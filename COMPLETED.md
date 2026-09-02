@@ -1,5 +1,39 @@
 # COMPLETED
 
+## [Shiny-locked species/forms audit] — Leg 14
+2026-09-02. Cross-referenced Serebii's shiny-locked page against the live
+`species.json`/`forms.json` row-by-row (not from memory) via a one-off Node script.
+Resolved the TODO's open question: all 7 of Pikachu's event cap forms already exist as
+distinct `forms.json` rows (no fetch-script gap) — `partner-cap` is correctly excluded
+since it's the player's own Let's Go Pikachu, which can be legitimately shiny. Mapped
+species-wide locks (Cosmog, Kubfu/Urshifu, Glastrier/Spectrier/Calyrex incl. its Ice/
+Shadow Rider fusions, Ogerpon incl. all 3 masks, Hoopa incl. Unbound, the Gen 9
+paradoxes/Loyal Three/Treasures of Ruin, Koraidon/Miraidon) against form-specific-only
+locks (Vivillon's Poké Ball pattern only, Floette's Eternal Flower only, Ursaluna's
+Bloodmoon only, Melmetal's Gmax only — bases NOT locked). Also confirmed via
+Bulbapedia that non_boxable forms (Ash-Greninja, Magearna's Megas, Melmetal Gmax,
+Urshifu Gmax, Terapagos's battle formes) are already hidden from the dex view entirely,
+so a lock there is currently moot for the UI leg. Surfaced one out-of-scope discovery —
+Zacian/Zamazenta are also shiny-locked per Bulbapedia, not just Gen 9 legendaries as the
+original TODO assumed — filed as a blocking decision rather than folded in silently.
+Full findings, source caveats (WebFetch can't reliably read Serebii's icon-based lock
+table, only its plain-text lists), and the not-locked list:
+`docs/investigations/shiny-locked-audit.md`. Data-audit only, no code changes — schema/
+seed/UI legs remain open in TODO.md.
+
+## [Wire homeBoxable into the collectible dex view] — Leg 13
+2026-09-02. Asked Vanny how the 17 `homeBoxable: false` forms should render (own
+section? greyed-out/hidden like cosmetic_variant? excluded like non_boxable?) — chose
+"normal row + badge," matching the semantics that these are real, ownable dex_distinct
+forms Home just hasn't added deposit support for yet, not a lesser or hidden category.
+Added `homeBoxable` to `DexRowData` (`types.ts`), passed it through in
+`buildDexSections.ts`'s `rowFor`, and rendered a `.dex-not-home-boxable-badge` span next
+to the display name in `DexRow.tsx` when false, styled in `global.css`. No repo here
+(not a git working directory), so no commit hash — full change is `types.ts`,
+`buildDexSections.ts`, `DexRow.tsx`, `global.css`, plus a new
+`buildDexSections.test.ts` case asserting the field passes through instead of filtering.
+All 47 existing tests + typecheck still pass.
+
 ## [Sprite gaps: gen 6, animated, shiny] — Leg 12
 2026-09-02. Investigated three reported gaps by checking the real CDN (GitHub API +
 direct HTTP checks against raw.githubusercontent.com/PokeAPI/sprites), not from memory.
