@@ -1,11 +1,5 @@
 # TODO
 
-## [Pokémon name capitalization] — Leg 7
-Pokémon names should render capitalized wherever they're displayed; currently inconsistent
-somewhere in the dex/collection views per Vanny's dev-data pass. Needs a sweep to find
-every display site, not just the obvious grid.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [origin-games.ts: Pokémon GO has a Trainer ID] — Leg 8
 Vanny flagged that Pokémon GO does have a visible Trainer ID in-game, contradicting
 `hasTrainerId: false` currently set for it in `src/shared/data/origin-games.ts` (GO still
@@ -87,6 +81,16 @@ Alpha as later additions once those concepts exist in the schema. Broader than L
 per-entry search/filter — this is a view/grouping mode across the whole collection.
 Overlaps with Leg 15 on the origin-game/OT dimensions; Ribbon/Alpha pieces are blocked on
 those markers existing at all (see the Ribbons/Alpha item under Future Milestones).
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Pokémon name punctuation exceptions] — unscheduled
+Leg 7 title-cases raw PokeAPI slugs (hyphens preserved as separators) at every display
+site, but ~14 species have real names the slug format can't represent: apostrophes
+(Farfetch'd/Sirfetch'd), periods (Mr. Mime, Mr. Rime, Mime Jr.), a colon (Type: Null),
+gender symbols (Nidoran♀/♂), an accent (Flabébé), and lowercase-after-hyphen exceptions
+(Jangmo-o/Hakamo-o/Kommo-o, Ho-Oh and Porygon-Z are already correct as-is). Deliberately
+deferred at Vanny's call — simple title-case only, no exceptions dictionary — see
+COMPLETED.md's Leg 7 entry.
 Last touched: 2026-09-02. Re-check count: 0.
 
 ## [App icon] — unscheduled

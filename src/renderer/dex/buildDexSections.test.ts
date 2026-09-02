@@ -118,7 +118,7 @@ describe('buildDexSections', () => {
     expect(regionalSection).toBeDefined()
     expect(regionalSection.heading).toBe('Alolan Forms')
     expect(regionalSection.rows.map((r) => r.formId)).toEqual([2])
-    expect(regionalSection.rows[0].displayName).toBe('Raichu (alola)')
+    expect(regionalSection.rows[0].displayName).toBe('Raichu (Alola)')
   })
 
   it('gives a named base forme its real display label instead of the bare species name', () => {
@@ -128,7 +128,7 @@ describe('buildDexSections', () => {
     ]
     const sections = buildDexSections(SPECIES, forms, [], OPTIONS_DEFAULT)
     const deoxysSection = sections.find((s) => s.speciesId === 386)!
-    expect(deoxysSection.rows.map((r) => r.displayName)).toEqual(['Deoxys (normal)', 'Deoxys (attack)'])
+    expect(deoxysSection.rows.map((r) => r.displayName)).toEqual(['Deoxys (Normal)', 'Deoxys (Attack)'])
   })
 
   it('leaves the bare species name for base forms with no entry in BASE_FORM_NAMES', () => {
@@ -145,6 +145,18 @@ describe('buildDexSections', () => {
     const sections = buildDexSections(SPECIES, forms, [], OPTIONS_DEFAULT)
     expect(sections.find((s) => s.speciesId === 25)!.rows[0].homeBoxable).toBe(true)
     expect(sections.find((s) => s.speciesId === 26)!.rows[0].homeBoxable).toBe(false)
+  })
+
+  it('capitalizes raw lowercase species/form slugs, preserving hyphens as word separators', () => {
+    const rawSpecies: Species[] = [{ id: 122, name: 'mr-mime', generation: 1 }]
+    const forms: Form[] = [
+      makeForm({ id: 1, speciesId: 122, formName: 'base' }),
+      makeForm({ id: 2, speciesId: 122, formName: '10-percent' })
+    ]
+    const sections = buildDexSections(rawSpecies, forms, [], OPTIONS_DEFAULT)
+    const section = sections.find((s) => s.speciesId === 122)!
+    expect(section.heading).toBe('Mr-Mime')
+    expect(section.rows.map((r) => r.displayName)).toEqual(['Mr-Mime', 'Mr-Mime (10 Percent)'])
   })
 
   it('passes shinyLocked through onto the row instead of filtering on it', () => {

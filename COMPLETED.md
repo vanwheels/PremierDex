@@ -1,5 +1,17 @@
 # COMPLETED
 
+## [Pokémon name capitalization] — Leg 7 — 2026-09-02
+Species/form names were stored as raw lowercase PokeAPI slugs and rendered as-is; every
+display site traces back to one choke point (`buildDexSections.ts`'s `displayName`/
+`heading` construction), so a single `capitalizeWords` helper there fixes the dex grid,
+section headings, `OriginModal`, `SpriteModal`, and `SpriteThumbnail` in one pass. Also
+capitalized form-name suffixes (e.g. "Deoxys (attack)" → "Deoxys (Attack)"), which were
+lowercase before this and would otherwise have become a new inconsistency next to the
+now-capitalized species name. Scope, per Vanny's call: simple title-case only, hyphens
+preserved as word separators — no exceptions dictionary for the ~14 species whose real
+names need punctuation the slug format drops (Farfetch'd, Mr. Mime, Nidoran♀/♂, etc.);
+logged as `[Pokémon name punctuation exceptions]`. See commit `<hash>`.
+
 ## [Spiky-Eared Pichu: HOME deposit + always-shiny flags] — Leg 6 — 2026-09-02
 Added `alwaysShiny` as a new Form field — the opposite axis from the existing
 `shinyLocked` (which means "never shiny"; `alwaysShiny` means "never non-shiny") —

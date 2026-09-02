@@ -84,10 +84,23 @@ const BASE_FORM_NAMES: Record<number, string> = {
   1013: 'unremarkable' // Sinistcha
 }
 
+/**
+ * Capitalizes the first letter of each hyphen- or space-separated word, preserving the
+ * separators. Species and form names are stored as raw lowercase PokeAPI slugs (e.g.
+ * "mr-mime", "ho-oh", "10-percent") — this fixes the common case but can't restore
+ * punctuation the slug format drops (apostrophes, periods, colons, gender symbols,
+ * accents), so a handful of names still render imperfectly (e.g. "Farfetchd" instead of
+ * "Farfetch'd", "Jangmo-O" instead of "Jangmo-o"). Logged as a follow-up in TODO.md rather
+ * than fixed here — see the "Pokémon name capitalization" leg.
+ */
+function capitalizeWords(text: string): string {
+  return text.replace(/(?:^|[\s-])[a-z]/g, (match) => match.toUpperCase())
+}
+
 function formDisplayName(speciesName: string, form: Form): string {
   const formName = form.formName === 'base' ? BASE_FORM_NAMES[form.speciesId] : form.formName
   if (!formName) return speciesName
-  return `${speciesName} (${formName.replace(/-/g, ' ')})`
+  return `${speciesName} (${capitalizeWords(formName.replace(/-/g, ' '))})`
 }
 
 interface EntrySlot {
@@ -175,13 +188,14 @@ export function buildDexSections(
   const regionalBuckets = new Map<string, DexRowData[]>()
 
   for (const sp of species) {
+    const speciesName = capitalizeWords(sp.name)
     const speciesForms = formsBySpecies.get(sp.id) ?? []
     const rows: DexRowData[] = []
     const cosmeticRows: DexRowData[] = []
 
     for (const form of speciesForms) {
       const entriesByGender = entriesByForm.get(form.id)
-      const rowsForForm = buildRows(sp.name, sp.id, form, entriesByGender, options.splitGenderRows)
+      const rowsForForm = buildRows(speciesName, sp.id, form, entriesByGender, options.splitGenderRows)
 
       if (form.formCategory === 'cosmetic_variant') {
         cosmeticRows.push(...rowsForForm)
@@ -198,7 +212,7 @@ export function buildDexSections(
       }
     }
 
-    sections.push({ key: `species-${sp.id}`, heading: sp.name, speciesId: sp.id, rows, cosmeticRows })
+    sections.push({ key: `species-${sp.id}`, heading: speciesName, speciesId: sp.id, rows, cosmeticRows })
   }
 
   if (options.regionalMode === 'grouped') {
