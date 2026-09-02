@@ -8,6 +8,15 @@ export interface SeedSpecies {
   generation: number
 }
 
+export interface SeedForm {
+  speciesId: number
+  formName: string
+  formCategory: 'dex_distinct' | 'cosmetic_variant' | 'non_boxable'
+  hasGenderDifference: boolean
+  firstAvailableGeneration: number
+  regionalGroup: 'alolan' | 'galarian' | 'hisuian' | 'paldean' | null
+}
+
 // Unpackaged (dev and local `npm run build`), the main bundle lives at
 // <projectRoot>/out/main/index.cjs — __dirname is stable there, unlike `app.getAppPath()`.
 // Packaged, this needs an electron-builder `extraResources` entry shipping data/pokemon/
@@ -22,4 +31,10 @@ const DATA_DIR = app.isPackaged
 export function loadSpeciesData(): SeedSpecies[] {
   const filePath = join(DATA_DIR, 'species.json')
   return JSON.parse(readFileSync(filePath, 'utf-8')) as SeedSpecies[]
+}
+
+/** Loads the static per-species form list written by `npm run fetch-pokemon-forms`. */
+export function loadFormsData(): SeedForm[] {
+  const filePath = join(DATA_DIR, 'forms.json')
+  return JSON.parse(readFileSync(filePath, 'utf-8')) as SeedForm[]
 }

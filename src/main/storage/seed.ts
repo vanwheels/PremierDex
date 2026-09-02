@@ -1,5 +1,5 @@
 import type Database from 'better-sqlite3'
-import { loadSpeciesData } from './load-species-data'
+import { loadFormsData, loadSpeciesData } from './load-species-data'
 
 /**
  * Seeds reference data (species/forms/collection-entry rows) on every startup.
@@ -7,11 +7,10 @@ import { loadSpeciesData } from './load-species-data'
  * safe to re-run: it only ever adds rows that don't exist yet and never touches a
  * player's existing owned/shiny state.
  *
- * Forms are seeded as a single PLACEHOLDER 'base' form per species (form_category:
- * 'dex_distinct', has_gender_difference: false) — real per-form categorization
- * (dex_distinct vs cosmetic_variant vs non_boxable, gender differences, regional
- * grouping) is its own follow-up leg (see TODO.md); this just needs the pipeline to
- * run end-to-end.
+ * Forms come from `data/pokemon/forms.json` (see `scripts/fetch-pokemon-forms.ts` and
+ * `docs/investigations/form-categorization.md` for how form_category/regional_group/
+ * has_gender_difference/first_available_generation are derived) — real per-form data,
+ * not the single 'base' placeholder Leg 1 seeded.
  */
 export function runSeed(db: Database.Database): void {
   const insertSpecies = db.prepare(
@@ -21,7 +20,7 @@ export function runSeed(db: Database.Database): void {
     INSERT OR IGNORE INTO forms
       (species_id, form_name, form_category, home_boxable, has_gender_difference, first_available_generation, regional_group)
     VALUES
-      (@speciesId, 'base', 'dex_distinct', 1, 0, @generation, NULL)
+      (@speciesId, @formName, @formCategory, 1, @hasGenderDifference, @firstAvailableGeneration, @regionalGroup)
   `)
   const selectFormId = db.prepare('SELECT id FROM forms WHERE species_id = ? AND form_name = ?')
   const insertEntry = db.prepare(
@@ -31,11 +30,24 @@ export function runSeed(db: Database.Database): void {
   const seedAll = db.transaction(() => {
     for (const species of loadSpeciesData()) {
       insertSpecies.run(species)
-      insertForm.run({ speciesId: species.id, generation: species.generation })
+    }
 
-      const form = selectFormId.get(species.id, 'base') as { id: number }
-      for (const shiny of [0, 1]) {
-        insertEntry.run({ formId: form.id, gender: 'unknown', shiny })
+    for (const form of loadFormsData()) {
+      insertForm.run({
+        speciesId: form.speciesId,
+        formName: form.formName,
+        formCategory: form.formCategory,
+        hasGenderDifference: form.hasGenderDifference ? 1 : 0,
+        firstAvailableGeneration: form.firstAvailableGeneration,
+        regionalGroup: form.regionalGroup
+      })
+
+      const row = selectFormId.get(form.speciesId, form.formName) as { id: number }
+      const genders = form.hasGenderDifference ? (['male', 'female'] as const) : (['unknown'] as const)
+      for (const gender of genders) {
+        for (const shiny of [0, 1]) {
+          insertEntry.run({ formId: row.id, gender, shiny })
+        }
       }
     }
   })
