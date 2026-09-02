@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Foldable species: display checked-off form when collapsed] — Leg 9 — 2026-09-02
+Collapsed foldable-species rows (Unown, Maushold, etc.) always showed the base form
+(`rows[0]`) regardless of which variant was actually owned/shiny, hiding a checked-off
+cosmetic variant behind an unchecked default. Added `pickCollapsedRow` (checks `rows[0]`
+then `cosmeticRows` in list order for the first owned-or-shiny entry, falling back to
+`rows[0]`) and wired it into `DexTable`'s collapse-slot rendering; expanded view is
+unaffected. User-facing override selector (Vanny's stretch idea) not implemented — logged
+as `[User-facing selector for collapsed foldable-species form]`. See commit `5f1ae9c`.
+
 ## [origin-games.ts: Pokémon GO has a Trainer ID] — Leg 8 — 2026-09-02
 Confirmed with Vanny: GO's visible Trainer ID is the 12-digit Trainer Code (friend
 code), not a mainline-style TID/SID pair. Set `hasTrainerId: true` for GO, added an
