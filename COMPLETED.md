@@ -13,7 +13,7 @@ independent nickname, but the column holds a single input — per Vanny's call, 
 whichever is "active" with shiny taking precedence when both are owned (see DexRow's
 `activeNicknameEntry`, unit tested in DexRow.test.ts). No data-layer changes — the
 `nickname` column and CollectionEntryOriginInput shape are unchanged; this was a
-UI-only move. See commit `<pending>`.
+UI-only move. See commit `e47972c`.
 
 ## [Foldable species: display checked-off form when collapsed] — Leg 9 — 2026-09-02
 Collapsed foldable-species rows (Unown, Maushold, etc.) always showed the base form
