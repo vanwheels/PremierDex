@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { TrainerProfileInput } from '@shared/types/trainer-profile'
 import { findOriginGame } from '@shared/data/origin-games'
+import { OriginGameInput } from './OriginGameInput'
 
 const TID_MAX = 999999
 const SID_MAX = 4294
@@ -12,9 +13,7 @@ interface TrainerProfileFormProps {
 }
 
 /** Editable field set shared by TrainerProfilesPanel's add-row and TrainerProfileRow's
- * edit mode — always rendered inside a <tr>, never standalone. Assumes a <datalist
- * id="origin-games"> exists elsewhere on the page (TrainerProfilesPanel renders it once,
- * shared by every row) for the Game field's autocomplete.
+ * edit mode — always rendered inside a <tr>, never standalone.
  *
  * TID/SID are kept as strings in local state (not numbers) so an in-progress edit like
  * "" or a leading zero doesn't get silently coerced back by React before the user
@@ -54,7 +53,7 @@ export function TrainerProfileForm({ initial, onSubmit, onCancel }: TrainerProfi
   return (
     <>
       <td>
-        <input list="origin-games" value={game} onChange={(e) => setGame(e.target.value)} placeholder="Game" />
+        <OriginGameInput value={game} onChange={setGame} />
       </td>
       <td>
         <input value={otName} onChange={(e) => setOtName(e.target.value)} placeholder="OT Name" />

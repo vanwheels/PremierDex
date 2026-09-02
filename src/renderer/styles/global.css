@@ -40,6 +40,49 @@ td {
   box-sizing: border-box;
 }
 
+.origin-game-input {
+  position: relative;
+}
+
+.origin-game-options {
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0.15rem 0 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  max-height: 12rem;
+  overflow-y: auto;
+  background: Canvas;
+  color: CanvasText;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 25%);
+}
+
+.origin-game-options li {
+  display: block;
+}
+
+.origin-game-options button {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 0.6rem;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.origin-game-options button:hover,
+.origin-game-options button:focus {
+  background: color-mix(in srgb, currentColor 15%, transparent);
+}
+
 .dex-toolbar {
   display: flex;
   gap: 1.5rem;
