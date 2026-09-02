@@ -6,7 +6,7 @@ rows with dex #/Owned/Shiny checkbox columns, a gender-split toggle (off by defa
 collapses to the male entry), a regional inline/grouped toggle, and a per-species
 cosmetic-variant expand control. `src/renderer/dex/buildDexSections.ts` holds the pure
 view-model logic (unit-tested); toggle state lives only in the renderer, never written
-to storage. See commit `<pending>`.
+to storage. See commit `c6ae4d7`.
 
 ## [Form categorization data pass] — Leg 2
 2026-09-01. Real per-form data (form_category/has_gender_difference/regional_group/
