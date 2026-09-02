@@ -12,7 +12,7 @@ the same formatting every non-base form already uses — no data-model change. E
 7 male/female-pair species (Frillish, Jellicent, Pyroar, Meowstic, Indeedee,
 Basculegion, Oinkologne) whose only non-generic form_name is "male", not a real forme
 name. Full species list and reasoning: `docs/investigations/home-depositability-audit.md`
-section 4.
+section 4. See commit `d24e9b7`.
 
 ## [Missing form data: Unown/Vivillon/Flabébé line/Furfrou/Alcremie/Poltchageist/Sinistcha] — Leg 9
 2026-09-02. Confirmed live against PokeAPI (per the investigation doc's open question)
