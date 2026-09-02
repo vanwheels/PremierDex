@@ -70,9 +70,9 @@ export function runSeed(db: Database.Database): void {
   )
   const insertForm = db.prepare(`
     INSERT OR IGNORE INTO forms
-      (species_id, form_name, form_category, home_boxable, has_gender_difference, first_available_generation, regional_group, pokeapi_id)
+      (species_id, form_name, form_category, home_boxable, has_gender_difference, first_available_generation, regional_group, pokeapi_id, sprite_form_suffix)
     VALUES
-      (@speciesId, @formName, @formCategory, @homeBoxable, @hasGenderDifference, @firstAvailableGeneration, @regionalGroup, @pokeapiId)
+      (@speciesId, @formName, @formCategory, @homeBoxable, @hasGenderDifference, @firstAvailableGeneration, @regionalGroup, @pokeapiId, @spriteFormSuffix)
   `)
   // Leg-4 backfill: INSERT OR IGNORE above skips rows that already existed pre-Leg-4
   // (unique on species_id+form_name), so their pokeapi_id would otherwise stay NULL
@@ -113,8 +113,15 @@ export function runSeed(db: Database.Database): void {
         hasGenderDifference: form.hasGenderDifference ? 1 : 0,
         firstAvailableGeneration: form.firstAvailableGeneration,
         regionalGroup: form.regionalGroup,
-        pokeapiId: form.pokeapiId
+        pokeapiId: form.pokeapiId,
+        spriteFormSuffix: form.spriteFormSuffix
       })
+      // No backfill needed for sprite_form_suffix (unlike pokeapi_id/home_boxable
+      // above): every row this leg gives a non-null value is itself a brand-new row
+      // (Unown's letters, Vivillon's patterns, etc. — see
+      // docs/investigations/home-depositability-audit.md section 3), so INSERT OR
+      // IGNORE above always reaches it. Every pre-existing row's correct value is
+      // NULL, which the fresh column already defaults to.
       backfillPokeapiId.run({
         speciesId: form.speciesId,
         formName: form.formName,

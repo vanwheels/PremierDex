@@ -1,5 +1,25 @@
 # COMPLETED
 
+## [Missing form data: Unown/Vivillon/Flabébé line/Furfrou/Alcremie/Poltchageist/Sinistcha] — Leg 9
+2026-09-02. Confirmed live against PokeAPI (per the investigation doc's open question)
+that these species pack their variants as multiple `pokemon-form` entries under one
+`pokemon` variety rather than separate varieties, and that those sub-forms' sprites are
+keyed `"{basePokemonId}-{form_name}.png"` — not by a standalone numeric id the way every
+other form's sprite is. Added a nullable `spriteFormSuffix` field threaded through
+`Form`/schema/seed/sprites.ts alongside a new `fetchDefaultVarietySubForms` path in
+`fetch-pokemon-forms.ts`, triggered generically off `defaultPokemon.forms.length > 1`
+rather than a hardcoded species list. That generic trigger also corrected the same gap
+for 20 species groups beyond the 7 originally named — including Arceus's 18 type-plates
+and Silvally's 17 memory-types as `dex_distinct` rows — kept in scope per Vanny's call
+when flagged. Caught and fixed a real bug before committing: the sub-form heuristic
+initially compared every sub-form (including the species' own default look) against
+itself, wrongly demoting each affected species' base row to `cosmetic_variant` and
+hiding it behind the cosmetic-variant expand toggle; fixed by hardcoding the `is_default`
+sub-form to `dex_distinct`, same as every other species' base row, and verified all 1025
+species still have an anchor row. Re-fetched live: 228 new form rows, zero pre-existing
+rows changed. Full species list and reasoning:
+`docs/investigations/home-depositability-audit.md` section 3. See commit `<pending>`.
+
 ## [Home-depositability corrections for existing forms] — Leg 8
 2026-09-02. Populated the `home_boxable` column (present in the schema since Leg 4 but
 hardcoded to `1`/`true` on every insert) with real values for the 17 forms Home doesn't

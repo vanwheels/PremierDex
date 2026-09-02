@@ -33,8 +33,16 @@ export interface Form {
   regionalGroup: string | null
   /** PokeAPI's own numeric pokemon id — the sprite CDN's file-naming key. Equal to the
    * National Dex number for base forms; an unrelated id (10001+) for alternate
-   * varieties. See sprites.ts. */
+   * varieties. Shared across every cosmetic sub-form of a species that packs its
+   * variants as multiple pokemon-form entries under one variety (see
+   * spriteFormSuffix) rather than as separate varieties. See sprites.ts. */
   pokeapiId: number
+  /** Non-null only for a cosmetic sub-form sharing its pokeapiId with sibling forms
+   * (e.g. Unown's letters, Vivillon's patterns, Alcremie's cream/sweet combos) — the
+   * sprite CDN keys these as "{pokeapiId}-{spriteFormSuffix}.png" instead of the plain
+   * "{pokeapiId}.png" every other form uses. See sprites.ts and
+   * docs/investigations/home-depositability-audit.md section 3. */
+  spriteFormSuffix: string | null
 }
 
 export interface CollectionEntry {

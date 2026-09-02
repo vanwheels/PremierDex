@@ -21,6 +21,7 @@ export function applySchema(db: Database.Database): void {
       first_available_generation INTEGER NOT NULL,
       regional_group TEXT,
       pokeapi_id INTEGER,
+      sprite_form_suffix TEXT,
       UNIQUE(species_id, form_name)
     );
     CREATE INDEX IF NOT EXISTS idx_forms_species ON forms(species_id);
@@ -41,5 +42,8 @@ export function applySchema(db: Database.Database): void {
   const formColumns = db.prepare('PRAGMA table_info(forms)').all() as Array<{ name: string }>
   if (!formColumns.some((c) => c.name === 'pokeapi_id')) {
     db.exec('ALTER TABLE forms ADD COLUMN pokeapi_id INTEGER')
+  }
+  if (!formColumns.some((c) => c.name === 'sprite_form_suffix')) {
+    db.exec('ALTER TABLE forms ADD COLUMN sprite_form_suffix TEXT')
   }
 }

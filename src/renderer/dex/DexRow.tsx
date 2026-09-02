@@ -22,10 +22,12 @@ export function DexRow({ row, onToggleEntry, onOpenSprite, expandControl, indent
       <td>
         <SpriteThumbnail
           pokeapiId={row.pokeapiId}
+          spriteFormSuffix={row.spriteFormSuffix}
           displayName={row.displayName}
           onClick={() =>
             onOpenSprite({
               pokeapiId: row.pokeapiId,
+              spriteFormSuffix: row.spriteFormSuffix,
               displayName: row.displayName,
               firstAvailableGeneration: row.firstAvailableGeneration
             })

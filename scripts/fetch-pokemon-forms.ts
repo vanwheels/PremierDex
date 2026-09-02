@@ -43,6 +43,17 @@
  *     deposit support lags game releases, so it's a hand-maintained OVERRIDES fact, not
  *     part of the heuristic above. See docs/investigations/home-depositability-audit.md
  *     section 2 for the current false entries and their sourcing.
+ *   - A minority of species (Unown, Vivillon, Flabébé/Floette/Florges, Furfrou,
+ *     Alcremie, Poltchageist/Sinistcha — confirmed live 2026-09-02) express their
+ *     cosmetic sub-forms as multiple pokemon-form entries under one variety instead of
+ *     as separate varieties (detected generically off defaultPokemon.forms.length > 1,
+ *     not a hardcoded species list — see fetchDefaultVarietySubForms below). Their
+ *     sub-forms' sprite files aren't keyed by the sub-form's own PokeAPI id (that id is
+ *     unrelated to the sprite path); the CDN instead keys them
+ *     "{basePokemonId}-{form_name}.png", so pokeapiId stays the shared base pokemon id
+ *     across all of a species' sub-forms and the suffix is stored separately as
+ *     spriteFormSuffix (null for every form that isn't one of these — see sprites.ts).
+ *     See docs/investigations/home-depositability-audit.md section 3.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -71,8 +82,12 @@ interface SeedForm {
   regionalGroup: 'alolan' | 'galarian' | 'hisuian' | 'paldean' | null
   /** PokeAPI's own numeric pokemon id — the sprite CDN's file-naming key (see
    * src/renderer/dex/sprites.ts). Equal to species.id for the base form; an unrelated
-   * id (10001+) for alternate varieties. */
+   * id (10001+) for alternate varieties; shared across sibling sub-forms for species
+   * covered by spriteFormSuffix below. */
   pokeapiId: number
+  /** Non-null only for a cosmetic sub-form sharing its pokeapiId with siblings (Unown's
+   * letters, Vivillon's patterns, etc.) — see the module doc comment and sprites.ts. */
+  spriteFormSuffix: string | null
 }
 
 interface PokeApiSpeciesResponse {
@@ -90,7 +105,10 @@ interface PokeApiPokemonResponse {
 interface PokeApiFormResponse {
   form_name: string
   is_battle_only: boolean
+  is_default: boolean
   version_group: { name: string }
+  types: Array<{ type: { name: string } }>
+  sprites: { front_default: string | null; front_female: string | null }
 }
 
 /** speciesId:formName -> field overrides, applied after the heuristic below. Also the
@@ -246,12 +264,26 @@ function formNameFromVariety(speciesSlug: string, varietyPokemonName: string): s
   return varietyPokemonName.startsWith(prefix) ? varietyPokemonName.slice(prefix.length) : varietyPokemonName
 }
 
+function typeNames(types: Array<{ type: { name: string } }>): string[] {
+  return types.map((t) => t.type.name).sort()
+}
+
 function sameTypesAndStats(a: PokeApiPokemonResponse, b: PokeApiPokemonResponse): boolean {
-  const typesA = a.types.map((t) => t.type.name).sort()
-  const typesB = b.types.map((t) => t.type.name).sort()
+  const typesA = typeNames(a.types)
+  const typesB = typeNames(b.types)
   if (typesA.length !== typesB.length || typesA.some((t, i) => t !== typesB[i])) return false
   if (a.stats.length !== b.stats.length) return false
   return a.stats.every((s, i) => s.base_stat === b.stats[i].base_stat)
+}
+
+/** Same as sameTypesAndStats but for a pokemon-form's own `types` (no `stats` field is
+ * exposed at that granularity) — used for the cosmetic-sub-form path below, where every
+ * known case is purely a palette swap, but the type check stays a real signal rather
+ * than an assumption. */
+function sameTypes(a: Array<{ type: { name: string } }>, b: Array<{ type: { name: string } }>): boolean {
+  const typesA = typeNames(a)
+  const typesB = typeNames(b)
+  return typesA.length === typesB.length && typesA.every((t, i) => t === typesB[i])
 }
 
 async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
@@ -264,18 +296,23 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
 
   const forms: SeedForm[] = []
 
-  forms.push(
-    applyOverride(species.id, 'base', {
-      speciesId: species.id,
-      formName: 'base',
-      formCategory: 'dex_distinct',
-      homeBoxable: true,
-      hasGenderDifference: hasDistinctFemaleSprite(defaultPokemon),
-      firstAvailableGeneration: species.generation,
-      regionalGroup: null,
-      pokeapiId: defaultPokemon.id
-    })
-  )
+  if (defaultPokemon.forms.length > 1) {
+    forms.push(...(await fetchDefaultVarietySubForms(species, defaultPokemon)))
+  } else {
+    forms.push(
+      applyOverride(species.id, 'base', {
+        speciesId: species.id,
+        formName: 'base',
+        formCategory: 'dex_distinct',
+        homeBoxable: true,
+        hasGenderDifference: hasDistinctFemaleSprite(defaultPokemon),
+        firstAvailableGeneration: species.generation,
+        regionalGroup: null,
+        pokeapiId: defaultPokemon.id,
+        spriteFormSuffix: null
+      })
+    )
+  }
 
   const nonDefaultVarieties = speciesData.varieties.filter((v) => v !== defaultVariety)
   for (const variety of nonDefaultVarieties) {
@@ -313,12 +350,81 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
         hasGenderDifference: hasDistinctFemaleSprite(pokemon),
         firstAvailableGeneration: generation,
         regionalGroup,
-        pokeapiId: pokemon.id
+        pokeapiId: pokemon.id,
+        spriteFormSuffix: null
       })
     )
   }
 
   return forms
+}
+
+/**
+ * Expands a default variety's multiple pokemon-form entries into one SeedForm each —
+ * see the module doc comment above for why a handful of species (Unown, Vivillon, etc.)
+ * need this instead of the single 'base' row every other species gets. The is_default
+ * sub-form (whichever letter/pattern/color PokeAPI marks default — not necessarily
+ * forms[0]) becomes formName 'base' with no sprite suffix, matching the Leg 1 seed
+ * convention; every sibling sub-form uses its own form_name for both.
+ */
+async function fetchDefaultVarietySubForms(
+  species: SeedSpecies,
+  defaultPokemon: PokeApiPokemonResponse
+): Promise<SeedForm[]> {
+  const subForms = await mapWithConcurrency(defaultPokemon.forms, (f) => fetchJson<PokeApiFormResponse>(f.url))
+
+  return subForms.map((form) => {
+    const hasGenderDifference =
+      form.sprites.front_female !== null && form.sprites.front_female !== form.sprites.front_default
+
+    // The is_default sub-form is this species' own base look (Unown-A, Vivillon-Meadow,
+    // Alcremie's plain vanilla-strawberry, etc.) — always 'base'/dex_distinct/no
+    // suffix, same as every other species' base row, never run through the
+    // sibling-vs-base comparison below (which would otherwise compare it to itself and
+    // trivially "match", wrongly demoting it to cosmetic_variant and hiding it behind
+    // the cosmetic-variant expand toggle instead of showing it as the species' main row).
+    if (form.is_default) {
+      return applyOverride(species.id, 'base', {
+        speciesId: species.id,
+        formName: 'base',
+        formCategory: 'dex_distinct',
+        homeBoxable: true,
+        hasGenderDifference,
+        firstAvailableGeneration: species.generation,
+        regionalGroup: null,
+        pokeapiId: defaultPokemon.id,
+        spriteFormSuffix: null
+      })
+    }
+
+    const regionalGroup = REGIONAL_GROUPS[form.form_name] ?? null
+    const generation =
+      VERSION_GROUP_GENERATION[form.version_group.name] ??
+      (() => {
+        throw new Error(
+          `Unknown version_group "${form.version_group.name}" for ${species.name} sub-form ` +
+            `"${form.form_name}" — add it to VERSION_GROUP_GENERATION`
+        )
+      })()
+
+    const formCategory: SeedForm['formCategory'] = form.is_battle_only
+      ? 'non_boxable'
+      : regionalGroup !== null || !sameTypes(form.types, defaultPokemon.types)
+        ? 'dex_distinct'
+        : 'cosmetic_variant'
+
+    return applyOverride(species.id, form.form_name, {
+      speciesId: species.id,
+      formName: form.form_name,
+      formCategory,
+      homeBoxable: true,
+      hasGenderDifference,
+      firstAvailableGeneration: generation,
+      regionalGroup,
+      pokeapiId: defaultPokemon.id,
+      spriteFormSuffix: form.form_name
+    })
+  })
 }
 
 function applyOverride(speciesId: number, formName: string, form: SeedForm): SeedForm {

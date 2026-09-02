@@ -63,25 +63,50 @@ done in this leg (see TODO.md).
 
 ## 3. Missing from the data entirely (fetch script gap, not categorization)
 
-Confirmed via direct inspection — these species have only their `base` form (and
-sometimes `gmax`) in `forms.json`, nothing else:
+**Resolved (Leg 9).** Confirmed via live PokeAPI checks that these species express their
+variants as multiple `pokemon-form` entries under a *single* `pokemon` variety, not as
+separate `varieties` the way `fetch-pokemon-forms.ts` otherwise assumes — e.g. Unown's
+`/pokemon/201` has one variety but its `forms` array lists all 28 letters as separate
+`pokemon-form` entries (`unown-a` through `unown-z`, `-exclamation`, `-question`), each
+with its own `is_battle_only`/`form_name`/`version_group`/`types`. This is a different
+shape from the `pikachu-original-cap` vs `pikachu-cosplay` case (separate varieties),
+not the same machinery reused.
 
-- **Unown** — 0 of its 28 letter forms (A–Z, !, ?)
-- **Vivillon** — 0 of its ~20 patterns
-- **Flabébé** — 0 of its 5 color variants (red/yellow/orange/blue/white)
-- **Floette** — has `base`/`eternal`/`mega` but 0 of its 5 color variants
-- **Florges** — 0 of its 5 color variants
-- **Furfrou** — 0 of its 9 trims
-- **Alcremie** — has `base`/`gmax` but 0 of its 63 cream/sweet combinations
-- **Poltchageist**, **Sinistcha** — 0 of their 2 forms each (Unremarkable/Masterpiece)
+Also discovered live: these sub-forms' sprite files aren't keyed by the sub-form's own
+PokeAPI id (e.g. Unown-B's `pokemon-form` id 10001 is unrelated to its sprite path) —
+the CDN instead keys them `"{basePokemonId}-{form_name}.png"` (confirmed:
+`unown-b` → `201-b.png`, `vivillon-icy-snow` → `666-icy-snow.png`). `sprites.ts`
+previously assumed every form's sprite was keyed by a single standalone numeric id, so
+this required a new nullable `spriteFormSuffix` field (`Form`/schema/seed/sprites.ts all
+updated) rather than being just a fetch-script fix.
 
-Root cause is likely that `fetch-pokemon-forms.ts` only walks `/pokemon-species`
-`varieties` (separate `pokemon` entries), while these species express their variants as
-multiple `pokemon-form` entries under a *single* `pokemon` variety instead (this is
-exactly the shape that produced the `pikachu-original-cap` vs `pikachu-cosplay` cosmetic
-forms already handled correctly — so the script has the machinery, it's likely just not
-being reached for these species' variety). Needs checking against a live PokeAPI
-response before assuming the exact fix.
+`fetch-pokemon-forms.ts`'s fix is generic — triggered by
+`defaultPokemon.forms.length > 1`, not a hardcoded species list — so it corrected the
+same gap for species beyond the 7 originally suspected. Full list (228 new form rows
+across 27 species, re-fetched and verified 2026-09-02, zero pre-existing rows changed):
+
+- **Unown** (27 new), **Vivillon**/**Scatterbug**/**Spewpa** (19 each — the pattern
+  applies to both pre-evolutions too), **Flabébé**/**Floette**/**Florges** (4 each),
+  **Furfrou** (9), **Alcremie** (62), **Poltchageist**/**Sinistcha** (1 each) — the
+  originally-named cosmetic groups.
+- **Arceus** (18 — its type-plate forms, correctly `dex_distinct` since they change its
+  type) and **Silvally** (17 — its memory-type forms, same reasoning) — previously
+  entirely missing from the dex despite being real, commonly-tracked variants.
+- **Genesect** (4 Drives), **Deerling**/**Sawsbuck** (3 seasonal each), **Pichu**
+  (spiky-eared), **Burmy**/**Mothim** (cloak forms), **Shellos**/**Gastrodon**
+  (east/west sea), **Frillish**/**Jellicent**, **Pyroar**, **Sinistea**/**Polteageist** —
+  1-4 new cosmetic forms each.
+- **Cherrim** (Sunshine form) and **Xerneas** (Active Mode) — correctly `non_boxable`
+  (both are battle-only stance changes, not persistent forms).
+
+A first implementation pass had a real bug, caught before committing: the sub-form
+heuristic compared every sub-form's types against the *default* sub-form's types to
+decide `dex_distinct` vs `cosmetic_variant`, including the default sub-form itself —
+trivially "matching itself" and downgrading it to `cosmetic_variant`, which would have
+hidden every affected species' main dex row (Unown, Arceus, etc.) behind the
+cosmetic-variant expand toggle with no visible primary row. Fixed by hardcoding the
+`is_default` sub-form to `formName: 'base'` / `formCategory: 'dex_distinct'` unconditionally, same as every other species' base row, and verified afterward that all 1025
+species have at least one non-`cosmetic_variant`/`non_boxable` anchor row.
 
 ## 4. Base-form display naming (separate, smaller issue)
 

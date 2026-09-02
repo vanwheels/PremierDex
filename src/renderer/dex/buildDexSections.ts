@@ -63,6 +63,7 @@ function buildRows(
       regular: slot?.regular ?? null,
       shinyEntry: slot?.shiny ?? null,
       pokeapiId: form.pokeapiId,
+      spriteFormSuffix: form.spriteFormSuffix,
       firstAvailableGeneration: form.firstAvailableGeneration
     }
   }

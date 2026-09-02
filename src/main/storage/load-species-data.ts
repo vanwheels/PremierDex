@@ -17,6 +17,7 @@ export interface SeedForm {
   firstAvailableGeneration: number
   regionalGroup: 'alolan' | 'galarian' | 'hisuian' | 'paldean' | null
   pokeapiId: number
+  spriteFormSuffix: string | null
 }
 
 // Unpackaged (dev and local `npm run build`), the main bundle lives at

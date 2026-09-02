@@ -3,6 +3,7 @@ import { availableGenerations, generationSpriteUrl } from './sprites'
 
 export interface SpriteModalTarget {
   pokeapiId: number
+  spriteFormSuffix: string | null
   displayName: string
   firstAvailableGeneration: number
 }
@@ -53,7 +54,7 @@ export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element 
             <p>Sprite unavailable for this generation.</p>
           ) : (
             <img
-              src={generationSpriteUrl(target.pokeapiId, generation, shiny)}
+              src={generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, shiny)}
               alt={`${target.displayName} — generation ${generation}${shiny ? ' shiny' : ''}`}
               width={MODAL_SIZE}
               height={MODAL_SIZE}

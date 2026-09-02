@@ -19,7 +19,8 @@ vi.mock('./load-species-data', () => ({
       hasGenderDifference: false,
       firstAvailableGeneration: 1,
       regionalGroup: null,
-      pokeapiId: 1
+      pokeapiId: 1,
+      spriteFormSuffix: null
     },
     {
       speciesId: 2,
@@ -29,7 +30,8 @@ vi.mock('./load-species-data', () => ({
       hasGenderDifference: false,
       firstAvailableGeneration: 1,
       regionalGroup: null,
-      pokeapiId: 2
+      pokeapiId: 2,
+      spriteFormSuffix: null
     }
   ]
 }))

@@ -21,6 +21,7 @@ interface FormRow {
   first_available_generation: number
   regional_group: string | null
   pokeapi_id: number | null
+  sprite_form_suffix: string | null
 }
 
 interface CollectionEntryRow {
@@ -43,7 +44,8 @@ function toForm(row: FormRow): Form {
     regionalGroup: row.regional_group,
     // Non-null by the time this runs: runSeed's backfill (seed.ts) always completes
     // before createSqliteStorage prepares the listForms statement below.
-    pokeapiId: row.pokeapi_id as number
+    pokeapiId: row.pokeapi_id as number,
+    spriteFormSuffix: row.sprite_form_suffix
   }
 }
 

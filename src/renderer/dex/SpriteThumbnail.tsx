@@ -3,6 +3,7 @@ import { defaultSpriteUrl } from './sprites'
 
 interface SpriteThumbnailProps {
   pokeapiId: number
+  spriteFormSuffix: string | null
   displayName: string
   onClick: () => void
 }
@@ -15,7 +16,12 @@ const THUMBNAIL_SIZE = 32
  * than showing the browser's broken-image icon — see sprites.ts for why some ids
  * legitimately have no file at a given path.
  */
-export function SpriteThumbnail({ pokeapiId, displayName, onClick }: SpriteThumbnailProps): JSX.Element {
+export function SpriteThumbnail({
+  pokeapiId,
+  spriteFormSuffix,
+  displayName,
+  onClick
+}: SpriteThumbnailProps): JSX.Element {
   const [failed, setFailed] = useState(false)
 
   return (
@@ -29,7 +35,7 @@ export function SpriteThumbnail({ pokeapiId, displayName, onClick }: SpriteThumb
         '?'
       ) : (
         <img
-          src={defaultSpriteUrl(pokeapiId, false)}
+          src={defaultSpriteUrl(pokeapiId, spriteFormSuffix, false)}
           alt={displayName}
           loading="lazy"
           width={THUMBNAIL_SIZE}

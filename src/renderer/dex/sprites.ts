@@ -1,9 +1,13 @@
 /**
  * Sprite URL construction for `raw.githubusercontent.com/PokeAPI/sprites`, keyed on a
- * form's `pokeapiId` (PokeAPI's own numeric pokemon id — see Form.pokeapiId). Pure and
- * network-free: the actual fetch/caching happens via plain `<img src>` tags in
- * SpriteThumbnail/SpriteModal, which fall back to a placeholder on load error rather
- * than this module trying to know in advance which files exist.
+ * form's `pokeapiId` (PokeAPI's own numeric pokemon id — see Form.pokeapiId) plus an
+ * optional `spriteFormSuffix` for the cosmetic sub-forms that share a pokeapiId with
+ * their siblings (Unown's letters, Vivillon's patterns, Alcremie's cream/sweet combos,
+ * etc. — see Form.spriteFormSuffix): the CDN keys those as
+ * "{pokeapiId}-{spriteFormSuffix}.png" instead of the plain "{pokeapiId}.png" every
+ * other form uses. Pure and network-free: the actual fetch/caching happens via plain
+ * `<img src>` tags in SpriteThumbnail/SpriteModal, which fall back to a placeholder on
+ * load error rather than this module trying to know in advance which files exist.
  *
  * Verified live against the repo (see TODO.md's Sprite display leg): generation
  * folders exist through generation-ix, but generation-viii has no Sword/Shield sprite
@@ -41,18 +45,31 @@ const ROMAN_NUMERALS: Record<number, string> = {
 
 const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
 
+/** The CDN's file-naming key for a form: pokeapiId alone, or "{pokeapiId}-{suffix}" for
+ * a cosmetic sub-form that shares its pokeapiId with siblings. */
+function spriteFileId(pokeapiId: number, spriteFormSuffix: string | null): string {
+  return spriteFormSuffix ? `${pokeapiId}-${spriteFormSuffix}` : `${pokeapiId}`
+}
+
 /** The row-thumbnail sprite: PokeAPI's evergreen "current" default artwork. */
-export function defaultSpriteUrl(pokeapiId: number, shiny: boolean): string {
-  return shiny ? `${SPRITE_BASE}/shiny/${pokeapiId}.png` : `${SPRITE_BASE}/${pokeapiId}.png`
+export function defaultSpriteUrl(pokeapiId: number, spriteFormSuffix: string | null, shiny: boolean): string {
+  const id = spriteFileId(pokeapiId, spriteFormSuffix)
+  return shiny ? `${SPRITE_BASE}/shiny/${id}.png` : `${SPRITE_BASE}/${id}.png`
 }
 
 /** The modal's generation-stepped sprite, per GENERATION_GAME's representative game. */
-export function generationSpriteUrl(pokeapiId: number, generation: number, shiny: boolean): string {
+export function generationSpriteUrl(
+  pokeapiId: number,
+  spriteFormSuffix: string | null,
+  generation: number,
+  shiny: boolean
+): string {
   const game = GENERATION_GAME[generation]
   const roman = ROMAN_NUMERALS[generation]
   if (!game || !roman) throw new Error(`No sprite mapping for generation ${generation}`)
+  const id = spriteFileId(pokeapiId, spriteFormSuffix)
   const shinyPart = shiny ? '/shiny' : ''
-  return `${SPRITE_BASE}/versions/generation-${roman}/${game}${shinyPart}/${pokeapiId}.png`
+  return `${SPRITE_BASE}/versions/generation-${roman}/${game}${shinyPart}/${id}.png`
 }
 
 /**

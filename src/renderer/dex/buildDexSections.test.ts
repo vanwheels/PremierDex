@@ -18,6 +18,7 @@ function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'fo
     firstAvailableGeneration: 1,
     regionalGroup: null,
     pokeapiId: overrides.id,
+    spriteFormSuffix: null,
     ...overrides
   }
 }

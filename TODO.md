@@ -24,16 +24,6 @@ section? greyed-out row within their species? excluded like non_boxable?) before
 a filter/badge.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [Missing form data: Unown/Vivillon/Flabébé line/Furfrou/Alcremie/Poltchageist/Sinistcha] — Leg 9
-`fetch-pokemon-forms.ts` only pulled the `base` (and sometimes `gmax`) form for these
-species — 0 of Unown's 28 letters, Vivillon's ~20 patterns, Flabébé/Floette/Florges' 5
-colors each, Furfrou's 9 trims, Alcremie's 63 combos, or Poltchageist/Sinistcha's 2
-forms each, all of which are Home-depositable. Likely these express variants as multiple
-`pokemon-form` entries under one PokeAPI `pokemon` variety rather than separate
-varieties — confirm against a live response before fixing. Detail:
-`docs/investigations/home-depositability-audit.md`.
-Last touched: 2026-09-01. Re-check count: 0.
-
 ## [Base-form display naming] — Leg 10
 Deoxys and Wormadam's default variety is stored as `formName: 'base'` (storage
 convention), but their in-game name is "Normal"/"Plant" respectively — Oricorio

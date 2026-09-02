@@ -9,6 +9,7 @@ export interface DexRowData {
   regular: CollectionEntry | null // shiny = false
   shinyEntry: CollectionEntry | null // shiny = true
   pokeapiId: number
+  spriteFormSuffix: string | null
   firstAvailableGeneration: number
 }
 
