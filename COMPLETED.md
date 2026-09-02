@@ -40,4 +40,4 @@ usable; HOME's only account-level ID is a social friend code, not per-slot ident
 Vanny's call, identity is uniformly a user-provided name (no type-specific ID columns),
 and a `CHECK` constraint requires trainer_profile_id set only for location_type =
 'save_file', null for the other four — a save-file location is inherently "the boxes
-inside trainer X's save."
+inside trainer X's save." See commit `bf092e7`.
