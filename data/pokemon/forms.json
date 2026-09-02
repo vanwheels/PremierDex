@@ -288,15 +288,6 @@
     "pokeapiId": 10092
   },
   {
-    "speciesId": 20,
-    "formName": "totem-alola",
-    "formCategory": "dex_distinct",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10093
-  },
-  {
     "speciesId": 21,
     "formName": "base",
     "formCategory": "dex_distinct",
@@ -457,15 +448,6 @@
     "firstAvailableGeneration": 7,
     "regionalGroup": null,
     "pokeapiId": 10148
-  },
-  {
-    "speciesId": 25,
-    "formName": "starter",
-    "formCategory": "dex_distinct",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10158
   },
   {
     "speciesId": 25,
@@ -1539,15 +1521,6 @@
     "pokeapiId": 10115
   },
   {
-    "speciesId": 105,
-    "formName": "totem",
-    "formCategory": "dex_distinct",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10149
-  },
-  {
     "speciesId": 106,
     "formName": "base",
     "formCategory": "dex_distinct",
@@ -1888,15 +1861,6 @@
     "firstAvailableGeneration": 1,
     "regionalGroup": null,
     "pokeapiId": 133
-  },
-  {
-    "speciesId": 133,
-    "formName": "starter",
-    "formCategory": "dex_distinct",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10159
   },
   {
     "speciesId": 133,
@@ -8577,15 +8541,6 @@
     "pokeapiId": 735
   },
   {
-    "speciesId": 735,
-    "formName": "totem",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10121
-  },
-  {
     "speciesId": 736,
     "formName": "base",
     "formCategory": "dex_distinct",
@@ -8611,15 +8566,6 @@
     "firstAvailableGeneration": 7,
     "regionalGroup": null,
     "pokeapiId": 738
-  },
-  {
-    "speciesId": 738,
-    "formName": "totem",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10122
   },
   {
     "speciesId": 739,
@@ -8701,15 +8647,6 @@
     "firstAvailableGeneration": 7,
     "regionalGroup": null,
     "pokeapiId": 743
-  },
-  {
-    "speciesId": 743,
-    "formName": "totem",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10150
   },
   {
     "speciesId": 744,
@@ -8829,15 +8766,6 @@
     "pokeapiId": 752
   },
   {
-    "speciesId": 752,
-    "formName": "totem",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10153
-  },
-  {
     "speciesId": 753,
     "formName": "base",
     "formCategory": "dex_distinct",
@@ -8854,15 +8782,6 @@
     "firstAvailableGeneration": 7,
     "regionalGroup": null,
     "pokeapiId": 754
-  },
-  {
-    "speciesId": 754,
-    "formName": "totem",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10128
   },
   {
     "speciesId": 755,
@@ -8899,15 +8818,6 @@
     "firstAvailableGeneration": 7,
     "regionalGroup": null,
     "pokeapiId": 758
-  },
-  {
-    "speciesId": 758,
-    "formName": "totem",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10129
   },
   {
     "speciesId": 759,
@@ -9207,15 +9117,6 @@
     "pokeapiId": 777
   },
   {
-    "speciesId": 777,
-    "formName": "totem",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10154
-  },
-  {
     "speciesId": 778,
     "formName": "base",
     "formCategory": "dex_distinct",
@@ -9232,24 +9133,6 @@
     "firstAvailableGeneration": 7,
     "regionalGroup": null,
     "pokeapiId": 10143
-  },
-  {
-    "speciesId": 778,
-    "formName": "totem-disguised",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10144
-  },
-  {
-    "speciesId": 778,
-    "formName": "totem-busted",
-    "formCategory": "non_boxable",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10145
   },
   {
     "speciesId": 779,
@@ -9313,15 +9196,6 @@
     "firstAvailableGeneration": 7,
     "regionalGroup": null,
     "pokeapiId": 784
-  },
-  {
-    "speciesId": 784,
-    "formName": "totem",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 7,
-    "regionalGroup": null,
-    "pokeapiId": 10146
   },
   {
     "speciesId": 785,
@@ -11880,42 +11754,6 @@
     "pokeapiId": 1007
   },
   {
-    "speciesId": 1007,
-    "formName": "limited-build",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 9,
-    "regionalGroup": null,
-    "pokeapiId": 10264
-  },
-  {
-    "speciesId": 1007,
-    "formName": "sprinting-build",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 9,
-    "regionalGroup": null,
-    "pokeapiId": 10265
-  },
-  {
-    "speciesId": 1007,
-    "formName": "swimming-build",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 9,
-    "regionalGroup": null,
-    "pokeapiId": 10266
-  },
-  {
-    "speciesId": 1007,
-    "formName": "gliding-build",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 9,
-    "regionalGroup": null,
-    "pokeapiId": 10267
-  },
-  {
     "speciesId": 1008,
     "formName": "base",
     "formCategory": "dex_distinct",
@@ -11923,42 +11761,6 @@
     "firstAvailableGeneration": 9,
     "regionalGroup": null,
     "pokeapiId": 1008
-  },
-  {
-    "speciesId": 1008,
-    "formName": "low-power-mode",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 9,
-    "regionalGroup": null,
-    "pokeapiId": 10268
-  },
-  {
-    "speciesId": 1008,
-    "formName": "drive-mode",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 9,
-    "regionalGroup": null,
-    "pokeapiId": 10269
-  },
-  {
-    "speciesId": 1008,
-    "formName": "aquatic-mode",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 9,
-    "regionalGroup": null,
-    "pokeapiId": 10270
-  },
-  {
-    "speciesId": 1008,
-    "formName": "glide-mode",
-    "formCategory": "cosmetic_variant",
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 9,
-    "regionalGroup": null,
-    "pokeapiId": 10271
   },
   {
     "speciesId": 1009,

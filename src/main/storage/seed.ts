@@ -2,6 +2,57 @@ import type Database from 'better-sqlite3'
 import { loadFormsData, loadSpeciesData } from './load-species-data'
 
 /**
+ * Leg 7 cleanup: forms.json used to include rows for varieties that shouldn't occupy a
+ * dex slot at all — Totem Pokemon (in-game boss encounters, not catchable), Let's Go
+ * Pikachu/Eevee's `starter` form, and Koraidon/Miraidon's ride-mode varieties (an
+ * in-game S/V traversal feature, not a persistent form). See
+ * docs/investigations/home-depositability-audit.md section 1 and
+ * scripts/fetch-pokemon-forms.ts's `isExcludedVariety`, which now skips generating these
+ * rows going forward. seed.ts itself is INSERT-only and never deletes, so a local db
+ * seeded before this leg would otherwise keep these rows (and their collection_entries)
+ * forever. Listed as explicit (species_id, form_name) pairs rather than diffed against
+ * forms.json's current contents, so a bad or partial forms.json fetch can never delete a
+ * player's real collection data.
+ */
+const PRUNED_FORM_KEYS: ReadonlyArray<readonly [number, string]> = [
+  [20, 'totem-alola'],
+  [25, 'starter'],
+  [105, 'totem'],
+  [133, 'starter'],
+  [735, 'totem'],
+  [738, 'totem'],
+  [743, 'totem'],
+  [752, 'totem'],
+  [754, 'totem'],
+  [758, 'totem'],
+  [777, 'totem'],
+  [778, 'totem-disguised'],
+  [778, 'totem-busted'],
+  [784, 'totem'],
+  [1007, 'limited-build'],
+  [1007, 'sprinting-build'],
+  [1007, 'swimming-build'],
+  [1007, 'gliding-build'],
+  [1008, 'low-power-mode'],
+  [1008, 'drive-mode'],
+  [1008, 'aquatic-mode'],
+  [1008, 'glide-mode']
+]
+
+function prunePreLeg7ExcludedForms(db: Database.Database): void {
+  const findFormId = db.prepare('SELECT id FROM forms WHERE species_id = ? AND form_name = ?')
+  const deleteEntries = db.prepare('DELETE FROM collection_entries WHERE form_id = ?')
+  const deleteForm = db.prepare('DELETE FROM forms WHERE id = ?')
+
+  for (const [speciesId, formName] of PRUNED_FORM_KEYS) {
+    const row = findFormId.get(speciesId, formName) as { id: number } | undefined
+    if (!row) continue
+    deleteEntries.run(row.id)
+    deleteForm.run(row.id)
+  }
+}
+
+/**
  * Seeds reference data (species/forms/collection-entry rows) on every startup.
  * Entirely INSERT OR IGNORE keyed on schema.ts's unique constraints, so this is always
  * safe to re-run: it only ever adds rows that don't exist yet and never touches a
@@ -35,6 +86,8 @@ export function runSeed(db: Database.Database): void {
   )
 
   const seedAll = db.transaction(() => {
+    prunePreLeg7ExcludedForms(db)
+
     for (const species of loadSpeciesData()) {
       insertSpecies.run(species)
     }

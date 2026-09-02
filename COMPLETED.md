@@ -1,5 +1,17 @@
 # COMPLETED
 
+## [Dex/species exclusions: totem, Let's Go starters, Koraidon/Miraidon modes] — Leg 7
+2026-09-02. `scripts/fetch-pokemon-forms.ts` now skips generating a row for any variety
+`isExcludedVariety` matches (totem `formName`, Pikachu/Eevee's Let's Go `starter`,
+Koraidon/Miraidon's ride-mode forms) instead of fetching it and discarding it, checked
+before the per-variety PokeAPI calls so excluded varieties cost nothing extra. Re-ran the
+fetch and diffed old vs. new `forms.json`: exactly the 22 expected rows removed (12
+totem + 2 starter + 8 ride-mode), nothing else changed. Since `runSeed` is INSERT-only
+and never deletes, added a one-time `prunePreLeg7ExcludedForms` step (explicit
+species_id/form_name pairs, not a diff against `forms.json`, so a bad fetch can never
+delete real collection data) so an already-seeded local db gets these rows and their
+`collection_entries` removed too. See commit `<pending>`.
+
 ## [Packaging/distribution] — Leg 6
 2026-09-01. `electron-builder.yml`: NSIS/x64-only Windows target, `publish: github`
 (vanwheels/PremierDex), `extraResources` shipping `data/pokemon/` outside asar (the gap

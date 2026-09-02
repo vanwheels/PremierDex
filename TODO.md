@@ -15,14 +15,6 @@ but not wired up. Needs a toggle in `SpriteModal.tsx` to switch static/animated,
 to whichever generations actually have an animated folder (likely just gen 5).
 Last touched: 2026-09-01. Re-check count: 0.
 
-## [Dex/species exclusions: totem, Let's Go starters, Koraidon/Miraidon modes] — Leg 7
-Drop 12 totem-form rows (Raticate-Alola, Marowak-Alola, Gumshoos, Vikavolt, Araquanid,
-Lurantis, Salazzle, Togedemaru, Kommo-o, Mimikyu totem-disguised/busted — in-game bosses,
-not catchable), Eevee/Pikachu's `starter` (Let's Go) forms, and Koraidon/Miraidon's
-ride-mode cosmetic variants (in-game traversal feature, not a persistent form) — these
-shouldn't occupy a dex slot at all. Full list: `docs/investigations/home-depositability-audit.md`.
-Last touched: 2026-09-01. Re-check count: 0.
-
 ## [Home-depositability corrections for existing forms] — Leg 8
 Dialga/Palkia/Giratina Origin, Necrozma Dawn Wings/Dusk Mane, Calyrex Ice/Shadow Rider,
 Ogerpon's 3 masks, and Minior's 7 core color forms are real, non-battle-only forms

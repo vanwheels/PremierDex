@@ -33,6 +33,12 @@
  *     species that has multiple already-distinct base formes each with their own
  *     Gmax/Mega (Toxtricity Amped/Low Key, Urshifu Single/Rapid Strike, Tatsugiri
  *     Curly/Droopy/Stretchy all report form_name "gmax"/"mega" on every variant).
+ *   - A small set of varieties are excluded entirely (no forms.json row at all), rather
+ *     than categorized non_boxable: Totem Pokemon (in-game boss encounters, not
+ *     catchable), Let's Go Pikachu/Eevee's `starter` form (can't transfer out of Let's
+ *     Go into Home), and Koraidon/Miraidon's ride-mode varieties (an in-game S/V
+ *     traversal feature, not a persistent Pokemon state). See `isExcludedVariety` below
+ *     and docs/investigations/home-depositability-audit.md section 1.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -126,6 +132,29 @@ const REGIONAL_GROUPS: Record<string, SeedForm['regionalGroup']> = {
 const CONCURRENCY = 10
 const MAX_ATTEMPTS = 3
 
+const KORAIDON_ID = 1007
+const MIRAIDON_ID = 1008
+const KORAIDON_RIDE_MODES = ['limited-build', 'sprinting-build', 'swimming-build', 'gliding-build']
+const MIRAIDON_RIDE_MODES = ['low-power-mode', 'drive-mode', 'aquatic-mode', 'glide-mode']
+const LETS_GO_STARTER_SPECIES = [25, 133] // Pikachu, Eevee
+
+/**
+ * Varieties that shouldn't occupy a dex slot at all — not "boxable but not yet
+ * Home-depositable" (that's non_boxable), just not real, trackable dex entries. See
+ * docs/investigations/home-depositability-audit.md section 1:
+ *   - Totem Pokemon: in-game boss encounters only, never catchable.
+ *   - Let's Go Pikachu/Eevee's `starter` form: can't transfer out of Let's Go into Home.
+ *   - Koraidon/Miraidon ride modes: an in-game S/V traversal feature, not a form that
+ *     persists as a distinct Pokemon state outside battle.
+ */
+function isExcludedVariety(speciesId: number, formName: string): boolean {
+  if (formName === 'totem' || formName.startsWith('totem-')) return true
+  if (LETS_GO_STARTER_SPECIES.includes(speciesId) && formName === 'starter') return true
+  if (speciesId === KORAIDON_ID && KORAIDON_RIDE_MODES.includes(formName)) return true
+  if (speciesId === MIRAIDON_ID && MIRAIDON_RIDE_MODES.includes(formName)) return true
+  return false
+}
+
 async function fetchJson<T>(url: string): Promise<T> {
   let lastErr: unknown
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -213,9 +242,15 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
 
   const nonDefaultVarieties = speciesData.varieties.filter((v) => v !== defaultVariety)
   for (const variety of nonDefaultVarieties) {
+    // formName is derivable from the variety's own pokemon slug (already in hand from
+    // the species response) without fetching it — check exclusion first so excluded
+    // varieties (totem, Let's Go starter, Koraidon/Miraidon ride modes) skip the two
+    // PokeAPI calls below entirely rather than being fetched and then discarded.
+    const formName = formNameFromVariety(species.name, variety.pokemon.name)
+    if (isExcludedVariety(species.id, formName)) continue
+
     const pokemon = await fetchJson<PokeApiPokemonResponse>(variety.pokemon.url)
     const form = await fetchJson<PokeApiFormResponse>(pokemon.forms[0].url)
-    const formName = formNameFromVariety(species.name, variety.pokemon.name)
 
     const regionalGroup = REGIONAL_GROUPS[form.form_name] ?? null
     const generation =
