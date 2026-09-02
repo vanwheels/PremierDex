@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { availableGenerations, generationSpriteUrl } from './sprites'
+import { animatedSpriteUrl, availableGenerations, generationSpriteUrl, hasAnimatedSprites } from './sprites'
 
 export interface SpriteModalTarget {
   pokeapiId: number
@@ -25,7 +25,11 @@ export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element 
   const generations = availableGenerations(target.firstAvailableGeneration)
   const [generation, setGeneration] = useState(generations[generations.length - 1])
   const [shiny, setShiny] = useState(false)
+  const [animated, setAnimated] = useState(false)
   const [failed, setFailed] = useState(false)
+
+  const canAnimate = hasAnimatedSprites(generation)
+  const showAnimated = animated && canAnimate
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -54,8 +58,12 @@ export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element 
             <p>Sprite unavailable for this generation.</p>
           ) : (
             <img
-              src={generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, shiny)}
-              alt={`${target.displayName} — generation ${generation}${shiny ? ' shiny' : ''}`}
+              src={
+                showAnimated
+                  ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, shiny)
+                  : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, shiny)
+              }
+              alt={`${target.displayName} — generation ${generation}${shiny ? ' shiny' : ''}${showAnimated ? ' animated' : ''}`}
               width={MODAL_SIZE}
               height={MODAL_SIZE}
               onError={() => setFailed(true)}
@@ -76,17 +84,31 @@ export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element 
             ›
           </button>
         </div>
-        <label>
-          <input
-            type="checkbox"
-            checked={shiny}
-            onChange={(e) => {
-              setShiny(e.target.checked)
-              setFailed(false)
-            }}
-          />
-          Shiny
-        </label>
+        <div className="sprite-modal-options">
+          <label>
+            <input
+              type="checkbox"
+              checked={shiny}
+              onChange={(e) => {
+                setShiny(e.target.checked)
+                setFailed(false)
+              }}
+            />
+            Shiny
+          </label>
+          <label title={canAnimate ? undefined : 'No animated sprites for this generation'}>
+            <input
+              type="checkbox"
+              checked={animated}
+              disabled={!canAnimate}
+              onChange={(e) => {
+                setAnimated(e.target.checked)
+                setFailed(false)
+              }}
+            />
+            Animated
+          </label>
+        </div>
       </div>
     </div>
   )

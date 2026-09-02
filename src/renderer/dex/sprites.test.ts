@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { availableGenerations, CURRENT_MAX_GENERATION, defaultSpriteUrl, generationSpriteUrl } from './sprites'
+import {
+  animatedSpriteUrl,
+  availableGenerations,
+  CURRENT_MAX_GENERATION,
+  defaultSpriteUrl,
+  generationSpriteUrl,
+  hasAnimatedSprites
+} from './sprites'
 
 describe('availableGenerations', () => {
   it('runs from firstAvailableGeneration through the current generation', () => {
@@ -66,6 +73,37 @@ describe('generationSpriteUrl', () => {
   it('appends spriteFormSuffix to the id for a cosmetic sub-form', () => {
     expect(generationSpriteUrl(666, 'icy-snow', 9, false)).toBe(
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ix/scarlet-violet/666-icy-snow.png'
+    )
+  })
+})
+
+describe('hasAnimatedSprites', () => {
+  it('is true only for generation 5', () => {
+    expect(hasAnimatedSprites(5)).toBe(true)
+  })
+
+  it('is false for every other generation', () => {
+    expect(hasAnimatedSprites(1)).toBe(false)
+    expect(hasAnimatedSprites(9)).toBe(false)
+  })
+})
+
+describe('animatedSpriteUrl', () => {
+  it('builds the gen-5 animated URL', () => {
+    expect(animatedSpriteUrl(25, null, false)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.png'
+    )
+  })
+
+  it('builds the shiny variant under a nested /shiny/ subfolder', () => {
+    expect(animatedSpriteUrl(25, null, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/25.png'
+    )
+  })
+
+  it('appends spriteFormSuffix to the id for a cosmetic sub-form', () => {
+    expect(animatedSpriteUrl(201, 'b', false)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/201-b.png'
     )
   })
 })

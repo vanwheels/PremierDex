@@ -122,3 +122,10 @@ td {
   gap: 1rem;
   margin: 0.5rem 0;
 }
+
+.sprite-modal-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}

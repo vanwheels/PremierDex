@@ -82,3 +82,19 @@ export function availableGenerations(firstAvailableGeneration: number): number[]
   const length = CURRENT_MAX_GENERATION - start + 1
   return Array.from({ length }, (_, i) => start + i)
 }
+
+/** Generations with an animated sprite folder in the CDN — confirmed during Leg 4/11
+ * research to be gen 5 (black-white) only; other generations used static art only. */
+const ANIMATED_GENERATIONS = new Set([5])
+
+export function hasAnimatedSprites(generation: number): boolean {
+  return ANIMATED_GENERATIONS.has(generation)
+}
+
+/** The modal's animated-sprite variant. Only valid for a generation where
+ * hasAnimatedSprites is true — callers must gate on that first. */
+export function animatedSpriteUrl(pokeapiId: number, spriteFormSuffix: string | null, shiny: boolean): string {
+  const id = spriteFileId(pokeapiId, spriteFormSuffix)
+  const shinyPart = shiny ? '/shiny' : ''
+  return `${SPRITE_BASE}/versions/generation-v/black-white/animated${shinyPart}/${id}.png`
+}
