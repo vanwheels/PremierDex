@@ -65,6 +65,9 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   const matchedGame = findOriginGame(game)
   const tidVisible = matchedGame?.hasTrainerId ?? true
   const sidVisible = matchedGame?.hasSecretId ?? true
+  // Pokémon GO's 12-digit Trainer Code overrides the mainline 6-digit cap — see
+  // origin-games.ts's trainerIdMax doc.
+  const tidMax = matchedGame?.trainerIdMax ?? TID_MAX
 
   const handleProfileSelect = (value: string): void => {
     if (value === NO_PROFILE) {
@@ -86,7 +89,7 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   // in-range integer.
   const parsedTid = tid.trim() === '' ? null : Number(tid)
   const parsedSid = sid.trim() === '' ? null : Number(sid)
-  const tidValid = !tidVisible || parsedTid === null || (Number.isInteger(parsedTid) && parsedTid >= 0 && parsedTid <= TID_MAX)
+  const tidValid = !tidVisible || parsedTid === null || (Number.isInteger(parsedTid) && parsedTid >= 0 && parsedTid <= tidMax)
   const sidValid = !sidVisible || parsedSid === null || (Number.isInteger(parsedSid) && parsedSid >= 0 && parsedSid <= SID_MAX)
   const valid = bothBlank || (game.trim() !== '' && otName.trim() !== '' && tidValid && sidValid)
 
@@ -137,7 +140,7 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
         {tidVisible && (
           <label className="origin-modal-field">
             TID
-            <input type="number" min={0} max={TID_MAX} value={tid} onChange={(e) => setTid(e.target.value)} />
+            <input type="number" min={0} max={tidMax} value={tid} onChange={(e) => setTid(e.target.value)} />
           </label>
         )}
         {sidVisible && (

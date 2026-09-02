@@ -5,8 +5,11 @@
  *
  * hasTrainerId/hasSecretId encode whether an origin game has that value at all, per
  * https://bulbapedia.bulbagarden.net/wiki/Trainer_ID_number:
- * - Pokémon GO has no Trainer ID or Secret ID at all — origin identity there is just the
- *   trainer/OT name.
+ * - Pokémon GO has no Secret ID, but does show a Trainer ID in-game: a 12-digit
+ *   "Trainer Code" (grouped as XXXX XXXX XXXX on the profile/add-friend screen), used to
+ *   add friends. It isn't derived the same way as mainline's TID/SID pair and doesn't fit
+ *   the mainline 6-digit range, so it sets `trainerIdMax` to override the default cap
+ *   (see TrainerProfileForm.tsx / OriginModal.tsx).
  * - Generations I-VI store a Secret ID internally but never display it in-game — a player
  *   can't read it off their Trainer Card, but it's still extractable with an external tool
  *   (e.g. PKHex), so the field stays enterable rather than hidden.
@@ -19,11 +22,16 @@ export interface OriginGame {
   /** Generation introduced; null for Pokémon GO, which isn't part of the mainline
    * generation numbering. */
   generation: number | null
-  /** False only for Pokémon GO. */
+  /** True for every listed game today (Pokémon GO shows a 12-digit Trainer Code — see
+   * file header) — kept as a flag rather than assumed true so a future entry without any
+   * visible Trainer ID still has a way to opt out. */
   hasTrainerId: boolean
   /** False only for Pokémon GO — every mainline generation has a Secret ID internally,
    * even where it's not shown in-game (see file header). */
   hasSecretId: boolean
+  /** Overrides the default 6-digit Trainer ID cap (999999) used by TrainerProfileForm.tsx
+   * / OriginModal.tsx. Only Pokémon GO sets this, for its 12-digit Trainer Code. */
+  trainerIdMax?: number
 }
 
 function mainlineGame(id: string, name: string, generation: number): OriginGame {
@@ -71,7 +79,7 @@ export const ORIGIN_GAMES: OriginGame[] = [
   mainlineGame('scarlet', 'Pokémon Scarlet', 9),
   mainlineGame('violet', 'Pokémon Violet', 9),
   mainlineGame('legends-za', 'Pokémon Legends: Z-A', 9),
-  { id: 'go', name: 'Pokémon GO', generation: null, hasTrainerId: false, hasSecretId: false }
+  { id: 'go', name: 'Pokémon GO', generation: null, hasTrainerId: true, hasSecretId: false, trainerIdMax: 999_999_999_999 }
 ]
 
 export function findOriginGame(name: string): OriginGame | undefined {

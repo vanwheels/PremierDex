@@ -1,12 +1,5 @@
 # TODO
 
-## [origin-games.ts: Pokémon GO has a Trainer ID] — Leg 8
-Vanny flagged that Pokémon GO does have a visible Trainer ID in-game, contradicting
-`hasTrainerId: false` currently set for it in `src/shared/data/origin-games.ts` (GO still
-has no Secret ID, so `hasSecretId: false` stays correct). Needs the actual GO ID format
-confirmed before the flag/UI change goes in.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Foldable species: display checked-off form when collapsed] — Leg 9
 Foldable/multi-form species (Unknown, Maushold, etc.) should display the first *checked
 off* form when collapsed, falling back to the first form in list order if none are

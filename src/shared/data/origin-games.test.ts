@@ -7,9 +7,16 @@ describe('ORIGIN_GAMES', () => {
     expect(new Set(ORIGIN_GAMES.map((g) => g.name)).size).toBe(ORIGIN_GAMES.length)
   })
 
-  it('marks Pokémon GO as having neither a Trainer ID nor a Secret ID', () => {
+  it('marks Pokémon GO as having a Trainer ID (12-digit Trainer Code) but no Secret ID', () => {
     const go = findOriginGame('Pokémon GO')
-    expect(go).toEqual({ id: 'go', name: 'Pokémon GO', generation: null, hasTrainerId: false, hasSecretId: false })
+    expect(go).toEqual({
+      id: 'go',
+      name: 'Pokémon GO',
+      generation: null,
+      hasTrainerId: true,
+      hasSecretId: false,
+      trainerIdMax: 999_999_999_999
+    })
   })
 
   it('marks every mainline/spinoff game as having both a Trainer ID and a Secret ID, even pre-Gen-VII where the Secret ID is never shown in-game but is still extractable with an external tool', () => {
