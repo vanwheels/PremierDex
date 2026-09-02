@@ -231,3 +231,17 @@ export function buildDexSections(
 
   return sections
 }
+
+/**
+ * Picks which row represents a foldable species (one with cosmetic variants — Unown,
+ * Maushold, etc.) when its section is collapsed: the first candidate, checking `rows[0]`
+ * then `cosmeticRows` in list order, that has an owned regular or shiny entry — or
+ * `rows[0]` itself if none are checked off. Only meaningful when the species actually has
+ * cosmetic rows; DexTable is the only caller, and only for the row slot carrying the
+ * expand toggle (rows[0]) — any further dex_distinct rows in the section (e.g. Floette's
+ * Eternal Flower) render as-is regardless of collapse state.
+ */
+export function pickCollapsedRow(rows: DexRowData[], cosmeticRows: DexRowData[]): DexRowData {
+  const candidates = [rows[0], ...cosmeticRows]
+  return candidates.find((row) => row.regular?.owned || row.shinyEntry?.owned) ?? rows[0]
+}

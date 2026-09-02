@@ -5,6 +5,7 @@ import { SpriteModal } from './SpriteModal'
 import type { SpriteModalTarget } from './SpriteModal'
 import { OriginModal } from './OriginModal'
 import type { OriginModalTarget } from './OriginModal'
+import { pickCollapsedRow } from './buildDexSections'
 import type { DexSection } from './types'
 
 interface DexTableProps {
@@ -55,24 +56,32 @@ export function DexTable({ sections, onToggleEntry, onSaveOrigin }: DexTableProp
 
             return (
               <Fragment key={section.key}>
-                {section.rows.map((row, i) => (
-                  <DexRow
-                    key={row.key}
-                    row={row}
-                    onToggleEntry={onToggleEntry}
-                    onOpenSprite={setSpriteTarget}
-                    onOpenOrigin={setOriginTarget}
-                    expandControl={
-                      i === 0 && hasCosmeticRows && section.speciesId !== null
-                        ? {
-                            isExpanded,
-                            count: section.cosmeticRows.length,
-                            onClick: () => toggleExpanded(section.speciesId!)
-                          }
-                        : undefined
-                    }
-                  />
-                ))}
+                {section.rows.map((row, i) => {
+                  const isCollapseSlot = i === 0 && hasCosmeticRows && section.speciesId !== null
+                  // Collapsed, this slot shows whichever form (base or a cosmetic
+                  // variant) is checked off, so an owned/shiny variant doesn't hide
+                  // behind an unowned default. Expanded, every row is visible anyway, so
+                  // it shows the base form in its normal list-order position.
+                  const displayRow = isCollapseSlot && !isExpanded ? pickCollapsedRow(section.rows, section.cosmeticRows) : row
+                  return (
+                    <DexRow
+                      key={row.key}
+                      row={displayRow}
+                      onToggleEntry={onToggleEntry}
+                      onOpenSprite={setSpriteTarget}
+                      onOpenOrigin={setOriginTarget}
+                      expandControl={
+                        isCollapseSlot
+                          ? {
+                              isExpanded,
+                              count: section.cosmeticRows.length,
+                              onClick: () => toggleExpanded(section.speciesId!)
+                            }
+                          : undefined
+                      }
+                    />
+                  )
+                })}
                 {isExpanded &&
                   section.cosmeticRows.map((row) => (
                     <DexRow

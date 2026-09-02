@@ -1,12 +1,5 @@
 # TODO
 
-## [Foldable species: display checked-off form when collapsed] — Leg 9
-Foldable/multi-form species (Unknown, Maushold, etc.) should display the first *checked
-off* form when collapsed, falling back to the first form in list order if none are
-checked. Vanny suggested possibly adding a user-facing selector to pick which form
-displays when collapsed, as a stretch on top of the checked-off default.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Move nicknames out of Origin field] — Leg 10
 Nicknames currently live inside the Origin field/modal; they should be their own column,
 positioned between Name and Owned, on whatever grid(s) currently fold them into Origin.
@@ -84,6 +77,13 @@ gender symbols (Nidoran♀/♂), an accent (Flabébé), and lowercase-after-hyph
 (Jangmo-o/Hakamo-o/Kommo-o, Ho-Oh and Porygon-Z are already correct as-is). Deliberately
 deferred at Vanny's call — simple title-case only, no exceptions dictionary — see
 COMPLETED.md's Leg 7 entry.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [User-facing selector for collapsed foldable-species form] — unscheduled
+Leg 9 shipped the checked-off-first default (falls back to list order if nothing's
+checked — see COMPLETED.md). Vanny floated a stretch on top of that: let the user
+explicitly pick which form displays when collapsed, overriding the automatic pick. Not
+started — flagged as a stretch, not committed scope, when Leg 9 was opened.
 Last touched: 2026-09-02. Re-check count: 0.
 
 ## [App icon] — unscheduled

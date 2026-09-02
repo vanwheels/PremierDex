@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
-import { buildDexSections } from './buildDexSections'
-import type { DexOptions } from './types'
+import { buildDexSections, pickCollapsedRow } from './buildDexSections'
+import type { DexOptions, DexRowData } from './types'
 
 const OPTIONS_DEFAULT: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
 
@@ -167,5 +167,63 @@ describe('buildDexSections', () => {
     const sections = buildDexSections(SPECIES, forms, [], OPTIONS_DEFAULT)
     expect(sections.find((s) => s.speciesId === 25)!.rows[0].shinyLocked).toBe(false)
     expect(sections.find((s) => s.speciesId === 26)!.rows[0].shinyLocked).toBe(true)
+  })
+})
+
+function makeRow(overrides: Partial<DexRowData> & Pick<DexRowData, 'key' | 'displayName'>): DexRowData {
+  return {
+    formId: 1,
+    dexNumber: 201,
+    regular: null,
+    shinyEntry: null,
+    pokeapiId: 201,
+    spriteFormSuffix: null,
+    firstAvailableGeneration: 1,
+    homeBoxable: true,
+    shinyLocked: false,
+    ...overrides
+  }
+}
+
+function ownedEntry(id: number, shiny = false): CollectionEntry {
+  return {
+    id,
+    formId: 1,
+    gender: 'unknown',
+    shiny,
+    owned: true,
+    trainerProfileId: null,
+    originGame: null,
+    otName: null,
+    tid: null,
+    sid: null,
+    nickname: null
+  }
+}
+
+describe('pickCollapsedRow', () => {
+  it('falls back to rows[0] when nothing is checked off', () => {
+    const base = makeRow({ key: 'a', displayName: 'Unown (A)' })
+    const cosmetic = makeRow({ key: 'b', displayName: 'Unown (B)' })
+    expect(pickCollapsedRow([base], [cosmetic])).toBe(base)
+  })
+
+  it('picks the first checked-off cosmetic row when the base form is unchecked', () => {
+    const base = makeRow({ key: 'a', displayName: 'Unown (A)' })
+    const uncheckedCosmetic = makeRow({ key: 'b', displayName: 'Unown (B)' })
+    const checkedCosmetic = makeRow({ key: 'c', displayName: 'Unown (C)', regular: ownedEntry(1) })
+    expect(pickCollapsedRow([base], [uncheckedCosmetic, checkedCosmetic])).toBe(checkedCosmetic)
+  })
+
+  it('prefers rows[0] over a checked cosmetic row when the base form is itself checked off', () => {
+    const base = makeRow({ key: 'a', displayName: 'Unown (A)', regular: ownedEntry(1) })
+    const checkedCosmetic = makeRow({ key: 'c', displayName: 'Unown (C)', regular: ownedEntry(2) })
+    expect(pickCollapsedRow([base], [checkedCosmetic])).toBe(base)
+  })
+
+  it('counts a checked-off shiny entry, not just the regular one', () => {
+    const base = makeRow({ key: 'a', displayName: 'Unown (A)' })
+    const shinyOnlyCosmetic = makeRow({ key: 'b', displayName: 'Unown (B)', shinyEntry: ownedEntry(1, true) })
+    expect(pickCollapsedRow([base], [shinyOnlyCosmetic])).toBe(shinyOnlyCosmetic)
   })
 })
