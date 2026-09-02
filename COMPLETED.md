@@ -19,3 +19,8 @@ mainline title, Colosseum/XD, and Pokémon GO, each flagged for whether it shows
 Trainer ID and/or Secret ID; the Game field is now a datalist-backed autocomplete
 sourced from that list, and TID/SID inputs hide themselves per the matched game's flags
 (GO hides both; pre-Gen-VII hides SID only). See commit `f1e0612`.
+
+Follow-up same day: the Game field's native `<datalist>` dropdown didn't scroll (and
+isn't stylable at all — it's drawn outside the DOM), so swapped it for a small hand-rolled
+combobox (`OriginGameInput.tsx`) with a proper `overflow-y: auto` popup. See commit
+`30e1bf9`.
