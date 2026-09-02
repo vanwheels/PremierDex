@@ -15,7 +15,7 @@ helper: exact match still always counts, and a hyphen-prefixed compound name now
 too, but only when the variety also differs in types/stats — which is what keeps
 `pikachu-alola-cap` (same prefix, identical stats, a cosmetic cap) correctly excluded
 without a hardcoded species list. Hand-patched the 4 already-generated `forms.json` rows
-to match rather than re-running the live PokeAPI fetch. See commit `<pending>`.
+to match rather than re-running the live PokeAPI fetch. See commit `074927a`.
 
 ## [Per-entry origin data + nicknames] — Leg 4 — 2026-09-02
 Collection Entries get `trainer_profile_id` (provenance-only FK, orphaned to null on
