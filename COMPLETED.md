@@ -15,7 +15,7 @@ automatically via its `SELECT *`, needed only a `FormRow`/`toForm` update. Patch
 47 keys into the existing `data/pokemon/forms.json` directly via a one-off script rather
 than a full live re-fetch (verified all 47 keys matched a real row — no drift between
 the audit doc and current form names) — same approach Leg 8 used for `home_boxable`.
-See commit `<hash>`. Full change is `schema.ts`, `seed.ts`, `shared/types/pokemon.ts`,
+See commit `6b78ddd`. Full change is `schema.ts`, `seed.ts`, `shared/types/pokemon.ts`,
 `load-species-data.ts`, `fetch-pokemon-forms.ts`, `sqlite-storage.ts`,
 `data/pokemon/forms.json`, plus new `seed.test.ts`/`sqlite-storage.test.ts`/
 `buildDexSections.test.ts` fixture updates and a new backfill test. All 48 tests +
