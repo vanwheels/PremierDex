@@ -1,4 +1,5 @@
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
+import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
 import type { UpdaterBridge } from '@shared/updater/updater-provider'
 
@@ -22,4 +23,8 @@ export interface AppBridge extends UpdaterBridge {
   /** Opens an open-file dialog, restores collection state from the chosen backup. Null
    * if the user canceled the dialog. */
   importCollectionFromFile(): Promise<CollectionImportResult | null>
+  listTrainerProfiles(): Promise<TrainerProfile[]>
+  createTrainerProfile(input: TrainerProfileInput): Promise<TrainerProfile>
+  updateTrainerProfile(id: number, input: TrainerProfileInput): Promise<TrainerProfile>
+  deleteTrainerProfile(id: number): Promise<void>
 }

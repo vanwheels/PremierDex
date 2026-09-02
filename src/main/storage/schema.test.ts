@@ -15,7 +15,7 @@ describe('applySchema', () => {
       .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name")
       .all()
       .map((row) => (row as { name: string }).name)
-    expect(tables).toEqual(['collection_entries', 'forms', 'species'])
+    expect(tables).toEqual(['collection_entries', 'forms', 'species', 'trainer_profiles'])
   })
 
   it('is safe to apply twice (idempotent DDL)', () => {
@@ -46,6 +46,24 @@ describe('applySchema', () => {
     db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
     expect(() =>
       db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
+    ).toThrow()
+  })
+
+  it('rejects a trainer_profiles tid outside the 16-bit range via the CHECK constraint', () => {
+    const db = makeDb()
+    expect(() =>
+      db
+        .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
+        .run('Pokémon Sword', 'Ash', 70000, 0)
+    ).toThrow()
+  })
+
+  it('rejects a negative trainer_profiles sid via the CHECK constraint', () => {
+    const db = makeDb()
+    expect(() =>
+      db
+        .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
+        .run('Pokémon Sword', 'Ash', 0, -1)
     ).toThrow()
   })
 })

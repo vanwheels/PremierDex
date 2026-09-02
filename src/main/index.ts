@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { createSqliteStorage } from './storage/sqlite-storage'
 import { registerPokemonIpc } from './ipc/pokemon-ipc'
 import { registerBackupIpc } from './ipc/backup-ipc'
+import { registerTrainerProfileIpc } from './ipc/trainer-profile-ipc'
 import { registerUpdaterIpc } from './updater/auto-updater'
 import { loadRenderer } from './renderer-url'
 
@@ -48,6 +49,7 @@ app.whenReady().then(() => {
   const storage = createSqliteStorage(dbPath)
   registerPokemonIpc(storage)
   registerBackupIpc(storage)
+  registerTrainerProfileIpc(storage)
   registerUpdaterIpc(() => activeWindow)
 
   createWindow()

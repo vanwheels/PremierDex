@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
+import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
 import type { CollectionExport, CollectionImportResult } from '@shared/storage/collection-export'
 import { applySchema } from './schema'
@@ -33,6 +34,15 @@ interface CollectionEntryRow {
   owned: 0 | 1
 }
 
+interface TrainerProfileRow {
+  id: number
+  game: string
+  ot_name: string
+  tid: number
+  sid: number
+  label: string | null
+}
+
 function toForm(row: FormRow): Form {
   return {
     id: row.id,
@@ -61,6 +71,17 @@ function toCollectionEntry(row: CollectionEntryRow): CollectionEntry {
   }
 }
 
+function toTrainerProfile(row: TrainerProfileRow): TrainerProfile {
+  return {
+    id: row.id,
+    game: row.game,
+    otName: row.ot_name,
+    tid: row.tid,
+    sid: row.sid,
+    label: row.label
+  }
+}
+
 export function createSqliteStorage(dbPath: string): StorageAdapter {
   const db = new Database(dbPath)
   applySchema(db)
@@ -72,6 +93,17 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const setOwnedStmt = db.prepare('UPDATE collection_entries SET owned = @owned WHERE id = @id')
   const getEntryStmt = db.prepare('SELECT * FROM collection_entries WHERE id = ?')
   const listFormKeysStmt = db.prepare('SELECT id, species_id, form_name FROM forms')
+  const listTrainerProfilesStmt = db.prepare('SELECT * FROM trainer_profiles ORDER BY id')
+  const getTrainerProfileStmt = db.prepare('SELECT * FROM trainer_profiles WHERE id = ?')
+  const insertTrainerProfileStmt = db.prepare(`
+    INSERT INTO trainer_profiles (game, ot_name, tid, sid, label)
+    VALUES (@game, @otName, @tid, @sid, @label)
+  `)
+  const updateTrainerProfileStmt = db.prepare(`
+    UPDATE trainer_profiles SET game = @game, ot_name = @otName, tid = @tid, sid = @sid, label = @label
+    WHERE id = @id
+  `)
+  const deleteTrainerProfileStmt = db.prepare('DELETE FROM trainer_profiles WHERE id = ?')
 
   /** `${speciesId}::${formName}` — stable across reinstalls, unlike the AUTOINCREMENT
    * form id, which is what import matching keys on instead of raw ids. */
@@ -157,6 +189,24 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       applyImport()
 
       return { matched, skipped }
+    },
+
+    async listTrainerProfiles(): Promise<TrainerProfile[]> {
+      return (listTrainerProfilesStmt.all() as TrainerProfileRow[]).map(toTrainerProfile)
+    },
+
+    async createTrainerProfile(input: TrainerProfileInput): Promise<TrainerProfile> {
+      const result = insertTrainerProfileStmt.run(input)
+      return toTrainerProfile(getTrainerProfileStmt.get(result.lastInsertRowid) as TrainerProfileRow)
+    },
+
+    async updateTrainerProfile(id: number, input: TrainerProfileInput): Promise<TrainerProfile> {
+      updateTrainerProfileStmt.run({ id, ...input })
+      return toTrainerProfile(getTrainerProfileStmt.get(id) as TrainerProfileRow)
+    },
+
+    async deleteTrainerProfile(id: number): Promise<void> {
+      deleteTrainerProfileStmt.run(id)
     }
   }
 }

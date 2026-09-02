@@ -36,6 +36,17 @@ export function applySchema(db: Database.Database): void {
       UNIQUE(form_id, gender, shiny)
     );
     CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
+
+    -- Origin identity a Collection Entry will eventually reference (Leg 4) — standalone
+    -- for now, see [Trainer Profile model] in TODO.md.
+    CREATE TABLE IF NOT EXISTS trainer_profiles (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      game TEXT NOT NULL,
+      ot_name TEXT NOT NULL,
+      tid INTEGER NOT NULL CHECK (tid BETWEEN 0 AND 65535),
+      sid INTEGER NOT NULL DEFAULT 0 CHECK (sid BETWEEN 0 AND 65535),
+      label TEXT
+    );
   `)
 
   // CREATE TABLE IF NOT EXISTS above doesn't retrofit new columns onto a forms table

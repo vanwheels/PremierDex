@@ -1,4 +1,5 @@
 import type { CollectionEntry, Form, Species } from '../types/pokemon'
+import type { TrainerProfile, TrainerProfileInput } from '../types/trainer-profile'
 import type { CollectionExport, CollectionImportResult } from './collection-export'
 
 /**
@@ -22,4 +23,8 @@ export interface StorageAdapter {
   setOwned(entryId: number, owned: boolean): Promise<CollectionEntry>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
+  listTrainerProfiles(): Promise<TrainerProfile[]>
+  createTrainerProfile(input: TrainerProfileInput): Promise<TrainerProfile>
+  updateTrainerProfile(id: number, input: TrainerProfileInput): Promise<TrainerProfile>
+  deleteTrainerProfile(id: number): Promise<void>
 }

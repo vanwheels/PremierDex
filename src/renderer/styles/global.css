@@ -31,6 +31,15 @@ td {
   font-size: 0.9em;
 }
 
+.trainer-profiles {
+  margin-bottom: 1.5rem;
+}
+
+.trainer-profiles-table input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .dex-toolbar {
   display: flex;
   gap: 1.5rem;

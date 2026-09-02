@@ -6,6 +6,7 @@ import { buildDexSections } from './dex/buildDexSections'
 import { DexTable } from './dex/DexTable'
 import { DexToolbar } from './dex/DexToolbar'
 import type { DexOptions } from './dex/types'
+import { TrainerProfilesPanel } from './trainer/TrainerProfilesPanel'
 
 const DEFAULT_OPTIONS: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
 
@@ -55,6 +56,7 @@ export function App(): JSX.Element {
       <h1>PremierDex</h1>
       <BackupControls onImported={loadAll} />
       <UpdateControls />
+      <TrainerProfilesPanel />
       <DexToolbar options={options} onChange={setOptions} />
       <DexTable sections={sections} onToggleEntry={handleToggleEntry} />
     </main>

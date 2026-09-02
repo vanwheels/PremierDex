@@ -13,3 +13,13 @@ export const BackupIpcChannel = {
   exportToFile: 'pokemon:collection:exportToFile',
   importFromFile: 'pokemon:collection:importFromFile'
 } as const
+
+/** Trainer Profile CRUD (see main/ipc/trainer-profile-ipc.ts) — standalone from
+ * PokemonIpcChannel's species/form/entry surface, see [Trainer Profile model] in
+ * TODO.md. */
+export const TrainerProfileIpcChannel = {
+  list: 'trainerProfile:list',
+  create: 'trainerProfile:create',
+  update: 'trainerProfile:update',
+  delete: 'trainerProfile:delete'
+} as const
