@@ -5,7 +5,7 @@ import {
   CURRENT_MAX_GENERATION,
   defaultSpriteUrl,
   generationSpriteUrl,
-  hasAnimatedSprites
+  hasBlackWhiteAnimatedSprites
 } from './sprites'
 
 describe('availableGenerations', () => {
@@ -58,11 +58,24 @@ describe('generationSpriteUrl', () => {
     )
   })
 
-  it('gen 1 has no shiny subfolder in the real CDN — the URL is still built, expected to 404', () => {
-    // Gen 1 games predate shiny Pokemon entirely; sprites.ts doesn't special-case
-    // this, the <img onError> fallback in SpriteModal handles the resulting 404.
-    expect(generationSpriteUrl(25, null, 1, true)).toBe(
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/shiny/25.png'
+  it('uses the real omegaruby-alphasapphire folder name for generation 6', () => {
+    expect(generationSpriteUrl(25, null, 6, false)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vi/omegaruby-alphasapphire/25.png'
+    )
+  })
+
+  it.each([1, 8, 9])(
+    'falls back to the evergreen shiny sprite for generation %i — the CDN has no shiny subfolder there',
+    (generation) => {
+      expect(generationSpriteUrl(25, null, generation, true)).toBe(
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png'
+      )
+    }
+  )
+
+  it('does not fall back for a non-shiny request in a shiny-less generation', () => {
+    expect(generationSpriteUrl(25, null, 1, false)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/25.png'
     )
   })
 
@@ -77,33 +90,45 @@ describe('generationSpriteUrl', () => {
   })
 })
 
-describe('hasAnimatedSprites', () => {
+describe('hasBlackWhiteAnimatedSprites', () => {
   it('is true only for generation 5', () => {
-    expect(hasAnimatedSprites(5)).toBe(true)
+    expect(hasBlackWhiteAnimatedSprites(5)).toBe(true)
   })
 
   it('is false for every other generation', () => {
-    expect(hasAnimatedSprites(1)).toBe(false)
-    expect(hasAnimatedSprites(9)).toBe(false)
+    expect(hasBlackWhiteAnimatedSprites(1)).toBe(false)
+    expect(hasBlackWhiteAnimatedSprites(9)).toBe(false)
   })
 })
 
 describe('animatedSpriteUrl', () => {
-  it('builds the gen-5 animated URL', () => {
-    expect(animatedSpriteUrl(25, null, false)).toBe(
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.png'
+  it('builds the gen-5 black-white animated URL as a .gif', () => {
+    expect(animatedSpriteUrl(25, null, false, 'black-white')).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.gif'
     )
   })
 
-  it('builds the shiny variant under a nested /shiny/ subfolder', () => {
-    expect(animatedSpriteUrl(25, null, true)).toBe(
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/25.png'
+  it('builds the black-white shiny variant under a nested /shiny/ subfolder', () => {
+    expect(animatedSpriteUrl(25, null, true, 'black-white')).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/25.gif'
     )
   })
 
   it('appends spriteFormSuffix to the id for a cosmetic sub-form', () => {
-    expect(animatedSpriteUrl(201, 'b', false)).toBe(
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/201-b.png'
+    expect(animatedSpriteUrl(201, 'b', false, 'black-white')).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/201-b.gif'
+    )
+  })
+
+  it('builds the Showdown animated URL, generation-independent', () => {
+    expect(animatedSpriteUrl(25, null, false, 'showdown')).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/25.gif'
+    )
+  })
+
+  it('builds the Showdown shiny variant under a nested /shiny/ subfolder', () => {
+    expect(animatedSpriteUrl(25, null, true, 'showdown')).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/shiny/25.gif'
     )
   })
 })

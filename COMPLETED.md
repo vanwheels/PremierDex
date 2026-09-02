@@ -1,5 +1,23 @@
 # COMPLETED
 
+## [Sprite gaps: gen 6, animated, shiny] — Leg 12
+2026-09-02. Investigated three reported gaps by checking the real CDN (GitHub API +
+direct HTTP checks against raw.githubusercontent.com/PokeAPI/sprites), not from memory.
+Gen 6: `sprites.ts` had the folder name wrong (`omega-ruby-alpha-sapphire`; the CDN's
+real folder is `omegaruby-alphasapphire`), 404ing every gen-6 request. Animated: the
+CDN serves gen-5 animated sprites as `.gif`, but `animatedSpriteUrl` appended `.png`,
+404ing every animated request regardless of the gen-5 gate from Leg 11. Also confirmed
+live that `sprites/pokemon/other/showdown/` holds Pokemon Showdown's animated GIFs
+covering every generation/species (with `shiny/` and `back/` subfolders too) — added as
+a second `AnimatedSource`, user-selected via a radio pair that only appears at gen 5
+(Showdown is the only option elsewhere), per Vanny's call when flagged. Shiny: confirmed
+live that `versions/generation-viii/brilliant-diamond-shining-pearl/shiny/` and
+`versions/generation-ix/scarlet-violet/shiny/` don't exist on the CDN at all (0 files),
+same as the already-documented gen-1 gap — `generationSpriteUrl` now falls back to the
+evergreen `defaultSpriteUrl` shiny art for those three generations instead of building
+a URL guaranteed to 404, per Vanny's call over disabling the checkbox. See commit
+`<hash>`.
+
 ## [Animated Sprites toggle] — Leg 11
 2026-09-02. Added an Animated checkbox to `SpriteModal.tsx` alongside the existing
 Shiny one, backed by new `hasAnimatedSprites`/`animatedSpriteUrl` in `sprites.ts`

@@ -128,4 +128,12 @@ td {
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sprite-modal-animated-source {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85em;
 }

@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react'
-import { animatedSpriteUrl, availableGenerations, generationSpriteUrl, hasAnimatedSprites } from './sprites'
+import {
+  animatedSpriteUrl,
+  AnimatedSource,
+  availableGenerations,
+  generationSpriteUrl,
+  hasBlackWhiteAnimatedSprites
+} from './sprites'
 
 export interface SpriteModalTarget {
   pokeapiId: number
@@ -19,17 +25,24 @@ const MODAL_SIZE = 200
  * Click-to-enlarge overlay with the generation stepper. Defaults to the most current
  * generation (most recognizable art) and non-shiny; closes on Escape, backdrop click,
  * or the close button. A generation/shiny combo with no sprite file shows a text
- * fallback rather than a broken image — see sprites.ts.
+ * fallback rather than a broken image — see sprites.ts (which itself falls back to
+ * evergreen shiny art for the three generations with no shiny set at all).
+ *
+ * Animated has two sources (see AnimatedSource in sprites.ts): the authentic gen-5
+ * black-white set, and Pokemon Showdown's generation-independent set. The Animated
+ * checkbox is always enabled; the black-white/Showdown radio choice only appears when
+ * generation 5 is selected; outside gen 5, Showdown is the only option.
  */
 export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element {
   const generations = availableGenerations(target.firstAvailableGeneration)
   const [generation, setGeneration] = useState(generations[generations.length - 1])
   const [shiny, setShiny] = useState(false)
   const [animated, setAnimated] = useState(false)
+  const [preferredSource, setPreferredSource] = useState<AnimatedSource>('black-white')
   const [failed, setFailed] = useState(false)
 
-  const canAnimate = hasAnimatedSprites(generation)
-  const showAnimated = animated && canAnimate
+  const canUseBlackWhite = hasBlackWhiteAnimatedSprites(generation)
+  const animatedSource: AnimatedSource = canUseBlackWhite ? preferredSource : 'showdown'
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -59,11 +72,11 @@ export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element 
           ) : (
             <img
               src={
-                showAnimated
-                  ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, shiny)
+                animated
+                  ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, shiny, animatedSource)
                   : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, shiny)
               }
-              alt={`${target.displayName} — generation ${generation}${shiny ? ' shiny' : ''}${showAnimated ? ' animated' : ''}`}
+              alt={`${target.displayName} — generation ${generation}${shiny ? ' shiny' : ''}${animated ? ' animated' : ''}`}
               width={MODAL_SIZE}
               height={MODAL_SIZE}
               onError={() => setFailed(true)}
@@ -96,11 +109,10 @@ export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element 
             />
             Shiny
           </label>
-          <label title={canAnimate ? undefined : 'No animated sprites for this generation'}>
+          <label>
             <input
               type="checkbox"
               checked={animated}
-              disabled={!canAnimate}
               onChange={(e) => {
                 setAnimated(e.target.checked)
                 setFailed(false)
@@ -108,6 +120,34 @@ export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element 
             />
             Animated
           </label>
+          {animated && canUseBlackWhite && (
+            <span className="sprite-modal-animated-source">
+              <label>
+                <input
+                  type="radio"
+                  name="animated-source"
+                  checked={preferredSource === 'black-white'}
+                  onChange={() => {
+                    setPreferredSource('black-white')
+                    setFailed(false)
+                  }}
+                />
+                Black &amp; White
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="animated-source"
+                  checked={preferredSource === 'showdown'}
+                  onChange={() => {
+                    setPreferredSource('showdown')
+                    setFailed(false)
+                  }}
+                />
+                Showdown
+              </label>
+            </span>
+          )}
         </div>
       </div>
     </div>

@@ -12,8 +12,12 @@
  * Verified live against the repo (see TODO.md's Sprite display leg): generation
  * folders exist through generation-ix, but generation-viii has no Sword/Shield sprite
  * set (those games used 3D models — brilliant-diamond-shining-pearl is the only
- * gen-8 sprite source) and generation-i/red-blue has no shiny/ subfolder at all
- * (Gen 1 predates shiny Pokemon).
+ * gen-8 sprite source). Also verified live: generation-i/red-blue,
+ * generation-viii/brilliant-diamond-shining-pearl, and generation-ix/scarlet-violet
+ * have no shiny/ subfolder at all on the CDN (0 files — Gen 1 predates shiny Pokemon;
+ * BDSP and SV simply never got shiny recolors uploaded). generationSpriteUrl falls
+ * back to the evergreen defaultSpriteUrl shiny art for those three generations rather
+ * than building a URL guaranteed to 404.
  */
 
 export const CURRENT_MAX_GENERATION = 9
@@ -25,7 +29,7 @@ const GENERATION_GAME: Record<number, string> = {
   3: 'emerald',
   4: 'platinum',
   5: 'black-white',
-  6: 'omega-ruby-alpha-sapphire',
+  6: 'omegaruby-alphasapphire',
   7: 'ultra-sun-ultra-moon',
   8: 'brilliant-diamond-shining-pearl',
   9: 'scarlet-violet'
@@ -57,6 +61,11 @@ export function defaultSpriteUrl(pokeapiId: number, spriteFormSuffix: string | n
   return shiny ? `${SPRITE_BASE}/shiny/${id}.png` : `${SPRITE_BASE}/${id}.png`
 }
 
+/** Generations with no shiny/ subfolder at all on the CDN (verified live — see the
+ * module comment above). generationSpriteUrl falls back to defaultSpriteUrl's
+ * evergreen shiny art for these rather than building a URL that can never resolve. */
+const GENERATIONS_WITHOUT_SHINY = new Set([1, 8, 9])
+
 /** The modal's generation-stepped sprite, per GENERATION_GAME's representative game. */
 export function generationSpriteUrl(
   pokeapiId: number,
@@ -67,6 +76,9 @@ export function generationSpriteUrl(
   const game = GENERATION_GAME[generation]
   const roman = ROMAN_NUMERALS[generation]
   if (!game || !roman) throw new Error(`No sprite mapping for generation ${generation}`)
+  if (shiny && GENERATIONS_WITHOUT_SHINY.has(generation)) {
+    return defaultSpriteUrl(pokeapiId, spriteFormSuffix, true)
+  }
   const id = spriteFileId(pokeapiId, spriteFormSuffix)
   const shinyPart = shiny ? '/shiny' : ''
   return `${SPRITE_BASE}/versions/generation-${roman}/${game}${shinyPart}/${id}.png`
@@ -83,18 +95,33 @@ export function availableGenerations(firstAvailableGeneration: number): number[]
   return Array.from({ length }, (_, i) => start + i)
 }
 
-/** Generations with an animated sprite folder in the CDN — confirmed during Leg 4/11
- * research to be gen 5 (black-white) only; other generations used static art only. */
-const ANIMATED_GENERATIONS = new Set([5])
+/** Two animated sources on the CDN: the authentic per-game 'black-white' set (gen 5
+ * only — B/W was the last 2D-sprite generation before games moved to 3D models) and
+ * Pokemon Showdown's 'showdown' set (sprites/pokemon/other/showdown/ — generation-
+ * independent, covers every species/form, confirmed live to have shiny/ and back/
+ * subfolders too, though this module only needs front). Both are .gif, not .png. */
+export type AnimatedSource = 'black-white' | 'showdown'
 
-export function hasAnimatedSprites(generation: number): boolean {
-  return ANIMATED_GENERATIONS.has(generation)
+/** Generations with the authentic black-white animated set — confirmed during Leg
+ * 4/11 research to be gen 5 only. Showdown's animated set has no such restriction;
+ * callers should use it for every other generation. */
+const BLACK_WHITE_ANIMATED_GENERATIONS = new Set([5])
+
+export function hasBlackWhiteAnimatedSprites(generation: number): boolean {
+  return BLACK_WHITE_ANIMATED_GENERATIONS.has(generation)
 }
 
-/** The modal's animated-sprite variant. Only valid for a generation where
- * hasAnimatedSprites is true — callers must gate on that first. */
-export function animatedSpriteUrl(pokeapiId: number, spriteFormSuffix: string | null, shiny: boolean): string {
+/** The modal's animated-sprite variant. For 'black-white', only valid for a generation
+ * where hasBlackWhiteAnimatedSprites is true — callers must gate on that first;
+ * 'showdown' is always valid. */
+export function animatedSpriteUrl(
+  pokeapiId: number,
+  spriteFormSuffix: string | null,
+  shiny: boolean,
+  source: AnimatedSource
+): string {
   const id = spriteFileId(pokeapiId, spriteFormSuffix)
   const shinyPart = shiny ? '/shiny' : ''
-  return `${SPRITE_BASE}/versions/generation-v/black-white/animated${shinyPart}/${id}.png`
+  const folder = source === 'showdown' ? `${SPRITE_BASE}/other/showdown` : `${SPRITE_BASE}/versions/generation-v/black-white/animated`
+  return `${folder}${shinyPart}/${id}.gif`
 }
