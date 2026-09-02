@@ -52,6 +52,26 @@ export function applySchema(db: Database.Database): void {
       sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 4294),
       label TEXT
     );
+
+    -- A Pokémon's current location (HOME/Bank/Box/Ranch/save-file), separate from its
+    -- origin (trainer_profiles) so trades/transfers move location without touching
+    -- origin. See [Storage Location model] in TODO.md. None of the five kinds have a
+    -- real capturable identifier (confirmed against Bulbapedia/Project Pokémon: Bank,
+    -- Box, and Ranch expose nothing usable, and HOME's only account-level ID is a social
+    -- friend code, not a per-slot identity) — so identity is a plain user-provided name,
+    -- not a type-specific field. save_file is the one type genuinely scoped to a specific
+    -- save, so it must link to the trainer_profile whose boxes it is; the other four
+    -- kinds are standalone and must NOT carry that link.
+    CREATE TABLE IF NOT EXISTS storage_locations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      location_type TEXT NOT NULL CHECK (location_type IN ('home', 'bank', 'box', 'ranch', 'save_file')),
+      name TEXT NOT NULL,
+      trainer_profile_id INTEGER REFERENCES trainer_profiles(id),
+      CHECK (
+        (location_type = 'save_file' AND trainer_profile_id IS NOT NULL) OR
+        (location_type != 'save_file' AND trainer_profile_id IS NULL)
+      )
+    );
   `)
 
   // CREATE TABLE IF NOT EXISTS above doesn't retrofit new columns onto a forms table

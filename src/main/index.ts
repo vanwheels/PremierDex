@@ -4,6 +4,7 @@ import { createSqliteStorage } from './storage/sqlite-storage'
 import { registerPokemonIpc } from './ipc/pokemon-ipc'
 import { registerBackupIpc } from './ipc/backup-ipc'
 import { registerTrainerProfileIpc } from './ipc/trainer-profile-ipc'
+import { registerStorageLocationIpc } from './ipc/storage-location-ipc'
 import { registerUpdaterIpc } from './updater/auto-updater'
 import { loadRenderer } from './renderer-url'
 
@@ -50,6 +51,7 @@ app.whenReady().then(() => {
   registerPokemonIpc(storage)
   registerBackupIpc(storage)
   registerTrainerProfileIpc(storage)
+  registerStorageLocationIpc(storage)
   registerUpdaterIpc(() => activeWindow)
 
   createWindow()

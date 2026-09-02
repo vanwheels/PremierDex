@@ -1,5 +1,6 @@
 import type { CollectionEntry, Form, Species } from '../types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '../types/trainer-profile'
+import type { StorageLocation, StorageLocationInput } from '../types/storage-location'
 import type { CollectionExport, CollectionImportResult } from './collection-export'
 
 /**
@@ -27,4 +28,8 @@ export interface StorageAdapter {
   createTrainerProfile(input: TrainerProfileInput): Promise<TrainerProfile>
   updateTrainerProfile(id: number, input: TrainerProfileInput): Promise<TrainerProfile>
   deleteTrainerProfile(id: number): Promise<void>
+  listStorageLocations(): Promise<StorageLocation[]>
+  createStorageLocation(input: StorageLocationInput): Promise<StorageLocation>
+  updateStorageLocation(id: number, input: StorageLocationInput): Promise<StorageLocation>
+  deleteStorageLocation(id: number): Promise<void>
 }

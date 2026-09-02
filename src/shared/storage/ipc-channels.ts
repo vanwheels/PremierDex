@@ -23,3 +23,12 @@ export const TrainerProfileIpcChannel = {
   update: 'trainerProfile:update',
   delete: 'trainerProfile:delete'
 } as const
+
+/** Storage Location CRUD (see main/ipc/storage-location-ipc.ts) — see [Storage Location
+ * model] in TODO.md. */
+export const StorageLocationIpcChannel = {
+  list: 'storageLocation:list',
+  create: 'storageLocation:create',
+  update: 'storageLocation:update',
+  delete: 'storageLocation:delete'
+} as const

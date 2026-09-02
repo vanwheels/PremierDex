@@ -7,6 +7,7 @@ import { DexTable } from './dex/DexTable'
 import { DexToolbar } from './dex/DexToolbar'
 import type { DexOptions } from './dex/types'
 import { TrainerProfilesPanel } from './trainer/TrainerProfilesPanel'
+import { StorageLocationsPanel } from './storage-location/StorageLocationsPanel'
 
 const DEFAULT_OPTIONS: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
 
@@ -57,6 +58,7 @@ export function App(): JSX.Element {
       <BackupControls onImported={loadAll} />
       <UpdateControls />
       <TrainerProfilesPanel />
+      <StorageLocationsPanel />
       <DexToolbar options={options} onChange={setOptions} />
       <DexTable sections={sections} onToggleEntry={handleToggleEntry} />
     </main>

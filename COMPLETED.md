@@ -24,3 +24,20 @@ Follow-up same day: the Game field's native `<datalist>` dropdown didn't scroll 
 isn't stylable at all — it's drawn outside the DOM), so swapped it for a small hand-rolled
 combobox (`OriginGameInput.tsx`) with a proper `overflow-y: auto` popup. See commit
 `30e1bf9`.
+
+## [Storage Location model] — Leg 2 — 2026-09-02
+Standalone `storage_locations` table (location_type enum: home/bank/box/ranch/save_file,
+user-provided name, optional trainer_profile_id) with full CRUD through
+StorageAdapter/IPC/preload, and a basic add/edit/delete panel in the renderer — mirrors
+Leg 1's Trainer Profile shape throughout. Not yet referenced by any Collection Entry
+(Leg 4) or the backup export flow (see TODO's [Trainer Profile + Storage Location backup
+export/import]).
+
+Resolved the TODO's open identity question first: researched Bulbapedia/Project Pokémon
+on Pokémon Bank/Box/Ranch save structures and Pokémon HOME's account system — none of the
+five location kinds expose a real, capturable identifier (Bank/Box/Ranch store nothing
+usable; HOME's only account-level ID is a social friend code, not per-slot identity). Per
+Vanny's call, identity is uniformly a user-provided name (no type-specific ID columns),
+and a `CHECK` constraint requires trainer_profile_id set only for location_type =
+'save_file', null for the other four — a save-file location is inherently "the boxes
+inside trainer X's save."

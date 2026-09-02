@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
+import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
 import type { CollectionExport, CollectionImportResult } from '@shared/storage/collection-export'
 import { applySchema } from './schema'
@@ -43,6 +44,13 @@ interface TrainerProfileRow {
   label: string | null
 }
 
+interface StorageLocationRow {
+  id: number
+  location_type: StorageLocation['locationType']
+  name: string
+  trainer_profile_id: number | null
+}
+
 function toForm(row: FormRow): Form {
   return {
     id: row.id,
@@ -82,6 +90,15 @@ function toTrainerProfile(row: TrainerProfileRow): TrainerProfile {
   }
 }
 
+function toStorageLocation(row: StorageLocationRow): StorageLocation {
+  return {
+    id: row.id,
+    locationType: row.location_type,
+    name: row.name,
+    trainerProfileId: row.trainer_profile_id
+  }
+}
+
 export function createSqliteStorage(dbPath: string): StorageAdapter {
   const db = new Database(dbPath)
   applySchema(db)
@@ -104,6 +121,18 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     WHERE id = @id
   `)
   const deleteTrainerProfileStmt = db.prepare('DELETE FROM trainer_profiles WHERE id = ?')
+  const listStorageLocationsStmt = db.prepare('SELECT * FROM storage_locations ORDER BY id')
+  const getStorageLocationStmt = db.prepare('SELECT * FROM storage_locations WHERE id = ?')
+  const insertStorageLocationStmt = db.prepare(`
+    INSERT INTO storage_locations (location_type, name, trainer_profile_id)
+    VALUES (@locationType, @name, @trainerProfileId)
+  `)
+  const updateStorageLocationStmt = db.prepare(`
+    UPDATE storage_locations SET location_type = @locationType, name = @name,
+      trainer_profile_id = @trainerProfileId
+    WHERE id = @id
+  `)
+  const deleteStorageLocationStmt = db.prepare('DELETE FROM storage_locations WHERE id = ?')
 
   /** `${speciesId}::${formName}` — stable across reinstalls, unlike the AUTOINCREMENT
    * form id, which is what import matching keys on instead of raw ids. */
@@ -207,6 +236,24 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
 
     async deleteTrainerProfile(id: number): Promise<void> {
       deleteTrainerProfileStmt.run(id)
+    },
+
+    async listStorageLocations(): Promise<StorageLocation[]> {
+      return (listStorageLocationsStmt.all() as StorageLocationRow[]).map(toStorageLocation)
+    },
+
+    async createStorageLocation(input: StorageLocationInput): Promise<StorageLocation> {
+      const result = insertStorageLocationStmt.run(input)
+      return toStorageLocation(getStorageLocationStmt.get(result.lastInsertRowid) as StorageLocationRow)
+    },
+
+    async updateStorageLocation(id: number, input: StorageLocationInput): Promise<StorageLocation> {
+      updateStorageLocationStmt.run({ id, ...input })
+      return toStorageLocation(getStorageLocationStmt.get(id) as StorageLocationRow)
+    },
+
+    async deleteStorageLocation(id: number): Promise<void> {
+      deleteStorageLocationStmt.run(id)
     }
   }
 }

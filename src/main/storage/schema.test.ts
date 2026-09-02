@@ -15,7 +15,7 @@ describe('applySchema', () => {
       .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name")
       .all()
       .map((row) => (row as { name: string }).name)
-    expect(tables).toEqual(['collection_entries', 'forms', 'species', 'trainer_profiles'])
+    expect(tables).toEqual(['collection_entries', 'forms', 'species', 'storage_locations', 'trainer_profiles'])
   })
 
   it('is safe to apply twice (idempotent DDL)', () => {
@@ -82,6 +82,49 @@ describe('applySchema', () => {
       db
         .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
         .run('Pokémon GO', 'Ash', null, null)
+    ).not.toThrow()
+  })
+
+  it('rejects an invalid storage_locations location_type via the CHECK constraint', () => {
+    const db = makeDb()
+    expect(() =>
+      db
+        .prepare('INSERT INTO storage_locations (location_type, name) VALUES (?, ?)')
+        .run('not_a_real_type', 'Somewhere')
+    ).toThrow()
+  })
+
+  it('rejects a save_file storage_locations row with no trainer_profile_id', () => {
+    const db = makeDb()
+    expect(() =>
+      db.prepare('INSERT INTO storage_locations (location_type, name) VALUES (?, ?)').run('save_file', 'Sword Box 1')
+    ).toThrow()
+  })
+
+  it('rejects a non-save_file storage_locations row that sets a trainer_profile_id', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)').run(
+      'Pokémon Sword',
+      'Ash',
+      1,
+      2
+    )
+    expect(() =>
+      db
+        .prepare('INSERT INTO storage_locations (location_type, name, trainer_profile_id) VALUES (?, ?, 1)')
+        .run('home', 'My HOME Account')
+    ).toThrow()
+  })
+
+  it('allows a save_file storage_locations row with a trainer_profile_id', () => {
+    const db = makeDb()
+    const trainer = db
+      .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
+      .run('Pokémon Sword', 'Ash', 1, 2)
+    expect(() =>
+      db
+        .prepare('INSERT INTO storage_locations (location_type, name, trainer_profile_id) VALUES (?, ?, ?)')
+        .run('save_file', 'Sword Box 1', trainer.lastInsertRowid)
     ).not.toThrow()
   })
 

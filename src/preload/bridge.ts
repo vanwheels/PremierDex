@@ -1,5 +1,6 @@
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
+import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
 import type { UpdaterBridge } from '@shared/updater/updater-provider'
 
@@ -27,4 +28,8 @@ export interface AppBridge extends UpdaterBridge {
   createTrainerProfile(input: TrainerProfileInput): Promise<TrainerProfile>
   updateTrainerProfile(id: number, input: TrainerProfileInput): Promise<TrainerProfile>
   deleteTrainerProfile(id: number): Promise<void>
+  listStorageLocations(): Promise<StorageLocation[]>
+  createStorageLocation(input: StorageLocationInput): Promise<StorageLocation>
+  updateStorageLocation(id: number, input: StorageLocationInput): Promise<StorageLocation>
+  deleteStorageLocation(id: number): Promise<void>
 }
