@@ -11,7 +11,7 @@ condition gained `|| row.shinyLocked` and a `.dex-shiny-locked-badge` span (styl
 locked. Seeding is unchanged — the shiny `collection_entries` row still gets created for
 locked forms (Leg 15 didn't skip it), so the new `shinyLocked` disable check is
 additive to, not a replacement for, the existing `!row.shinyEntry` check. See commit
-`<hash>`. Full change is `types.ts`, `buildDexSections.ts`, `DexRow.tsx`, `global.css`,
+`0cc85a7`. Full change is `types.ts`, `buildDexSections.ts`, `DexRow.tsx`, `global.css`,
 plus a new `buildDexSections.test.ts` case asserting the field passes through instead of
 filtering. All 49 tests + typecheck pass.
 
