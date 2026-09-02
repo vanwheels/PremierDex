@@ -26,17 +26,20 @@ export function TrainerProfileForm({ initial, onSubmit, onCancel }: TrainerProfi
   const [sid, setSid] = useState(initial.sid === null ? '' : String(initial.sid))
   const [label, setLabel] = useState(initial.label ?? '')
 
-  // An unmatched/custom-typed game defaults to requiring both fields — the safest
+  // An unmatched/custom-typed game defaults to showing both fields — the safest
   // assumption when we don't know its display rules, and matches every listed game
   // before Pokémon GO was added.
   const matchedGame = findOriginGame(game)
   const tidVisible = matchedGame?.hasTrainerId ?? true
   const sidVisible = matchedGame?.hasSecretId ?? true
 
-  const parsedTid = Number(tid)
-  const parsedSid = Number(sid)
-  const tidValid = !tidVisible || (tid.trim() !== '' && Number.isInteger(parsedTid) && parsedTid >= 0 && parsedTid <= TID_MAX)
-  const sidValid = !sidVisible || (sid.trim() !== '' && Number.isInteger(parsedSid) && parsedSid >= 0 && parsedSid <= SID_MAX)
+  // TID/SID are optional even when the game shows them — only Game and OT Name are
+  // required. A blank field parses to null; a non-blank one still has to be a valid
+  // in-range integer.
+  const parsedTid = tid.trim() === '' ? null : Number(tid)
+  const parsedSid = sid.trim() === '' ? null : Number(sid)
+  const tidValid = !tidVisible || parsedTid === null || (Number.isInteger(parsedTid) && parsedTid >= 0 && parsedTid <= TID_MAX)
+  const sidValid = !sidVisible || parsedSid === null || (Number.isInteger(parsedSid) && parsedSid >= 0 && parsedSid <= SID_MAX)
   const valid = game.trim().length > 0 && otName.trim().length > 0 && tidValid && sidValid
 
   const handleSubmit = (): void => {
@@ -69,7 +72,7 @@ export function TrainerProfileForm({ initial, onSubmit, onCancel }: TrainerProfi
         {sidVisible ? (
           <input type="number" min={0} max={SID_MAX} value={sid} onChange={(e) => setSid(e.target.value)} />
         ) : (
-          <span title="This game doesn't show a Secret ID.">—</span>
+          <span title="This game doesn't have a Secret ID.">—</span>
         )}
       </td>
       <td>

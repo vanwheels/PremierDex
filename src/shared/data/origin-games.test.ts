@@ -12,19 +12,10 @@ describe('ORIGIN_GAMES', () => {
     expect(go).toEqual({ id: 'go', name: 'Pokémon GO', generation: null, hasTrainerId: false, hasSecretId: false })
   })
 
-  it('marks every Gen I-VI mainline/spinoff game as having a Trainer ID but no visible Secret ID', () => {
-    const preGen7 = ORIGIN_GAMES.filter((g) => g.generation !== null && g.generation < 7)
-    expect(preGen7.length).toBeGreaterThan(0)
-    for (const game of preGen7) {
-      expect(game.hasTrainerId).toBe(true)
-      expect(game.hasSecretId).toBe(false)
-    }
-  })
-
-  it('marks every Gen VII+ mainline game as having both a Trainer ID and a Secret ID', () => {
-    const gen7Plus = ORIGIN_GAMES.filter((g) => g.generation !== null && g.generation >= 7)
-    expect(gen7Plus.length).toBeGreaterThan(0)
-    for (const game of gen7Plus) {
+  it('marks every mainline/spinoff game as having both a Trainer ID and a Secret ID, even pre-Gen-VII where the Secret ID is never shown in-game but is still extractable with an external tool', () => {
+    const mainline = ORIGIN_GAMES.filter((g) => g.generation !== null)
+    expect(mainline.length).toBeGreaterThan(0)
+    for (const game of mainline) {
       expect(game.hasTrainerId).toBe(true)
       expect(game.hasSecretId).toBe(true)
     }

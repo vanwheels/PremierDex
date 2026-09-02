@@ -3,12 +3,13 @@
  * Leg 1 — see TODO.md). Mainline titles, transfer-eligible spinoffs (Colosseum, XD: Gale
  * of Darkness), and Pokémon GO.
  *
- * hasTrainerId/hasSecretId encode what a player can actually read off their game, per
+ * hasTrainerId/hasSecretId encode whether an origin game has that value at all, per
  * https://bulbapedia.bulbagarden.net/wiki/Trainer_ID_number:
  * - Pokémon GO has no Trainer ID or Secret ID at all — origin identity there is just the
  *   trainer/OT name.
- * - Generations I-VI store a Secret ID internally but never display it anywhere in-game,
- *   so there's nothing for a player to enter.
+ * - Generations I-VI store a Secret ID internally but never display it in-game — a player
+ *   can't read it off their Trainer Card, but it's still extractable with an external tool
+ *   (e.g. PKHex), so the field stays enterable rather than hidden.
  * - Generation VII onward derives both a 6-digit Trainer ID and a 4-digit Secret ID from
  *   a single 32-bit value and shows both on the Trainer Card.
  */
@@ -20,12 +21,13 @@ export interface OriginGame {
   generation: number | null
   /** False only for Pokémon GO. */
   hasTrainerId: boolean
-  /** False for Pokémon GO and every Generation I-VI game. */
+  /** False only for Pokémon GO — every mainline generation has a Secret ID internally,
+   * even where it's not shown in-game (see file header). */
   hasSecretId: boolean
 }
 
 function mainlineGame(id: string, name: string, generation: number): OriginGame {
-  return { id, name, generation, hasTrainerId: true, hasSecretId: generation >= 7 }
+  return { id, name, generation, hasTrainerId: true, hasSecretId: true }
 }
 
 export const ORIGIN_GAMES: OriginGame[] = [
