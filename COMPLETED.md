@@ -31,6 +31,16 @@ it. `origin-games.ts`'s `hasSecretId` now reads true for every mainline/spinoff 
 (false only for Pokémon GO, which has no SID at all); the Gen VII+ cutoff was the wrong
 signal — display-only, not availability. See commit `b596402`.
 
+Follow-up 2026-09-02: Vanny corrected the range that follow-up shipped with — pre-Gen-VII
+SID isn't capped at Gen VII+'s 4294 (that cap is `floor(32-bit ID / 1_000_000)`, specific
+to Gen VII+'s derivation scheme), it can run up to 6 digits. Widened `SID_MAX` to match
+`TID_MAX` (999999) in both entry forms, same "widest across any generation" approach the
+DB CHECK and TID_MAX already used. Also widened the `trainer_profiles`/`collection_entries`
+sid CHECK constraints from 0-4294 to 0-999999, with a data-preserving rebuild migration for
+installs that already had the narrower constraint (unlike the earlier tid NOT NULL rebuild,
+this one copies existing rows — both tables now hold real data from today's Legs). See
+commit `e6554e6`.
+
 ## [Trainer Profile model] — Leg 1 — 2026-09-02
 Standalone `trainer_profiles` table (game, OT name, TID/SID, optional label) with full
 CRUD through StorageAdapter/IPC/preload, and a basic add/edit/delete panel in the
