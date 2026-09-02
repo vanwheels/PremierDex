@@ -76,10 +76,13 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   }
 
   const bothBlank = game.trim() === '' && otName.trim() === ''
-  const parsedTid = Number(tid)
-  const parsedSid = Number(sid)
-  const tidValid = !tidVisible || (tid.trim() !== '' && Number.isInteger(parsedTid) && parsedTid >= 0 && parsedTid <= TID_MAX)
-  const sidValid = !sidVisible || (sid.trim() !== '' && Number.isInteger(parsedSid) && parsedSid >= 0 && parsedSid <= SID_MAX)
+  // TID/SID are optional even when the game shows them — only Game and OT Name are
+  // required. A blank field parses to null; a non-blank one still has to be a valid
+  // in-range integer.
+  const parsedTid = tid.trim() === '' ? null : Number(tid)
+  const parsedSid = sid.trim() === '' ? null : Number(sid)
+  const tidValid = !tidVisible || parsedTid === null || (Number.isInteger(parsedTid) && parsedTid >= 0 && parsedTid <= TID_MAX)
+  const sidValid = !sidVisible || parsedSid === null || (Number.isInteger(parsedSid) && parsedSid >= 0 && parsedSid <= SID_MAX)
   const valid = bothBlank || (game.trim() !== '' && otName.trim() !== '' && tidValid && sidValid)
 
   const handleSave = (): void => {
