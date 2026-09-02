@@ -13,7 +13,7 @@ renderer `UpdateControls` component reusing `BackupControls`' CSS classes.
 `npm run package:dir` was run locally to confirm the packaged app launches and that both
 `extraResources` and `asarUnpack` land correctly — no automated test for the IPC wiring
 itself (thin main-process glue, same as the GW2-Squaded original it's modeled on). See
-commit `<pending>`.
+commit `8217d63`.
 
 ## [Manual export/import (JSON)] — Leg 5
 2026-09-01. Full-collection JSON backup/restore, the only backup path in v1 (no sync
