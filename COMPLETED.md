@@ -10,7 +10,7 @@ lowercase before this and would otherwise have become a new inconsistency next t
 now-capitalized species name. Scope, per Vanny's call: simple title-case only, hyphens
 preserved as word separators — no exceptions dictionary for the ~14 species whose real
 names need punctuation the slug format drops (Farfetch'd, Mr. Mime, Nidoran♀/♂, etc.);
-logged as `[Pokémon name punctuation exceptions]`. See commit `<hash>`.
+logged as `[Pokémon name punctuation exceptions]`. See commit `3693968`.
 
 ## [Spiky-Eared Pichu: HOME deposit + always-shiny flags] — Leg 6 — 2026-09-02
 Added `alwaysShiny` as a new Form field — the opposite axis from the existing
