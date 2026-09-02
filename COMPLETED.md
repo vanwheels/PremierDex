@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [origin-games.ts: Pokémon GO has a Trainer ID] — Leg 8 — 2026-09-02
+Confirmed with Vanny: GO's visible Trainer ID is the 12-digit Trainer Code (friend
+code), not a mainline-style TID/SID pair. Set `hasTrainerId: true` for GO, added an
+optional per-game `trainerIdMax` override (999,999,999,999 for GO) since the existing
+6-digit TID cap can't hold it, and threaded it through both `TrainerProfileForm.tsx`
+and `OriginModal.tsx`. See commit `1719639`.
+
 ## [Pokémon name capitalization] — Leg 7 — 2026-09-02
 Species/form names were stored as raw lowercase PokeAPI slugs and rendered as-is; every
 display site traces back to one choke point (`buildDexSections.ts`'s `displayName`/
