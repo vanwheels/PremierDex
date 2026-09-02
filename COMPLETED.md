@@ -18,4 +18,4 @@ forward into this leg at Vanny's call: `shared/data/origin-games.ts` lists every
 mainline title, Colosseum/XD, and Pokémon GO, each flagged for whether it shows a
 Trainer ID and/or Secret ID; the Game field is now a datalist-backed autocomplete
 sourced from that list, and TID/SID inputs hide themselves per the matched game's flags
-(GO hides both; pre-Gen-VII hides SID only). See commit `<pending>`.
+(GO hides both; pre-Gen-VII hides SID only). See commit `f1e0612`.
