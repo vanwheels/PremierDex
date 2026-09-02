@@ -49,12 +49,21 @@ describe('applySchema', () => {
     ).toThrow()
   })
 
-  it('rejects a trainer_profiles tid outside the 16-bit range via the CHECK constraint', () => {
+  it('rejects a trainer_profiles tid past the 6-digit range via the CHECK constraint', () => {
     const db = makeDb()
     expect(() =>
       db
         .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
-        .run('Pokémon Sword', 'Ash', 70000, 0)
+        .run('Pokémon Scarlet', 'Ash', 1_000_000, 0)
+    ).toThrow()
+  })
+
+  it('rejects a trainer_profiles sid past the 4-digit range via the CHECK constraint', () => {
+    const db = makeDb()
+    expect(() =>
+      db
+        .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
+        .run('Pokémon Scarlet', 'Ash', 0, 4295)
     ).toThrow()
   })
 
@@ -65,5 +74,41 @@ describe('applySchema', () => {
         .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
         .run('Pokémon Sword', 'Ash', 0, -1)
     ).toThrow()
+  })
+
+  it('allows null tid/sid, for origins like Pokémon GO that show neither', () => {
+    const db = makeDb()
+    expect(() =>
+      db
+        .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
+        .run('Pokémon GO', 'Ash', null, null)
+    ).not.toThrow()
+  })
+
+  it('rebuilds trainer_profiles when it still has the pre-widen NOT NULL tid column', () => {
+    const db = new Database(':memory:')
+    db.exec(`
+      CREATE TABLE trainer_profiles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        game TEXT NOT NULL,
+        ot_name TEXT NOT NULL,
+        tid INTEGER NOT NULL CHECK (tid BETWEEN 0 AND 65535),
+        sid INTEGER NOT NULL DEFAULT 0 CHECK (sid BETWEEN 0 AND 65535),
+        label TEXT
+      );
+    `)
+
+    applySchema(db)
+
+    const columns = db.prepare('PRAGMA table_info(trainer_profiles)').all() as Array<{
+      name: string
+      notnull: 0 | 1
+    }>
+    expect(columns.find((c) => c.name === 'tid')?.notnull).toBe(0)
+    expect(() =>
+      db
+        .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
+        .run('Pokémon GO', 'Ash', null, null)
+    ).not.toThrow()
   })
 })

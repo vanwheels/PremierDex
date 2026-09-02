@@ -38,8 +38,8 @@ interface TrainerProfileRow {
   id: number
   game: string
   ot_name: string
-  tid: number
-  sid: number
+  tid: number | null
+  sid: number | null
   label: string | null
 }
 

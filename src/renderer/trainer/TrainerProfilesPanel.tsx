@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
+import { ORIGIN_GAMES } from '@shared/data/origin-games'
 import { TrainerProfileForm } from './TrainerProfileForm'
 import { TrainerProfileRow } from './TrainerProfileRow'
 
-const EMPTY_INPUT: TrainerProfileInput = { game: '', otName: '', tid: 0, sid: 0, label: null }
+const EMPTY_INPUT: TrainerProfileInput = { game: '', otName: '', tid: null, sid: null, label: null }
 
 /** CRUD UI for Trainer Profiles (Leg 1) — the origin identity a Collection Entry will
  * eventually reference (Leg 4). Standalone here: nothing else reads or links to these
@@ -43,6 +44,11 @@ export function TrainerProfilesPanel(): JSX.Element {
   return (
     <section className="trainer-profiles">
       <h2>Trainer Profiles</h2>
+      <datalist id="origin-games">
+        {ORIGIN_GAMES.map((g) => (
+          <option key={g.id} value={g.name} />
+        ))}
+      </datalist>
       <table className="trainer-profiles-table">
         <thead>
           <tr>

@@ -32,8 +32,8 @@ export function TrainerProfileRow({ profile, onSave, onDelete }: TrainerProfileR
     <tr>
       <td>{profile.game}</td>
       <td>{profile.otName}</td>
-      <td>{profile.tid}</td>
-      <td>{profile.sid}</td>
+      <td>{profile.tid ?? '—'}</td>
+      <td>{profile.sid ?? '—'}</td>
       <td>{profile.label ?? ''}</td>
       <td>
         <button type="button" onClick={() => setEditing(true)}>

@@ -16,8 +16,8 @@ describe('trainer profile CRUD', () => {
     const created = await storage.createTrainerProfile({
       game: 'Pokémon Sword',
       otName: 'Ash',
-      tid: 12345,
-      sid: 54321,
+      tid: 123456,
+      sid: 1234,
       label: 'Main file'
     })
 
@@ -73,6 +73,35 @@ describe('trainer profile CRUD', () => {
     await storage.deleteTrainerProfile(created.id)
 
     expect(await storage.listTrainerProfiles()).toEqual([])
+  })
+
+  it('stores a Pokémon GO profile with null tid/sid', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const created = await storage.createTrainerProfile({
+      game: 'Pokémon GO',
+      otName: 'Ash',
+      tid: null,
+      sid: null,
+      label: null
+    })
+
+    expect(created.tid).toBeNull()
+    expect(created.sid).toBeNull()
+    expect(await storage.listTrainerProfiles()).toEqual([created])
+  })
+
+  it('accepts a 6-digit tid and 4-digit sid (Gen VII+ range)', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const created = await storage.createTrainerProfile({
+      game: 'Pokémon Scarlet',
+      otName: 'Ash',
+      tid: 999_999,
+      sid: 4294,
+      label: null
+    })
+
+    expect(created.tid).toBe(999_999)
+    expect(created.sid).toBe(4294)
   })
 
   it('keeps profiles for the same game distinct via id, not natural key', async () => {

@@ -27,16 +27,11 @@ implicit in the save file, so identity there is probably just user-provided nami
 Needs confirming before the schema is locked in.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [Origin-game list] — Leg 3
-Reference list of origin games for use in origin data entry: mainline titles,
-transfer-eligible spinoffs (Colosseum, XD), and Pokémon GO as a selectable origin
-(GO has no TID/SID — uses OT name/nickname instead, needs its own handling).
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Per-entry origin data + nicknames] — Leg 4
-Wire OT/TID/origin game (Leg 3's list) and nickname onto each Collection Entry, sourced
-from a linked Trainer Profile (Leg 1) but stored immutably on the entry itself so later
-transfers/storage-location changes (Leg 2) never overwrite origin. Depends on Legs 1-3.
+Wire OT/TID/origin game (origin-game list, pulled forward into Leg 1 — see COMPLETED) and
+nickname onto each Collection Entry, sourced from a linked Trainer Profile (Leg 1) but
+stored immutably on the entry itself so later transfers/storage-location changes (Leg 2)
+never overwrite origin. Depends on Legs 1-2.
 Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Dex search/filter] — Leg 5
