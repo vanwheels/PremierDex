@@ -16,7 +16,7 @@ are never written by import — `runSeed` already keeps those current on every s
 UI: an Export…/Import… control row in `App.tsx` via the new `BackupControls.tsx`. Unit
 tests cover the natural-key matching, full-replace reset, and skip-on-orphaned-form
 behavior (`sqlite-storage.test.ts`) plus the backup-file shape validation
-(`collection-export.test.ts`). See commit `<hash>`.
+(`collection-export.test.ts`). See commit `5482414`.
 
 ## [Sprite display] — Leg 4
 2026-09-01. PokeAPI sprite thumbnails in the grid with a click-to-enlarge modal and a
