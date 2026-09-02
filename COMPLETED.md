@@ -12,7 +12,7 @@ confirm it's a genuine Home-support gap, not a heuristic bug in the existing
 refetch needed), and added a `seed.ts` backfill so an already-seeded local db picks up
 the correction on next startup, matching the existing `pokeapi_id` backfill pattern.
 `homeBoxable` reaches storage/types but has no UI consumer yet — filtering it into the
-dex view is tracked separately in TODO.md. See commit `<pending>`.
+dex view is tracked separately in TODO.md. See commit `45353cb`.
 
 ## [Dex/species exclusions: totem, Let's Go starters, Koraidon/Miraidon modes] — Leg 7
 2026-09-02. `scripts/fetch-pokemon-forms.ts` now skips generating a row for any variety
