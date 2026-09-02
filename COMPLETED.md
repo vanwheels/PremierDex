@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Animated Sprites toggle] — Leg 11
+2026-09-02. Added an Animated checkbox to `SpriteModal.tsx` alongside the existing
+Shiny one, backed by new `hasAnimatedSprites`/`animatedSpriteUrl` in `sprites.ts`
+gated to gen 5 only (the sole generation the CDN has an animated folder for) — the
+checkbox disables itself outside gen 5. See commit `419cf0c`.
+
 ## [Base-form display naming] — Leg 10
 2026-09-02. Swept live against PokeAPI (not from memory) and found 54 species — not just
 the 4 originally named (Deoxys, Wormadam, Oricorio, Squawkabilly) — whose default variety
