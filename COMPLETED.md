@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Spreadsheet-style Living Dex UI] — Leg 3
+2026-09-01. Replaced the proof-of-pipeline table with the real grid: species-grouped
+rows with dex #/Owned/Shiny checkbox columns, a gender-split toggle (off by default,
+collapses to the male entry), a regional inline/grouped toggle, and a per-species
+cosmetic-variant expand control. `src/renderer/dex/buildDexSections.ts` holds the pure
+view-model logic (unit-tested); toggle state lives only in the renderer, never written
+to storage. See commit `<pending>`.
+
 ## [Form categorization data pass] — Leg 2
 2026-09-01. Real per-form data (form_category/has_gender_difference/regional_group/
 first_available_generation) for all 1025 species' 1351 forms, replacing the Leg 1

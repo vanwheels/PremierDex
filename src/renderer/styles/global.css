@@ -18,3 +18,29 @@ td {
   padding: 0.25rem 0.5rem;
   text-align: left;
 }
+
+.dex-toolbar {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dex-table {
+  width: 100%;
+}
+
+.dex-table thead th {
+  position: sticky;
+  top: 0;
+  background: Canvas;
+}
+
+.dex-row-indent td:nth-child(2) {
+  padding-left: 1.75rem;
+}
+
+.dex-expand-toggle {
+  margin-right: 0.5rem;
+  cursor: pointer;
+}

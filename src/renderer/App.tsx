@@ -1,16 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
+import { buildDexSections } from './dex/buildDexSections'
+import { DexTable } from './dex/DexTable'
+import { DexToolbar } from './dex/DexToolbar'
+import type { DexOptions } from './dex/types'
 
-/**
- * Proof-of-pipeline screen for the scaffold leg: confirms DB seeding + IPC + renderer
- * wiring works end-to-end. This is NOT the real spreadsheet-style Living Dex UI — that's
- * its own later leg (see TODO.md) once form data is accurately categorized.
- */
+const DEFAULT_OPTIONS: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
+
+/** The v1 spreadsheet-style Living Dex grid. See TODO.md's [Spreadsheet-style Living Dex UI] item. */
 export function App(): JSX.Element {
   const [species, setSpecies] = useState<Species[]>([])
   const [forms, setForms] = useState<Form[]>([])
   const [entries, setEntries] = useState<CollectionEntry[]>([])
   const [loading, setLoading] = useState(true)
+  const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
 
   useEffect(() => {
     Promise.all([window.premierDex.listSpecies(), window.premierDex.listForms(), window.premierDex.listCollectionEntries()])
@@ -22,6 +25,17 @@ export function App(): JSX.Element {
       .finally(() => setLoading(false))
   }, [])
 
+  const sections = useMemo(
+    () => buildDexSections(species, forms, entries, options),
+    [species, forms, entries, options]
+  )
+
+  const handleToggleEntry = (entryId: number, owned: boolean): void => {
+    window.premierDex.setOwned(entryId, owned).then((updated) => {
+      setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
+    })
+  }
+
   if (loading) {
     return <p>Loading…</p>
   }
@@ -29,27 +43,8 @@ export function App(): JSX.Element {
   return (
     <main>
       <h1>PremierDex</h1>
-      <p>
-        Loaded {species.length} species / {forms.length} forms / {entries.length} collection entries.
-      </p>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Gen</th>
-          </tr>
-        </thead>
-        <tbody>
-          {species.slice(0, 10).map((s) => (
-            <tr key={s.id}>
-              <td>{s.id}</td>
-              <td>{s.name}</td>
-              <td>{s.generation}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DexToolbar options={options} onChange={setOptions} />
+      <DexTable sections={sections} onToggleEntry={handleToggleEntry} />
     </main>
   )
 }

@@ -1,12 +1,5 @@
 # TODO
 
-## [Spreadsheet-style Living Dex UI] — Leg 3
-Replace the scaffold's proof-of-pipeline table (`src/renderer/App.tsx`) with the real
-v1 spreadsheet-style grid: display toggles for gender variants as separate rows (off by
-default), regional forms inline-vs-grouped, and boxable cosmetic variants shown/hidden
-per species. Toggles are presentation-only, never baked into stored data.
-Last touched: 2026-09-01. Re-check count: 0.
-
 ## [Sprite display] — Leg 4
 PokeAPI sprites with a generation-accurate toggle and click-to-enlarge. Needs
 `src/renderer/index.html`'s CSP `img-src`/`connect-src` widened to PokeAPI's sprite host

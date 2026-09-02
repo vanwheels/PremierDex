@@ -1,0 +1,138 @@
+import type { CollectionEntry, Form, Gender, Species } from '@shared/types/pokemon'
+import type { DexOptions, DexRowData, DexSection } from './types'
+
+const REGIONAL_LABELS: Record<string, string> = {
+  alolan: 'Alolan Forms',
+  galarian: 'Galarian Forms',
+  hisuian: 'Hisuian Forms',
+  paldean: 'Paldean Forms'
+}
+const REGIONAL_ORDER = ['alolan', 'galarian', 'hisuian', 'paldean']
+
+function formDisplayName(speciesName: string, form: Form): string {
+  if (form.formName === 'base') return speciesName
+  return `${speciesName} (${form.formName.replace(/-/g, ' ')})`
+}
+
+interface EntrySlot {
+  regular: CollectionEntry | null
+  shiny: CollectionEntry | null
+}
+type EntriesByGender = Map<Gender, EntrySlot>
+
+function indexEntriesByForm(entries: CollectionEntry[]): Map<number, EntriesByGender> {
+  const byForm = new Map<number, EntriesByGender>()
+  for (const entry of entries) {
+    let byGender = byForm.get(entry.formId)
+    if (!byGender) {
+      byGender = new Map()
+      byForm.set(entry.formId, byGender)
+    }
+    let slot = byGender.get(entry.gender)
+    if (!slot) {
+      slot = { regular: null, shiny: null }
+      byGender.set(entry.gender, slot)
+    }
+    if (entry.shiny) slot.shiny = entry
+    else slot.regular = entry
+  }
+  return byForm
+}
+
+/**
+ * Builds the row(s) for one form. Gender-diff forms collapse to a single row (the male
+ * entry) unless splitGenderRows is on, in which case they expand to a ♂ row and a ♀ row.
+ * Forms without a gender difference always seed only 'unknown'-gender entries.
+ */
+function buildRows(
+  speciesName: string,
+  dexNumber: number,
+  form: Form,
+  entriesByGender: EntriesByGender | undefined,
+  splitGenderRows: boolean
+): DexRowData[] {
+  const baseName = formDisplayName(speciesName, form)
+
+  const rowFor = (gender: Gender, suffix: string): DexRowData => {
+    const slot = entriesByGender?.get(gender)
+    return {
+      key: `${form.id}-${gender}`,
+      formId: form.id,
+      dexNumber,
+      displayName: suffix ? `${baseName} ${suffix}` : baseName,
+      regular: slot?.regular ?? null,
+      shinyEntry: slot?.shiny ?? null
+    }
+  }
+
+  if (!form.hasGenderDifference) return [rowFor('unknown', '')]
+  if (!splitGenderRows) return [rowFor('male', '')]
+  return [rowFor('male', '♂'), rowFor('female', '♀')]
+}
+
+/**
+ * Shapes species/forms/collection-entries into display sections per the current toggle
+ * options. Toggles only affect this view-model — never the stored data. non_boxable
+ * forms (Mega/Gmax/battle-only, etc.) are never collectible and are filtered out here.
+ */
+export function buildDexSections(
+  species: Species[],
+  forms: Form[],
+  entries: CollectionEntry[],
+  options: DexOptions
+): DexSection[] {
+  const entriesByForm = indexEntriesByForm(entries)
+  const formsBySpecies = new Map<number, Form[]>()
+  for (const form of forms) {
+    if (form.formCategory === 'non_boxable') continue
+    const list = formsBySpecies.get(form.speciesId)
+    if (list) list.push(form)
+    else formsBySpecies.set(form.speciesId, [form])
+  }
+
+  const sections: DexSection[] = []
+  const regionalBuckets = new Map<string, DexRowData[]>()
+
+  for (const sp of species) {
+    const speciesForms = formsBySpecies.get(sp.id) ?? []
+    const rows: DexRowData[] = []
+    const cosmeticRows: DexRowData[] = []
+
+    for (const form of speciesForms) {
+      const entriesByGender = entriesByForm.get(form.id)
+      const rowsForForm = buildRows(sp.name, sp.id, form, entriesByGender, options.splitGenderRows)
+
+      if (form.formCategory === 'cosmetic_variant') {
+        cosmeticRows.push(...rowsForForm)
+        continue
+      }
+
+      // dex_distinct
+      if (form.regionalGroup !== null && options.regionalMode === 'grouped') {
+        const bucket = regionalBuckets.get(form.regionalGroup) ?? []
+        bucket.push(...rowsForForm)
+        regionalBuckets.set(form.regionalGroup, bucket)
+      } else {
+        rows.push(...rowsForForm)
+      }
+    }
+
+    sections.push({ key: `species-${sp.id}`, heading: sp.name, speciesId: sp.id, rows, cosmeticRows })
+  }
+
+  if (options.regionalMode === 'grouped') {
+    for (const group of REGIONAL_ORDER) {
+      const rows = regionalBuckets.get(group)
+      if (!rows || rows.length === 0) continue
+      sections.push({
+        key: `regional-${group}`,
+        heading: REGIONAL_LABELS[group] ?? group,
+        speciesId: null,
+        rows,
+        cosmeticRows: []
+      })
+    }
+  }
+
+  return sections
+}
