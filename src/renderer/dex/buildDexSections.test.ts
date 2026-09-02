@@ -123,4 +123,14 @@ describe('buildDexSections', () => {
     const sections = buildDexSections(SPECIES, forms, [], OPTIONS_DEFAULT)
     expect(sections.find((s) => s.speciesId === 25)!.rows[0].displayName).toBe('Pikachu')
   })
+
+  it('passes homeBoxable through onto the row instead of filtering on it', () => {
+    const forms: Form[] = [
+      makeForm({ id: 1, speciesId: 25, formName: 'base' }),
+      makeForm({ id: 2, speciesId: 26, formName: 'base', homeBoxable: false })
+    ]
+    const sections = buildDexSections(SPECIES, forms, [], OPTIONS_DEFAULT)
+    expect(sections.find((s) => s.speciesId === 25)!.rows[0].homeBoxable).toBe(true)
+    expect(sections.find((s) => s.speciesId === 26)!.rows[0].homeBoxable).toBe(false)
+  })
 })

@@ -47,6 +47,11 @@ export function DexRow({ row, onToggleEntry, onOpenSprite, expandControl, indent
           </button>
         )}
         {row.displayName}
+        {!row.homeBoxable && (
+          <span className="dex-not-home-boxable-badge" title="Not yet accepted by Pokemon Home">
+            Not Home-boxable
+          </span>
+        )}
       </td>
       <td>
         <input

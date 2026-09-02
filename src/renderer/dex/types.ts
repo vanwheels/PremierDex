@@ -11,6 +11,11 @@ export interface DexRowData {
   pokeapiId: number
   spriteFormSuffix: string | null
   firstAvailableGeneration: number
+  /** False for the handful of real, dex_distinct forms Home doesn't accept deposits of
+   * yet (Origin formes, Necrozma Dawn/Dusk, Calyrex Riders, Ogerpon masks, Minior cores)
+   * — see docs/investigations/home-depositability-audit.md section 2. Still a normal,
+   * fully-checkable row; DexRow just flags it with a badge. */
+  homeBoxable: boolean
 }
 
 /**

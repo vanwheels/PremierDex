@@ -140,7 +140,8 @@ function buildRows(
       shinyEntry: slot?.shiny ?? null,
       pokeapiId: form.pokeapiId,
       spriteFormSuffix: form.spriteFormSuffix,
-      firstAvailableGeneration: form.firstAvailableGeneration
+      firstAvailableGeneration: form.firstAvailableGeneration,
+      homeBoxable: form.homeBoxable
     }
   }
 
