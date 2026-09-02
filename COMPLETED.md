@@ -1,5 +1,20 @@
 # COMPLETED
 
+## [Shiny-locked species/forms: UI wiring] — Leg 16
+2026-09-02. Asked Vanny how a locked shiny checkbox should render (disabled/greyed with
+no explanation vs. disabled + a badge) — chose disabled + badge, matching Leg 13's
+`homeBoxable` treatment (don't just quietly disable, label why). `shinyLocked` already
+existed on `Form` from Leg 15; threaded it through `DexRowData` (`types.ts`),
+`buildDexSections.ts`'s `rowFor`, and `DexRow.tsx`, where the shiny checkbox's `disabled`
+condition gained `|| row.shinyLocked` and a `.dex-shiny-locked-badge` span (styled in
+`global.css`, same shape as `.dex-not-home-boxable-badge`) renders next to it when
+locked. Seeding is unchanged — the shiny `collection_entries` row still gets created for
+locked forms (Leg 15 didn't skip it), so the new `shinyLocked` disable check is
+additive to, not a replacement for, the existing `!row.shinyEntry` check. See commit
+`<hash>`. Full change is `types.ts`, `buildDexSections.ts`, `DexRow.tsx`, `global.css`,
+plus a new `buildDexSections.test.ts` case asserting the field passes through instead of
+filtering. All 49 tests + typecheck pass.
+
 ## [Shiny-locked species/forms: schema + seed backfill] — Leg 15
 2026-09-02. Added `shinyLocked` to `Form` end-to-end: `schema.ts` (new `shiny_locked`
 column, both the fresh CREATE TABLE and an ALTER-TABLE retrofit for pre-existing dbs),

@@ -134,4 +134,14 @@ describe('buildDexSections', () => {
     expect(sections.find((s) => s.speciesId === 25)!.rows[0].homeBoxable).toBe(true)
     expect(sections.find((s) => s.speciesId === 26)!.rows[0].homeBoxable).toBe(false)
   })
+
+  it('passes shinyLocked through onto the row instead of filtering on it', () => {
+    const forms: Form[] = [
+      makeForm({ id: 1, speciesId: 25, formName: 'base' }),
+      makeForm({ id: 2, speciesId: 26, formName: 'base', shinyLocked: true })
+    ]
+    const sections = buildDexSections(SPECIES, forms, [], OPTIONS_DEFAULT)
+    expect(sections.find((s) => s.speciesId === 25)!.rows[0].shinyLocked).toBe(false)
+    expect(sections.find((s) => s.speciesId === 26)!.rows[0].shinyLocked).toBe(true)
+  })
 })

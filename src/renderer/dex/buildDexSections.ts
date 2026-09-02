@@ -141,7 +141,8 @@ function buildRows(
       pokeapiId: form.pokeapiId,
       spriteFormSuffix: form.spriteFormSuffix,
       firstAvailableGeneration: form.firstAvailableGeneration,
-      homeBoxable: form.homeBoxable
+      homeBoxable: form.homeBoxable,
+      shinyLocked: form.shinyLocked
     }
   }
 

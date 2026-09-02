@@ -16,6 +16,11 @@ export interface DexRowData {
    * — see docs/investigations/home-depositability-audit.md section 2. Still a normal,
    * fully-checkable row; DexRow just flags it with a badge. */
   homeBoxable: boolean
+  /** True when no legitimate shiny of this form has ever existed, by any means (not
+   * merely "not currently obtainable") — see docs/investigations/shiny-locked-audit.md.
+   * DexRow disables the shiny checkbox and flags it with a badge, same treatment as
+   * homeBoxable. */
+  shinyLocked: boolean
 }
 
 /**

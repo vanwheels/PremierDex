@@ -64,10 +64,15 @@ export function DexRow({ row, onToggleEntry, onOpenSprite, expandControl, indent
       <td>
         <input
           type="checkbox"
-          disabled={!row.shinyEntry}
+          disabled={!row.shinyEntry || row.shinyLocked}
           checked={row.shinyEntry?.owned ?? false}
           onChange={() => row.shinyEntry && onToggleEntry(row.shinyEntry.id, !row.shinyEntry.owned)}
         />
+        {row.shinyLocked && (
+          <span className="dex-shiny-locked-badge" title="No legitimate shiny of this form has ever existed">
+            Shiny-locked
+          </span>
+        )}
       </td>
     </tr>
   )

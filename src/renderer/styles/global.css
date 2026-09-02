@@ -67,6 +67,16 @@ td {
   white-space: nowrap;
 }
 
+.dex-shiny-locked-badge {
+  display: block;
+  padding: 0.05rem 0.4rem;
+  border-radius: 0.75rem;
+  font-size: 0.65em;
+  opacity: 0.75;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+
 .sprite-thumbnail {
   display: flex;
   align-items: center;
