@@ -15,6 +15,7 @@ function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'fo
   return {
     formCategory: 'dex_distinct',
     homeBoxable: true,
+    shinyLocked: false,
     hasGenderDifference: false,
     firstAvailableGeneration: 1,
     regionalGroup: null,

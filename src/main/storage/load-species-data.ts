@@ -18,6 +18,7 @@ export interface SeedForm {
   regionalGroup: 'alolan' | 'galarian' | 'hisuian' | 'paldean' | null
   pokeapiId: number
   spriteFormSuffix: string | null
+  shinyLocked: boolean
 }
 
 // Unpackaged (dev and local `npm run build`), the main bundle lives at

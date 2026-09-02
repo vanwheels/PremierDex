@@ -13,6 +13,7 @@ vi.mock('./load-species-data', () => ({
       formName: 'base',
       formCategory: 'dex_distinct',
       homeBoxable: true,
+      shinyLocked: false,
       hasGenderDifference: false,
       firstAvailableGeneration: 1,
       regionalGroup: null,
@@ -98,5 +99,25 @@ describe('runSeed', () => {
       home_boxable: number
     }
     expect(row.home_boxable).toBe(1)
+  })
+
+  it('backfills a stale shiny_locked value on a row that already existed', () => {
+    const db = makeDb()
+
+    // Same reasoning as the home_boxable backfill test above: INSERT OR IGNORE won't
+    // touch an existing row, so only the backfill can correct a stale value. The
+    // fixture's bulbasaur/base has shinyLocked: false; seed this row with 1.
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, ?, ?)').run('bulbasaur', 1)
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, shiny_locked, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1, 1)`
+    ).run()
+
+    runSeed(db)
+
+    const row = db.prepare("SELECT shiny_locked FROM forms WHERE species_id = 1 AND form_name = 'base'").get() as {
+      shiny_locked: number
+    }
+    expect(row.shiny_locked).toBe(0)
   })
 })

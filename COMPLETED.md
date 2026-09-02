@@ -1,5 +1,27 @@
 # COMPLETED
 
+## [Shiny-locked species/forms: schema + seed backfill] — Leg 15
+2026-09-02. Added `shinyLocked` to `Form` end-to-end: `schema.ts` (new `shiny_locked`
+column, both the fresh CREATE TABLE and an ALTER-TABLE retrofit for pre-existing dbs),
+`shared/types/pokemon.ts`, `load-species-data.ts`, and a `SHINY_LOCKED` set in
+`fetch-pokemon-forms.ts` (kept separate from the existing `OVERRIDES` map since it's a
+plain set of locked keys, not a field-override map) covering the 47 locked
+(species, form) pairs from Leg 14's audit doc, correctly excluding Zacian/Zamazenta per
+Vanny's distribution-event policy call. `seed.ts` got an unconditional resync backfill
+(`backfillShinyLocked`), same pattern as Leg 8's `home_boxable` backfill, so an
+already-seeded local db picks up the correct value on next startup without touching
+`collection_entries`. `sqlite-storage.ts`'s row mapper picks up the new column
+automatically via its `SELECT *`, needed only a `FormRow`/`toForm` update. Patched the
+47 keys into the existing `data/pokemon/forms.json` directly via a one-off script rather
+than a full live re-fetch (verified all 47 keys matched a real row — no drift between
+the audit doc and current form names) — same approach Leg 8 used for `home_boxable`.
+See commit `<hash>`. Full change is `schema.ts`, `seed.ts`, `shared/types/pokemon.ts`,
+`load-species-data.ts`, `fetch-pokemon-forms.ts`, `sqlite-storage.ts`,
+`data/pokemon/forms.json`, plus new `seed.test.ts`/`sqlite-storage.test.ts`/
+`buildDexSections.test.ts` fixture updates and a new backfill test. All 48 tests +
+typecheck pass. UI wiring (how a locked shiny checkbox renders) stays open in TODO.md as
+its own leg.
+
 ## [Shiny-locked species/forms: Zacian/Zamazenta correction] — Leg 14 follow-up
 2026-09-02. Vanny corrected Leg 14's Zacian/Zamazenta note: their normal story gift is
 non-shiny, but a legitimate shiny of each was distributed once via a past Mystery

@@ -43,6 +43,13 @@ export interface Form {
    * "{pokeapiId}.png" every other form uses. See sprites.ts and
    * docs/investigations/home-depositability-audit.md section 3. */
   spriteFormSuffix: string | null
+  /** True when no legitimate shiny of this species/form has ever existed by any means —
+   * normal in-game generation or a past distribution, expired or not — as opposed to "is
+   * it currently, officially still obtainable." A different axis than homeBoxable: a
+   * shiny-locked Pokemon is still ownable/boxable, only its shiny variant isn't. See
+   * docs/investigations/shiny-locked-audit.md for the definition's derivation and the
+   * per-form sourcing. */
+  shinyLocked: boolean
 }
 
 export interface CollectionEntry {

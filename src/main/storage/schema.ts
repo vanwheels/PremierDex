@@ -17,6 +17,7 @@ export function applySchema(db: Database.Database): void {
       form_name TEXT NOT NULL,
       form_category TEXT NOT NULL CHECK (form_category IN ('dex_distinct', 'cosmetic_variant', 'non_boxable')),
       home_boxable INTEGER NOT NULL DEFAULT 1,
+      shiny_locked INTEGER NOT NULL DEFAULT 0,
       has_gender_difference INTEGER NOT NULL DEFAULT 0,
       first_available_generation INTEGER NOT NULL,
       regional_group TEXT,
@@ -45,5 +46,8 @@ export function applySchema(db: Database.Database): void {
   }
   if (!formColumns.some((c) => c.name === 'sprite_form_suffix')) {
     db.exec('ALTER TABLE forms ADD COLUMN sprite_form_suffix TEXT')
+  }
+  if (!formColumns.some((c) => c.name === 'shiny_locked')) {
+    db.exec('ALTER TABLE forms ADD COLUMN shiny_locked INTEGER NOT NULL DEFAULT 0')
   }
 }

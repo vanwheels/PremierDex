@@ -43,6 +43,13 @@
  *     deposit support lags game releases, so it's a hand-maintained OVERRIDES fact, not
  *     part of the heuristic above. See docs/investigations/home-depositability-audit.md
  *     section 2 for the current false entries and their sourcing.
+ *   - shinyLocked defaults to false and, like homeBoxable, is not derivable from any
+ *     PokeAPI signal — it's a hand-maintained fact sourced against Serebii/Bulbapedia,
+ *     applied via the separate SHINY_LOCKED set below (kept apart from OVERRIDES since
+ *     it's a plain set of locked keys, not a field-override map). See
+ *     docs/investigations/shiny-locked-audit.md for the definition (a species/form is
+ *     locked only when no legitimate shiny has EVER existed by any means, not "is it
+ *     currently obtainable") and the per-form sourcing.
  *   - A minority of species (Unown, Vivillon, Flabébé/Floette/Florges, Furfrou,
  *     Alcremie, Poltchageist/Sinistcha — confirmed live 2026-09-02) express their
  *     cosmetic sub-forms as multiple pokemon-form entries under one variety instead of
@@ -88,6 +95,11 @@ interface SeedForm {
   /** Non-null only for a cosmetic sub-form sharing its pokeapiId with siblings (Unown's
    * letters, Vivillon's patterns, etc.) — see the module doc comment and sprites.ts. */
   spriteFormSuffix: string | null
+  /** True when no legitimate shiny of this species/form has ever existed by any means —
+   * like homeBoxable, not derivable from any PokeAPI signal, so this is always `false`
+   * except where SHINY_LOCKED below says otherwise. See
+   * docs/investigations/shiny-locked-audit.md for the definition and per-form sourcing. */
+  shinyLocked: boolean
 }
 
 interface PokeApiSpeciesResponse {
@@ -138,6 +150,64 @@ const OVERRIDES: Record<string, Partial<SeedForm>> = {
   '774:indigo': { homeBoxable: false },
   '774:violet': { homeBoxable: false }
 }
+
+/** speciesId:formName -> shiny-locked, per docs/investigations/shiny-locked-audit.md's
+ * confirmed table (2026-09-02, Serebii's shiny-locked page cross-referenced against
+ * Bulbapedia). Zacian/Zamazenta are deliberately excluded despite Bulbapedia listing
+ * their normal story gift as non-shiny: a legitimate shiny of both was distributed via a
+ * past Mystery Gift/serial-code event, and per Vanny's policy call an event's real-world
+ * expiration doesn't retroactively lock a species — preserved distribution files mean
+ * collectors can still obtain one. Exported so the one-off forms.json migration script
+ * (see git history around this leg) can reuse the same list rather than duplicating it. */
+export const SHINY_LOCKED: ReadonlySet<string> = new Set([
+  '25:original-cap', // Pikachu's event cap forms (not partner-cap, which IS shiny-obtainable in Let's Go)
+  '25:hoenn-cap',
+  '25:sinnoh-cap',
+  '25:unova-cap',
+  '25:kalos-cap',
+  '25:alola-cap',
+  '25:world-cap',
+  '494:base', // Victini
+  '658:ash', // Ash-Greninja (non_boxable, hidden from the dex view, but still a real fact)
+  '666:poke-ball', // Vivillon's Poke Ball pattern only
+  '720:base', // Hoopa (Confined and Unbound share the lock — one individual, forme change)
+  '720:unbound',
+  '801:base', // Magearna
+  '801:original',
+  '802:base', // Marshadow
+  '809:gmax', // Melmetal's Gigantamax factor (non_boxable, hidden, base Melmetal is NOT locked)
+  '893:base', // Zarude
+  '893:dada',
+  '670:eternal', // Floette's Eternal Flower only
+  '789:base', // Cosmog
+  '790:base', // Cosmoem
+  '891:base', // Kubfu
+  '892:base', // Urshifu Single Strike (Kubfu's evolution retains the lock either style)
+  '892:rapid-strike', // Urshifu Rapid Strike
+  '896:base', // Glastrier
+  '897:base', // Spectrier
+  '898:base', // Calyrex
+  '898:ice', // Calyrex Ice Rider (fusion with locked Glastrier)
+  '898:shadow', // Calyrex Shadow Rider (fusion with locked Spectrier)
+  '901:bloodmoon', // Ursaluna's Bloodmoon form only — base Ursaluna is NOT locked
+  '1007:base', // Koraidon
+  '1008:base', // Miraidon
+  '1009:base', // Walking Wake
+  '1010:base', // Iron Leaves
+  '1011:base', // Okidogi
+  '1012:base', // Munkidori
+  '1013:base', // Fezandipiti
+  '1017:base', // Ogerpon (all 4 masks share the lock — one individual, held-item forme change)
+  '1017:wellspring-mask',
+  '1017:hearthflame-mask',
+  '1017:cornerstone-mask',
+  '1020:base', // Gouging Fire
+  '1021:base', // Raging Bolt
+  '1022:base', // Iron Boulder
+  '1023:base', // Iron Crown
+  '1024:base', // Terapagos
+  '1025:base' // Pecharunt
+])
 
 /** Captured from PokeAPI's /version-group list + each entry's .generation during
  * planning — small and stable enough to hardcode rather than fetch per form. */
@@ -309,7 +379,8 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
         firstAvailableGeneration: species.generation,
         regionalGroup: null,
         pokeapiId: defaultPokemon.id,
-        spriteFormSuffix: null
+        spriteFormSuffix: null,
+        shinyLocked: false
       })
     )
   }
@@ -351,7 +422,8 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
         firstAvailableGeneration: generation,
         regionalGroup,
         pokeapiId: pokemon.id,
-        spriteFormSuffix: null
+        spriteFormSuffix: null,
+        shinyLocked: false
       })
     )
   }
@@ -393,7 +465,8 @@ async function fetchDefaultVarietySubForms(
         firstAvailableGeneration: species.generation,
         regionalGroup: null,
         pokeapiId: defaultPokemon.id,
-        spriteFormSuffix: null
+        spriteFormSuffix: null,
+        shinyLocked: false
       })
     }
 
@@ -422,13 +495,15 @@ async function fetchDefaultVarietySubForms(
       firstAvailableGeneration: generation,
       regionalGroup,
       pokeapiId: defaultPokemon.id,
-      spriteFormSuffix: form.form_name
+      spriteFormSuffix: form.form_name,
+      shinyLocked: false
     })
   })
 }
 
 function applyOverride(speciesId: number, formName: string, form: SeedForm): SeedForm {
-  return { ...form, ...OVERRIDES[`${speciesId}:${formName}`] }
+  const key = `${speciesId}:${formName}`
+  return { ...form, ...OVERRIDES[key], shinyLocked: SHINY_LOCKED.has(key) }
 }
 
 async function main(): Promise<void> {

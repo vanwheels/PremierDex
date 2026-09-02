@@ -17,6 +17,7 @@ interface FormRow {
   form_name: string
   form_category: Form['formCategory']
   home_boxable: 0 | 1
+  shiny_locked: 0 | 1
   has_gender_difference: 0 | 1
   first_available_generation: number
   regional_group: string | null
@@ -39,6 +40,7 @@ function toForm(row: FormRow): Form {
     formName: row.form_name,
     formCategory: row.form_category,
     homeBoxable: row.home_boxable === 1,
+    shinyLocked: row.shiny_locked === 1,
     hasGenderDifference: row.has_gender_difference === 1,
     firstAvailableGeneration: row.first_available_generation,
     regionalGroup: row.regional_group,
