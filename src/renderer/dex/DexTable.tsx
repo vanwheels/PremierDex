@@ -23,9 +23,9 @@ export function DexTable({ sections, onToggleEntry, onSaveOrigin }: DexTableProp
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
   // Which row's sprite is enlarged, if any. UI-only, same as expandedSpeciesIds above.
   const [spriteTarget, setSpriteTarget] = useState<SpriteModalTarget | null>(null)
-  // Which entry's origin/nickname editor is open, if any. Unlike spriteTarget, saving
-  // from here writes to SQLite (via onSaveOrigin), so this isn't purely UI state — but
-  // "which modal is open" still belongs local to DexTable, same as spriteTarget.
+  // Which entry's origin editor is open, if any. Unlike spriteTarget, saving from here
+  // writes to SQLite (via onSaveOrigin), so this isn't purely UI state — but "which modal
+  // is open" still belongs local to DexTable, same as spriteTarget.
   const [originTarget, setOriginTarget] = useState<OriginModalTarget | null>(null)
 
   const toggleExpanded = (speciesId: number): void => {
@@ -45,6 +45,7 @@ export function DexTable({ sections, onToggleEntry, onSaveOrigin }: DexTableProp
             <th>Sprite</th>
             <th>#</th>
             <th>Name</th>
+            <th>Nickname</th>
             <th>Owned</th>
             <th>Shiny</th>
           </tr>
@@ -70,6 +71,7 @@ export function DexTable({ sections, onToggleEntry, onSaveOrigin }: DexTableProp
                       onToggleEntry={onToggleEntry}
                       onOpenSprite={setSpriteTarget}
                       onOpenOrigin={setOriginTarget}
+                      onSaveOrigin={onSaveOrigin}
                       expandControl={
                         isCollapseSlot
                           ? {
@@ -90,6 +92,7 @@ export function DexTable({ sections, onToggleEntry, onSaveOrigin }: DexTableProp
                       onToggleEntry={onToggleEntry}
                       onOpenSprite={setSpriteTarget}
                       onOpenOrigin={setOriginTarget}
+                      onSaveOrigin={onSaveOrigin}
                       indent
                     />
                   ))}

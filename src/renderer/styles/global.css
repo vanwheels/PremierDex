@@ -129,6 +129,14 @@ td {
   white-space: nowrap;
 }
 
+.dex-nickname-input {
+  width: 8rem;
+}
+
+.dex-nickname-input:disabled {
+  opacity: 0.4;
+}
+
 .dex-origin-button {
   margin-left: 0.35rem;
   padding: 0.05rem 0.4rem;

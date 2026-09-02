@@ -1,5 +1,20 @@
 # COMPLETED
 
+## [Move nicknames out of Origin field] — Leg 10 — 2026-09-02
+Nicknames were living inside the Origin button/modal on the Living Dex grid (the button
+showed the nickname text in place of "Origin" once set, and OriginModal had its own
+Nickname field). Gave them their own "Nickname" column between Name and Owned instead —
+an inline text input, committed on blur/Enter, that writes straight through the existing
+setEntryOrigin IPC call (a full-row snapshot write) carrying the entry's other origin
+fields through unchanged. OriginModal no longer touches nickname at all; its Save now
+always passes the entry's existing value through untouched.
+A dex row can have both a regular and a shiny entry owned at once, each with an
+independent nickname, but the column holds a single input — per Vanny's call, it edits
+whichever is "active" with shiny taking precedence when both are owned (see DexRow's
+`activeNicknameEntry`, unit tested in DexRow.test.ts). No data-layer changes — the
+`nickname` column and CollectionEntryOriginInput shape are unchanged; this was a
+UI-only move. See commit `<pending>`.
+
 ## [Foldable species: display checked-off form when collapsed] — Leg 9 — 2026-09-02
 Collapsed foldable-species rows (Unown, Maushold, etc.) always showed the base form
 (`rows[0]`) regardless of which variant was actually owned/shiny, hiding a checked-off

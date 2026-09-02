@@ -1,12 +1,5 @@
 # TODO
 
-## [Move nicknames out of Origin field] — Leg 10
-Nicknames currently live inside the Origin field/modal; they should be their own column,
-positioned between Name and Owned, on whatever grid(s) currently fold them into Origin.
-Sequenced ahead of Leg 15 (Dex search/filter), which adds a search-by-nickname dimension
-that depends on nicknames having their own field to search against.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [TID visibility when setting Pokémon origin] — Leg 11
 When picking/setting a Collection Entry's origin (via Trainer Profile selection or the
 per-entry Origin modal), the TID should be visible to help disambiguate between similarly

@@ -26,7 +26,8 @@ interface OriginModalProps {
 }
 
 /**
- * Per-entry origin/nickname editor (Leg 4) — click-to-open, mirrors SpriteModal's
+ * Per-entry origin editor (Leg 4; nickname moved out to its own grid column at Leg 10 —
+ * see DexRow's inline nickname input) — click-to-open, mirrors SpriteModal's
  * backdrop/Escape/close pattern. One entry (a specific gender+shiny combo) is edited at
  * a time; the regular and shiny rows of the same form are separate CollectionEntry rows
  * and get independent origin data, since they're independent individuals.
@@ -34,7 +35,9 @@ interface OriginModalProps {
  * "Copy from Trainer Profile" only ever *seeds* the game/OT/TID/SID fields — after
  * that, they're plain editable inputs, and Save snapshots whatever's currently in them
  * onto the entry. Editing the source profile later, or deleting it, never changes what
- * was already saved here (see sqlite-storage.ts's deleteTrainerProfile).
+ * was already saved here (see sqlite-storage.ts's deleteTrainerProfile). Save carries the
+ * entry's existing nickname through unchanged (setEntryOrigin is a full-row snapshot
+ * write, not a partial patch) — this modal never touches it.
  *
  * The TID/SID visibility-by-game logic and validation shape duplicate
  * TrainerProfileForm.tsx rather than reusing it directly — that component renders as
@@ -48,7 +51,6 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   const [otName, setOtName] = useState(entry.otName ?? '')
   const [tid, setTid] = useState(entry.tid === null ? '' : String(entry.tid))
   const [sid, setSid] = useState(entry.sid === null ? '' : String(entry.sid))
-  const [nickname, setNickname] = useState(entry.nickname ?? '')
 
   useEffect(() => {
     window.premierDex.listTrainerProfiles().then(setProfiles)
@@ -96,14 +98,14 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   const handleSave = (): void => {
     if (!valid) return
     const input: CollectionEntryOriginInput = bothBlank
-      ? { trainerProfileId: null, originGame: null, otName: null, tid: null, sid: null, nickname: nickname.trim() || null }
+      ? { trainerProfileId: null, originGame: null, otName: null, tid: null, sid: null, nickname: entry.nickname }
       : {
           trainerProfileId,
           originGame: game.trim(),
           otName: otName.trim(),
           tid: tidVisible ? parsedTid : null,
           sid: sidVisible ? parsedSid : null,
-          nickname: nickname.trim() || null
+          nickname: entry.nickname
         }
     onSave(entry.id, input)
     onClose()
@@ -149,10 +151,6 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
             <input type="number" min={0} max={SID_MAX} value={sid} onChange={(e) => setSid(e.target.value)} />
           </label>
         )}
-        <label className="origin-modal-field">
-          Nickname
-          <input value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="Optional" />
-        </label>
         <div className="origin-modal-actions">
           <button type="button" onClick={handleSave} disabled={!valid}>
             Save
