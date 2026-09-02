@@ -18,6 +18,11 @@ Generalized storage-location concept distinct from Trainer Profile: HOME Account
 Pokémon Bank, Pokémon Box, My Pokémon Ranch, and in-save-file dexes. A Pokémon's
 current location must be trackable independently of its origin (Trainer Profile), so
 trades/transfers move location without touching origin. Depends on Leg 1 existing.
+Catch: unlike Trainer Profile, storage locations don't uniformly have TID/SID — HOME
+has its own UID (separate identifier space, needs verifying how it's structured), while
+Bank/Ranch/Box are believed to carry no persistent identifier at all beyond whatever's
+implicit in the save file, so identity there is probably just user-provided naming.
+Needs confirming before the schema is locked in.
 Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Origin-game list] — Leg 3
