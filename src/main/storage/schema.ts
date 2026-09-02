@@ -18,6 +18,7 @@ export function applySchema(db: Database.Database): void {
       form_category TEXT NOT NULL CHECK (form_category IN ('dex_distinct', 'cosmetic_variant', 'non_boxable')),
       home_boxable INTEGER NOT NULL DEFAULT 1,
       shiny_locked INTEGER NOT NULL DEFAULT 0,
+      always_shiny INTEGER NOT NULL DEFAULT 0,
       has_gender_difference INTEGER NOT NULL DEFAULT 0,
       first_available_generation INTEGER NOT NULL,
       regional_group TEXT,
@@ -85,6 +86,9 @@ export function applySchema(db: Database.Database): void {
   }
   if (!formColumns.some((c) => c.name === 'shiny_locked')) {
     db.exec('ALTER TABLE forms ADD COLUMN shiny_locked INTEGER NOT NULL DEFAULT 0')
+  }
+  if (!formColumns.some((c) => c.name === 'always_shiny')) {
+    db.exec('ALTER TABLE forms ADD COLUMN always_shiny INTEGER NOT NULL DEFAULT 0')
   }
 
   // Same retrofit story for collection_entries: origin/nickname (Leg 4) postdate this

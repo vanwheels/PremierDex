@@ -62,8 +62,9 @@ function prunePreLeg7ExcludedForms(db: Database.Database): void {
  * `docs/investigations/form-categorization.md` for how form_category/regional_group/
  * has_gender_difference/first_available_generation are derived,
  * `docs/investigations/home-depositability-audit.md` for home_boxable, and
- * `docs/investigations/shiny-locked-audit.md` for shiny_locked) — real per-form
- * data, not the single 'base' placeholder Leg 1 seeded.
+ * `docs/investigations/shiny-locked-audit.md` for shiny_locked; always_shiny is the
+ * opposite-axis fact, hand-maintained the same way — see fetch-pokemon-forms.ts's
+ * ALWAYS_SHINY set) — real per-form data, not the single 'base' placeholder Leg 1 seeded.
  */
 export function runSeed(db: Database.Database): void {
   const insertSpecies = db.prepare(
@@ -71,9 +72,9 @@ export function runSeed(db: Database.Database): void {
   )
   const insertForm = db.prepare(`
     INSERT OR IGNORE INTO forms
-      (species_id, form_name, form_category, home_boxable, shiny_locked, has_gender_difference, first_available_generation, regional_group, pokeapi_id, sprite_form_suffix)
+      (species_id, form_name, form_category, home_boxable, shiny_locked, always_shiny, has_gender_difference, first_available_generation, regional_group, pokeapi_id, sprite_form_suffix)
     VALUES
-      (@speciesId, @formName, @formCategory, @homeBoxable, @shinyLocked, @hasGenderDifference, @firstAvailableGeneration, @regionalGroup, @pokeapiId, @spriteFormSuffix)
+      (@speciesId, @formName, @formCategory, @homeBoxable, @shinyLocked, @alwaysShiny, @hasGenderDifference, @firstAvailableGeneration, @regionalGroup, @pokeapiId, @spriteFormSuffix)
   `)
   // Leg-4 backfill: INSERT OR IGNORE above skips rows that already existed pre-Leg-4
   // (unique on species_id+form_name), so their pokeapi_id would otherwise stay NULL
@@ -103,6 +104,13 @@ export function runSeed(db: Database.Database): void {
     UPDATE forms SET shiny_locked = @shinyLocked
     WHERE species_id = @speciesId AND form_name = @formName AND shiny_locked != @shinyLocked
   `)
+  // Same pattern again: always_shiny (Leg 6) is the opposite-axis fact from
+  // shiny_locked — hand-maintained, not derivable from PokeAPI — so a row inserted
+  // before this leg needs the same re-sync-unconditionally backfill.
+  const backfillAlwaysShiny = db.prepare(`
+    UPDATE forms SET always_shiny = @alwaysShiny
+    WHERE species_id = @speciesId AND form_name = @formName AND always_shiny != @alwaysShiny
+  `)
   const selectFormId = db.prepare('SELECT id FROM forms WHERE species_id = ? AND form_name = ?')
   const insertEntry = db.prepare(
     'INSERT OR IGNORE INTO collection_entries (form_id, gender, shiny, owned) VALUES (@formId, @gender, @shiny, 0)'
@@ -122,6 +130,7 @@ export function runSeed(db: Database.Database): void {
         formCategory: form.formCategory,
         homeBoxable: form.homeBoxable ? 1 : 0,
         shinyLocked: form.shinyLocked ? 1 : 0,
+        alwaysShiny: form.alwaysShiny ? 1 : 0,
         hasGenderDifference: form.hasGenderDifference ? 1 : 0,
         firstAvailableGeneration: form.firstAvailableGeneration,
         regionalGroup: form.regionalGroup,
@@ -148,6 +157,11 @@ export function runSeed(db: Database.Database): void {
         speciesId: form.speciesId,
         formName: form.formName,
         shinyLocked: form.shinyLocked ? 1 : 0
+      })
+      backfillAlwaysShiny.run({
+        speciesId: form.speciesId,
+        formName: form.formName,
+        alwaysShiny: form.alwaysShiny ? 1 : 0
       })
 
       const row = selectFormId.get(form.speciesId, form.formName) as { id: number }

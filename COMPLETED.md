@@ -1,5 +1,17 @@
 # COMPLETED
 
+## [Spiky-Eared Pichu: HOME deposit + always-shiny flags] — Leg 6 — 2026-09-02
+Added `alwaysShiny` as a new Form field — the opposite axis from the existing
+`shinyLocked` (which means "never shiny"; `alwaysShiny` means "never non-shiny") —
+plumbed through the same hand-maintained-fact path `shinyLocked` and `homeBoxable`
+already use: schema column + migration, `sqlite-storage.ts`, `seed.ts`'s
+insert/backfill, and `fetch-pokemon-forms.ts`'s `ALWAYS_SHINY` set (mirroring
+`SHINY_LOCKED`). Set `homeBoxable: false` and `alwaysShiny: true` on Spiky-Eared Pichu
+(`172:spiky-eared`) in `forms.json`, and `alwaysShiny: false` on all other 1556 rows.
+Kept to the data layer only, per the TODO's explicit "data-only fix" framing — no
+renderer changes, unlike `homeBoxable`/`shinyLocked` which both already have a `DexRow`
+consumer. Flagged as a follow-up TODO (`[alwaysShiny UI consumer]`) rather than done here.
+
 Legs 1-16 (Project Scaffold + Living Dex v1 milestones) archived at
 `docs/completed-archive/project-scaffold.md` and `docs/completed-archive/living-dex-v1.md`.
 See `MILESTONES.md` for the shipped-milestone index.

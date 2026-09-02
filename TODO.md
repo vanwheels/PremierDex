@@ -1,12 +1,5 @@
 # TODO
 
-## [Spiky-Eared Pichu: HOME deposit + always-shiny flags] — Leg 6
-Spiky-Eared Pichu can't be deposited into Pokémon HOME (needs `homeBoxable: false`) and is
-only ever obtainable shiny (needs a permanent-shiny flag distinct from the existing
-`shinyLocked`, which currently means the opposite — never shiny). Data-only fix once
-scoped.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Pokémon name capitalization] — Leg 7
 Pokémon names should render capitalized wherever they're displayed; currently inconsistent
 somewhere in the dex/collection views per Vanny's dev-data pass. Needs a sweep to find
@@ -103,6 +96,16 @@ local/internal packaging, so left off the leg sequence.
 Blocked: needs production-quality PokéBall-or-similar artwork before a real public
 release.
 Last touched: 2026-09-01. Re-check count: 0.
+
+## [alwaysShiny UI consumer] — unscheduled
+Leg 6 added `alwaysShiny` (data layer only, per that leg's explicit "data-only fix"
+framing) but nothing in the renderer reads it yet — unlike `homeBoxable`/`shinyLocked`,
+which both already reach `DexRow` (a badge, and for `shinyLocked` also a disabled
+checkbox). The natural consistent treatment would mirror `shinyLocked`'s but on the
+opposite checkbox: disable the *regular* (non-shiny) checkbox and badge the row when
+`alwaysShiny` is true, so Spiky-Eared Pichu can't be marked owned-and-not-shiny. Not done
+as part of Leg 6 to keep that leg's scope to the data correction it was framed as.
+Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Origin auto-populate from Trainer Profile edits] — unscheduled
 Vanny wants a Collection Entry's origin info to auto-update when its source Trainer

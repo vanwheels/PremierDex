@@ -19,6 +19,7 @@ export interface SeedForm {
   pokeapiId: number
   spriteFormSuffix: string | null
   shinyLocked: boolean
+  alwaysShiny: boolean
 }
 
 // Unpackaged (dev and local `npm run build`), the main bundle lives at

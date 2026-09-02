@@ -54,6 +54,10 @@
  *     docs/investigations/shiny-locked-audit.md for the definition (a species/form is
  *     locked only when no legitimate shiny has EVER existed by any means, not "is it
  *     currently obtainable") and the per-form sourcing.
+ *   - alwaysShiny defaults to false and is the opposite-axis fact from shinyLocked (never
+ *     shiny vs. only ever shiny) — same hand-maintained treatment, applied via the
+ *     ALWAYS_SHINY set below (Leg 6: Spiky-Eared Pichu's National Park encounter, always
+ *     the golden coloring — see TODO.md).
  *   - A minority of species (Unown, Vivillon, Flabébé/Floette/Florges, Furfrou,
  *     Alcremie, Poltchageist/Sinistcha — confirmed live 2026-09-02) express their
  *     cosmetic sub-forms as multiple pokemon-form entries under one variety instead of
@@ -104,6 +108,10 @@ interface SeedForm {
    * except where SHINY_LOCKED below says otherwise. See
    * docs/investigations/shiny-locked-audit.md for the definition and per-form sourcing. */
   shinyLocked: boolean
+  /** True when a form has never legitimately existed as non-shiny — the opposite axis
+   * from shinyLocked, same hand-maintained treatment (not derivable from any PokeAPI
+   * signal), always `false` except where ALWAYS_SHINY below says otherwise. */
+  alwaysShiny: boolean
 }
 
 interface PokeApiSpeciesResponse {
@@ -152,7 +160,8 @@ const OVERRIDES: Record<string, Partial<SeedForm>> = {
   '774:green': { homeBoxable: false },
   '774:blue': { homeBoxable: false },
   '774:indigo': { homeBoxable: false },
-  '774:violet': { homeBoxable: false }
+  '774:violet': { homeBoxable: false },
+  '172:spiky-eared': { homeBoxable: false } // Spiky-Eared Pichu (HGSS National Park event) — see TODO.md's Leg 6
 }
 
 /** speciesId:formName -> shiny-locked, per docs/investigations/shiny-locked-audit.md's
@@ -212,6 +221,12 @@ export const SHINY_LOCKED: ReadonlySet<string> = new Set([
   '1024:base', // Terapagos
   '1025:base' // Pecharunt
 ])
+
+/** speciesId:formName -> always-shiny, the opposite-axis set from SHINY_LOCKED above —
+ * a form that has never legitimately existed as non-shiny. Currently just Spiky-Eared
+ * Pichu: its HeartGold/SoulSilver National Park encounter is always the golden coloring,
+ * with no non-shiny version obtainable by any means. See TODO.md's Leg 6. */
+export const ALWAYS_SHINY: ReadonlySet<string> = new Set(['172:spiky-eared'])
 
 /** Captured from PokeAPI's /version-group list + each entry's .generation during
  * planning — small and stable enough to hardcode rather than fetch per form. */
@@ -399,7 +414,8 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
         regionalGroup: null,
         pokeapiId: defaultPokemon.id,
         spriteFormSuffix: null,
-        shinyLocked: false
+        shinyLocked: false,
+        alwaysShiny: false
       })
     )
   }
@@ -443,7 +459,8 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
         regionalGroup,
         pokeapiId: pokemon.id,
         spriteFormSuffix: null,
-        shinyLocked: false
+        shinyLocked: false,
+        alwaysShiny: false
       })
     )
   }
@@ -486,7 +503,8 @@ async function fetchDefaultVarietySubForms(
         regionalGroup: null,
         pokeapiId: defaultPokemon.id,
         spriteFormSuffix: null,
-        shinyLocked: false
+        shinyLocked: false,
+        alwaysShiny: false
       })
     }
 
@@ -517,14 +535,15 @@ async function fetchDefaultVarietySubForms(
       regionalGroup,
       pokeapiId: defaultPokemon.id,
       spriteFormSuffix: form.form_name,
-      shinyLocked: false
+      shinyLocked: false,
+      alwaysShiny: false
     })
   })
 }
 
 function applyOverride(speciesId: number, formName: string, form: SeedForm): SeedForm {
   const key = `${speciesId}:${formName}`
-  return { ...form, ...OVERRIDES[key], shinyLocked: SHINY_LOCKED.has(key) }
+  return { ...form, ...OVERRIDES[key], shinyLocked: SHINY_LOCKED.has(key), alwaysShiny: ALWAYS_SHINY.has(key) }
 }
 
 async function main(): Promise<void> {

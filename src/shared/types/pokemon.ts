@@ -50,6 +50,12 @@ export interface Form {
    * docs/investigations/shiny-locked-audit.md for the definition's derivation and the
    * per-form sourcing. */
   shinyLocked: boolean
+  /** True when a form has never legitimately existed as non-shiny — the opposite axis
+   * from shinyLocked (which means "never shiny"). E.g. Spiky-Eared Pichu, whose National
+   * Park encounter is always the golden coloring — see TODO.md's "Spiky-Eared Pichu: HOME
+   * deposit + always-shiny flags" leg. Distinct from homeBoxable: an always-shiny form
+   * can still be non-boxable, or vice versa (Spiky-Eared Pichu happens to be both). */
+  alwaysShiny: boolean
 }
 
 export interface CollectionEntry {

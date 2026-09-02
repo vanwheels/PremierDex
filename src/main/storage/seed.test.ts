@@ -14,6 +14,7 @@ vi.mock('./load-species-data', () => ({
       formCategory: 'dex_distinct',
       homeBoxable: true,
       shinyLocked: false,
+      alwaysShiny: false,
       hasGenderDifference: false,
       firstAvailableGeneration: 1,
       regionalGroup: null,
