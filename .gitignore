@@ -1,0 +1,21 @@
+node_modules/
+out/
+dist/
+release/
+*.tsbuildinfo
+
+# Local SQLite database (userData path is used in packaged/dev builds; this covers any
+# copy that ends up in the repo root during local testing)
+*.sqlite
+*.sqlite3
+*.db
+
+.DS_Store
+*.log
+npm-debug.log*
+
+.env
+.env.local
+
+.vscode/*
+!.vscode/extensions.json

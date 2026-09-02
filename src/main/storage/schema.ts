@@ -1,0 +1,37 @@
+import type Database from 'better-sqlite3'
+
+export function applySchema(db: Database.Database): void {
+  db.pragma('journal_mode = WAL')
+  db.pragma('foreign_keys = ON')
+
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS species (
+      id INTEGER PRIMARY KEY,
+      name TEXT NOT NULL,
+      generation INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS forms (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      species_id INTEGER NOT NULL REFERENCES species(id),
+      form_name TEXT NOT NULL,
+      form_category TEXT NOT NULL CHECK (form_category IN ('dex_distinct', 'cosmetic_variant', 'non_boxable')),
+      home_boxable INTEGER NOT NULL DEFAULT 1,
+      has_gender_difference INTEGER NOT NULL DEFAULT 0,
+      first_available_generation INTEGER NOT NULL,
+      regional_group TEXT,
+      UNIQUE(species_id, form_name)
+    );
+    CREATE INDEX IF NOT EXISTS idx_forms_species ON forms(species_id);
+
+    CREATE TABLE IF NOT EXISTS collection_entries (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      form_id INTEGER NOT NULL REFERENCES forms(id),
+      gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
+      shiny INTEGER NOT NULL DEFAULT 0,
+      owned INTEGER NOT NULL DEFAULT 0,
+      UNIQUE(form_id, gender, shiny)
+    );
+    CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
+  `)
+}
