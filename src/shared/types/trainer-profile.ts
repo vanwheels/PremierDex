@@ -6,10 +6,12 @@
 /**
  * Trainer ID / Secret ID display rules changed shape across generations (see
  * shared/data/origin-games.ts and https://bulbapedia.bulbagarden.net/wiki/Trainer_ID_number):
- * Gen I-VI shows a 5-digit TID (0-65535) and never displays a SID at all; Gen VII+ shows
- * a 6-digit TID (0-999999) and a 4-digit SID (0-4294); Pokémon GO has neither. Both
- * fields are nullable here for exactly that reason — null means "this origin game
- * doesn't show this field," not "unknown."
+ * Gen I-VI shows a 5-digit TID (0-65535) and never displays a SID at all — though a SID
+ * still exists internally there and can be read out with an external tool like PKHex;
+ * Gen VII+ shows a 6-digit TID (0-999999) and a 4-digit SID (0-4294); Pokémon GO has
+ * neither. Both fields are nullable here for exactly that reason — null means "this
+ * origin game doesn't have this field," not "unknown." Stored/validated range for both
+ * is the widest across any generation (0-999999) rather than a tighter per-game bound.
  */
 export interface TrainerProfile {
   id: number

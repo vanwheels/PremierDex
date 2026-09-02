@@ -76,11 +76,11 @@ describe('collection entry origin', () => {
     await expect(storage.setEntryOrigin(entry.id, { ...ORIGIN_INPUT, tid: 1_000_000 })).rejects.toThrow()
   })
 
-  it('rejects a sid past the 4-digit range at the DB layer', async () => {
+  it('rejects a sid past the 6-digit range at the DB layer', async () => {
     const storage = createSqliteStorage(':memory:')
     const entry = await findBulbasaurBaseEntry(storage)
 
-    await expect(storage.setEntryOrigin(entry.id, { ...ORIGIN_INPUT, sid: 4295 })).rejects.toThrow()
+    await expect(storage.setEntryOrigin(entry.id, { ...ORIGIN_INPUT, sid: 1_000_000 })).rejects.toThrow()
   })
 
   it('links an entry to a trainer profile via trainerProfileId', async () => {

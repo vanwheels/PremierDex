@@ -104,6 +104,19 @@ describe('trainer profile CRUD', () => {
     expect(created.sid).toBe(4294)
   })
 
+  it('accepts a sid past Gen VII+\'s 4294 cap for a pre-Gen-VII game, read out with an external tool', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const created = await storage.createTrainerProfile({
+      game: 'Pokémon Black',
+      otName: 'Ash',
+      tid: 12345,
+      sid: 54321,
+      label: null
+    })
+
+    expect(created.sid).toBe(54321)
+  })
+
   it('keeps profiles for the same game distinct via id, not natural key', async () => {
     const storage = createSqliteStorage(':memory:')
     const first = await storage.createTrainerProfile({

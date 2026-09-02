@@ -58,13 +58,22 @@ describe('applySchema', () => {
     ).toThrow()
   })
 
-  it('rejects a trainer_profiles sid past the 4-digit range via the CHECK constraint', () => {
+  it('rejects a trainer_profiles sid past the 6-digit range via the CHECK constraint', () => {
     const db = makeDb()
     expect(() =>
       db
         .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
-        .run('Pokémon Scarlet', 'Ash', 0, 4295)
+        .run('Pokémon Scarlet', 'Ash', 0, 1_000_000)
     ).toThrow()
+  })
+
+  it('allows a trainer_profiles sid past Gen VII+\'s 4294 cap, for a pre-Gen-VII SID read out with PKHex', () => {
+    const db = makeDb()
+    expect(() =>
+      db
+        .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
+        .run('Pokémon Black', 'Ash', 0, 54321)
+    ).not.toThrow()
   })
 
   it('rejects a negative trainer_profiles sid via the CHECK constraint', () => {
@@ -161,7 +170,7 @@ describe('applySchema', () => {
     ).toThrow()
   })
 
-  it('rejects a collection_entries sid past the 4-digit range via the CHECK constraint', () => {
+  it('rejects a collection_entries sid past the 6-digit range via the CHECK constraint', () => {
     const db = makeDb()
     db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
     db.prepare(
@@ -169,7 +178,9 @@ describe('applySchema', () => {
        VALUES (1, 'base', 'dex_distinct', 1)`
     ).run()
     expect(() =>
-      db.prepare('INSERT INTO collection_entries (form_id, gender, shiny, sid) VALUES (1, \'unknown\', 0, ?)').run(4295)
+      db
+        .prepare('INSERT INTO collection_entries (form_id, gender, shiny, sid) VALUES (1, \'unknown\', 0, ?)')
+        .run(1_000_000)
     ).toThrow()
   })
 
@@ -211,6 +222,81 @@ describe('applySchema', () => {
       db
         .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
         .run('Pokémon GO', 'Ash', null, null)
+    ).not.toThrow()
+  })
+
+  it('widens trainer_profiles sid to 999999 while preserving existing rows', () => {
+    const db = new Database(':memory:')
+    db.exec(`
+      CREATE TABLE trainer_profiles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        game TEXT NOT NULL,
+        ot_name TEXT NOT NULL,
+        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 4294),
+        label TEXT
+      );
+    `)
+    const inserted = db
+      .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid, label) VALUES (?, ?, ?, ?, ?)')
+      .run('Pokémon Black', 'Ash', 1, 2, null)
+
+    applySchema(db)
+
+    expect(db.prepare('SELECT * FROM trainer_profiles').all()).toEqual([
+      { id: inserted.lastInsertRowid, game: 'Pokémon Black', ot_name: 'Ash', tid: 1, sid: 2, label: null }
+    ])
+    expect(() =>
+      db
+        .prepare('INSERT INTO trainer_profiles (game, ot_name, tid, sid) VALUES (?, ?, ?, ?)')
+        .run('Pokémon White', 'Ash', 3, 54321)
+    ).not.toThrow()
+  })
+
+  it('widens collection_entries sid to 999999 while preserving existing rows', () => {
+    const db = new Database(':memory:')
+    db.exec(`
+      CREATE TABLE species (id INTEGER PRIMARY KEY, name TEXT NOT NULL, generation INTEGER NOT NULL);
+      CREATE TABLE forms (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        species_id INTEGER NOT NULL REFERENCES species(id),
+        form_name TEXT NOT NULL,
+        form_category TEXT NOT NULL,
+        first_available_generation INTEGER NOT NULL
+      );
+      CREATE TABLE collection_entries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        form_id INTEGER NOT NULL REFERENCES forms(id),
+        gender TEXT NOT NULL DEFAULT 'unknown',
+        shiny INTEGER NOT NULL DEFAULT 0,
+        owned INTEGER NOT NULL DEFAULT 0,
+        origin_game TEXT,
+        ot_name TEXT,
+        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 4294),
+        nickname TEXT,
+        UNIQUE(form_id, gender, shiny)
+      );
+      INSERT INTO species (id, name, generation) VALUES (1, 'bulbasaur', 1);
+      INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+        VALUES (1, 'base', 'dex_distinct', 1);
+    `)
+    const inserted = db
+      .prepare(
+        'INSERT INTO collection_entries (form_id, gender, shiny, owned, origin_game, ot_name, tid, sid, nickname) VALUES (1, \'unknown\', 0, 1, ?, ?, ?, ?, ?)'
+      )
+      .run('Pokémon Black', 'Ash', 1, 2, null)
+
+    applySchema(db)
+
+    const row = db.prepare('SELECT * FROM collection_entries').get() as Record<string, unknown>
+    expect(row.id).toBe(inserted.lastInsertRowid)
+    expect(row.trainer_profile_id).toBeNull()
+    expect(row.sid).toBe(2)
+    expect(() =>
+      db
+        .prepare('INSERT INTO collection_entries (form_id, gender, shiny, sid) VALUES (1, \'male\', 0, ?)')
+        .run(54321)
     ).not.toThrow()
   })
 })

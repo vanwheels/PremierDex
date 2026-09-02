@@ -39,17 +39,17 @@ export function applySchema(db: Database.Database): void {
 
     -- Origin identity a Collection Entry will eventually reference (Leg 4) — standalone
     -- for now, see [Trainer Profile model] in TODO.md. tid/sid are nullable: Pokémon GO
-    -- has neither, and pre-Gen-7 games never display a SID at all (see
-    -- shared/types/trainer-profile.ts). Ranges cover the widest any generation shows —
-    -- 6-digit TID and 4-digit SID, both introduced Gen VII — rather than a tighter
-    -- per-generation bound, since that depends on the game name text in a column SQLite
-    -- CHECK can't cross-reference.
+    -- has neither, and pre-Gen-7 games never display a SID in-game, though it exists
+    -- internally and can be read out with a tool like PKHex (see
+    -- shared/types/trainer-profile.ts). Both ranges cover the widest any generation
+    -- shows/holds — 0-999999 — rather than a tighter per-generation bound, since that
+    -- depends on the game name text in a column SQLite CHECK can't cross-reference.
     CREATE TABLE IF NOT EXISTS trainer_profiles (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       game TEXT NOT NULL,
       ot_name TEXT NOT NULL,
       tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
-      sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 4294),
+      sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
       label TEXT
     );
 
@@ -109,7 +109,7 @@ export function applySchema(db: Database.Database): void {
     db.exec('ALTER TABLE collection_entries ADD COLUMN tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999)')
   }
   if (!entryColumns.some((c) => c.name === 'sid')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 4294)')
+    db.exec('ALTER TABLE collection_entries ADD COLUMN sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999)')
   }
   if (!entryColumns.some((c) => c.name === 'nickname')) {
     db.exec('ALTER TABLE collection_entries ADD COLUMN nickname TEXT')
@@ -133,9 +133,65 @@ export function applySchema(db: Database.Database): void {
         game TEXT NOT NULL,
         ot_name TEXT NOT NULL,
         tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
-        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 4294),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
         label TEXT
       );
+    `)
+  }
+
+  // Widened sid's upper bound again, from 4294 (Gen VII+'s derived cap,
+  // floor(32-bit ID / 1_000_000)) to 999999: pre-Gen-VII games never display a Secret
+  // ID in-game, but it exists internally and can run up to 6 digits once read out with
+  // a tool like PKHex — see the CREATE TABLE comment above. Unlike the tid NOT NULL
+  // rebuild above, this table now sees real use (Legs 1-4 shipped the same day), so
+  // this rebuild copies existing rows across instead of dropping them. Detected via the
+  // stored CHECK text directly, since PRAGMA table_info doesn't expose CHECK bounds.
+  const trainerProfilesSql = db
+    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'trainer_profiles'")
+    .get() as { sql: string } | undefined
+  if (trainerProfilesSql?.sql.includes('sid BETWEEN 0 AND 4294')) {
+    db.exec(`
+      CREATE TABLE trainer_profiles_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        game TEXT NOT NULL,
+        ot_name TEXT NOT NULL,
+        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
+        label TEXT
+      );
+      INSERT INTO trainer_profiles_new (id, game, ot_name, tid, sid, label)
+        SELECT id, game, ot_name, tid, sid, label FROM trainer_profiles;
+      DROP TABLE trainer_profiles;
+      ALTER TABLE trainer_profiles_new RENAME TO trainer_profiles;
+    `)
+  }
+
+  const entriesSql = db
+    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entries'")
+    .get() as { sql: string } | undefined
+  if (entriesSql?.sql.includes('sid BETWEEN 0 AND 4294')) {
+    db.exec(`
+      CREATE TABLE collection_entries_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        form_id INTEGER NOT NULL REFERENCES forms(id),
+        gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
+        shiny INTEGER NOT NULL DEFAULT 0,
+        owned INTEGER NOT NULL DEFAULT 0,
+        trainer_profile_id INTEGER REFERENCES trainer_profiles(id),
+        origin_game TEXT,
+        ot_name TEXT,
+        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
+        nickname TEXT,
+        UNIQUE(form_id, gender, shiny)
+      );
+      INSERT INTO collection_entries_new
+        (id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname)
+        SELECT id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname
+        FROM collection_entries;
+      DROP TABLE collection_entries;
+      ALTER TABLE collection_entries_new RENAME TO collection_entries;
+      CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
     `)
   }
 }

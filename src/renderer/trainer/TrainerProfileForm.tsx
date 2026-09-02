@@ -4,7 +4,12 @@ import { findOriginGame } from '@shared/data/origin-games'
 import { OriginGameInput } from './OriginGameInput'
 
 const TID_MAX = 999999
-const SID_MAX = 4294
+// Equal to TID_MAX, not the narrower Gen VII+ derived cap (floor(32-bit ID / 1_000_000)
+// = 4294): pre-Gen-VII games don't display a Secret ID in-game, but it exists
+// internally and can run up to 6 digits once read out with an external tool like PKHex,
+// so the field isn't tightened to Gen VII+'s range — same "widest across any
+// generation" approach already used for TID_MAX.
+const SID_MAX = TID_MAX
 
 interface TrainerProfileFormProps {
   initial: TrainerProfileInput
