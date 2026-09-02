@@ -20,9 +20,8 @@ export interface SeedForm {
 
 // Unpackaged (dev and local `npm run build`), the main bundle lives at
 // <projectRoot>/out/main/index.cjs — __dirname is stable there, unlike `app.getAppPath()`.
-// Packaged, this needs an electron-builder `extraResources` entry shipping data/pokemon/
-// outside app.asar (see TODO.md's packaging item — not wired up yet this leg), landing at
-// process.resourcesPath/data/pokemon. Pattern matches GW2-Squaded's
+// Packaged, electron-builder.yml's `extraResources` entry ships data/pokemon/ outside
+// app.asar, landing at process.resourcesPath/data/pokemon. Pattern matches GW2-Squaded's
 // src/main/game-data/load-game-data.ts.
 const DATA_DIR = app.isPackaged
   ? join(process.resourcesPath, 'data', 'pokemon')

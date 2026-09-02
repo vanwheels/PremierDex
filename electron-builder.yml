@@ -1,0 +1,41 @@
+appId: net.torastar.premierdex
+productName: PremierDex
+directories:
+  output: dist
+  buildResources: build
+
+# out/ is electron-vite's build output (main/preload/renderer); data/pokemon is the static
+# PokeAPI-derived species/forms data read at runtime by src/main/storage/load-species-data.ts
+# (shipped via extraResources below, not asar, so it lands at process.resourcesPath/data/pokemon).
+files:
+  - out/**/*
+  - package.json
+  - '!**/*.map'
+
+extraResources:
+  - from: data/pokemon
+    to: data/pokemon
+
+# In-app updates (see src/main/updater/auto-updater.ts) read from this repo's GitHub Releases via
+# electron-updater. Windows/NSIS only for now, per the locked decision to distribute via GitHub
+# Releases rather than app stores (IP-risk reasons) — no code signing set up for mac/linux yet.
+publish:
+  provider: github
+  owner: vanwheels
+  repo: PremierDex
+
+# better-sqlite3's native .node binding can't be dlopen'd from inside an asar archive —
+# unpack it (and any other native module) alongside app.asar instead.
+asarUnpack:
+  - '**/*.node'
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+
+# oneClick: true makes in-app updates (electron-updater's quitAndInstall) install silently in the
+# background and auto-relaunch, instead of popping the full installer wizard on every update — the
+# wizard/directory-picker only ever mattered for the very first install anyway.
+nsis:
+  oneClick: true

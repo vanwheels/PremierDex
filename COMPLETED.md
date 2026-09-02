@@ -1,5 +1,20 @@
 # COMPLETED
 
+## [Packaging/distribution] — Leg 6
+2026-09-01. `electron-builder.yml`: NSIS/x64-only Windows target, `publish: github`
+(vanwheels/PremierDex), `extraResources` shipping `data/pokemon/` outside asar (the gap
+`load-species-data.ts` had been carrying a comment about since Leg 1), and `asarUnpack`
+for `better-sqlite3`'s native binding. Also wired in-app auto-update via
+`electron-updater`, reusing GW2-Squaded's pattern almost verbatim: a status-broadcasting
+`registerUpdaterIpc` in main, `UpdaterBridge`/`UpdateStatus` shared types, folded into
+the existing single `window.premierDex` bridge (PremierDex uses one bridge object,
+unlike GW2-Squaded's several `window.gw2*` globals) rather than a separate global, and a
+renderer `UpdateControls` component reusing `BackupControls`' CSS classes.
+`npm run package:dir` was run locally to confirm the packaged app launches and that both
+`extraResources` and `asarUnpack` land correctly — no automated test for the IPC wiring
+itself (thin main-process glue, same as the GW2-Squaded original it's modeled on). See
+commit `<pending>`.
+
 ## [Manual export/import (JSON)] — Leg 5
 2026-09-01. Full-collection JSON backup/restore, the only backup path in v1 (no sync
 backend). `StorageAdapter.exportCollection`/`importCollection` (sqlite-storage.ts) are

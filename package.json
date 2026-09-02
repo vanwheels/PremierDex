@@ -12,6 +12,9 @@
     "dev": "electron-vite dev",
     "build": "electron-vite build",
     "start": "electron-vite preview",
+    "package:dir": "npm run build && electron-builder --dir",
+    "package:win": "npm run build && electron-builder --win",
+    "package:win:publish": "npm run build && electron-builder --win --publish always",
     "fetch-pokemon-species": "tsx scripts/fetch-pokemon-species.ts",
     "fetch-pokemon-forms": "tsx scripts/fetch-pokemon-forms.ts",
     "test": "vitest run",
@@ -22,6 +25,7 @@
   "dependencies": {
     "@electron-toolkit/utils": "^4.0.0",
     "better-sqlite3": "^13.0.1",
+    "electron-updater": "^6.8.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

@@ -1,18 +1,18 @@
 # TODO
 
+## [App icon] — unscheduled
+No custom icon exists yet (`build/icon.png` per electron-builder convention, matching
+GW2-Squaded) — packaged builds currently ship with Electron's default icon. Needs
+production-quality PokéBall-or-similar artwork before a real public release; not
+blocking local/internal packaging.
+Last touched: 2026-09-01. Re-check count: 0.
+
 ## [Animated Sprites toggle] — Leg 11
 A third sprite display mode alongside the Leg 4 generation stepper: PokeAPI's sprite
 CDN has a `versions/generation-v/black-white/animated/` folder (with its own `shiny/`
 subfolder) holding animated gen-5 sprites — confirmed to exist during Leg 4's research,
 but not wired up. Needs a toggle in `SpriteModal.tsx` to switch static/animated, scoped
 to whichever generations actually have an animated folder (likely just gen 5).
-Last touched: 2026-09-01. Re-check count: 0.
-
-## [Packaging/distribution] — Leg 6
-electron-builder.yml + GitHub Releases distribution (per the locked decision to avoid
-app stores for IP-risk reasons). Explicitly out of scope for the scaffold session;
-`better-sqlite3`'s native rebuild already runs via `postinstall: electron-builder
-install-app-deps`, but no packaging config exists yet.
 Last touched: 2026-09-01. Re-check count: 0.
 
 ## [Dex/species exclusions: totem, Let's Go starters, Koraidon/Miraidon modes] — Leg 7

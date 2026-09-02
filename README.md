@@ -26,6 +26,19 @@ npm run dev
 
 `npm run typecheck`, `npm run lint`, and `npm test` (vitest) round out the checks.
 
+## Packaging
+
+Distribution is via GitHub Releases (no app stores, per a locked decision — see
+`TODO.md`). Windows only for now.
+
+```
+npm run package:win           # build an NSIS installer locally, unsigned
+npm run package:win:publish   # same, then upload to GitHub Releases (needs a GH_TOKEN)
+```
+
+In-app updates read from GitHub Releases via `electron-updater`
+(`src/main/updater/auto-updater.ts`); only enabled in packaged Windows builds.
+
 ## Project docs
 
 - `TODO.md` / `COMPLETED.md` — active and finished work, leg by leg.

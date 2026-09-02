@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import { BackupControls } from './BackupControls'
+import { UpdateControls } from './UpdateControls'
 import { buildDexSections } from './dex/buildDexSections'
 import { DexTable } from './dex/DexTable'
 import { DexToolbar } from './dex/DexToolbar'
@@ -53,6 +54,7 @@ export function App(): JSX.Element {
     <main>
       <h1>PremierDex</h1>
       <BackupControls onImported={loadAll} />
+      <UpdateControls />
       <DexToolbar options={options} onChange={setOptions} />
       <DexTable sections={sections} onToggleEntry={handleToggleEntry} />
     </main>

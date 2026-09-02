@@ -3,7 +3,12 @@ import { join } from 'node:path'
 import { createSqliteStorage } from './storage/sqlite-storage'
 import { registerPokemonIpc } from './ipc/pokemon-ipc'
 import { registerBackupIpc } from './ipc/backup-ipc'
+import { registerUpdaterIpc } from './updater/auto-updater'
 import { loadRenderer } from './renderer-url'
+
+// Tracked so registerUpdaterIpc can push status events to whichever window is currently
+// open, rather than only the one that existed at registration time.
+let activeWindow: BrowserWindow | null = null
 
 function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
@@ -23,6 +28,10 @@ function createWindow(): BrowserWindow {
     mainWindow.show()
   })
 
+  mainWindow.on('closed', () => {
+    if (activeWindow === mainWindow) activeWindow = null
+  })
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
@@ -30,6 +39,7 @@ function createWindow(): BrowserWindow {
 
   void loadRenderer(mainWindow)
 
+  activeWindow = mainWindow
   return mainWindow
 }
 
@@ -38,6 +48,7 @@ app.whenReady().then(() => {
   const storage = createSqliteStorage(dbPath)
   registerPokemonIpc(storage)
   registerBackupIpc(storage)
+  registerUpdaterIpc(() => activeWindow)
 
   createWindow()
 
