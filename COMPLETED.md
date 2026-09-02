@@ -16,7 +16,7 @@ live that `versions/generation-viii/brilliant-diamond-shining-pearl/shiny/` and
 same as the already-documented gen-1 gap — `generationSpriteUrl` now falls back to the
 evergreen `defaultSpriteUrl` shiny art for those three generations instead of building
 a URL guaranteed to 404, per Vanny's call over disabling the checkbox. See commit
-`<hash>`.
+`37639da`.
 
 ## [Animated Sprites toggle] — Leg 11
 2026-09-02. Added an Animated checkbox to `SpriteModal.tsx` alongside the existing
