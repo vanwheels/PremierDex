@@ -24,11 +24,3 @@ section? greyed-out row within their species? excluded like non_boxable?) before
 a filter/badge.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [Base-form display naming] — Leg 10
-Deoxys and Wormadam's default variety is stored as `formName: 'base'` (storage
-convention), but their in-game name is "Normal"/"Plant" respectively — Oricorio
-("Baile") and Squawkabilly ("Green") likely need the same display-label treatment even
-though their non-base forms are already present and correctly categorized. Display-layer
-fix, not a data-model change; sweep for other species with a named base forme first.
-Detail: `docs/investigations/home-depositability-audit.md`.
-Last touched: 2026-09-01. Re-check count: 0.

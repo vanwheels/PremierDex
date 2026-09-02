@@ -7,7 +7,8 @@ const OPTIONS_DEFAULT: DexOptions = { splitGenderRows: false, regionalMode: 'inl
 
 const SPECIES: Species[] = [
   { id: 25, name: 'Pikachu', generation: 1 },
-  { id: 26, name: 'Raichu', generation: 1 }
+  { id: 26, name: 'Raichu', generation: 1 },
+  { id: 386, name: 'Deoxys', generation: 3 }
 ]
 
 function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'formName'>): Form {
@@ -105,5 +106,21 @@ describe('buildDexSections', () => {
     expect(regionalSection.heading).toBe('Alolan Forms')
     expect(regionalSection.rows.map((r) => r.formId)).toEqual([2])
     expect(regionalSection.rows[0].displayName).toBe('Raichu (alola)')
+  })
+
+  it('gives a named base forme its real display label instead of the bare species name', () => {
+    const forms: Form[] = [
+      makeForm({ id: 1, speciesId: 386, formName: 'base' }),
+      makeForm({ id: 2, speciesId: 386, formName: 'attack' })
+    ]
+    const sections = buildDexSections(SPECIES, forms, [], OPTIONS_DEFAULT)
+    const deoxysSection = sections.find((s) => s.speciesId === 386)!
+    expect(deoxysSection.rows.map((r) => r.displayName)).toEqual(['Deoxys (normal)', 'Deoxys (attack)'])
+  })
+
+  it('leaves the bare species name for base forms with no entry in BASE_FORM_NAMES', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base' })]
+    const sections = buildDexSections(SPECIES, forms, [], OPTIONS_DEFAULT)
+    expect(sections.find((s) => s.speciesId === 25)!.rows[0].displayName).toBe('Pikachu')
   })
 })

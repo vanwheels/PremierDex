@@ -110,11 +110,29 @@ species have at least one non-`cosmetic_variant`/`non_boxable` anchor row.
 
 ## 4. Base-form display naming (separate, smaller issue)
 
-The default variety of every species is stored as `formName: 'base'` by convention
-(see rule 7 in [form-categorization.md](form-categorization.md)). That's fine as a
-storage key, but several species' base form has an actual in-game name that isn't
-"base" — confirmed: Deoxys ("Normal"), Wormadam ("Plant"). The user also expects
-Oricorio ("Baile") and Squawkabilly ("Green") to need the same treatment, though both
-of those already have all their non-base forms present and correctly categorized — this
-is purely a display-label gap, not a missing-data one. Worth a sweep for any other
-multi-form species with a named (not generic) base forme before building the fix.
+**Resolved (Leg 10).** The default variety of every species is stored as
+`formName: 'base'` by convention (see rule 7 in
+[form-categorization.md](form-categorization.md)) — a storage key, not necessarily the
+in-game name. Swept live against PokeAPI (every species with >1 form in `forms.json`,
+checking the is_default sub-form's own `form_name`) rather than guessed from memory: 54
+species have a real non-generic default `form_name` (Deoxys "normal", Wormadam "plant",
+Oricorio "baile", Squawkabilly "green-plumage", plus Giratina, Shaymin, Basculin,
+Tornadus/Thundurus/Landorus/Enamorus, Keldeo, Meloetta, Zygarde, Hoopa, Lycanroc,
+Wishiwashi, Toxtricity, Urshifu, Tatsugiri, Eiscue, Morpeko, Palafin, Aegislash,
+Darmanitan, Xerneas, Cherrim, Mimikyu, Burmy/Mothim, Arceus, Silvally, Unown,
+Vivillon/Scatterbug/Spewpa, Flabebe/Floette/Florges, Furfrou, Alcremie, Minior,
+Pumpkaboo/Gourgeist, Sinistea/Polteageist, Shellos/Gastrodon, Deerling/Sawsbuck,
+Poltchageist, Sinistcha, Maushold, Dudunsparce, Gimmighoul).
+
+Deliberately excluded: Frillish, Jellicent, Pyroar, Meowstic, Indeedee, Basculegion,
+Oinkologne — their only non-generic default `form_name` is "male", which is PokeAPI's
+internal disambiguation label for a male/female form pair, not a real Pokedex forme
+name, so their base row correctly keeps showing just the species name.
+
+Fixed as a pure display-layer change (no data-model change, per the original framing):
+`buildDexSections.ts`'s `formDisplayName` now looks the true form_name up in a
+`BASE_FORM_NAMES: Record<speciesId, string>` map when `formName === 'base'`, then runs
+it through the exact same `(form-name)` formatting every non-base sibling already uses
+(lowercase, dashes to spaces — e.g. "Deoxys (normal)", not a hand-written "Deoxys
+(Normal Forme)"), rather than falling back to the bare species name. Species with no
+entry in the map are unaffected.

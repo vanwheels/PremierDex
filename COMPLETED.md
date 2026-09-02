@@ -1,5 +1,19 @@
 # COMPLETED
 
+## [Base-form display naming] — Leg 10
+2026-09-02. Swept live against PokeAPI (not from memory) and found 54 species — not just
+the 4 originally named (Deoxys, Wormadam, Oricorio, Squawkabilly) — whose default variety
+has a real non-generic `form_name` that the `'base'` storage convention was hiding.
+Vanny chose to cover all of them, including the purely-cosmetic pattern/color groups
+(Unown, Vivillon family, Alcremie, etc.), and to match the existing sibling-form label
+style exactly rather than hand-written proper names. Fixed as a `BASE_FORM_NAMES`
+lookup in `buildDexSections.ts`'s `formDisplayName`, feeding the true form_name through
+the same formatting every non-base form already uses — no data-model change. Excludes
+7 male/female-pair species (Frillish, Jellicent, Pyroar, Meowstic, Indeedee,
+Basculegion, Oinkologne) whose only non-generic form_name is "male", not a real forme
+name. Full species list and reasoning: `docs/investigations/home-depositability-audit.md`
+section 4.
+
 ## [Missing form data: Unown/Vivillon/Flabébé line/Furfrou/Alcremie/Poltchageist/Sinistcha] — Leg 9
 2026-09-02. Confirmed live against PokeAPI (per the investigation doc's open question)
 that these species pack their variants as multiple `pokemon-form` entries under one
