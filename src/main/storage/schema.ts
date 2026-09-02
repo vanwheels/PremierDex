@@ -20,6 +20,7 @@ export function applySchema(db: Database.Database): void {
       has_gender_difference INTEGER NOT NULL DEFAULT 0,
       first_available_generation INTEGER NOT NULL,
       regional_group TEXT,
+      pokeapi_id INTEGER,
       UNIQUE(species_id, form_name)
     );
     CREATE INDEX IF NOT EXISTS idx_forms_species ON forms(species_id);
@@ -34,4 +35,11 @@ export function applySchema(db: Database.Database): void {
     );
     CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
   `)
+
+  // CREATE TABLE IF NOT EXISTS above doesn't retrofit new columns onto a forms table
+  // that already existed pre-Leg-4. SQLite has no ADD COLUMN IF NOT EXISTS, so check first.
+  const formColumns = db.prepare('PRAGMA table_info(forms)').all() as Array<{ name: string }>
+  if (!formColumns.some((c) => c.name === 'pokeapi_id')) {
+    db.exec('ALTER TABLE forms ADD COLUMN pokeapi_id INTEGER')
+  }
 }

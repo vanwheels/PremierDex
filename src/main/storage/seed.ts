@@ -18,9 +18,16 @@ export function runSeed(db: Database.Database): void {
   )
   const insertForm = db.prepare(`
     INSERT OR IGNORE INTO forms
-      (species_id, form_name, form_category, home_boxable, has_gender_difference, first_available_generation, regional_group)
+      (species_id, form_name, form_category, home_boxable, has_gender_difference, first_available_generation, regional_group, pokeapi_id)
     VALUES
-      (@speciesId, @formName, @formCategory, 1, @hasGenderDifference, @firstAvailableGeneration, @regionalGroup)
+      (@speciesId, @formName, @formCategory, 1, @hasGenderDifference, @firstAvailableGeneration, @regionalGroup, @pokeapiId)
+  `)
+  // Leg-4 backfill: INSERT OR IGNORE above skips rows that already existed pre-Leg-4
+  // (unique on species_id+form_name), so their pokeapi_id would otherwise stay NULL
+  // forever. Runs every startup; a no-op once every row has been backfilled once.
+  const backfillPokeapiId = db.prepare(`
+    UPDATE forms SET pokeapi_id = @pokeapiId
+    WHERE species_id = @speciesId AND form_name = @formName AND pokeapi_id IS NULL
   `)
   const selectFormId = db.prepare('SELECT id FROM forms WHERE species_id = ? AND form_name = ?')
   const insertEntry = db.prepare(
@@ -39,7 +46,13 @@ export function runSeed(db: Database.Database): void {
         formCategory: form.formCategory,
         hasGenderDifference: form.hasGenderDifference ? 1 : 0,
         firstAvailableGeneration: form.firstAvailableGeneration,
-        regionalGroup: form.regionalGroup
+        regionalGroup: form.regionalGroup,
+        pokeapiId: form.pokeapiId
+      })
+      backfillPokeapiId.run({
+        speciesId: form.speciesId,
+        formName: form.formName,
+        pokeapiId: form.pokeapiId
       })
 
       const row = selectFormId.get(form.speciesId, form.formName) as { id: number }

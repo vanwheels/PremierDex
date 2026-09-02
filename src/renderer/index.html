@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://raw.githubusercontent.com; connect-src 'self'"
     />
-    <!-- img-src/connect-src get PokeAPI sprite hosts (raw.githubusercontent.com) added in the
-         sprite-display leg — see TODO.md. -->
+    <!-- Sprites load via plain <img> tags (src/renderer/dex/sprites.ts), never fetch/XHR,
+         so only img-src needs the PokeAPI sprite host — connect-src stays 'self'. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PremierDex</title>
   </head>

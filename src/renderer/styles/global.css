@@ -36,11 +36,77 @@ td {
   background: Canvas;
 }
 
-.dex-row-indent td:nth-child(2) {
+.dex-row-indent td:nth-child(3) {
   padding-left: 1.75rem;
 }
 
 .dex-expand-toggle {
   margin-right: 0.5rem;
   cursor: pointer;
+}
+
+.sprite-thumbnail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.sprite-thumbnail img {
+  image-rendering: pixelated;
+}
+
+.sprite-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sprite-modal {
+  position: relative;
+  background: Canvas;
+  color: CanvasText;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  min-width: 16rem;
+  text-align: center;
+}
+
+.sprite-modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  border: none;
+  background: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.sprite-modal-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.sprite-modal-image img {
+  image-rendering: pixelated;
+}
+
+.sprite-modal-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
 }

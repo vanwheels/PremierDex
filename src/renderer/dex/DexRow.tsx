@@ -1,3 +1,5 @@
+import { SpriteThumbnail } from './SpriteThumbnail'
+import type { SpriteModalTarget } from './SpriteModal'
 import type { DexRowData } from './types'
 
 export interface ExpandControl {
@@ -9,13 +11,27 @@ export interface ExpandControl {
 interface DexRowProps {
   row: DexRowData
   onToggleEntry: (entryId: number, owned: boolean) => void
+  onOpenSprite: (target: SpriteModalTarget) => void
   expandControl?: ExpandControl
   indent?: boolean
 }
 
-export function DexRow({ row, onToggleEntry, expandControl, indent }: DexRowProps): JSX.Element {
+export function DexRow({ row, onToggleEntry, onOpenSprite, expandControl, indent }: DexRowProps): JSX.Element {
   return (
     <tr className={indent ? 'dex-row-indent' : undefined}>
+      <td>
+        <SpriteThumbnail
+          pokeapiId={row.pokeapiId}
+          displayName={row.displayName}
+          onClick={() =>
+            onOpenSprite({
+              pokeapiId: row.pokeapiId,
+              displayName: row.displayName,
+              firstAvailableGeneration: row.firstAvailableGeneration
+            })
+          }
+        />
+      </td>
       <td>{row.dexNumber}</td>
       <td>
         {expandControl && (

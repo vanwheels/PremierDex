@@ -31,6 +31,10 @@ export interface Form {
   hasGenderDifference: boolean
   firstAvailableGeneration: number
   regionalGroup: string | null
+  /** PokeAPI's own numeric pokemon id — the sprite CDN's file-naming key. Equal to the
+   * National Dex number for base forms; an unrelated id (10001+) for alternate
+   * varieties. See sprites.ts. */
+  pokeapiId: number
 }
 
 export interface CollectionEntry {

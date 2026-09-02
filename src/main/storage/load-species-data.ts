@@ -15,6 +15,7 @@ export interface SeedForm {
   hasGenderDifference: boolean
   firstAvailableGeneration: number
   regionalGroup: 'alolan' | 'galarian' | 'hisuian' | 'paldean' | null
+  pokeapiId: number
 }
 
 // Unpackaged (dev and local `npm run build`), the main bundle lives at

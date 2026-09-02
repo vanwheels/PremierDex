@@ -51,6 +51,10 @@ interface SeedForm {
   hasGenderDifference: boolean
   firstAvailableGeneration: number
   regionalGroup: 'alolan' | 'galarian' | 'hisuian' | 'paldean' | null
+  /** PokeAPI's own numeric pokemon id — the sprite CDN's file-naming key (see
+   * src/renderer/dex/sprites.ts). Equal to species.id for the base form; an unrelated
+   * id (10001+) for alternate varieties. */
+  pokeapiId: number
 }
 
 interface PokeApiSpeciesResponse {
@@ -58,6 +62,7 @@ interface PokeApiSpeciesResponse {
 }
 
 interface PokeApiPokemonResponse {
+  id: number
   types: Array<{ type: { name: string } }>
   stats: Array<{ base_stat: number }>
   sprites: { front_default: string | null; front_female: string | null }
@@ -201,7 +206,8 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
       formCategory: 'dex_distinct',
       hasGenderDifference: hasDistinctFemaleSprite(defaultPokemon),
       firstAvailableGeneration: species.generation,
-      regionalGroup: null
+      regionalGroup: null,
+      pokeapiId: defaultPokemon.id
     })
   )
 
@@ -233,7 +239,8 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
         formCategory,
         hasGenderDifference: hasDistinctFemaleSprite(pokemon),
         firstAvailableGeneration: generation,
-        regionalGroup
+        regionalGroup,
+        pokeapiId: pokemon.id
       })
     )
   }

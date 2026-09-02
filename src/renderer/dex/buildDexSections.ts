@@ -61,7 +61,9 @@ function buildRows(
       dexNumber,
       displayName: suffix ? `${baseName} ${suffix}` : baseName,
       regular: slot?.regular ?? null,
-      shinyEntry: slot?.shiny ?? null
+      shinyEntry: slot?.shiny ?? null,
+      pokeapiId: form.pokeapiId,
+      firstAvailableGeneration: form.firstAvailableGeneration
     }
   }
 

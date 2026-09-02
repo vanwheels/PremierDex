@@ -17,6 +17,7 @@ function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'fo
     hasGenderDifference: false,
     firstAvailableGeneration: 1,
     regionalGroup: null,
+    pokeapiId: overrides.id,
     ...overrides
   }
 }

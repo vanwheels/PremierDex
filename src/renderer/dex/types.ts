@@ -8,6 +8,8 @@ export interface DexRowData {
   displayName: string
   regular: CollectionEntry | null // shiny = false
   shinyEntry: CollectionEntry | null // shiny = true
+  pokeapiId: number
+  firstAvailableGeneration: number
 }
 
 /**

@@ -19,6 +19,7 @@ interface FormRow {
   has_gender_difference: 0 | 1
   first_available_generation: number
   regional_group: string | null
+  pokeapi_id: number | null
 }
 
 interface CollectionEntryRow {
@@ -38,7 +39,10 @@ function toForm(row: FormRow): Form {
     homeBoxable: row.home_boxable === 1,
     hasGenderDifference: row.has_gender_difference === 1,
     firstAvailableGeneration: row.first_available_generation,
-    regionalGroup: row.regional_group
+    regionalGroup: row.regional_group,
+    // Non-null by the time this runs: runSeed's backfill (seed.ts) always completes
+    // before createSqliteStorage prepares the listForms statement below.
+    pokeapiId: row.pokeapi_id as number
   }
 }
 
