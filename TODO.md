@@ -20,6 +20,17 @@ provenance FK dangles). Re-check count reset since this is new information, not 
 repeat flag.
 Last touched: 2026-09-02. Re-check count: 0.
 
+## [Trainer Profile + Storage Location sort] — unscheduled
+Trainer Profiles and Storage Locations should be sortable by game (release date order),
+game (alphabetical), and OT name/Name (alphabetical). No sort control exists yet on
+either panel — both just render in insertion/query order.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Move nicknames out of Origin field] — unscheduled
+Nicknames currently live inside the Origin field/modal; they should be their own column,
+positioned between Name and Owned, on whatever grid(s) currently fold them into Origin.
+Last touched: 2026-09-02. Re-check count: 0.
+
 ## [Dex search/filter] — Leg 5
 Search the Living Dex by name/dex#; filter by owned, shiny, regional form, generation,
 and the existing badge flags (homeBoxable, shinyLocked). No dependency on the Trainer

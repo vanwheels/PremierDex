@@ -18,6 +18,19 @@ gap for Trainer Profile/Storage Location now also drops the new `trainerProfileI
 link on restore (the copied snapshot fields themselves are unaffected). See that TODO
 item for detail — left as Vanny's call whether to bump its priority.
 
+Follow-up 2026-09-02: `OriginModal` (this leg's per-entry editor) required TID/SID
+whenever the matched game showed them, same as `TrainerProfileForm` did before its own
+fix — a blank TID/SID field couldn't be saved even though both are meant to be optional.
+Brought it in line with `TrainerProfileForm`'s existing blank-parses-to-null handling.
+See commit `23fbb57`.
+
+Follow-up 2026-09-02: Vanny flagged that Gen I-VI games, while never displaying a Secret
+ID on their in-game Trainer Card, do still have one internally — extractable with a tool
+like PKHex — so the field shouldn't be hidden just because the game itself never shows
+it. `origin-games.ts`'s `hasSecretId` now reads true for every mainline/spinoff game
+(false only for Pokémon GO, which has no SID at all); the Gen VII+ cutoff was the wrong
+signal — display-only, not availability. See commit `b596402`.
+
 ## [Trainer Profile model] — Leg 1 — 2026-09-02
 Standalone `trainer_profiles` table (game, OT name, TID/SID, optional label) with full
 CRUD through StorageAdapter/IPC/preload, and a basic add/edit/delete panel in the
