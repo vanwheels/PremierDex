@@ -1,4 +1,5 @@
 import type { CollectionEntry, Form, Species } from '../types/pokemon'
+import type { CollectionExport, CollectionImportResult } from './collection-export'
 
 /**
  * The full local storage surface the app depends on. The renderer never talks to
@@ -9,10 +10,16 @@ import type { CollectionEntry, Form, Species } from '../types/pokemon'
  *
  * Methods are async even though better-sqlite3 itself is synchronous, so the interface
  * doesn't leak that implementation detail across the IPC boundary.
+ *
+ * exportCollection/importCollection are pure DB operations (no file I/O, no dialogs) —
+ * the file-picker flow that wraps them lives in main/ipc/backup-ipc.ts instead, since
+ * that's Electron-dialog orchestration, not storage.
  */
 export interface StorageAdapter {
   listSpecies(): Promise<Species[]>
   listForms(): Promise<Form[]>
   listCollectionEntries(): Promise<CollectionEntry[]>
   setOwned(entryId: number, owned: boolean): Promise<CollectionEntry>
+  exportCollection(): Promise<CollectionExport>
+  importCollection(data: CollectionExport): Promise<CollectionImportResult>
 }

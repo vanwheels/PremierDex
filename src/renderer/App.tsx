@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
+import { BackupControls } from './BackupControls'
 import { buildDexSections } from './dex/buildDexSections'
 import { DexTable } from './dex/DexTable'
 import { DexToolbar } from './dex/DexToolbar'
@@ -15,15 +16,23 @@ export function App(): JSX.Element {
   const [loading, setLoading] = useState(true)
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
 
-  useEffect(() => {
-    Promise.all([window.premierDex.listSpecies(), window.premierDex.listForms(), window.premierDex.listCollectionEntries()])
-      .then(([speciesList, formList, entryList]) => {
-        setSpecies(speciesList)
-        setForms(formList)
-        setEntries(entryList)
-      })
-      .finally(() => setLoading(false))
+  // Reused after a JSON import too, since that writes owned state straight to SQLite
+  // without going through setOwned — React's copy has to be reloaded from scratch.
+  const loadAll = useCallback((): Promise<void> => {
+    return Promise.all([
+      window.premierDex.listSpecies(),
+      window.premierDex.listForms(),
+      window.premierDex.listCollectionEntries()
+    ]).then(([speciesList, formList, entryList]) => {
+      setSpecies(speciesList)
+      setForms(formList)
+      setEntries(entryList)
+    })
   }, [])
+
+  useEffect(() => {
+    loadAll().finally(() => setLoading(false))
+  }, [loadAll])
 
   const sections = useMemo(
     () => buildDexSections(species, forms, entries, options),
@@ -43,6 +52,7 @@ export function App(): JSX.Element {
   return (
     <main>
       <h1>PremierDex</h1>
+      <BackupControls onImported={loadAll} />
       <DexToolbar options={options} onChange={setOptions} />
       <DexTable sections={sections} onToggleEntry={handleToggleEntry} />
     </main>

@@ -8,11 +8,6 @@ but not wired up. Needs a toggle in `SpriteModal.tsx` to switch static/animated,
 to whichever generations actually have an animated folder (likely just gen 5).
 Last touched: 2026-09-01. Re-check count: 0.
 
-## [Manual export/import (JSON)] — Leg 5
-Required-for-v1 backup mechanism: export the full collection (species/forms/collection
-entries) to JSON and reimport it. No sync backend in v1 — this is the only backup path.
-Last touched: 2026-09-01. Re-check count: 0.
-
 ## [Packaging/distribution] — Leg 6
 electron-builder.yml + GitHub Releases distribution (per the locked decision to avoid
 app stores for IP-risk reasons). Explicitly out of scope for the scaffold session;

@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'node:path'
 import { createSqliteStorage } from './storage/sqlite-storage'
 import { registerPokemonIpc } from './ipc/pokemon-ipc'
+import { registerBackupIpc } from './ipc/backup-ipc'
 import { loadRenderer } from './renderer-url'
 
 function createWindow(): BrowserWindow {
@@ -36,6 +37,7 @@ app.whenReady().then(() => {
   const dbPath = join(app.getPath('userData'), 'premierdex.sqlite')
   const storage = createSqliteStorage(dbPath)
   registerPokemonIpc(storage)
+  registerBackupIpc(storage)
 
   createWindow()
 

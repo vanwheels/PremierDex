@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
+import type { CollectionExport, CollectionImportResult } from '@shared/storage/collection-export'
 import { applySchema } from './schema'
 import { runSeed } from './seed'
 
@@ -66,6 +67,17 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const listEntriesStmt = db.prepare('SELECT * FROM collection_entries ORDER BY form_id, gender, shiny')
   const setOwnedStmt = db.prepare('UPDATE collection_entries SET owned = @owned WHERE id = @id')
   const getEntryStmt = db.prepare('SELECT * FROM collection_entries WHERE id = ?')
+  const listFormKeysStmt = db.prepare('SELECT id, species_id, form_name FROM forms')
+
+  /** `${speciesId}::${formName}` — stable across reinstalls, unlike the AUTOINCREMENT
+   * form id, which is what import matching keys on instead of raw ids. */
+  function formNaturalKey(speciesId: number, formName: string): string {
+    return `${speciesId}::${formName}`
+  }
+
+  function entryKey(formId: number, gender: CollectionEntry['gender'], shiny: 0 | 1): string {
+    return `${formId}::${gender}::${shiny}`
+  }
 
   return {
     async listSpecies(): Promise<Species[]> {
@@ -83,6 +95,64 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     async setOwned(entryId: number, owned: boolean): Promise<CollectionEntry> {
       setOwnedStmt.run({ id: entryId, owned: owned ? 1 : 0 })
       return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
+    },
+
+    async exportCollection(): Promise<CollectionExport> {
+      return {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        species: listSpeciesStmt.all() as SpeciesRow[],
+        forms: (listFormsStmt.all() as FormRow[]).map(toForm),
+        collectionEntries: (listEntriesStmt.all() as CollectionEntryRow[]).map(toCollectionEntry)
+      }
+    },
+
+    /** Restores collection state from a backup, full-replace: every current entry ends
+     * up owned exactly as the backup says, including reset to unowned when the backup
+     * doesn't mention it at all. That's the expected meaning of "import a backup" —
+     * species/forms themselves are never touched here, since runSeed already owns
+     * keeping those current on every startup. */
+    async importCollection(data: CollectionExport): Promise<CollectionImportResult> {
+      const importFormKeys = new Map<number, string>()
+      for (const form of data.forms) {
+        importFormKeys.set(form.id, formNaturalKey(form.speciesId, form.formName))
+      }
+
+      const currentFormIdByKey = new Map<string, number>()
+      const currentForms = listFormKeysStmt.all() as Array<{
+        id: number
+        species_id: number
+        form_name: string
+      }>
+      for (const form of currentForms) {
+        currentFormIdByKey.set(formNaturalKey(form.species_id, form.form_name), form.id)
+      }
+
+      const wantedOwned = new Map<string, boolean>()
+      let matched = 0
+      let skipped = 0
+      for (const entry of data.collectionEntries) {
+        const naturalKey = importFormKeys.get(entry.formId)
+        const currentFormId = naturalKey !== undefined ? currentFormIdByKey.get(naturalKey) : undefined
+        if (currentFormId === undefined) {
+          skipped++
+          continue
+        }
+        matched++
+        wantedOwned.set(entryKey(currentFormId, entry.gender, entry.shiny ? 1 : 0), entry.owned)
+      }
+
+      const applyImport = db.transaction(() => {
+        for (const row of listEntriesStmt.all() as CollectionEntryRow[]) {
+          const owned = wantedOwned.get(entryKey(row.form_id, row.gender, row.shiny)) ?? false
+          if ((row.owned === 1) !== owned) {
+            setOwnedStmt.run({ id: row.id, owned: owned ? 1 : 0 })
+          }
+        }
+      })
+      applyImport()
+
+      return { matched, skipped }
     }
   }
 }

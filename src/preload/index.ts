@@ -1,18 +1,20 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type { CollectionEntry } from '@shared/types/pokemon'
-import type { StorageAdapter } from '@shared/storage/storage-interface'
-import { PokemonIpcChannel } from '@shared/storage/ipc-channels'
+import type { CollectionImportResult } from '@shared/storage/collection-export'
+import { BackupIpcChannel, PokemonIpcChannel } from '@shared/storage/ipc-channels'
+import type { AppBridge } from './bridge'
 
-/**
- * Implements the shared StorageAdapter interface over IPC. The renderer only ever talks
- * to this bridge (window.premierDex) — never to SQLite directly.
- */
-const storage: StorageAdapter = {
+/** Implements window.premierDex — see bridge.ts for why this isn't just StorageAdapter
+ * over IPC. The renderer never talks to SQLite or the filesystem directly. */
+const bridge: AppBridge = {
   listSpecies: () => ipcRenderer.invoke(PokemonIpcChannel.listSpecies),
   listForms: () => ipcRenderer.invoke(PokemonIpcChannel.listForms),
   listCollectionEntries: () => ipcRenderer.invoke(PokemonIpcChannel.listCollectionEntries),
   setOwned: (entryId: number, owned: boolean): Promise<CollectionEntry> =>
-    ipcRenderer.invoke(PokemonIpcChannel.setOwned, entryId, owned)
+    ipcRenderer.invoke(PokemonIpcChannel.setOwned, entryId, owned),
+  exportCollectionToFile: (): Promise<string | null> => ipcRenderer.invoke(BackupIpcChannel.exportToFile),
+  importCollectionFromFile: (): Promise<CollectionImportResult | null> =>
+    ipcRenderer.invoke(BackupIpcChannel.importFromFile)
 }
 
-contextBridge.exposeInMainWorld('premierDex', storage)
+contextBridge.exposeInMainWorld('premierDex', bridge)

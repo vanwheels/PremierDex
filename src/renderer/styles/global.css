@@ -19,6 +19,18 @@ td {
   text-align: left;
 }
 
+.backup-controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.backup-status {
+  opacity: 0.75;
+  font-size: 0.9em;
+}
+
 .dex-toolbar {
   display: flex;
   gap: 1.5rem;

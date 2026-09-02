@@ -1,7 +1,7 @@
-import type { StorageAdapter } from '@shared/storage/storage-interface'
+import type { AppBridge } from './bridge'
 
 declare global {
   interface Window {
-    premierDex: StorageAdapter
+    premierDex: AppBridge
   }
 }

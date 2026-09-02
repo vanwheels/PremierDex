@@ -1,5 +1,23 @@
 # COMPLETED
 
+## [Manual export/import (JSON)] — Leg 5
+2026-09-01. Full-collection JSON backup/restore, the only backup path in v1 (no sync
+backend). `StorageAdapter.exportCollection`/`importCollection` (sqlite-storage.ts) are
+pure DB reads/writes; a separate `backup-ipc.ts` owns the native save/open dialog and
+disk I/O, keeping Electron-dialog orchestration out of the storage layer. Import matches
+entries by natural key (species id + form name + gender + shiny), not raw row id, since
+AUTOINCREMENT ids aren't guaranteed stable across a reinstall or a different app
+version's seed run — entries whose form no longer exists in the current install are
+counted as skipped rather than erroring. Import is a full replace: every current entry
+ends up owned exactly as the backup file says, including reset to unowned for anything
+the file doesn't mention, since that's the expected meaning of "restore a backup" (the
+renderer confirms this via `window.confirm` before importing). Species/forms themselves
+are never written by import — `runSeed` already keeps those current on every startup.
+UI: an Export…/Import… control row in `App.tsx` via the new `BackupControls.tsx`. Unit
+tests cover the natural-key matching, full-replace reset, and skip-on-orphaned-form
+behavior (`sqlite-storage.test.ts`) plus the backup-file shape validation
+(`collection-export.test.ts`). See commit `<hash>`.
+
 ## [Sprite display] — Leg 4
 2026-09-01. PokeAPI sprite thumbnails in the grid with a click-to-enlarge modal and a
 generation stepper (each form's firstAvailableGeneration through gen 9) plus a shiny
