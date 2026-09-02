@@ -18,7 +18,7 @@ hiding it behind the cosmetic-variant expand toggle; fixed by hardcoding the `is
 sub-form to `dex_distinct`, same as every other species' base row, and verified all 1025
 species still have an anchor row. Re-fetched live: 228 new form rows, zero pre-existing
 rows changed. Full species list and reasoning:
-`docs/investigations/home-depositability-audit.md` section 3. See commit `<pending>`.
+`docs/investigations/home-depositability-audit.md` section 3. See commit `5b9ef58`.
 
 ## [Home-depositability corrections for existing forms] — Leg 8
 2026-09-02. Populated the `home_boxable` column (present in the schema since Leg 4 but
