@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3'
-import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
@@ -33,6 +33,12 @@ interface CollectionEntryRow {
   gender: CollectionEntry['gender']
   shiny: 0 | 1
   owned: 0 | 1
+  trainer_profile_id: number | null
+  origin_game: string | null
+  ot_name: string | null
+  tid: number | null
+  sid: number | null
+  nickname: string | null
 }
 
 interface TrainerProfileRow {
@@ -75,7 +81,13 @@ function toCollectionEntry(row: CollectionEntryRow): CollectionEntry {
     formId: row.form_id,
     gender: row.gender,
     shiny: row.shiny === 1,
-    owned: row.owned === 1
+    owned: row.owned === 1,
+    trainerProfileId: row.trainer_profile_id,
+    originGame: row.origin_game,
+    otName: row.ot_name,
+    tid: row.tid,
+    sid: row.sid,
+    nickname: row.nickname
   }
 }
 
@@ -109,6 +121,15 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const listEntriesStmt = db.prepare('SELECT * FROM collection_entries ORDER BY form_id, gender, shiny')
   const setOwnedStmt = db.prepare('UPDATE collection_entries SET owned = @owned WHERE id = @id')
   const getEntryStmt = db.prepare('SELECT * FROM collection_entries WHERE id = ?')
+  const setEntryOriginStmt = db.prepare(`
+    UPDATE collection_entries
+    SET trainer_profile_id = @trainerProfileId, origin_game = @originGame, ot_name = @otName,
+      tid = @tid, sid = @sid, nickname = @nickname
+    WHERE id = @id
+  `)
+  const orphanEntriesByTrainerProfileStmt = db.prepare(
+    'UPDATE collection_entries SET trainer_profile_id = NULL WHERE trainer_profile_id = ?'
+  )
   const listFormKeysStmt = db.prepare('SELECT id, species_id, form_name FROM forms')
   const listTrainerProfilesStmt = db.prepare('SELECT * FROM trainer_profiles ORDER BY id')
   const getTrainerProfileStmt = db.prepare('SELECT * FROM trainer_profiles WHERE id = ?')
@@ -159,6 +180,11 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
 
     async setOwned(entryId: number, owned: boolean): Promise<CollectionEntry> {
       setOwnedStmt.run({ id: entryId, owned: owned ? 1 : 0 })
+      return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
+    },
+
+    async setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry> {
+      setEntryOriginStmt.run({ id: entryId, ...input })
       return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
     },
 
@@ -235,6 +261,11 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     },
 
     async deleteTrainerProfile(id: number): Promise<void> {
+      // Orphan first: trainer_profile_id has no ON DELETE clause (SQLite defaults to NO
+      // ACTION), so deleting a still-referenced profile would otherwise fail the FK
+      // check. The referencing entries' snapshot columns (game/otName/tid/sid/nickname)
+      // are unaffected — only the provenance link is cleared.
+      orphanEntriesByTrainerProfileStmt.run(id)
       deleteTrainerProfileStmt.run(id)
     },
 

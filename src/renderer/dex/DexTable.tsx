@@ -1,12 +1,16 @@
 import { Fragment, useState } from 'react'
+import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
 import { DexRow } from './DexRow'
 import { SpriteModal } from './SpriteModal'
 import type { SpriteModalTarget } from './SpriteModal'
+import { OriginModal } from './OriginModal'
+import type { OriginModalTarget } from './OriginModal'
 import type { DexSection } from './types'
 
 interface DexTableProps {
   sections: DexSection[]
   onToggleEntry: (entryId: number, owned: boolean) => void
+  onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
 }
 
 /**
@@ -14,10 +18,14 @@ interface DexTableProps {
  * intentionally not lifted to App — it never affects stored data, and resets on
  * navigating away, which is fine for a display preference.
  */
-export function DexTable({ sections, onToggleEntry }: DexTableProps): JSX.Element {
+export function DexTable({ sections, onToggleEntry, onSaveOrigin }: DexTableProps): JSX.Element {
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
   // Which row's sprite is enlarged, if any. UI-only, same as expandedSpeciesIds above.
   const [spriteTarget, setSpriteTarget] = useState<SpriteModalTarget | null>(null)
+  // Which entry's origin/nickname editor is open, if any. Unlike spriteTarget, saving
+  // from here writes to SQLite (via onSaveOrigin), so this isn't purely UI state — but
+  // "which modal is open" still belongs local to DexTable, same as spriteTarget.
+  const [originTarget, setOriginTarget] = useState<OriginModalTarget | null>(null)
 
   const toggleExpanded = (speciesId: number): void => {
     setExpandedSpeciesIds((prev) => {
@@ -53,6 +61,7 @@ export function DexTable({ sections, onToggleEntry }: DexTableProps): JSX.Elemen
                     row={row}
                     onToggleEntry={onToggleEntry}
                     onOpenSprite={setSpriteTarget}
+                    onOpenOrigin={setOriginTarget}
                     expandControl={
                       i === 0 && hasCosmeticRows && section.speciesId !== null
                         ? {
@@ -66,7 +75,14 @@ export function DexTable({ sections, onToggleEntry }: DexTableProps): JSX.Elemen
                 ))}
                 {isExpanded &&
                   section.cosmeticRows.map((row) => (
-                    <DexRow key={row.key} row={row} onToggleEntry={onToggleEntry} onOpenSprite={setSpriteTarget} indent />
+                    <DexRow
+                      key={row.key}
+                      row={row}
+                      onToggleEntry={onToggleEntry}
+                      onOpenSprite={setSpriteTarget}
+                      onOpenOrigin={setOriginTarget}
+                      indent
+                    />
                   ))}
               </Fragment>
             )
@@ -74,6 +90,14 @@ export function DexTable({ sections, onToggleEntry }: DexTableProps): JSX.Elemen
         </tbody>
       </table>
       {spriteTarget && <SpriteModal target={spriteTarget} onClose={() => setSpriteTarget(null)} />}
+      {originTarget && (
+        <OriginModal
+          entry={originTarget.entry}
+          displayName={originTarget.displayName}
+          onClose={() => setOriginTarget(null)}
+          onSave={onSaveOrigin}
+        />
+      )}
     </>
   )
 }

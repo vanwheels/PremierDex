@@ -89,6 +89,46 @@ describe('exportCollection / importCollection', () => {
     expect((await findBulbasaurBaseEntry(fresh, true)).owned).toBe(false)
   })
 
+  it('carries origin/nickname fields through export (Leg 4 — reused via toCollectionEntry, no dedicated export code)', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entry = await findBulbasaurBaseEntry(storage, false)
+    await storage.setEntryOrigin(entry.id, {
+      trainerProfileId: null,
+      originGame: 'Pokémon Sword',
+      otName: 'Ash',
+      tid: 123456,
+      sid: 1234,
+      nickname: 'Bulby'
+    })
+
+    const exported = await storage.exportCollection()
+
+    const exportedEntry = exported.collectionEntries.find((e) => e.id === entry.id)!
+    expect(exportedEntry.nickname).toBe('Bulby')
+    expect(exportedEntry.otName).toBe('Ash')
+  })
+
+  it('leaves local origin/nickname data untouched on import — import only ever restores owned state', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entry = await findBulbasaurBaseEntry(storage, false)
+    await storage.setEntryOrigin(entry.id, {
+      trainerProfileId: null,
+      originGame: 'Pokémon Sword',
+      otName: 'Ash',
+      tid: 123456,
+      sid: 1234,
+      nickname: 'Bulby'
+    })
+
+    // A backup from before this entry had a nickname, or from before Leg 4 entirely —
+    // either way importCollection only ever writes the owned column, so it must not
+    // wipe the nickname/origin data set locally above.
+    const staleExport = await createSqliteStorage(':memory:').exportCollection()
+    await storage.importCollection(staleExport)
+
+    expect((await findBulbasaurBaseEntry(storage, false)).nickname).toBe('Bulby')
+  })
+
   it('skips entries whose form no longer exists in this install', async () => {
     const storage = createSqliteStorage(':memory:')
     const exported = await storage.exportCollection()
@@ -98,7 +138,19 @@ describe('exportCollection / importCollection', () => {
       forms: [...exported.forms, { ...exported.forms[0], id: 999_999, formName: 'ghost-form' }],
       collectionEntries: [
         ...exported.collectionEntries,
-        { id: 999_999, formId: 999_999, gender: 'unknown' as const, shiny: false, owned: true }
+        {
+          id: 999_999,
+          formId: 999_999,
+          gender: 'unknown' as const,
+          shiny: false,
+          owned: true,
+          trainerProfileId: null,
+          originGame: null,
+          otName: null,
+          tid: null,
+          sid: null,
+          nickname: null
+        }
       ]
     }
 

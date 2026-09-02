@@ -128,6 +128,65 @@ describe('applySchema', () => {
     ).not.toThrow()
   })
 
+  it('allows a collection_entries row with null origin/nickname fields (the pre-Leg-4 default)', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    expect(() =>
+      db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
+    ).not.toThrow()
+    const row = db.prepare('SELECT * FROM collection_entries').get() as Record<string, unknown>
+    expect(row.trainer_profile_id).toBeNull()
+    expect(row.origin_game).toBeNull()
+    expect(row.ot_name).toBeNull()
+    expect(row.tid).toBeNull()
+    expect(row.sid).toBeNull()
+    expect(row.nickname).toBeNull()
+  })
+
+  it('rejects a collection_entries tid past the 6-digit range via the CHECK constraint', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    expect(() =>
+      db
+        .prepare('INSERT INTO collection_entries (form_id, gender, shiny, tid) VALUES (1, \'unknown\', 0, ?)')
+        .run(1_000_000)
+    ).toThrow()
+  })
+
+  it('rejects a collection_entries sid past the 4-digit range via the CHECK constraint', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    expect(() =>
+      db.prepare('INSERT INTO collection_entries (form_id, gender, shiny, sid) VALUES (1, \'unknown\', 0, ?)').run(4295)
+    ).toThrow()
+  })
+
+  it('rejects a collection_entries trainer_profile_id that has no matching trainer_profiles row', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    expect(() =>
+      db
+        .prepare('INSERT INTO collection_entries (form_id, gender, shiny, trainer_profile_id) VALUES (1, \'unknown\', 0, ?)')
+        .run(999)
+    ).toThrow()
+  })
+
   it('rebuilds trainer_profiles when it still has the pre-widen NOT NULL tid column', () => {
     const db = new Database(':memory:')
     db.exec(`

@@ -87,6 +87,34 @@ export function applySchema(db: Database.Database): void {
     db.exec('ALTER TABLE forms ADD COLUMN shiny_locked INTEGER NOT NULL DEFAULT 0')
   }
 
+  // Same retrofit story for collection_entries: origin/nickname (Leg 4) postdate this
+  // table's original CREATE. trainer_profile_id is provenance only (which Trainer
+  // Profile, if any, the snapshot columns below were copied from) — the game/ot_name/
+  // tid/sid/nickname columns are the source of truth for display and never auto-update
+  // when the referenced profile changes later. No ON DELETE clause: SQLite's default FK
+  // action is NO ACTION, which would block deleting a still-referenced profile, so
+  // orphaning trainer_profile_id to NULL on profile delete is handled explicitly in
+  // sqlite-storage.ts's deleteTrainerProfile instead of here.
+  const entryColumns = db.prepare('PRAGMA table_info(collection_entries)').all() as Array<{ name: string }>
+  if (!entryColumns.some((c) => c.name === 'trainer_profile_id')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN trainer_profile_id INTEGER REFERENCES trainer_profiles(id)')
+  }
+  if (!entryColumns.some((c) => c.name === 'origin_game')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN origin_game TEXT')
+  }
+  if (!entryColumns.some((c) => c.name === 'ot_name')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN ot_name TEXT')
+  }
+  if (!entryColumns.some((c) => c.name === 'tid')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999)')
+  }
+  if (!entryColumns.some((c) => c.name === 'sid')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 4294)')
+  }
+  if (!entryColumns.some((c) => c.name === 'nickname')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN nickname TEXT')
+  }
+
   // trainer_profiles briefly shipped with tid/sid as NOT NULL 0-65535 before the
   // Bulbapedia-sourced widen (6-digit TID/4-digit SID from Gen VII, both nullable for
   // Pokémon GO and pre-Gen-VII's invisible SID — see the CREATE TABLE comment above).

@@ -58,4 +58,33 @@ export interface CollectionEntry {
   gender: Gender
   shiny: boolean
   owned: boolean
+  /** Origin/nickname (Leg 4) — who caught/received this specific individual, snapshotted
+   * immutably at the time it was set rather than live-joined to a Trainer Profile, so
+   * later edits to that profile (or its deletion) never retroactively change this entry.
+   * All six fields are independent of `owned`: they're only ever meaningful for an owned
+   * entry, but nothing here enforces that at the type level — the UI gates it instead.
+   * See src/shared/types/trainer-profile.ts and shared/data/origin-games.ts. */
+  /** The Trainer Profile the fields below were copied from, if any — provenance only,
+   * not re-validated against the profile's current values. Null if never set from a
+   * profile, or if that profile was later deleted (see deleteTrainerProfile). */
+  trainerProfileId: number | null
+  originGame: string | null
+  otName: string | null
+  tid: number | null
+  sid: number | null
+  /** User-facing nickname for this individual Pokémon, independent of any Trainer
+   * Profile. */
+  nickname: string | null
+}
+
+/** Field set for setEntryOrigin — everything but the assigned id, mirroring
+ * TrainerProfileInput's shape. All fields nullable: a blank game/otName clears origin
+ * entirely (and forces tid/sid null), independent of nickname. */
+export interface CollectionEntryOriginInput {
+  trainerProfileId: number | null
+  originGame: string | null
+  otName: string | null
+  tid: number | null
+  sid: number | null
+  nickname: string | null
 }

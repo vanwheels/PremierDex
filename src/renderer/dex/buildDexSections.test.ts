@@ -26,7 +26,18 @@ function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'fo
 }
 
 function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, 'id' | 'formId'>): CollectionEntry {
-  return { gender: 'unknown', shiny: false, owned: false, ...overrides }
+  return {
+    gender: 'unknown',
+    shiny: false,
+    owned: false,
+    trainerProfileId: null,
+    originGame: null,
+    otName: null,
+    tid: null,
+    sid: null,
+    nickname: null,
+    ...overrides
+  }
 }
 
 describe('buildDexSections', () => {

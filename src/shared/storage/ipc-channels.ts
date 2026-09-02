@@ -3,7 +3,8 @@ export const PokemonIpcChannel = {
   listSpecies: 'pokemon:species:list',
   listForms: 'pokemon:forms:list',
   listCollectionEntries: 'pokemon:collectionEntries:list',
-  setOwned: 'pokemon:collectionEntries:setOwned'
+  setOwned: 'pokemon:collectionEntries:setOwned',
+  setEntryOrigin: 'pokemon:collectionEntries:setOrigin'
 } as const
 
 /** File-dialog-backed backup flow (see main/ipc/backup-ipc.ts) — separate from

@@ -1,4 +1,4 @@
-import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
@@ -18,6 +18,7 @@ export interface AppBridge extends UpdaterBridge {
   listForms(): Promise<Form[]>
   listCollectionEntries(): Promise<CollectionEntry[]>
   setOwned(entryId: number, owned: boolean): Promise<CollectionEntry>
+  setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry>
   /** Opens a save dialog, writes the full collection to the chosen file. Null if the
    * user canceled the dialog. */
   exportCollectionToFile(): Promise<string | null>

@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
+import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
 import { PokemonIpcChannel } from '@shared/storage/ipc-channels'
 
 export function registerPokemonIpc(storage: StorageAdapter): void {
@@ -8,5 +9,8 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
   ipcMain.handle(PokemonIpcChannel.listCollectionEntries, () => storage.listCollectionEntries())
   ipcMain.handle(PokemonIpcChannel.setOwned, (_event, entryId: number, owned: boolean) =>
     storage.setOwned(entryId, owned)
+  )
+  ipcMain.handle(PokemonIpcChannel.setEntryOrigin, (_event, entryId: number, input: CollectionEntryOriginInput) =>
+    storage.setEntryOrigin(entryId, input)
   )
 }

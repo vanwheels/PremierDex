@@ -129,6 +129,69 @@ td {
   white-space: nowrap;
 }
 
+.dex-origin-button {
+  margin-left: 0.35rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 0.75rem;
+  font-size: 0.7em;
+  border: 1px solid currentColor;
+  background: none;
+  cursor: pointer;
+  max-width: 6rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.dex-origin-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.origin-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.origin-modal {
+  position: relative;
+  background: Canvas;
+  color: CanvasText;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  min-width: 18rem;
+}
+
+.origin-modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  border: none;
+  background: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.origin-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0.6rem 0;
+  font-size: 0.85em;
+}
+
+.origin-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
 .sprite-thumbnail {
   display: flex;
   align-items: center;

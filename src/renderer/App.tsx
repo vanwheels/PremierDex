@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import { BackupControls } from './BackupControls'
 import { UpdateControls } from './UpdateControls'
 import { buildDexSections } from './dex/buildDexSections'
@@ -48,6 +48,12 @@ export function App(): JSX.Element {
     })
   }
 
+  const handleSaveOrigin = (entryId: number, input: CollectionEntryOriginInput): void => {
+    window.premierDex.setEntryOrigin(entryId, input).then((updated) => {
+      setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
+    })
+  }
+
   if (loading) {
     return <p>Loading…</p>
   }
@@ -60,7 +66,7 @@ export function App(): JSX.Element {
       <TrainerProfilesPanel />
       <StorageLocationsPanel />
       <DexToolbar options={options} onChange={setOptions} />
-      <DexTable sections={sections} onToggleEntry={handleToggleEntry} />
+      <DexTable sections={sections} onToggleEntry={handleToggleEntry} onSaveOrigin={handleSaveOrigin} />
     </main>
   )
 }

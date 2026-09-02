@@ -1,4 +1,4 @@
-import type { CollectionEntry, Form, Species } from '../types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '../types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '../types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '../types/storage-location'
 import type { CollectionExport, CollectionImportResult } from './collection-export'
@@ -22,6 +22,7 @@ export interface StorageAdapter {
   listForms(): Promise<Form[]>
   listCollectionEntries(): Promise<CollectionEntry[]>
   setOwned(entryId: number, owned: boolean): Promise<CollectionEntry>
+  setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>
