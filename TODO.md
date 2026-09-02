@@ -13,15 +13,11 @@ backup export/import flow (`collection-export.ts`) — a reinstall or a restore 
 backup silently loses every profile/location the user created. Noticed while building
 Leg 1, re-confirmed as the same gap while building Leg 2; deferred both times since each
 leg's scope was CRUD + schema + basic UI only, and wiring it in touches the export
-format/version. Worth doing before Leg 4 makes both load-bearing for Collection Entry
-origin/location data.
-Last touched: 2026-09-02. Re-check count: 0.
-
-## [Per-entry origin data + nicknames] — Leg 4
-Wire OT/TID/origin game (origin-game list, pulled forward into Leg 1 — see COMPLETED) and
-nickname onto each Collection Entry, sourced from a linked Trainer Profile (Leg 1) but
-stored immutably on the entry itself so later transfers/storage-location changes (Leg 2)
-never overwrite origin. Depends on Legs 1-2.
+format/version. Now confirmed live: Leg 4 gave Collection Entries a `trainerProfileId`
+FK, so a restore drops each entry's link back to its source profile (the copied
+origin_game/ot_name/tid/sid/nickname snapshot itself is unaffected — only the
+provenance FK dangles). Re-check count reset since this is new information, not a
+repeat flag.
 Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Dex search/filter] — Leg 5

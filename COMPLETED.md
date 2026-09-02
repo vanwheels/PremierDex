@@ -4,6 +4,20 @@ Legs 1-16 (Project Scaffold + Living Dex v1 milestones) archived at
 `docs/completed-archive/project-scaffold.md` and `docs/completed-archive/living-dex-v1.md`.
 See `MILESTONES.md` for the shipped-milestone index.
 
+## [Per-entry origin data + nicknames] — Leg 4 — 2026-09-02
+Collection Entries get `trainer_profile_id` (provenance-only FK, orphaned to null on
+profile delete rather than blocking it) plus origin_game/ot_name/tid/sid/nickname,
+copied once from a picked Trainer Profile and then editable independently — never
+re-synced if the source profile changes later. Regular and shiny entries of the same
+form get independent editors via a new per-entry `OriginModal` (mirrors the existing
+`SpriteModal` pattern), reached from a button next to each Owned/Shiny checkbox, gated
+to owned entries. See commit `afe254b`.
+
+Flagged, not fixed, while closing this leg: the existing TODO's backup export/import
+gap for Trainer Profile/Storage Location now also drops the new `trainerProfileId`
+link on restore (the copied snapshot fields themselves are unaffected). See that TODO
+item for detail — left as Vanny's call whether to bump its priority.
+
 ## [Trainer Profile model] — Leg 1 — 2026-09-02
 Standalone `trainer_profiles` table (game, OT name, TID/SID, optional label) with full
 CRUD through StorageAdapter/IPC/preload, and a basic add/edit/delete panel in the
