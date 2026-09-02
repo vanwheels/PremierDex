@@ -16,9 +16,13 @@
  *     least one of those).
  *   - cosmetic_variant: not battle-only, types and stats identical to the default variety
  *     (Vivillon patterns, Pikachu cap/cosplay forms, Alcremie, Unown, Furfrou trims).
- *   - regional_group: set whenever form_name exactly equals alola/galar/hisui/paldea —
- *     an EXACT match, not a substring check. pikachu-alola-cap's form_name is
- *     "alola-cap", which would false-positive a naive .includes('alola') test.
+ *   - regional_group: set when form_name exactly equals alola/galar/hisui/paldea, OR when
+ *     it's hyphen-prefixed by one of those tokens (paldea-combat-breed, galar-standard)
+ *     AND the variety differs in types/stats from the default — i.e. it also qualifies as
+ *     dex_distinct on its own. That second clause is what keeps pikachu-alola-cap (same
+ *     prefix, but identical types/stats — a cosmetic cap, not a regional forme) correctly
+ *     excluded without hardcoding a species exception list. See
+ *     resolveRegionalGroup below.
  *   - has_gender_difference: sprites.front_female is set AND differs from
  *     sprites.front_default on that variety's own /pokemon/{name} response (per-form,
  *     not just per-species). Not just non-null: PokeAPI duplicates front_default into
@@ -253,6 +257,21 @@ const REGIONAL_GROUPS: Record<string, SeedForm['regionalGroup']> = {
   paldea: 'paldean'
 }
 
+/**
+ * form_name exactly matching a regional token (raichu-alola's form_name is plain "alola")
+ * always counts, regardless of type/stat diff — see the module doc comment. A
+ * hyphen-prefixed compound name (paldea-combat-breed, galar-standard) only counts when
+ * the variety also differs in types/stats from the default, which is what distinguishes
+ * those genuine regional formes from a same-stats cosmetic reuse of the prefix like
+ * pikachu-alola-cap.
+ */
+function resolveRegionalGroup(formName: string, typesOrStatsDiffer: boolean): SeedForm['regionalGroup'] {
+  const exact = REGIONAL_GROUPS[formName]
+  if (exact) return exact
+  if (!typesOrStatsDiffer) return null
+  return REGIONAL_GROUPS[formName.split('-')[0]] ?? null
+}
+
 const CONCURRENCY = 10
 const MAX_ATTEMPTS = 3
 
@@ -397,7 +416,8 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
     const pokemon = await fetchJson<PokeApiPokemonResponse>(variety.pokemon.url)
     const form = await fetchJson<PokeApiFormResponse>(pokemon.forms[0].url)
 
-    const regionalGroup = REGIONAL_GROUPS[form.form_name] ?? null
+    const typesOrStatsDiffer = !sameTypesAndStats(pokemon, defaultPokemon)
+    const regionalGroup = resolveRegionalGroup(form.form_name, typesOrStatsDiffer)
     const generation =
       VERSION_GROUP_GENERATION[form.version_group.name] ??
       (() => {
@@ -408,7 +428,7 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
 
     const formCategory: SeedForm['formCategory'] = form.is_battle_only
       ? 'non_boxable'
-      : regionalGroup !== null || !sameTypesAndStats(pokemon, defaultPokemon)
+      : regionalGroup !== null || typesOrStatsDiffer
         ? 'dex_distinct'
         : 'cosmetic_variant'
 
@@ -470,7 +490,8 @@ async function fetchDefaultVarietySubForms(
       })
     }
 
-    const regionalGroup = REGIONAL_GROUPS[form.form_name] ?? null
+    const typesOrStatsDiffer = !sameTypes(form.types, defaultPokemon.types)
+    const regionalGroup = resolveRegionalGroup(form.form_name, typesOrStatsDiffer)
     const generation =
       VERSION_GROUP_GENERATION[form.version_group.name] ??
       (() => {
@@ -482,7 +503,7 @@ async function fetchDefaultVarietySubForms(
 
     const formCategory: SeedForm['formCategory'] = form.is_battle_only
       ? 'non_boxable'
-      : regionalGroup !== null || !sameTypes(form.types, defaultPokemon.types)
+      : regionalGroup !== null || typesOrStatsDiffer
         ? 'dex_distinct'
         : 'cosmetic_variant'
 

@@ -2370,7 +2370,7 @@
     "homeBoxable": true,
     "hasGenderDifference": false,
     "firstAvailableGeneration": 9,
-    "regionalGroup": null,
+    "regionalGroup": "paldean",
     "pokeapiId": 10250,
     "spriteFormSuffix": null,
     "shinyLocked": false
@@ -2382,7 +2382,7 @@
     "homeBoxable": true,
     "hasGenderDifference": false,
     "firstAvailableGeneration": 9,
-    "regionalGroup": null,
+    "regionalGroup": "paldean",
     "pokeapiId": 10251,
     "spriteFormSuffix": null,
     "shinyLocked": false
@@ -2394,7 +2394,7 @@
     "homeBoxable": true,
     "hasGenderDifference": false,
     "firstAvailableGeneration": 9,
-    "regionalGroup": null,
+    "regionalGroup": "paldean",
     "pokeapiId": 10252,
     "spriteFormSuffix": null,
     "shinyLocked": false
@@ -9246,7 +9246,7 @@
     "homeBoxable": true,
     "hasGenderDifference": false,
     "firstAvailableGeneration": 8,
-    "regionalGroup": null,
+    "regionalGroup": "galarian",
     "pokeapiId": 10177,
     "spriteFormSuffix": null,
     "shinyLocked": false
@@ -9258,7 +9258,7 @@
     "homeBoxable": true,
     "hasGenderDifference": false,
     "firstAvailableGeneration": 8,
-    "regionalGroup": null,
+    "regionalGroup": "galarian",
     "pokeapiId": 10178,
     "spriteFormSuffix": null,
     "shinyLocked": false

@@ -4,6 +4,19 @@ Legs 1-16 (Project Scaffold + Living Dex v1 milestones) archived at
 `docs/completed-archive/project-scaffold.md` and `docs/completed-archive/living-dex-v1.md`.
 See `MILESTONES.md` for the shipped-milestone index.
 
+## [Paldea Tauros breed sort-order bug] — Leg 5 — 2026-09-02
+Root cause wasn't `buildDexSections.ts` (its regional-grouping logic was already correct)
+but the data-generation script: `fetch-pokemon-forms.ts`'s `regionalGroup` detection
+required form_name to *exactly* equal alola/galar/hisui/paldea, so compound regional
+form_names (Tauros's `paldea-combat-breed`/`-blaze-breed`/`-aqua-breed`, and Darmanitan's
+`galar-standard`/`-zen`) fell through to `null` and stayed in their species section
+instead of moving to the grouped regional section. Fixed with a `resolveRegionalGroup`
+helper: exact match still always counts, and a hyphen-prefixed compound name now counts
+too, but only when the variety also differs in types/stats — which is what keeps
+`pikachu-alola-cap` (same prefix, identical stats, a cosmetic cap) correctly excluded
+without a hardcoded species list. Hand-patched the 4 already-generated `forms.json` rows
+to match rather than re-running the live PokeAPI fetch. See commit `<pending>`.
+
 ## [Per-entry origin data + nicknames] — Leg 4 — 2026-09-02
 Collection Entries get `trainer_profile_id` (provenance-only FK, orphaned to null on
 profile delete rather than blocking it) plus origin_game/ot_name/tid/sid/nickname,
