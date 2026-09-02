@@ -7,10 +7,12 @@ production-quality PokéBall-or-similar artwork before a real public release; no
 blocking local/internal packaging.
 Last touched: 2026-09-01. Re-check count: 0.
 
-## [Trainer Profile model] — Leg 1
-New entity: game + TID/SID + OT name, tied to a save. This is the origin identity a
-Collection Entry will eventually reference — build and persist it standalone first
-(CRUD, schema, basic UI for managing profiles) before wiring any entry data to it.
+## [Trainer Profile backup export/import] — unscheduled
+Trainer Profiles (Leg 1) aren't included in the JSON backup export/import flow
+(`collection-export.ts`) — a reinstall or a restore from backup silently loses every
+profile the user created. Noticed while building Leg 1; deferred since Leg 1's scope was
+CRUD + schema + basic UI only, and wiring it in touches the export format/version. Worth
+doing before Leg 4 makes Trainer Profiles load-bearing for Collection Entry origin data.
 Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Storage Location model] — Leg 2
