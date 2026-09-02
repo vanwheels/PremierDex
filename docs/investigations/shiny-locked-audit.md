@@ -61,23 +61,37 @@ regardless. Noted anyway for completeness since `seed.ts` still creates a
 | Koraidon | `base` | dex_distinct | Not in Serebii's plain-text lists, but confirmed shiny-locked by cross-check (see below) — the TODO's "rest of the Gen 9 legendaries" phrasing already anticipated this. |
 | Miraidon | `base` | dex_distinct | Same as Koraidon. |
 
-## New discovery beyond the TODO's original list: Zacian/Zamazenta
+## Policy: what "shinyLocked" actually means (per Vanny, 2026-09-02)
 
-Bulbapedia's Shiny Pokémon article explicitly names **Zacian and Zamazenta** alongside
-Eternatus, the Galarian legendary birds, Keldeo, Glastrier, Spectrier, and Calyrex as
-prevented from being shiny on their (only, non-repeatable) in-game encounter. This
-wasn't in the TODO's original enumeration and isn't a Gen 9 legendary, so it's outside
-this leg's assumed scope — flagging rather than silently rolling it in. The general
-pattern, for what it's worth: traditional "box art" legendaries obtained via a normal
-battle encounter (Groudon/Kyogre/Rayquaza, Dialga/Palkia/Giratina, Reshiram/Zekrom,
-Xerneas/Yveltal, Solgaleo/Lunala, etc.) are *not* locked — shiny-hunting them via
-soft-reset is a long-documented, working strategy. Zacian/Zamazenta and Koraidon/
-Miraidon broke that pattern by being handed over in a scripted cutscene with no
-catch/encounter to soft-reset, which is consistent with why only those four turned up
-as locked outside the traditional mythical/ultra-beast/paradox categories already named.
-**Open question for Vanny:** should this audit (and the eventual `shinyLocked` field)
-extend to Zacian/Zamazenta now, or stay scoped to the TODO's original list and pick up
-Zacian/Zamazenta as a separate follow-up? Left undecided rather than assumed.
+Bulbapedia's Shiny Pokémon article names **Zacian and Zamazenta** as prevented from
+being shiny on their normal in-game story gift — same mechanism as Glastrier/
+Spectrier/Calyrex above. But Vanny corrected the framing: Zacian/Zamazenta aren't
+"hard-coded, no-exceptions" locked the way Cosmog or Kubfu are. A legitimate shiny
+Zacian/Zamazenta *was* distributed via a past Mystery Gift/serial-code event that
+bypassed the normal non-shiny story gift, and per Vanny, an event's real-world
+expiration date doesn't matter here — preserved distribution files and known
+workarounds mean collectors can still legitimately obtain a past-event shiny long
+after the official window closed.
+
+That settles the general definition `shinyLocked` needs going into the schema leg:
+**true only when no legitimate shiny of that species/form has ever existed by any
+means** (normal in-game generation *or* a past distribution, expired or not) — not
+"is it currently, officially still obtainable through Game Freak." Under that
+definition:
+
+- **Zacian and Zamazenta are NOT shiny-locked** — reclassified out of this audit's
+  locked table entirely, despite their normal story gift being non-shiny.
+- The rest of the "Event-Only" bucket in the table above (Victini, Ash-Greninja,
+  Vivillon's Poké Ball pattern, Hoopa, Magearna ×2, Marshadow, Melmetal's Gmax, Zarude
+  ×2, Pikachu's cap forms) stays locked under this same test — to the best of
+  available knowledge no shiny version of any of these was ever officially
+  distributed, unlike Zacian/Zamazenta. That "to the best of available knowledge"
+  qualifier is doing real work, though: it wasn't re-verified per-species against a
+  distribution-event archive the way Zacian/Zamazenta was raised directly by Vanny.
+  Worth a targeted check before the schema leg locks these in, rather than assumed.
+- Koraidon/Miraidon are left locked in the table above — no known shiny distribution
+  for either, but this wasn't specifically asked about the way Zacian/Zamazenta was,
+  so treat that as unconfirmed rather than settled either way.
 
 ## Explicitly checked and NOT locked (don't flag these)
 
@@ -89,6 +103,11 @@ Zacian/Zamazenta as a separate follow-up? Left undecided rather than assumed.
 - Ursaluna: `base`.
 - Melmetal: `base`.
 - Greninja: `base`, `battle-bond` (both normal in-game forms; only `ash` is locked).
+- **Zacian, Zamazenta** — `base` (dex_distinct) for both. A legitimate shiny was
+  distributed via a past event, so under the policy above these are not shiny-locked
+  despite Bulbapedia listing their normal story gift as non-shiny. `crowned` (both
+  species' Rusted Sword/Shield forme) is `non_boxable` — hidden from the dex view,
+  same as it would be if it turned out locked, so moot either way for the UI leg.
 
 ## Not independently re-verified
 
@@ -99,3 +118,8 @@ forme rows in-game, versus just the base) are inferred from how forme-changing w
 generally (same individual, not a separate catch), not confirmed row-by-row against a
 primary source per form. If a form-specific correction ever surfaces, treat this doc as
 the place to record it, not `forms.json` directly.
+
+The "any legitimate shiny ever distributed, expired or not" test (Zacian/Zamazenta,
+above) was applied on Vanny's direct correction, not independently re-derived for every
+other locked entry — the "Event-Only" bucket and Koraidon/Miraidon are noted above as
+unconfirmed against that specific test, not just against Serebii's face-value wording.

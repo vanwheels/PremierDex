@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Shiny-locked species/forms: Zacian/Zamazenta correction] — Leg 14 follow-up
+2026-09-02. Vanny corrected Leg 14's Zacian/Zamazenta note: their normal story gift is
+non-shiny, but a legitimate shiny of each was distributed once via a past Mystery
+Gift/serial-code event, and an event's expiration doesn't count toward "locked" since
+collectors can still obtain preserved past distributions. That settled the operative
+definition of `shinyLocked` for the upcoming schema leg (locked = no legitimate shiny
+ever, by any means — not "is it currently obtainable") and reclassified Zacian/Zamazenta
+(both already-tracked `base` dex_distinct rows, id 888/889) as NOT locked, reversing
+Leg 14's tentative "confirmed locked" note. Flagged the same distribution-event test as
+unconfirmed for the rest of the Event-Only bucket and for Koraidon/Miraidon, rather than
+silently assuming it clears them too. Doc-only:
+`docs/investigations/shiny-locked-audit.md`.
+
 ## [Shiny-locked species/forms audit] — Leg 14
 2026-09-02. Cross-referenced Serebii's shiny-locked page against the live
 `species.json`/`forms.json` row-by-row (not from memory) via a one-off Node script.
