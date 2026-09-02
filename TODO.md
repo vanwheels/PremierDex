@@ -15,16 +15,14 @@ but not wired up. Needs a toggle in `SpriteModal.tsx` to switch static/animated,
 to whichever generations actually have an animated folder (likely just gen 5).
 Last touched: 2026-09-01. Re-check count: 0.
 
-## [Home-depositability corrections for existing forms] — Leg 8
-Dialga/Palkia/Giratina Origin, Necrozma Dawn Wings/Dusk Mane, Calyrex Ice/Shadow Rider,
-Ogerpon's 3 masks, and Minior's 7 core color forms are real, non-battle-only forms
-currently stored `dex_distinct` but not actually depositable in Pokemon Home yet.
-`non_boxable` was defined from PokeAPI's `is_battle_only` flag, which doesn't capture
-this — needs either a new field or an `OVERRIDES` batch; decide when scoping. Minior may
-be an actual heuristic bug rather than a Home-specific gap — check PokeAPI's raw
-response before assuming an override is needed. Detail:
-`docs/investigations/home-depositability-audit.md`.
-Last touched: 2026-09-01. Re-check count: 0.
+## [Wire homeBoxable into the collectible dex view] — unscheduled
+Leg 8 corrected `home_boxable` on the 17 forms Home doesn't yet accept (Dialga/Palkia/
+Giratina Origin, Necrozma Dawn/Dusk, Calyrex Ice/Shadow Rider, Ogerpon's masks, Minior's
+core colors), but the field has no UI consumer — `buildDexSections.ts` only filters on
+`formCategory === 'non_boxable'`, not `homeBoxable`. Decide how these should render (own
+section? greyed-out row within their species? excluded like non_boxable?) before wiring
+a filter/badge.
+Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Missing form data: Unown/Vivillon/Flabébé line/Furfrou/Alcremie/Poltchageist/Sinistcha] — Leg 9
 `fetch-pokemon-forms.ts` only pulled the `base` (and sometimes `gmax`) form for these

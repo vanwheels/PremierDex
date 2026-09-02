@@ -45,14 +45,21 @@ in the main games — Home just hasn't added support yet. Currently mis-stored a
 - Ogerpon — all 3 mask forms (`wellspring-mask`, `hearthflame-mask`, `cornerstone-mask`)
 - Minior — the 7 "core" color forms (`red`/`orange`/`yellow`/`green`/`blue`/`indigo`/
   `violet`) are `dex_distinct`; only the 6 `*-meteor` cosmetic variants + base are
-  boxable in Home today. Note this one may actually be a heuristic bug rather than a
-  Home-specific gap — Minior's core form is battle-only in-game (reverts to Meteor Form
-  on withdrawal), so `is_battle_only` should have caught it; worth checking PokeAPI's
-  raw response for these varieties before assuming it needs a hand override.
+  boxable in Home today. **Resolved (Leg 8):** checked live against PokeAPI's raw
+  `pokemon-form` response for `minior-red` (id 10255) — `is_battle_only: false`,
+  `form_name: "red"`. Not a heuristic bug: PokeAPI genuinely doesn't flag Minior's core
+  forms as battle-only (unlike Home, which won't box them), so this is the same kind of
+  Home-specific gap as the others, not a script bug.
 
-Likely needs either a new field (e.g. `home_depositable`, since it's a Home-specific
-fact that can change as Home adds support) rather than overloading `non_boxable`, or at
-minimum a batch of `OVERRIDES` entries — decide when scoping that leg.
+**Resolved (Leg 8):** used the existing `home_boxable` schema/type field (already
+present since Leg 4 — `schema.ts`, `sqlite-storage.ts`, `shared/types/pokemon.ts` — but
+hardcoded to `1`/`true` on every row) rather than adding a new field. Populated it via a
+17-entry `OVERRIDES` batch in `fetch-pokemon-forms.ts` (the 3 Origin formes, Necrozma's
+2, Calyrex's 2, Ogerpon's 3 masks, Minior's 7 core colors), hand-patched into
+`forms.json`, with a `seed.ts` backfill so already-seeded local databases pick up the
+correction on next startup. `homeBoxable` is plumbed through storage/types but has no UI
+consumer yet — filtering it into the collectible dex view is a separate follow-up, not
+done in this leg (see TODO.md).
 
 ## 3. Missing from the data entirely (fetch script gap, not categorization)
 

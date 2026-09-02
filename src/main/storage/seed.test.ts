@@ -12,6 +12,7 @@ vi.mock('./load-species-data', () => ({
       speciesId: 1,
       formName: 'base',
       formCategory: 'dex_distinct',
+      homeBoxable: true,
       hasGenderDifference: false,
       firstAvailableGeneration: 1,
       regionalGroup: null,
@@ -75,5 +76,26 @@ describe('runSeed', () => {
     const db = makeDb()
     expect(() => runSeed(db)).not.toThrow()
     expect(() => runSeed(db)).not.toThrow()
+  })
+
+  it('backfills a stale home_boxable value on a row that already existed', () => {
+    const db = makeDb()
+
+    // Simulate a row seeded with the wrong value (e.g. from before forms.json's
+    // OVERRIDES existed, or a stale local db) — INSERT OR IGNORE means runSeed's own
+    // insertForm won't touch an existing row, so only the backfill can correct it.
+    // The fixture's bulbasaur/base has homeBoxable: true; seed this row with 0.
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, ?, ?)').run('bulbasaur', 1)
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, home_boxable, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 0, 1)`
+    ).run()
+
+    runSeed(db)
+
+    const row = db.prepare("SELECT home_boxable FROM forms WHERE species_id = 1 AND form_name = 'base'").get() as {
+      home_boxable: number
+    }
+    expect(row.home_boxable).toBe(1)
   })
 })

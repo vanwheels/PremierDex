@@ -39,6 +39,10 @@
  *     Go into Home), and Koraidon/Miraidon's ride-mode varieties (an in-game S/V
  *     traversal feature, not a persistent Pokemon state). See `isExcludedVariety` below
  *     and docs/investigations/home-depositability-audit.md section 1.
+ *   - homeBoxable defaults to true and is not derivable from any PokeAPI signal — Home's
+ *     deposit support lags game releases, so it's a hand-maintained OVERRIDES fact, not
+ *     part of the heuristic above. See docs/investigations/home-depositability-audit.md
+ *     section 2 for the current false entries and their sourcing.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -54,6 +58,14 @@ interface SeedForm {
   speciesId: number
   formName: string
   formCategory: 'dex_distinct' | 'cosmetic_variant' | 'non_boxable'
+  /** Whether Pokemon Home currently accepts this form into a box — distinct from
+   * formCategory, which is derived from PokeAPI's is_battle_only and doesn't capture
+   * this. A form can be a real, catchable, non-battle-only dex_distinct forme (so it
+   * belongs in the dex) that Home simply hasn't added deposit support for yet — Home's
+   * support lags game releases and isn't encoded in PokeAPI at all, so this is always
+   * `true` except where OVERRIDES says otherwise (see docs/investigations/
+   * home-depositability-audit.md section 2 for the current list and sourcing). */
+  homeBoxable: boolean
   hasGenderDifference: boolean
   firstAvailableGeneration: number
   regionalGroup: 'alolan' | 'galarian' | 'hisuian' | 'paldean' | null
@@ -81,9 +93,33 @@ interface PokeApiFormResponse {
   version_group: { name: string }
 }
 
-/** speciesId:formName -> field overrides, applied after the heuristic below. Starts
- * empty; the escape hatch for anything a spot-check finds the heuristic got wrong. */
-const OVERRIDES: Record<string, Partial<SeedForm>> = {}
+/** speciesId:formName -> field overrides, applied after the heuristic below. Also the
+ * home-depositability escape hatch: PokeAPI has no signal at all for "does Home
+ * currently accept this form," so every entry below sets homeBoxable: false by hand,
+ * sourced against Serebii's depositable-species list (see
+ * docs/investigations/home-depositability-audit.md section 2, verified 2026-09-01).
+ * Minior's 7 core-color formes were checked live against PokeAPI's raw response before
+ * being added here (is_battle_only is false for minior-red et al., confirming this is a
+ * genuine Home-support gap rather than a bug in the is_battle_only heuristic). */
+const OVERRIDES: Record<string, Partial<SeedForm>> = {
+  '483:origin': { homeBoxable: false }, // Dialga
+  '484:origin': { homeBoxable: false }, // Palkia
+  '487:origin': { homeBoxable: false }, // Giratina
+  '800:dusk': { homeBoxable: false }, // Necrozma Dusk Mane
+  '800:dawn': { homeBoxable: false }, // Necrozma Dawn Wings
+  '898:ice': { homeBoxable: false }, // Calyrex Ice Rider
+  '898:shadow': { homeBoxable: false }, // Calyrex Shadow Rider
+  '1017:wellspring-mask': { homeBoxable: false }, // Ogerpon
+  '1017:hearthflame-mask': { homeBoxable: false },
+  '1017:cornerstone-mask': { homeBoxable: false },
+  '774:red': { homeBoxable: false }, // Minior core colors
+  '774:orange': { homeBoxable: false },
+  '774:yellow': { homeBoxable: false },
+  '774:green': { homeBoxable: false },
+  '774:blue': { homeBoxable: false },
+  '774:indigo': { homeBoxable: false },
+  '774:violet': { homeBoxable: false }
+}
 
 /** Captured from PokeAPI's /version-group list + each entry's .generation during
  * planning — small and stable enough to hardcode rather than fetch per form. */
@@ -233,6 +269,7 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
       speciesId: species.id,
       formName: 'base',
       formCategory: 'dex_distinct',
+      homeBoxable: true,
       hasGenderDifference: hasDistinctFemaleSprite(defaultPokemon),
       firstAvailableGeneration: species.generation,
       regionalGroup: null,
@@ -272,6 +309,7 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
         speciesId: species.id,
         formName,
         formCategory,
+        homeBoxable: true,
         hasGenderDifference: hasDistinctFemaleSprite(pokemon),
         firstAvailableGeneration: generation,
         regionalGroup,

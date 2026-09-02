@@ -1,5 +1,19 @@
 # COMPLETED
 
+## [Home-depositability corrections for existing forms] — Leg 8
+2026-09-02. Populated the `home_boxable` column (present in the schema since Leg 4 but
+hardcoded to `1`/`true` on every insert) with real values for the 17 forms Home doesn't
+yet accept: Dialga/Palkia/Giratina Origin, Necrozma Dawn Wings/Dusk Mane, Calyrex Ice/
+Shadow Rider, Ogerpon's 3 masks, and Minior's 7 core color forms. Checked Minior's raw
+PokeAPI `pokemon-form` response live first (`is_battle_only: false` for `minior-red`) to
+confirm it's a genuine Home-support gap, not a heuristic bug in the existing
+`is_battle_only` non_boxable check. Added a 17-entry `OVERRIDES` batch to
+`fetch-pokemon-forms.ts`, hand-patched the same values into `forms.json` (no full live
+refetch needed), and added a `seed.ts` backfill so an already-seeded local db picks up
+the correction on next startup, matching the existing `pokeapi_id` backfill pattern.
+`homeBoxable` reaches storage/types but has no UI consumer yet — filtering it into the
+dex view is tracked separately in TODO.md. See commit `<pending>`.
+
 ## [Dex/species exclusions: totem, Let's Go starters, Koraidon/Miraidon modes] — Leg 7
 2026-09-02. `scripts/fetch-pokemon-forms.ts` now skips generating a row for any variety
 `isExcludedVariety` matches (totem `formName`, Pikachu/Eevee's Let's Go `starter`,

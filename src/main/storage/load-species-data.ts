@@ -12,6 +12,7 @@ export interface SeedForm {
   speciesId: number
   formName: string
   formCategory: 'dex_distinct' | 'cosmetic_variant' | 'non_boxable'
+  homeBoxable: boolean
   hasGenderDifference: boolean
   firstAvailableGeneration: number
   regionalGroup: 'alolan' | 'galarian' | 'hisuian' | 'paldean' | null
