@@ -12,7 +12,7 @@ was ever touched), with the same full-replace semantics: absent from the backup 
 reset to null, matching `owned`'s existing reset-to-unowned behavior. A malformed/
 hand-edited backup whose entry references a `trainerProfileId` missing from its own
 `trainerProfiles` array gets that link dropped to null rather than failing the whole
-import. See commit `pending`.
+import. See commit `8c2688d`.
 
 ## [Trainer Profile + Storage Location sort] — Leg 12 — 2026-09-02
 Added a shared "Sort by" dropdown (game — release order, game — A–Z, OT Name/Name — A–Z)
