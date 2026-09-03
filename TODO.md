@@ -41,13 +41,6 @@ restructuring expands the existing top-tab pattern rather than moving to a sideb
 visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
 styling all in scope, not a targeted fix.
 
-## [Invalid Combo Flag] — Leg 6
-A derived, non-blocking warning badge when an entry's species/ball doesn't match Legs
-4-5's validity data for its origin game — computed at read time, not a stored column,
-same treatment as `completionStats.ts`. Soft warn only; this isn't a full
-legality-checker app. Depends on Legs 4-5.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Per-Storage-Location Completion Stats] — Leg 7
 Extend completion-stats logic to scope owned/shiny stats to a given storageLocationId.
 Logic only — UI consumption waits for Leg 8's tabbed table. Depends on Leg 3.

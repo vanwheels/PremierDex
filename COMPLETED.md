@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Invalid Combo Flag] — Leg 6 — 2026-09-03
+Derived, non-blocking "Invalid combo" badge on an owned Living Dex entry whose species
+or caught ball doesn't match Legs 4-5's validity data for its origin game — computed at
+read time, never a stored column, same treatment as `completionStats.ts`. Species-
+availability data needed its own IPC channel/bridge method to reach the renderer for the
+first time (it's a static file read, not a DB row, so it doesn't fit StorageAdapter).
+Collection view intentionally not touched this leg — it already omits DexRow's other
+owned-state badges. See commit `bb8b281`.
+
 ## [Legends Arceus Ball Pool] — Leg 5 — 2026-09-03
 Added Legends Arceus's six non-overlapping ball names (Feather/Wing/Jet/Leaden/Gigaton/
 Origin Ball) to `POKE_BALLS`, plus a `ballPoolForGame()` lookup that OriginModal's
