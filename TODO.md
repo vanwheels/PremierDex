@@ -10,6 +10,79 @@ Blocked: needs production-quality PokéBall-or-similar artwork before a real pub
 release.
 Last touched: 2026-09-02. Re-check count: 0.
 
+## Current Milestone: Nav restructuring → Visual pass → Storage Location sync → Dex Table redesign
+
+Scoped into 10 legs during a 2026-09-02 leg-planning pass. Decisions locked that day:
+`storageLocationId` is a nullable FK (no forced migration — entries can sit unassigned
+indefinitely); Met Location ships as free text this milestone (a curated per-game
+location list is deferred — see the Future Milestones item below); the per-game validity
+dataset ships narrow — species-availability-per-game + Legends Arceus's ball pool only,
+not full form/gender/ball-combo legality (also deferred below); the Invalid Flag is
+derived at read time, not a stored column, same treatment as `completionStats.ts`; nav
+restructuring expands the existing top-tab pattern rather than moving to a sidebar; the
+visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
+styling all in scope, not a targeted fix.
+
+## [Visual Design Pass] — Leg 2
+Full re-skin: color/theme system, layout density/spacing, and component styling (buttons,
+inputs, modals, tabs currently render as plain unstyled HTML). Lands right after nav
+restructuring so it applies to the settled tab structure instead of the old stacked-panel
+layout. Leg 1 landed, so this is unblocked.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Storage Location FK + Met Location Field] — Leg 3
+Nullable `storageLocationId` FK + free-text `metLocation` on CollectionEntry — schema
+retrofit, types, IPC, a `setEntryStorageLocation` setter (kept separate from
+`setEntryOrigin` since location and origin are deliberately different axes), `metLocation`
+wired into OriginModal, and a minimal interim assignment picker (upgraded in Leg 9). No
+forced migration — entries can sit unassigned indefinitely.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Per-Game Species-Availability Dataset] — Leg 4
+Which species are obtainable in a given origin game (v1 slice — species-availability
+only, not full form/gender/ball-combo legality), grouped by shared regional dex to cut
+duplication and sourced live from PokeAPI rather than memory. Also where the held-item
+form-change modeling gap (Arceus Plates, Genesect Drives, Giratina's Griseous Orb,
+Zacian/Zamazenta Crowned, Silvally, etc.) gets written up as its own investigation doc
+rather than solved inline.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Legends Arceus Ball Pool] — Leg 5
+Legends Arceus's own non-standard balls (not currently in shared/data/poke-balls.ts)
+added to the dataset, with the "Caught In" picker filtered to a game's legal pool instead
+of today's flat global list.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Invalid Combo Flag] — Leg 6
+A derived, non-blocking warning badge when an entry's species/ball doesn't match Legs
+4-5's validity data for its origin game — computed at read time, not a stored column,
+same treatment as `completionStats.ts`. Soft warn only; this isn't a full
+legality-checker app. Depends on Legs 4-5.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Per-Storage-Location Completion Stats] — Leg 7
+Extend completion-stats logic to scope owned/shiny stats to a given storageLocationId.
+Logic only — UI consumption waits for Leg 8's tabbed table. Depends on Leg 3.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Dex Table Redesign: Per-Location Tabs] — Leg 8
+Tabbed-per-Storage-Location structure for the Living Dex table (using Storage Location's
+existing `name` field as the tab label — no schema change needed there), plus an
+Unassigned tab for null storageLocationId entries, wired to Leg 7's stats per tab.
+Depends on Legs 3 and 7.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Dex Table Redesign: Storage Location Assignment] — Leg 9
+Move storage-location assignment from Leg 3's interim picker into the redesigned table
+itself. Depends on Leg 8.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Dex Table Redesign: Richer Row Fields] — Leg 10
+Richer per-row info beyond today's sprite/#/name/gen/nickname/owned/shiny — exact field
+list still TBD, to be decided once Met Location, Invalid Flag, ball, and storage location
+all actually exist in the UI. Depends on Legs 3-9 landing first.
+Last touched: 2026-09-02. Re-check count: 0.
+
 ## Future Milestones (post-current)
 
 Large items Vanny explicitly flagged as out of scope for the current milestone — logged
@@ -30,24 +103,12 @@ time, capture date flagged by Vanny as very low priority. All blocked on Ribbons
 scoped first.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [Next milestone: Nav restructuring → Validation/Storage-Location sync → Dex Table redesign] — future milestone
-Supersedes the earlier "UI overhaul" entry below, per a 2026-09-02 planning discussion —
-split into three ordered parts so the one piece that structurally depends on new schema
-doesn't get built twice:
-1. **Menu/section restructuring** — split the current single cluttered page into distinct
-   sections (Trainer Profiles/Storage Locations/Collection/etc). Independent of the schema
-   work below, safe to do first — this is why Vanny wants UI work to lead the milestone.
-2. **Per-game validation + Storage Location sync** — a foundational per-game validity
-   dataset (which species/form/gender/ball combos a given game actually allows), a new
-   `storageLocationId` FK on CollectionEntry, a new Met Location field (doesn't exist on
-   CollectionEntry today), Legends Arceus's own ball pool (not in shared/data/poke-balls.ts
-   currently), an Invalid Flag for bad combos (soft warn only, not a hard block — this
-   isn't a full legality-checker app), and per-Storage-Location completion tracking.
-   Held-item form-changes (Arceus Plates, Genesect Drives, Giratina's Griseous Orb,
-   Zacian/Zamazenta Crowned, Silvally, etc.) are a known modeling gap, deliberately split
-   into their own investigation doc rather than solved inline here.
-3. **Living Dex Table redesign** — tabbed per Storage Location (using its existing `name`
-   field as the tab label — no schema change needed there), plus richer per-row info
-   (fields not yet decided). Built last, after part 2 lands, so the row layout is designed
-   once against the full field set instead of redone when validation/storage fields show up.
+## [Deeper per-game validity: form/gender legality + curated Met Location list] — future milestone
+Split out of the current milestone during its 2026-09-02 leg-planning pass: the initial
+validity dataset only covers species-availability-per-game + Legends Arceus's ball pool,
+and Met Location ships as free text — both deliberately narrowed so that milestone's legs
+stayed small. This item covers the fuller versions: per-game form/gender/ball-combo
+legality (beyond just ball pool), and a curated real-locations-per-game dataset
+(routes/cities/areas) to replace the free-text Met Location field. Needs its own scoping
+before being picked up, same as Ribbons/Dex-tier above.
 Last touched: 2026-09-02. Re-check count: 0.
