@@ -6,7 +6,7 @@ Diamond/Pearl's Palkia/Dialga pairing per Vanny's direction, muted/desaturated r
 than anime-vivid; light only surfaces via OS-level `prefers-color-scheme` (no in-app
 toggle — see TODO.md). global.css split into tokens/base/buttons/layout/tables/modals.css
 to stay under the file-size convention. App.tsx gained an `.app-shell`/`.app-header`/
-`.app-content` wrapper (markup-only, no behavior change). See commit `<pending>`.
+`.app-content` wrapper (markup-only, no behavior change). See commit `afdbf9e`.
 
 ## [Nav Restructuring: Expand Top Tabs] — Leg 1 — 2026-09-02
 Trainer Profiles and Storage Locations became their own top-level tabs alongside Living
