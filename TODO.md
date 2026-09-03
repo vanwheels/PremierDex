@@ -1,19 +1,14 @@
 # TODO
 
-## [Species-forms data bugs] — Leg 22
-Several correctness bugs in the species/forms data surfaced after Leg 9's
-foldable-species work: Mothim has no forms entry at all; Burmy folds correctly but
-Wormadam doesn't (likely other pairs affected too); Arceus and Genesect still display
-every form instead of folding; and Scatterbug/Spewpa each wrongly carry Vivillon's full
-form list even though the pre-evolutions can't reveal which Vivillon form they'll become
-(they should be a single entry each, with only Vivillon showing the variants). Needs
-investigation into the shared forms dataset/folding logic rather than one-off fixes,
-since these look like instances of the same underlying issue.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Female-form sprites missing] — Leg 23
 Species with a gender-split form (Jellicent, Pyroar, etc.) are missing the sprite for
-the female form.
+the female form. Leg 22's investigation found the actual affected set is wider than the
+two examples first noted: Frillish, Jellicent, and Pyroar's female sub-form, and
+Xerneas's Active Mode, Sinistea/Polteageist's Antique, and Poltchageist/Sinistcha's
+second form all come back with every sprite field null on PokeAPI's own sub-form entry —
+the female look lives on the *male* sub-form's `front_female` field instead, not on the
+female sub-form's own sprite fields; the other five have no known sprite source at all
+via the API (checked live 2026-09-02, during Leg 22's investigation — see COMPLETED.md).
 Last touched: 2026-09-02. Re-check count: 0.
 
 ## [alwaysShiny UI consumer] — Leg 24

@@ -22,7 +22,6 @@ const BASE_FORM_NAMES: Record<number, string> = {
   386: 'normal', // Deoxys
   412: 'plant', // Burmy
   413: 'plant', // Wormadam
-  414: 'plant', // Mothim
   421: 'overcast', // Cherrim
   422: 'west', // Shellos
   423: 'west', // Gastrodon
@@ -38,8 +37,6 @@ const BASE_FORM_NAMES: Record<number, string> = {
   645: 'incarnate', // Landorus
   647: 'ordinary', // Keldeo
   648: 'aria', // Meloetta
-  664: 'icy-snow', // Scatterbug
-  665: 'icy-snow', // Spewpa
   666: 'meadow', // Vivillon
   669: 'red', // Flabébé
   670: 'red', // Floette

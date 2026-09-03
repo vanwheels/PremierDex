@@ -1,5 +1,22 @@
 # COMPLETED
 
+## [Species-forms data bugs] — Leg 22 — 2026-09-02
+Investigation split the leg's four claims into two different root causes, not one shared
+bug as originally framed. (1) Mothim, Scatterbug, and Spewpa: PokeAPI's `/pokemon/{id}.forms`
+array structurally mirrors a related evolution-chain species (Burmy's cloaks, Vivillon's
+patterns) even though these species never actually change appearance — confirmed live, every
+one of those sub-forms' sprite fields comes back null, unlike Burmy's/Vivillon's own real
+sub-forms. Fixed by excluding these 3 species from `fetchDefaultVarietySubForms`'s
+`forms.length > 1` detection (`SPURIOUS_MULTI_FORM_SPECIES`), so they fall through to the
+plain single-'base'-form path; `forms.json` patched to match and `formNames.ts`'s now-stale
+`BASE_FORM_NAMES` entries for the three removed. (2) Arceus's 18 plates and Genesect's 4
+drives: per Vanny's call, these are held-item-driven type changes (remove the Plate/Drive
+and it reverts), not a persistent Home-depositable state — reclassified `non_boxable` via
+`OVERRIDES` rather than left `dex_distinct`, so they're filtered from the dex entirely
+instead of needing to "fold." Wormadam's 3 cloaks were investigated and left as-is: they
+genuinely differ in type/stats and are separate Living Dex slots in the real games (unlike
+Burmy's, which are cosmetic-only) — not a bug. See commit `<pending>`.
+
 ## [Group by Dex number in Collection] — Leg 21 — 2026-09-02
 Added `dexNumber` as a fourth `CollectionGroupBy` mode alongside Origin Game/OT/Shiny.
 Since every form of a species shares its national dex number, the group is the species

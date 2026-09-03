@@ -69,6 +69,10 @@
  *     across all of a species' sub-forms and the suffix is stored separately as
  *     spriteFormSuffix (null for every form that isn't one of these — see sprites.ts).
  *     See docs/investigations/home-depositability-audit.md section 3.
+ *   - The forms.length > 1 signal above false-positives for a handful of species whose
+ *     multi-entry forms array is a PokeAPI artifact rather than real sub-forms (Mothim,
+ *     Scatterbug, Spewpa) — see SPURIOUS_MULTI_FORM_SPECIES below, which excludes them
+ *     from that path entirely so they get the plain single-'base'-form treatment instead.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -135,15 +139,46 @@ interface PokeApiFormResponse {
   sprites: { front_default: string | null; front_female: string | null }
 }
 
-/** speciesId:formName -> field overrides, applied after the heuristic below. Also the
- * home-depositability escape hatch: PokeAPI has no signal at all for "does Home
- * currently accept this form," so every entry below sets homeBoxable: false by hand,
- * sourced against Serebii's depositable-species list (see
- * docs/investigations/home-depositability-audit.md section 2, verified 2026-09-01).
- * Minior's 7 core-color formes were checked live against PokeAPI's raw response before
- * being added here (is_battle_only is false for minior-red et al., confirming this is a
- * genuine Home-support gap rather than a bug in the is_battle_only heuristic). */
+/** speciesId:formName -> field overrides, applied after the heuristic below. Most entries
+ * are the home-depositability escape hatch: PokeAPI has no signal at all for "does Home
+ * currently accept this form," so these set homeBoxable: false by hand, sourced against
+ * Serebii's depositable-species list (see docs/investigations/home-depositability-audit.md
+ * section 2, verified 2026-09-01). Minior's 7 core-color formes were checked live against
+ * PokeAPI's raw response before being added here (is_battle_only is false for minior-red et
+ * al., confirming this is a genuine Home-support gap rather than a bug in the
+ * is_battle_only heuristic).
+ *
+ * Arceus's 18 plates and Genesect's 4 drives are a different override: formCategory:
+ * 'non_boxable' (not just homeBoxable: false). Both are held-item-driven type changes —
+ * remove the Plate/Drive and the Pokemon reverts — not a permanent forme change like
+ * Wormadam's cloak (locked at evolution) or Rotom's appliances (persists without the Secret
+ * Key). is_battle_only is false for these on PokeAPI (checked live 2026-09-02: e.g.
+ * arceus-bug, genesect-douse), so the heuristic alone would wrongly call them dex_distinct.
+ * Per Vanny's call (TODO.md's Leg 22), neither represents its own Living Dex/Home box slot —
+ * only the base (no-item) form does. */
 const OVERRIDES: Record<string, Partial<SeedForm>> = {
+  '493:bug': { formCategory: 'non_boxable', homeBoxable: false }, // Arceus plates
+  '493:dark': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:dragon': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:electric': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:fighting': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:fire': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:flying': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:ghost': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:grass': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:ground': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:ice': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:poison': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:psychic': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:rock': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:steel': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:water': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:unknown': { formCategory: 'non_boxable', homeBoxable: false },
+  '493:fairy': { formCategory: 'non_boxable', homeBoxable: false },
+  '649:douse': { formCategory: 'non_boxable', homeBoxable: false }, // Genesect drives
+  '649:shock': { formCategory: 'non_boxable', homeBoxable: false },
+  '649:burn': { formCategory: 'non_boxable', homeBoxable: false },
+  '649:chill': { formCategory: 'non_boxable', homeBoxable: false },
   '483:origin': { homeBoxable: false }, // Dialga
   '484:origin': { homeBoxable: false }, // Palkia
   '487:origin': { homeBoxable: false }, // Giratina
@@ -297,6 +332,23 @@ const MIRAIDON_RIDE_MODES = ['low-power-mode', 'drive-mode', 'aquatic-mode', 'gl
 const LETS_GO_STARTER_SPECIES = [25, 133] // Pikachu, Eevee
 
 /**
+ * Species whose defaultPokemon.forms array (the >1 signal fetchDefaultVarietySubForms
+ * below keys off) is a PokeAPI structural artifact, not real sub-forms: Mothim's forms
+ * list is Burmy's plant/sandy/trash cloak names, and Scatterbug/Spewpa's is Vivillon's 20
+ * pattern names — mirrored from a species one step away in the evolution chain even though
+ * none of them ever change appearance. Confirmed live 2026-09-02: every one of those
+ * sub-forms' sprite fields (front_default, front_female, the works) comes back null, unlike
+ * Burmy's/Vivillon's own sub-forms, which all have real, distinct sprites. A blanket
+ * "front_default is null" check can't replace this exclusion list — it would also drop
+ * real, sprite-less dex entries elsewhere (Xerneas's Active Mode, Sinistea/Polteageist's
+ * Antique, Poltchageist/Sinistcha's second form, and Frillish/Jellicent/Pyroar's female
+ * sub-form all come back null on every sprite field too, despite being real, trackable
+ * forms — see TODO.md's "Female-form sprites missing" leg). Species here fall through to
+ * fetchSpeciesForms' plain single-'base'-form branch instead. See TODO.md's Leg 22.
+ */
+const SPURIOUS_MULTI_FORM_SPECIES = new Set([414, 664, 665]) // Mothim, Scatterbug, Spewpa
+
+/**
  * Varieties that shouldn't occupy a dex slot at all — not "boxable but not yet
  * Home-depositable" (that's non_boxable), just not real, trackable dex entries. See
  * docs/investigations/home-depositability-audit.md section 1:
@@ -400,7 +452,7 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
 
   const forms: SeedForm[] = []
 
-  if (defaultPokemon.forms.length > 1) {
+  if (defaultPokemon.forms.length > 1 && !SPURIOUS_MULTI_FORM_SPECIES.has(species.id)) {
     forms.push(...(await fetchDefaultVarietySubForms(species, defaultPokemon)))
   } else {
     forms.push(
