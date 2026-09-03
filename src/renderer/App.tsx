@@ -2,12 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { BackupControls } from './BackupControls'
 import { UpdateControls } from './UpdateControls'
 import { ThemeProvider } from './theme/theme-store'
 import { ThemeModeToggle } from './theme/ThemeModeToggle'
 import { buildDexSections } from './dex/buildDexSections'
 import { filterDexSections } from './dex/filterDexSections'
+import { filterDepositableSections } from './dex/locationDepositability'
 import { sortDexSections } from './dex/sortDexSections'
 import { computeCompletionStats, DEFAULT_COMPLETION_STATS_OPTIONS, filterEntriesByStorageLocation } from './dex/completionStats'
 import type { CompletionStatsOptions } from './dex/completionStats'
@@ -46,6 +48,10 @@ export function App(): JSX.Element {
   // per-row assignment picker (Leg 3, Leg 9) has the list to populate its dropdown from,
   // and so DexLocationTabs (Leg 8) has it for the per-location tab bar.
   const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([])
+  // Leg 5: fetched here (rather than left to TrainerProfilesPanel's own load) so a
+  // save_file location tab can resolve its linked Trainer Profile's game and gate
+  // depositability by it — see locationDepositability.ts.
+  const [trainerProfiles, setTrainerProfiles] = useState<TrainerProfile[]>([])
   const [speciesAvailability, setSpeciesAvailability] = useState<SpeciesAvailabilityData>(EMPTY_SPECIES_AVAILABILITY)
   const [loading, setLoading] = useState(true)
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
@@ -73,13 +79,15 @@ export function App(): JSX.Element {
       window.premierDex.listForms(),
       window.premierDex.listCollectionEntries(),
       window.premierDex.listStorageLocations(),
-      window.premierDex.loadSpeciesAvailability()
-    ]).then(([speciesList, formList, entryList, storageLocationList, availability]) => {
+      window.premierDex.loadSpeciesAvailability(),
+      window.premierDex.listTrainerProfiles()
+    ]).then(([speciesList, formList, entryList, storageLocationList, availability, trainerProfileList]) => {
       setSpecies(speciesList)
       setForms(formList)
       setEntries(entryList)
       setStorageLocations(storageLocationList)
       setSpeciesAvailability(availability)
+      setTrainerProfiles(trainerProfileList)
     })
   }, [])
 
@@ -88,12 +96,20 @@ export function App(): JSX.Element {
     loadAll()
   }, [loadAll])
 
-  // Trainer Profile update (live sync, Leg 31) and delete (orphaning) both rewrite
-  // collection_entries directly at the DB layer, bypassing setEntryOrigin — refetch just
-  // the entries so linked-but-stale rows in state pick up the change.
+  // Trainer Profile create/update/delete all leave App's own `trainerProfiles` copy stale
+  // (TrainerProfilesPanel manages its own list independently) — refetched here too so a
+  // save_file location's depositability gate (Leg 5, locationDepositability.ts) always
+  // resolves against the current game. Update (live sync, Leg 31) and delete (orphaning)
+  // also rewrite collection_entries directly at the DB layer, bypassing setEntryOrigin, so
+  // entries gets refetched alongside for those two.
+  const refetchTrainerProfiles = useCallback((): void => {
+    window.premierDex.listTrainerProfiles().then(setTrainerProfiles)
+  }, [])
+
   const refetchEntries = useCallback((): void => {
     window.premierDex.listCollectionEntries().then(setEntries)
-  }, [])
+    refetchTrainerProfiles()
+  }, [refetchTrainerProfiles])
 
   useEffect(() => {
     loadAll().finally(() => setLoading(false))
@@ -114,7 +130,23 @@ export function App(): JSX.Element {
     () => buildDexSections(species, forms, entriesForLocationTab, options),
     [species, forms, entriesForLocationTab, options]
   )
-  const filteredSections = useMemo(() => filterDexSections(sections, filters), [sections, filters])
+  // Leg 5: which species/forms even belong in this tab's table at all, ahead of the
+  // user's own DexFilters dimensions below — see locationDepositability.ts. A save_file
+  // location's cap comes from its linked Trainer Profile's game; every other capped type
+  // (ranch/box/bank) has a fixed generation ceiling, and home/Unassigned aren't capped.
+  const selectedLocation = useMemo(
+    () => storageLocations.find((location) => location.id === selectedLocationTab) ?? null,
+    [storageLocations, selectedLocationTab]
+  )
+  const selectedLocationTrainerGame = useMemo(() => {
+    if (selectedLocation?.locationType !== 'save_file') return null
+    return trainerProfiles.find((profile) => profile.id === selectedLocation.trainerProfileId)?.game ?? null
+  }, [selectedLocation, trainerProfiles])
+  const depositableSections = useMemo(
+    () => filterDepositableSections(sections, selectedLocation, selectedLocationTrainerGame, speciesAvailability),
+    [sections, selectedLocation, selectedLocationTrainerGame, speciesAvailability]
+  )
+  const filteredSections = useMemo(() => filterDexSections(depositableSections, filters), [depositableSections, filters])
   const visibleSections = useMemo(() => sortDexSections(filteredSections, sort), [filteredSections, sort])
   // Independent of options/filters/sort (all display-only) — stats reflect the whole of
   // the selected tab's location, not the currently-visible slice. See completionStats.ts.

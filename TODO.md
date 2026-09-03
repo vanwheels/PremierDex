@@ -79,15 +79,6 @@ looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the 
 just sprites" — it never claimed to reflect real box contents, so the same checklist
 ceiling doesn't misrepresent it the way it would Box view.
 
-## [Non-HOME locations show all 1025 species as depositable] — Leg 5
-Ranch/Box/individual-save-file storage locations currently list every species as
-depositable in their Dex Table view — there's no per-location-type/per-game
-species-eligibility filter today (confirmed: filterDexSections.ts has no
-location-type-aware species gating). Needs a depositable-species-per-location-type
-dataset (e.g. Ranch capped at Gen 4) mirroring the per-game validity approach from Legs
-4/6 of the prior milestone, then wiring it into the location-tab-scoped view.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ## [Existing dex entries stuck in Unassigned instead of vanny's HOME dex] — Leg 6
 Vanny's pre-existing collection entries are showing under the Unassigned location tab
 instead of the 'vanny' HOME storage location. autoAssignLocation.ts (Leg 9 of the prior

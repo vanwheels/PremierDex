@@ -9,10 +9,12 @@ import { sortTrainerProfiles } from './sortTrainerProfiles'
 const EMPTY_INPUT: TrainerProfileInput = { game: '', otName: '', tid: null, sid: null, label: null, language: null }
 
 interface TrainerProfilesPanelProps {
-  /** Update and delete both rewrite collection_entries directly at the DB layer (Leg 31's
-   * live sync, and the pre-existing orphan-on-delete) without going through
-   * setEntryOrigin — App.tsx's `entries` state has no other way to learn that happened,
-   * so this tells it to refetch. */
+  /** Tells App.tsx to refetch both its own `trainerProfiles` copy (this panel manages its
+   * own list independently, so App's copy — used by Leg 5's save_file depositability
+   * gate — would otherwise go stale on any create/update/delete here) and `entries`.
+   * Entries specifically needs it for update and delete, which both rewrite
+   * collection_entries directly at the DB layer (Leg 31's live sync, and the
+   * pre-existing orphan-on-delete) without going through setEntryOrigin. */
   onEntriesChanged: () => void
 }
 
@@ -36,6 +38,7 @@ export function TrainerProfilesPanel({ onEntriesChanged }: TrainerProfilesPanelP
     await window.premierDex.createTrainerProfile(input)
     setAdding(false)
     await load()
+    onEntriesChanged()
   }
 
   const handleUpdate = async (id: number, input: TrainerProfileInput): Promise<void> => {

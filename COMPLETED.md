@@ -10,6 +10,16 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Non-HOME locations show all 1025 species as depositable] — Leg 5 (2026-09-03)
+Added `locationDepositability.ts`: a generation-cap dataset for ranch (Gen 4)/box (Gen
+3)/bank (Gen 7), and a save_file check that reuses Legs 4/6's per-game
+SpeciesAvailabilityData against the location's linked Trainer Profile game — home and the
+Unassigned tab stay uncapped. `filterDepositableSections` wires this into App.tsx ahead of
+the user's own DexFilters, mirroring filterDexSections' section-survival/cosmetic-promotion
+shape. An already-owned row always passes regardless of the cap (grandfathered) rather than
+hiding real data. Also fixed a staleness gap the fix surfaced: App's new `trainerProfiles`
+copy needed refreshing on create too, not just update/delete. See commit `<hash>`.
+
 ## [Completion tables should share a row on wide windows] — Leg 4 (2026-09-03)
 Wrapped the three Completion Stats tables in a flex row (`.completion-stats-tables`,
 `flex-wrap: wrap`) instead of the vertical stack, with each table growing to fill its
