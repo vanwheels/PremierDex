@@ -48,9 +48,21 @@ duplicate owned copies and unowned-but-placed placeholder slots. The second piec
 `CollectionEntry`'s `UNIQUE(form_id, gender, shiny)` constraint dropped (owned becomes a
 real per-individual count, not a checkbox) and a real box/slot data model tied to Storage
 Locations — too large and too load-bearing to design inline. Split in two per Vanny's
-call: this milestone (Legs 1-9) ships the three view modes read-only on today's data;
-[Box Arrangement / Real Inventory Data Model] (future milestone, below) covers the
-editing/duplicates/slot-position piece once that's separately scoped.
+call: this milestone (Legs 1-8) ships List and Hybrid read-only on today's data;
+[Box Arrangement / Real Inventory Data Model] (future milestone, below) covers
+editing/duplicates/slot-position once that's separately scoped.
+
+Re-scoped further 2026-09-03, same day: Box view (originally Leg 8) got pulled out of
+this milestone entirely and folded into the Box Arrangement future-milestone item
+instead of staying a Phase 1 leg. Vanny pointed out a real box can hold several regular
+and shiny copies of the same species mixed together (e.g. a box of assorted shiny and
+non-shiny Woopers) — a "Box view" that's supposed to look like a real box is a claim
+about real per-individual contents, not a rendering choice, and today's schema can't
+represent more than one regular + one shiny per species at all. Building it now would
+mean shipping something that calls itself a box but can never show what a real box
+looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the list,
+just sprites" — it never claimed to reflect real box contents, so the same checklist
+ceiling doesn't misrepresent it the way it would Box view.
 
 ## [Ball column shows text instead of the ball icon] — Leg 1
 The Dex Table's Non-Shiny/Shiny Ball columns (Leg 10 of the prior milestone) render
@@ -117,33 +129,18 @@ identically across List/Box/Hybrid, species outside the active filter don't appe
 any of them, not just List.
 Last touched: 2026-09-03. Re-check count: 0.
 
-## [Box view mode] — Leg 8
-New HOME-style read-only grid: 30 sprite-only cells per box (5 rows x 6 columns per
-Vanny's Pokémon HOME reference), right-click opens an action menu (contents TBD at leg
-time — likely Origin modal/sprite modal shortcuts, mirroring what's already reachable
-from a Dex Table row). On today's data, slots auto-fill in dex-number order rather than
-a real saved arrangement — arbitrary placement/duplicates wait on the Box Arrangement
-future milestone below actually existing.
-Tile population, confirmed 2026-09-03: each DexRowData row contributes up to two tiles —
-a regular-slot tile and a shiny-slot tile, exactly mirroring List view's existing
-two-column pairing. Each tile renders as a real sprite when that slot is owned, or a
-greyed-out placeholder when it's within the active filter scope but unowned. A
-species/row outside the active filter (e.g. wrong generation) contributes no tiles at
-all — greyed placeholders are for "in scope but missing," not "every species that
-exists."
-Last touched: 2026-09-03. Re-check count: 0.
-
-## [Hybrid view mode] — Leg 9
-Second HOME-derived read-only grid, same tile-population rules as Leg 8's Box view (up
-to two tiles per row, greyed placeholders for in-scope-but-unowned), but flowing
-continuously — no box-style page boundaries, confirmed 2026-09-03 over the paginated
-alternative real HOME's own List View screen actually uses. Row width reflows with the
-window instead of a fixed 6-column grid. Detail panel pinned to the bottom of the page,
+## [Hybrid view mode] — Leg 8
+HOME-derived read-only grid: sprite-only tiles flowing continuously with the window
+width — no box-style page boundaries, confirmed 2026-09-03 over the paginated
+alternative real HOME's own List View screen actually uses. Tile population: each
+DexRowData row contributes up to two tiles (regular-slot + shiny-slot, mirroring List
+view's existing two-column pairing) — a real sprite when that slot is owned, a
+greyed-out placeholder when it's within the active filter scope but unowned, nothing at
+all when the row itself is filtered out. Detail panel pinned to the bottom of the page,
 confirmed 2026-09-03 to reuse the Origin modal's existing fields (OT/TID/SID/nickname/
 origin game/ball/met location/storage location, plus the home-boxable/shiny-locked/
 invalid-combo badges) rather than HOME's own Nature/stats block, which PremierDex has no
-data for. Shares its tile-cell rendering with Leg 8's Box view — worth building second
-and factoring the shared grid-cell component out rather than duplicating it.
+data for.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## Future Milestones (unscheduled)
@@ -155,8 +152,8 @@ the current milestone.
 ## [Box Arrangement / Real Inventory Data Model] — future milestone
 Split out of the User-Customizable Dex Layout milestone during its 2026-09-03
 leg-planning pass (see that milestone's intro note) — the harder half of Vanny's
-original ask, deliberately deferred past Phase 1's three read-only view modes. Vanny's
-calls so far: (1) duplicate owned copies of the same species/form should be real tracked
+original ask, deliberately deferred past Phase 1's read-only view modes. Vanny's calls so
+far: (1) duplicate owned copies of the same species/form should be real tracked
 individuals, not a visual trick — drop CollectionEntry's `UNIQUE(form_id, gender,
 shiny)` constraint (a SQLite table-rebuild migration, same class of hazard as the
 CHECK-widen rebuilds already handled in schema.ts) and turn "owned" into a per-individual
@@ -165,13 +162,23 @@ arranged boxes are the same thing as real Storage Locations, not a separate plan
 concept — a box becomes a numbered sub-unit of a Storage Location (e.g. HOME Box 3) with
 real per-entry slot positions, and unowned species can still be placed into a slot as a
 greyed-out placeholder.
+Box view mode itself (a HOME-style 30-cell grid, 5 rows x 6 columns, sprite-only,
+right-click action menu) moved here from Phase 1 the same day, 2026-09-03: Vanny pointed
+out a real box can hold several regular and shiny copies of one species mixed together
+(e.g. a box of assorted shiny/non-shiny Woopers) — Box view's entire premise is showing
+real per-individual box contents, which today's single-regular/single-shiny-per-species
+schema can't represent at all. Building it before this milestone's data model exists
+would ship something that calls itself a box but can never look like one. (Hybrid view
+stayed in Phase 1 — Vanny only ever described it as "the list, just sprites," so the same
+ceiling doesn't misrepresent it.)
 Needs its own scoping pass before picked up: this touches completionStats.ts,
 filterDexSections.ts, invalidCombo.ts, autoAssignLocation.ts, and
 exportCollection/importCollection's natural-key matching (currently keyed on
 form_id/gender/shiny, which collides once duplicates are real) — plus the editing UX
 itself (drag-and-drop vs. a menu-based add/remove/swap flow, per Vanny's own "without
-overcomplicating UI" concern). Depends on the Box/Hybrid grid components from Phase 1
-existing first, since editing extends those views rather than replacing them.
+overcomplicating UI" concern) and Box view's own build (grid, pagination, right-click
+menu) on top of the new data. Depends on Phase 1's Hybrid grid component existing first
+as a starting point, since Box view's tile rendering will likely share code with it.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## [Dex completeness tier migration] — future milestone
