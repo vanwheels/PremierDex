@@ -16,7 +16,7 @@ nickname-only-edit snapshot (carrying language through unchanged, same as it alr
 for game/OT/TID/SID). No `CollectionExport` version bump — same as Leg 4's fields, this
 extends an already-covered array rather than changing the export's top-level shape; an
 old backup missing the field imports as `null` via the existing `wanted?.field ?? null`
-pattern. See commit `<pending>`.
+pattern. See commit `f66fcd7`.
 Follow-up: [Dex search/filter]'s Leg 15 TODO item widened to include language now that it
 exists alongside the other origin fields.
 
