@@ -56,8 +56,9 @@ function SortableHeader({ label, sortKey, sort, onSortChange }: SortableHeaderPr
 
 /**
  * Owns the per-species cosmetic-variant expand/collapse state. This is UI-only and
- * intentionally not lifted to App — it never affects stored data, and resets on
- * navigating away, which is fine for a display preference.
+ * intentionally not lifted to App — it never affects stored data. Since Leg 2, App keeps
+ * this component mounted (hidden, not unmounted) while browsing other views for
+ * performance, so this state now persists across a tab switch rather than resetting.
  */
 export function DexTable({
   sections,

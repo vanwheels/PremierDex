@@ -64,20 +64,12 @@ looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the 
 just sprites" — it never claimed to reflect real box contents, so the same checklist
 ceiling doesn't misrepresent it the way it would Box view.
 
-## [Table resize/tab-switch performance] — Leg 2
-Resizing the app window makes the Dex/Completion tables noticeably laggy while columns
-reflow, and switching into the Living Dex tab is laggy on its own even without resizing.
-Likely a full re-render/re-computation of all ~1025 dex rows on every resize tick and
-every tab mount rather than memoized layout — needs profiling to confirm before picking a
-fix (debounce resize, memoize buildDexSections/filterDexSections, or virtualize the table
-body).
-Last touched: 2026-09-03. Re-check count: 0.
-
 ## [Dex Table column widths don't use expanded horizontal space] — Leg 3
 Widening the window only grows the gap between the Name and Gen columns — the Game/Ball
 columns stay fixed-narrow and truncate all but the shortest game names (e.g. "GO"). Needs
-the table's column-width distribution reworked (colgroup widths or table-layout: fixed
-with real per-column basis) so extra width goes to the columns that actually need it.
+the table's column-width distribution reworked (colgroup widths on top of Leg 2's
+table-layout: fixed) so extra width goes to the columns that actually need it rather than
+today's roughly-even fallback.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## [Completion tables should share a row on wide windows] — Leg 4

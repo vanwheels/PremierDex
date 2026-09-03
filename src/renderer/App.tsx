@@ -197,33 +197,41 @@ export function App(): JSX.Element {
           </button>
         </nav>
         <main className="app-content">
-          {view === 'dex' && (
-            <>
-              <DexLocationTabs
-                storageLocations={storageLocations}
-                selected={selectedLocationTab}
-                onSelect={setSelectedLocationTab}
-              />
-              <CompletionStatsPanel
-                stats={completionStats}
-                options={completionStatsOptions}
-                onOptionsChange={setCompletionStatsOptions}
-              />
-              <DexToolbar options={options} onChange={setOptions} />
-              <DexFilterBar filters={filters} onChange={setFilters} />
-              <DexTable
-                sections={visibleSections}
-                sort={sort}
-                onSortChange={setSort}
-                onToggleEntry={handleToggleEntry}
-                onSaveOrigin={handleSaveOrigin}
-                onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
-                storageLocations={storageLocations}
-                onSaveStorageLocation={handleSaveStorageLocation}
-                speciesAvailability={speciesAvailability}
-              />
-            </>
-          )}
+          {/* Leg 2 (Table resize/tab-switch performance): kept mounted and hidden via the
+           * `hidden` attribute rather than conditionally rendered like the other views
+           * below. DexTable's row count (~1000+ DexRows, each with two populated <select>s,
+           * a sprite <img>, checkboxes) made a full unmount/remount on every switch into
+           * this tab the dominant cost — profiling found buildDexSections/filterDexSections/
+           * sortDexSections were already correctly memoized, so recomputation was never the
+           * bottleneck. Side effect: DexTable's local expand/collapse state (see its doc
+           * comment) now survives a switch away and back instead of resetting — an
+           * improvement, not a regression, but noted since the old doc comment called the
+           * reset-on-navigate behavior out as intentional. */}
+          <div hidden={view !== 'dex'}>
+            <DexLocationTabs
+              storageLocations={storageLocations}
+              selected={selectedLocationTab}
+              onSelect={setSelectedLocationTab}
+            />
+            <CompletionStatsPanel
+              stats={completionStats}
+              options={completionStatsOptions}
+              onOptionsChange={setCompletionStatsOptions}
+            />
+            <DexToolbar options={options} onChange={setOptions} />
+            <DexFilterBar filters={filters} onChange={setFilters} />
+            <DexTable
+              sections={visibleSections}
+              sort={sort}
+              onSortChange={setSort}
+              onToggleEntry={handleToggleEntry}
+              onSaveOrigin={handleSaveOrigin}
+              onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
+              storageLocations={storageLocations}
+              onSaveStorageLocation={handleSaveStorageLocation}
+              speciesAvailability={speciesAvailability}
+            />
+          </div>
           {view === 'collection' && (
             <CollectionView species={species} forms={forms} entries={entries} onSaveOrigin={handleSaveOrigin} />
           )}

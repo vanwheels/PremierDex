@@ -35,6 +35,17 @@ tbody tr:hover {
   z-index: 1;
 }
 
+/* Leg 2 (Table resize/tab-switch performance): table-layout: auto (the default) forces
+ * the browser to remeasure every cell's intrinsic content width across all ~1000+ rows on
+ * every reflow during a live window resize — with fixed, column widths come from the
+ * first row only, making resize reflow cost independent of row count. No colgroup yet, so
+ * columns fall back to roughly-even widths rather than today's content-driven ones; Leg 3
+ * ("Dex Table column widths don't use expanded horizontal space") is the follow-up that
+ * gives each column a real proportional basis on top of this. */
+.dex-table {
+  table-layout: fixed;
+}
+
 .dex-row-indent td:nth-child(3) {
   padding-left: 2rem;
 }
