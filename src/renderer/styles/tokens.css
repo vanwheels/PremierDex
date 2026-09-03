@@ -16,13 +16,19 @@
  * → --text. --bg's luminance is calibrated against GW2-Squaded's own dark bg
  * (`#291e26`) rather than pushed toward black.
  *
- * Diamond (`:root[data-theme='diamond']`, Leg — in-app toggle) sampled the same way off
- * Dialga: its steel-blue plated body → --surface family, the pale cyan diamond core gem
- * → --accent, its darker navy secondary plating → --accent2, the gem's icy-white
- * highlight → --text. Deliberately landed at the *same* mid-luminance band as Pearl
- * (not a light theme) — Dialga isn't "the light one," it's a different hue family at
- * the same comfort level, per the luminance memory above. `<html data-theme>` is set by
- * `theme/theme-store.tsx`, which also owns the System/Diamond/Pearl toggle
+ * Diamond (`:root[data-theme='diamond']`, in-app toggle) sampled off Dialga's actual
+ * sprites/box art (not memory, unlike the first pass at this — see COMPLETED.md): its
+ * steel-blue plated body and the box art's indigo backdrop → --bg/--surface family, its
+ * darker navy plate markings → --accent2, the diamond core gem's icy-white highlight →
+ * --text. --accent/--accent-strong break from "sample the normal sprite" on purpose —
+ * they're pulled from *shiny* Dialga's teal-cyan instead of normal Dialga's blue, same
+ * as normal Dialga's blue is too close in hue to --surface/--accent2 to read as its own
+ * color the way Pearl's rose-magenta accent does against its plum surface; shiny's teal
+ * gives that same pop without leaving the Dialga reference. Deliberately landed at the
+ * *same* mid-luminance band as Pearl (not a light theme) — Dialga isn't "the light one,"
+ * it's a different hue family at the same comfort level, per the luminance memory above.
+ * `<html data-theme>` is set by `theme/theme-store.tsx`, which also owns the
+ * System/Diamond/Pearl toggle
  * (`ThemeModeToggle.tsx`) — same architecture as GW2-Squaded's
  * app-settings-store.tsx/ThemeModeToggle.tsx (`--accent`/`--danger` kept semantically
  * separate there too).
@@ -65,20 +71,20 @@
   /* Still dark-ish per the comfort band above, not a native-widget light theme. */
   color-scheme: dark;
 
-  --bg: #1f2836;
-  --surface: #2c3a4c;
-  --surface-raised: #35455a;
-  --border: #56708a;
-  --text: #e8f1f7;
-  --muted: #93b0c7;
+  --bg: #1c2536;
+  --surface: #2a3850;
+  --surface-raised: #33445f;
+  --border: #55708f;
+  --text: #e4f0f5;
+  --muted: #9ab1c9;
 
-  --accent: #4aa8dc;
-  --accent-strong: #9edcf0;
-  --on-accent: #0a1620;
-  --accent2: #4f6483;
+  --accent: #45c4ae;
+  --accent-strong: #a0e8d8;
+  --on-accent: #0f2620;
+  --accent2: #6580a2;
 
   --gold: #d4a84f;
   --danger: #c9564a;
 
-  --shadow: rgba(8, 14, 22, 0.5);
+  --shadow: rgba(6, 12, 20, 0.5);
 }

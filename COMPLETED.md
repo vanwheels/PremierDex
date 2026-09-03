@@ -13,6 +13,14 @@ BackupControls/UpdateControls. `--gold`/`--danger` stayed close to Pearl's value
 design (shiny signal and severity color meant to read consistently across both themes).
 See commit `41d831a`.
 
+Revision (same day): the first pass approximated Dialga's colors from memory rather than
+an actual reference, and it showed — --accent (plain blue) sat too close in hue to
+--surface/--accent2 to read as its own color the way Pearl's rose-magenta pops against
+its plum surface. Vanny supplied real sprite/box-art references; re-pulled --bg/--surface
+off the steel-blue body and indigo box-art backdrop, and --accent/--accent-strong off
+*shiny* Dialga's teal-cyan instead of normal Dialga's blue specifically to get that pop
+without leaving the Dialga reference. See commit `<pending>`.
+
 ## [Visual Design Pass] — Leg 2 — 2026-09-02
 Full re-skin off a token-based CSS system: dark (default) and light palettes pulled from
 Diamond/Pearl's Palkia/Dialga pairing per Vanny's direction; light only surfaces via
