@@ -64,14 +64,6 @@ looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the 
 just sprites" — it never claimed to reflect real box contents, so the same checklist
 ceiling doesn't misrepresent it the way it would Box view.
 
-## [Ball column shows text instead of the ball icon] — Leg 1
-The Dex Table's Non-Shiny/Shiny Ball columns (Leg 10 of the prior milestone) render
-caughtBallCell() as plain text via dex-inline-origin-field instead of reusing the
-existing BallIcon component (built in the Collection milestone's Leg 28, already used in
-CollectionRow). Fix: swap DexRow.tsx's ball cells to render <BallIcon ball={...} /> the
-same way CollectionRow does.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ## [Table resize/tab-switch performance] — Leg 2
 Resizing the app window makes the Dex/Completion tables noticeably laggy while columns
 reflow, and switching into the Living Dex tab is laggy on its own even without resizing.

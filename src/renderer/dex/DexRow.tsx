@@ -8,6 +8,7 @@ import { originTitle } from './originSummary'
 import { useNicknameEditor } from './useNicknameEditor'
 import { checkEntryValidity } from './invalidCombo'
 import type { DexRowData } from './types'
+import { BallIcon } from './BallIcon'
 
 const UNASSIGNED = ''
 
@@ -219,7 +220,7 @@ export function DexRow({
         {originGameCell(row.regular)}
       </td>
       <td className="dex-inline-origin-field" title={caughtBallCell(row.regular)}>
-        {caughtBallCell(row.regular)}
+        {row.regular?.owned && row.regular.caughtBall && <BallIcon ball={row.regular.caughtBall} />}
       </td>
       <td>{storageLocationSelect(row.regular)}</td>
       <td>
@@ -249,7 +250,7 @@ export function DexRow({
         {originGameCell(row.shinyEntry)}
       </td>
       <td className="dex-inline-origin-field" title={caughtBallCell(row.shinyEntry)}>
-        {caughtBallCell(row.shinyEntry)}
+        {row.shinyEntry?.owned && row.shinyEntry.caughtBall && <BallIcon ball={row.shinyEntry.caughtBall} />}
       </td>
       <td>{storageLocationSelect(row.shinyEntry)}</td>
     </tr>

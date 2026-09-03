@@ -9,3 +9,10 @@ Living Dex v1 milestones — a separate, earlier numbering that collides with bu
 this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
+
+## [Ball column shows text instead of the ball icon] — Leg 1 (2026-09-03)
+Swapped DexRow.tsx's regular/shiny Ball cells to render `<BallIcon ball={...} />`
+(conditioned on the entry being owned and having a `caughtBall` set), matching
+CollectionRow's existing usage instead of the plain-text `caughtBallCell()` output.
+`caughtBallCell()` itself is unchanged — still backs the `<td>` title attribute and its
+own tests. See commit `<hash>`.
