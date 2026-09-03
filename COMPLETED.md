@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Per-Game Species-Availability Dataset] — Leg 4 — 2026-09-03
+`scripts/fetch-species-availability.ts` + `data/pokemon/species-availability.json` +
+`loadSpeciesAvailabilityData()`, keyed by PokeAPI regional-dex name (not by game) so
+dex-sharing games like Gold/Silver/Crystal store one species list instead of three.
+Colosseum/XD/GO confirmed live to have no usable PokeAPI dex data — documented, not
+guessed. Held-item form-change gap written up in
+`docs/investigations/held-item-form-change-gap.md` per the leg's scope. No IPC/renderer
+wiring yet — Leg 6 is the first consumer. See commit `37f33b3`.
+
 ## [Storage Location FK + Met Location Field] — Leg 3 — 2026-09-03
 Nullable `storageLocationId` FK (schema retrofit onto `collection_entries`, orphaned to
 null on the referenced location's delete/import-replace rather than blocking it) plus

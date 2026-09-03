@@ -32,15 +32,6 @@ restructuring expands the existing top-tab pattern rather than moving to a sideb
 visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
 styling all in scope, not a targeted fix.
 
-## [Per-Game Species-Availability Dataset] — Leg 4
-Which species are obtainable in a given origin game (v1 slice — species-availability
-only, not full form/gender/ball-combo legality), grouped by shared regional dex to cut
-duplication and sourced live from PokeAPI rather than memory. Also where the held-item
-form-change modeling gap (Arceus Plates, Genesect Drives, Giratina's Griseous Orb,
-Zacian/Zamazenta Crowned, Silvally, etc.) gets written up as its own investigation doc
-rather than solved inline.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Legends Arceus Ball Pool] — Leg 5
 Legends Arceus's own non-standard balls (not currently in shared/data/poke-balls.ts)
 added to the dataset, with the "Caught In" picker filtered to a game's legal pool instead
