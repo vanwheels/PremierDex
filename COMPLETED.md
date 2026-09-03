@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Rename 'Owned' to 'Non-Shiny'] — Leg 26 — 2026-09-02
+Display-only rename across the three places the "Owned" column/filter/header sits next to
+its shiny counterpart (DexTable's sortable column header, DexFilterBar's tri-state filter,
+CompletionStatsPanel's stats table headers). The underlying `owned` field/sortKey/IPC name
+is untouched — it's a genuine ownership boolean used by both regular and shiny entries, not
+the thing being renamed. See commit `48edcba`.
+
 ## [Kyurem Black/White should not be Home-boxable] — Leg 25 — 2026-09-02
 Data-only fix, same shape as the other Home-support gaps in
 docs/investigations/home-depositability-audit.md: set `homeBoxable: false` on Kyurem's
