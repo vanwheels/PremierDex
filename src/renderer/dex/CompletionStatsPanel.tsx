@@ -29,8 +29,8 @@ function StatsTable({ title, rows }: { title: string; rows: CompletionBucket[] }
         <thead>
           <tr>
             <th></th>
-            <th>Owned</th>
-            <th>Owned %</th>
+            <th>Non-Shiny</th>
+            <th>Non-Shiny %</th>
             <th>Shiny</th>
             <th>Shiny %</th>
           </tr>

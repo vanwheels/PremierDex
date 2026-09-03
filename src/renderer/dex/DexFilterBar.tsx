@@ -48,7 +48,7 @@ export function DexFilterBar({ filters, onChange }: DexFilterBarProps): JSX.Elem
           onChange={(e) => onChange({ ...filters, query: e.target.value })}
         />
       </label>
-      <TriStateSelect label="Owned" value={filters.owned} onChange={(owned) => onChange({ ...filters, owned })} />
+      <TriStateSelect label="Non-Shiny" value={filters.owned} onChange={(owned) => onChange({ ...filters, owned })} />
       <TriStateSelect label="Shiny" value={filters.shiny} onChange={(shiny) => onChange({ ...filters, shiny })} />
       <TriStateSelect label="Regional" value={filters.regional} onChange={(regional) => onChange({ ...filters, regional })} />
       <label>

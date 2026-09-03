@@ -1,10 +1,5 @@
 # TODO
 
-## [Rename 'Owned' to 'Non-Shiny'] — Leg 26
-The "Owned" label/checkbox in Collection should be renamed to "Non-Shiny" for clarity
-against the shiny counterpart.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [User-facing selector for collapsed foldable-species form] — Leg 27
 Leg 9 shipped the checked-off-first default (falls back to list order if nothing's
 checked — see COMPLETED.md). Vanny floated a stretch on top of that: let the user

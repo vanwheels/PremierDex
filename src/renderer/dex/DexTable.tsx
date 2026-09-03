@@ -76,7 +76,7 @@ export function DexTable({ sections, sort, onSortChange, onToggleEntry, onSaveOr
             <SortableHeader label="Name" sortKey="name" sort={sort} onSortChange={onSortChange} />
             <SortableHeader label="Gen" sortKey="generation" sort={sort} onSortChange={onSortChange} />
             <th>Nickname</th>
-            <SortableHeader label="Owned" sortKey="owned" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Non-Shiny" sortKey="owned" sort={sort} onSortChange={onSortChange} />
             <SortableHeader label="Shiny" sortKey="shiny" sort={sort} onSortChange={onSortChange} />
           </tr>
         </thead>
