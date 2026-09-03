@@ -40,7 +40,7 @@ function makeRow(overrides: Partial<DexRowData> & Pick<DexRowData, 'key' | 'dexN
 }
 
 function makeSection(overrides: Partial<DexSection> & Pick<DexSection, 'key'>): DexSection {
-  return { heading: overrides.key, speciesId: 1, rows: [], cosmeticRows: [], ...overrides }
+  return { heading: overrides.key, speciesId: 1, rows: [], cosmeticRows: [], collapsedDisplayFormId: null, ...overrides }
 }
 
 function filters(overrides: Partial<DexFilters>): DexFilters {

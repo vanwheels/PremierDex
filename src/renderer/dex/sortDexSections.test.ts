@@ -39,7 +39,7 @@ function makeRow(overrides: Partial<DexRowData> & Pick<DexRowData, 'key' | 'dexN
 }
 
 function makeSection(overrides: Partial<DexSection> & Pick<DexSection, 'key' | 'rows'>): DexSection {
-  return { heading: overrides.key, speciesId: 1, cosmeticRows: [], ...overrides }
+  return { heading: overrides.key, speciesId: 1, cosmeticRows: [], collapsedDisplayFormId: null, ...overrides }
 }
 
 describe('sortDexSections', () => {

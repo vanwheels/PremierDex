@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Stale test-fixture factories fail typecheck] — Leg 30 — 2026-09-02
+Added the missing `alwaysShiny: false` default to buildDexSections.test.ts's `makeRow`
+and `collapsedDisplayFormId: null` to the `makeSection` factories in
+filterDexSections.test.ts/sortDexSections.test.ts. `npm run typecheck` and `npm test`
+(204/204) both clean. See commit `<pending>`.
+
 ## [Pokémon name punctuation exceptions] — Leg 29 — 2026-09-02
 Added a `SPECIES_NAME_EXCEPTIONS` slug→name dictionary in `formNames.ts` for the 12
 species Leg 7's plain title-case can't reconstruct (apostrophes, periods, a colon, gender

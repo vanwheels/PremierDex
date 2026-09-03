@@ -1,14 +1,5 @@
 # TODO
 
-## [Stale test-fixture factories fail typecheck] — unscheduled
-`npm run typecheck` currently fails on 3 pre-existing errors, surfaced while working Leg
-28, unrelated to that leg's change: buildDexSections.test.ts's `makeRow` factory doesn't
-default `alwaysShiny` (added Leg 24), and filterDexSections.test.ts/sortDexSections.test.ts's
-`makeSection` factories type `collapsedDisplayFormId` as optional instead of `| null`
-(added Leg 27). `npm test` still passes — vitest doesn't type-check — so these went
-unnoticed. Small, contained fix: add the missing default to each factory.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Origin auto-populate from Trainer Profile edits] — unscheduled
 Vanny wants a Collection Entry's origin info to auto-update when its source Trainer
 Profile is edited later. This runs directly against Leg 4's deliberate design (origin
@@ -22,10 +13,12 @@ Last touched: 2026-09-02. Re-check count: 0.
 ## [App icon] — unscheduled
 No custom icon exists yet (`build/icon.png` per electron-builder convention, matching
 GW2-Squaded) — packaged builds currently ship with Electron's default icon. Not blocking
-local/internal packaging, so left off the leg sequence.
+local/internal packaging, so left off the leg sequence. Confirmed 2026-09-02: stays
+unscheduled and outside any milestone grouping — Vanny will submit the artwork when it's
+ready rather than this being scoped into a leg.
 Blocked: needs production-quality PokéBall-or-similar artwork before a real public
 release.
-Last touched: 2026-09-01. Re-check count: 0.
+Last touched: 2026-09-02. Re-check count: 0.
 
 ## Future Milestones (post-current)
 
@@ -47,7 +40,24 @@ time, capture date flagged by Vanny as very low priority. All blocked on Ribbons
 scoped first.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [UI overhaul / visual upgrade milestone] — future milestone
-Vanny's call: once the current milestone ships and gets its post-mortem, the next large
-milestone should be a UI overhaul / visual upgrade pass rather than another feature leg.
+## [Next milestone: Nav restructuring → Validation/Storage-Location sync → Dex Table redesign] — future milestone
+Supersedes the earlier "UI overhaul" entry below, per a 2026-09-02 planning discussion —
+split into three ordered parts so the one piece that structurally depends on new schema
+doesn't get built twice:
+1. **Menu/section restructuring** — split the current single cluttered page into distinct
+   sections (Trainer Profiles/Storage Locations/Collection/etc). Independent of the schema
+   work below, safe to do first — this is why Vanny wants UI work to lead the milestone.
+2. **Per-game validation + Storage Location sync** — a foundational per-game validity
+   dataset (which species/form/gender/ball combos a given game actually allows), a new
+   `storageLocationId` FK on CollectionEntry, a new Met Location field (doesn't exist on
+   CollectionEntry today), Legends Arceus's own ball pool (not in shared/data/poke-balls.ts
+   currently), an Invalid Flag for bad combos (soft warn only, not a hard block — this
+   isn't a full legality-checker app), and per-Storage-Location completion tracking.
+   Held-item form-changes (Arceus Plates, Genesect Drives, Giratina's Griseous Orb,
+   Zacian/Zamazenta Crowned, Silvally, etc.) are a known modeling gap, deliberately split
+   into their own investigation doc rather than solved inline here.
+3. **Living Dex Table redesign** — tabbed per Storage Location (using its existing `name`
+   field as the tab label — no schema change needed there), plus richer per-row info
+   (fields not yet decided). Built last, after part 2 lands, so the row layout is designed
+   once against the full field set instead of redone when validation/storage fields show up.
 Last touched: 2026-09-02. Re-check count: 0.
