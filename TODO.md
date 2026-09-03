@@ -28,25 +28,6 @@ schema.ts's retrofit blocks already got split out into schema-ball.test.ts/
 schema-language.test.ts on the test side.
 Last touched: 2026-09-03. Re-check count: 0.
 
-## Current Milestone: Nav restructuring → Visual pass → Storage Location sync → Dex Table redesign
-
-Scoped into 10 legs during a 2026-09-02 leg-planning pass. Decisions locked that day:
-`storageLocationId` is a nullable FK (no forced migration — entries can sit unassigned
-indefinitely); Met Location ships as free text this milestone (a curated per-game
-location list is deferred — see the Future Milestones item below); the per-game validity
-dataset ships narrow — species-availability-per-game + Legends Arceus's ball pool only,
-not full form/gender/ball-combo legality (also deferred below); the Invalid Flag is
-derived at read time, not a stored column, same treatment as `completionStats.ts`; nav
-restructuring expands the existing top-tab pattern rather than moving to a sidebar; the
-visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
-styling all in scope, not a targeted fix.
-
-## [Dex Table Redesign: Richer Row Fields] — Leg 10
-Richer per-row info beyond today's sprite/#/name/gen/nickname/owned/shiny — exact field
-list still TBD, to be decided once Met Location, Invalid Flag, ball, and storage location
-all actually exist in the UI. Depends on Legs 3-9 landing first.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## Future Milestones (post-current)
 
 Large items Vanny explicitly flagged as out of scope for the current milestone — logged

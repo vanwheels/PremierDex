@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Dex Table Redesign: Richer Row Fields] — Leg 10 — 2026-09-03
+Field list was TBD in the TODO note pending Vanny's call — asked, and got Origin Game +
+Caught Ball as the two fields to surface (OT/TID/SID/Language stay modal-only, likely
+redundant with a linked Trainer Profile) laid out as their own Non-Shiny/Shiny column
+pairs, mirroring Leg 9's Loc. columns rather than an expandable row detail or a richer
+tooltip. Read-only in the table itself — still edited only through OriginModal, same as
+every other origin field. This was the milestone's last leg; see
+`docs/postmortems/nav-visual-dex-table-redesign.md`. See commit `15c1bd8`.
+
 ## [Dex Table Redesign: Storage Location Assignment] — Leg 9 — 2026-09-03
 "Move assignment into the redesigned table" was ambiguous between auto-assign-on-check-in,
 a manual-only dedicated column, and drag-and-drop between tabs — asked Vanny, who picked
