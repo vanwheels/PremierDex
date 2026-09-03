@@ -6,9 +6,9 @@ import type { DexOptions, DexRowData } from './types'
 const OPTIONS_DEFAULT: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
 
 const SPECIES: Species[] = [
-  { id: 25, name: 'Pikachu', generation: 1 },
-  { id: 26, name: 'Raichu', generation: 1 },
-  { id: 386, name: 'Deoxys', generation: 3 }
+  { id: 25, name: 'Pikachu', generation: 1, collapsedDisplayFormId: null },
+  { id: 26, name: 'Raichu', generation: 1, collapsedDisplayFormId: null },
+  { id: 386, name: 'Deoxys', generation: 3, collapsedDisplayFormId: null }
 ]
 
 function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'formName'>): Form {
@@ -157,7 +157,7 @@ describe('buildDexSections', () => {
   })
 
   it('capitalizes raw lowercase species/form slugs, preserving hyphens as word separators', () => {
-    const rawSpecies: Species[] = [{ id: 122, name: 'mr-mime', generation: 1 }]
+    const rawSpecies: Species[] = [{ id: 122, name: 'mr-mime', generation: 1, collapsedDisplayFormId: null }]
     const forms: Form[] = [
       makeForm({ id: 1, speciesId: 122, formName: 'base' }),
       makeForm({ id: 2, speciesId: 122, formName: '10-percent' })
@@ -166,6 +166,15 @@ describe('buildDexSections', () => {
     const section = sections.find((s) => s.speciesId === 122)!
     expect(section.heading).toBe('Mr-Mime')
     expect(section.rows.map((r) => r.displayName)).toEqual(['Mr-Mime', 'Mr-Mime (10 Percent)'])
+  })
+
+  it("carries a species' collapsedDisplayFormId through onto its section", () => {
+    const speciesWithOverride: Species[] = [
+      { id: 25, name: 'Pikachu', generation: 1, collapsedDisplayFormId: 2 }
+    ]
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base' })]
+    const sections = buildDexSections(speciesWithOverride, forms, [], OPTIONS_DEFAULT)
+    expect(sections.find((s) => s.speciesId === 25)!.collapsedDisplayFormId).toBe(2)
   })
 
   it('passes shinyLocked through onto the row instead of filtering on it', () => {
@@ -237,5 +246,23 @@ describe('pickCollapsedRow', () => {
     const base = makeRow({ key: 'a', displayName: 'Unown (A)' })
     const shinyOnlyCosmetic = makeRow({ key: 'b', displayName: 'Unown (B)', shinyEntry: ownedEntry(1, true) })
     expect(pickCollapsedRow([base], [shinyOnlyCosmetic])).toBe(shinyOnlyCosmetic)
+  })
+
+  it("honors a user override (Leg 27) over the auto-pick, even when the override isn't owned", () => {
+    const base = makeRow({ key: 'a', displayName: 'Unown (A)', formId: 1, regular: ownedEntry(1) })
+    const uncheckedCosmetic = makeRow({ key: 'b', displayName: 'Unown (B)', formId: 2 })
+    expect(pickCollapsedRow([base], [uncheckedCosmetic], 2)).toBe(uncheckedCosmetic)
+  })
+
+  it('falls back to the auto-pick when the override formId matches no candidate', () => {
+    const base = makeRow({ key: 'a', displayName: 'Unown (A)', formId: 1 })
+    const checkedCosmetic = makeRow({ key: 'b', displayName: 'Unown (B)', formId: 2, regular: ownedEntry(1) })
+    expect(pickCollapsedRow([base], [checkedCosmetic], 999)).toBe(checkedCosmetic)
+  })
+
+  it('ignores a null override and falls back to the auto-pick', () => {
+    const base = makeRow({ key: 'a', displayName: 'Unown (A)', formId: 1 })
+    const checkedCosmetic = makeRow({ key: 'b', displayName: 'Unown (B)', formId: 2, regular: ownedEntry(1) })
+    expect(pickCollapsedRow([base], [checkedCosmetic], null)).toBe(checkedCosmetic)
   })
 })

@@ -16,7 +16,13 @@ export function applySchema(db: Database.Database): void {
     CREATE TABLE IF NOT EXISTS species (
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL,
-      generation INTEGER NOT NULL
+      generation INTEGER NOT NULL,
+      -- User-facing override (Leg 27) on top of Leg 9's owned/shiny auto-pick: pins which
+      -- form displays when this species' cosmetic-variant section is collapsed. NULL
+      -- means "auto" (pickCollapsedRow's default). Forward reference to forms(id) is fine
+      -- here — SQLite only resolves FK targets at enforcement time, not CREATE TABLE
+      -- parse time, and forms is created immediately below.
+      collapsed_display_form_id INTEGER REFERENCES forms(id)
     );
 
     CREATE TABLE IF NOT EXISTS forms (
@@ -83,6 +89,13 @@ export function applySchema(db: Database.Database): void {
       )
     );
   `)
+
+  // Same retrofit story for species: collapsed_display_form_id postdates every existing
+  // install's species table.
+  const speciesColumns = db.prepare('PRAGMA table_info(species)').all() as Array<{ name: string }>
+  if (!speciesColumns.some((c) => c.name === 'collapsed_display_form_id')) {
+    db.exec('ALTER TABLE species ADD COLUMN collapsed_display_form_id INTEGER REFERENCES forms(id)')
+  }
 
   // CREATE TABLE IF NOT EXISTS above doesn't retrofit new columns onto a forms table
   // that already existed pre-Leg-4. SQLite has no ADD COLUMN IF NOT EXISTS, so check first.

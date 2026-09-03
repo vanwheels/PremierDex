@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react'
 import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
 import { DexRow } from './DexRow'
+import type { CollapsedDisplayControl } from './DexRow'
 import { SpriteModal } from './SpriteModal'
 import type { SpriteModalTarget } from './SpriteModal'
 import { OriginModal } from './OriginModal'
@@ -14,6 +15,7 @@ interface DexTableProps {
   onSortChange: (sort: DexSort | null) => void
   onToggleEntry: (entryId: number, owned: boolean) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
+  onSetCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
 }
 
 /** Three-state header click cycle (Leg 16): unsorted/other-column → ascending →
@@ -48,7 +50,14 @@ function SortableHeader({ label, sortKey, sort, onSortChange }: SortableHeaderPr
  * intentionally not lifted to App — it never affects stored data, and resets on
  * navigating away, which is fine for a display preference.
  */
-export function DexTable({ sections, sort, onSortChange, onToggleEntry, onSaveOrigin }: DexTableProps): JSX.Element {
+export function DexTable({
+  sections,
+  sort,
+  onSortChange,
+  onToggleEntry,
+  onSaveOrigin,
+  onSetCollapsedDisplayForm
+}: DexTableProps): JSX.Element {
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
   // Which row's sprite is enlarged, if any. UI-only, same as expandedSpeciesIds above.
   const [spriteTarget, setSpriteTarget] = useState<SpriteModalTarget | null>(null)
@@ -90,10 +99,24 @@ export function DexTable({ sections, sort, onSortChange, onToggleEntry, onSaveOr
                 {section.rows.map((row, i) => {
                   const isCollapseSlot = i === 0 && hasCosmeticRows && section.speciesId !== null
                   // Collapsed, this slot shows whichever form (base or a cosmetic
-                  // variant) is checked off, so an owned/shiny variant doesn't hide
-                  // behind an unowned default. Expanded, every row is visible anyway, so
-                  // it shows the base form in its normal list-order position.
-                  const displayRow = isCollapseSlot && !isExpanded ? pickCollapsedRow(section.rows, section.cosmeticRows) : row
+                  // variant) is checked off — or the user's pinned pick, Leg 27 — so an
+                  // owned/shiny variant doesn't hide behind an unowned default. Expanded,
+                  // every row is visible anyway, so it shows the base form in its normal
+                  // list-order position.
+                  const displayRow =
+                    isCollapseSlot && !isExpanded
+                      ? pickCollapsedRow(section.rows, section.cosmeticRows, section.collapsedDisplayFormId)
+                      : row
+                  const collapsedDisplayControl: CollapsedDisplayControl | undefined = isCollapseSlot
+                    ? {
+                        value: section.collapsedDisplayFormId,
+                        options: [section.rows[0], ...section.cosmeticRows].map((candidate) => ({
+                          formId: candidate.formId,
+                          label: candidate.displayName
+                        })),
+                        onChange: (formId) => onSetCollapsedDisplayForm(section.speciesId!, formId)
+                      }
+                    : undefined
                   return (
                     <DexRow
                       key={row.key}
@@ -111,6 +134,7 @@ export function DexTable({ sections, sort, onSortChange, onToggleEntry, onSaveOr
                             }
                           : undefined
                       }
+                      collapsedDisplayControl={collapsedDisplayControl}
                     />
                   )
                 })}

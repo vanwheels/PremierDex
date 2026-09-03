@@ -20,6 +20,13 @@ export interface Species {
   id: number // National Dex number
   name: string
   generation: number // generation introduced
+  /** User-facing override (Leg 27) on top of Leg 9's pickCollapsedRow auto-pick: pins a
+   * specific form (by Form.id, from among the species' collapse-slot candidates — the
+   * dex_distinct base row plus its cosmetic_variant rows) to display when the species'
+   * section is collapsed. Null means "auto" — fall back to the owned/shiny-based pick.
+   * Sticks even if the picked form's owned/shiny status later changes; only an explicit
+   * "Auto" reselect clears it back to null. */
+  collapsedDisplayFormId: number | null
 }
 
 export interface Form {

@@ -13,4 +13,7 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
   ipcMain.handle(PokemonIpcChannel.setEntryOrigin, (_event, entryId: number, input: CollectionEntryOriginInput) =>
     storage.setEntryOrigin(entryId, input)
   )
+  ipcMain.handle(PokemonIpcChannel.setCollapsedDisplayForm, (_event, speciesId: number, formId: number | null) =>
+    storage.setCollapsedDisplayForm(speciesId, formId)
+  )
 }

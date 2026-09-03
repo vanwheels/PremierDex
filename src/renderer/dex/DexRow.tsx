@@ -12,6 +12,15 @@ export interface ExpandControl {
   count: number
 }
 
+/** Leg 27: lets the user pin which candidate row (the collapse slot's own row, or one of
+ * its cosmeticRows) displays when the section is collapsed, overriding pickCollapsedRow's
+ * auto-pick. `value` null means "Auto" — see Species.collapsedDisplayFormId. */
+export interface CollapsedDisplayControl {
+  value: number | null
+  options: Array<{ formId: number; label: string }>
+  onChange: (formId: number | null) => void
+}
+
 interface DexRowProps {
   row: DexRowData
   onToggleEntry: (entryId: number, owned: boolean) => void
@@ -19,6 +28,7 @@ interface DexRowProps {
   onOpenOrigin: (target: OriginModalTarget) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   expandControl?: ExpandControl
+  collapsedDisplayControl?: CollapsedDisplayControl
   indent?: boolean
 }
 
@@ -33,7 +43,16 @@ export function activeNicknameEntry(row: DexRowData): CollectionEntry | null {
   return null
 }
 
-export function DexRow({ row, onToggleEntry, onOpenSprite, onOpenOrigin, onSaveOrigin, expandControl, indent }: DexRowProps): JSX.Element {
+export function DexRow({
+  row,
+  onToggleEntry,
+  onOpenSprite,
+  onOpenOrigin,
+  onSaveOrigin,
+  expandControl,
+  collapsedDisplayControl,
+  indent
+}: DexRowProps): JSX.Element {
   const nicknameEntry = activeNicknameEntry(row)
   const { text: nicknameText, setText: setNicknameText, commit: commitNickname } = useNicknameEditor(nicknameEntry, onSaveOrigin)
 
@@ -67,6 +86,23 @@ export function DexRow({ row, onToggleEntry, onOpenSprite, onOpenOrigin, onSaveO
           >
             {expandControl.isExpanded ? '▾' : '▸'} {expandControl.count}
           </button>
+        )}
+        {collapsedDisplayControl && (
+          <select
+            className="dex-collapsed-display-select"
+            value={collapsedDisplayControl.value ?? 'auto'}
+            onChange={(e) =>
+              collapsedDisplayControl.onChange(e.target.value === 'auto' ? null : Number(e.target.value))
+            }
+            title="Which form to display when this section is collapsed"
+          >
+            <option value="auto">Auto</option>
+            {collapsedDisplayControl.options.map((opt) => (
+              <option key={opt.formId} value={opt.formId}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
         )}
         {row.displayName}
         {!row.homeBoxable && (

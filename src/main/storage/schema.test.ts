@@ -302,6 +302,31 @@ describe('applySchema', () => {
     ).not.toThrow()
   })
 
+  it('allows a species row with a null collapsed_display_form_id (the default)', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    const row = db.prepare('SELECT collapsed_display_form_id FROM species WHERE id = 1').get() as {
+      collapsed_display_form_id: number | null
+    }
+    expect(row.collapsed_display_form_id).toBeNull()
+  })
+
+  it('retrofits collapsed_display_form_id onto a species table that predates Leg 27', () => {
+    const db = new Database(':memory:')
+    db.exec(`
+      CREATE TABLE species (id INTEGER PRIMARY KEY, name TEXT NOT NULL, generation INTEGER NOT NULL);
+      INSERT INTO species (id, name, generation) VALUES (1, 'bulbasaur', 1);
+    `)
+
+    applySchema(db)
+
+    const columns = db.prepare('PRAGMA table_info(species)').all() as Array<{ name: string }>
+    expect(columns.some((c) => c.name === 'collapsed_display_form_id')).toBe(true)
+    const row = db.prepare('SELECT * FROM species WHERE id = 1').get() as Record<string, unknown>
+    expect(row.name).toBe('bulbasaur')
+    expect(row.collapsed_display_form_id).toBeNull()
+  })
+
   it('rebuilds trainer_profiles without violating FKs from linked collection_entries/storage_locations rows', () => {
     const db = new Database(':memory:')
     db.pragma('foreign_keys = ON')

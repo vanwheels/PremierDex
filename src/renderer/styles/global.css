@@ -158,6 +158,11 @@ td {
   cursor: pointer;
 }
 
+.dex-collapsed-display-select {
+  margin-right: 0.5rem;
+  font-size: 0.8em;
+}
+
 .dex-not-home-boxable-badge {
   margin-left: 0.5rem;
   padding: 0.05rem 0.4rem;

@@ -89,6 +89,12 @@ export function App(): JSX.Element {
     })
   }
 
+  const handleSetCollapsedDisplayForm = (speciesId: number, formId: number | null): void => {
+    window.premierDex.setCollapsedDisplayForm(speciesId, formId).then((updated) => {
+      setSpecies((prev) => prev.map((sp) => (sp.id === updated.id ? updated : sp)))
+    })
+  }
+
   if (loading) {
     return <p>Loading…</p>
   }
@@ -127,6 +133,7 @@ export function App(): JSX.Element {
             onSortChange={setSort}
             onToggleEntry={handleToggleEntry}
             onSaveOrigin={handleSaveOrigin}
+            onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
           />
         </>
       ) : (

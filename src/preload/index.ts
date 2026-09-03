@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import type { CollectionEntry, CollectionEntryOriginInput } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
@@ -23,6 +23,8 @@ const bridge: AppBridge = {
     ipcRenderer.invoke(PokemonIpcChannel.setOwned, entryId, owned),
   setEntryOrigin: (entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry> =>
     ipcRenderer.invoke(PokemonIpcChannel.setEntryOrigin, entryId, input),
+  setCollapsedDisplayForm: (speciesId: number, formId: number | null): Promise<Species> =>
+    ipcRenderer.invoke(PokemonIpcChannel.setCollapsedDisplayForm, speciesId, formId),
   exportCollectionToFile: (): Promise<string | null> => ipcRenderer.invoke(BackupIpcChannel.exportToFile),
   importCollectionFromFile: (): Promise<CollectionImportResult | null> =>
     ipcRenderer.invoke(BackupIpcChannel.importFromFile),

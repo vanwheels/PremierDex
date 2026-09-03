@@ -126,7 +126,14 @@ export function buildDexSections(
       }
     }
 
-    sections.push({ key: `species-${sp.id}`, heading: speciesName, speciesId: sp.id, rows, cosmeticRows })
+    sections.push({
+      key: `species-${sp.id}`,
+      heading: speciesName,
+      speciesId: sp.id,
+      rows,
+      cosmeticRows,
+      collapsedDisplayFormId: sp.collapsedDisplayFormId
+    })
   }
 
   if (options.regionalMode === 'grouped') {
@@ -138,7 +145,8 @@ export function buildDexSections(
         heading: REGIONAL_LABELS[group] ?? group,
         speciesId: null,
         rows,
-        cosmeticRows: []
+        cosmeticRows: [],
+        collapsedDisplayFormId: null
       })
     }
   }
@@ -148,14 +156,25 @@ export function buildDexSections(
 
 /**
  * Picks which row represents a foldable species (one with cosmetic variants — Unown,
- * Maushold, etc.) when its section is collapsed: the first candidate, checking `rows[0]`
- * then `cosmeticRows` in list order, that has an owned regular or shiny entry — or
- * `rows[0]` itself if none are checked off. Only meaningful when the species actually has
- * cosmetic rows; DexTable is the only caller, and only for the row slot carrying the
- * expand toggle (rows[0]) — any further dex_distinct rows in the section (e.g. Floette's
- * Eternal Flower) render as-is regardless of collapse state.
+ * Maushold, etc.) when its section is collapsed. `overrideFormId` (Leg 27's user-facing
+ * pick, from Species.collapsedDisplayFormId) wins outright when it names one of this
+ * section's candidates — sticking regardless of that row's owned/shiny state. Otherwise
+ * falls back to Leg 9's auto-pick: the first candidate, checking `rows[0]` then
+ * `cosmeticRows` in list order, that has an owned regular or shiny entry — or `rows[0]`
+ * itself if none are checked off. Only meaningful when the species actually has cosmetic
+ * rows; DexTable is the only caller, and only for the row slot carrying the expand toggle
+ * (rows[0]) — any further dex_distinct rows in the section (e.g. Floette's Eternal
+ * Flower) render as-is regardless of collapse state.
  */
-export function pickCollapsedRow(rows: DexRowData[], cosmeticRows: DexRowData[]): DexRowData {
+export function pickCollapsedRow(
+  rows: DexRowData[],
+  cosmeticRows: DexRowData[],
+  overrideFormId?: number | null
+): DexRowData {
   const candidates = [rows[0], ...cosmeticRows]
+  if (overrideFormId != null) {
+    const picked = candidates.find((row) => row.formId === overrideFormId)
+    if (picked) return picked
+  }
   return candidates.find((row) => row.regular?.owned || row.shinyEntry?.owned) ?? rows[0]
 }

@@ -11,6 +11,7 @@ interface SpeciesRow {
   id: number
   name: string
   generation: number
+  collapsed_display_form_id: number | null
 }
 
 interface FormRow {
@@ -58,6 +59,15 @@ interface StorageLocationRow {
   location_type: StorageLocation['locationType']
   name: string
   trainer_profile_id: number | null
+}
+
+function toSpecies(row: SpeciesRow): Species {
+  return {
+    id: row.id,
+    name: row.name,
+    generation: row.generation,
+    collapsedDisplayFormId: row.collapsed_display_form_id
+  }
 }
 
 function toForm(row: FormRow): Form {
@@ -122,7 +132,15 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   applySchema(db)
   runSeed(db)
 
-  const listSpeciesStmt = db.prepare('SELECT id, name, generation FROM species ORDER BY id')
+  const listSpeciesStmt = db.prepare(
+    'SELECT id, name, generation, collapsed_display_form_id FROM species ORDER BY id'
+  )
+  const getSpeciesStmt = db.prepare(
+    'SELECT id, name, generation, collapsed_display_form_id FROM species WHERE id = ?'
+  )
+  const setCollapsedDisplayFormStmt = db.prepare(
+    'UPDATE species SET collapsed_display_form_id = @formId WHERE id = @id'
+  )
   const listFormsStmt = db.prepare('SELECT * FROM forms ORDER BY species_id, id')
   const listEntriesStmt = db.prepare('SELECT * FROM collection_entries ORDER BY form_id, gender, shiny')
   const setOwnedStmt = db.prepare('UPDATE collection_entries SET owned = @owned WHERE id = @id')
@@ -200,7 +218,12 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
 
   return {
     async listSpecies(): Promise<Species[]> {
-      return listSpeciesStmt.all() as SpeciesRow[]
+      return (listSpeciesStmt.all() as SpeciesRow[]).map(toSpecies)
+    },
+
+    async setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species> {
+      setCollapsedDisplayFormStmt.run({ id: speciesId, formId })
+      return toSpecies(getSpeciesStmt.get(speciesId) as SpeciesRow)
     },
 
     async listForms(): Promise<Form[]> {
@@ -225,7 +248,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       return {
         version: 2,
         exportedAt: new Date().toISOString(),
-        species: listSpeciesStmt.all() as SpeciesRow[],
+        species: (listSpeciesStmt.all() as SpeciesRow[]).map(toSpecies),
         forms: (listFormsStmt.all() as FormRow[]).map(toForm),
         collectionEntries: (listEntriesStmt.all() as CollectionEntryRow[]).map(toCollectionEntry),
         trainerProfiles: (listTrainerProfilesStmt.all() as TrainerProfileRow[]).map(toTrainerProfile),

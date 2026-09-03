@@ -49,6 +49,10 @@ export interface DexSection {
   speciesId: number | null
   rows: DexRowData[]
   cosmeticRows: DexRowData[]
+  /** Leg 27's user-facing override on pickCollapsedRow's auto-pick — mirrors
+   * Species.collapsedDisplayFormId. Always null for a regional-group section (speciesId
+   * null); those never carry cosmetic rows. */
+  collapsedDisplayFormId: number | null
 }
 
 export interface DexOptions {

@@ -22,6 +22,9 @@ export interface StorageAdapter {
   listForms(): Promise<Form[]>
   listCollectionEntries(): Promise<CollectionEntry[]>
   setOwned(entryId: number, owned: boolean): Promise<CollectionEntry>
+  /** Leg 27: pins (or, with formId null, clears) the form a foldable species' section
+   * displays when collapsed, overriding pickCollapsedRow's auto-pick. */
+  setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species>
   setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
