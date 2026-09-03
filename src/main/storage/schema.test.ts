@@ -301,4 +301,68 @@ describe('applySchema', () => {
         .run(54321)
     ).not.toThrow()
   })
+
+  it('rebuilds trainer_profiles without violating FKs from linked collection_entries/storage_locations rows', () => {
+    const db = new Database(':memory:')
+    db.pragma('foreign_keys = ON')
+    db.exec(`
+      CREATE TABLE species (id INTEGER PRIMARY KEY, name TEXT NOT NULL, generation INTEGER NOT NULL);
+      CREATE TABLE forms (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        species_id INTEGER NOT NULL REFERENCES species(id),
+        form_name TEXT NOT NULL,
+        form_category TEXT NOT NULL,
+        first_available_generation INTEGER NOT NULL
+      );
+      CREATE TABLE trainer_profiles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        game TEXT NOT NULL,
+        ot_name TEXT NOT NULL,
+        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 4294),
+        label TEXT
+      );
+      CREATE TABLE collection_entries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        form_id INTEGER NOT NULL REFERENCES forms(id),
+        gender TEXT NOT NULL DEFAULT 'unknown',
+        shiny INTEGER NOT NULL DEFAULT 0,
+        owned INTEGER NOT NULL DEFAULT 0,
+        trainer_profile_id INTEGER REFERENCES trainer_profiles(id),
+        origin_game TEXT,
+        ot_name TEXT,
+        tid INTEGER,
+        sid INTEGER,
+        nickname TEXT,
+        UNIQUE(form_id, gender, shiny)
+      );
+      CREATE TABLE storage_locations (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        location_type TEXT NOT NULL,
+        name TEXT NOT NULL,
+        trainer_profile_id INTEGER REFERENCES trainer_profiles(id)
+      );
+      INSERT INTO species (id, name, generation) VALUES (1, 'bulbasaur', 1);
+      INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+        VALUES (1, 'base', 'dex_distinct', 1);
+      INSERT INTO trainer_profiles (game, ot_name, tid, sid, label) VALUES ('Pokemon Black', 'Ash', 1, 2, null);
+      INSERT INTO collection_entries (form_id, gender, shiny, owned, trainer_profile_id)
+        VALUES (1, 'unknown', 0, 1, 1);
+      INSERT INTO storage_locations (location_type, name, trainer_profile_id) VALUES ('save_file', 'Box 1', 1);
+    `)
+
+    expect(() => applySchema(db)).not.toThrow()
+
+    // FK enforcement should be back on afterward, and the linked rows should have
+    // survived the rebuild with their trainer_profile_id intact.
+    expect(db.pragma('foreign_keys', { simple: true })).toBe(1)
+    const entry = db.prepare('SELECT trainer_profile_id FROM collection_entries WHERE id = 1').get() as {
+      trainer_profile_id: number
+    }
+    expect(entry.trainer_profile_id).toBe(1)
+    const loc = db.prepare('SELECT trainer_profile_id FROM storage_locations WHERE id = 1').get() as {
+      trainer_profile_id: number
+    }
+    expect(loc.trainer_profile_id).toBe(1)
+  })
 })

@@ -132,14 +132,21 @@ export function applySchema(db: Database.Database): void {
   // Bulbapedia-sourced widen (6-digit TID/4-digit SID from Gen VII, both nullable for
   // Pokémon GO and pre-Gen-VII's invisible SID — see the CREATE TABLE comment above).
   // SQLite can't ALTER a CHECK constraint, so detect the old NOT NULL tid column and
-  // rebuild the table. Safe unconditionally: this table has never shipped in a release,
-  // so no install has real rows in it yet.
+  // rebuild the table. collection_entries/storage_locations hold FK references into
+  // trainer_profiles, so with foreign_keys=ON (set at the top of this function) a bare
+  // DROP TABLE here performs an implicit DELETE that SQLite checks against those FKs —
+  // it throws FOREIGN KEY constraint failed the moment any install actually has linked
+  // rows, despite this block's original assumption that none would. Follow SQLite's
+  // documented procedure for schema changes on FK-referenced tables: disable
+  // enforcement and wrap the rebuild in its own transaction.
   const trainerProfileColumns = db.prepare('PRAGMA table_info(trainer_profiles)').all() as Array<{
     name: string
     notnull: 0 | 1
   }>
   if (trainerProfileColumns.some((c) => c.name === 'tid' && c.notnull === 1)) {
+    db.pragma('foreign_keys = OFF')
     db.exec(`
+      BEGIN;
       DROP TABLE trainer_profiles;
       CREATE TABLE trainer_profiles (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -149,7 +156,9 @@ export function applySchema(db: Database.Database): void {
         sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
         label TEXT
       );
+      COMMIT;
     `)
+    db.pragma('foreign_keys = ON')
   }
 
   // Widened sid's upper bound again, from 4294 (Gen VII+'s derived cap,
@@ -159,11 +168,23 @@ export function applySchema(db: Database.Database): void {
   // rebuild above, this table now sees real use (Legs 1-4 shipped the same day), so
   // this rebuild copies existing rows across instead of dropping them. Detected via the
   // stored CHECK text directly, since PRAGMA table_info doesn't expose CHECK bounds.
+  //
+  // Same FK hazard as the tid rebuild above: collection_entries/storage_locations
+  // reference trainer_profiles(id), so the DROP TABLE below needs foreign_keys=OFF or
+  // it fails FOREIGN KEY constraint failed against real linked data (confirmed against
+  // this project's own dev DB — 23 trainer_profiles rows, thousands of collection_entries
+  // rows referencing them). Wrapped in a transaction so a failure can't leave a
+  // half-renamed table sitting around; the leading DROP TABLE IF EXISTS makes this
+  // self-healing if a prior unguarded run already left exactly that (trainer_profiles_new
+  // created and populated, then the old DROP TABLE threw and aborted before the rename).
   const trainerProfilesSql = db
     .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'trainer_profiles'")
     .get() as { sql: string } | undefined
   if (trainerProfilesSql?.sql.includes('sid BETWEEN 0 AND 4294')) {
+    db.pragma('foreign_keys = OFF')
+    db.exec('DROP TABLE IF EXISTS trainer_profiles_new')
     db.exec(`
+      BEGIN;
       CREATE TABLE trainer_profiles_new (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         game TEXT NOT NULL,
@@ -176,7 +197,9 @@ export function applySchema(db: Database.Database): void {
         SELECT id, game, ot_name, tid, sid, label FROM trainer_profiles;
       DROP TABLE trainer_profiles;
       ALTER TABLE trainer_profiles_new RENAME TO trainer_profiles;
+      COMMIT;
     `)
+    db.pragma('foreign_keys = ON')
   }
 
   const entriesSql = db
