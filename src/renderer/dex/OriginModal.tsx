@@ -3,6 +3,7 @@ import type { CollectionEntry, CollectionEntryOriginInput } from '@shared/types/
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { findOriginGame } from '@shared/data/origin-games'
 import { ORIGIN_LANGUAGES } from '@shared/data/languages'
+import { POKE_BALLS } from '@shared/data/poke-balls'
 import { OriginGameInput } from '../trainer/OriginGameInput'
 
 const TID_MAX = 999999
@@ -53,6 +54,9 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   const [tid, setTid] = useState(entry.tid === null ? '' : String(entry.tid))
   const [sid, setSid] = useState(entry.sid === null ? '' : String(entry.sid))
   const [language, setLanguage] = useState(entry.language ?? '')
+  // Not seeded by "Copy from Trainer Profile" (see handleProfileSelect below) — a ball
+  // is per-catch, not per-trainer, so there's no profile field to copy it from.
+  const [caughtBall, setCaughtBall] = useState(entry.caughtBall ?? '')
 
   useEffect(() => {
     window.premierDex.listTrainerProfiles().then(setProfiles)
@@ -108,7 +112,8 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
           tid: null,
           sid: null,
           language: null,
-          nickname: entry.nickname
+          nickname: entry.nickname,
+          caughtBall: null
         }
       : {
           trainerProfileId,
@@ -117,7 +122,8 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
           tid: tidVisible ? parsedTid : null,
           sid: sidVisible ? parsedSid : null,
           language: language || null,
-          nickname: entry.nickname
+          nickname: entry.nickname,
+          caughtBall: caughtBall || null
         }
     onSave(entry.id, input)
     onClose()
@@ -171,6 +177,17 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
             {ORIGIN_LANGUAGES.map((l) => (
               <option key={l} value={l}>
                 {l}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="origin-modal-field">
+          Caught In
+          <select value={caughtBall} onChange={(e) => setCaughtBall(e.target.value)}>
+            <option value="">—</option>
+            {POKE_BALLS.map((b) => (
+              <option key={b} value={b}>
+                {b}
               </option>
             ))}
           </select>

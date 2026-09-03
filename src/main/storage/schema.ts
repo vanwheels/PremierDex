@@ -1,5 +1,6 @@
 import type Database from 'better-sqlite3'
 import { ORIGIN_LANGUAGES } from '@shared/data/languages'
+import { POKE_BALLS } from '@shared/data/poke-balls'
 
 // Language (Leg 14) is a genuinely closed set defined by the games themselves (unlike
 // `game`, which is open-ended enough to cover ROM hacks/future titles and so stays a
@@ -7,6 +8,11 @@ import { ORIGIN_LANGUAGES } from '@shared/data/languages'
 // enum above. Built from ORIGIN_LANGUAGES rather than hardcoded so schema.ts and
 // shared/data/languages.ts can't drift apart.
 const LANGUAGE_LIST_SQL = ORIGIN_LANGUAGES.map((l) => `'${l}'`).join(', ')
+
+// Caught-in Poké Ball (Leg 28) — same closed-set reasoning as language above, built from
+// POKE_BALLS so schema.ts and shared/data/poke-balls.ts can't drift apart. collection_entries
+// only: a ball is per-catch, not per-trainer, so trainer_profiles never gets this column.
+const POKE_BALL_LIST_SQL = POKE_BALLS.map((b) => `'${b}'`).join(', ')
 
 export function applySchema(db: Database.Database): void {
   db.pragma('journal_mode = WAL')
@@ -258,6 +264,14 @@ export function applySchema(db: Database.Database): void {
   if (!entryColumnsFinal.some((c) => c.name === 'language')) {
     db.exec(
       `ALTER TABLE collection_entries ADD COLUMN language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL}))`
+    )
+  }
+
+  // caught_ball (Leg 28) retrofit — same "query fresh, run unconditionally at the end"
+  // approach as language above.
+  if (!entryColumnsFinal.some((c) => c.name === 'caught_ball')) {
+    db.exec(
+      `ALTER TABLE collection_entries ADD COLUMN caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN (${POKE_BALL_LIST_SQL}))`
     )
   }
 }

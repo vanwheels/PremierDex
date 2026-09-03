@@ -221,6 +221,19 @@ td {
   cursor: default;
 }
 
+.ball-icon {
+  margin-left: 0.35rem;
+  vertical-align: middle;
+  image-rendering: pixelated;
+}
+
+.ball-icon-fallback {
+  margin-left: 0.35rem;
+  vertical-align: middle;
+  font-size: 0.7em;
+  opacity: 0.75;
+}
+
 .origin-modal-backdrop {
   position: fixed;
   inset: 0;

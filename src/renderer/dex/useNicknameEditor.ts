@@ -40,7 +40,8 @@ export function useNicknameEditor(
       tid: entry.tid,
       sid: entry.sid,
       language: entry.language,
-      nickname: trimmed || null
+      nickname: trimmed || null,
+      caughtBall: entry.caughtBall
     })
   }
 

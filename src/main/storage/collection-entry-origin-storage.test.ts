@@ -36,7 +36,8 @@ const ORIGIN_INPUT = {
   tid: 123456,
   sid: 1234,
   language: 'English',
-  nickname: 'Bulby'
+  nickname: 'Bulby',
+  caughtBall: 'Great Ball'
 }
 
 describe('collection entry origin', () => {
@@ -62,7 +63,8 @@ describe('collection entry origin', () => {
       tid: null,
       sid: null,
       language: null,
-      nickname: null
+      nickname: null,
+      caughtBall: null
     })
 
     expect(cleared.originGame).toBeNull()
@@ -71,6 +73,14 @@ describe('collection entry origin', () => {
     expect(cleared.sid).toBeNull()
     expect(cleared.language).toBeNull()
     expect(cleared.nickname).toBeNull()
+    expect(cleared.caughtBall).toBeNull()
+  })
+
+  it('rejects a caught ball value outside the fixed Poké Ball list at the DB layer', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entry = await findBulbasaurBaseEntry(storage)
+
+    await expect(storage.setEntryOrigin(entry.id, { ...ORIGIN_INPUT, caughtBall: 'Pizza Ball' })).rejects.toThrow()
   })
 
   it('rejects a tid past the 6-digit range at the DB layer', async () => {

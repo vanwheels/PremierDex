@@ -101,7 +101,8 @@ describe('exportCollection / importCollection', () => {
       tid: 123456,
       sid: 1234,
       language: 'English',
-      nickname: 'Bulby'
+      nickname: 'Bulby',
+      caughtBall: 'Great Ball'
     })
 
     const exported = await storage.exportCollection()
@@ -110,6 +111,7 @@ describe('exportCollection / importCollection', () => {
     expect(exportedEntry.nickname).toBe('Bulby')
     expect(exportedEntry.otName).toBe('Ash')
     expect(exportedEntry.language).toBe('English')
+    expect(exportedEntry.caughtBall).toBe('Great Ball')
   })
 
   it('resets local origin/nickname data on import when the backup entry has none (full replace, Leg 13)', async () => {
@@ -122,7 +124,8 @@ describe('exportCollection / importCollection', () => {
       tid: 123456,
       sid: 1234,
       language: 'English',
-      nickname: 'Bulby'
+      nickname: 'Bulby',
+      caughtBall: 'Great Ball'
     })
 
     // A backup from before this entry had a nickname/origin set — full-replace means
@@ -158,7 +161,8 @@ describe('exportCollection / importCollection', () => {
       tid: profile.tid,
       sid: profile.sid,
       language: profile.language,
-      nickname: 'Bulby'
+      nickname: 'Bulby',
+      caughtBall: 'Great Ball'
     })
     const exported = await source.exportCollection()
 
@@ -211,7 +215,8 @@ describe('exportCollection / importCollection', () => {
       tid: null,
       sid: null,
       language: null,
-      nickname: null
+      nickname: null,
+      caughtBall: null
     })
     const exported = await source.exportCollection()
     // Simulate a hand-edited/corrupted backup where the profile array is missing the
@@ -248,7 +253,8 @@ describe('exportCollection / importCollection', () => {
           tid: null,
           sid: null,
           language: null,
-          nickname: null
+          nickname: null,
+          caughtBall: null
         }
       ]
     }

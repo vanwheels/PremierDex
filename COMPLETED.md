@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Pokéball-caught-in tracking] — Leg 28 — 2026-09-02
+Scoped down from the open TODO framing via a few decisions from Vanny: a fixed 27-entry
+POKE_BALLS enum (not free text), edited as a "Caught In" dropdown inside OriginModal
+alongside the other origin fields (not seeded by "Copy from Trainer Profile" — a ball is
+per-catch, not per-trainer), plus a small read-only ball icon on CollectionRow (icons
+sourced from PokeAPI/sprites' items/ folder, same CDN sprites.ts already uses). Storage-
+layer plumbing (schema CHECK column, export/import, origin summary tooltip) is complete,
+but display is CollectionRow-only per Vanny's framing of the original ask — DexRow shows
+no icon. See commit `<hash>`.
+
 ## [User-facing selector for collapsed foldable-species form] — Leg 27 — 2026-09-02
 Leg 9's stretch idea, now implemented: a dropdown next to the expand/collapse toggle lets
 the user pin which form (base or a cosmetic variant) displays when a foldable species'

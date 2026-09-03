@@ -42,6 +42,7 @@ interface CollectionEntryRow {
   sid: number | null
   language: string | null
   nickname: string | null
+  caught_ball: string | null
 }
 
 interface TrainerProfileRow {
@@ -102,7 +103,8 @@ function toCollectionEntry(row: CollectionEntryRow): CollectionEntry {
     tid: row.tid,
     sid: row.sid,
     language: row.language,
-    nickname: row.nickname
+    nickname: row.nickname,
+    caughtBall: row.caught_ball
   }
 }
 
@@ -148,7 +150,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const setEntryOriginStmt = db.prepare(`
     UPDATE collection_entries
     SET trainer_profile_id = @trainerProfileId, origin_game = @originGame, ot_name = @otName,
-      tid = @tid, sid = @sid, language = @language, nickname = @nickname
+      tid = @tid, sid = @sid, language = @language, nickname = @nickname, caught_ball = @caughtBall
     WHERE id = @id
   `)
   const orphanEntriesByTrainerProfileStmt = db.prepare(
@@ -202,7 +204,8 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const restoreEntryStmt = db.prepare(`
     UPDATE collection_entries
     SET owned = @owned, trainer_profile_id = @trainerProfileId, origin_game = @originGame,
-      ot_name = @otName, tid = @tid, sid = @sid, language = @language, nickname = @nickname
+      ot_name = @otName, tid = @tid, sid = @sid, language = @language, nickname = @nickname,
+      caught_ball = @caughtBall
     WHERE id = @id
   `)
 
@@ -294,6 +297,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
         sid: number | null
         language: string | null
         nickname: string | null
+        caughtBall: string | null
       }
       const wantedByKey = new Map<string, WantedEntry>()
       let matched = 0
@@ -317,7 +321,8 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
           tid: entry.tid,
           sid: entry.sid,
           language: entry.language,
-          nickname: entry.nickname
+          nickname: entry.nickname,
+          caughtBall: entry.caughtBall
         })
       }
 
@@ -347,7 +352,8 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
             tid: wanted?.tid ?? null,
             sid: wanted?.sid ?? null,
             language: wanted?.language ?? null,
-            nickname: wanted?.nickname ?? null
+            nickname: wanted?.nickname ?? null,
+            caughtBall: wanted?.caughtBall ?? null
           })
         }
       })

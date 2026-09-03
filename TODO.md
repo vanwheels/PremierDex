@@ -1,11 +1,5 @@
 # TODO
 
-## [Pokéball-caught-in tracking] — Leg 28
-Vanny floated adding the ability to record which Poké Ball a Collection Entry's Pokémon
-was caught in. Not scoped — flagged as a possible later-milestone addition, not committed
-work.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Pokémon name punctuation exceptions] — Leg 29
 Leg 7 title-cases raw PokeAPI slugs (hyphens preserved as separators) at every display
 site, but ~14 species have real names the slug format can't represent: apostrophes

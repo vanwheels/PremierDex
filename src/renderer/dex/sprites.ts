@@ -59,6 +59,15 @@ const ROMAN_NUMERALS: Record<number, string> = {
 }
 
 const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
+const ITEM_SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items'
+
+/** Caught-in Poké Ball icon (Leg 28) — same CDN repo as SPRITE_BASE above, just its
+ * items/ folder instead of pokemon/. Takes the already-computed slug (shared/data/
+ * poke-balls.ts's pokeBallIconSlug) rather than the display name, so this module stays
+ * free of any Poké-Ball-specific string logic. */
+export function pokeBallIconUrl(slug: string): string {
+  return `${ITEM_SPRITE_BASE}/${slug}.png`
+}
 
 /** The CDN's file-naming key for a form: pokeapiId alone, or "{pokeapiId}-{suffix}" for
  * a cosmetic sub-form that shares its pokeapiId with siblings. */

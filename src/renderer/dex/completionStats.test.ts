@@ -29,6 +29,7 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
     sid: null,
     language: null,
     nickname: null,
+    caughtBall: null,
     ...overrides
   }
 }

@@ -74,7 +74,7 @@ export interface CollectionEntry {
   /** Origin/nickname (Leg 4) — who caught/received this specific individual, snapshotted
    * immutably at the time it was set rather than live-joined to a Trainer Profile, so
    * later edits to that profile (or its deletion) never retroactively change this entry.
-   * All seven fields are independent of `owned`: they're only ever meaningful for an
+   * All eight fields below are independent of `owned`: they're only ever meaningful for an
    * owned entry, but nothing here enforces that at the type level — the UI gates it
    * instead. See src/shared/types/trainer-profile.ts and shared/data/origin-games.ts. */
   /** The Trainer Profile the fields below were copied from, if any — provenance only,
@@ -91,11 +91,16 @@ export interface CollectionEntry {
   /** User-facing nickname for this individual Pokémon, independent of any Trainer
    * Profile. */
   nickname: string | null
+  /** Which Poké Ball this individual was caught in (Leg 28) — one of shared/data/
+   * poke-balls.ts's POKE_BALLS, edited alongside the other origin fields but not tied to
+   * a Trainer Profile (a ball is per-catch, not per-trainer, so "Copy from Trainer
+   * Profile" never touches it). */
+  caughtBall: string | null
 }
 
 /** Field set for setEntryOrigin — everything but the assigned id, mirroring
  * TrainerProfileInput's shape. All fields nullable: a blank game/otName clears origin
- * entirely (and forces tid/sid/language null), independent of nickname. */
+ * entirely (and forces tid/sid/language/caughtBall null), independent of nickname. */
 export interface CollectionEntryOriginInput {
   trainerProfileId: number | null
   originGame: string | null
@@ -104,4 +109,5 @@ export interface CollectionEntryOriginInput {
   sid: number | null
   language: string | null
   nickname: string | null
+  caughtBall: string | null
 }

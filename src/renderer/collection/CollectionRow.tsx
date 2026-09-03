@@ -4,6 +4,7 @@ import type { SpriteModalTarget } from '../dex/SpriteModal'
 import type { OriginModalTarget } from '../dex/OriginModal'
 import { originTitle } from '../dex/originSummary'
 import { useNicknameEditor } from '../dex/useNicknameEditor'
+import { BallIcon } from '../dex/BallIcon'
 import type { CollectionRowData } from './types'
 
 interface CollectionRowProps {
@@ -61,6 +62,7 @@ export function CollectionRow({ row, onOpenSprite, onOpenOrigin, onSaveOrigin }:
         >
           Origin
         </button>
+        {row.entry.caughtBall && <BallIcon ball={row.entry.caughtBall} />}
       </td>
     </tr>
   )
