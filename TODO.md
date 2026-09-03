@@ -41,13 +41,6 @@ restructuring expands the existing top-tab pattern rather than moving to a sideb
 visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
 styling all in scope, not a targeted fix.
 
-## [Dex Table Redesign: Per-Location Tabs] — Leg 8
-Tabbed-per-Storage-Location structure for the Living Dex table (using Storage Location's
-existing `name` field as the tab label — no schema change needed there), plus an
-Unassigned tab for null storageLocationId entries, wired to Leg 7's stats per tab.
-Depends on Legs 3 and 7.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Dex Table Redesign: Storage Location Assignment] — Leg 9
 Move storage-location assignment from Leg 3's interim picker into the redesigned table
 itself. Depends on Leg 8.

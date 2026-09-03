@@ -1,5 +1,16 @@
 # COMPLETED
 
+## [Dex Table Redesign: Per-Location Tabs] — Leg 8 — 2026-09-03
+Added a `DexLocationTabs` pill bar (alphabetical by name, fixed Unassigned tab last) above
+the Living Dex view, feeding Leg 7's `filterEntriesByStorageLocation` into both
+`buildDexSections` and `computeCompletionStats` from the one selected tab — so the table
+rows and the stats panel above it scope to the same location at once. An entry unowned
+everywhere still only shows as checkable under the Unassigned tab (storageLocationId:
+null covers both "never owned" and "owned but unassigned"), which is intended: Leg 3's
+interim per-row picker (moving into this table at Leg 9) is still the only way to assign a
+location, so a species has nowhere else to be checkable from until it's given one. See
+commit `22defa6`.
+
 ## [Per-Storage-Location Completion Stats] — Leg 7 — 2026-09-03
 Added `filterEntriesByStorageLocation`, a pre-filter callers run on the entries array
 before `computeCompletionStats` to scope owned/shiny counts to one storage location (or
