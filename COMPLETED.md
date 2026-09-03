@@ -1,5 +1,22 @@
 # COMPLETED
 
+## [Collection view by origin/OT/Shiny] — Leg 18 — 2026-09-02
+A separate top-level view (tab toggle next to the existing Living Dex grid) that browses
+owned entries grouped by one dimension at a time — Origin Game, OT, or Shiny — rather than
+species-first. Ribbon/Alpha grouping stayed out of scope, per the TODO item's own framing
+(blocked on those markers not existing in the schema yet). Vanny's calls, confirmed before
+implementation: a separate view rather than reshaping DexTable in place, one grouping
+dimension at a time (no nesting), and owned entries only (origin/OT/shiny data is only
+ever meaningful for an owned CollectionEntry). New `buildCollectionGroups` groups by
+`entry.originGame`/`otName`/`shiny`, with a catch-all "No origin set"/"No OT set" bucket
+sorted last; origin-game ordering reuses the existing `compareGames` release-date sort
+(`shared/gameSort.ts`) rather than a new one. `formDisplayName`/`capitalizeWords`
+(species/form name formatting), the nickname-input wiring, and the origin-summary tooltip
+were pulled out of `buildDexSections.ts`/`DexRow.tsx` into shared modules
+(`dex/formNames.ts`, `dex/useNicknameEditor.ts`, `dex/originSummary.ts`) so the new
+Collection row reuses the exact same logic instead of duplicating it. See commit
+`<pending>`.
+
 ## [Dex sort] — Leg 16 — 2026-09-02
 Clickable column headers (#, Name, Gen, Owned, Shiny — Vanny's call over a SortSelect-
 style dropdown) on the Living Dex grid, cycling asc → desc → back to unsorted (natural

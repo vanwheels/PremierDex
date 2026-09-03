@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput } from '@shared/types/pokemon'
 import { SpriteThumbnail } from './SpriteThumbnail'
 import type { SpriteModalTarget } from './SpriteModal'
 import type { OriginModalTarget } from './OriginModal'
+import { originTitle } from './originSummary'
+import { useNicknameEditor } from './useNicknameEditor'
 import type { DexRowData } from './types'
 
 export interface ExpandControl {
@@ -32,47 +33,9 @@ export function activeNicknameEntry(row: DexRowData): CollectionEntry | null {
   return null
 }
 
-/** Origin summary shown as the origin button's tooltip once set — OT/TID/SID/language/
- * game, the same fields the modal itself edits. Omits whichever of TID/SID/language is
- * null (unshown by that origin game, or just never set) rather than printing "TID: —". */
-function originTitle(entry: DexRowData['regular']): string | undefined {
-  if (!entry || !entry.otName) return undefined
-  const parts = [`OT: ${entry.otName}`]
-  if (entry.tid !== null) parts.push(`TID: ${entry.tid}`)
-  if (entry.sid !== null) parts.push(`SID: ${entry.sid}`)
-  if (entry.language) parts.push(entry.language)
-  if (entry.originGame) parts.push(entry.originGame)
-  return parts.join(' · ')
-}
-
 export function DexRow({ row, onToggleEntry, onOpenSprite, onOpenOrigin, onSaveOrigin, expandControl, indent }: DexRowProps): JSX.Element {
   const nicknameEntry = activeNicknameEntry(row)
-  const [nicknameText, setNicknameText] = useState(nicknameEntry?.nickname ?? '')
-
-  // Re-sync local text when the edited entry (or its stored nickname) changes out from
-  // under this input — a toggle to/from owned swaps which entry is active, and an
-  // external update (e.g. another window) can change the stored value directly.
-  useEffect(() => {
-    setNicknameText(nicknameEntry?.nickname ?? '')
-  }, [nicknameEntry?.id, nicknameEntry?.nickname])
-
-  const commitNickname = (): void => {
-    if (!nicknameEntry) return
-    const trimmed = nicknameText.trim()
-    if (trimmed === (nicknameEntry.nickname ?? '')) return
-    // Full-row snapshot update (see CollectionEntryOriginInput) — carry the entry's
-    // existing origin fields through unchanged so this nickname-only edit doesn't blank
-    // them out.
-    onSaveOrigin(nicknameEntry.id, {
-      trainerProfileId: nicknameEntry.trainerProfileId,
-      originGame: nicknameEntry.originGame,
-      otName: nicknameEntry.otName,
-      tid: nicknameEntry.tid,
-      sid: nicknameEntry.sid,
-      language: nicknameEntry.language,
-      nickname: trimmed || null
-    })
-  }
+  const { text: nicknameText, setText: setNicknameText, commit: commitNickname } = useNicknameEditor(nicknameEntry, onSaveOrigin)
 
   return (
     <tr className={indent ? 'dex-row-indent' : undefined}>

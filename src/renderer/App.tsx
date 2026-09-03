@@ -14,8 +14,13 @@ import type { DexFilters, DexOptions, DexSort } from './dex/types'
 import { DEFAULT_DEX_FILTERS, DEFAULT_DEX_SORT } from './dex/types'
 import { TrainerProfilesPanel } from './trainer/TrainerProfilesPanel'
 import { StorageLocationsPanel } from './storage-location/StorageLocationsPanel'
+import { CollectionView } from './collection/CollectionView'
 
 const DEFAULT_OPTIONS: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
+
+/** Which top-level lens the collection is browsed through — the species-first Living
+ * Dex grid, or the owned-entries-grouped-by-origin/OT/shiny Collection view (Leg 18). */
+type AppView = 'dex' | 'collection'
 
 /** The v1 spreadsheet-style Living Dex grid. See TODO.md's [Spreadsheet-style Living Dex UI] item. */
 export function App(): JSX.Element {
@@ -26,6 +31,7 @@ export function App(): JSX.Element {
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
   const [filters, setFilters] = useState<DexFilters>(DEFAULT_DEX_FILTERS)
   const [sort, setSort] = useState<DexSort | null>(DEFAULT_DEX_SORT)
+  const [view, setView] = useState<AppView>('dex')
   // Bumped after a JSON import (Leg 13 added Trainer Profiles/Storage Locations to the
   // backup) so both panels below remount and refetch — they load their own data on
   // mount only and have no other way to learn the DB moved out from under them.
@@ -88,15 +94,33 @@ export function App(): JSX.Element {
       <TrainerProfilesPanel key={importVersion} />
       <StorageLocationsPanel key={importVersion} />
       <CompletionStatsPanel stats={completionStats} />
-      <DexToolbar options={options} onChange={setOptions} />
-      <DexFilterBar filters={filters} onChange={setFilters} />
-      <DexTable
-        sections={visibleSections}
-        sort={sort}
-        onSortChange={setSort}
-        onToggleEntry={handleToggleEntry}
-        onSaveOrigin={handleSaveOrigin}
-      />
+      <div className="app-view-tabs">
+        <button type="button" className={view === 'dex' ? 'app-view-tab active' : 'app-view-tab'} onClick={() => setView('dex')}>
+          Living Dex
+        </button>
+        <button
+          type="button"
+          className={view === 'collection' ? 'app-view-tab active' : 'app-view-tab'}
+          onClick={() => setView('collection')}
+        >
+          Collection
+        </button>
+      </div>
+      {view === 'dex' ? (
+        <>
+          <DexToolbar options={options} onChange={setOptions} />
+          <DexFilterBar filters={filters} onChange={setFilters} />
+          <DexTable
+            sections={visibleSections}
+            sort={sort}
+            onSortChange={setSort}
+            onToggleEntry={handleToggleEntry}
+            onSaveOrigin={handleSaveOrigin}
+          />
+        </>
+      ) : (
+        <CollectionView species={species} forms={forms} entries={entries} onSaveOrigin={handleSaveOrigin} />
+      )}
     </main>
   )
 }

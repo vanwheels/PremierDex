@@ -1,13 +1,5 @@
 # TODO
 
-## [Collection view by origin/OT/Shiny/Ribbon/Alpha] — Leg 18
-Ability to view/group the collection by origin game, OT, and Shiny status now; Ribbon and
-Alpha as later additions once those concepts exist in the schema. Broader than Leg 15's
-per-entry search/filter — this is a view/grouping mode across the whole collection.
-Overlaps with Leg 15 on the origin-game/OT dimensions; Ribbon/Alpha pieces are blocked on
-those markers existing at all (see the Ribbons/Alpha item under Future Milestones).
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Pokémon name punctuation exceptions] — unscheduled
 Leg 7 title-cases raw PokeAPI slugs (hyphens preserved as separators) at every display
 site, but ~14 species have real names the slug format can't represent: apostrophes
