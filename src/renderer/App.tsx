@@ -19,9 +19,11 @@ import { CollectionView } from './collection/CollectionView'
 
 const DEFAULT_OPTIONS: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
 
-/** Which top-level lens the collection is browsed through — the species-first Living
- * Dex grid, or the owned-entries-grouped-by-origin/OT/shiny Collection view (Leg 18). */
-type AppView = 'dex' | 'collection'
+/** Which top-level lens the collection is browsed through — the species-first Living Dex
+ * grid, the owned-entries-grouped-by-origin/OT/shiny Collection view (Leg 18), or the
+ * Trainer Profiles/Storage Locations management tabs (Leg 1 of the nav-restructuring
+ * milestone — previously always-mounted stacked panels above the Dex/Collection tabs). */
+type AppView = 'dex' | 'collection' | 'trainers' | 'storage-locations'
 
 /** The v1 spreadsheet-style Living Dex grid. See docs/completed-archive/living-dex-v1.md's
  * [Spreadsheet-style Living Dex UI] item (Leg 3). */
@@ -112,13 +114,6 @@ export function App(): JSX.Element {
       <h1>PremierDex</h1>
       <BackupControls onImported={handleImported} />
       <UpdateControls />
-      <TrainerProfilesPanel key={importVersion} onEntriesChanged={refetchEntries} />
-      <StorageLocationsPanel key={importVersion} />
-      <CompletionStatsPanel
-        stats={completionStats}
-        options={completionStatsOptions}
-        onOptionsChange={setCompletionStatsOptions}
-      />
       <div className="app-view-tabs">
         <button type="button" className={view === 'dex' ? 'app-view-tab active' : 'app-view-tab'} onClick={() => setView('dex')}>
           Living Dex
@@ -130,9 +125,28 @@ export function App(): JSX.Element {
         >
           Collection
         </button>
+        <button
+          type="button"
+          className={view === 'trainers' ? 'app-view-tab active' : 'app-view-tab'}
+          onClick={() => setView('trainers')}
+        >
+          Trainer Profiles
+        </button>
+        <button
+          type="button"
+          className={view === 'storage-locations' ? 'app-view-tab active' : 'app-view-tab'}
+          onClick={() => setView('storage-locations')}
+        >
+          Storage Locations
+        </button>
       </div>
-      {view === 'dex' ? (
+      {view === 'dex' && (
         <>
+          <CompletionStatsPanel
+            stats={completionStats}
+            options={completionStatsOptions}
+            onOptionsChange={setCompletionStatsOptions}
+          />
           <DexToolbar options={options} onChange={setOptions} />
           <DexFilterBar filters={filters} onChange={setFilters} />
           <DexTable
@@ -144,9 +158,12 @@ export function App(): JSX.Element {
             onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
           />
         </>
-      ) : (
+      )}
+      {view === 'collection' && (
         <CollectionView species={species} forms={forms} entries={entries} onSaveOrigin={handleSaveOrigin} />
       )}
+      {view === 'trainers' && <TrainerProfilesPanel key={importVersion} onEntriesChanged={refetchEntries} />}
+      {view === 'storage-locations' && <StorageLocationsPanel key={importVersion} />}
     </main>
   )
 }
