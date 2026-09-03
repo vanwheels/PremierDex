@@ -15,4 +15,4 @@ Swapped DexRow.tsx's regular/shiny Ball cells to render `<BallIcon ball={...} />
 (conditioned on the entry being owned and having a `caughtBall` set), matching
 CollectionRow's existing usage instead of the plain-text `caughtBallCell()` output.
 `caughtBallCell()` itself is unchanged — still backs the `<td>` title attribute and its
-own tests. See commit `<hash>`.
+own tests. See commit `4284893`.
