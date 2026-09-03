@@ -13,7 +13,7 @@ landed in that slot first. Owned/shiny sort is "any row in the section has an ow
 regular/shiny entry" (Vanny's call over "every row"), matching how the existing owned/
 shiny filter tri-states already treat a section. New `sortDexSections`, run after
 `filterDexSections` in App's pipeline — presentation-only, never persisted, same
-convention as `DexOptions`/`DexFilters`. See commit `56bc10d`.
+convention as `DexOptions`/`DexFilters`. See commit `50bb09e`.
 
 ## [Dex search/filter] — Leg 15 — 2026-09-02
 One free-text `DexFilters.query` field (rather than a box per dimension) matches name,
