@@ -9,7 +9,7 @@ full flat list. Also caught a real migration hazard: `caught_ball`'s CHECK const
 baked in at ALTER-time and SQLite can't widen a CHECK, so any install that already ran the
 Leg 28 retrofit would reject the new ball names forever without a fix — added a
 detect-and-rebuild retrofit to schema.ts mirroring the existing sid-4294 table-rebuild
-pattern. See commit `<pending>`.
+pattern. See commit `02b3c9f`.
 
 ## [Per-Game Species-Availability Dataset] — Leg 4 — 2026-09-03
 `scripts/fetch-species-availability.ts` + `data/pokemon/species-availability.json` +
