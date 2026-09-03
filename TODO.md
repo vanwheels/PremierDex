@@ -10,6 +10,21 @@ Blocked: needs production-quality PokéBall-or-similar artwork before a real pub
 release.
 Last touched: 2026-09-02. Re-check count: 0.
 
+## [Virtualize the Dex Table body] — unscheduled
+Leg 2 (2026-09-03) fixed the worst of the resize/tab-switch lag (memoized data pipeline
+was already fine; the real costs were a full unmount/remount on tab switch and
+table-layout: auto forcing per-row remeasurement on resize) — see COMPLETED.md. A smaller
+residual delay remains on both, inherent to keeping ~1000+ real DOM rows around: resize
+still reflows row heights when column-width changes affect text wrapping, and un-hiding
+the table on tab switch still costs a browser layout+paint pass over every row even
+though React no longer rebuilds them. Fully eliminating either needs windowing (only
+~20-40 rows in the DOM at once), which was set aside during Leg 2 as too large a lift for
+that leg — would need reworking how expand/collapse and cosmetic rows work under a
+virtualizer, plus sticky-header handling.
+Confirmed 2026-09-03: Vanny finds the post-Leg-2 delay acceptable for now — pick this up
+only if it becomes a real problem, not proactively.
+Last touched: 2026-09-03. Re-check count: 0.
+
 ## [Split schema.ts] — unscheduled
 Crossed the ~300-line soft cap at Leg 5 (341 lines, still well under the 500 hard cap) —
 each closed-set CHECK column (language, caught_ball) has picked up its own "ALTER-time
