@@ -58,6 +58,18 @@ export function activeNicknameEntry(row: DexRowData): CollectionEntry | null {
   return null
 }
 
+/** Leg 10: text shown in the read-only Game/Ball columns — gated to owned entries per
+ * CollectionEntry's doc comment (these fields are only ever meaningful once owned, even
+ * though a stale value can technically survive an unown/re-own cycle since
+ * onToggleEntry doesn't clear them). '—' covers both "unowned" and "owned but unset". */
+export function originGameCell(entry: CollectionEntry | null): string {
+  return entry?.owned ? entry.originGame ?? '—' : '—'
+}
+
+export function caughtBallCell(entry: CollectionEntry | null): string {
+  return entry?.owned ? entry.caughtBall ?? '—' : '—'
+}
+
 export function DexRow({
   row,
   onToggleEntry,
@@ -203,6 +215,12 @@ export function DexRow({
         )}
         {invalidComboBadge(row.regular)}
       </td>
+      <td className="dex-inline-origin-field" title={originGameCell(row.regular)}>
+        {originGameCell(row.regular)}
+      </td>
+      <td className="dex-inline-origin-field" title={caughtBallCell(row.regular)}>
+        {caughtBallCell(row.regular)}
+      </td>
       <td>{storageLocationSelect(row.regular)}</td>
       <td>
         <input
@@ -226,6 +244,12 @@ export function DexRow({
           </span>
         )}
         {invalidComboBadge(row.shinyEntry)}
+      </td>
+      <td className="dex-inline-origin-field" title={originGameCell(row.shinyEntry)}>
+        {originGameCell(row.shinyEntry)}
+      </td>
+      <td className="dex-inline-origin-field" title={caughtBallCell(row.shinyEntry)}>
+        {caughtBallCell(row.shinyEntry)}
       </td>
       <td>{storageLocationSelect(row.shinyEntry)}</td>
     </tr>

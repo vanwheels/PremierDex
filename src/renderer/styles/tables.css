@@ -159,6 +159,18 @@ tbody tr:hover {
   opacity: 0.4;
 }
 
+/* Leg 10: read-only Game/Ball columns, same truncate-with-tooltip treatment as
+ * dex-origin-button's title attribute since these can run longer than the column. */
+.dex-inline-origin-field {
+  color: var(--muted);
+  font-size: 0.75rem;
+  max-width: 6rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
 .ball-icon {
   margin-left: 0.35rem;
   vertical-align: middle;

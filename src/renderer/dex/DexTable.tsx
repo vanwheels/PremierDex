@@ -19,7 +19,8 @@ interface DexTableProps {
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   onSetCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
   /** Per-entry assignment picker (Leg 3), its own Loc. columns since Leg 9 — see DexRow's
-   * doc comment. */
+   * doc comment. Game/Ball columns joined it at Leg 10, read-only there (edited only via
+   * OriginModal). */
   storageLocations: StorageLocation[]
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
   /** Leg 6's derived invalid-combo badge — see DexRow's doc comment. */
@@ -98,8 +99,12 @@ export function DexTable({
               <SortableHeader label="Gen" sortKey="generation" sort={sort} onSortChange={onSortChange} />
               <th>Nickname</th>
               <SortableHeader label="Non-Shiny" sortKey="owned" sort={sort} onSortChange={onSortChange} />
+              <th>Non-Shiny Game</th>
+              <th>Non-Shiny Ball</th>
               <th>Non-Shiny Loc.</th>
               <SortableHeader label="Shiny" sortKey="shiny" sort={sort} onSortChange={onSortChange} />
+              <th>Shiny Game</th>
+              <th>Shiny Ball</th>
               <th>Shiny Loc.</th>
             </tr>
           </thead>
