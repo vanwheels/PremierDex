@@ -28,10 +28,11 @@ schema.ts's retrofit blocks already got split out into schema-ball.test.ts/
 schema-language.test.ts on the test side.
 Last touched: 2026-09-03. Re-check count: 0.
 
-## Future Milestones (post-current)
+## Future Milestones (unscheduled)
 
-Large items Vanny explicitly flagged as out of scope for the current milestone — logged
-here so they aren't lost, not queued into a leg yet.
+Large items Vanny explicitly flagged as out of scope for a past milestone — logged here
+so they aren't lost, not queued into a leg yet. No milestone is currently in progress;
+these are candidates for whatever gets scoped next.
 
 ## [Dex completeness tier migration] — future milestone
 Migrating a collection from a regular living dex/shiny living dex (species-only) up to a
