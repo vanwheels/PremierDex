@@ -18,7 +18,8 @@ describe('trainer profile CRUD', () => {
       otName: 'Ash',
       tid: 123456,
       sid: 1234,
-      label: 'Main file'
+      label: 'Main file',
+      language: 'English'
     })
 
     expect(created.id).toBeGreaterThan(0)
@@ -32,7 +33,8 @@ describe('trainer profile CRUD', () => {
       otName: 'Ash',
       tid: 1,
       sid: 2,
-      label: null
+      label: null,
+      language: null
     })
 
     expect(created.label).toBeNull()
@@ -45,7 +47,8 @@ describe('trainer profile CRUD', () => {
       otName: 'Ash',
       tid: 1,
       sid: 2,
-      label: null
+      label: null,
+      language: null
     })
 
     const updated = await storage.updateTrainerProfile(created.id, {
@@ -53,10 +56,19 @@ describe('trainer profile CRUD', () => {
       otName: 'Ash',
       tid: 1,
       sid: 2,
-      label: 'Renamed'
+      label: 'Renamed',
+      language: 'Japanese'
     })
 
-    expect(updated).toEqual({ id: created.id, game: 'Pokémon Shield', otName: 'Ash', tid: 1, sid: 2, label: 'Renamed' })
+    expect(updated).toEqual({
+      id: created.id,
+      game: 'Pokémon Shield',
+      otName: 'Ash',
+      tid: 1,
+      sid: 2,
+      label: 'Renamed',
+      language: 'Japanese'
+    })
     expect(await storage.listTrainerProfiles()).toEqual([updated])
   })
 
@@ -67,7 +79,8 @@ describe('trainer profile CRUD', () => {
       otName: 'Ash',
       tid: 1,
       sid: 2,
-      label: null
+      label: null,
+      language: null
     })
 
     await storage.deleteTrainerProfile(created.id)
@@ -82,7 +95,8 @@ describe('trainer profile CRUD', () => {
       otName: 'Ash',
       tid: null,
       sid: null,
-      label: null
+      label: null,
+      language: null
     })
 
     expect(created.tid).toBeNull()
@@ -97,7 +111,8 @@ describe('trainer profile CRUD', () => {
       otName: 'Ash',
       tid: 999_999,
       sid: 4294,
-      label: null
+      label: null,
+      language: null
     })
 
     expect(created.tid).toBe(999_999)
@@ -111,7 +126,8 @@ describe('trainer profile CRUD', () => {
       otName: 'Ash',
       tid: 12345,
       sid: 54321,
-      label: null
+      label: null,
+      language: null
     })
 
     expect(created.sid).toBe(54321)
@@ -124,17 +140,33 @@ describe('trainer profile CRUD', () => {
       otName: 'Ash',
       tid: 1,
       sid: 1,
-      label: 'File A'
+      label: 'File A',
+      language: null
     })
     const second = await storage.createTrainerProfile({
       game: 'Pokémon Sword',
       otName: 'Ash',
       tid: 1,
       sid: 1,
-      label: 'File B'
+      label: 'File B',
+      language: null
     })
 
     expect(first.id).not.toBe(second.id)
     expect(await storage.listTrainerProfiles()).toEqual([first, second])
+  })
+
+  it('rejects a language value outside the fixed in-game language list', async () => {
+    const storage = createSqliteStorage(':memory:')
+    await expect(
+      storage.createTrainerProfile({
+        game: 'Pokémon Sword',
+        otName: 'Ash',
+        tid: 1,
+        sid: 1,
+        label: null,
+        language: 'Klingon'
+      })
+    ).rejects.toThrow()
   })
 })

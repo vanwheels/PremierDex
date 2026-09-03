@@ -35,6 +35,7 @@ export function TrainerProfileRow({ profile, onSave, onDelete }: TrainerProfileR
       <td>{profile.tid ?? '—'}</td>
       <td>{profile.sid ?? '—'}</td>
       <td>{profile.label ?? ''}</td>
+      <td>{profile.language ?? '—'}</td>
       <td>
         <button type="button" onClick={() => setEditing(true)}>
           Edit

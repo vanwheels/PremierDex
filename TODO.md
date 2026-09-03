@@ -1,17 +1,12 @@
 # TODO
 
-## [Origin language/country field] — Leg 14
-Add language/origin-country as a tracked origin attribute (Trainer Profile and/or
-per-entry origin data), alongside the existing game/OT/TID/SID fields.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Dex search/filter] — Leg 15
 Search the Living Dex by name/dex#; filter by owned, shiny, regional form, generation,
 and the existing badge flags (homeBoxable, shinyLocked). No dependency on the Trainer
 Profile/origin work above — can be picked up independently if priorities shift.
 Vanny's 2026-09-02 pass adds two more search dimensions to fold in here: search by
 nickname (moved to its own field in Leg 10) and search by origin settings (origin game/
-OT/TID/SID).
+OT/TID/SID/language — language added Leg 14).
 Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Dex sort] — Leg 16

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { TrainerProfileInput } from '@shared/types/trainer-profile'
 import { findOriginGame } from '@shared/data/origin-games'
+import { ORIGIN_LANGUAGES } from '@shared/data/languages'
 import { OriginGameInput } from './OriginGameInput'
 
 const TID_MAX = 999999
@@ -30,6 +31,7 @@ export function TrainerProfileForm({ initial, onSubmit, onCancel }: TrainerProfi
   const [tid, setTid] = useState(initial.tid === null ? '' : String(initial.tid))
   const [sid, setSid] = useState(initial.sid === null ? '' : String(initial.sid))
   const [label, setLabel] = useState(initial.label ?? '')
+  const [language, setLanguage] = useState(initial.language ?? '')
 
   // An unmatched/custom-typed game defaults to showing both fields — the safest
   // assumption when we don't know its display rules, and matches every listed game
@@ -57,7 +59,8 @@ export function TrainerProfileForm({ initial, onSubmit, onCancel }: TrainerProfi
       otName: otName.trim(),
       tid: tidVisible ? parsedTid : null,
       sid: sidVisible ? parsedSid : null,
-      label: label.trim() || null
+      label: label.trim() || null,
+      language: language || null
     })
   }
 
@@ -85,6 +88,16 @@ export function TrainerProfileForm({ initial, onSubmit, onCancel }: TrainerProfi
       </td>
       <td>
         <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Optional" />
+      </td>
+      <td>
+        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+          <option value="">—</option>
+          {ORIGIN_LANGUAGES.map((l) => (
+            <option key={l} value={l}>
+              {l}
+            </option>
+          ))}
+        </select>
       </td>
       <td>
         <button type="button" onClick={handleSubmit} disabled={!valid}>

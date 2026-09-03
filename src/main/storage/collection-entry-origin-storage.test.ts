@@ -35,6 +35,7 @@ const ORIGIN_INPUT = {
   otName: 'Ash',
   tid: 123456,
   sid: 1234,
+  language: 'English',
   nickname: 'Bulby'
 }
 
@@ -60,6 +61,7 @@ describe('collection entry origin', () => {
       otName: null,
       tid: null,
       sid: null,
+      language: null,
       nickname: null
     })
 
@@ -67,6 +69,7 @@ describe('collection entry origin', () => {
     expect(cleared.otName).toBeNull()
     expect(cleared.tid).toBeNull()
     expect(cleared.sid).toBeNull()
+    expect(cleared.language).toBeNull()
     expect(cleared.nickname).toBeNull()
   })
 
@@ -91,7 +94,8 @@ describe('collection entry origin', () => {
       otName: 'Ash',
       tid: 123456,
       sid: 1234,
-      label: null
+      label: null,
+      language: null
     })
     const entry = await findBulbasaurBaseEntry(storage)
 
@@ -107,7 +111,8 @@ describe('collection entry origin', () => {
       otName: 'Ash',
       tid: 123456,
       sid: 1234,
-      label: null
+      label: null,
+      language: null
     })
     const entry = await findBulbasaurBaseEntry(storage)
     await storage.setEntryOrigin(entry.id, { ...ORIGIN_INPUT, trainerProfileId: profile.id })

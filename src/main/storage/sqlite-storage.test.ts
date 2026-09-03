@@ -100,6 +100,7 @@ describe('exportCollection / importCollection', () => {
       otName: 'Ash',
       tid: 123456,
       sid: 1234,
+      language: 'English',
       nickname: 'Bulby'
     })
 
@@ -108,6 +109,7 @@ describe('exportCollection / importCollection', () => {
     const exportedEntry = exported.collectionEntries.find((e) => e.id === entry.id)!
     expect(exportedEntry.nickname).toBe('Bulby')
     expect(exportedEntry.otName).toBe('Ash')
+    expect(exportedEntry.language).toBe('English')
   })
 
   it('resets local origin/nickname data on import when the backup entry has none (full replace, Leg 13)', async () => {
@@ -119,6 +121,7 @@ describe('exportCollection / importCollection', () => {
       otName: 'Ash',
       tid: 123456,
       sid: 1234,
+      language: 'English',
       nickname: 'Bulby'
     })
 
@@ -139,7 +142,8 @@ describe('exportCollection / importCollection', () => {
       otName: 'Ash',
       tid: 123456,
       sid: 1234,
-      label: 'Playthrough 1'
+      label: 'Playthrough 1',
+      language: 'English'
     })
     const location = await source.createStorageLocation({
       locationType: 'save_file',
@@ -153,6 +157,7 @@ describe('exportCollection / importCollection', () => {
       otName: profile.otName,
       tid: profile.tid,
       sid: profile.sid,
+      language: profile.language,
       nickname: 'Bulby'
     })
     const exported = await source.exportCollection()
@@ -171,7 +176,14 @@ describe('exportCollection / importCollection', () => {
 
   it('is a full replace for Trainer Profiles/Storage Locations too: local-only rows absent from the backup are gone', async () => {
     const fresh = createSqliteStorage(':memory:')
-    await fresh.createTrainerProfile({ game: 'Pokémon Sword', otName: 'Local', tid: null, sid: null, label: null })
+    await fresh.createTrainerProfile({
+      game: 'Pokémon Sword',
+      otName: 'Local',
+      tid: null,
+      sid: null,
+      label: null,
+      language: null
+    })
 
     const empty = createSqliteStorage(':memory:')
     const exported = await empty.exportCollection()
@@ -188,7 +200,8 @@ describe('exportCollection / importCollection', () => {
       otName: 'Ash',
       tid: null,
       sid: null,
-      label: null
+      label: null,
+      language: null
     })
     const entry = await findBulbasaurBaseEntry(source, false)
     await source.setEntryOrigin(entry.id, {
@@ -197,6 +210,7 @@ describe('exportCollection / importCollection', () => {
       otName: profile.otName,
       tid: null,
       sid: null,
+      language: null,
       nickname: null
     })
     const exported = await source.exportCollection()
@@ -233,6 +247,7 @@ describe('exportCollection / importCollection', () => {
           otName: null,
           tid: null,
           sid: null,
+          language: null,
           nickname: null
         }
       ]

@@ -1,5 +1,25 @@
 # COMPLETED
 
+## [Origin language/country field] — Leg 14 — 2026-09-02
+Resolved the TODO's open scoping question first, with Vanny: "language" means the
+in-game language flag every Pokémon carries internally (Japanese/English/French/German/
+Italian/Spanish/Korean/Chinese Simplified/Chinese Traditional — `shared/data/
+languages.ts`'s `ORIGIN_LANGUAGES`), not a free-text country — "country" was dropped
+entirely, since Pokémon's own data has no such concept. Added as a nullable `language`
+column on both `trainer_profiles` and `collection_entries`, following Leg 4's existing
+copy-once-then-independently-editable pattern: `TrainerProfileForm`/`OriginModal` both
+get a `<select>` (unlike the free-text `game` field, language is a genuinely closed set,
+so it's DB-CHECK-constrained the same way `gender`/`form_category` are, and validated at
+the schema layer rather than left to app-level trust). Reaches every existing origin
+touchpoint: `setEntryOrigin`, backup export/import, `DexRow`'s origin tooltip and its
+nickname-only-edit snapshot (carrying language through unchanged, same as it already did
+for game/OT/TID/SID). No `CollectionExport` version bump — same as Leg 4's fields, this
+extends an already-covered array rather than changing the export's top-level shape; an
+old backup missing the field imports as `null` via the existing `wanted?.field ?? null`
+pattern. See commit `<pending>`.
+Follow-up: [Dex search/filter]'s Leg 15 TODO item widened to include language now that it
+exists alongside the other origin fields.
+
 ## [Trainer Profile + Storage Location backup export/import] — Leg 13 — 2026-09-02
 `CollectionExport` bumped to v2 (v1 never shipped in a release, so no migration path):
 added `trainerProfiles`/`storageLocations` arrays, restoring both on import as a full

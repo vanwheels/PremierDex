@@ -35,7 +35,8 @@ td {
   margin-bottom: 1.5rem;
 }
 
-.trainer-profiles-table input {
+.trainer-profiles-table input,
+.trainer-profiles-table select {
   width: 100%;
   box-sizing: border-box;
 }

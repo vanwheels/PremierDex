@@ -1,4 +1,12 @@
 import type Database from 'better-sqlite3'
+import { ORIGIN_LANGUAGES } from '@shared/data/languages'
+
+// Language (Leg 14) is a genuinely closed set defined by the games themselves (unlike
+// `game`, which is open-ended enough to cover ROM hacks/future titles and so stays a
+// plain unconstrained TEXT column) — safe to enforce with a CHECK, same as `gender`'s
+// enum above. Built from ORIGIN_LANGUAGES rather than hardcoded so schema.ts and
+// shared/data/languages.ts can't drift apart.
+const LANGUAGE_LIST_SQL = ORIGIN_LANGUAGES.map((l) => `'${l}'`).join(', ')
 
 export function applySchema(db: Database.Database): void {
   db.pragma('journal_mode = WAL')
@@ -51,7 +59,8 @@ export function applySchema(db: Database.Database): void {
       ot_name TEXT NOT NULL,
       tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
       sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
-      label TEXT
+      label TEXT,
+      language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL}))
     );
 
     -- A Pokémon's current location (HOME/Bank/Box/Ranch/save-file), separate from its
@@ -197,5 +206,22 @@ export function applySchema(db: Database.Database): void {
       ALTER TABLE collection_entries_new RENAME TO collection_entries;
       CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
     `)
+  }
+
+  // language (Leg 14) retrofit for both tables — re-read PRAGMA state here rather than
+  // reusing trainerProfileColumns/entryColumns above, since the sid-4294 rebuilds just
+  // above can recreate either table without this leg's column; querying fresh keeps
+  // this correct whether or not a rebuild fired on this run.
+  const trainerProfileColumnsFinal = db.prepare('PRAGMA table_info(trainer_profiles)').all() as Array<{ name: string }>
+  if (!trainerProfileColumnsFinal.some((c) => c.name === 'language')) {
+    db.exec(
+      `ALTER TABLE trainer_profiles ADD COLUMN language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL}))`
+    )
+  }
+  const entryColumnsFinal = db.prepare('PRAGMA table_info(collection_entries)').all() as Array<{ name: string }>
+  if (!entryColumnsFinal.some((c) => c.name === 'language')) {
+    db.exec(
+      `ALTER TABLE collection_entries ADD COLUMN language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL}))`
+    )
   }
 }

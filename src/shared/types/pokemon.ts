@@ -67,9 +67,9 @@ export interface CollectionEntry {
   /** Origin/nickname (Leg 4) — who caught/received this specific individual, snapshotted
    * immutably at the time it was set rather than live-joined to a Trainer Profile, so
    * later edits to that profile (or its deletion) never retroactively change this entry.
-   * All six fields are independent of `owned`: they're only ever meaningful for an owned
-   * entry, but nothing here enforces that at the type level — the UI gates it instead.
-   * See src/shared/types/trainer-profile.ts and shared/data/origin-games.ts. */
+   * All seven fields are independent of `owned`: they're only ever meaningful for an
+   * owned entry, but nothing here enforces that at the type level — the UI gates it
+   * instead. See src/shared/types/trainer-profile.ts and shared/data/origin-games.ts. */
   /** The Trainer Profile the fields below were copied from, if any — provenance only,
    * not re-validated against the profile's current values. Null if never set from a
    * profile, or if that profile was later deleted (see deleteTrainerProfile). */
@@ -78,6 +78,9 @@ export interface CollectionEntry {
   otName: string | null
   tid: number | null
   sid: number | null
+  /** In-game language flag (Leg 14) — one of shared/data/languages.ts's
+   * ORIGIN_LANGUAGES, snapshotted the same way as the other origin fields. */
+  language: string | null
   /** User-facing nickname for this individual Pokémon, independent of any Trainer
    * Profile. */
   nickname: string | null
@@ -85,12 +88,13 @@ export interface CollectionEntry {
 
 /** Field set for setEntryOrigin — everything but the assigned id, mirroring
  * TrainerProfileInput's shape. All fields nullable: a blank game/otName clears origin
- * entirely (and forces tid/sid null), independent of nickname. */
+ * entirely (and forces tid/sid/language null), independent of nickname. */
 export interface CollectionEntryOriginInput {
   trainerProfileId: number | null
   originGame: string | null
   otName: string | null
   tid: number | null
   sid: number | null
+  language: string | null
   nickname: string | null
 }

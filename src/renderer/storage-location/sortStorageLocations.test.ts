@@ -4,7 +4,7 @@ import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { sortStorageLocations } from './sortStorageLocations'
 
 function trainer(overrides: Partial<TrainerProfile>): TrainerProfile {
-  return { id: 1, game: 'Pokémon Red', otName: 'Red', tid: null, sid: null, label: null, ...overrides }
+  return { id: 1, game: 'Pokémon Red', otName: 'Red', tid: null, sid: null, label: null, language: null, ...overrides }
 }
 
 function location(overrides: Partial<StorageLocation>): StorageLocation {

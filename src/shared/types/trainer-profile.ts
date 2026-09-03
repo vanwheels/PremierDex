@@ -22,6 +22,10 @@ export interface TrainerProfile {
   /** User-facing nickname to tell apart multiple profiles for the same game (e.g. two
    * separate playthroughs) — optional, purely for display. */
   label: string | null
+  /** In-game language flag (Leg 14) — one of shared/data/languages.ts's ORIGIN_LANGUAGES,
+   * or null if unset. Not gated by game the way TID/SID are: every origin game carries a
+   * language flag, so there's no per-game hide/show here. */
+  language: string | null
 }
 
 /** Field set for create/update — everything but the assigned id. */
@@ -31,4 +35,5 @@ export interface TrainerProfileInput {
   tid: number | null
   sid: number | null
   label: string | null
+  language: string | null
 }

@@ -32,14 +32,15 @@ export function activeNicknameEntry(row: DexRowData): CollectionEntry | null {
   return null
 }
 
-/** Origin summary shown as the origin button's tooltip once set — OT/TID/SID/game, the
- * same fields the modal itself edits. Omits whichever of TID/SID is null (unshown by
- * that origin game) rather than printing "TID: —". */
+/** Origin summary shown as the origin button's tooltip once set — OT/TID/SID/language/
+ * game, the same fields the modal itself edits. Omits whichever of TID/SID/language is
+ * null (unshown by that origin game, or just never set) rather than printing "TID: —". */
 function originTitle(entry: DexRowData['regular']): string | undefined {
   if (!entry || !entry.otName) return undefined
   const parts = [`OT: ${entry.otName}`]
   if (entry.tid !== null) parts.push(`TID: ${entry.tid}`)
   if (entry.sid !== null) parts.push(`SID: ${entry.sid}`)
+  if (entry.language) parts.push(entry.language)
   if (entry.originGame) parts.push(entry.originGame)
   return parts.join(' · ')
 }
@@ -68,6 +69,7 @@ export function DexRow({ row, onToggleEntry, onOpenSprite, onOpenOrigin, onSaveO
       otName: nicknameEntry.otName,
       tid: nicknameEntry.tid,
       sid: nicknameEntry.sid,
+      language: nicknameEntry.language,
       nickname: trimmed || null
     })
   }

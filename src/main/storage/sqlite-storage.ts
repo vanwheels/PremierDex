@@ -39,6 +39,7 @@ interface CollectionEntryRow {
   ot_name: string | null
   tid: number | null
   sid: number | null
+  language: string | null
   nickname: string | null
 }
 
@@ -49,6 +50,7 @@ interface TrainerProfileRow {
   tid: number | null
   sid: number | null
   label: string | null
+  language: string | null
 }
 
 interface StorageLocationRow {
@@ -89,6 +91,7 @@ function toCollectionEntry(row: CollectionEntryRow): CollectionEntry {
     otName: row.ot_name,
     tid: row.tid,
     sid: row.sid,
+    language: row.language,
     nickname: row.nickname
   }
 }
@@ -100,7 +103,8 @@ function toTrainerProfile(row: TrainerProfileRow): TrainerProfile {
     otName: row.ot_name,
     tid: row.tid,
     sid: row.sid,
-    label: row.label
+    label: row.label,
+    language: row.language
   }
 }
 
@@ -126,7 +130,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const setEntryOriginStmt = db.prepare(`
     UPDATE collection_entries
     SET trainer_profile_id = @trainerProfileId, origin_game = @originGame, ot_name = @otName,
-      tid = @tid, sid = @sid, nickname = @nickname
+      tid = @tid, sid = @sid, language = @language, nickname = @nickname
     WHERE id = @id
   `)
   const orphanEntriesByTrainerProfileStmt = db.prepare(
@@ -136,11 +140,12 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const listTrainerProfilesStmt = db.prepare('SELECT * FROM trainer_profiles ORDER BY id')
   const getTrainerProfileStmt = db.prepare('SELECT * FROM trainer_profiles WHERE id = ?')
   const insertTrainerProfileStmt = db.prepare(`
-    INSERT INTO trainer_profiles (game, ot_name, tid, sid, label)
-    VALUES (@game, @otName, @tid, @sid, @label)
+    INSERT INTO trainer_profiles (game, ot_name, tid, sid, label, language)
+    VALUES (@game, @otName, @tid, @sid, @label, @language)
   `)
   const updateTrainerProfileStmt = db.prepare(`
-    UPDATE trainer_profiles SET game = @game, ot_name = @otName, tid = @tid, sid = @sid, label = @label
+    UPDATE trainer_profiles SET game = @game, ot_name = @otName, tid = @tid, sid = @sid, label = @label,
+      language = @language
     WHERE id = @id
   `)
   const deleteTrainerProfileStmt = db.prepare('DELETE FROM trainer_profiles WHERE id = ?')
@@ -169,8 +174,8 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const deleteAllStorageLocationsStmt = db.prepare('DELETE FROM storage_locations')
   const deleteAllTrainerProfilesStmt = db.prepare('DELETE FROM trainer_profiles')
   const insertTrainerProfileWithIdStmt = db.prepare(`
-    INSERT INTO trainer_profiles (id, game, ot_name, tid, sid, label)
-    VALUES (@id, @game, @otName, @tid, @sid, @label)
+    INSERT INTO trainer_profiles (id, game, ot_name, tid, sid, label, language)
+    VALUES (@id, @game, @otName, @tid, @sid, @label, @language)
   `)
   const insertStorageLocationWithIdStmt = db.prepare(`
     INSERT INTO storage_locations (id, location_type, name, trainer_profile_id)
@@ -179,7 +184,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const restoreEntryStmt = db.prepare(`
     UPDATE collection_entries
     SET owned = @owned, trainer_profile_id = @trainerProfileId, origin_game = @originGame,
-      ot_name = @otName, tid = @tid, sid = @sid, nickname = @nickname
+      ot_name = @otName, tid = @tid, sid = @sid, language = @language, nickname = @nickname
     WHERE id = @id
   `)
 
@@ -264,6 +269,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
         otName: string | null
         tid: number | null
         sid: number | null
+        language: string | null
         nickname: string | null
       }
       const wantedByKey = new Map<string, WantedEntry>()
@@ -287,6 +293,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
           otName: entry.otName,
           tid: entry.tid,
           sid: entry.sid,
+          language: entry.language,
           nickname: entry.nickname
         })
       }
@@ -316,6 +323,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
             otName: wanted?.otName ?? null,
             tid: wanted?.tid ?? null,
             sid: wanted?.sid ?? null,
+            language: wanted?.language ?? null,
             nickname: wanted?.nickname ?? null
           })
         }

@@ -32,6 +32,7 @@ function ownedEntry(id: number, shiny: boolean, nickname: string | null = null):
     otName: null,
     tid: null,
     sid: null,
+    language: null,
     nickname
   }
 }

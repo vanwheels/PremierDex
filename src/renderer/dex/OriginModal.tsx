@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput } from '@shared/types/pokemon'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { findOriginGame } from '@shared/data/origin-games'
+import { ORIGIN_LANGUAGES } from '@shared/data/languages'
 import { OriginGameInput } from '../trainer/OriginGameInput'
 
 const TID_MAX = 999999
@@ -32,12 +33,12 @@ interface OriginModalProps {
  * a time; the regular and shiny rows of the same form are separate CollectionEntry rows
  * and get independent origin data, since they're independent individuals.
  *
- * "Copy from Trainer Profile" only ever *seeds* the game/OT/TID/SID fields — after
- * that, they're plain editable inputs, and Save snapshots whatever's currently in them
- * onto the entry. Editing the source profile later, or deleting it, never changes what
- * was already saved here (see sqlite-storage.ts's deleteTrainerProfile). Save carries the
- * entry's existing nickname through unchanged (setEntryOrigin is a full-row snapshot
- * write, not a partial patch) — this modal never touches it.
+ * "Copy from Trainer Profile" only ever *seeds* the game/OT/TID/SID/language fields —
+ * after that, they're plain editable inputs, and Save snapshots whatever's currently in
+ * them onto the entry. Editing the source profile later, or deleting it, never changes
+ * what was already saved here (see sqlite-storage.ts's deleteTrainerProfile). Save
+ * carries the entry's existing nickname through unchanged (setEntryOrigin is a full-row
+ * snapshot write, not a partial patch) — this modal never touches it.
  *
  * The TID/SID visibility-by-game logic and validation shape duplicate
  * TrainerProfileForm.tsx rather than reusing it directly — that component renders as
@@ -51,6 +52,7 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   const [otName, setOtName] = useState(entry.otName ?? '')
   const [tid, setTid] = useState(entry.tid === null ? '' : String(entry.tid))
   const [sid, setSid] = useState(entry.sid === null ? '' : String(entry.sid))
+  const [language, setLanguage] = useState(entry.language ?? '')
 
   useEffect(() => {
     window.premierDex.listTrainerProfiles().then(setProfiles)
@@ -83,6 +85,7 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
     setOtName(profile.otName)
     setTid(profile.tid === null ? '' : String(profile.tid))
     setSid(profile.sid === null ? '' : String(profile.sid))
+    setLanguage(profile.language ?? '')
   }
 
   const bothBlank = game.trim() === '' && otName.trim() === ''
@@ -98,13 +101,22 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   const handleSave = (): void => {
     if (!valid) return
     const input: CollectionEntryOriginInput = bothBlank
-      ? { trainerProfileId: null, originGame: null, otName: null, tid: null, sid: null, nickname: entry.nickname }
+      ? {
+          trainerProfileId: null,
+          originGame: null,
+          otName: null,
+          tid: null,
+          sid: null,
+          language: null,
+          nickname: entry.nickname
+        }
       : {
           trainerProfileId,
           originGame: game.trim(),
           otName: otName.trim(),
           tid: tidVisible ? parsedTid : null,
           sid: sidVisible ? parsedSid : null,
+          language: language || null,
           nickname: entry.nickname
         }
     onSave(entry.id, input)
@@ -152,6 +164,17 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
             <input type="number" min={0} max={SID_MAX} value={sid} onChange={(e) => setSid(e.target.value)} />
           </label>
         )}
+        <label className="origin-modal-field">
+          Language
+          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+            <option value="">—</option>
+            {ORIGIN_LANGUAGES.map((l) => (
+              <option key={l} value={l}>
+                {l}
+              </option>
+            ))}
+          </select>
+        </label>
         <div className="origin-modal-actions">
           <button type="button" onClick={handleSave} disabled={!valid}>
             Save

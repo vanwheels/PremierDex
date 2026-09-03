@@ -30,7 +30,8 @@ describe('storage location CRUD', () => {
       otName: 'Ash',
       tid: 1,
       sid: 2,
-      label: null
+      label: null,
+      language: null
     })
 
     const created = await storage.createStorageLocation({
@@ -58,7 +59,8 @@ describe('storage location CRUD', () => {
       otName: 'Ash',
       tid: 1,
       sid: 2,
-      label: null
+      label: null,
+      language: null
     })
 
     await expect(

@@ -36,6 +36,7 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
     otName: null,
     tid: null,
     sid: null,
+    language: null,
     nickname: null,
     ...overrides
   }
@@ -197,6 +198,7 @@ function ownedEntry(id: number, shiny = false): CollectionEntry {
     otName: null,
     tid: null,
     sid: null,
+    language: null,
     nickname: null
   }
 }

@@ -153,6 +153,7 @@ describe('applySchema', () => {
     expect(row.ot_name).toBeNull()
     expect(row.tid).toBeNull()
     expect(row.sid).toBeNull()
+    expect(row.language).toBeNull()
     expect(row.nickname).toBeNull()
   })
 
@@ -244,7 +245,7 @@ describe('applySchema', () => {
     applySchema(db)
 
     expect(db.prepare('SELECT * FROM trainer_profiles').all()).toEqual([
-      { id: inserted.lastInsertRowid, game: 'Pokémon Black', ot_name: 'Ash', tid: 1, sid: 2, label: null }
+      { id: inserted.lastInsertRowid, game: 'Pokémon Black', ot_name: 'Ash', tid: 1, sid: 2, label: null, language: null }
     ])
     expect(() =>
       db
@@ -293,6 +294,7 @@ describe('applySchema', () => {
     expect(row.id).toBe(inserted.lastInsertRowid)
     expect(row.trainer_profile_id).toBeNull()
     expect(row.sid).toBe(2)
+    expect(row.language).toBeNull()
     expect(() =>
       db
         .prepare('INSERT INTO collection_entries (form_id, gender, shiny, sid) VALUES (1, \'male\', 0, ?)')

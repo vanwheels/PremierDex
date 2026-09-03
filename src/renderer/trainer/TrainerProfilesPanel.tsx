@@ -6,7 +6,7 @@ import { TrainerProfileForm } from './TrainerProfileForm'
 import { TrainerProfileRow } from './TrainerProfileRow'
 import { sortTrainerProfiles } from './sortTrainerProfiles'
 
-const EMPTY_INPUT: TrainerProfileInput = { game: '', otName: '', tid: null, sid: null, label: null }
+const EMPTY_INPUT: TrainerProfileInput = { game: '', otName: '', tid: null, sid: null, label: null, language: null }
 
 /** CRUD UI for Trainer Profiles (Leg 1) — the origin identity a Collection Entry will
  * eventually reference (Leg 4). Standalone here: nothing else reads or links to these
@@ -60,6 +60,7 @@ export function TrainerProfilesPanel(): JSX.Element {
             <th>TID</th>
             <th>SID</th>
             <th>Label</th>
+            <th>Language</th>
             <th />
           </tr>
         </thead>
