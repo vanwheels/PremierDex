@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Female-form sprites missing] — Leg 23 — 2026-09-02
+Root cause was bigger than Leg 22's framing: the female split row/entry has never shown
+a distinct sprite for *any* of the 103 hasGenderDifference forms, not just the handful
+flagged — buildDexSections/buildCollectionGroups never passed gender through to the
+sprite URL builders at all. Threaded a `female` boolean through sprites.ts and the
+SpriteThumbnail/SpriteModal/DexRow/CollectionRow chain to build PokeAPI CDN's real
+female/ subfolder path. Separately patched forms.json to drop a genuinely broken
+duplicate 'female' row on Frillish/Jellicent/Pyroar (PokeAPI's gender split there is a
+second pokemon-form entry with all-null sprite fields, already redundant with
+hasGenderDifference on the base row). Xerneas/Sinistea/Polteageist/Poltchageist/
+Sinistcha's forms flagged by Leg 22 are unrelated to gender and have no sprite source at
+all — left as-is. See commit `d1c9335`.
+
 ## [Species-forms data bugs] — Leg 22 — 2026-09-02
 Investigation split the leg's four claims into two different root causes, not one shared
 bug as originally framed. (1) Mothim, Scatterbug, and Spewpa: PokeAPI's `/pokemon/{id}.forms`

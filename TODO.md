@@ -1,16 +1,5 @@
 # TODO
 
-## [Female-form sprites missing] — Leg 23
-Species with a gender-split form (Jellicent, Pyroar, etc.) are missing the sprite for
-the female form. Leg 22's investigation found the actual affected set is wider than the
-two examples first noted: Frillish, Jellicent, and Pyroar's female sub-form, and
-Xerneas's Active Mode, Sinistea/Polteageist's Antique, and Poltchageist/Sinistcha's
-second form all come back with every sprite field null on PokeAPI's own sub-form entry —
-the female look lives on the *male* sub-form's `front_female` field instead, not on the
-female sub-form's own sprite fields; the other five have no known sprite source at all
-via the API (checked live 2026-09-02, during Leg 22's investigation — see COMPLETED.md).
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [alwaysShiny UI consumer] — Leg 24
 Leg 6 added `alwaysShiny` (data layer only, per that leg's explicit "data-only fix"
 framing) but nothing in the renderer reads it yet — unlike `homeBoxable`/`shinyLocked`,
