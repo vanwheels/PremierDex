@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Dex Table Redesign: Storage Location Assignment] — Leg 9 — 2026-09-03
+"Move assignment into the redesigned table" was ambiguous between auto-assign-on-check-in,
+a manual-only dedicated column, and drag-and-drop between tabs — asked Vanny, who picked
+auto-assign-on-check-in. Checking an entry owned while a real location tab is selected now
+assigns it there in the same action (`autoAssignedLocationOnCheckIn`, wired into `App.tsx`'s
+`handleToggleEntry`). Leg 3's per-row `<select>` also moved out of the cramped Non-Shiny/
+Shiny cells into its own "Non-Shiny Loc."/"Shiny Loc." columns, staying disabled for unowned
+entries and available for reassigning afterward or assigning while on the Unassigned tab.
+See commit `f3ceeee`.
+
 ## [Dex Table Redesign: Per-Location Tabs] — Leg 8 — 2026-09-03
 Added a `DexLocationTabs` pill bar (alphabetical by name, fixed Unassigned tab last) above
 the Living Dex view, feeding Leg 7's `filterEntriesByStorageLocation` into both

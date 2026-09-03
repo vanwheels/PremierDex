@@ -41,11 +41,6 @@ restructuring expands the existing top-tab pattern rather than moving to a sideb
 visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
 styling all in scope, not a targeted fix.
 
-## [Dex Table Redesign: Storage Location Assignment] — Leg 9
-Move storage-location assignment from Leg 3's interim picker into the redesigned table
-itself. Depends on Leg 8.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Dex Table Redesign: Richer Row Fields] — Leg 10
 Richer per-row info beyond today's sprite/#/name/gen/nickname/owned/shiny — exact field
 list still TBD, to be decided once Met Location, Invalid Flag, ball, and storage location
