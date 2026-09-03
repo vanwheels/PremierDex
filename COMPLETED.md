@@ -25,6 +25,13 @@ title glyph from a diamond to an orb (Palkia carries a pearl — the Lustrous Or
 diamond; that shape is Dialga's, for whenever Diamond theming gets built). See commit
 `8a14e57`.
 
+Third revision: "washed out" (bg/surface too close in value, --muted too gray) and "flat,
+no depth" (every surface a single flat fill, no implied light source) were two separate
+problems. Widened palette contrast, and gave every panel/button/input the same
+directional-gradient + inset-highlight + layered-shadow recipe plus a shared feTurbulence
+--grain texture — depth without gloss/glass, per Vanny's constraint. See commit
+`efc9490`.
+
 ## [Nav Restructuring: Expand Top Tabs] — Leg 1 — 2026-09-02
 Trainer Profiles and Storage Locations became their own top-level tabs alongside Living
 Dex/Collection; Backup/Update controls moved to persistent chrome above the tabs; the
