@@ -110,7 +110,7 @@ describe('exportCollection / importCollection', () => {
     expect(exportedEntry.otName).toBe('Ash')
   })
 
-  it('leaves local origin/nickname data untouched on import — import only ever restores owned state', async () => {
+  it('resets local origin/nickname data on import when the backup entry has none (full replace, Leg 13)', async () => {
     const storage = createSqliteStorage(':memory:')
     const entry = await findBulbasaurBaseEntry(storage, false)
     await storage.setEntryOrigin(entry.id, {
@@ -122,13 +122,95 @@ describe('exportCollection / importCollection', () => {
       nickname: 'Bulby'
     })
 
-    // A backup from before this entry had a nickname, or from before Leg 4 entirely —
-    // either way importCollection only ever writes the owned column, so it must not
-    // wipe the nickname/origin data set locally above.
+    // A backup from before this entry had a nickname/origin set — full-replace means
+    // restoring it wipes local-only origin data, same as it already did for `owned`.
     const staleExport = await createSqliteStorage(':memory:').exportCollection()
     await storage.importCollection(staleExport)
 
-    expect((await findBulbasaurBaseEntry(storage, false)).nickname).toBe('Bulby')
+    const restored = await findBulbasaurBaseEntry(storage, false)
+    expect(restored.nickname).toBeNull()
+    expect(restored.otName).toBeNull()
+  })
+
+  it('round-trips Trainer Profiles and Storage Locations through export/import, preserving ids and the FK link', async () => {
+    const source = createSqliteStorage(':memory:')
+    const profile = await source.createTrainerProfile({
+      game: 'Pokémon Sword',
+      otName: 'Ash',
+      tid: 123456,
+      sid: 1234,
+      label: 'Playthrough 1'
+    })
+    const location = await source.createStorageLocation({
+      locationType: 'save_file',
+      name: 'Sword Save',
+      trainerProfileId: profile.id
+    })
+    const entry = await findBulbasaurBaseEntry(source, false)
+    await source.setEntryOrigin(entry.id, {
+      trainerProfileId: profile.id,
+      originGame: profile.game,
+      otName: profile.otName,
+      tid: profile.tid,
+      sid: profile.sid,
+      nickname: 'Bulby'
+    })
+    const exported = await source.exportCollection()
+
+    // Simulates a reinstall: a brand-new, freshly-seeded database with no profiles or
+    // locations of its own yet.
+    const fresh = createSqliteStorage(':memory:')
+    await fresh.importCollection(exported)
+
+    expect(await fresh.listTrainerProfiles()).toEqual([profile])
+    expect(await fresh.listStorageLocations()).toEqual([location])
+    const restoredEntry = await findBulbasaurBaseEntry(fresh, false)
+    expect(restoredEntry.trainerProfileId).toBe(profile.id)
+    expect(restoredEntry.nickname).toBe('Bulby')
+  })
+
+  it('is a full replace for Trainer Profiles/Storage Locations too: local-only rows absent from the backup are gone', async () => {
+    const fresh = createSqliteStorage(':memory:')
+    await fresh.createTrainerProfile({ game: 'Pokémon Sword', otName: 'Local', tid: null, sid: null, label: null })
+
+    const empty = createSqliteStorage(':memory:')
+    const exported = await empty.exportCollection()
+    await fresh.importCollection(exported)
+
+    expect(await fresh.listTrainerProfiles()).toEqual([])
+    expect(await fresh.listStorageLocations()).toEqual([])
+  })
+
+  it('drops a dangling trainerProfileId on an entry rather than failing import, when its profile is missing from the backup', async () => {
+    const source = createSqliteStorage(':memory:')
+    const profile = await source.createTrainerProfile({
+      game: 'Pokémon Sword',
+      otName: 'Ash',
+      tid: null,
+      sid: null,
+      label: null
+    })
+    const entry = await findBulbasaurBaseEntry(source, false)
+    await source.setEntryOrigin(entry.id, {
+      trainerProfileId: profile.id,
+      originGame: profile.game,
+      otName: profile.otName,
+      tid: null,
+      sid: null,
+      nickname: null
+    })
+    const exported = await source.exportCollection()
+    // Simulate a hand-edited/corrupted backup where the profile array is missing the
+    // profile an entry still points to.
+    const corrupted = { ...exported, trainerProfiles: [] }
+
+    const fresh = createSqliteStorage(':memory:')
+    const result = await fresh.importCollection(corrupted)
+
+    expect(result.matched).toBe(exported.collectionEntries.length)
+    const restoredEntry = await findBulbasaurBaseEntry(fresh, false)
+    expect(restoredEntry.trainerProfileId).toBeNull()
+    expect(restoredEntry.originGame).toBe('Pokémon Sword')
   })
 
   it('skips entries whose form no longer exists in this install', async () => {

@@ -1,17 +1,5 @@
 # TODO
 
-## [Trainer Profile + Storage Location backup export/import] — Leg 13
-Neither Trainer Profiles (Leg 1) nor Storage Locations (Leg 2) are included in the JSON
-backup export/import flow (`collection-export.ts`) — a reinstall or a restore from
-backup silently loses every profile/location the user created. Noticed while building
-Leg 1, re-confirmed as the same gap while building Leg 2; deferred both times since each
-leg's scope was CRUD + schema + basic UI only, and wiring it in touches the export
-format/version. Now confirmed live: Leg 4 gave Collection Entries a `trainerProfileId`
-FK, so a restore drops each entry's link back to its source profile (the copied
-origin_game/ot_name/tid/sid/nickname snapshot itself is unaffected — only the
-provenance FK dangles).
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Origin language/country field] — Leg 14
 Add language/origin-country as a tracked origin attribute (Trainer Profile and/or
 per-entry origin data), alongside the existing game/OT/TID/SID fields.

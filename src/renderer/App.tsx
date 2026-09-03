@@ -18,6 +18,10 @@ export function App(): JSX.Element {
   const [entries, setEntries] = useState<CollectionEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
+  // Bumped after a JSON import (Leg 13 added Trainer Profiles/Storage Locations to the
+  // backup) so both panels below remount and refetch — they load their own data on
+  // mount only and have no other way to learn the DB moved out from under them.
+  const [importVersion, setImportVersion] = useState(0)
 
   // Reused after a JSON import too, since that writes owned state straight to SQLite
   // without going through setOwned — React's copy has to be reloaded from scratch.
@@ -32,6 +36,11 @@ export function App(): JSX.Element {
       setEntries(entryList)
     })
   }, [])
+
+  const handleImported = useCallback((): void => {
+    setImportVersion((v) => v + 1)
+    loadAll()
+  }, [loadAll])
 
   useEffect(() => {
     loadAll().finally(() => setLoading(false))
@@ -61,10 +70,10 @@ export function App(): JSX.Element {
   return (
     <main>
       <h1>PremierDex</h1>
-      <BackupControls onImported={loadAll} />
+      <BackupControls onImported={handleImported} />
       <UpdateControls />
-      <TrainerProfilesPanel />
-      <StorageLocationsPanel />
+      <TrainerProfilesPanel key={importVersion} />
+      <StorageLocationsPanel key={importVersion} />
       <DexToolbar options={options} onChange={setOptions} />
       <DexTable sections={sections} onToggleEntry={handleToggleEntry} onSaveOrigin={handleSaveOrigin} />
     </main>

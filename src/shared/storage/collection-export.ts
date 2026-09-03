@@ -1,16 +1,27 @@
 import type { CollectionEntry, Form, Species } from '../types/pokemon'
+import type { TrainerProfile } from '../types/trainer-profile'
+import type { StorageLocation } from '../types/storage-location'
 
 /**
  * Full-collection snapshot for the manual JSON backup mechanism (Leg 5 — the only
  * backup path in v1, no sync backend). Mirrors StorageAdapter's list* methods plus a
  * version/timestamp so a later schema change has something to detect and migrate on.
+ *
+ * v2 (Leg 13) adds trainerProfiles/storageLocations: v1 omitted both, so a reinstall or
+ * a restore from backup silently lost every profile/location the user created — see
+ * TODO.md/COMPLETED.md's Leg 13 entry. No migration path from v1: neither table had
+ * shipped in a release yet, so there was nothing worth carrying forward:
+ * parseCollectionExport rejects a v1 file outright, same as it already rejected an
+ * unrecognized version before this change.
  */
 export interface CollectionExport {
-  version: 1
+  version: 2
   exportedAt: string
   species: Species[]
   forms: Form[]
   collectionEntries: CollectionEntry[]
+  trainerProfiles: TrainerProfile[]
+  storageLocations: StorageLocation[]
 }
 
 /**
@@ -33,11 +44,17 @@ export function parseCollectionExport(raw: unknown): CollectionExport {
   }
 
   const data = raw as Partial<CollectionExport>
-  if (data.version !== 1) {
-    throw new Error(`Unsupported backup version: ${String(data.version)}. Expected 1.`)
+  if (data.version !== 2) {
+    throw new Error(`Unsupported backup version: ${String(data.version)}. Expected 2.`)
   }
-  if (!Array.isArray(data.species) || !Array.isArray(data.forms) || !Array.isArray(data.collectionEntries)) {
-    throw new Error('Backup file is missing species, forms, or collectionEntries.')
+  if (
+    !Array.isArray(data.species) ||
+    !Array.isArray(data.forms) ||
+    !Array.isArray(data.collectionEntries) ||
+    !Array.isArray(data.trainerProfiles) ||
+    !Array.isArray(data.storageLocations)
+  ) {
+    throw new Error('Backup file is missing species, forms, collectionEntries, trainerProfiles, or storageLocations.')
   }
 
   return data as CollectionExport

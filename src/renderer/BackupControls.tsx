@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
 interface BackupControlsProps {
-  /** Called after a successful import so the caller can reload species/forms/entries —
-   * import changes owned state directly in SQLite, bypassing React state entirely. */
+  /** Called after a successful import so the caller can reload species/forms/entries
+   * (and, as of Leg 13, Trainer Profiles/Storage Locations) — import writes directly to
+   * SQLite, bypassing React state entirely. */
   onImported: () => void
 }
 
@@ -17,8 +18,9 @@ export function BackupControls({ onImported }: BackupControlsProps): JSX.Element
 
   const handleImport = async (): Promise<void> => {
     const confirmed = window.confirm(
-      "Importing replaces your current collection with the backup file's — anything owned " +
-        "since that backup that isn't in the file will be reset to unowned. Continue?"
+      "Importing replaces your current collection, Trainer Profiles, and Storage Locations " +
+        "with the backup file's — anything created or owned since that backup that isn't in " +
+        'the file will be lost. Continue?'
     )
     if (!confirmed) return
 

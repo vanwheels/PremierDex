@@ -1,5 +1,19 @@
 # COMPLETED
 
+## [Trainer Profile + Storage Location backup export/import] — Leg 13 — 2026-09-02
+`CollectionExport` bumped to v2 (v1 never shipped in a release, so no migration path):
+added `trainerProfiles`/`storageLocations` arrays, restoring both on import as a full
+wipe-and-recreate that preserves each row's original id — the only way to keep
+`collection_entries.trainer_profile_id` and `storage_locations.trainer_profile_id` valid
+without a remapping step, since TrainerProfile's `label` field means natural-key matching
+(as used for forms) can't uniquely identify a profile. `importCollection` also now
+restores each entry's `trainerProfileId`/origin/nickname fields (previously only `owned`
+was ever touched), with the same full-replace semantics: absent from the backup means
+reset to null, matching `owned`'s existing reset-to-unowned behavior. A malformed/
+hand-edited backup whose entry references a `trainerProfileId` missing from its own
+`trainerProfiles` array gets that link dropped to null rather than failing the whole
+import. See commit `pending`.
+
 ## [Trainer Profile + Storage Location sort] — Leg 12 — 2026-09-02
 Added a shared "Sort by" dropdown (game — release order, game — A–Z, OT Name/Name — A–Z)
 to both TrainerProfilesPanel and StorageLocationsPanel; previously both just rendered in
