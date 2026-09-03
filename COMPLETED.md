@@ -11,6 +11,7 @@ pre-first-paint — same `theme-store.tsx`/`ThemeModeToggle.tsx` architecture as
 GW2-Squaded's own theme switcher. Toggle lives in the persistent header chrome next to
 BackupControls/UpdateControls. `--gold`/`--danger` stayed close to Pearl's values by
 design (shiny signal and severity color meant to read consistently across both themes).
+See commit `41d831a`.
 
 ## [Visual Design Pass] — Leg 2 — 2026-09-02
 Full re-skin off a token-based CSS system: dark (default) and light palettes pulled from
