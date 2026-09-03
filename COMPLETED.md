@@ -15,7 +15,7 @@ sorted last; origin-game ordering reuses the existing `compareGames` release-dat
 were pulled out of `buildDexSections.ts`/`DexRow.tsx` into shared modules
 (`dex/formNames.ts`, `dex/useNicknameEditor.ts`, `dex/originSummary.ts`) so the new
 Collection row reuses the exact same logic instead of duplicating it. See commit
-`<pending>`.
+`fc51ac1`.
 
 ## [Dex sort] — Leg 16 — 2026-09-02
 Clickable column headers (#, Name, Gen, Owned, Shiny — Vanny's call over a SortSelect-
