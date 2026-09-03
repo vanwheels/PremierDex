@@ -1,5 +1,10 @@
 # COMPLETED
 
+## [TID visibility when setting Pokémon origin] — Leg 11 — 2026-09-02
+OriginModal's "Copy from Trainer Profile" dropdown now appends the TID to each option
+(`— TID <n>`) when the profile has one, so similarly named/labeled profiles can be told
+apart before picking. See commit `e2b2e32`.
+
 ## [Move nicknames out of Origin field] — Leg 10 — 2026-09-02
 Nicknames were living inside the Origin button/modal on the Living Dex grid (the button
 showed the nickname text in place of "Origin" once set, and OriginModal had its own

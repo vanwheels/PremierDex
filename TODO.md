@@ -1,11 +1,5 @@
 # TODO
 
-## [TID visibility when setting Pokémon origin] — Leg 11
-When picking/setting a Collection Entry's origin (via Trainer Profile selection or the
-per-entry Origin modal), the TID should be visible to help disambiguate between similarly
-named profiles. Noted by Vanny during dev-data entry.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Trainer Profile + Storage Location sort] — Leg 12
 Trainer Profiles and Storage Locations should be sortable by game (release date order),
 game (alphabetical), and OT name/Name (alphabetical). No sort control exists yet on

@@ -127,6 +127,7 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
             {profiles.map((profile) => (
               <option key={profile.id} value={profile.id}>
                 {profile.label ?? profile.otName} — {profile.game}
+                {profile.tid !== null && ` — TID ${profile.tid}`}
               </option>
             ))}
           </select>
