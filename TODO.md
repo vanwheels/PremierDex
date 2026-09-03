@@ -9,16 +9,6 @@ default `alwaysShiny` (added Leg 24), and filterDexSections.test.ts/sortDexSecti
 unnoticed. Small, contained fix: add the missing default to each factory.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [Pokémon name punctuation exceptions] — Leg 29
-Leg 7 title-cases raw PokeAPI slugs (hyphens preserved as separators) at every display
-site, but ~14 species have real names the slug format can't represent: apostrophes
-(Farfetch'd/Sirfetch'd), periods (Mr. Mime, Mr. Rime, Mime Jr.), a colon (Type: Null),
-gender symbols (Nidoran♀/♂), an accent (Flabébé), and lowercase-after-hyphen exceptions
-(Jangmo-o/Hakamo-o/Kommo-o, Ho-Oh and Porygon-Z are already correct as-is). Deliberately
-deferred at Vanny's call — simple title-case only, no exceptions dictionary — see
-COMPLETED.md's Leg 7 entry.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Origin auto-populate from Trainer Profile edits] — unscheduled
 Vanny wants a Collection Entry's origin info to auto-update when its source Trainer
 Profile is edited later. This runs directly against Leg 4's deliberate design (origin

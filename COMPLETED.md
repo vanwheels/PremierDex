@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Pokémon name punctuation exceptions] — Leg 29 — 2026-09-02
+Added a `SPECIES_NAME_EXCEPTIONS` slug→name dictionary in `formNames.ts` for the 12
+species Leg 7's plain title-case can't reconstruct (apostrophes, periods, a colon, gender
+symbols, an accent, lowercase-after-hyphen), behind a new `speciesDisplayName` choke
+point; `capitalizeWords` alone still handles form-name suffixes and every other species.
+Reverses Leg 7's "no exceptions dictionary" call at Vanny's request. See commit
+`00a2824`.
+
 ## [Pokéball-caught-in tracking] — Leg 28 — 2026-09-02
 Scoped down from the open TODO framing via a few decisions from Vanny: a fixed 27-entry
 POKE_BALLS enum (not free text), edited as a "Caught In" dropdown inside OriginModal
