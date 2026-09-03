@@ -1,39 +1,37 @@
 /**
- * Theme tokens (2026-09-02 Visual Design Pass, Leg 2) — dark is the app's authored
- * default (matching Vanny's own always-dark preference), pulling a muted/desaturated
- * read of Palkia's pearl-magenta color story from Diamond/Pearl box art; light mode
- * pulls the same muted treatment of Dialga's steel blue, and only shows up when the OS
- * itself is in light mode (`prefers-color-scheme`) — there's no in-app toggle yet, see
- * TODO.md. Saturation was deliberately calibrated toward the games' actual box-art
- * tones rather than the more vivid anime-art reading, so this reads as a considered app
- * palette rather than a fan-art recolor. Same CSS-custom-property architecture as
- * GW2-Squaded's global.css (`--accent`/`--danger` kept semantically separate there too).
+ * Theme tokens (2026-09-02 Visual Design Pass, Leg 2; re-pulled same day after the first
+ * pass read as generic "AI dark mode" regardless of hue) — dark is the app's authored
+ * default (matching Vanny's own always-dark preference), sampled directly off Palkia's
+ * sprite and the Pearl box art rather than invented: pearl-pink/white body → --surface
+ * family, its saturated rose-magenta markings → --accent, the grayish blue-violet
+ * fin/wing plating → --accent2, its warm cream belly → --text. Light mode (Dialga) is
+ * untouched for now — dark gets nailed down first, see TODO.md. Same CSS-custom-
+ * property architecture as GW2-Squaded's global.css (`--accent`/`--danger` kept
+ * semantically separate there too).
  *
- * `--accent2` carries each version's secondary motif (Palkia's dark indigo markings /
- * Dialga's deep navy plating) for less-prominent interactive accents so the UI has more
- * depth than a single hue + neutrals. `--gold` is reserved for shiny/collector-value
- * signals (dex-always-shiny-badge, dex-shiny-locked-badge) so "shiny" reads as its own
- * meaningful color rather than reusing --accent.
+ * `--gold` is reserved for shiny/collector-value signals (dex-always-shiny-badge,
+ * dex-shiny-locked-badge) so "shiny" reads as its own meaningful color rather than
+ * reusing --accent.
  */
 :root {
   color-scheme: dark;
 
-  --bg: #1e1626;
-  --surface: #2a1e32;
-  --surface-raised: #34263e;
-  --border: #4a3a54;
-  --text: #f2e8ee;
-  --muted: #b39aac;
+  --bg: #150e1a;
+  --surface: #221731;
+  --surface-raised: #2c1e3d;
+  --border: #4f3f5c;
+  --text: #f6ecf2;
+  --muted: #a98aa0;
 
-  --accent: #c96a9c;
-  --accent-strong: #e8a7c6;
-  --on-accent: #2a1220;
-  --accent2: #6b5a94;
+  --accent: #d1487e;
+  --accent-strong: #f0a8c8;
+  --on-accent: #2a0f1e;
+  --accent2: #6f6f96;
 
-  --gold: #cfa955;
-  --danger: #c15a52;
+  --gold: #d4a84f;
+  --danger: #c85248;
 
-  --shadow: rgba(10, 5, 12, 0.55);
+  --shadow: rgba(8, 3, 12, 0.6);
 }
 
 @media (prefers-color-scheme: light) {

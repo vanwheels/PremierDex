@@ -77,84 +77,86 @@ export function DexTable({
 
   return (
     <>
-      <table className="dex-table">
-        <thead>
-          <tr>
-            <th>Sprite</th>
-            <SortableHeader label="#" sortKey="dexNumber" sort={sort} onSortChange={onSortChange} />
-            <SortableHeader label="Name" sortKey="name" sort={sort} onSortChange={onSortChange} />
-            <SortableHeader label="Gen" sortKey="generation" sort={sort} onSortChange={onSortChange} />
-            <th>Nickname</th>
-            <SortableHeader label="Non-Shiny" sortKey="owned" sort={sort} onSortChange={onSortChange} />
-            <SortableHeader label="Shiny" sortKey="shiny" sort={sort} onSortChange={onSortChange} />
-          </tr>
-        </thead>
-        <tbody>
-          {sections.map((section) => {
-            const isExpanded = section.speciesId !== null && expandedSpeciesIds.has(section.speciesId)
-            const hasCosmeticRows = section.cosmeticRows.length > 0
+      <div className="dex-table-panel">
+        <table className="dex-table">
+          <thead>
+            <tr>
+              <th>Sprite</th>
+              <SortableHeader label="#" sortKey="dexNumber" sort={sort} onSortChange={onSortChange} />
+              <SortableHeader label="Name" sortKey="name" sort={sort} onSortChange={onSortChange} />
+              <SortableHeader label="Gen" sortKey="generation" sort={sort} onSortChange={onSortChange} />
+              <th>Nickname</th>
+              <SortableHeader label="Non-Shiny" sortKey="owned" sort={sort} onSortChange={onSortChange} />
+              <SortableHeader label="Shiny" sortKey="shiny" sort={sort} onSortChange={onSortChange} />
+            </tr>
+          </thead>
+          <tbody>
+            {sections.map((section) => {
+              const isExpanded = section.speciesId !== null && expandedSpeciesIds.has(section.speciesId)
+              const hasCosmeticRows = section.cosmeticRows.length > 0
 
-            return (
-              <Fragment key={section.key}>
-                {section.rows.map((row, i) => {
-                  const isCollapseSlot = i === 0 && hasCosmeticRows && section.speciesId !== null
-                  // Collapsed, this slot shows whichever form (base or a cosmetic
-                  // variant) is checked off — or the user's pinned pick, Leg 27 — so an
-                  // owned/shiny variant doesn't hide behind an unowned default. Expanded,
-                  // every row is visible anyway, so it shows the base form in its normal
-                  // list-order position.
-                  const displayRow =
-                    isCollapseSlot && !isExpanded
-                      ? pickCollapsedRow(section.rows, section.cosmeticRows, section.collapsedDisplayFormId)
-                      : row
-                  const collapsedDisplayControl: CollapsedDisplayControl | undefined = isCollapseSlot
-                    ? {
-                        value: section.collapsedDisplayFormId,
-                        options: [section.rows[0], ...section.cosmeticRows].map((candidate) => ({
-                          formId: candidate.formId,
-                          label: candidate.displayName
-                        })),
-                        onChange: (formId) => onSetCollapsedDisplayForm(section.speciesId!, formId)
-                      }
-                    : undefined
-                  return (
-                    <DexRow
-                      key={row.key}
-                      row={displayRow}
-                      onToggleEntry={onToggleEntry}
-                      onOpenSprite={setSpriteTarget}
-                      onOpenOrigin={setOriginTarget}
-                      onSaveOrigin={onSaveOrigin}
-                      expandControl={
-                        isCollapseSlot
-                          ? {
-                              isExpanded,
-                              count: section.cosmeticRows.length,
-                              onClick: () => toggleExpanded(section.speciesId!)
-                            }
-                          : undefined
-                      }
-                      collapsedDisplayControl={collapsedDisplayControl}
-                    />
-                  )
-                })}
-                {isExpanded &&
-                  section.cosmeticRows.map((row) => (
-                    <DexRow
-                      key={row.key}
-                      row={row}
-                      onToggleEntry={onToggleEntry}
-                      onOpenSprite={setSpriteTarget}
-                      onOpenOrigin={setOriginTarget}
-                      onSaveOrigin={onSaveOrigin}
-                      indent
-                    />
-                  ))}
-              </Fragment>
-            )
-          })}
-        </tbody>
-      </table>
+              return (
+                <Fragment key={section.key}>
+                  {section.rows.map((row, i) => {
+                    const isCollapseSlot = i === 0 && hasCosmeticRows && section.speciesId !== null
+                    // Collapsed, this slot shows whichever form (base or a cosmetic
+                    // variant) is checked off — or the user's pinned pick, Leg 27 — so an
+                    // owned/shiny variant doesn't hide behind an unowned default. Expanded,
+                    // every row is visible anyway, so it shows the base form in its normal
+                    // list-order position.
+                    const displayRow =
+                      isCollapseSlot && !isExpanded
+                        ? pickCollapsedRow(section.rows, section.cosmeticRows, section.collapsedDisplayFormId)
+                        : row
+                    const collapsedDisplayControl: CollapsedDisplayControl | undefined = isCollapseSlot
+                      ? {
+                          value: section.collapsedDisplayFormId,
+                          options: [section.rows[0], ...section.cosmeticRows].map((candidate) => ({
+                            formId: candidate.formId,
+                            label: candidate.displayName
+                          })),
+                          onChange: (formId) => onSetCollapsedDisplayForm(section.speciesId!, formId)
+                        }
+                      : undefined
+                    return (
+                      <DexRow
+                        key={row.key}
+                        row={displayRow}
+                        onToggleEntry={onToggleEntry}
+                        onOpenSprite={setSpriteTarget}
+                        onOpenOrigin={setOriginTarget}
+                        onSaveOrigin={onSaveOrigin}
+                        expandControl={
+                          isCollapseSlot
+                            ? {
+                                isExpanded,
+                                count: section.cosmeticRows.length,
+                                onClick: () => toggleExpanded(section.speciesId!)
+                              }
+                            : undefined
+                        }
+                        collapsedDisplayControl={collapsedDisplayControl}
+                      />
+                    )
+                  })}
+                  {isExpanded &&
+                    section.cosmeticRows.map((row) => (
+                      <DexRow
+                        key={row.key}
+                        row={row}
+                        onToggleEntry={onToggleEntry}
+                        onOpenSprite={setSpriteTarget}
+                        onOpenOrigin={setOriginTarget}
+                        onSaveOrigin={onSaveOrigin}
+                        indent
+                      />
+                    ))}
+                </Fragment>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
       {spriteTarget && <SpriteModal target={spriteTarget} onClose={() => setSpriteTarget(null)} />}
       {originTarget && (
         <OriginModal

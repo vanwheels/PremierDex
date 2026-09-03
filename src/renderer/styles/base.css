@@ -7,9 +7,15 @@ body {
   height: 100%;
 }
 
+/* A faint magenta glow at the top of the viewport, nodding to the cosmic-swirl Pearl box
+   art without trying to reproduce it — mostly hidden behind .app-header/.app-view-tabs,
+   showing through only in the content area below them. Without this the page reads as a
+   single flat fill, same as every other unstyled dark-mode template. */
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse 120% 55% at 50% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 65%),
+    var(--bg);
   color: var(--text);
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

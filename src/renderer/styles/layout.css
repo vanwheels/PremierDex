@@ -25,6 +25,21 @@
 .app-title {
   margin: 0;
   letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+}
+
+/* Small rotated-square "gem" nodding to Palkia's diamond chest core — an abstract brand
+   touch that doesn't need custom artwork. */
+.app-title::before {
+  content: '';
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-right: 0.6rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  transform: rotate(45deg);
 }
 
 .app-header-controls {
@@ -107,10 +122,30 @@
   width: 16rem;
 }
 
+/**
+ * Card framing (added after the first re-skin pass read as too flat — tables sitting
+ * directly on .app-content's bg with no container "bled into the background"). Applied
+ * to each section's existing wrapper class rather than a new shared `.panel` class in
+ * JSX, so this stayed a CSS-only change. .dex-table has no such wrapper in DexTable.tsx,
+ * so that one got a dedicated .dex-table-panel div — see its own rule below.
+ */
 .trainer-profiles,
 .storage-locations,
+.completion-stats-block,
+.collection-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem 1.25rem;
+  box-shadow: 0 10px 30px -18px var(--shadow);
+}
+
 .completion-stats {
   margin-bottom: 1.75rem;
+}
+
+.completion-stats-block + .completion-stats-block {
+  margin-top: 1rem;
 }
 
 .collection-view label {
@@ -120,6 +155,17 @@
 
 .collection-group {
   margin-bottom: 1.75rem;
+}
+
+/* Table-specific card: no padding and clipped overflow instead, so .dex-table's sticky
+   header can sit flush with the panel's top edge rather than floating past rounded
+   corners it doesn't own. */
+.dex-table-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -18px var(--shadow);
 }
 
 .collection-group h2 {
