@@ -21,6 +21,11 @@ export interface DexRowData {
    * DexRow disables the shiny checkbox and flags it with a badge, same treatment as
    * homeBoxable. */
   shinyLocked: boolean
+  /** Non-null for a dex_distinct regional form (alolan/galarian/hisuian/paldean),
+   * mirroring Form.regionalGroup — carried through so the search/filter bar (Leg 15) can
+   * filter to regional forms independent of DexOptions.regionalMode's inline/grouped
+   * *layout* toggle. Always null for cosmetic-variant rows. */
+  regionalGroup: string | null
 }
 
 /**
@@ -41,4 +46,38 @@ export interface DexOptions {
   /** Off by default: a gender-diff form collapses to one row (using the male entry). */
   splitGenderRows: boolean
   regionalMode: 'inline' | 'grouped'
+}
+
+/** A three-way toggle for a boolean row property: no opinion, must be true, or must be
+ * false. Used by every yes/no filter dimension below. */
+export type FilterTriState = 'any' | 'yes' | 'no'
+
+/**
+ * Search/filter state for the Living Dex grid (Leg 15). Presentation-only, same as
+ * DexOptions — narrows which built DexSections are visible, never touches stored data,
+ * and isn't persisted across a reload.
+ *
+ * `query` is one free-text field rather than separate boxes per dimension (Vanny's call
+ * when folding nickname/origin search in): it matches across name, dex#, nickname, OT
+ * name, origin game, language, and TID/SID — see filterDexSections.ts's rowMatches.
+ */
+export interface DexFilters {
+  query: string
+  owned: FilterTriState
+  shiny: FilterTriState
+  regional: FilterTriState
+  /** 'any' or one of Species/Form's 1-CURRENT_MAX_GENERATION generation numbers. */
+  generation: number | 'any'
+  homeBoxable: FilterTriState
+  shinyLocked: FilterTriState
+}
+
+export const DEFAULT_DEX_FILTERS: DexFilters = {
+  query: '',
+  owned: 'any',
+  shiny: 'any',
+  regional: 'any',
+  generation: 'any',
+  homeBoxable: 'any',
+  shinyLocked: 'any'
 }

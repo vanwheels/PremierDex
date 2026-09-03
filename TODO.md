@@ -1,14 +1,5 @@
 # TODO
 
-## [Dex search/filter] — Leg 15
-Search the Living Dex by name/dex#; filter by owned, shiny, regional form, generation,
-and the existing badge flags (homeBoxable, shinyLocked). No dependency on the Trainer
-Profile/origin work above — can be picked up independently if priorities shift.
-Vanny's 2026-09-02 pass adds two more search dimensions to fold in here: search by
-nickname (moved to its own field in Leg 10) and search by origin settings (origin game/
-OT/TID/SID/language — language added Leg 14).
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Dex sort] — Leg 16
 Sortable columns on the Living Dex grid (dex#, name, generation, owned/shiny status).
 Independent of the origin-tracking chain.

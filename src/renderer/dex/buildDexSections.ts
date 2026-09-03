@@ -155,7 +155,8 @@ function buildRows(
       spriteFormSuffix: form.spriteFormSuffix,
       firstAvailableGeneration: form.firstAvailableGeneration,
       homeBoxable: form.homeBoxable,
-      shinyLocked: form.shinyLocked
+      shinyLocked: form.shinyLocked,
+      regionalGroup: form.regionalGroup
     }
   }
 

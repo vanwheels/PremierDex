@@ -91,6 +91,18 @@ td {
   margin-bottom: 1rem;
 }
 
+.dex-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dex-filter-query {
+  width: 16rem;
+}
+
 .panel-toolbar {
   display: flex;
   gap: 1.5rem;

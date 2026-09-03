@@ -3,9 +3,12 @@ import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from 
 import { BackupControls } from './BackupControls'
 import { UpdateControls } from './UpdateControls'
 import { buildDexSections } from './dex/buildDexSections'
+import { filterDexSections } from './dex/filterDexSections'
 import { DexTable } from './dex/DexTable'
 import { DexToolbar } from './dex/DexToolbar'
-import type { DexOptions } from './dex/types'
+import { DexFilterBar } from './dex/DexFilterBar'
+import type { DexFilters, DexOptions } from './dex/types'
+import { DEFAULT_DEX_FILTERS } from './dex/types'
 import { TrainerProfilesPanel } from './trainer/TrainerProfilesPanel'
 import { StorageLocationsPanel } from './storage-location/StorageLocationsPanel'
 
@@ -18,6 +21,7 @@ export function App(): JSX.Element {
   const [entries, setEntries] = useState<CollectionEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
+  const [filters, setFilters] = useState<DexFilters>(DEFAULT_DEX_FILTERS)
   // Bumped after a JSON import (Leg 13 added Trainer Profiles/Storage Locations to the
   // backup) so both panels below remount and refetch — they load their own data on
   // mount only and have no other way to learn the DB moved out from under them.
@@ -50,6 +54,7 @@ export function App(): JSX.Element {
     () => buildDexSections(species, forms, entries, options),
     [species, forms, entries, options]
   )
+  const visibleSections = useMemo(() => filterDexSections(sections, filters), [sections, filters])
 
   const handleToggleEntry = (entryId: number, owned: boolean): void => {
     window.premierDex.setOwned(entryId, owned).then((updated) => {
@@ -75,7 +80,8 @@ export function App(): JSX.Element {
       <TrainerProfilesPanel key={importVersion} />
       <StorageLocationsPanel key={importVersion} />
       <DexToolbar options={options} onChange={setOptions} />
-      <DexTable sections={sections} onToggleEntry={handleToggleEntry} onSaveOrigin={handleSaveOrigin} />
+      <DexFilterBar filters={filters} onChange={setFilters} />
+      <DexTable sections={visibleSections} onToggleEntry={handleToggleEntry} onSaveOrigin={handleSaveOrigin} />
     </main>
   )
 }

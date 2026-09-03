@@ -1,5 +1,21 @@
 # COMPLETED
 
+## [Dex search/filter] — Leg 15 — 2026-09-02
+One free-text `DexFilters.query` field (rather than a box per dimension) matches name,
+dex#, nickname, and origin settings (OT name/origin game/language/TID/SID) across either
+owned entry — folds in the two dimensions Vanny's 2026-09-02 pass added on top of the
+original name/dex# scope. Paired with independent tri-state (any/yes/no) filters for
+owned, shiny, regional form, and the existing homeBoxable/shinyLocked badge flags, plus a
+generation dropdown (1-CURRENT_MAX_GENERATION). `regionalGroup` added to `DexRowData`
+(mirroring `Form.regionalGroup`) since the row didn't carry it before — needed for the
+regional filter, independent of `DexOptions.regionalMode`'s inline/grouped *layout*
+toggle. New `filterDexSections` runs after `buildDexSections`, over its already-shaped
+output, dropping a section only when none of its rows or cosmeticRows match; a
+cosmeticRow-only match (e.g. searching an Unown letter by name) gets promoted into `rows`
+since the expand toggle that normally reveals cosmeticRows lives on rows[0], which would
+otherwise be filtered out. `DexFilterBar` is presentation-only like `DexToolbar` — never
+persisted. See commit `e5653f6`.
+
 ## [Origin language/country field] — Leg 14 — 2026-09-02
 Resolved the TODO's open scoping question first, with Vanny: "language" means the
 in-game language flag every Pokémon carries internally (Japanese/English/French/German/
