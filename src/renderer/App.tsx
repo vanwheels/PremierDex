@@ -23,7 +23,8 @@ const DEFAULT_OPTIONS: DexOptions = { splitGenderRows: false, regionalMode: 'inl
  * Dex grid, or the owned-entries-grouped-by-origin/OT/shiny Collection view (Leg 18). */
 type AppView = 'dex' | 'collection'
 
-/** The v1 spreadsheet-style Living Dex grid. See TODO.md's [Spreadsheet-style Living Dex UI] item. */
+/** The v1 spreadsheet-style Living Dex grid. See docs/completed-archive/living-dex-v1.md's
+ * [Spreadsheet-style Living Dex UI] item (Leg 3). */
 export function App(): JSX.Element {
   const [species, setSpecies] = useState<Species[]>([])
   const [forms, setForms] = useState<Form[]>([])

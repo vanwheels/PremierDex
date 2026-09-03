@@ -9,7 +9,8 @@
  * `<img src>` tags in SpriteThumbnail/SpriteModal, which fall back to a placeholder on
  * load error rather than this module trying to know in advance which files exist.
  *
- * Verified live against the repo (see TODO.md's Sprite display leg): generation
+ * Verified live against the repo (see docs/completed-archive/living-dex-v1.md's [Sprite
+ * display] leg, Leg 4): generation
  * folders exist through generation-ix, but generation-viii has no Sword/Shield sprite
  * set (those games used 3D models — brilliant-diamond-shining-pearl is the only
  * gen-8 sprite source). Also verified live: generation-i/red-blue,
