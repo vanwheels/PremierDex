@@ -52,7 +52,7 @@ export function StorageLocationRow({
         <button type="button" onClick={() => setEditing(true)}>
           Edit
         </button>
-        <button type="button" onClick={onDelete}>
+        <button type="button" className="button-danger" onClick={onDelete}>
           Delete
         </button>
       </td>

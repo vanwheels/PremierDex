@@ -110,11 +110,15 @@ export function App(): JSX.Element {
   }
 
   return (
-    <main>
-      <h1>PremierDex</h1>
-      <BackupControls onImported={handleImported} />
-      <UpdateControls />
-      <div className="app-view-tabs">
+    <div className="app-shell">
+      <header className="app-header">
+        <h1 className="app-title">PremierDex</h1>
+        <div className="app-header-controls">
+          <BackupControls onImported={handleImported} />
+          <UpdateControls />
+        </div>
+      </header>
+      <nav className="app-view-tabs">
         <button type="button" className={view === 'dex' ? 'app-view-tab active' : 'app-view-tab'} onClick={() => setView('dex')}>
           Living Dex
         </button>
@@ -139,31 +143,33 @@ export function App(): JSX.Element {
         >
           Storage Locations
         </button>
-      </div>
-      {view === 'dex' && (
-        <>
-          <CompletionStatsPanel
-            stats={completionStats}
-            options={completionStatsOptions}
-            onOptionsChange={setCompletionStatsOptions}
-          />
-          <DexToolbar options={options} onChange={setOptions} />
-          <DexFilterBar filters={filters} onChange={setFilters} />
-          <DexTable
-            sections={visibleSections}
-            sort={sort}
-            onSortChange={setSort}
-            onToggleEntry={handleToggleEntry}
-            onSaveOrigin={handleSaveOrigin}
-            onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
-          />
-        </>
-      )}
-      {view === 'collection' && (
-        <CollectionView species={species} forms={forms} entries={entries} onSaveOrigin={handleSaveOrigin} />
-      )}
-      {view === 'trainers' && <TrainerProfilesPanel key={importVersion} onEntriesChanged={refetchEntries} />}
-      {view === 'storage-locations' && <StorageLocationsPanel key={importVersion} />}
-    </main>
+      </nav>
+      <main className="app-content">
+        {view === 'dex' && (
+          <>
+            <CompletionStatsPanel
+              stats={completionStats}
+              options={completionStatsOptions}
+              onOptionsChange={setCompletionStatsOptions}
+            />
+            <DexToolbar options={options} onChange={setOptions} />
+            <DexFilterBar filters={filters} onChange={setFilters} />
+            <DexTable
+              sections={visibleSections}
+              sort={sort}
+              onSortChange={setSort}
+              onToggleEntry={handleToggleEntry}
+              onSaveOrigin={handleSaveOrigin}
+              onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
+            />
+          </>
+        )}
+        {view === 'collection' && (
+          <CollectionView species={species} forms={forms} entries={entries} onSaveOrigin={handleSaveOrigin} />
+        )}
+        {view === 'trainers' && <TrainerProfilesPanel key={importVersion} onEntriesChanged={refetchEntries} />}
+        {view === 'storage-locations' && <StorageLocationsPanel key={importVersion} />}
+      </main>
+    </div>
   )
 }

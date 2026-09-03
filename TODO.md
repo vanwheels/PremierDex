@@ -10,6 +10,14 @@ Blocked: needs production-quality PokéBall-or-similar artwork before a real pub
 release.
 Last touched: 2026-09-02. Re-check count: 0.
 
+## [In-app light/dark toggle] — unscheduled
+Leg 2's theme tokens ship both a dark palette (default) and a light one, but the light
+palette only ever shows up via the OS-level `prefers-color-scheme` media query — there's
+no in-app switcher (no persisted setting, no `<html data-theme>` override) like
+GW2-Squaded has. Not scoped into a leg; noted here so it isn't lost if a manual toggle
+turns out to be wanted later.
+Last touched: 2026-09-02. Re-check count: 0.
+
 ## Current Milestone: Nav restructuring → Visual pass → Storage Location sync → Dex Table redesign
 
 Scoped into 10 legs during a 2026-09-02 leg-planning pass. Decisions locked that day:
@@ -22,13 +30,6 @@ derived at read time, not a stored column, same treatment as `completionStats.ts
 restructuring expands the existing top-tab pattern rather than moving to a sidebar; the
 visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
 styling all in scope, not a targeted fix.
-
-## [Visual Design Pass] — Leg 2
-Full re-skin: color/theme system, layout density/spacing, and component styling (buttons,
-inputs, modals, tabs currently render as plain unstyled HTML). Lands right after nav
-restructuring so it applies to the settled tab structure instead of the old stacked-panel
-layout. Leg 1 landed, so this is unblocked.
-Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Storage Location FK + Met Location Field] — Leg 3
 Nullable `storageLocationId` FK + free-text `metLocation` on CollectionEntry — schema

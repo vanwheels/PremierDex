@@ -1,0 +1,60 @@
+/**
+ * Theme tokens (2026-09-02 Visual Design Pass, Leg 2) — dark is the app's authored
+ * default (matching Vanny's own always-dark preference), pulling a muted/desaturated
+ * read of Palkia's pearl-magenta color story from Diamond/Pearl box art; light mode
+ * pulls the same muted treatment of Dialga's steel blue, and only shows up when the OS
+ * itself is in light mode (`prefers-color-scheme`) — there's no in-app toggle yet, see
+ * TODO.md. Saturation was deliberately calibrated toward the games' actual box-art
+ * tones rather than the more vivid anime-art reading, so this reads as a considered app
+ * palette rather than a fan-art recolor. Same CSS-custom-property architecture as
+ * GW2-Squaded's global.css (`--accent`/`--danger` kept semantically separate there too).
+ *
+ * `--accent2` carries each version's secondary motif (Palkia's dark indigo markings /
+ * Dialga's deep navy plating) for less-prominent interactive accents so the UI has more
+ * depth than a single hue + neutrals. `--gold` is reserved for shiny/collector-value
+ * signals (dex-always-shiny-badge, dex-shiny-locked-badge) so "shiny" reads as its own
+ * meaningful color rather than reusing --accent.
+ */
+:root {
+  color-scheme: dark;
+
+  --bg: #1e1626;
+  --surface: #2a1e32;
+  --surface-raised: #34263e;
+  --border: #4a3a54;
+  --text: #f2e8ee;
+  --muted: #b39aac;
+
+  --accent: #c96a9c;
+  --accent-strong: #e8a7c6;
+  --on-accent: #2a1220;
+  --accent2: #6b5a94;
+
+  --gold: #cfa955;
+  --danger: #c15a52;
+
+  --shadow: rgba(10, 5, 12, 0.55);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    --bg: #eef2f6;
+    --surface: #ffffff;
+    --surface-raised: #f7fafc;
+    --border: #ccd6e0;
+    --text: #22303e;
+    --muted: #62758a;
+
+    --accent: #4d7aa8;
+    --accent-strong: #2c4460;
+    --on-accent: #ffffff;
+    --accent2: #2c4460;
+
+    --gold: #a9822f;
+    --danger: #b03a2e;
+
+    --shadow: rgba(34, 48, 62, 0.15);
+  }
+}

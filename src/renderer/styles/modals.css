@@ -1,0 +1,147 @@
+.origin-modal-backdrop,
+.sprite-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--bg) 70%, black 30%);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.origin-modal,
+.sprite-modal {
+  position: relative;
+  background: var(--surface-raised);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 1rem 2.5rem var(--shadow);
+}
+
+.origin-modal {
+  min-width: 20rem;
+}
+
+.sprite-modal {
+  min-width: 16rem;
+  text-align: center;
+}
+
+.origin-modal-close,
+.sprite-modal-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.75rem;
+  border: none;
+  background: none;
+  font-size: 1.25rem;
+  color: var(--muted);
+  padding: 0.1rem 0.4rem;
+}
+
+.origin-modal-close:hover,
+.sprite-modal-close:hover {
+  color: var(--text);
+}
+
+.origin-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0.7rem 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.origin-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.sprite-modal-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  margin: 0.5rem auto;
+}
+
+.sprite-modal-image img {
+  image-rendering: pixelated;
+}
+
+.sprite-modal-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.sprite-modal-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sprite-modal-animated-source {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Origin-game autocomplete popover (OriginGameInput) — same elevated-surface treatment
+   as the modals above, just anchored inline under the input rather than centered over a
+   backdrop. */
+.origin-game-input {
+  position: relative;
+}
+
+.origin-game-options {
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0.2rem 0 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  max-height: 12rem;
+  overflow-y: auto;
+  background: var(--surface-raised);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 0.5rem 1rem var(--shadow);
+}
+
+.origin-game-options li {
+  display: block;
+}
+
+.origin-game-options button {
+  display: block;
+  width: 100%;
+  padding: 0.3rem 0.7rem;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: inherit;
+  font: inherit;
+}
+
+.origin-game-options button:hover,
+.origin-game-options button:focus {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
