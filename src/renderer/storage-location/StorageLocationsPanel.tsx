@@ -9,12 +9,18 @@ import { sortStorageLocations } from './sortStorageLocations'
 
 const EMPTY_INPUT: StorageLocationInput = { locationType: 'home', name: '', trainerProfileId: null }
 
+interface StorageLocationsPanelProps {
+  /** DexTable's interim assignment picker (Leg 3) reads its options from App.tsx's own
+   * copy of the list — this tells App to refetch after a create/update/delete here, same
+   * pattern as TrainerProfilesPanel's onEntriesChanged. */
+  onLocationsChanged: () => void
+}
+
 /** CRUD UI for Storage Locations (Leg 2) — where a Pokémon currently sits (HOME/Bank/
  * Box/Ranch/save-file), kept independent of TrainerProfile (Leg 1) origin so
- * trades/transfers can move location without touching origin. Standalone here: nothing
- * else reads or links to these yet. See TODO.md's [Storage Location model]. Mirrors
- * trainer/TrainerProfilesPanel.tsx's shape. */
-export function StorageLocationsPanel(): JSX.Element {
+ * trades/transfers can move location without touching origin. See TODO.md's [Storage
+ * Location model]. Mirrors trainer/TrainerProfilesPanel.tsx's shape. */
+export function StorageLocationsPanel({ onLocationsChanged }: StorageLocationsPanelProps): JSX.Element {
   const [locations, setLocations] = useState<StorageLocation[]>([])
   const [trainerProfiles, setTrainerProfiles] = useState<TrainerProfile[]>([])
   const [loading, setLoading] = useState(true)
@@ -44,17 +50,20 @@ export function StorageLocationsPanel(): JSX.Element {
     await window.premierDex.createStorageLocation(input)
     setAdding(false)
     await load()
+    onLocationsChanged()
   }
 
   const handleUpdate = async (id: number, input: StorageLocationInput): Promise<void> => {
     await window.premierDex.updateStorageLocation(id, input)
     await load()
+    onLocationsChanged()
   }
 
   const handleDelete = async (id: number): Promise<void> => {
     if (!window.confirm('Delete this storage location?')) return
     await window.premierDex.deleteStorageLocation(id)
     await load()
+    onLocationsChanged()
   }
 
   if (loading) {

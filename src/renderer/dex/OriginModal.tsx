@@ -59,6 +59,10 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   // Not seeded by "Copy from Trainer Profile" (see handleProfileSelect below) — a ball
   // is per-catch, not per-trainer, so there's no profile field to copy it from.
   const [caughtBall, setCaughtBall] = useState(entry.caughtBall ?? '')
+  // Free-text "where caught" (Leg 3 of the Storage Location milestone) — same
+  // independently-editable treatment as caughtBall: not tied to a Trainer Profile, and
+  // not seeded by "Copy from Trainer Profile".
+  const [metLocation, setMetLocation] = useState(entry.metLocation ?? '')
 
   useEffect(() => {
     window.premierDex.listTrainerProfiles().then(setProfiles)
@@ -119,7 +123,8 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
           sid: null,
           language: null,
           nickname: entry.nickname,
-          caughtBall: null
+          caughtBall: null,
+          metLocation: null
         }
       : {
           trainerProfileId,
@@ -129,7 +134,8 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
           sid: sidVisible ? parsedSid : null,
           language: language || null,
           nickname: entry.nickname,
-          caughtBall: caughtBall || null
+          caughtBall: caughtBall || null,
+          metLocation: metLocation.trim() || null
         }
     onSave(entry.id, input)
     onClose()
@@ -216,6 +222,14 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
               </option>
             ))}
           </select>
+        </label>
+        <label className="origin-modal-field">
+          Met Location
+          <input
+            value={metLocation}
+            onChange={(e) => setMetLocation(e.target.value)}
+            placeholder="Optional"
+          />
         </label>
         <div className="origin-modal-actions">
           <button type="button" onClick={handleSave} disabled={!valid}>

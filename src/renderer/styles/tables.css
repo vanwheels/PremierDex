@@ -134,6 +134,20 @@ tbody tr:hover {
   cursor: default;
 }
 
+/* Minimal interim assignment picker (Leg 3) — moves into the redesigned per-location Dex
+ * table at Leg 9. Same compact treatment as dex-collapsed-display-select. */
+.dex-storage-location-select {
+  margin-left: 0.35rem;
+  font-size: 0.68rem;
+  padding: 0.1rem 0.3rem;
+  max-width: 6.5rem;
+  vertical-align: middle;
+}
+
+.dex-storage-location-select:disabled {
+  opacity: 0.4;
+}
+
 .ball-icon {
   margin-left: 0.35rem;
   vertical-align: middle;

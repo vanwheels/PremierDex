@@ -26,6 +26,10 @@ export interface StorageAdapter {
    * displays when collapsed, overriding pickCollapsedRow's auto-pick. */
   setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species>
   setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry>
+  /** Separate from setEntryOrigin (Leg 3) — current location and origin are deliberately
+   * different axes, see CollectionEntry's doc comment. Null clears the assignment back
+   * to unassigned. */
+  setEntryStorageLocation(entryId: number, storageLocationId: number | null): Promise<CollectionEntry>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>

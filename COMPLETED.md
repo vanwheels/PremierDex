@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Storage Location FK + Met Location Field] — Leg 3 — 2026-09-03
+Nullable `storageLocationId` FK (schema retrofit onto `collection_entries`, orphaned to
+null on the referenced location's delete/import-replace rather than blocking it) plus
+free-text `metLocation`, threaded through types/IPC/preload. `setEntryStorageLocation` is
+a dedicated setter, kept off `CollectionEntryOriginInput` since current location and
+origin are different axes; `metLocation` rides along with the origin fields in
+OriginModal instead. Interim assignment picker is a plain `<select>` next to each row's
+Origin button in DexRow, reading App.tsx's own `storageLocations` fetch — moves into the
+redesigned per-location table at Leg 9. See commit `<pending>`.
+
 ## [Diamond Theming + In-App Diamond/Pearl Toggle] — 2026-09-03
 Diamond palette pulled from Dialga (steel-blue plated body → --surface family, its pale
 cyan diamond core gem → --accent, darker navy secondary plating → --accent2, the gem's

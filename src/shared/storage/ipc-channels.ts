@@ -5,6 +5,7 @@ export const PokemonIpcChannel = {
   listCollectionEntries: 'pokemon:collectionEntries:list',
   setOwned: 'pokemon:collectionEntries:setOwned',
   setEntryOrigin: 'pokemon:collectionEntries:setOrigin',
+  setEntryStorageLocation: 'pokemon:collectionEntries:setStorageLocation',
   setCollapsedDisplayForm: 'pokemon:species:setCollapsedDisplayForm'
 } as const
 

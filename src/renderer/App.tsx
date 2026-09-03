@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
+import type { StorageLocation } from '@shared/types/storage-location'
 import { BackupControls } from './BackupControls'
 import { UpdateControls } from './UpdateControls'
 import { ThemeProvider } from './theme/theme-store'
@@ -33,6 +34,9 @@ export function App(): JSX.Element {
   const [species, setSpecies] = useState<Species[]>([])
   const [forms, setForms] = useState<Form[]>([])
   const [entries, setEntries] = useState<CollectionEntry[]>([])
+  // Fetched here (rather than left to StorageLocationsPanel's own load) so DexTable's
+  // interim assignment picker (Leg 3) has the list to populate its dropdown from.
+  const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([])
   const [loading, setLoading] = useState(true)
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
   const [filters, setFilters] = useState<DexFilters>(DEFAULT_DEX_FILTERS)
@@ -52,11 +56,13 @@ export function App(): JSX.Element {
     return Promise.all([
       window.premierDex.listSpecies(),
       window.premierDex.listForms(),
-      window.premierDex.listCollectionEntries()
-    ]).then(([speciesList, formList, entryList]) => {
+      window.premierDex.listCollectionEntries(),
+      window.premierDex.listStorageLocations()
+    ]).then(([speciesList, formList, entryList, storageLocationList]) => {
       setSpecies(speciesList)
       setForms(formList)
       setEntries(entryList)
+      setStorageLocations(storageLocationList)
     })
   }, [])
 
@@ -97,6 +103,12 @@ export function App(): JSX.Element {
 
   const handleSaveOrigin = (entryId: number, input: CollectionEntryOriginInput): void => {
     window.premierDex.setEntryOrigin(entryId, input).then((updated) => {
+      setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
+    })
+  }
+
+  const handleSaveStorageLocation = (entryId: number, storageLocationId: number | null): void => {
+    window.premierDex.setEntryStorageLocation(entryId, storageLocationId).then((updated) => {
       setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
     })
   }
@@ -165,6 +177,8 @@ export function App(): JSX.Element {
                 onToggleEntry={handleToggleEntry}
                 onSaveOrigin={handleSaveOrigin}
                 onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
+                storageLocations={storageLocations}
+                onSaveStorageLocation={handleSaveStorageLocation}
               />
             </>
           )}
@@ -172,7 +186,9 @@ export function App(): JSX.Element {
             <CollectionView species={species} forms={forms} entries={entries} onSaveOrigin={handleSaveOrigin} />
           )}
           {view === 'trainers' && <TrainerProfilesPanel key={importVersion} onEntriesChanged={refetchEntries} />}
-          {view === 'storage-locations' && <StorageLocationsPanel key={importVersion} />}
+          {view === 'storage-locations' && (
+            <StorageLocationsPanel key={importVersion} onLocationsChanged={loadAll} />
+          )}
         </main>
       </div>
     </ThemeProvider>

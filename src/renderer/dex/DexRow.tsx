@@ -1,10 +1,13 @@
 import type { CollectionEntry, CollectionEntryOriginInput } from '@shared/types/pokemon'
+import type { StorageLocation } from '@shared/types/storage-location'
 import { SpriteThumbnail } from './SpriteThumbnail'
 import type { SpriteModalTarget } from './SpriteModal'
 import type { OriginModalTarget } from './OriginModal'
 import { originTitle } from './originSummary'
 import { useNicknameEditor } from './useNicknameEditor'
 import type { DexRowData } from './types'
+
+const UNASSIGNED = ''
 
 export interface ExpandControl {
   isExpanded: boolean
@@ -27,6 +30,10 @@ interface DexRowProps {
   onOpenSprite: (target: SpriteModalTarget) => void
   onOpenOrigin: (target: OriginModalTarget) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
+  /** Minimal interim assignment picker (Leg 3) — moves into the redesigned per-location
+   * Dex table itself at Leg 9, per TODO.md. */
+  storageLocations: StorageLocation[]
+  onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
   expandControl?: ExpandControl
   collapsedDisplayControl?: CollapsedDisplayControl
   indent?: boolean
@@ -49,12 +56,33 @@ export function DexRow({
   onOpenSprite,
   onOpenOrigin,
   onSaveOrigin,
+  storageLocations,
+  onSaveStorageLocation,
   expandControl,
   collapsedDisplayControl,
   indent
 }: DexRowProps): JSX.Element {
   const nicknameEntry = activeNicknameEntry(row)
   const { text: nicknameText, setText: setNicknameText, commit: commitNickname } = useNicknameEditor(nicknameEntry, onSaveOrigin)
+
+  const storageLocationSelect = (entry: CollectionEntry | null): JSX.Element => (
+    <select
+      className="dex-storage-location-select"
+      disabled={!entry?.owned}
+      value={entry?.storageLocationId ?? UNASSIGNED}
+      onChange={(e) =>
+        entry && onSaveStorageLocation(entry.id, e.target.value === UNASSIGNED ? null : Number(e.target.value))
+      }
+      title="Storage location"
+    >
+      <option value={UNASSIGNED}>Unassigned</option>
+      {storageLocations.map((location) => (
+        <option key={location.id} value={location.id}>
+          {location.name}
+        </option>
+      ))}
+    </select>
+  )
 
   return (
     <tr className={indent ? 'dex-row-indent' : undefined}>
@@ -146,6 +174,7 @@ export function DexRow({
         >
           Origin
         </button>
+        {storageLocationSelect(row.regular)}
         {row.alwaysShiny && (
           <span className="dex-always-shiny-badge" title="No legitimate non-shiny of this form has ever existed">
             Always shiny
@@ -168,6 +197,7 @@ export function DexRow({
         >
           Origin
         </button>
+        {storageLocationSelect(row.shinyEntry)}
         {row.shinyLocked && (
           <span className="dex-shiny-locked-badge" title="No legitimate shiny of this form has ever existed">
             Shiny-locked

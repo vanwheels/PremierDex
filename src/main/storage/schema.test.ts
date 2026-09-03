@@ -156,6 +156,8 @@ describe('applySchema', () => {
     expect(row.language).toBeNull()
     expect(row.nickname).toBeNull()
     expect(row.caught_ball).toBeNull()
+    expect(row.storage_location_id).toBeNull()
+    expect(row.met_location).toBeNull()
   })
 
   it('rejects a collection_entries tid past the 6-digit range via the CHECK constraint', () => {

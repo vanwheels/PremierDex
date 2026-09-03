@@ -19,6 +19,7 @@ export interface AppBridge extends UpdaterBridge {
   listCollectionEntries(): Promise<CollectionEntry[]>
   setOwned(entryId: number, owned: boolean): Promise<CollectionEntry>
   setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry>
+  setEntryStorageLocation(entryId: number, storageLocationId: number | null): Promise<CollectionEntry>
   setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species>
   /** Opens a save dialog, writes the full collection to the chosen file. Null if the
    * user canceled the dialog. */

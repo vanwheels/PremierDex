@@ -43,6 +43,8 @@ interface CollectionEntryRow {
   language: string | null
   nickname: string | null
   caught_ball: string | null
+  storage_location_id: number | null
+  met_location: string | null
 }
 
 interface TrainerProfileRow {
@@ -104,7 +106,9 @@ function toCollectionEntry(row: CollectionEntryRow): CollectionEntry {
     sid: row.sid,
     language: row.language,
     nickname: row.nickname,
-    caughtBall: row.caught_ball
+    caughtBall: row.caught_ball,
+    storageLocationId: row.storage_location_id,
+    metLocation: row.met_location
   }
 }
 
@@ -150,11 +154,24 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const setEntryOriginStmt = db.prepare(`
     UPDATE collection_entries
     SET trainer_profile_id = @trainerProfileId, origin_game = @originGame, ot_name = @otName,
-      tid = @tid, sid = @sid, language = @language, nickname = @nickname, caught_ball = @caughtBall
+      tid = @tid, sid = @sid, language = @language, nickname = @nickname, caught_ball = @caughtBall,
+      met_location = @metLocation
     WHERE id = @id
   `)
+  // Separate from setEntryOriginStmt above — storage location is its own axis (Leg 3),
+  // never touched by an origin save. No CHECK to violate here (a plain nullable FK), so
+  // an invalid id simply throws FOREIGN KEY constraint failed, same as any other FK write.
+  const setEntryStorageLocationStmt = db.prepare(
+    'UPDATE collection_entries SET storage_location_id = @storageLocationId WHERE id = @id'
+  )
   const orphanEntriesByTrainerProfileStmt = db.prepare(
     'UPDATE collection_entries SET trainer_profile_id = NULL WHERE trainer_profile_id = ?'
+  )
+  // Mirrors orphanEntriesByTrainerProfileStmt above: storage_location_id has no ON
+  // DELETE clause (SQLite defaults to NO ACTION), so deleting a still-assigned location
+  // needs this run first or the FK check blocks the delete.
+  const orphanEntriesByStorageLocationStmt = db.prepare(
+    'UPDATE collection_entries SET storage_location_id = NULL WHERE storage_location_id = ?'
   )
   const listFormKeysStmt = db.prepare('SELECT id, species_id, form_name FROM forms')
   const listTrainerProfilesStmt = db.prepare('SELECT * FROM trainer_profiles ORDER BY id')
@@ -199,6 +216,10 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   // collection_entries.trainer_profile_id and storage_locations.trainer_profile_id valid
   // post-restore with no remapping step. See importCollection below.
   const clearAllEntryTrainerProfilesStmt = db.prepare('UPDATE collection_entries SET trainer_profile_id = NULL')
+  // Same FK hazard as clearAllEntryTrainerProfilesStmt: storage_location_id (Leg 3) has
+  // no ON DELETE clause, so wiping storage_locations below would otherwise fail the FK
+  // check against any entry still assigned to one.
+  const clearAllEntryStorageLocationsStmt = db.prepare('UPDATE collection_entries SET storage_location_id = NULL')
   const deleteAllStorageLocationsStmt = db.prepare('DELETE FROM storage_locations')
   const deleteAllTrainerProfilesStmt = db.prepare('DELETE FROM trainer_profiles')
   const insertTrainerProfileWithIdStmt = db.prepare(`
@@ -213,7 +234,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     UPDATE collection_entries
     SET owned = @owned, trainer_profile_id = @trainerProfileId, origin_game = @originGame,
       ot_name = @otName, tid = @tid, sid = @sid, language = @language, nickname = @nickname,
-      caught_ball = @caughtBall
+      caught_ball = @caughtBall, storage_location_id = @storageLocationId, met_location = @metLocation
     WHERE id = @id
   `)
 
@@ -252,6 +273,11 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
 
     async setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry> {
       setEntryOriginStmt.run({ id: entryId, ...input })
+      return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
+    },
+
+    async setEntryStorageLocation(entryId: number, storageLocationId: number | null): Promise<CollectionEntry> {
+      setEntryStorageLocationStmt.run({ id: entryId, storageLocationId })
       return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
     },
 
@@ -295,6 +321,8 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       // export can never disagree with itself here, since trainerProfiles is a full
       // dump of the same live table the entries' FK was read from.
       const importedTrainerProfileIds = new Set(data.trainerProfiles.map((profile) => profile.id))
+      // Same guard, same reasoning, for storageLocationId against data.storageLocations.
+      const importedStorageLocationIds = new Set(data.storageLocations.map((location) => location.id))
 
       interface WantedEntry {
         owned: boolean
@@ -306,6 +334,8 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
         language: string | null
         nickname: string | null
         caughtBall: string | null
+        storageLocationId: number | null
+        metLocation: string | null
       }
       const wantedByKey = new Map<string, WantedEntry>()
       let matched = 0
@@ -330,7 +360,12 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
           sid: entry.sid,
           language: entry.language,
           nickname: entry.nickname,
-          caughtBall: entry.caughtBall
+          caughtBall: entry.caughtBall,
+          storageLocationId:
+            entry.storageLocationId !== null && importedStorageLocationIds.has(entry.storageLocationId)
+              ? entry.storageLocationId
+              : null,
+          metLocation: entry.metLocation
         })
       }
 
@@ -340,6 +375,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
         // trainer_profiles (parent) — otherwise either delete fails against a row still
         // referencing it. Reinsertion is parent-then-child for the same reason.
         clearAllEntryTrainerProfilesStmt.run()
+        clearAllEntryStorageLocationsStmt.run()
         deleteAllStorageLocationsStmt.run()
         deleteAllTrainerProfilesStmt.run()
         for (const profile of data.trainerProfiles) {
@@ -361,7 +397,9 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
             sid: wanted?.sid ?? null,
             language: wanted?.language ?? null,
             nickname: wanted?.nickname ?? null,
-            caughtBall: wanted?.caughtBall ?? null
+            caughtBall: wanted?.caughtBall ?? null,
+            storageLocationId: wanted?.storageLocationId ?? null,
+            metLocation: wanted?.metLocation ?? null
           })
         }
       })
@@ -409,6 +447,10 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     },
 
     async deleteStorageLocation(id: number): Promise<void> {
+      // Orphan first, same reasoning as deleteTrainerProfile above: storage_location_id
+      // has no ON DELETE clause, so deleting a still-assigned location would otherwise
+      // fail the FK check.
+      orphanEntriesByStorageLocationStmt.run(id)
       deleteStorageLocationStmt.run(id)
     }
   }

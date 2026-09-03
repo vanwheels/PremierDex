@@ -102,7 +102,8 @@ describe('exportCollection / importCollection', () => {
       sid: 1234,
       language: 'English',
       nickname: 'Bulby',
-      caughtBall: 'Great Ball'
+      caughtBall: 'Great Ball',
+      metLocation: 'Route 1'
     })
 
     const exported = await storage.exportCollection()
@@ -112,6 +113,7 @@ describe('exportCollection / importCollection', () => {
     expect(exportedEntry.otName).toBe('Ash')
     expect(exportedEntry.language).toBe('English')
     expect(exportedEntry.caughtBall).toBe('Great Ball')
+    expect(exportedEntry.metLocation).toBe('Route 1')
   })
 
   it('resets local origin/nickname data on import when the backup entry has none (full replace, Leg 13)', async () => {
@@ -125,7 +127,8 @@ describe('exportCollection / importCollection', () => {
       sid: 1234,
       language: 'English',
       nickname: 'Bulby',
-      caughtBall: 'Great Ball'
+      caughtBall: 'Great Ball',
+      metLocation: 'Route 1'
     })
 
     // A backup from before this entry had a nickname/origin set — full-replace means
@@ -162,8 +165,10 @@ describe('exportCollection / importCollection', () => {
       sid: profile.sid,
       language: profile.language,
       nickname: 'Bulby',
-      caughtBall: 'Great Ball'
+      caughtBall: 'Great Ball',
+      metLocation: 'Route 1'
     })
+    await source.setEntryStorageLocation(entry.id, location.id)
     const exported = await source.exportCollection()
 
     // Simulates a reinstall: a brand-new, freshly-seeded database with no profiles or
@@ -176,6 +181,7 @@ describe('exportCollection / importCollection', () => {
     const restoredEntry = await findBulbasaurBaseEntry(fresh, false)
     expect(restoredEntry.trainerProfileId).toBe(profile.id)
     expect(restoredEntry.nickname).toBe('Bulby')
+    expect(restoredEntry.storageLocationId).toBe(location.id)
   })
 
   it('is a full replace for Trainer Profiles/Storage Locations too: local-only rows absent from the backup are gone', async () => {
@@ -216,7 +222,8 @@ describe('exportCollection / importCollection', () => {
       sid: null,
       language: null,
       nickname: null,
-      caughtBall: null
+      caughtBall: null,
+      metLocation: null
     })
     const exported = await source.exportCollection()
     // Simulate a hand-edited/corrupted backup where the profile array is missing the
@@ -230,6 +237,28 @@ describe('exportCollection / importCollection', () => {
     const restoredEntry = await findBulbasaurBaseEntry(fresh, false)
     expect(restoredEntry.trainerProfileId).toBeNull()
     expect(restoredEntry.originGame).toBe('Pokémon Sword')
+  })
+
+  it('drops a dangling storageLocationId on an entry rather than failing import, when its location is missing from the backup', async () => {
+    const source = createSqliteStorage(':memory:')
+    const location = await source.createStorageLocation({
+      locationType: 'box',
+      name: 'Box 1',
+      trainerProfileId: null
+    })
+    const entry = await findBulbasaurBaseEntry(source, false)
+    await source.setEntryStorageLocation(entry.id, location.id)
+    const exported = await source.exportCollection()
+    // Simulate a hand-edited/corrupted backup where the location array is missing the
+    // location an entry still points to.
+    const corrupted = { ...exported, storageLocations: [] }
+
+    const fresh = createSqliteStorage(':memory:')
+    const result = await fresh.importCollection(corrupted)
+
+    expect(result.matched).toBe(exported.collectionEntries.length)
+    const restoredEntry = await findBulbasaurBaseEntry(fresh, false)
+    expect(restoredEntry.storageLocationId).toBeNull()
   })
 
   it('skips entries whose form no longer exists in this install', async () => {
@@ -254,7 +283,9 @@ describe('exportCollection / importCollection', () => {
           sid: null,
           language: null,
           nickname: null,
-          caughtBall: null
+          caughtBall: null,
+          storageLocationId: null,
+          metLocation: null
         }
       ]
     }

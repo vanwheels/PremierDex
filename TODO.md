@@ -23,14 +23,6 @@ restructuring expands the existing top-tab pattern rather than moving to a sideb
 visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
 styling all in scope, not a targeted fix.
 
-## [Storage Location FK + Met Location Field] — Leg 3
-Nullable `storageLocationId` FK + free-text `metLocation` on CollectionEntry — schema
-retrofit, types, IPC, a `setEntryStorageLocation` setter (kept separate from
-`setEntryOrigin` since location and origin are deliberately different axes), `metLocation`
-wired into OriginModal, and a minimal interim assignment picker (upgraded in Leg 9). No
-forced migration — entries can sit unassigned indefinitely.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Per-Game Species-Availability Dataset] — Leg 4
 Which species are obtainable in a given origin game (v1 slice — species-availability
 only, not full form/gender/ball-combo legality), grouped by shared regional dex to cut

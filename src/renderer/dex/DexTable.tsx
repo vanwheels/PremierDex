@@ -1,5 +1,6 @@
 import { Fragment, useState } from 'react'
 import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
+import type { StorageLocation } from '@shared/types/storage-location'
 import { DexRow } from './DexRow'
 import type { CollapsedDisplayControl } from './DexRow'
 import { SpriteModal } from './SpriteModal'
@@ -16,6 +17,9 @@ interface DexTableProps {
   onToggleEntry: (entryId: number, owned: boolean) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   onSetCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
+  /** Minimal interim assignment picker (Leg 3) — see DexRow's doc comment. */
+  storageLocations: StorageLocation[]
+  onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
 }
 
 /** Three-state header click cycle (Leg 16): unsorted/other-column → ascending →
@@ -56,7 +60,9 @@ export function DexTable({
   onSortChange,
   onToggleEntry,
   onSaveOrigin,
-  onSetCollapsedDisplayForm
+  onSetCollapsedDisplayForm,
+  storageLocations,
+  onSaveStorageLocation
 }: DexTableProps): JSX.Element {
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
   // Which row's sprite is enlarged, if any. UI-only, same as expandedSpeciesIds above.
@@ -126,6 +132,8 @@ export function DexTable({
                         onOpenSprite={setSpriteTarget}
                         onOpenOrigin={setOriginTarget}
                         onSaveOrigin={onSaveOrigin}
+                        storageLocations={storageLocations}
+                        onSaveStorageLocation={onSaveStorageLocation}
                         expandControl={
                           isCollapseSlot
                             ? {
@@ -148,6 +156,8 @@ export function DexTable({
                         onOpenSprite={setSpriteTarget}
                         onOpenOrigin={setOriginTarget}
                         onSaveOrigin={onSaveOrigin}
+                        storageLocations={storageLocations}
+                        onSaveStorageLocation={onSaveStorageLocation}
                         indent
                       />
                     ))}

@@ -98,11 +98,23 @@ export interface CollectionEntry {
    * a Trainer Profile (a ball is per-catch, not per-trainer, so "Copy from Trainer
    * Profile" never touches it). */
   caughtBall: string | null
+  /** Free-text "where caught" (Storage Location milestone, Leg 3) — a curated
+   * per-game location list is deferred (see TODO.md), so this ships as plain text.
+   * Edited through OriginModal alongside the other origin fields above. */
+  metLocation: string | null
+  /** The Storage Location (HOME/Bank/Box/Ranch/save-file) this individual currently
+   * resides in, if assigned (Leg 3) — null means unassigned. Deliberately a separate
+   * axis from origin: current location moves freely across trades/transfers while
+   * origin stays fixed, so this is written by its own setEntryStorageLocation setter,
+   * never by setEntryOrigin. See shared/types/storage-location.ts. */
+  storageLocationId: number | null
 }
 
 /** Field set for setEntryOrigin — everything but the assigned id, mirroring
  * TrainerProfileInput's shape. All fields nullable: a blank game/otName clears origin
- * entirely (and forces tid/sid/language/caughtBall null), independent of nickname. */
+ * entirely (and forces tid/sid/language/caughtBall/metLocation null), independent of
+ * nickname. storageLocationId is deliberately absent here — see CollectionEntry's doc
+ * comment above; it's written only via setEntryStorageLocation. */
 export interface CollectionEntryOriginInput {
   trainerProfileId: number | null
   originGame: string | null
@@ -112,4 +124,5 @@ export interface CollectionEntryOriginInput {
   language: string | null
   nickname: string | null
   caughtBall: string | null
+  metLocation: string | null
 }

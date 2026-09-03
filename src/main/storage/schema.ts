@@ -276,4 +276,21 @@ export function applySchema(db: Database.Database): void {
       `ALTER TABLE collection_entries ADD COLUMN caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN (${POKE_BALL_LIST_SQL}))`
     )
   }
+
+  // storage_location_id + met_location (Leg 3 of the nav-restructuring milestone) —
+  // same retrofit approach as caught_ball above. storage_location_id is a nullable FK
+  // onto storage_locations(id), deliberately separate from the trainer_profile_id/
+  // origin_game/... origin fields above: current location and original origin are
+  // different axes (see storage-location.ts's doc comment), so this is written by its
+  // own setEntryStorageLocation setter, never by setEntryOrigin. storage_locations is
+  // already created earlier in this function, so the forward reference resolves fine.
+  // met_location is free text this milestone (a curated per-game location list is
+  // deferred — see TODO.md), so it's a plain TEXT column with no CHECK, and lives
+  // alongside the other origin fields since it's edited through OriginModal.
+  if (!entryColumnsFinal.some((c) => c.name === 'storage_location_id')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN storage_location_id INTEGER REFERENCES storage_locations(id)')
+  }
+  if (!entryColumnsFinal.some((c) => c.name === 'met_location')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN met_location TEXT')
+  }
 }
