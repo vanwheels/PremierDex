@@ -77,12 +77,40 @@ const BASE_FORM_NAMES: Record<number, string> = {
  * separators. Species and form names are stored as raw lowercase PokeAPI slugs (e.g.
  * "mr-mime", "ho-oh", "10-percent") — this fixes the common case but can't restore
  * punctuation the slug format drops (apostrophes, periods, colons, gender symbols,
- * accents), so a handful of names still render imperfectly (e.g. "Farfetchd" instead of
- * "Farfetch'd", "Jangmo-O" instead of "Jangmo-o"). Logged as a follow-up in TODO.md rather
- * than fixed here — see the "Pokémon name capitalization" leg.
+ * accents) or lowercase-after-hyphen names. Species affected by that are listed in
+ * SPECIES_NAME_EXCEPTIONS below and go through speciesDisplayName instead.
  */
 export function capitalizeWords(text: string): string {
   return text.replace(/(?:^|[\s-])[a-z]/g, (match) => match.toUpperCase())
+}
+
+/**
+ * Species whose real name can't be reconstructed from their PokeAPI slug by
+ * capitalizeWords alone — apostrophes, periods, a colon, gender symbols, an accent, and
+ * lowercase-after-hyphen names. Keyed by the raw slug (Species.name). Ho-Oh and
+ * Porygon-Z are deliberately absent: capitalizeWords already renders them correctly.
+ * Leg 29 — see TODO.md's "Pokémon name punctuation exceptions" / COMPLETED.md's Leg 7.
+ */
+const SPECIES_NAME_EXCEPTIONS: Record<string, string> = {
+  farfetchd: "Farfetch'd",
+  sirfetchd: "Sirfetch'd",
+  'mr-mime': 'Mr. Mime',
+  'mr-rime': 'Mr. Rime',
+  'mime-jr': 'Mime Jr.',
+  'type-null': 'Type: Null',
+  'nidoran-f': 'Nidoran♀',
+  'nidoran-m': 'Nidoran♂',
+  flabebe: 'Flabébé',
+  'jangmo-o': 'Jangmo-o',
+  'hakamo-o': 'Hakamo-o',
+  'kommo-o': 'Kommo-o'
+}
+
+/** Renders a species' raw PokeAPI slug (Species.name) as its real display name, using
+ * SPECIES_NAME_EXCEPTIONS where capitalizeWords can't reconstruct it. The single choke
+ * point for species-name display — see buildDexSections.ts and buildCollectionGroups.ts. */
+export function speciesDisplayName(name: string): string {
+  return SPECIES_NAME_EXCEPTIONS[name] ?? capitalizeWords(name)
 }
 
 /** Shared by buildDexSections.ts (per-form rows) and collection/buildCollectionGroups.ts

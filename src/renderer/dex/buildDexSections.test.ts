@@ -158,15 +158,24 @@ describe('buildDexSections', () => {
   })
 
   it('capitalizes raw lowercase species/form slugs, preserving hyphens as word separators', () => {
-    const rawSpecies: Species[] = [{ id: 122, name: 'mr-mime', generation: 1, collapsedDisplayFormId: null }]
+    const rawSpecies: Species[] = [{ id: 250, name: 'ho-oh', generation: 2, collapsedDisplayFormId: null }]
     const forms: Form[] = [
-      makeForm({ id: 1, speciesId: 122, formName: 'base' }),
-      makeForm({ id: 2, speciesId: 122, formName: '10-percent' })
+      makeForm({ id: 1, speciesId: 250, formName: 'base' }),
+      makeForm({ id: 2, speciesId: 250, formName: 'test-form' })
     ]
     const sections = buildDexSections(rawSpecies, forms, [], OPTIONS_DEFAULT)
+    const section = sections.find((s) => s.speciesId === 250)!
+    expect(section.heading).toBe('Ho-Oh')
+    expect(section.rows.map((r) => r.displayName)).toEqual(['Ho-Oh', 'Ho-Oh (Test Form)'])
+  })
+
+  it('restores punctuation for species with an exception entry (Leg 29)', () => {
+    const rawSpecies: Species[] = [{ id: 122, name: 'mr-mime', generation: 1, collapsedDisplayFormId: null }]
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 122, formName: 'base' })]
+    const sections = buildDexSections(rawSpecies, forms, [], OPTIONS_DEFAULT)
     const section = sections.find((s) => s.speciesId === 122)!
-    expect(section.heading).toBe('Mr-Mime')
-    expect(section.rows.map((r) => r.displayName)).toEqual(['Mr-Mime', 'Mr-Mime (10 Percent)'])
+    expect(section.heading).toBe('Mr. Mime')
+    expect(section.rows[0].displayName).toBe('Mr. Mime')
   })
 
   it("carries a species' collapsedDisplayFormId through onto its section", () => {

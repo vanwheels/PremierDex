@@ -1,5 +1,5 @@
 import type { CollectionEntry, Form, Gender, Species } from '@shared/types/pokemon'
-import { capitalizeWords, formDisplayName } from '../dex/formNames'
+import { formDisplayName, speciesDisplayName } from '../dex/formNames'
 import { compareGames } from '../shared/gameSort'
 import type { CollectionGroup, CollectionGroupBy, CollectionRowData } from './types'
 
@@ -15,7 +15,7 @@ function genderSuffix(gender: Gender): string {
 }
 
 function buildRow(entry: CollectionEntry, species: Species, form: Form): CollectionRowData {
-  const baseName = formDisplayName(capitalizeWords(species.name), form)
+  const baseName = formDisplayName(speciesDisplayName(species.name), form)
   return {
     key: String(entry.id),
     entry,
@@ -51,7 +51,7 @@ function groupFor(entry: CollectionEntry, groupBy: CollectionGroupBy, species: S
   }
   if (groupBy === 'dexNumber') {
     const key = String(species.id).padStart(4, '0')
-    return { key, label: `#${species.id} ${capitalizeWords(species.name)}` }
+    return { key, label: `#${species.id} ${speciesDisplayName(species.name)}` }
   }
   const label = entry.otName ?? NO_OT_LABEL
   if (entry.tid !== null && entry.sid !== null) {

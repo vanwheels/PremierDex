@@ -1,5 +1,5 @@
 import type { CollectionEntry, Form, Gender, Species } from '@shared/types/pokemon'
-import { capitalizeWords, formDisplayName } from './formNames'
+import { formDisplayName, speciesDisplayName } from './formNames'
 import type { DexOptions, DexRowData, DexSection } from './types'
 
 /** Exported for completionStats.ts (Leg 17), which buckets by the same regional groups
@@ -102,7 +102,7 @@ export function buildDexSections(
   const regionalBuckets = new Map<string, DexRowData[]>()
 
   for (const sp of species) {
-    const speciesName = capitalizeWords(sp.name)
+    const speciesName = speciesDisplayName(sp.name)
     const speciesForms = formsBySpecies.get(sp.id) ?? []
     const rows: DexRowData[] = []
     const cosmeticRows: DexRowData[] = []
