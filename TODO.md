@@ -1,5 +1,14 @@
 # TODO
 
+## [Stale test-fixture factories fail typecheck] — unscheduled
+`npm run typecheck` currently fails on 3 pre-existing errors, surfaced while working Leg
+28, unrelated to that leg's change: buildDexSections.test.ts's `makeRow` factory doesn't
+default `alwaysShiny` (added Leg 24), and filterDexSections.test.ts/sortDexSections.test.ts's
+`makeSection` factories type `collapsedDisplayFormId` as optional instead of `| null`
+(added Leg 27). `npm test` still passes — vitest doesn't type-check — so these went
+unnoticed. Small, contained fix: add the missing default to each factory.
+Last touched: 2026-09-02. Re-check count: 0.
+
 ## [Pokémon name punctuation exceptions] — Leg 29
 Leg 7 title-cases raw PokeAPI slugs (hyphens preserved as separators) at every display
 site, but ~14 species have real names the slug format can't represent: apostrophes
