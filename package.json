@@ -17,6 +17,7 @@
     "package:win:publish": "npm run build && electron-builder --win --publish always",
     "fetch-pokemon-species": "tsx scripts/fetch-pokemon-species.ts",
     "fetch-pokemon-forms": "tsx scripts/fetch-pokemon-forms.ts",
+    "fetch-species-availability": "tsx scripts/fetch-species-availability.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
