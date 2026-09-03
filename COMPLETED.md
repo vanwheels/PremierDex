@@ -16,6 +16,15 @@ section (Trainer Profiles, Storage Locations, Completion Stats blocks, Collectio
 groups, a new `.dex-table-panel` around DexTable). Light mode left untouched — dark
 first, per Vanny's direction. See commit `b9d28ca`.
 
+Second revision: the "dark theme" framing itself was wrong — --bg had been pushed to
+near-black, which is uncomfortable on an emissive display regardless of hue (see
+memory/comfortable-luminance-not-dark-vs-light.md), and its blue-over-red channel
+balance read as Pokémon-Violet purple instead of Pearl rose-magenta. Recalibrated to a
+mid-luminance warm plum against GW2-Squaded's own bg as reference, and corrected the
+title glyph from a diamond to an orb (Palkia carries a pearl — the Lustrous Orb — not a
+diamond; that shape is Dialga's, for whenever Diamond theming gets built). See commit
+`8a14e57`.
+
 ## [Nav Restructuring: Expand Top Tabs] — Leg 1 — 2026-09-02
 Trainer Profiles and Storage Locations became their own top-level tabs alongside Living
 Dex/Collection; Backup/Update controls moved to persistent chrome above the tabs; the
