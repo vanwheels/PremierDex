@@ -79,20 +79,11 @@ looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the 
 just sprites" — it never claimed to reflect real box contents, so the same checklist
 ceiling doesn't misrepresent it the way it would Box view.
 
-## [Dex Table column widths don't use expanded horizontal space] — Leg 3
-Widening the window only grows the gap between the Name and Gen columns — the Game/Ball
-columns stay fixed-narrow and truncate all but the shortest game names (e.g. "GO"). Needs
-the table's column-width distribution reworked (colgroup widths on top of Leg 2's
-table-layout: fixed) so extra width goes to the columns that actually need it rather than
-today's roughly-even fallback.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ## [Completion tables should share a row on wide windows] — Leg 4
 The three Completion Stats tables currently stack vertically with a lot of unused
 horizontal space beside them on wide windows. Fit two (or, if the app's minimum window
 width matches Vanny's other apps like GW2-Squaded, all three) side by side instead.
-Depends on Leg 3's column-width rework landing first since both are about the Living Dex
-tab's use of horizontal space.
+Leg 3's column-width rework has landed, so this is unblocked.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## [Non-HOME locations show all 1025 species as depositable] — Leg 5

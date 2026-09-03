@@ -10,6 +10,15 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Dex Table column widths don't use expanded horizontal space] — Leg 3 (2026-09-03)
+Gave `.dex-table` a `<colgroup>` with percentage widths (Sprite 4%, # 3%, Name 17%, Gen
+3%, Nickname 8%, Non-Shiny 8%, Non-Shiny Game 13.5%, Non-Shiny Ball 4%, Non-Shiny Loc.
+7%, and the shiny side mirroring that), on top of Leg 2's table-layout: fixed — percentages
+throughout rather than a px/% mix, so the split stays stable as the table's own width
+changes. Also loosened `.dex-inline-origin-field`'s max-width from a fixed 6rem to 100%,
+since that fixed cap was capping the Game cells' text well below their new (wider)
+column regardless of the colgroup change. See commit `<pending>`.
+
 ## [Table resize/tab-switch performance] — Leg 2 (2026-09-03)
 Profiled both symptoms before touching anything: buildDexSections/filterDexSections/
 sortDexSections were already correctly memoized in App.tsx, and there's no resize

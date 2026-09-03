@@ -38,10 +38,10 @@ tbody tr:hover {
 /* Leg 2 (Table resize/tab-switch performance): table-layout: auto (the default) forces
  * the browser to remeasure every cell's intrinsic content width across all ~1000+ rows on
  * every reflow during a live window resize — with fixed, column widths come from the
- * first row only, making resize reflow cost independent of row count. No colgroup yet, so
- * columns fall back to roughly-even widths rather than today's content-driven ones; Leg 3
- * ("Dex Table column widths don't use expanded horizontal space") is the follow-up that
- * gives each column a real proportional basis on top of this. */
+ * colgroup (or the first row if none is given), making resize reflow cost independent of
+ * row count. Leg 3 added DexTable's <colgroup> percentage widths on top of this so extra
+ * window width flows to the columns that need it (Name, the Game columns) instead of a
+ * roughly-even fallback. */
 .dex-table {
   table-layout: fixed;
 }
@@ -171,11 +171,14 @@ tbody tr:hover {
 }
 
 /* Leg 10: read-only Game/Ball columns, same truncate-with-tooltip treatment as
- * dex-origin-button's title attribute since these can run longer than the column. */
+ * dex-origin-button's title attribute since these can run longer than the column.
+ * max-width: 100% (not a fixed rem cap, since Leg 3) so this fills whatever width the
+ * colgroup gives its column — the Game columns get real room there — and only falls
+ * back to ellipsis if a game name still doesn't fit at a given window width. */
 .dex-inline-origin-field {
   color: var(--muted);
   font-size: 0.75rem;
-  max-width: 6rem;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

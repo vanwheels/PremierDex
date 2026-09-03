@@ -92,6 +92,27 @@ export function DexTable({
     <>
       <div className="dex-table-panel">
         <table className="dex-table">
+          {/* Leg 3: gives table-layout: fixed (Leg 2) a real proportional basis instead of
+           * its roughly-even fallback. Percentages, not a px/% mix, so the split stays
+           * stable as the table's own width changes — extra window width flows to Name
+           * and the two Game columns (the ones that actually hold variable-length text and
+           * were truncating), while the fixed-content columns (Sprite, #, Gen, Ball icons)
+           * stay small. Column count/order must match the <tr> below exactly. */}
+          <colgroup>
+            <col style={{ width: '4%' }} /> {/* Sprite */}
+            <col style={{ width: '3%' }} /> {/* # */}
+            <col style={{ width: '17%' }} /> {/* Name */}
+            <col style={{ width: '3%' }} /> {/* Gen */}
+            <col style={{ width: '8%' }} /> {/* Nickname */}
+            <col style={{ width: '8%' }} /> {/* Non-Shiny */}
+            <col style={{ width: '13.5%' }} /> {/* Non-Shiny Game */}
+            <col style={{ width: '4%' }} /> {/* Non-Shiny Ball */}
+            <col style={{ width: '7%' }} /> {/* Non-Shiny Loc. */}
+            <col style={{ width: '8%' }} /> {/* Shiny */}
+            <col style={{ width: '13.5%' }} /> {/* Shiny Game */}
+            <col style={{ width: '4%' }} /> {/* Shiny Ball */}
+            <col style={{ width: '7%' }} /> {/* Shiny Loc. */}
+          </colgroup>
           <thead>
             <tr>
               <th>Sprite</th>
