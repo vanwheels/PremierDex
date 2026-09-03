@@ -10,6 +10,15 @@ Blocked: needs production-quality PokéBall-or-similar artwork before a real pub
 release.
 Last touched: 2026-09-02. Re-check count: 0.
 
+## [Split sqlite-storage.ts] — unscheduled
+Already over the ~300-line soft cap before Leg 3 (415 lines) and now at 457 after Leg 3's
+storage-location FK/met-location additions — still under the 500-line hard cap, so not
+urgent, but growing. Candidate split: pull the exportCollection/importCollection backup
+logic (and its natural-key matching helpers) into its own module, mirroring how
+schema.ts's retrofit blocks already got split out into schema-ball.test.ts/
+schema-language.test.ts on the test side.
+Last touched: 2026-09-03. Re-check count: 0.
+
 ## Current Milestone: Nav restructuring → Visual pass → Storage Location sync → Dex Table redesign
 
 Scoped into 10 legs during a 2026-09-02 leg-planning pass. Decisions locked that day:
