@@ -200,7 +200,9 @@ const OVERRIDES: Record<string, Partial<SeedForm>> = {
   '774:blue': { homeBoxable: false },
   '774:indigo': { homeBoxable: false },
   '774:violet': { homeBoxable: false },
-  '172:spiky-eared': { homeBoxable: false } // Spiky-Eared Pichu (HGSS National Park event) — see TODO.md's Leg 6
+  '172:spiky-eared': { homeBoxable: false }, // Spiky-Eared Pichu (HGSS National Park event) — see TODO.md's Leg 6
+  '646:black': { homeBoxable: false }, // Black Kyurem — not Home-boxable, unlike base Kyurem
+  '646:white': { homeBoxable: false } // White Kyurem — same
 }
 
 /** speciesId:formName -> shiny-locked, per docs/investigations/shiny-locked-audit.md's

@@ -1,11 +1,5 @@
 # TODO
 
-## [Kyurem Black/White should not be Home-boxable] — Leg 25
-Black Kyurem and White Kyurem shouldn't be selectable as boxable-in-Home, unlike regular
-Kyurem. Likely needs the same kind of per-form flag Leg 6 added for `alwaysShiny`/
-`homeBoxable` — see the "alwaysShiny UI consumer" item above for the related pattern.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Rename 'Owned' to 'Non-Shiny'] — Leg 26
 The "Owned" label/checkbox in Collection should be renamed to "Non-Shiny" for clarity
 against the shiny counterpart.
