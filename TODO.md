@@ -28,6 +28,57 @@ schema.ts's retrofit blocks already got split out into schema-ball.test.ts/
 schema-language.test.ts on the test side.
 Last touched: 2026-09-03. Re-check count: 0.
 
+## [Table resize/tab-switch performance] — unscheduled
+Resizing the app window makes the Dex/Completion tables noticeably laggy while columns
+reflow, and switching into the Living Dex tab is laggy on its own even without resizing.
+Likely a full re-render/re-computation of all ~1025 dex rows on every resize tick and
+every tab mount rather than memoized layout — needs profiling to confirm before picking a
+fix (debounce resize, memoize buildDexSections/filterDexSections, or virtualize the table
+body).
+Last touched: 2026-09-03. Re-check count: 0.
+
+## [Non-HOME locations show all 1025 species as depositable] — unscheduled
+Ranch/Box/individual-save-file storage locations currently list every species as
+depositable in their Dex Table view — there's no per-location-type/per-game
+species-eligibility filter today (confirmed: filterDexSections.ts has no
+location-type-aware species gating). Needs a depositable-species-per-location-type
+dataset (e.g. Ranch capped at Gen 4) mirroring the per-game validity approach from Legs
+4/6, then wiring it into the location-tab-scoped view.
+Last touched: 2026-09-03. Re-check count: 0.
+
+## [Existing dex entries stuck in Unassigned instead of vanny's HOME dex] — unscheduled
+Vanny's pre-existing collection entries are showing under the Unassigned location tab
+instead of the 'vanny' HOME storage location. autoAssignLocation.ts (Leg 9) only assigns
+a location on a fresh check-in while a location tab is selected — entries checked in
+before storage locations existed (Leg 3) or while a different tab was active never got
+backfilled. Needs investigation into whether a one-time backfill (default un-located
+owned entries to the trainer's HOME location) is the right fix, or whether this is an
+import-path bug instead.
+Last touched: 2026-09-03. Re-check count: 0.
+
+## [Ball column shows text instead of the ball icon] — unscheduled
+The Dex Table's Non-Shiny/Shiny Ball columns (Leg 10) render caughtBallCell() as plain
+text via dex-inline-origin-field instead of reusing the existing BallIcon component
+(built in the Collection milestone's Leg 28, already used in CollectionRow). Quick fix:
+swap DexRow.tsx's ball cells to render <BallIcon ball={...} /> the same way CollectionRow
+does.
+Last touched: 2026-09-03. Re-check count: 0.
+
+## [Dex Table column widths don't use expanded horizontal space] — unscheduled
+Widening the window only grows the gap between the Name and Gen columns — the Game/Ball
+columns stay fixed-narrow and truncate all but the shortest game names (e.g. "GO"). Needs
+the table's column-width distribution reworked (colgroup widths or table-layout: fixed
+with real per-column basis) so extra width goes to the columns that actually need it.
+Last touched: 2026-09-03. Re-check count: 0.
+
+## [Completion tables should share a row on wide windows] — unscheduled
+The three Completion Stats tables currently stack vertically with a lot of unused
+horizontal space beside them on wide windows. Fit two (or, if the app's minimum window
+width matches Vanny's other apps like GW2-Squaded, all three) side by side instead.
+Likely pairs with the column-width item above since both are about the Living Dex tab's
+use of horizontal space.
+Last touched: 2026-09-03. Re-check count: 0.
+
 ## Future Milestones (unscheduled)
 
 Large items Vanny explicitly flagged as out of scope for a past milestone — logged here
@@ -49,6 +100,16 @@ time, capture date flagged by Vanny as very low priority. All blocked on Ribbons
 scoped first.
 Last touched: 2026-09-02. Re-check count: 0.
 
+## [User-customizable Dex layout/view] — future milestone
+Vanny wants to define how their Living Dex actually displays — shinies only /
+non-shinies only / both, forms shown or collapsed, etc. — as a persisted layout choice,
+not just the existing transient DexFilterBar search filter. Ties into the longer-term
+idea of customizing how boxes/storage locations display too (organizing boxes the way the
+user wants to see them). Needs its own scoping pass — what a "layout" is as a data model,
+how it interacts with DexLocationTabs and the existing filter bar — before being picked
+up, same as the other future-milestone items above.
+Last touched: 2026-09-03. Re-check count: 0.
+
 ## [Deeper per-game validity: form/gender legality + curated Met Location list] — future milestone
 Split out of the current milestone during its 2026-09-02 leg-planning pass: the initial
 validity dataset only covers species-availability-per-game + Legends Arceus's ball pool,
@@ -57,4 +118,14 @@ stayed small. This item covers the fuller versions: per-game form/gender/ball-co
 legality (beyond just ball pool), and a curated real-locations-per-game dataset
 (routes/cities/areas) to replace the free-text Met Location field. Needs its own scoping
 before being picked up, same as Ribbons/Dex-tier above.
-Last touched: 2026-09-02. Re-check count: 0.
+Confirmed 2026-09-03 via real usage: this is no longer just a "nice to have deeper"
+enhancement — a large chunk of Vanny's Unassigned entries are showing false-positive
+Invalid Combo badges. Root cause (read in invalidCombo.ts): the species-availability
+dataset only encodes each game's base regional dex, so it doesn't account for (a)
+postgame unlocks that expand the catchable pool past the base dex, or (b) a species being
+reachable by evolving a catchable pre-evolution even when the evolved form itself isn't in
+the wild encounter table (e.g. Ivysaur logged as Ultra Moon origin — not directly
+catchable there, but reachable by evolving a caught Bulbasaur). Both are obtainability
+gaps in the current data model, not edge cases — worth flagging to Vanny as a candidate to
+prioritize sooner than the rest of this future-milestone item.
+Last touched: 2026-09-03. Re-check count: 0.

@@ -57,6 +57,17 @@ first pass (memory-only colors) read as generically wrong.
   else in this milestone — it landed as a same-day follow-up to Leg 2 with two further
   revisions. It shipped fine, but it's the one piece of this milestone that doesn't map
   cleanly onto the leg sequence when read back from `MILESTONES.md`/this doc alone.
+- **Real usage after shipping surfaced several issues none of the per-leg verification
+  caught**, logged 2026-09-03: resize/tab-switch performance on the Dex Table, false-
+  positive Invalid Combo badges (the species-availability dataset only encodes base
+  regional dexes, missing postgame unlocks and evolution-reachability), non-HOME storage
+  locations listing all 1025 species as depositable, pre-existing entries stuck in
+  Unassigned instead of the user's HOME location, the new Ball columns rendering text
+  instead of reusing the existing `BallIcon` component, and Dex Table column widths not
+  distributing extra horizontal space to the columns that need it. `npm run typecheck`/
+  `npm test` verify behavior against what the code intends, not against real data shapes
+  or a resized/long-running window — none of this was the kind of thing that class of
+  check would have caught. See `TODO.md` for the individual items.
 
 ## Scope creep
 
@@ -72,3 +83,8 @@ mid-work.
 - Give same-day addenda (like the Diamond/Pearl toggle) their own leg number when they're
   substantial enough to need multiple revisions, so the milestone's leg count stays a
   reliable map of what shipped.
+- A milestone built entirely against synthetic/small test data and typecheck/vitest can
+  still ship real gaps that only show up once Vanny drives it against a full, real
+  collection (1025 species, a genuinely large window resize). Where feasible, a quick pass
+  with real data/window sizes before calling a milestone done would catch some of this
+  class of issue earlier than a post-ship feedback round.
