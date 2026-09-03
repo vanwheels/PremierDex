@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Origin auto-populate from Trainer Profile edits] — Leg 31 — 2026-09-02
+Reverses Leg 4's one-time-copy design at Vanny's explicit call: saving a Trainer Profile
+now live-mirrors its game/OT/TID/SID/language onto every Collection Entry still linked to
+it (`trainerProfileId` set), rather than those fields being an independent snapshot.
+Those five fields are disabled in OriginModal while linked — editable again only after
+unlinking (same as an orphaned/deleted profile already allowed) — so a manual edit can't
+be silently clobbered by the next profile save. nickname/caughtBall stay per-entry,
+untouched by the sync. See commit `7f8bf83`.
+
 ## [Stale test-fixture factories fail typecheck] — Leg 30 — 2026-09-02
 Added the missing `alwaysShiny: false` default to buildDexSections.test.ts's `makeRow`
 and `collapsedDisplayFormId: null` to the `makeSection` factories in
