@@ -145,7 +145,7 @@ structurally-unownable unit doesn't cap completion below 100%. Scoped to species
 Vanny's 2026-09-02 call on the TODO's own flagged ambiguity: no dex-tier (regular vs.
 complete living dex) breakdown until that concept exists — see TODO.md's [Dex
 completeness tier migration] future-milestone item, which stays open for that follow-on.
-See commit `<pending>`.
+See commit `57676df`.
 
 Legs 1-16 (Project Scaffold + Living Dex v1 milestones) archived at
 `docs/completed-archive/project-scaffold.md` and `docs/completed-archive/living-dex-v1.md`.
