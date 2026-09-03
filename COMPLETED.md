@@ -17,7 +17,7 @@ Gave `.dex-table` a `<colgroup>` with percentage widths (Sprite 4%, # 3%, Name 1
 throughout rather than a px/% mix, so the split stays stable as the table's own width
 changes. Also loosened `.dex-inline-origin-field`'s max-width from a fixed 6rem to 100%,
 since that fixed cap was capping the Game cells' text well below their new (wider)
-column regardless of the colgroup change. See commit `<pending>`.
+column regardless of the colgroup change. See commit `479bf07`.
 
 ## [Table resize/tab-switch performance] — Leg 2 (2026-09-03)
 Profiled both symptoms before touching anything: buildDexSections/filterDexSections/
