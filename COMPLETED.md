@@ -10,6 +10,13 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Completion tables should share a row on wide windows] — Leg 4 (2026-09-03)
+Wrapped the three Completion Stats tables in a flex row (`.completion-stats-tables`,
+`flex-wrap: wrap`) instead of the vertical stack, with each table growing to fill its
+share of the row (`completion-stats-table` moved from `width: auto` to `width: 100%`).
+App's `minWidth` (1024) matches GW2-Squaded's, so all three fit side by side rather than
+just two. See commit `2b34849`.
+
 ## [Dex Table column widths don't use expanded horizontal space] — Leg 3 (2026-09-03)
 Gave `.dex-table` a `<colgroup>` with percentage widths (Sprite 4%, # 3%, Name 17%, Gen
 3%, Nickname 8%, Non-Shiny 8%, Non-Shiny Game 13.5%, Non-Shiny Ball 4%, Non-Shiny Loc.
