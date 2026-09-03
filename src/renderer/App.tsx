@@ -5,9 +5,11 @@ import { UpdateControls } from './UpdateControls'
 import { buildDexSections } from './dex/buildDexSections'
 import { filterDexSections } from './dex/filterDexSections'
 import { sortDexSections } from './dex/sortDexSections'
+import { computeCompletionStats } from './dex/completionStats'
 import { DexTable } from './dex/DexTable'
 import { DexToolbar } from './dex/DexToolbar'
 import { DexFilterBar } from './dex/DexFilterBar'
+import { CompletionStatsPanel } from './dex/CompletionStatsPanel'
 import type { DexFilters, DexOptions, DexSort } from './dex/types'
 import { DEFAULT_DEX_FILTERS, DEFAULT_DEX_SORT } from './dex/types'
 import { TrainerProfilesPanel } from './trainer/TrainerProfilesPanel'
@@ -58,6 +60,9 @@ export function App(): JSX.Element {
   )
   const filteredSections = useMemo(() => filterDexSections(sections, filters), [sections, filters])
   const visibleSections = useMemo(() => sortDexSections(filteredSections, sort), [filteredSections, sort])
+  // Independent of options/filters/sort (all display-only) — stats reflect the whole
+  // collection, not the currently-visible slice. See completionStats.ts.
+  const completionStats = useMemo(() => computeCompletionStats(forms, entries), [forms, entries])
 
   const handleToggleEntry = (entryId: number, owned: boolean): void => {
     window.premierDex.setOwned(entryId, owned).then((updated) => {
@@ -82,6 +87,7 @@ export function App(): JSX.Element {
       <UpdateControls />
       <TrainerProfilesPanel key={importVersion} />
       <StorageLocationsPanel key={importVersion} />
+      <CompletionStatsPanel stats={completionStats} />
       <DexToolbar options={options} onChange={setOptions} />
       <DexFilterBar filters={filters} onChange={setFilters} />
       <DexTable

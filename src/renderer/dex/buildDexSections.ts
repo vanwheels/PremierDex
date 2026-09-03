@@ -1,13 +1,15 @@
 import type { CollectionEntry, Form, Gender, Species } from '@shared/types/pokemon'
 import type { DexOptions, DexRowData, DexSection } from './types'
 
-const REGIONAL_LABELS: Record<string, string> = {
+/** Exported for completionStats.ts (Leg 17), which buckets by the same regional groups
+ * as the grouped-mode dex layout below. */
+export const REGIONAL_LABELS: Record<string, string> = {
   alolan: 'Alolan Forms',
   galarian: 'Galarian Forms',
   hisuian: 'Hisuian Forms',
   paldean: 'Paldean Forms'
 }
-const REGIONAL_ORDER = ['alolan', 'galarian', 'hisuian', 'paldean']
+export const REGIONAL_ORDER = ['alolan', 'galarian', 'hisuian', 'paldean']
 
 /**
  * The default variety's formName is always stored as the literal 'base' (storage
@@ -109,7 +111,9 @@ interface EntrySlot {
 }
 type EntriesByGender = Map<Gender, EntrySlot>
 
-function indexEntriesByForm(entries: CollectionEntry[]): Map<number, EntriesByGender> {
+/** Exported for completionStats.ts (Leg 17), which needs the same per-form/per-gender
+ * entry lookup but over the raw entry set rather than shaped display rows. */
+export function indexEntriesByForm(entries: CollectionEntry[]): Map<number, EntriesByGender> {
   const byForm = new Map<number, EntriesByGender>()
   for (const entry of entries) {
     let byGender = byForm.get(entry.formId)

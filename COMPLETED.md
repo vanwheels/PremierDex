@@ -135,6 +135,18 @@ Kept to the data layer only, per the TODO's explicit "data-only fix" framing —
 renderer changes, unlike `homeBoxable`/`shinyLocked` which both already have a `DexRow`
 consumer. Flagged as a follow-up TODO (`[alwaysShiny UI consumer]`) rather than done here.
 
+## [Completion stats dashboard] — Leg 17 — 2026-09-02
+Owned%/shiny% completion stats (overall, by generation, by regional group), computed
+directly from Form/CollectionEntry rather than through buildDexSections' row shaping —
+needed both genders of a gender-diff form counted regardless of the splitGenderRows
+display toggle, which hides the female entry entirely when off. `alwaysShiny` forms are
+excluded from the regular denominator and `shinyLocked` forms from the shiny one, so a
+structurally-unownable unit doesn't cap completion below 100%. Scoped to species-only per
+Vanny's 2026-09-02 call on the TODO's own flagged ambiguity: no dex-tier (regular vs.
+complete living dex) breakdown until that concept exists — see TODO.md's [Dex
+completeness tier migration] future-milestone item, which stays open for that follow-on.
+See commit `<pending>`.
+
 Legs 1-16 (Project Scaffold + Living Dex v1 milestones) archived at
 `docs/completed-archive/project-scaffold.md` and `docs/completed-archive/living-dex-v1.md`.
 See `MILESTONES.md` for the shipped-milestone index.

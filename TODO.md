@@ -1,16 +1,5 @@
 # TODO
 
-## [Completion stats dashboard] — Leg 17
-Owned%/shiny% completion stats, broken down by generation and regional group. Natural
-follow-on to search/filter/sort (Legs 15-16) reusing the same query surface, but not
-strictly blocked on them.
-Vanny's 2026-09-02 pass flags this as likely larger than currently scoped: completion
-needs to be tracked per dex tier (e.g. regular living dex vs. complete/form-and-gender
-living dex — see the migration item under Future Milestones below), separately for owned
-and shiny. May need to split into its own leg once the tier concept exists; flagging
-here rather than resizing Leg 17 unilaterally.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Collection view by origin/OT/Shiny/Ribbon/Alpha] — Leg 18
 Ability to view/group the collection by origin game, OT, and Shiny status now; Ribbon and
 Alpha as later additions once those concepts exist in the schema. Broader than Leg 15's

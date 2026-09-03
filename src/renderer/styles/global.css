@@ -84,6 +84,18 @@ td {
   background: color-mix(in srgb, currentColor 15%, transparent);
 }
 
+.completion-stats {
+  margin-bottom: 1.5rem;
+}
+
+.completion-stats-block {
+  margin-bottom: 1rem;
+}
+
+.completion-stats-table {
+  width: auto;
+}
+
 .dex-toolbar {
   display: flex;
   gap: 1.5rem;
