@@ -18,7 +18,7 @@ Unassigned tab stay uncapped. `filterDepositableSections` wires this into App.ts
 the user's own DexFilters, mirroring filterDexSections' section-survival/cosmetic-promotion
 shape. An already-owned row always passes regardless of the cap (grandfathered) rather than
 hiding real data. Also fixed a staleness gap the fix surfaced: App's new `trainerProfiles`
-copy needed refreshing on create too, not just update/delete. See commit `<hash>`.
+copy needed refreshing on create too, not just update/delete. See commit `a4280f3`.
 
 ## [Completion tables should share a row on wide windows] — Leg 4 (2026-09-03)
 Wrapped the three Completion Stats tables in a flex row (`.completion-stats-tables`,
