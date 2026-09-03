@@ -6,7 +6,11 @@ export const PokemonIpcChannel = {
   setOwned: 'pokemon:collectionEntries:setOwned',
   setEntryOrigin: 'pokemon:collectionEntries:setOrigin',
   setEntryStorageLocation: 'pokemon:collectionEntries:setStorageLocation',
-  setCollapsedDisplayForm: 'pokemon:species:setCollapsedDisplayForm'
+  setCollapsedDisplayForm: 'pokemon:species:setCollapsedDisplayForm',
+  /** Leg 6: static per-game species-availability data (see load-species-data.ts),
+   * not a StorageAdapter/DB method — there's no collection_entries-shaped row to read,
+   * just the fetch-species-availability.ts-written JSON file. */
+  loadSpeciesAvailability: 'pokemon:speciesAvailability:load'
 } as const
 
 /** File-dialog-backed backup flow (see main/ipc/backup-ipc.ts) — separate from

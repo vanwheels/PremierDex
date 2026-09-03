@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
+import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { BackupControls } from './BackupControls'
 import { UpdateControls } from './UpdateControls'
 import { ThemeProvider } from './theme/theme-store'
@@ -22,6 +23,11 @@ import { CollectionView } from './collection/CollectionView'
 
 const DEFAULT_OPTIONS: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
 
+// Empty until loadAll's fetch resolves (App gates rendering behind `loading` until then,
+// same as species/forms/entries below) — an empty availability dataset makes Leg 6's
+// invalid-combo check a no-op rather than a crash.
+const EMPTY_SPECIES_AVAILABILITY: SpeciesAvailabilityData = { pokedexes: {}, gameToPokedexes: {} }
+
 /** Which top-level lens the collection is browsed through — the species-first Living Dex
  * grid, the owned-entries-grouped-by-origin/OT/shiny Collection view (Leg 18), or the
  * Trainer Profiles/Storage Locations management tabs (Leg 1 of the nav-restructuring
@@ -37,6 +43,7 @@ export function App(): JSX.Element {
   // Fetched here (rather than left to StorageLocationsPanel's own load) so DexTable's
   // interim assignment picker (Leg 3) has the list to populate its dropdown from.
   const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([])
+  const [speciesAvailability, setSpeciesAvailability] = useState<SpeciesAvailabilityData>(EMPTY_SPECIES_AVAILABILITY)
   const [loading, setLoading] = useState(true)
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
   const [filters, setFilters] = useState<DexFilters>(DEFAULT_DEX_FILTERS)
@@ -57,12 +64,14 @@ export function App(): JSX.Element {
       window.premierDex.listSpecies(),
       window.premierDex.listForms(),
       window.premierDex.listCollectionEntries(),
-      window.premierDex.listStorageLocations()
-    ]).then(([speciesList, formList, entryList, storageLocationList]) => {
+      window.premierDex.listStorageLocations(),
+      window.premierDex.loadSpeciesAvailability()
+    ]).then(([speciesList, formList, entryList, storageLocationList, availability]) => {
       setSpecies(speciesList)
       setForms(formList)
       setEntries(entryList)
       setStorageLocations(storageLocationList)
+      setSpeciesAvailability(availability)
     })
   }, [])
 
@@ -179,6 +188,7 @@ export function App(): JSX.Element {
                 onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
                 storageLocations={storageLocations}
                 onSaveStorageLocation={handleSaveStorageLocation}
+                speciesAvailability={speciesAvailability}
               />
             </>
           )}

@@ -21,6 +21,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { ORIGIN_GAMES } from '../src/shared/data/origin-games'
+import type { SpeciesAvailabilityData } from '../src/shared/types/species-availability'
 
 interface PokeApiVersionGroupResponse {
   pokedexes: Array<{ name: string }>
@@ -28,11 +29,6 @@ interface PokeApiVersionGroupResponse {
 
 interface PokeApiPokedexResponse {
   pokemon_entries: Array<{ pokemon_species: { url: string } }>
-}
-
-interface SpeciesAvailabilityData {
-  pokedexes: Record<string, number[]>
-  gameToPokedexes: Record<string, string[]>
 }
 
 /**

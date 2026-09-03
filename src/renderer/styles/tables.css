@@ -78,7 +78,8 @@ tbody tr:hover {
 
 .dex-not-home-boxable-badge,
 .dex-shiny-locked-badge,
-.dex-always-shiny-badge {
+.dex-always-shiny-badge,
+.dex-invalid-combo-badge {
   display: inline-block;
   padding: 0.05rem 0.5rem;
   border-radius: 999px;
@@ -98,6 +99,16 @@ tbody tr:hover {
   margin: 0.15rem 0 0;
   border-color: color-mix(in srgb, var(--gold) 50%, var(--border));
   color: var(--gold);
+}
+
+/* Invalid-combo (Leg 6) gets --danger instead — this one really is a "something's
+   wrong" signal, not a collector-value one like the --gold badges above. */
+.dex-invalid-combo-badge {
+  display: block;
+  width: fit-content;
+  margin: 0.15rem 0 0;
+  border-color: color-mix(in srgb, var(--danger) 50%, var(--border));
+  color: var(--danger);
 }
 
 .dex-nickname-input {

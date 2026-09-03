@@ -1,6 +1,7 @@
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
+import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
 import type { UpdaterBridge } from '@shared/updater/updater-provider'
 
@@ -21,6 +22,10 @@ export interface AppBridge extends UpdaterBridge {
   setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry>
   setEntryStorageLocation(entryId: number, storageLocationId: number | null): Promise<CollectionEntry>
   setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species>
+  /** Leg 6: static per-game species-availability data, for the Living Dex's derived
+   * invalid-combo badge (see renderer/dex/invalidCombo.ts). Not DB-backed — see
+   * PokemonIpcChannel.loadSpeciesAvailability's own comment. */
+  loadSpeciesAvailability(): Promise<SpeciesAvailabilityData>
   /** Opens a save dialog, writes the full collection to the chosen file. Null if the
    * user canceled the dialog. */
   exportCollectionToFile(): Promise<string | null>

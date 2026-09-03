@@ -1,10 +1,12 @@
 import type { CollectionEntry, CollectionEntryOriginInput } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
+import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { SpriteThumbnail } from './SpriteThumbnail'
 import type { SpriteModalTarget } from './SpriteModal'
 import type { OriginModalTarget } from './OriginModal'
 import { originTitle } from './originSummary'
 import { useNicknameEditor } from './useNicknameEditor'
+import { checkEntryValidity } from './invalidCombo'
 import type { DexRowData } from './types'
 
 const UNASSIGNED = ''
@@ -34,6 +36,8 @@ interface DexRowProps {
    * Dex table itself at Leg 9, per TODO.md. */
   storageLocations: StorageLocation[]
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
+  /** Leg 6: backs the invalid-combo badge below — see invalidCombo.ts. */
+  speciesAvailability: SpeciesAvailabilityData
   expandControl?: ExpandControl
   collapsedDisplayControl?: CollapsedDisplayControl
   indent?: boolean
@@ -58,12 +62,26 @@ export function DexRow({
   onSaveOrigin,
   storageLocations,
   onSaveStorageLocation,
+  speciesAvailability,
   expandControl,
   collapsedDisplayControl,
   indent
 }: DexRowProps): JSX.Element {
   const nicknameEntry = activeNicknameEntry(row)
   const { text: nicknameText, setText: setNicknameText, commit: commitNickname } = useNicknameEditor(nicknameEntry, onSaveOrigin)
+
+  // Leg 6: soft warning only — an unowned slot has no origin to check, and a valid
+  // combo renders no badge at all.
+  const invalidComboBadge = (entry: CollectionEntry | null): JSX.Element | null => {
+    if (!entry?.owned) return null
+    const result = checkEntryValidity(entry, row.dexNumber, speciesAvailability)
+    if (!result.invalid) return null
+    return (
+      <span className="dex-invalid-combo-badge" title={result.reasons.join('; ')}>
+        Invalid combo
+      </span>
+    )
+  }
 
   const storageLocationSelect = (entry: CollectionEntry | null): JSX.Element => (
     <select
@@ -180,6 +198,7 @@ export function DexRow({
             Always shiny
           </span>
         )}
+        {invalidComboBadge(row.regular)}
       </td>
       <td>
         <input
@@ -203,6 +222,7 @@ export function DexRow({
             Shiny-locked
           </span>
         )}
+        {invalidComboBadge(row.shinyEntry)}
       </td>
     </tr>
   )
