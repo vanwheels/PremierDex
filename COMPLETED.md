@@ -1,5 +1,16 @@
 # COMPLETED
 
+## [Legends Arceus Ball Pool] — Leg 5 — 2026-09-03
+Added Legends Arceus's six non-overlapping ball names (Feather/Wing/Jet/Leaden/Gigaton/
+Origin Ball) to `POKE_BALLS`, plus a `ballPoolForGame()` lookup that OriginModal's
+"Caught In" picker now filters through — only Legends Arceus has a defined pool this leg
+(per the milestone's narrow-dataset scoping), every other game still falls through to the
+full flat list. Also caught a real migration hazard: `caught_ball`'s CHECK constraint is
+baked in at ALTER-time and SQLite can't widen a CHECK, so any install that already ran the
+Leg 28 retrofit would reject the new ball names forever without a fix — added a
+detect-and-rebuild retrofit to schema.ts mirroring the existing sid-4294 table-rebuild
+pattern. See commit `<pending>`.
+
 ## [Per-Game Species-Availability Dataset] — Leg 4 — 2026-09-03
 `scripts/fetch-species-availability.ts` + `data/pokemon/species-availability.json` +
 `loadSpeciesAvailabilityData()`, keyed by PokeAPI regional-dex name (not by game) so

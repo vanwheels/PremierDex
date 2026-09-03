@@ -293,4 +293,49 @@ export function applySchema(db: Database.Database): void {
   if (!entryColumnsFinal.some((c) => c.name === 'met_location')) {
     db.exec('ALTER TABLE collection_entries ADD COLUMN met_location TEXT')
   }
+
+  // caught_ball's CHECK list was fixed at ALTER-time above and SQLite can't ALTER a CHECK
+  // constraint (same limitation as the sid-4294 rebuilds earlier in this function) — Leg 5
+  // added Legends Arceus's Feather/Wing/Jet/Leaden/Gigaton/Origin Ball names to
+  // POKE_BALLS, so any install that already ran the retrofit above pre-Leg-5 has a stale
+  // CHECK missing them. Detected via the stored CHECK text directly (PRAGMA table_info
+  // doesn't expose CHECK bounds) rather than a version flag, so this is self-healing
+  // however many balls get added in the future. Runs last and rebuilds with every column
+  // this function can have added by this point, copied straight across — nothing else
+  // references collection_entries(id) as an FK target, so no foreign_keys=OFF dance is
+  // needed here (unlike the trainer_profiles rebuilds above).
+  const entriesSqlForBallCheck = db
+    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entries'")
+    .get() as { sql: string } | undefined
+  if (entriesSqlForBallCheck?.sql.includes('caught_ball') && !entriesSqlForBallCheck.sql.includes("'Origin Ball'")) {
+    db.exec(`
+      CREATE TABLE collection_entries_ballcheck (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        form_id INTEGER NOT NULL REFERENCES forms(id),
+        gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
+        shiny INTEGER NOT NULL DEFAULT 0,
+        owned INTEGER NOT NULL DEFAULT 0,
+        trainer_profile_id INTEGER REFERENCES trainer_profiles(id),
+        origin_game TEXT,
+        ot_name TEXT,
+        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
+        nickname TEXT,
+        language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL})),
+        caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN (${POKE_BALL_LIST_SQL})),
+        storage_location_id INTEGER REFERENCES storage_locations(id),
+        met_location TEXT,
+        UNIQUE(form_id, gender, shiny)
+      );
+      INSERT INTO collection_entries_ballcheck
+        (id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
+         language, caught_ball, storage_location_id, met_location)
+        SELECT id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
+               language, caught_ball, storage_location_id, met_location
+        FROM collection_entries;
+      DROP TABLE collection_entries;
+      ALTER TABLE collection_entries_ballcheck RENAME TO collection_entries;
+      CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
+    `)
+  }
 }

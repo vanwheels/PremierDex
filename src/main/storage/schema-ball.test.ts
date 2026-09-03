@@ -92,4 +92,43 @@ describe('collection_entries.caught_ball', () => {
       db.prepare('UPDATE collection_entries SET caught_ball = ? WHERE id = ?').run('Ultra Ball', row.id)
     ).not.toThrow()
   })
+
+  it('widens a pre-Leg-5 caught_ball CHECK (missing Legends Arceus balls) via rebuild, preserving data', () => {
+    // Simulates an install that already ran the Leg 28 retrofit before Leg 5 added
+    // Legends Arceus's balls to POKE_BALLS: caught_ball exists, but its CHECK list is the
+    // old, narrower one (no 'Origin Ball').
+    const db = new Database(':memory:')
+    applySchema(db)
+    db.exec(`
+      CREATE TABLE collection_entries_old (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        form_id INTEGER NOT NULL REFERENCES forms(id),
+        gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
+        shiny INTEGER NOT NULL DEFAULT 0,
+        owned INTEGER NOT NULL DEFAULT 0,
+        trainer_profile_id INTEGER REFERENCES trainer_profiles(id),
+        origin_game TEXT,
+        ot_name TEXT,
+        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
+        nickname TEXT,
+        language TEXT,
+        caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN ('Poké Ball', 'Great Ball', 'Ultra Ball')),
+        storage_location_id INTEGER REFERENCES storage_locations(id),
+        met_location TEXT,
+        UNIQUE(form_id, gender, shiny)
+      );
+    `)
+    seedOneForm(db)
+    db.prepare("INSERT INTO collection_entries_old (form_id, gender, shiny, caught_ball) VALUES (1, 'unknown', 0, 'Great Ball')").run()
+    db.exec('DROP TABLE collection_entries; ALTER TABLE collection_entries_old RENAME TO collection_entries;')
+
+    applySchema(db)
+
+    const row = db.prepare('SELECT * FROM collection_entries').get() as Record<string, unknown>
+    expect(row.caught_ball).toBe('Great Ball')
+    expect(() =>
+      db.prepare('UPDATE collection_entries SET caught_ball = ? WHERE id = ?').run('Origin Ball', row.id)
+    ).not.toThrow()
+  })
 })

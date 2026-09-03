@@ -3,7 +3,7 @@ import type { CollectionEntry, CollectionEntryOriginInput } from '@shared/types/
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { findOriginGame } from '@shared/data/origin-games'
 import { ORIGIN_LANGUAGES } from '@shared/data/languages'
-import { POKE_BALLS } from '@shared/data/poke-balls'
+import { ballPoolForGame, type PokeBall } from '@shared/data/poke-balls'
 import { OriginGameInput } from '../trainer/OriginGameInput'
 
 const TID_MAX = 999999
@@ -86,6 +86,15 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   // Pokémon GO's 12-digit Trainer Code overrides the mainline 6-digit cap — see
   // origin-games.ts's trainerIdMax doc.
   const tidMax = matchedGame?.trainerIdMax ?? TID_MAX
+  // Filtered to the origin game's legal pool (Leg 5) rather than the flat POKE_BALLS
+  // list — currently only Legends Arceus has a defined pool, everything else still sees
+  // the full list (see ballPoolForGame's fallback). A previously-saved ball that's since
+  // fallen outside the pool (e.g. switching Game after Caught In was already set) stays
+  // in the option list rather than disappearing, so the picker never misrepresents what's
+  // actually saved on the entry.
+  const gameBallPool = ballPoolForGame(game)
+  const ballOptions: readonly string[] =
+    caughtBall === '' || gameBallPool.includes(caughtBall as PokeBall) ? gameBallPool : [...gameBallPool, caughtBall]
 
   const handleProfileSelect = (value: string): void => {
     if (value === NO_PROFILE) {
@@ -216,7 +225,7 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
           Caught In
           <select value={caughtBall} onChange={(e) => setCaughtBall(e.target.value)}>
             <option value="">—</option>
-            {POKE_BALLS.map((b) => (
+            {ballOptions.map((b) => (
               <option key={b} value={b}>
                 {b}
               </option>

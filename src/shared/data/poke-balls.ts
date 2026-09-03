@@ -38,10 +38,54 @@ export const POKE_BALLS = [
   'Safari Ball',
   'Park Ball',
   'Dream Ball',
-  'Beast Ball'
+  'Beast Ball',
+  // Legends Arceus's own crafted balls (Leg 5 — see TODO.md's "Legends Arceus Ball
+  // Pool"). Heavy Ball/Poké Ball/Great Ball/Ultra Ball are reused names already covered
+  // above (same string, different in-game mechanic — this is a name list, not a
+  // per-game item ID list, so no duplicate entry). Origin Ball is the game's
+  // Master-Ball-equivalent, earned late rather than crafted.
+  'Feather Ball',
+  'Wing Ball',
+  'Jet Ball',
+  'Leaden Ball',
+  'Gigaton Ball',
+  'Origin Ball'
 ] as const
 
 export type PokeBall = (typeof POKE_BALLS)[number]
+
+/**
+ * Legends Arceus's full legal ball pool, in-game crafting order (Leg 5). Deliberately
+ * narrow — see TODO.md's "the per-game validity dataset ships narrow... Legends Arceus's
+ * ball pool only" — every other game has no defined pool yet and falls through to the
+ * full POKE_BALLS list in ballPoolForGame below. Keyed by exact ORIGIN_GAMES `name` text
+ * rather than `id`, matching how OriginModal.tsx already resolves the typed-in game
+ * string (findOriginGame matches by name, not id).
+ */
+const BALL_POOLS: Record<string, readonly PokeBall[]> = {
+  'Pokémon Legends: Arceus': [
+    'Poké Ball',
+    'Great Ball',
+    'Ultra Ball',
+    'Feather Ball',
+    'Wing Ball',
+    'Jet Ball',
+    'Heavy Ball',
+    'Leaden Ball',
+    'Gigaton Ball',
+    'Origin Ball'
+  ]
+}
+
+/**
+ * Legal "Caught In" options for a given origin-game name (OriginModal.tsx's picker). A
+ * game with no defined pool above (i.e. every game except Legends Arceus right now)
+ * falls back to the full flat POKE_BALLS list, preserving today's behavior rather than
+ * silently emptying the picker for games this leg doesn't cover.
+ */
+export function ballPoolForGame(gameName: string): readonly PokeBall[] {
+  return BALL_POOLS[gameName] ?? POKE_BALLS
+}
 
 /**
  * CDN icon slug for the PokeAPI/sprites items/ folder (see renderer/dex/sprites.ts for

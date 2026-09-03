@@ -10,6 +10,15 @@ Blocked: needs production-quality PokéBall-or-similar artwork before a real pub
 release.
 Last touched: 2026-09-02. Re-check count: 0.
 
+## [Split schema.ts] — unscheduled
+Crossed the ~300-line soft cap at Leg 5 (341 lines, still well under the 500 hard cap) —
+each closed-set CHECK column (language, caught_ball) has picked up its own "ALTER-time
+CHECK can't be widened later" rebuild block over time, and that pattern will likely repeat
+if another CHECK-constrained column needs the same treatment. Candidate split: pull the
+CHECK-widen rebuild blocks (sid-4294, caught_ball) into their own module alongside the
+retrofit ALTERs, mirroring the sqlite-storage.ts split idea below.
+Last touched: 2026-09-03. Re-check count: 0.
+
 ## [Split sqlite-storage.ts] — unscheduled
 Already over the ~300-line soft cap before Leg 3 (415 lines) and now at 457 after Leg 3's
 storage-location FK/met-location additions — still under the 500-line hard cap, so not
@@ -31,12 +40,6 @@ derived at read time, not a stored column, same treatment as `completionStats.ts
 restructuring expands the existing top-tab pattern rather than moving to a sidebar; the
 visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
 styling all in scope, not a targeted fix.
-
-## [Legends Arceus Ball Pool] — Leg 5
-Legends Arceus's own non-standard balls (not currently in shared/data/poke-balls.ts)
-added to the dataset, with the "Caught In" picker filtered to a game's legal pool instead
-of today's flat global list.
-Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Invalid Combo Flag] — Leg 6
 A derived, non-blocking warning badge when an entry's species/ball doesn't match Legs
