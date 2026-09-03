@@ -1,30 +1,47 @@
 /**
  * Base form-control styling. Components that need a pill/icon/plain-text button
  * variant (dex-origin-button, dex-expand-toggle, app-view-tab, the modal close ×, …)
- * reset background/border/padding themselves in their own stylesheet — imported after
- * this one in global.css so those overrides win the cascade.
+ * reset background/border/padding/box-shadow themselves in their own stylesheet —
+ * imported after this one in global.css so those overrides win the cascade; they opt
+ * out of the raised bevel below since a tiny inline pill/icon control reading as a
+ * "raised button" would look inconsistent next to plain text.
+ *
+ * The gradient + inset top highlight + two-layer shadow is the same "one implied light
+ * source" recipe as layout.css's panel cards — see that file's doc comment.
  */
 button {
   font-family: inherit;
   font-size: 0.85rem;
   cursor: pointer;
   border: 1px solid var(--border);
-  background: var(--surface-raised);
+  background-color: var(--surface-raised);
+  background-image: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--surface-raised) 100%, white 6%) 0%,
+    var(--surface-raised) 70%
+  );
   color: var(--text);
   border-radius: 6px;
   padding: 0.4rem 0.85rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.2);
   transition:
     border-color 0.15s ease,
     background 0.15s ease,
-    transform 0.08s ease;
+    transform 0.08s ease,
+    box-shadow 0.08s ease;
 }
 
 button:hover:not(:disabled) {
   border-color: var(--accent);
 }
 
+/* Pressed state flips the bevel — inset shadow instead of raised — so a click reads as
+   the button actually depressing rather than just shrinking. */
 button:active:not(:disabled) {
   transform: scale(0.97);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 button:disabled {
@@ -45,6 +62,8 @@ button:disabled {
   background: color-mix(in srgb, var(--danger) 12%, transparent);
 }
 
+/* Recessed rather than raised — the opposite bevel direction from button's, so a field
+   reads as "carved into" the panel rather than sitting on top of it. */
 input,
 select {
   font-family: inherit;
@@ -54,6 +73,7 @@ select {
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.3rem 0.5rem;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 input[type='checkbox'],

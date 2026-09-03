@@ -19,7 +19,10 @@
   gap: 0.75rem;
   padding: 0.85rem 1.5rem;
   border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  background-color: var(--surface);
+  background-image: var(--grain);
+  background-size: 160px 160px;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
 .app-title {
@@ -56,7 +59,9 @@
   gap: 0.25rem;
   padding: 0.6rem 1.5rem 0;
   border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  background-color: var(--surface);
+  background-image: var(--grain);
+  background-size: 160px 160px;
 }
 
 .app-view-tab {
@@ -64,6 +69,7 @@
   border: none;
   border-radius: 6px 6px 0 0;
   background: none;
+  box-shadow: none;
   color: var(--muted);
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
@@ -115,9 +121,12 @@
   align-items: center;
   margin-bottom: 1rem;
   padding: 0.65rem 1rem;
-  background: var(--surface);
+  background-color: var(--surface);
+  background-image: var(--grain);
+  background-size: 160px 160px;
   border: 1px solid var(--border);
   border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .dex-filter-query {
@@ -130,16 +139,43 @@
  * to each section's existing wrapper class rather than a new shared `.panel` class in
  * JSX, so this stayed a CSS-only change. .dex-table has no such wrapper in DexTable.tsx,
  * so that one got a dedicated .dex-table-panel div — see its own rule below.
+ *
+ * Depth pass (same day, third revision): a single flat --surface fill plus a drop
+ * shadow still reads as a CSS box with no light source. Three additions instead, all
+ * keyed to one implied light source (upper-left, matching the app-title orb's
+ * highlight): a barely-there directional gradient (surface lightens ~4% toward the top,
+ * darkens ~5% toward the bottom — a value shift, not a second hue, so it doesn't read as
+ * a lifeless rainbow gradient), a hairline inset top highlight suggesting the panel's
+ * top edge catching light, and a two-layer shadow (a tight contact shadow + the existing
+ * soft ambient one) instead of one flat blur. --grain (base.css) is layered in too so
+ * panels share the body's material instead of reading as a flatter surface floating on
+ * top of a textured one.
  */
 .trainer-profiles,
 .storage-locations,
 .completion-stats-block,
-.collection-group {
-  background: var(--surface);
+.collection-group,
+.dex-table-panel {
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--surface) 100%, white 4%) 0%,
+      var(--surface) 55%,
+      color-mix(in srgb, var(--surface) 100%, black 5%) 100%
+    ),
+    var(--grain);
+  background-repeat: no-repeat, repeat;
+  background-size:
+    100% 100%,
+    160px 160px;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 1rem 1.25rem 1.25rem;
-  box-shadow: 0 10px 30px -18px var(--shadow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 10px 30px -16px var(--shadow);
 }
 
 .completion-stats {
@@ -159,15 +195,13 @@
   margin-bottom: 1.75rem;
 }
 
-/* Table-specific card: no padding and clipped overflow instead, so .dex-table's sticky
-   header can sit flush with the panel's top edge rather than floating past rounded
-   corners it doesn't own. */
+/* .dex-table-panel shares the card background/border/shadow rule above; it only differs
+   by dropping the padding and clipping overflow, so .dex-table's sticky header can sit
+   flush with the panel's top edge rather than floating past rounded corners it doesn't
+   own. */
 .dex-table-panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  padding: 0;
   overflow: hidden;
-  box-shadow: 0 10px 30px -18px var(--shadow);
 }
 
 .collection-group h2 {

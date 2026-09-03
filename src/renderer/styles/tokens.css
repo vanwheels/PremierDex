@@ -21,18 +21,25 @@
  * `--gold` is reserved for shiny/collector-value signals (dex-always-shiny-badge,
  * dex-shiny-locked-badge) so "shiny" reads as its own meaningful color rather than
  * reusing --accent.
+ *
+ * Third pass (same day): --bg and --surface sat too close in value, and --muted leaned
+ * too far toward neutral gray — together read as "washed out" even after the luminance
+ * fix. Widened the bg/surface gap and pulled --muted/--accent back toward the hue family
+ * instead of gray. Depth (panels/buttons reading as flat CSS boxes with no implied light
+ * source) is a separate problem from saturation, addressed in layout.css/buttons.css —
+ * directional gradients, layered shadows, and a grain texture, not a saturation bump.
  */
 :root {
   color-scheme: dark;
 
   --bg: #2e2129;
-  --surface: #3a2a34;
-  --surface-raised: #46333f;
-  --border: #634b5c;
+  --surface: #443047;
+  --surface-raised: #503a56;
+  --border: #7a5c78;
   --text: #f5e9ee;
-  --muted: #bb96ab;
+  --muted: #c49db6;
 
-  --accent: #d1487e;
+  --accent: #db4c82;
   --accent-strong: #f0a8c8;
   --on-accent: #2a0f1e;
   --accent2: #8a7aa0;
@@ -40,7 +47,7 @@
   --gold: #d4a84f;
   --danger: #c85248;
 
-  --shadow: rgba(20, 10, 16, 0.45);
+  --shadow: rgba(20, 10, 16, 0.5);
 }
 
 @media (prefers-color-scheme: light) {
