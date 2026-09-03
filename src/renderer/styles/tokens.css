@@ -1,12 +1,21 @@
 /**
- * Theme tokens (2026-09-02 Visual Design Pass, Leg 2; re-pulled same day after the first
- * pass read as generic "AI dark mode" regardless of hue) — dark is the app's authored
- * default (matching Vanny's own always-dark preference), sampled directly off Palkia's
- * sprite and the Pearl box art rather than invented: pearl-pink/white body → --surface
- * family, its saturated rose-magenta markings → --accent, the grayish blue-violet
- * fin/wing plating → --accent2, its warm cream belly → --text. Light mode (Dialga) is
- * untouched for now — dark gets nailed down first, see TODO.md. Same CSS-custom-
- * property architecture as GW2-Squaded's global.css (`--accent`/`--danger` kept
+ * Theme tokens (2026-09-02 Visual Design Pass, Leg 2; re-pulled twice same day — first
+ * off invented muted tones that read as generic "AI dark mode," then off Palkia's
+ * sprite/box art but pushed too close to near-black, which both strained the eyes and,
+ * because its blue channel outranked its red channel, read as Pokémon-Violet purple
+ * instead of Pearl rose-magenta). This isn't really "dark theme vs light theme" — it's
+ * Pearl theming vs Diamond theming (Palkia's pearl-magenta vs Dialga's diamond-steel-
+ * blue), and both need to land in a comfortable mid-luminance band rather than one
+ * pinned to near-black and the other to stark white — screens are an emitted light
+ * source, not reflected light like a printed page, so either extreme is harsh on an
+ * emissive display. See memory/comfortable-luminance-not-dark-vs-light.md.
+ *
+ * Pearl (the app's current/only theming — Diamond gets nailed down later, see TODO.md)
+ * sampled off Palkia's sprite: pearl-pink/white body → --surface family, its saturated
+ * rose-magenta markings → --accent, the grayish blue-violet fin/wing plating →
+ * --accent2, its warm cream belly → --text. --bg's luminance is calibrated against
+ * GW2-Squaded's own dark bg (`#291e26`) rather than pushed toward black. Same CSS-
+ * custom-property architecture as that app's global.css (`--accent`/`--danger` kept
  * semantically separate there too).
  *
  * `--gold` is reserved for shiny/collector-value signals (dex-always-shiny-badge,
@@ -16,22 +25,22 @@
 :root {
   color-scheme: dark;
 
-  --bg: #150e1a;
-  --surface: #221731;
-  --surface-raised: #2c1e3d;
-  --border: #4f3f5c;
-  --text: #f6ecf2;
-  --muted: #a98aa0;
+  --bg: #2e2129;
+  --surface: #3a2a34;
+  --surface-raised: #46333f;
+  --border: #634b5c;
+  --text: #f5e9ee;
+  --muted: #bb96ab;
 
   --accent: #d1487e;
   --accent-strong: #f0a8c8;
   --on-accent: #2a0f1e;
-  --accent2: #6f6f96;
+  --accent2: #8a7aa0;
 
   --gold: #d4a84f;
   --danger: #c85248;
 
-  --shadow: rgba(8, 3, 12, 0.6);
+  --shadow: rgba(20, 10, 16, 0.45);
 }
 
 @media (prefers-color-scheme: light) {

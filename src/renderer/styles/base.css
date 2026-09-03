@@ -9,12 +9,14 @@ body {
 
 /* A faint magenta glow at the top of the viewport, nodding to the cosmic-swirl Pearl box
    art without trying to reproduce it — mostly hidden behind .app-header/.app-view-tabs,
-   showing through only in the content area below them. Without this the page reads as a
-   single flat fill, same as every other unstyled dark-mode template. */
+   showing through only in the content area below them. Kept subtle now that --bg itself
+   already carries the Pearl hue (was compensating harder for a near-black base before
+   the mid-luminance revision). Without this the page reads as a single flat fill, same
+   as every other unstyled dark-mode template. */
 body {
   margin: 0;
   background:
-    radial-gradient(ellipse 120% 55% at 50% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 65%),
+    radial-gradient(ellipse 120% 55% at 50% -10%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%),
     var(--bg);
   color: var(--text);
   font-family:

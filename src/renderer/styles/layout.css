@@ -29,17 +29,19 @@
   align-items: center;
 }
 
-/* Small rotated-square "gem" nodding to Palkia's diamond chest core — an abstract brand
-   touch that doesn't need custom artwork. */
+/* Small pearlescent orb nodding to Palkia's held item, the Lustrous Orb — a round pearl,
+   not a faceted diamond (that shape belongs to Dialga's Adamant Orb / the Diamond
+   theming, once that gets built — see tokens.css's doc comment). An abstract brand touch
+   that doesn't need custom artwork; the off-center highlight is what reads as "pearl"
+   rather than a flat dot. */
 .app-title::before {
   content: '';
   display: inline-block;
-  width: 0.6rem;
-  height: 0.6rem;
+  width: 0.65rem;
+  height: 0.65rem;
   margin-right: 0.6rem;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 2px;
-  transform: rotate(45deg);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--accent-strong), var(--accent) 55%, var(--accent2) 100%);
 }
 
 .app-header-controls {
