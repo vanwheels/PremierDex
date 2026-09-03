@@ -1,12 +1,5 @@
 # TODO
 
-## [User-facing selector for collapsed foldable-species form] — Leg 27
-Leg 9 shipped the checked-off-first default (falls back to list order if nothing's
-checked — see COMPLETED.md). Vanny floated a stretch on top of that: let the user
-explicitly pick which form displays when collapsed, overriding the automatic pick. Not
-started — flagged as a stretch, not committed scope, when Leg 9 was opened.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Pokéball-caught-in tracking] — Leg 28
 Vanny floated adding the ability to record which Poké Ball a Collection Entry's Pokémon
 was caught in. Not scoped — flagged as a possible later-milestone addition, not committed

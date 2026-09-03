@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [User-facing selector for collapsed foldable-species form] — Leg 27 — 2026-09-02
+Leg 9's stretch idea, now implemented: a dropdown next to the expand/collapse toggle lets
+the user pin which form (base or a cosmetic variant) displays when a foldable species'
+section is collapsed, overriding pickCollapsedRow's owned/shiny auto-pick. Persisted per
+species (`species.collapsed_display_form_id`, nullable = Auto) rather than session-only —
+Vanny's call — and sticks even if the picked form's owned/shiny state later changes. Not
+wired into backup export/import: species rows are never restored on import (an existing,
+pre-leg limitation — seed data owns them), so a restored backup won't carry the pick
+forward. See commit `4de59c5`.
+
 ## [Rename 'Owned' to 'Non-Shiny'] — Leg 26 — 2026-09-02
 Display-only rename across the three places the "Owned" column/filter/header sits next to
 its shiny counterpart (DexTable's sortable column header, DexFilterBar's tri-state filter,
