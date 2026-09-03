@@ -1,11 +1,5 @@
 # TODO
 
-## [Trainer Profile + Storage Location sort] — Leg 12
-Trainer Profiles and Storage Locations should be sortable by game (release date order),
-game (alphabetical), and OT name/Name (alphabetical). No sort control exists yet on
-either panel — both just render in insertion/query order.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Trainer Profile + Storage Location backup export/import] — Leg 13
 Neither Trainer Profiles (Leg 1) nor Storage Locations (Leg 2) are included in the JSON
 backup export/import flow (`collection-export.ts`) — a reinstall or a restore from

@@ -90,6 +90,13 @@ td {
   margin-bottom: 1rem;
 }
 
+.panel-toolbar {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
 .dex-table {
   width: 100%;
 }

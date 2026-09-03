@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Trainer Profile + Storage Location sort] — Leg 12 — 2026-09-02
+Added a shared "Sort by" dropdown (game — release order, game — A–Z, OT Name/Name — A–Z)
+to both TrainerProfilesPanel and StorageLocationsPanel; previously both just rendered in
+insertion/query order with no sort control. Release order reuses ORIGIN_GAMES' existing
+array order (already release-date-ordered — see OriginGameInput.tsx) via a new
+`originGameOrder` lookup. A Storage Location's "game" is its linked Trainer Profile's game
+(null for every non-save_file location, which sorts last regardless of mode). Sort state
+is local/presentation-only, not persisted, mirroring DexToolbar.tsx's convention. See
+commit `d5d953b`.
+
 ## [TID visibility when setting Pokémon origin] — Leg 11 — 2026-09-02
 OriginModal's "Copy from Trainer Profile" dropdown now appends the TID to each option
 (`— TID <n>`) when the profile has one, so similarly named/labeled profiles can be told

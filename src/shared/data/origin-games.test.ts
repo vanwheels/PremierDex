@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { findOriginGame, ORIGIN_GAMES } from './origin-games'
+import { findOriginGame, ORIGIN_GAMES, originGameOrder } from './origin-games'
 
 describe('ORIGIN_GAMES', () => {
   it('has unique ids and unique display names', () => {
@@ -30,5 +30,17 @@ describe('ORIGIN_GAMES', () => {
 
   it('returns undefined for an unlisted game name', () => {
     expect(findOriginGame('Not A Real Pokémon Game')).toBeUndefined()
+  })
+})
+
+describe('originGameOrder', () => {
+  it('orders earlier games before later ones, matching ORIGIN_GAMES release order', () => {
+    expect(originGameOrder('Pokémon Red')).toBeLessThan(originGameOrder('Pokémon Gold'))
+    expect(originGameOrder('Pokémon Gold')).toBeLessThan(originGameOrder('Pokémon Scarlet'))
+  })
+
+  it('sorts an unlisted game name after every known game', () => {
+    expect(originGameOrder('Not A Real Pokémon Game')).toBe(ORIGIN_GAMES.length)
+    expect(originGameOrder('Not A Real Pokémon Game')).toBeGreaterThan(originGameOrder('Pokémon GO'))
   })
 })

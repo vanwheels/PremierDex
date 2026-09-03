@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
+import type { GameSortMode } from '../shared/gameSort'
+import { SortSelect } from '../shared/SortSelect'
 import { StorageLocationForm } from './StorageLocationForm'
 import { StorageLocationRow } from './StorageLocationRow'
+import { sortStorageLocations } from './sortStorageLocations'
 
 const EMPTY_INPUT: StorageLocationInput = { locationType: 'home', name: '', trainerProfileId: null }
 
@@ -16,6 +19,12 @@ export function StorageLocationsPanel(): JSX.Element {
   const [trainerProfiles, setTrainerProfiles] = useState<TrainerProfile[]>([])
   const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)
+  const [sortMode, setSortMode] = useState<GameSortMode>('game-release')
+
+  const sortedLocations = useMemo(
+    () => sortStorageLocations(locations, trainerProfiles, sortMode),
+    [locations, trainerProfiles, sortMode]
+  )
 
   // Trainer profiles are reloaded alongside locations so the save_file picker (and each
   // row's linked-trainer display) stays current after edits made elsewhere on the page.
@@ -55,6 +64,9 @@ export function StorageLocationsPanel(): JSX.Element {
   return (
     <section className="storage-locations">
       <h2>Storage Locations</h2>
+      <div className="panel-toolbar">
+        <SortSelect value={sortMode} onChange={setSortMode} nameLabel="Name" />
+      </div>
       <table className="storage-locations-table">
         <thead>
           <tr>
@@ -65,7 +77,7 @@ export function StorageLocationsPanel(): JSX.Element {
           </tr>
         </thead>
         <tbody>
-          {locations.map((location) => (
+          {sortedLocations.map((location) => (
             <StorageLocationRow
               key={location.id}
               location={location}

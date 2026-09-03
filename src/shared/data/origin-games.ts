@@ -85,3 +85,13 @@ export const ORIGIN_GAMES: OriginGame[] = [
 export function findOriginGame(name: string): OriginGame | undefined {
   return ORIGIN_GAMES.find((g) => g.name === name)
 }
+
+/** ORIGIN_GAMES is already listed in release-date order (see file header / the game-picker
+ * dropdown in OriginGameInput.tsx, which relies on the same thing) — this just exposes
+ * that ordering as a sort key. An unlisted/legacy game name sorts after every known game
+ * rather than throwing, so a Trainer Profile referencing a game since removed from this
+ * list still sorts (deterministically, just at the end) instead of breaking the sort. */
+export function originGameOrder(name: string): number {
+  const index = ORIGIN_GAMES.findIndex((g) => g.name === name)
+  return index === -1 ? ORIGIN_GAMES.length : index
+}

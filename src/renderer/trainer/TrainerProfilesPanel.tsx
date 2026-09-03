@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
+import type { GameSortMode } from '../shared/gameSort'
+import { SortSelect } from '../shared/SortSelect'
 import { TrainerProfileForm } from './TrainerProfileForm'
 import { TrainerProfileRow } from './TrainerProfileRow'
+import { sortTrainerProfiles } from './sortTrainerProfiles'
 
 const EMPTY_INPUT: TrainerProfileInput = { game: '', otName: '', tid: null, sid: null, label: null }
 
@@ -12,6 +15,9 @@ export function TrainerProfilesPanel(): JSX.Element {
   const [profiles, setProfiles] = useState<TrainerProfile[]>([])
   const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)
+  const [sortMode, setSortMode] = useState<GameSortMode>('game-release')
+
+  const sortedProfiles = useMemo(() => sortTrainerProfiles(profiles, sortMode), [profiles, sortMode])
 
   const load = (): Promise<void> => window.premierDex.listTrainerProfiles().then(setProfiles)
 
@@ -43,6 +49,9 @@ export function TrainerProfilesPanel(): JSX.Element {
   return (
     <section className="trainer-profiles">
       <h2>Trainer Profiles</h2>
+      <div className="panel-toolbar">
+        <SortSelect value={sortMode} onChange={setSortMode} nameLabel="OT Name" />
+      </div>
       <table className="trainer-profiles-table">
         <thead>
           <tr>
@@ -55,7 +64,7 @@ export function TrainerProfilesPanel(): JSX.Element {
           </tr>
         </thead>
         <tbody>
-          {profiles.map((profile) => (
+          {sortedProfiles.map((profile) => (
             <TrainerProfileRow
               key={profile.id}
               profile={profile}
