@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import { BackupControls } from './BackupControls'
 import { UpdateControls } from './UpdateControls'
+import { ThemeProvider } from './theme/theme-store'
+import { ThemeModeToggle } from './theme/ThemeModeToggle'
 import { buildDexSections } from './dex/buildDexSections'
 import { filterDexSections } from './dex/filterDexSections'
 import { sortDexSections } from './dex/sortDexSections'
@@ -110,66 +112,69 @@ export function App(): JSX.Element {
   }
 
   return (
-    <div className="app-shell">
-      <header className="app-header">
-        <h1 className="app-title">PremierDex</h1>
-        <div className="app-header-controls">
-          <BackupControls onImported={handleImported} />
-          <UpdateControls />
-        </div>
-      </header>
-      <nav className="app-view-tabs">
-        <button type="button" className={view === 'dex' ? 'app-view-tab active' : 'app-view-tab'} onClick={() => setView('dex')}>
-          Living Dex
-        </button>
-        <button
-          type="button"
-          className={view === 'collection' ? 'app-view-tab active' : 'app-view-tab'}
-          onClick={() => setView('collection')}
-        >
-          Collection
-        </button>
-        <button
-          type="button"
-          className={view === 'trainers' ? 'app-view-tab active' : 'app-view-tab'}
-          onClick={() => setView('trainers')}
-        >
-          Trainer Profiles
-        </button>
-        <button
-          type="button"
-          className={view === 'storage-locations' ? 'app-view-tab active' : 'app-view-tab'}
-          onClick={() => setView('storage-locations')}
-        >
-          Storage Locations
-        </button>
-      </nav>
-      <main className="app-content">
-        {view === 'dex' && (
-          <>
-            <CompletionStatsPanel
-              stats={completionStats}
-              options={completionStatsOptions}
-              onOptionsChange={setCompletionStatsOptions}
-            />
-            <DexToolbar options={options} onChange={setOptions} />
-            <DexFilterBar filters={filters} onChange={setFilters} />
-            <DexTable
-              sections={visibleSections}
-              sort={sort}
-              onSortChange={setSort}
-              onToggleEntry={handleToggleEntry}
-              onSaveOrigin={handleSaveOrigin}
-              onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
-            />
-          </>
-        )}
-        {view === 'collection' && (
-          <CollectionView species={species} forms={forms} entries={entries} onSaveOrigin={handleSaveOrigin} />
-        )}
-        {view === 'trainers' && <TrainerProfilesPanel key={importVersion} onEntriesChanged={refetchEntries} />}
-        {view === 'storage-locations' && <StorageLocationsPanel key={importVersion} />}
-      </main>
-    </div>
+    <ThemeProvider>
+      <div className="app-shell">
+        <header className="app-header">
+          <h1 className="app-title">PremierDex</h1>
+          <div className="app-header-controls">
+            <ThemeModeToggle />
+            <BackupControls onImported={handleImported} />
+            <UpdateControls />
+          </div>
+        </header>
+        <nav className="app-view-tabs">
+          <button type="button" className={view === 'dex' ? 'app-view-tab active' : 'app-view-tab'} onClick={() => setView('dex')}>
+            Living Dex
+          </button>
+          <button
+            type="button"
+            className={view === 'collection' ? 'app-view-tab active' : 'app-view-tab'}
+            onClick={() => setView('collection')}
+          >
+            Collection
+          </button>
+          <button
+            type="button"
+            className={view === 'trainers' ? 'app-view-tab active' : 'app-view-tab'}
+            onClick={() => setView('trainers')}
+          >
+            Trainer Profiles
+          </button>
+          <button
+            type="button"
+            className={view === 'storage-locations' ? 'app-view-tab active' : 'app-view-tab'}
+            onClick={() => setView('storage-locations')}
+          >
+            Storage Locations
+          </button>
+        </nav>
+        <main className="app-content">
+          {view === 'dex' && (
+            <>
+              <CompletionStatsPanel
+                stats={completionStats}
+                options={completionStatsOptions}
+                onOptionsChange={setCompletionStatsOptions}
+              />
+              <DexToolbar options={options} onChange={setOptions} />
+              <DexFilterBar filters={filters} onChange={setFilters} />
+              <DexTable
+                sections={visibleSections}
+                sort={sort}
+                onSortChange={setSort}
+                onToggleEntry={handleToggleEntry}
+                onSaveOrigin={handleSaveOrigin}
+                onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
+              />
+            </>
+          )}
+          {view === 'collection' && (
+            <CollectionView species={species} forms={forms} entries={entries} onSaveOrigin={handleSaveOrigin} />
+          )}
+          {view === 'trainers' && <TrainerProfilesPanel key={importVersion} onEntriesChanged={refetchEntries} />}
+          {view === 'storage-locations' && <StorageLocationsPanel key={importVersion} />}
+        </main>
+      </div>
+    </ThemeProvider>
   )
 }

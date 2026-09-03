@@ -10,22 +10,33 @@
  * source, not reflected light like a printed page, so either extreme is harsh on an
  * emissive display. See memory/comfortable-luminance-not-dark-vs-light.md.
  *
- * Pearl (the app's current/only theming — Diamond gets nailed down later, see TODO.md)
- * sampled off Palkia's sprite: pearl-pink/white body → --surface family, its saturated
- * rose-magenta markings → --accent, the grayish blue-violet fin/wing plating →
- * --accent2, its warm cream belly → --text. --bg's luminance is calibrated against
- * GW2-Squaded's own dark bg (`#291e26`) rather than pushed toward black. Same CSS-
- * custom-property architecture as that app's global.css (`--accent`/`--danger` kept
- * semantically separate there too).
+ * Pearl (bare `:root`, the app's original/default theming) sampled off Palkia's sprite:
+ * pearl-pink/white body → --surface family, its saturated rose-magenta markings →
+ * --accent, the grayish blue-violet fin/wing plating → --accent2, its warm cream belly
+ * → --text. --bg's luminance is calibrated against GW2-Squaded's own dark bg
+ * (`#291e26`) rather than pushed toward black.
+ *
+ * Diamond (`:root[data-theme='diamond']`, Leg — in-app toggle) sampled the same way off
+ * Dialga: its steel-blue plated body → --surface family, the pale cyan diamond core gem
+ * → --accent, its darker navy secondary plating → --accent2, the gem's icy-white
+ * highlight → --text. Deliberately landed at the *same* mid-luminance band as Pearl
+ * (not a light theme) — Dialga isn't "the light one," it's a different hue family at
+ * the same comfort level, per the luminance memory above. `<html data-theme>` is set by
+ * `theme/theme-store.tsx`, which also owns the System/Diamond/Pearl toggle
+ * (`ThemeModeToggle.tsx`) — same architecture as GW2-Squaded's
+ * app-settings-store.tsx/ThemeModeToggle.tsx (`--accent`/`--danger` kept semantically
+ * separate there too).
  *
  * `--gold` is reserved for shiny/collector-value signals (dex-always-shiny-badge,
  * dex-shiny-locked-badge) so "shiny" reads as its own meaningful color rather than
- * reusing --accent.
+ * reusing --accent — kept identical across both themes for that reason, rather than
+ * re-pulled per palette.
  *
- * Third pass (same day): --bg and --surface sat too close in value, and --muted leaned
- * too far toward neutral gray — together read as "washed out" even after the luminance
- * fix. Widened the bg/surface gap and pulled --muted/--accent back toward the hue family
- * instead of gray. Depth (panels/buttons reading as flat CSS boxes with no implied light
+ * Third pass (same day, Pearl only): --bg and --surface sat too close in value, and
+ * --muted leaned too far toward neutral gray — together read as "washed out" even after
+ * the luminance fix. Widened the bg/surface gap and pulled --muted/--accent back toward
+ * the hue family instead of gray; Diamond's values below were built to the same gaps
+ * from the start. Depth (panels/buttons reading as flat CSS boxes with no implied light
  * source) is a separate problem from saturation, addressed in layout.css/buttons.css —
  * directional gradients, layered shadows, and a grain texture, not a saturation bump.
  */
@@ -50,25 +61,24 @@
   --shadow: rgba(20, 10, 16, 0.5);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
+:root[data-theme='diamond'] {
+  /* Still dark-ish per the comfort band above, not a native-widget light theme. */
+  color-scheme: dark;
 
-    --bg: #eef2f6;
-    --surface: #ffffff;
-    --surface-raised: #f7fafc;
-    --border: #ccd6e0;
-    --text: #22303e;
-    --muted: #62758a;
+  --bg: #1f2836;
+  --surface: #2c3a4c;
+  --surface-raised: #35455a;
+  --border: #56708a;
+  --text: #e8f1f7;
+  --muted: #93b0c7;
 
-    --accent: #4d7aa8;
-    --accent-strong: #2c4460;
-    --on-accent: #ffffff;
-    --accent2: #2c4460;
+  --accent: #4aa8dc;
+  --accent-strong: #9edcf0;
+  --on-accent: #0a1620;
+  --accent2: #4f6483;
 
-    --gold: #a9822f;
-    --danger: #b03a2e;
+  --gold: #d4a84f;
+  --danger: #c9564a;
 
-    --shadow: rgba(34, 48, 62, 0.15);
-  }
+  --shadow: rgba(8, 14, 22, 0.5);
 }

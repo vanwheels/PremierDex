@@ -99,6 +99,20 @@
   align-items: center;
 }
 
+/* ThemeModeToggle (app-header-controls) — plain buttons in a row, "active" reusing the
+   same border-color/color: var(--accent) treatment .app-view-tab.active already uses
+   rather than a bespoke segmented-control look. Same pattern as GW2-Squaded's own
+   theme-mode-row. */
+.theme-mode-row {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.theme-mode-option.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .backup-status {
   color: var(--muted);
   font-size: 0.8rem;

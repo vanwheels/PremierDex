@@ -1,5 +1,17 @@
 # COMPLETED
 
+## [Diamond Theming + In-App Diamond/Pearl Toggle] — 2026-09-03
+Diamond palette pulled from Dialga (steel-blue plated body → --surface family, its pale
+cyan diamond core gem → --accent, darker navy secondary plating → --accent2, the gem's
+icy-white highlight → --text) at the same mid-luminance comfort band as Pearl, replacing
+the old placeholder light-mode block that tokens.css's Leg 2 comment had flagged as
+"nailed down later." Replaced the `prefers-color-scheme` media query with an explicit
+`<html data-theme>` toggle (System/Diamond/Pearl), persisted to localStorage and applied
+pre-first-paint — same `theme-store.tsx`/`ThemeModeToggle.tsx` architecture as
+GW2-Squaded's own theme switcher. Toggle lives in the persistent header chrome next to
+BackupControls/UpdateControls. `--gold`/`--danger` stayed close to Pearl's values by
+design (shiny signal and severity color meant to read consistently across both themes).
+
 ## [Visual Design Pass] — Leg 2 — 2026-09-02
 Full re-skin off a token-based CSS system: dark (default) and light palettes pulled from
 Diamond/Pearl's Palkia/Dialga pairing per Vanny's direction; light only surfaces via

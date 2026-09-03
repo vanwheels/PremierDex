@@ -10,14 +10,6 @@ Blocked: needs production-quality PokéBall-or-similar artwork before a real pub
 release.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [In-app light/dark toggle] — unscheduled
-Leg 2's theme tokens ship both a dark palette (default) and a light one, but the light
-palette only ever shows up via the OS-level `prefers-color-scheme` media query — there's
-no in-app switcher (no persisted setting, no `<html data-theme>` override) like
-GW2-Squaded has. Not scoped into a leg; noted here so it isn't lost if a manual toggle
-turns out to be wanted later.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## Current Milestone: Nav restructuring → Visual pass → Storage Location sync → Dex Table redesign
 
 Scoped into 10 legs during a 2026-09-02 leg-planning pass. Decisions locked that day:
