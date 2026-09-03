@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Kyurem Black/White should not be Home-boxable] — Leg 25 — 2026-09-02
+Data-only fix, same shape as the other Home-support gaps in
+docs/investigations/home-depositability-audit.md: set `homeBoxable: false` on Kyurem's
+`black`/`white` forms in forms.json and added matching OVERRIDES entries in
+fetch-pokemon-forms.ts. No code changes — homeBoxable was already fully plumbed through
+storage/filtering/UI as of Leg 8. See commit `7384fa0`.
+
 ## [alwaysShiny UI consumer] — Leg 24 — 2026-09-02
 Threaded `Form.alwaysShiny` through to `DexRowData` and gave it the mirror-image
 treatment of `shinyLocked`: disables the *regular* checkbox and shows an "Always shiny"
