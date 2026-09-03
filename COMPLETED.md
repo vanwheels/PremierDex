@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Group by OT should key on TID/SID, not name] — Leg 20 — 2026-09-02
+`buildCollectionGroups`'s 'ot' grouping keyed on `otName` alone, so Vanny's multiple
+same-named-but-distinct trainers ("vanny" from different games/saves) landed in one
+merged group. Group key is now the TID+SID pair when both are set (`otName` stays
+display-only), falling back to the old name-keyed grouping for entries with no tid/sid on
+file. Group sort order switched from comparing keys to comparing labels, since the key is
+no longer guaranteed to be the display name for 'ot'. See commit `<pending>`.
+
 ## [Configurable completion stats breakdown] — Leg 19 — 2026-09-02
 Replaced `completionStats.ts`'s single hardcoded "By Generation" breakdown with one
 computation driven by three independent toggles — include cosmetic variants, split by

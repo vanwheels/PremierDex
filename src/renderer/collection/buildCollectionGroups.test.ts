@@ -83,6 +83,31 @@ describe('buildCollectionGroups', () => {
     expect(groups.map((g) => g.label)).toEqual(['Ash', 'Zoe', 'No OT set'])
   })
 
+  it('groups by OT on the TID/SID pair, keeping same-named-but-distinct trainers apart', () => {
+    const entries = [
+      makeEntry({ id: 1, formId: 1, otName: 'Vanny', tid: 11111, sid: 1 }),
+      makeEntry({ id: 2, formId: 4, otName: 'Vanny', tid: 22222, sid: 2 }),
+      makeEntry({ id: 3, formId: 25, otName: 'Vanny', tid: 11111, sid: 1 })
+    ]
+    const groups = buildCollectionGroups(SPECIES, FORMS, entries, 'ot')
+    expect(groups).toHaveLength(2)
+    const trainerGroups = groups.filter((g) => g.label === 'Vanny')
+    expect(trainerGroups).toHaveLength(2)
+    const idsByGroup = trainerGroups.map((g) => g.rows.map((r) => r.entry.id).sort())
+    expect(idsByGroup).toContainEqual([1, 3])
+    expect(idsByGroup).toContainEqual([2])
+  })
+
+  it('groups by OT name when tid/sid are unset, unaffected by unrelated same-name entries with tid/sid', () => {
+    const entries = [
+      makeEntry({ id: 1, formId: 1, otName: 'Ash', tid: null, sid: null }),
+      makeEntry({ id: 2, formId: 4, otName: 'Ash', tid: 12345, sid: 6 })
+    ]
+    const groups = buildCollectionGroups(SPECIES, FORMS, entries, 'ot')
+    expect(groups).toHaveLength(2)
+    expect(groups.every((g) => g.label === 'Ash')).toBe(true)
+  })
+
   it('orders rows within a group by dex number', () => {
     const entries = [
       makeEntry({ id: 1, formId: 25, otName: 'Ash' }),

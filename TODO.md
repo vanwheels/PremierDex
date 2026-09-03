@@ -1,31 +1,27 @@
 # TODO
 
-## [Pokémon name punctuation exceptions] — unscheduled
-Leg 7 title-cases raw PokeAPI slugs (hyphens preserved as separators) at every display
-site, but ~14 species have real names the slug format can't represent: apostrophes
-(Farfetch'd/Sirfetch'd), periods (Mr. Mime, Mr. Rime, Mime Jr.), a colon (Type: Null),
-gender symbols (Nidoran♀/♂), an accent (Flabébé), and lowercase-after-hyphen exceptions
-(Jangmo-o/Hakamo-o/Kommo-o, Ho-Oh and Porygon-Z are already correct as-is). Deliberately
-deferred at Vanny's call — simple title-case only, no exceptions dictionary — see
-COMPLETED.md's Leg 7 entry.
+## [Group by Dex number in Collection] — Leg 21
+Collection needs an additional grouping option: group by dex number, alongside the
+existing grouping modes (e.g. OT).
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [User-facing selector for collapsed foldable-species form] — unscheduled
-Leg 9 shipped the checked-off-first default (falls back to list order if nothing's
-checked — see COMPLETED.md). Vanny floated a stretch on top of that: let the user
-explicitly pick which form displays when collapsed, overriding the automatic pick. Not
-started — flagged as a stretch, not committed scope, when Leg 9 was opened.
+## [Species-forms data bugs] — Leg 22
+Several correctness bugs in the species/forms data surfaced after Leg 9's
+foldable-species work: Mothim has no forms entry at all; Burmy folds correctly but
+Wormadam doesn't (likely other pairs affected too); Arceus and Genesect still display
+every form instead of folding; and Scatterbug/Spewpa each wrongly carry Vivillon's full
+form list even though the pre-evolutions can't reveal which Vivillon form they'll become
+(they should be a single entry each, with only Vivillon showing the variants). Needs
+investigation into the shared forms dataset/folding logic rather than one-off fixes,
+since these look like instances of the same underlying issue.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [App icon] — unscheduled
-No custom icon exists yet (`build/icon.png` per electron-builder convention, matching
-GW2-Squaded) — packaged builds currently ship with Electron's default icon. Not blocking
-local/internal packaging, so left off the leg sequence.
-Blocked: needs production-quality PokéBall-or-similar artwork before a real public
-release.
-Last touched: 2026-09-01. Re-check count: 0.
+## [Female-form sprites missing] — Leg 23
+Species with a gender-split form (Jellicent, Pyroar, etc.) are missing the sprite for
+the female form.
+Last touched: 2026-09-02. Re-check count: 0.
 
-## [alwaysShiny UI consumer] — unscheduled
+## [alwaysShiny UI consumer] — Leg 24
 Leg 6 added `alwaysShiny` (data layer only, per that leg's explicit "data-only fix"
 framing) but nothing in the renderer reads it yet — unlike `homeBoxable`/`shinyLocked`,
 which both already reach `DexRow` (a badge, and for `shinyLocked` also a disabled
@@ -33,6 +29,40 @@ checkbox). The natural consistent treatment would mirror `shinyLocked`'s but on 
 opposite checkbox: disable the *regular* (non-shiny) checkbox and badge the row when
 `alwaysShiny` is true, so Spiky-Eared Pichu can't be marked owned-and-not-shiny. Not done
 as part of Leg 6 to keep that leg's scope to the data correction it was framed as.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Kyurem Black/White should not be Home-boxable] — Leg 25
+Black Kyurem and White Kyurem shouldn't be selectable as boxable-in-Home, unlike regular
+Kyurem. Likely needs the same kind of per-form flag Leg 6 added for `alwaysShiny`/
+`homeBoxable` — see the "alwaysShiny UI consumer" item above for the related pattern.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Rename 'Owned' to 'Non-Shiny'] — Leg 26
+The "Owned" label/checkbox in Collection should be renamed to "Non-Shiny" for clarity
+against the shiny counterpart.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [User-facing selector for collapsed foldable-species form] — Leg 27
+Leg 9 shipped the checked-off-first default (falls back to list order if nothing's
+checked — see COMPLETED.md). Vanny floated a stretch on top of that: let the user
+explicitly pick which form displays when collapsed, overriding the automatic pick. Not
+started — flagged as a stretch, not committed scope, when Leg 9 was opened.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Pokéball-caught-in tracking] — Leg 28
+Vanny floated adding the ability to record which Poké Ball a Collection Entry's Pokémon
+was caught in. Not scoped — flagged as a possible later-milestone addition, not committed
+work.
+Last touched: 2026-09-02. Re-check count: 0.
+
+## [Pokémon name punctuation exceptions] — Leg 29
+Leg 7 title-cases raw PokeAPI slugs (hyphens preserved as separators) at every display
+site, but ~14 species have real names the slug format can't represent: apostrophes
+(Farfetch'd/Sirfetch'd), periods (Mr. Mime, Mr. Rime, Mime Jr.), a colon (Type: Null),
+gender symbols (Nidoran♀/♂), an accent (Flabébé), and lowercase-after-hyphen exceptions
+(Jangmo-o/Hakamo-o/Kommo-o, Ho-Oh and Porygon-Z are already correct as-is). Deliberately
+deferred at Vanny's call — simple title-case only, no exceptions dictionary — see
+COMPLETED.md's Leg 7 entry.
 Last touched: 2026-09-02. Re-check count: 0.
 
 ## [Origin auto-populate from Trainer Profile edits] — unscheduled
@@ -44,6 +74,14 @@ decision or needs a separate "sync back" action distinct from the current one-ti
 Blocked: needs Vanny's explicit call on which direction to take before this can be
 scoped into a leg.
 Last touched: 2026-09-02. Re-check count: 0.
+
+## [App icon] — unscheduled
+No custom icon exists yet (`build/icon.png` per electron-builder convention, matching
+GW2-Squaded) — packaged builds currently ship with Electron's default icon. Not blocking
+local/internal packaging, so left off the leg sequence.
+Blocked: needs production-quality PokéBall-or-similar artwork before a real public
+release.
+Last touched: 2026-09-01. Re-check count: 0.
 
 ## Future Milestones (post-current)
 
