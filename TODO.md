@@ -41,11 +41,6 @@ restructuring expands the existing top-tab pattern rather than moving to a sideb
 visual pass (Leg 2) is a full re-skin — theme/color, layout density, and component
 styling all in scope, not a targeted fix.
 
-## [Per-Storage-Location Completion Stats] — Leg 7
-Extend completion-stats logic to scope owned/shiny stats to a given storageLocationId.
-Logic only — UI consumption waits for Leg 8's tabbed table. Depends on Leg 3.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Dex Table Redesign: Per-Location Tabs] — Leg 8
 Tabbed-per-Storage-Location structure for the Living Dex table (using Storage Location's
 existing `name` field as the tab label — no schema change needed there), plus an

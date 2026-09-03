@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Per-Storage-Location Completion Stats] — Leg 7 — 2026-09-03
+Added `filterEntriesByStorageLocation`, a pre-filter callers run on the entries array
+before `computeCompletionStats` to scope owned/shiny counts to one storage location (or
+`null` for the Unassigned bucket) — totals stay collection-wide since which forms are
+collectible doesn't depend on which box is being viewed. Logic only, per the leg's scope;
+Leg 8 wires it into the tabbed table. See commit `2bb2356`.
+
 ## [Invalid Combo Flag] — Leg 6 — 2026-09-03
 Derived, non-blocking "Invalid combo" badge on an owned Living Dex entry whose species
 or caught ball doesn't match Legs 4-5's validity data for its origin game — computed at
