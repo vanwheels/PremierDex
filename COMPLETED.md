@@ -6,7 +6,7 @@ same-named-but-distinct trainers ("vanny" from different games/saves) landed in 
 merged group. Group key is now the TID+SID pair when both are set (`otName` stays
 display-only), falling back to the old name-keyed grouping for entries with no tid/sid on
 file. Group sort order switched from comparing keys to comparing labels, since the key is
-no longer guaranteed to be the display name for 'ot'. See commit `<pending>`.
+no longer guaranteed to be the display name for 'ot'. See commit `a26956e`.
 
 ## [Configurable completion stats breakdown] — Leg 19 — 2026-09-02
 Replaced `completionStats.ts`'s single hardcoded "By Generation" breakdown with one
