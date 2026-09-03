@@ -8,7 +8,7 @@ per-catch, not per-trainer), plus a small read-only ball icon on CollectionRow (
 sourced from PokeAPI/sprites' items/ folder, same CDN sprites.ts already uses). Storage-
 layer plumbing (schema CHECK column, export/import, origin summary tooltip) is complete,
 but display is CollectionRow-only per Vanny's framing of the original ask — DexRow shows
-no icon. See commit `<hash>`.
+no icon. See commit `41b9034`.
 
 ## [User-facing selector for collapsed foldable-species form] — Leg 27 — 2026-09-02
 Leg 9's stretch idea, now implemented: a dropdown next to the expand/collapse toggle lets
