@@ -220,5 +220,5 @@ tbody tr:hover {
 }
 
 .completion-stats-table {
-  width: auto;
+  width: 100%;
 }

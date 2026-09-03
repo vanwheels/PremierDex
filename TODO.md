@@ -79,13 +79,6 @@ looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the 
 just sprites" — it never claimed to reflect real box contents, so the same checklist
 ceiling doesn't misrepresent it the way it would Box view.
 
-## [Completion tables should share a row on wide windows] — Leg 4
-The three Completion Stats tables currently stack vertically with a lot of unused
-horizontal space beside them on wide windows. Fit two (or, if the app's minimum window
-width matches Vanny's other apps like GW2-Squaded, all three) side by side instead.
-Leg 3's column-width rework has landed, so this is unblocked.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ## [Non-HOME locations show all 1025 species as depositable] — Leg 5
 Ranch/Box/individual-save-file storage locations currently list every species as
 depositable in their Dex Table view — there's no per-location-type/per-game

@@ -88,9 +88,11 @@ export function CompletionStatsPanel({ stats, options, onOptionsChange }: Comple
           Fold regional forms into generation totals
         </label>
       </div>
-      <StatsTable title="Overall" rows={[stats.overall]} />
-      <StatsTable title="By Generation" rows={stats.byGeneration} />
-      {stats.byRegionalGroup.length > 0 && <StatsTable title="By Regional Group" rows={stats.byRegionalGroup} />}
+      <div className="completion-stats-tables">
+        <StatsTable title="Overall" rows={[stats.overall]} />
+        <StatsTable title="By Generation" rows={stats.byGeneration} />
+        {stats.byRegionalGroup.length > 0 && <StatsTable title="By Regional Group" rows={stats.byRegionalGroup} />}
+      </div>
     </section>
   )
 }

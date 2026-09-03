@@ -227,8 +227,15 @@
   margin-bottom: 1.75rem;
 }
 
-.completion-stats-block + .completion-stats-block {
-  margin-top: 1rem;
+.completion-stats-tables {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.completion-stats-tables .completion-stats-block {
+  flex: 1 1 auto;
 }
 
 .collection-view label {
