@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { CollectionEntry, Form } from '@shared/types/pokemon'
-import { computeCompletionStats } from './completionStats'
+import { computeCompletionStats, filterEntriesByStorageLocation } from './completionStats'
 
 function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'formName'>): Form {
   return {
@@ -148,5 +148,43 @@ describe('computeCompletionStats', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 1, formName: 'base' })]
     const stats = computeCompletionStats(forms, [])
     expect(stats.byRegionalGroup).toEqual([])
+  })
+
+  it('scopes owned counts to one storage location while total stays collection-wide', () => {
+    const forms: Form[] = [
+      makeForm({ id: 1, speciesId: 1, formName: 'base' }),
+      makeForm({ id: 2, speciesId: 4, formName: 'base' })
+    ]
+    const entries: CollectionEntry[] = [
+      makeEntry({ id: 10, formId: 1, owned: true, storageLocationId: 1 }),
+      makeEntry({ id: 11, formId: 2, owned: true, storageLocationId: 2 })
+    ]
+
+    const boxOne = computeCompletionStats(forms, filterEntriesByStorageLocation(entries, 1))
+    expect(boxOne.overall.regular.total).toBe(2)
+    expect(boxOne.overall.regular.owned).toBe(1)
+
+    const boxTwo = computeCompletionStats(forms, filterEntriesByStorageLocation(entries, 2))
+    expect(boxTwo.overall.regular.total).toBe(2)
+    expect(boxTwo.overall.regular.owned).toBe(1)
+  })
+})
+
+describe('filterEntriesByStorageLocation', () => {
+  it('keeps only entries assigned to the given storage location', () => {
+    const entries: CollectionEntry[] = [
+      makeEntry({ id: 10, formId: 1, owned: true, storageLocationId: 1 }),
+      makeEntry({ id: 11, formId: 2, owned: true, storageLocationId: 2 })
+    ]
+    expect(filterEntriesByStorageLocation(entries, 1)).toEqual([entries[0]])
+  })
+
+  it('null selects the Unassigned bucket rather than "no filter"', () => {
+    const entries: CollectionEntry[] = [
+      makeEntry({ id: 10, formId: 1, owned: true, storageLocationId: null }),
+      makeEntry({ id: 11, formId: 2, owned: true, storageLocationId: 2 }),
+      makeEntry({ id: 12, formId: 3, owned: false, storageLocationId: null })
+    ]
+    expect(filterEntriesByStorageLocation(entries, null)).toEqual([entries[0], entries[2]])
   })
 })

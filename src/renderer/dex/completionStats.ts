@@ -51,6 +51,23 @@ export const DEFAULT_COMPLETION_STATS_OPTIONS: CompletionStatsOptions = {
   foldRegionalIntoGeneration: false
 }
 
+/**
+ * Narrows entries to one Storage Location's worth (Leg 7), for scoping
+ * computeCompletionStats to a single tab of Leg 8's per-location table. `null` selects the
+ * Unassigned bucket (entries never assigned a location) rather than "no filter" — a caller
+ * wanting unscoped totals should skip filtering and pass the full entries array to
+ * computeCompletionStats, same as before this existed. Total counts are unaffected by this
+ * filter either way: they come from `forms`, not `entries` (see computeCompletionStats),
+ * since which forms are collectible doesn't depend on which box you're looking at — only
+ * which of them are owned does.
+ */
+export function filterEntriesByStorageLocation(
+  entries: CollectionEntry[],
+  storageLocationId: number | null
+): CollectionEntry[] {
+  return entries.filter((entry) => entry.storageLocationId === storageLocationId)
+}
+
 function emptyBucket(key: string, label: string): CompletionBucket {
   return { key, label, regular: { owned: 0, total: 0 }, shiny: { owned: 0, total: 0 } }
 }
