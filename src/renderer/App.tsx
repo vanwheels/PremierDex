@@ -9,9 +9,10 @@ import { ThemeModeToggle } from './theme/ThemeModeToggle'
 import { buildDexSections } from './dex/buildDexSections'
 import { filterDexSections } from './dex/filterDexSections'
 import { sortDexSections } from './dex/sortDexSections'
-import { computeCompletionStats, DEFAULT_COMPLETION_STATS_OPTIONS } from './dex/completionStats'
+import { computeCompletionStats, DEFAULT_COMPLETION_STATS_OPTIONS, filterEntriesByStorageLocation } from './dex/completionStats'
 import type { CompletionStatsOptions } from './dex/completionStats'
 import { DexTable } from './dex/DexTable'
+import { DexLocationTabs } from './dex/DexLocationTabs'
 import { DexToolbar } from './dex/DexToolbar'
 import { DexFilterBar } from './dex/DexFilterBar'
 import { CompletionStatsPanel } from './dex/CompletionStatsPanel'
@@ -41,7 +42,8 @@ export function App(): JSX.Element {
   const [forms, setForms] = useState<Form[]>([])
   const [entries, setEntries] = useState<CollectionEntry[]>([])
   // Fetched here (rather than left to StorageLocationsPanel's own load) so DexTable's
-  // interim assignment picker (Leg 3) has the list to populate its dropdown from.
+  // interim assignment picker (Leg 3) has the list to populate its dropdown from, and so
+  // DexLocationTabs (Leg 8) has it for the per-location tab bar.
   const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([])
   const [speciesAvailability, setSpeciesAvailability] = useState<SpeciesAvailabilityData>(EMPTY_SPECIES_AVAILABILITY)
   const [loading, setLoading] = useState(true)
@@ -51,6 +53,11 @@ export function App(): JSX.Element {
   const [completionStatsOptions, setCompletionStatsOptions] = useState<CompletionStatsOptions>(
     DEFAULT_COMPLETION_STATS_OPTIONS
   )
+  // Leg 8's per-location tab selection for the Living Dex view. Defaults to the
+  // Unassigned tab (null) rather than the first real location — it needs no data to
+  // resolve on first render, and it's where every entry starts out anyway (see
+  // DexLocationTabs' doc comment).
+  const [selectedLocationTab, setSelectedLocationTab] = useState<number | null>(null)
   const [view, setView] = useState<AppView>('dex')
   // Bumped after a JSON import (Leg 13 added Trainer Profiles/Storage Locations to the
   // backup) so both panels below remount and refetch — they load their own data on
@@ -91,17 +98,27 @@ export function App(): JSX.Element {
     loadAll().finally(() => setLoading(false))
   }, [loadAll])
 
+  // Leg 8: both the table and the stats panel scope to the selected location tab via
+  // Leg 7's filter, applied once here rather than in each consumer. An entry that's
+  // unowned everywhere sits at storageLocationId: null, same as an owned-but-unassigned
+  // one — so it only ever appears (checkable) under the Unassigned tab; see
+  // DexLocationTabs' doc comment for why that's the intended Leg 8/9 workflow, not a bug.
+  const entriesForLocationTab = useMemo(
+    () => filterEntriesByStorageLocation(entries, selectedLocationTab),
+    [entries, selectedLocationTab]
+  )
+
   const sections = useMemo(
-    () => buildDexSections(species, forms, entries, options),
-    [species, forms, entries, options]
+    () => buildDexSections(species, forms, entriesForLocationTab, options),
+    [species, forms, entriesForLocationTab, options]
   )
   const filteredSections = useMemo(() => filterDexSections(sections, filters), [sections, filters])
   const visibleSections = useMemo(() => sortDexSections(filteredSections, sort), [filteredSections, sort])
-  // Independent of options/filters/sort (all display-only) — stats reflect the whole
-  // collection, not the currently-visible slice. See completionStats.ts.
+  // Independent of options/filters/sort (all display-only) — stats reflect the whole of
+  // the selected tab's location, not the currently-visible slice. See completionStats.ts.
   const completionStats = useMemo(
-    () => computeCompletionStats(forms, entries, completionStatsOptions),
-    [forms, entries, completionStatsOptions]
+    () => computeCompletionStats(forms, entriesForLocationTab, completionStatsOptions),
+    [forms, entriesForLocationTab, completionStatsOptions]
   )
 
   const handleToggleEntry = (entryId: number, owned: boolean): void => {
@@ -172,6 +189,11 @@ export function App(): JSX.Element {
         <main className="app-content">
           {view === 'dex' && (
             <>
+              <DexLocationTabs
+                storageLocations={storageLocations}
+                selected={selectedLocationTab}
+                onSelect={setSelectedLocationTab}
+              />
               <CompletionStatsPanel
                 stats={completionStats}
                 options={completionStatsOptions}

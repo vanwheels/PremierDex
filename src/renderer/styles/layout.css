@@ -118,6 +118,37 @@
   font-size: 0.8rem;
 }
 
+/* Living Dex per-Storage-Location tab bar (Leg 8) — a second-tier tab strip, distinct
+   from .app-view-tabs' persistent chrome above: this one only scopes the Living Dex
+   view's own content (CompletionStatsPanel + DexTable), so it's a smaller pill row
+   living inline in .app-content rather than the header. */
+.dex-location-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.dex-location-tab {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.dex-location-tab:hover:not(.active) {
+  color: var(--text);
+}
+
+.dex-location-tab.active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
+  font-weight: 600;
+}
+
 .panel-toolbar,
 .dex-toolbar,
 .completion-stats-toolbar {
