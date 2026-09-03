@@ -25,6 +25,11 @@ export interface DexRowData {
    * DexRow disables the shiny checkbox and flags it with a badge, same treatment as
    * homeBoxable. */
   shinyLocked: boolean
+  /** True when a form has never legitimately existed as non-shiny (e.g. Spiky-Eared
+   * Pichu) — see Form.alwaysShiny's doc comment for the definition. DexRow disables the
+   * *regular* checkbox and flags it with a badge, the mirror-image treatment of
+   * shinyLocked. */
+  alwaysShiny: boolean
   /** Non-null for a dex_distinct regional form (alolan/galarian/hisuian/paldean),
    * mirroring Form.regionalGroup — carried through so the search/filter bar (Leg 15) can
    * filter to regional forms independent of DexOptions.regionalMode's inline/grouped

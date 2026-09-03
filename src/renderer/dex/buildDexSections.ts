@@ -68,6 +68,7 @@ function buildRows(
       firstAvailableGeneration: form.firstAvailableGeneration,
       homeBoxable: form.homeBoxable,
       shinyLocked: form.shinyLocked,
+      alwaysShiny: form.alwaysShiny,
       regionalGroup: form.regionalGroup
     }
   }

@@ -1,15 +1,5 @@
 # TODO
 
-## [alwaysShiny UI consumer] — Leg 24
-Leg 6 added `alwaysShiny` (data layer only, per that leg's explicit "data-only fix"
-framing) but nothing in the renderer reads it yet — unlike `homeBoxable`/`shinyLocked`,
-which both already reach `DexRow` (a badge, and for `shinyLocked` also a disabled
-checkbox). The natural consistent treatment would mirror `shinyLocked`'s but on the
-opposite checkbox: disable the *regular* (non-shiny) checkbox and badge the row when
-`alwaysShiny` is true, so Spiky-Eared Pichu can't be marked owned-and-not-shiny. Not done
-as part of Leg 6 to keep that leg's scope to the data correction it was framed as.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Kyurem Black/White should not be Home-boxable] — Leg 25
 Black Kyurem and White Kyurem shouldn't be selectable as boxable-in-Home, unlike regular
 Kyurem. Likely needs the same kind of per-form flag Leg 6 added for `alwaysShiny`/

@@ -97,7 +97,7 @@ export function DexRow({ row, onToggleEntry, onOpenSprite, onOpenOrigin, onSaveO
       <td>
         <input
           type="checkbox"
-          disabled={!row.regular}
+          disabled={!row.regular || row.alwaysShiny}
           checked={row.regular?.owned ?? false}
           onChange={() => row.regular && onToggleEntry(row.regular.id, !row.regular.owned)}
         />
@@ -110,6 +110,11 @@ export function DexRow({ row, onToggleEntry, onOpenSprite, onOpenOrigin, onSaveO
         >
           Origin
         </button>
+        {row.alwaysShiny && (
+          <span className="dex-always-shiny-badge" title="No legitimate non-shiny of this form has ever existed">
+            Always shiny
+          </span>
+        )}
       </td>
       <td>
         <input

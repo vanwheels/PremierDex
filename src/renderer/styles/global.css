@@ -178,6 +178,16 @@ td {
   white-space: nowrap;
 }
 
+.dex-always-shiny-badge {
+  display: block;
+  padding: 0.05rem 0.4rem;
+  border-radius: 0.75rem;
+  font-size: 0.65em;
+  opacity: 0.75;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+
 .dex-nickname-input {
   width: 8rem;
 }

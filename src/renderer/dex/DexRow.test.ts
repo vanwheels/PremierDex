@@ -17,6 +17,7 @@ function makeRow(overrides: Partial<DexRowData>): DexRowData {
     firstAvailableGeneration: 1,
     homeBoxable: true,
     shinyLocked: false,
+    alwaysShiny: false,
     regionalGroup: null,
     ...overrides
   }

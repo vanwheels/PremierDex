@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [alwaysShiny UI consumer] — Leg 24 — 2026-09-02
+Threaded `Form.alwaysShiny` through to `DexRowData` and gave it the mirror-image
+treatment of `shinyLocked`: disables the *regular* checkbox and shows an "Always shiny"
+badge on the shiny-only side of the row, so Spiky-Eared Pichu can't be marked
+owned-and-not-shiny. See commit `<pending>`.
+
 ## [Female-form sprites missing] — Leg 23 — 2026-09-02
 Root cause was bigger than Leg 22's framing: the female split row/entry has never shown
 a distinct sprite for *any* of the 103 hasGenderDifference forms, not just the handful

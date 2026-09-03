@@ -32,6 +32,7 @@ function makeRow(overrides: Partial<DexRowData> & Pick<DexRowData, 'key' | 'dexN
     firstAvailableGeneration: 1,
     homeBoxable: true,
     shinyLocked: false,
+    alwaysShiny: false,
     regionalGroup: null,
     ...overrides
   }
