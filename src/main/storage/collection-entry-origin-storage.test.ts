@@ -114,6 +114,66 @@ describe('collection entry origin', () => {
     expect(updated.trainerProfileId).toBe(profile.id)
   })
 
+  it('mirrors a trainer profile update onto every entry still linked to it (Leg 31)', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const profile = await storage.createTrainerProfile({
+      game: 'Pokémon Sword',
+      otName: 'Ash',
+      tid: 123456,
+      sid: 1234,
+      label: null,
+      language: 'English'
+    })
+    const entry = await findBulbasaurBaseEntry(storage)
+    await storage.setEntryOrigin(entry.id, { ...ORIGIN_INPUT, trainerProfileId: profile.id })
+
+    await storage.updateTrainerProfile(profile.id, {
+      game: 'Pokémon Shield',
+      otName: 'Red',
+      tid: 654321,
+      sid: 4321,
+      label: null,
+      language: 'Japanese'
+    })
+
+    const synced = await findBulbasaurBaseEntry(storage)
+    expect(synced.originGame).toBe('Pokémon Shield')
+    expect(synced.otName).toBe('Red')
+    expect(synced.tid).toBe(654321)
+    expect(synced.sid).toBe(4321)
+    expect(synced.language).toBe('Japanese')
+    // nickname/caughtBall are per-entry, never synced from the profile.
+    expect(synced.nickname).toBe(ORIGIN_INPUT.nickname)
+    expect(synced.caughtBall).toBe(ORIGIN_INPUT.caughtBall)
+  })
+
+  it('does not touch an unlinked entry when an unrelated trainer profile updates', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const profile = await storage.createTrainerProfile({
+      game: 'Pokémon Sword',
+      otName: 'Ash',
+      tid: 1,
+      sid: 1,
+      label: null,
+      language: null
+    })
+    const entry = await findBulbasaurBaseEntry(storage)
+    await storage.setEntryOrigin(entry.id, ORIGIN_INPUT) // trainerProfileId: null
+
+    await storage.updateTrainerProfile(profile.id, {
+      game: 'Pokémon Shield',
+      otName: 'Red',
+      tid: 2,
+      sid: 2,
+      label: null,
+      language: null
+    })
+
+    const untouched = await findBulbasaurBaseEntry(storage)
+    expect(untouched.originGame).toBe(ORIGIN_INPUT.originGame)
+    expect(untouched.otName).toBe(ORIGIN_INPUT.otName)
+  })
+
   it('orphans trainerProfileId to null (without touching the snapshot fields) when the source profile is deleted', async () => {
     const storage = createSqliteStorage(':memory:')
     const profile = await storage.createTrainerProfile({

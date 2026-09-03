@@ -34,12 +34,14 @@ interface OriginModalProps {
  * a time; the regular and shiny rows of the same form are separate CollectionEntry rows
  * and get independent origin data, since they're independent individuals.
  *
- * "Copy from Trainer Profile" only ever *seeds* the game/OT/TID/SID/language fields —
- * after that, they're plain editable inputs, and Save snapshots whatever's currently in
- * them onto the entry. Editing the source profile later, or deleting it, never changes
- * what was already saved here (see sqlite-storage.ts's deleteTrainerProfile). Save
- * carries the entry's existing nickname through unchanged (setEntryOrigin is a full-row
- * snapshot write, not a partial patch) — this modal never touches it.
+ * "Copy from Trainer Profile" *links* the game/OT/TID/SID/language fields to that profile
+ * (Leg 31) — while linked, those five inputs are disabled here and only ever change by
+ * editing the Trainer Profile itself, which live-mirrors onto every entry still linked to
+ * it. Choosing "— None —" unlinks the entry (freezing its current values) and makes the
+ * fields independently editable again; deleting the source profile does the same (see
+ * sqlite-storage.ts's deleteTrainerProfile). Save carries the entry's existing nickname
+ * through unchanged (setEntryOrigin is a full-row snapshot write, not a partial patch) —
+ * this modal never touches it.
  *
  * The TID/SID visibility-by-game logic and validation shape duplicate
  * TrainerProfileForm.tsx rather than reusing it directly — that component renders as
@@ -70,6 +72,10 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [onClose])
 
+  // While linked, these fields only ever change by editing the Trainer Profile itself
+  // (Leg 31) — disabled here rather than hidden, so it's visible that a value exists and
+  // where it comes from.
+  const linkedFieldsDisabled = trainerProfileId !== null
   const matchedGame = findOriginGame(game)
   const tidVisible = matchedGame?.hasTrainerId ?? true
   const sidVisible = matchedGame?.hasSecretId ?? true
@@ -152,27 +158,46 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
         </label>
         <label className="origin-modal-field">
           Game
-          <OriginGameInput value={game} onChange={setGame} />
+          <OriginGameInput value={game} onChange={setGame} disabled={linkedFieldsDisabled} />
         </label>
         <label className="origin-modal-field">
           OT Name
-          <input value={otName} onChange={(e) => setOtName(e.target.value)} placeholder="OT Name" />
+          <input
+            value={otName}
+            onChange={(e) => setOtName(e.target.value)}
+            placeholder="OT Name"
+            disabled={linkedFieldsDisabled}
+          />
         </label>
         {tidVisible && (
           <label className="origin-modal-field">
             TID
-            <input type="number" min={0} max={tidMax} value={tid} onChange={(e) => setTid(e.target.value)} />
+            <input
+              type="number"
+              min={0}
+              max={tidMax}
+              value={tid}
+              onChange={(e) => setTid(e.target.value)}
+              disabled={linkedFieldsDisabled}
+            />
           </label>
         )}
         {sidVisible && (
           <label className="origin-modal-field">
             SID
-            <input type="number" min={0} max={SID_MAX} value={sid} onChange={(e) => setSid(e.target.value)} />
+            <input
+              type="number"
+              min={0}
+              max={SID_MAX}
+              value={sid}
+              onChange={(e) => setSid(e.target.value)}
+              disabled={linkedFieldsDisabled}
+            />
           </label>
         )}
         <label className="origin-modal-field">
           Language
-          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+          <select value={language} onChange={(e) => setLanguage(e.target.value)} disabled={linkedFieldsDisabled}>
             <option value="">—</option>
             {ORIGIN_LANGUAGES.map((l) => (
               <option key={l} value={l}>

@@ -168,6 +168,14 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       language = @language
     WHERE id = @id
   `)
+  // Live sync (Leg 31 — reverses Leg 4's one-time-copy design): every entry still linked
+  // to this profile mirrors its new game/OT/TID/SID/language on every save. nickname and
+  // caught_ball are untouched — they're per-entry, never per-trainer (see CollectionEntry).
+  const syncLinkedEntriesStmt = db.prepare(`
+    UPDATE collection_entries
+    SET origin_game = @game, ot_name = @otName, tid = @tid, sid = @sid, language = @language
+    WHERE trainer_profile_id = @id
+  `)
   const deleteTrainerProfileStmt = db.prepare('DELETE FROM trainer_profiles WHERE id = ?')
   const listStorageLocationsStmt = db.prepare('SELECT * FROM storage_locations ORDER BY id')
   const getStorageLocationStmt = db.prepare('SELECT * FROM storage_locations WHERE id = ?')
@@ -373,6 +381,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
 
     async updateTrainerProfile(id: number, input: TrainerProfileInput): Promise<TrainerProfile> {
       updateTrainerProfileStmt.run({ id, ...input })
+      syncLinkedEntriesStmt.run({ id, game: input.game, otName: input.otName, tid: input.tid, sid: input.sid, language: input.language })
       return toTrainerProfile(getTrainerProfileStmt.get(id) as TrainerProfileRow)
     },
 

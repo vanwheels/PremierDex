@@ -120,12 +120,14 @@ export function applySchema(db: Database.Database): void {
   }
 
   // Same retrofit story for collection_entries: origin/nickname (Leg 4) postdate this
-  // table's original CREATE. trainer_profile_id is provenance only (which Trainer
-  // Profile, if any, the snapshot columns below were copied from) — the game/ot_name/
-  // tid/sid/nickname columns are the source of truth for display and never auto-update
-  // when the referenced profile changes later. No ON DELETE clause: SQLite's default FK
-  // action is NO ACTION, which would block deleting a still-referenced profile, so
-  // orphaning trainer_profile_id to NULL on profile delete is handled explicitly in
+  // table's original CREATE. trainer_profile_id is a live link (Leg 31 — reverses Leg 4's
+  // original "provenance only, never auto-update" design, see COMPLETED.md): while set,
+  // origin_game/ot_name/tid/sid/language mirror that trainer_profiles row and are
+  // rewritten whenever it's saved (see sqlite-storage.ts's updateTrainerProfile). nickname
+  // and caught_ball are per-entry and never touched by that sync. No ON DELETE clause:
+  // SQLite's default FK action is NO ACTION, which would block deleting a
+  // still-referenced profile, so orphaning trainer_profile_id to NULL on profile delete
+  // (freezing the columns at their last-synced values) is handled explicitly in
   // sqlite-storage.ts's deleteTrainerProfile instead of here.
   const entryColumns = db.prepare('PRAGMA table_info(collection_entries)').all() as Array<{ name: string }>
   if (!entryColumns.some((c) => c.name === 'trainer_profile_id')) {

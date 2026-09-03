@@ -4,6 +4,7 @@ import { ORIGIN_GAMES } from '@shared/data/origin-games'
 interface OriginGameInputProps {
   value: string
   onChange: (value: string) => void
+  disabled?: boolean
 }
 
 /**
@@ -14,7 +15,7 @@ interface OriginGameInputProps {
  * all (it's drawn outside the DOM). Still plain free text otherwise: typing something
  * not on the list is fine, it just won't match a suggestion.
  */
-export function OriginGameInput({ value, onChange }: OriginGameInputProps): JSX.Element {
+export function OriginGameInput({ value, onChange, disabled }: OriginGameInputProps): JSX.Element {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -39,13 +40,14 @@ export function OriginGameInput({ value, onChange }: OriginGameInputProps): JSX.
       <input
         value={value}
         placeholder="Game"
+        disabled={disabled}
         onChange={(e) => {
           onChange(e.target.value)
           setOpen(true)
         }}
         onFocus={() => setOpen(true)}
       />
-      {open && matches.length > 0 && (
+      {!disabled && open && matches.length > 0 && (
         <ul className="origin-game-options" role="listbox">
           {matches.map((g) => (
             <li key={g.id}>

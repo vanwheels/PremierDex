@@ -60,6 +60,13 @@ export function App(): JSX.Element {
     loadAll()
   }, [loadAll])
 
+  // Trainer Profile update (live sync, Leg 31) and delete (orphaning) both rewrite
+  // collection_entries directly at the DB layer, bypassing setEntryOrigin — refetch just
+  // the entries so linked-but-stale rows in state pick up the change.
+  const refetchEntries = useCallback((): void => {
+    window.premierDex.listCollectionEntries().then(setEntries)
+  }, [])
+
   useEffect(() => {
     loadAll().finally(() => setLoading(false))
   }, [loadAll])
@@ -104,7 +111,7 @@ export function App(): JSX.Element {
       <h1>PremierDex</h1>
       <BackupControls onImported={handleImported} />
       <UpdateControls />
-      <TrainerProfilesPanel key={importVersion} />
+      <TrainerProfilesPanel key={importVersion} onEntriesChanged={refetchEntries} />
       <StorageLocationsPanel key={importVersion} />
       <CompletionStatsPanel
         stats={completionStats}

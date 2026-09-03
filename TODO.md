@@ -1,15 +1,5 @@
 # TODO
 
-## [Origin auto-populate from Trainer Profile edits] — unscheduled
-Vanny wants a Collection Entry's origin info to auto-update when its source Trainer
-Profile is edited later. This runs directly against Leg 4's deliberate design (origin
-data is copied once at pick-time and then edited independently, intentionally never
-re-synced — see COMPLETED.md's Leg 4 entry) — implementing this either reverses that
-decision or needs a separate "sync back" action distinct from the current one-time copy.
-Blocked: needs Vanny's explicit call on which direction to take before this can be
-scoped into a leg.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [App icon] — unscheduled
 No custom icon exists yet (`build/icon.png` per electron-builder convention, matching
 GW2-Squaded) — packaged builds currently ship with Electron's default icon. Not blocking

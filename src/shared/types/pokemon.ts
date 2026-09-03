@@ -71,15 +71,17 @@ export interface CollectionEntry {
   gender: Gender
   shiny: boolean
   owned: boolean
-  /** Origin/nickname (Leg 4) — who caught/received this specific individual, snapshotted
-   * immutably at the time it was set rather than live-joined to a Trainer Profile, so
-   * later edits to that profile (or its deletion) never retroactively change this entry.
-   * All eight fields below are independent of `owned`: they're only ever meaningful for an
-   * owned entry, but nothing here enforces that at the type level — the UI gates it
-   * instead. See src/shared/types/trainer-profile.ts and shared/data/origin-games.ts. */
-  /** The Trainer Profile the fields below were copied from, if any — provenance only,
-   * not re-validated against the profile's current values. Null if never set from a
-   * profile, or if that profile was later deleted (see deleteTrainerProfile). */
+  /** Origin/nickname (Leg 4) — who caught/received this specific individual. All eight
+   * fields below are independent of `owned`: they're only ever meaningful for an owned
+   * entry, but nothing here enforces that at the type level — the UI gates it instead.
+   * See src/shared/types/trainer-profile.ts and shared/data/origin-games.ts. */
+  /** The Trainer Profile originGame/otName/tid/sid/language below are linked to, if any.
+   * While linked, those five fields live-mirror the profile — editing and saving the
+   * profile updates every entry still pointing at it (Leg 31; reverses Leg 4's original
+   * one-time-copy design, see COMPLETED.md). Null if never linked, or if that profile was
+   * later deleted (see deleteTrainerProfile), in which case the fields freeze at their
+   * last-synced values and become independently editable again. nickname/caughtBall are
+   * never tied to a profile and are always independently editable. */
   trainerProfileId: number | null
   originGame: string | null
   otName: string | null

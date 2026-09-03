@@ -8,10 +8,17 @@ import { sortTrainerProfiles } from './sortTrainerProfiles'
 
 const EMPTY_INPUT: TrainerProfileInput = { game: '', otName: '', tid: null, sid: null, label: null, language: null }
 
-/** CRUD UI for Trainer Profiles (Leg 1) — the origin identity a Collection Entry will
- * eventually reference (Leg 4). Standalone here: nothing else reads or links to these
- * yet. See TODO.md's [Trainer Profile model]. */
-export function TrainerProfilesPanel(): JSX.Element {
+interface TrainerProfilesPanelProps {
+  /** Update and delete both rewrite collection_entries directly at the DB layer (Leg 31's
+   * live sync, and the pre-existing orphan-on-delete) without going through
+   * setEntryOrigin — App.tsx's `entries` state has no other way to learn that happened,
+   * so this tells it to refetch. */
+  onEntriesChanged: () => void
+}
+
+/** CRUD UI for Trainer Profiles (Leg 1) — the origin identity a Collection Entry can link
+ * to (Leg 4; live sync added Leg 31). See TODO.md's [Trainer Profile model]. */
+export function TrainerProfilesPanel({ onEntriesChanged }: TrainerProfilesPanelProps): JSX.Element {
   const [profiles, setProfiles] = useState<TrainerProfile[]>([])
   const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)
@@ -34,12 +41,14 @@ export function TrainerProfilesPanel(): JSX.Element {
   const handleUpdate = async (id: number, input: TrainerProfileInput): Promise<void> => {
     await window.premierDex.updateTrainerProfile(id, input)
     await load()
+    onEntriesChanged()
   }
 
   const handleDelete = async (id: number): Promise<void> => {
     if (!window.confirm('Delete this trainer profile?')) return
     await window.premierDex.deleteTrainerProfile(id)
     await load()
+    onEntriesChanged()
   }
 
   if (loading) {
