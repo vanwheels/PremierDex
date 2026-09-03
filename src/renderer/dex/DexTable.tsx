@@ -6,12 +6,41 @@ import type { SpriteModalTarget } from './SpriteModal'
 import { OriginModal } from './OriginModal'
 import type { OriginModalTarget } from './OriginModal'
 import { pickCollapsedRow } from './buildDexSections'
-import type { DexSection } from './types'
+import type { DexSection, DexSort, DexSortKey } from './types'
 
 interface DexTableProps {
   sections: DexSection[]
+  sort: DexSort | null
+  onSortChange: (sort: DexSort | null) => void
   onToggleEntry: (entryId: number, owned: boolean) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
+}
+
+/** Three-state header click cycle (Leg 16): unsorted/other-column → ascending →
+ * descending → back to unsorted (buildDexSections' natural order). */
+function cycleSort(current: DexSort | null, key: DexSortKey): DexSort | null {
+  if (!current || current.key !== key) return { key, direction: 'asc' }
+  if (current.direction === 'asc') return { key, direction: 'desc' }
+  return null
+}
+
+interface SortableHeaderProps {
+  label: string
+  sortKey: DexSortKey
+  sort: DexSort | null
+  onSortChange: (sort: DexSort | null) => void
+}
+
+function SortableHeader({ label, sortKey, sort, onSortChange }: SortableHeaderProps): JSX.Element {
+  const isActive = sort?.key === sortKey
+  return (
+    <th>
+      <button type="button" className="dex-sort-header" onClick={() => onSortChange(cycleSort(sort, sortKey))}>
+        {label}
+        {isActive && (sort!.direction === 'asc' ? ' ▲' : ' ▼')}
+      </button>
+    </th>
+  )
 }
 
 /**
@@ -19,7 +48,7 @@ interface DexTableProps {
  * intentionally not lifted to App — it never affects stored data, and resets on
  * navigating away, which is fine for a display preference.
  */
-export function DexTable({ sections, onToggleEntry, onSaveOrigin }: DexTableProps): JSX.Element {
+export function DexTable({ sections, sort, onSortChange, onToggleEntry, onSaveOrigin }: DexTableProps): JSX.Element {
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
   // Which row's sprite is enlarged, if any. UI-only, same as expandedSpeciesIds above.
   const [spriteTarget, setSpriteTarget] = useState<SpriteModalTarget | null>(null)
@@ -43,11 +72,12 @@ export function DexTable({ sections, onToggleEntry, onSaveOrigin }: DexTableProp
         <thead>
           <tr>
             <th>Sprite</th>
-            <th>#</th>
-            <th>Name</th>
+            <SortableHeader label="#" sortKey="dexNumber" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Name" sortKey="name" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Gen" sortKey="generation" sort={sort} onSortChange={onSortChange} />
             <th>Nickname</th>
-            <th>Owned</th>
-            <th>Shiny</th>
+            <SortableHeader label="Owned" sortKey="owned" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Shiny" sortKey="shiny" sort={sort} onSortChange={onSortChange} />
           </tr>
         </thead>
         <tbody>

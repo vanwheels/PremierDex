@@ -81,3 +81,17 @@ export const DEFAULT_DEX_FILTERS: DexFilters = {
   homeBoxable: 'any',
   shinyLocked: 'any'
 }
+
+/** Which of the sortable grid columns to order sections by (Leg 16) — clicking a header
+ * in DexTable sets this. 'owned'/'shiny' sort on whether *any* row in the section has an
+ * owned regular/shiny entry (Vanny's call), not whether every row does. */
+export type DexSortKey = 'dexNumber' | 'name' | 'generation' | 'owned' | 'shiny'
+
+export interface DexSort {
+  key: DexSortKey
+  direction: 'asc' | 'desc'
+}
+
+/** No sort applied: sections render in buildDexSections' natural order (species/dex
+ * order, with grouped-mode regional clusters appended after). */
+export const DEFAULT_DEX_SORT: DexSort | null = null

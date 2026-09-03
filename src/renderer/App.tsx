@@ -4,11 +4,12 @@ import { BackupControls } from './BackupControls'
 import { UpdateControls } from './UpdateControls'
 import { buildDexSections } from './dex/buildDexSections'
 import { filterDexSections } from './dex/filterDexSections'
+import { sortDexSections } from './dex/sortDexSections'
 import { DexTable } from './dex/DexTable'
 import { DexToolbar } from './dex/DexToolbar'
 import { DexFilterBar } from './dex/DexFilterBar'
-import type { DexFilters, DexOptions } from './dex/types'
-import { DEFAULT_DEX_FILTERS } from './dex/types'
+import type { DexFilters, DexOptions, DexSort } from './dex/types'
+import { DEFAULT_DEX_FILTERS, DEFAULT_DEX_SORT } from './dex/types'
 import { TrainerProfilesPanel } from './trainer/TrainerProfilesPanel'
 import { StorageLocationsPanel } from './storage-location/StorageLocationsPanel'
 
@@ -22,6 +23,7 @@ export function App(): JSX.Element {
   const [loading, setLoading] = useState(true)
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
   const [filters, setFilters] = useState<DexFilters>(DEFAULT_DEX_FILTERS)
+  const [sort, setSort] = useState<DexSort | null>(DEFAULT_DEX_SORT)
   // Bumped after a JSON import (Leg 13 added Trainer Profiles/Storage Locations to the
   // backup) so both panels below remount and refetch — they load their own data on
   // mount only and have no other way to learn the DB moved out from under them.
@@ -54,7 +56,8 @@ export function App(): JSX.Element {
     () => buildDexSections(species, forms, entries, options),
     [species, forms, entries, options]
   )
-  const visibleSections = useMemo(() => filterDexSections(sections, filters), [sections, filters])
+  const filteredSections = useMemo(() => filterDexSections(sections, filters), [sections, filters])
+  const visibleSections = useMemo(() => sortDexSections(filteredSections, sort), [filteredSections, sort])
 
   const handleToggleEntry = (entryId: number, owned: boolean): void => {
     window.premierDex.setOwned(entryId, owned).then((updated) => {
@@ -81,7 +84,13 @@ export function App(): JSX.Element {
       <StorageLocationsPanel key={importVersion} />
       <DexToolbar options={options} onChange={setOptions} />
       <DexFilterBar filters={filters} onChange={setFilters} />
-      <DexTable sections={visibleSections} onToggleEntry={handleToggleEntry} onSaveOrigin={handleSaveOrigin} />
+      <DexTable
+        sections={visibleSections}
+        sort={sort}
+        onSortChange={setSort}
+        onToggleEntry={handleToggleEntry}
+        onSaveOrigin={handleSaveOrigin}
+      />
     </main>
   )
 }

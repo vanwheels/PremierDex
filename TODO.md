@@ -1,10 +1,5 @@
 # TODO
 
-## [Dex sort] — Leg 16
-Sortable columns on the Living Dex grid (dex#, name, generation, owned/shiny status).
-Independent of the origin-tracking chain.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Completion stats dashboard] — Leg 17
 Owned%/shiny% completion stats, broken down by generation and regional group. Natural
 follow-on to search/filter/sort (Legs 15-16) reusing the same query surface, but not

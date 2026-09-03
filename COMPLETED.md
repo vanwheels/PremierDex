@@ -1,5 +1,20 @@
 # COMPLETED
 
+## [Dex sort] — Leg 16 — 2026-09-02
+Clickable column headers (#, Name, Gen, Owned, Shiny — Vanny's call over a SortSelect-
+style dropdown) on the Living Dex grid, cycling asc → desc → back to unsorted (natural
+dex order) on repeated clicks of the same header. A new `Gen` column was added since
+generation wasn't previously a visible column but was one of the four requested sort
+dimensions. Sorting reorders whole species sections only (Vanny's call) — a section's own
+row order (cosmetic variants, gender splits) never changes; the sort key is read off each
+section's first row (dex#/name/generation are uniform within a species already), and a
+grouped-mode regional-cluster section (no single speciesId) sorts on whichever species
+landed in that slot first. Owned/shiny sort is "any row in the section has an owned
+regular/shiny entry" (Vanny's call over "every row"), matching how the existing owned/
+shiny filter tri-states already treat a section. New `sortDexSections`, run after
+`filterDexSections` in App's pipeline — presentation-only, never persisted, same
+convention as `DexOptions`/`DexFilters`. See commit `56bc10d`.
+
 ## [Dex search/filter] — Leg 15 — 2026-09-02
 One free-text `DexFilters.query` field (rather than a box per dimension) matches name,
 dex#, nickname, and origin settings (OT name/origin game/language/TID/SID) across either

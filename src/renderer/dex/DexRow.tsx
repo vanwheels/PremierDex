@@ -110,6 +110,7 @@ export function DexRow({ row, onToggleEntry, onOpenSprite, onOpenOrigin, onSaveO
           </span>
         )}
       </td>
+      <td>{row.firstAvailableGeneration}</td>
       <td>
         <input
           className="dex-nickname-input"
