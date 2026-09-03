@@ -19,7 +19,7 @@ an actual reference, and it showed — --accent (plain blue) sat too close in hu
 its plum surface. Vanny supplied real sprite/box-art references; re-pulled --bg/--surface
 off the steel-blue body and indigo box-art backdrop, and --accent/--accent-strong off
 *shiny* Dialga's teal-cyan instead of normal Dialga's blue specifically to get that pop
-without leaving the Dialga reference. See commit `<pending>`.
+without leaving the Dialga reference. See commit `c373932`.
 
 ## [Visual Design Pass] — Leg 2 — 2026-09-02
 Full re-skin off a token-based CSS system: dark (default) and light palettes pulled from
