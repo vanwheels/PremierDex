@@ -19,7 +19,8 @@ interface CollectionViewProps {
 const GROUP_BY_LABELS: Record<CollectionGroupBy, string> = {
   originGame: 'Origin Game',
   ot: 'OT',
-  shiny: 'Shiny'
+  shiny: 'Shiny',
+  dexNumber: 'Dex Number'
 }
 const GROUP_BY_OPTIONS = Object.keys(GROUP_BY_LABELS) as CollectionGroupBy[]
 

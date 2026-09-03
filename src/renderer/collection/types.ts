@@ -1,9 +1,10 @@
 import type { CollectionEntry } from '@shared/types/pokemon'
 
-/** Which dimension the Collection view (Leg 18) currently groups owned entries by.
- * Ribbon/Alpha are deliberately not options yet — blocked on those markers existing in
- * the schema at all (see TODO.md's Ribbons/Alpha future-milestone item). */
-export type CollectionGroupBy = 'originGame' | 'ot' | 'shiny'
+/** Which dimension the Collection view (Leg 18, dexNumber added Leg 21) currently groups
+ * owned entries by. Ribbon/Alpha are deliberately not options yet — blocked on those
+ * markers existing in the schema at all (see TODO.md's Ribbons/Alpha future-milestone
+ * item). */
+export type CollectionGroupBy = 'originGame' | 'ot' | 'shiny' | 'dexNumber'
 
 export const DEFAULT_COLLECTION_GROUP_BY: CollectionGroupBy = 'originGame'
 

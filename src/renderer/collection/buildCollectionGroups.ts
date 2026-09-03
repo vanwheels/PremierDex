@@ -35,14 +35,22 @@ function buildRow(entry: CollectionEntry, species: Species, form: Form): Collect
  * same-trainer entries with a differently-spelled otName (a fixed typo, say) still group
  * together under whichever name the first-seen entry carries. Entries missing a tid/sid
  * (no origin set, or an older entry predating Leg 14's language field) fall back to
- * grouping by name, same as before this leg. */
-function groupFor(entry: CollectionEntry, groupBy: CollectionGroupBy): { key: string; label: string } {
+ * grouping by name, same as before this leg. For 'dexNumber' (Leg 21), the group is the
+ * species itself — every form of a species shares its national dex number, so forms fold
+ * into one group the same way buildDexSections' species sections do; the key is the
+ * numeric dex number (padded so string comparison would still work, though sorting below
+ * compares it numerically) and the label carries both the number and the species name. */
+function groupFor(entry: CollectionEntry, groupBy: CollectionGroupBy, species: Species): { key: string; label: string } {
   if (groupBy === 'shiny') {
     return entry.shiny ? { key: SHINY_LABEL, label: SHINY_LABEL } : { key: REGULAR_LABEL, label: REGULAR_LABEL }
   }
   if (groupBy === 'originGame') {
     const label = entry.originGame ?? NO_ORIGIN_LABEL
     return { key: label, label }
+  }
+  if (groupBy === 'dexNumber') {
+    const key = String(species.id).padStart(4, '0')
+    return { key, label: `#${species.id} ${capitalizeWords(species.name)}` }
   }
   const label = entry.otName ?? NO_OT_LABEL
   if (entry.tid !== null && entry.sid !== null) {
@@ -56,12 +64,14 @@ function groupFor(entry: CollectionEntry, groupBy: CollectionGroupBy): { key: st
  * StorageLocationsPanel already sort by), treating the synthetic "No origin set" bucket
  * as compareGames' null case so it always sorts last; 'ot' is alphabetical by label (the
  * key is a TID/SID pair or synthetic name string, not something sort order should follow)
- * with "No OT set" sorted last the same way. */
+ * with "No OT set" sorted last the same way; 'dexNumber' sorts numerically by the
+ * zero-padded key groupFor produced. */
 function compareGroupKeys(a: CollectionGroup, b: CollectionGroup, groupBy: CollectionGroupBy): number {
   if (groupBy === 'shiny') return a.key === REGULAR_LABEL ? -1 : b.key === REGULAR_LABEL ? 1 : 0
   if (groupBy === 'originGame') {
     return compareGames(a.key === NO_ORIGIN_LABEL ? null : a.key, b.key === NO_ORIGIN_LABEL ? null : b.key, 'game-release')
   }
+  if (groupBy === 'dexNumber') return a.key.localeCompare(b.key)
   const aNone = a.label === NO_OT_LABEL
   const bNone = b.label === NO_OT_LABEL
   if (aNone !== bNone) return aNone ? 1 : -1
@@ -93,7 +103,7 @@ export function buildCollectionGroups(
     const sp = speciesById.get(form.speciesId)
     if (!sp) continue
 
-    const { key, label } = groupFor(entry, groupBy)
+    const { key, label } = groupFor(entry, groupBy, sp)
     let group = groups.get(key)
     if (!group) {
       group = { key, label, rows: [] }

@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Group by Dex number in Collection] — Leg 21 — 2026-09-02
+Added `dexNumber` as a fourth `CollectionGroupBy` mode alongside Origin Game/OT/Shiny.
+Since every form of a species shares its national dex number, the group is the species
+itself — forms fold into one group the same way `buildDexSections`' species sections do.
+Group key is the zero-padded dex number (so groups sort numerically); label is `#<n>
+<species name>`. See commit `<pending>`.
+
 ## [Group by OT should key on TID/SID, not name] — Leg 20 — 2026-09-02
 `buildCollectionGroups`'s 'ot' grouping keyed on `otName` alone, so Vanny's multiple
 same-named-but-distinct trainers ("vanny" from different games/saves) landed in one

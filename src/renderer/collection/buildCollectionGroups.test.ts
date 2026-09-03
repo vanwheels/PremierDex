@@ -117,6 +117,19 @@ describe('buildCollectionGroups', () => {
     expect(groups[0].rows.map((r) => r.dexNumber)).toEqual([1, 25])
   })
 
+  it('groups by dex number, folding forms of the same species together and sorting numerically', () => {
+    const alolanVulpix = makeForm({ id: 50, speciesId: 4, regionalGroup: 'alolan' })
+    const entries = [
+      makeEntry({ id: 1, formId: 25 }),
+      makeEntry({ id: 2, formId: 1 }),
+      makeEntry({ id: 3, formId: 4 }),
+      makeEntry({ id: 4, formId: 50 })
+    ]
+    const groups = buildCollectionGroups(SPECIES, [...FORMS, alolanVulpix], entries, 'dexNumber')
+    expect(groups.map((g) => g.label)).toEqual(['#1 Bulbasaur', '#4 Charmander', '#25 Pikachu'])
+    expect(groups[1].rows.map((r) => r.entry.id).sort()).toEqual([3, 4])
+  })
+
   it('marks the display name with gender symbol and shiny sparkle', () => {
     const genderForm = makeForm({ id: 26, speciesId: 25, hasGenderDifference: true })
     const entries = [makeEntry({ id: 1, formId: 26, gender: 'female', shiny: true })]

@@ -1,10 +1,5 @@
 # TODO
 
-## [Group by Dex number in Collection] — Leg 21
-Collection needs an additional grouping option: group by dex number, alongside the
-existing grouping modes (e.g. OT).
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Species-forms data bugs] — Leg 22
 Several correctness bugs in the species/forms data surfaced after Leg 9's
 foldable-species work: Mothim has no forms entry at all; Burmy folds correctly but
