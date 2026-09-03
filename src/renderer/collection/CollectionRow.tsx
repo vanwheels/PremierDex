@@ -25,11 +25,13 @@ export function CollectionRow({ row, onOpenSprite, onOpenOrigin, onSaveOrigin }:
         <SpriteThumbnail
           pokeapiId={row.pokeapiId}
           spriteFormSuffix={row.spriteFormSuffix}
+          female={row.femaleSprite}
           displayName={row.displayName}
           onClick={() =>
             onOpenSprite({
               pokeapiId: row.pokeapiId,
               spriteFormSuffix: row.spriteFormSuffix,
+              female: row.femaleSprite,
               displayName: row.displayName,
               firstAvailableGeneration: row.firstAvailableGeneration
             })

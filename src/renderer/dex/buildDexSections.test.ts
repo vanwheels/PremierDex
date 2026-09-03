@@ -93,6 +93,14 @@ describe('buildDexSections', () => {
     expect(rows.map((r) => r.displayName)).toEqual(['Pikachu ♂', 'Pikachu ♀'])
     expect(rows[0].regular?.id).toBe(10)
     expect(rows[1].regular?.id).toBe(12)
+    expect(rows.map((r) => r.femaleSprite)).toEqual([false, true])
+  })
+
+  it('only ever sets femaleSprite on the collapsed male-only row when splitGenderRows is off', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base', hasGenderDifference: true })]
+    const sections = buildDexSections(SPECIES, forms, [], OPTIONS_DEFAULT)
+    const rows = sections.find((s) => s.speciesId === 25)!.rows
+    expect(rows.map((r) => r.femaleSprite)).toEqual([false])
   })
 
   it('keeps regional forms inline within their species section by default', () => {
@@ -179,6 +187,7 @@ function makeRow(overrides: Partial<DexRowData> & Pick<DexRowData, 'key' | 'disp
     shinyEntry: null,
     pokeapiId: 201,
     spriteFormSuffix: null,
+    femaleSprite: false,
     firstAvailableGeneration: 1,
     homeBoxable: true,
     shinyLocked: false,

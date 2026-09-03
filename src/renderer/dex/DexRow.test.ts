@@ -13,6 +13,7 @@ function makeRow(overrides: Partial<DexRowData>): DexRowData {
     shinyEntry: null,
     pokeapiId: 1,
     spriteFormSuffix: null,
+    femaleSprite: false,
     firstAvailableGeneration: 1,
     homeBoxable: true,
     shinyLocked: false,

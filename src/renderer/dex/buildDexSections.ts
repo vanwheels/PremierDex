@@ -64,6 +64,7 @@ function buildRows(
       shinyEntry: slot?.shiny ?? null,
       pokeapiId: form.pokeapiId,
       spriteFormSuffix: form.spriteFormSuffix,
+      femaleSprite: gender === 'female',
       firstAvailableGeneration: form.firstAvailableGeneration,
       homeBoxable: form.homeBoxable,
       shinyLocked: form.shinyLocked,

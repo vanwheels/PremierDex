@@ -10,6 +10,10 @@ export interface DexRowData {
   shinyEntry: CollectionEntry | null // shiny = true
   pokeapiId: number
   spriteFormSuffix: string | null
+  /** True for the split-out female row of a gender-diff form (splitGenderRows on) — see
+   * SpriteThumbnail's prop of the same name. Always false for the male row and for
+   * gender-less forms' single 'unknown'-gender row. */
+  femaleSprite: boolean
   firstAvailableGeneration: number
   /** False for the handful of real, dex_distinct forms Home doesn't accept deposits of
    * yet (Origin formes, Necrozma Dawn/Dusk, Calyrex Riders, Ogerpon masks, Minior cores)

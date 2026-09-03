@@ -18,6 +18,17 @@
  * BDSP and SV simply never got shiny recolors uploaded). generationSpriteUrl falls
  * back to the evergreen defaultSpriteUrl shiny art for those three generations rather
  * than building a URL guaranteed to 404.
+ *
+ * `female` (see TODO.md's "Female-form sprites missing" leg) selects Form.hasGenderDifference's
+ * distinct female art, which the CDN keys as a "female/" *subfolder* rather than a
+ * filename suffix like spriteFormSuffix — confirmed live (e.g.
+ * sprites/pokemon/female/593.png for Jellicent) at every layer this module builds:
+ * evergreen, shiny (nested as shiny/female/, not female/shiny/), per-generation, and
+ * both animated sources. A species/generation combo with no distinct female art (e.g.
+ * Pikachu's gender difference wasn't drawn until generation IV, despite the species
+ * existing since gen 1) simply 404s and falls back to the same "sprite unavailable"
+ * handling SpriteThumbnail/SpriteModal already use for any other missing file — no
+ * special-cased fallback set needed here, unlike GENERATIONS_WITHOUT_SHINY below.
  */
 
 export const CURRENT_MAX_GENERATION = 9
@@ -55,10 +66,22 @@ function spriteFileId(pokeapiId: number, spriteFormSuffix: string | null): strin
   return spriteFormSuffix ? `${pokeapiId}-${spriteFormSuffix}` : `${pokeapiId}`
 }
 
+/** The shiny/female subfolder path shared by every sprite variant below — "shiny",
+ * "female", both nested as "shiny/female" (that order, confirmed live), or neither. */
+function genderShinyFolder(shiny: boolean, female: boolean): string {
+  const parts = [shiny && 'shiny', female && 'female'].filter((p): p is string => p !== false)
+  return parts.length ? `/${parts.join('/')}` : ''
+}
+
 /** The row-thumbnail sprite: PokeAPI's evergreen "current" default artwork. */
-export function defaultSpriteUrl(pokeapiId: number, spriteFormSuffix: string | null, shiny: boolean): string {
+export function defaultSpriteUrl(
+  pokeapiId: number,
+  spriteFormSuffix: string | null,
+  shiny: boolean,
+  female: boolean
+): string {
   const id = spriteFileId(pokeapiId, spriteFormSuffix)
-  return shiny ? `${SPRITE_BASE}/shiny/${id}.png` : `${SPRITE_BASE}/${id}.png`
+  return `${SPRITE_BASE}${genderShinyFolder(shiny, female)}/${id}.png`
 }
 
 /** Generations with no shiny/ subfolder at all on the CDN (verified live — see the
@@ -71,17 +94,17 @@ export function generationSpriteUrl(
   pokeapiId: number,
   spriteFormSuffix: string | null,
   generation: number,
-  shiny: boolean
+  shiny: boolean,
+  female: boolean
 ): string {
   const game = GENERATION_GAME[generation]
   const roman = ROMAN_NUMERALS[generation]
   if (!game || !roman) throw new Error(`No sprite mapping for generation ${generation}`)
   if (shiny && GENERATIONS_WITHOUT_SHINY.has(generation)) {
-    return defaultSpriteUrl(pokeapiId, spriteFormSuffix, true)
+    return defaultSpriteUrl(pokeapiId, spriteFormSuffix, true, female)
   }
   const id = spriteFileId(pokeapiId, spriteFormSuffix)
-  const shinyPart = shiny ? '/shiny' : ''
-  return `${SPRITE_BASE}/versions/generation-${roman}/${game}${shinyPart}/${id}.png`
+  return `${SPRITE_BASE}/versions/generation-${roman}/${game}${genderShinyFolder(shiny, female)}/${id}.png`
 }
 
 /**
@@ -118,10 +141,10 @@ export function animatedSpriteUrl(
   pokeapiId: number,
   spriteFormSuffix: string | null,
   shiny: boolean,
-  source: AnimatedSource
+  source: AnimatedSource,
+  female: boolean
 ): string {
   const id = spriteFileId(pokeapiId, spriteFormSuffix)
-  const shinyPart = shiny ? '/shiny' : ''
   const folder = source === 'showdown' ? `${SPRITE_BASE}/other/showdown` : `${SPRITE_BASE}/versions/generation-v/black-white/animated`
-  return `${folder}${shinyPart}/${id}.gif`
+  return `${folder}${genderShinyFolder(shiny, female)}/${id}.gif`
 }

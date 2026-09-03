@@ -10634,19 +10634,6 @@
     "alwaysShiny": false
   },
   {
-    "speciesId": 592,
-    "formName": "female",
-    "formCategory": "cosmetic_variant",
-    "homeBoxable": true,
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 5,
-    "regionalGroup": null,
-    "pokeapiId": 592,
-    "spriteFormSuffix": "female",
-    "shinyLocked": false,
-    "alwaysShiny": false
-  },
-  {
     "speciesId": 593,
     "formName": "base",
     "formCategory": "dex_distinct",
@@ -10656,19 +10643,6 @@
     "regionalGroup": null,
     "pokeapiId": 593,
     "spriteFormSuffix": null,
-    "shinyLocked": false,
-    "alwaysShiny": false
-  },
-  {
-    "speciesId": 593,
-    "formName": "female",
-    "formCategory": "cosmetic_variant",
-    "homeBoxable": true,
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 5,
-    "regionalGroup": null,
-    "pokeapiId": 593,
-    "spriteFormSuffix": "female",
     "shinyLocked": false,
     "alwaysShiny": false
   },
@@ -12164,19 +12138,6 @@
     "regionalGroup": null,
     "pokeapiId": 668,
     "spriteFormSuffix": null,
-    "shinyLocked": false,
-    "alwaysShiny": false
-  },
-  {
-    "speciesId": 668,
-    "formName": "female",
-    "formCategory": "cosmetic_variant",
-    "homeBoxable": true,
-    "hasGenderDifference": false,
-    "firstAvailableGeneration": 6,
-    "regionalGroup": null,
-    "pokeapiId": 668,
-    "spriteFormSuffix": "female",
     "shinyLocked": false,
     "alwaysShiny": false
   },

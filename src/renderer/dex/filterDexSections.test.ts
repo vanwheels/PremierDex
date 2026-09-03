@@ -28,6 +28,7 @@ function makeRow(overrides: Partial<DexRowData> & Pick<DexRowData, 'key' | 'dexN
     shinyEntry: null,
     pokeapiId: 1,
     spriteFormSuffix: null,
+    femaleSprite: false,
     firstAvailableGeneration: 1,
     homeBoxable: true,
     shinyLocked: false,

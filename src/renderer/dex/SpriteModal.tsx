@@ -10,6 +10,9 @@ import {
 export interface SpriteModalTarget {
   pokeapiId: number
   spriteFormSuffix: string | null
+  /** True for a split-out female dex/collection row — see SpriteThumbnail's prop of the
+   * same name. */
+  female: boolean
   displayName: string
   firstAvailableGeneration: number
 }
@@ -73,8 +76,8 @@ export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element 
             <img
               src={
                 animated
-                  ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, shiny, animatedSource)
-                  : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, shiny)
+                  ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, shiny, animatedSource, target.female)
+                  : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, shiny, target.female)
               }
               alt={`${target.displayName} — generation ${generation}${shiny ? ' shiny' : ''}${animated ? ' animated' : ''}`}
               width={MODAL_SIZE}

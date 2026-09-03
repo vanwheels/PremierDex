@@ -20,6 +20,9 @@ export interface CollectionRowData {
   displayName: string
   pokeapiId: number
   spriteFormSuffix: string | null
+  /** True when the entry's own gender is female — see dex/types.ts's DexRowData.femaleSprite
+   * of the same purpose. */
+  femaleSprite: boolean
   firstAvailableGeneration: number
 }
 

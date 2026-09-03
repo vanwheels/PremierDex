@@ -69,10 +69,14 @@
  *     across all of a species' sub-forms and the suffix is stored separately as
  *     spriteFormSuffix (null for every form that isn't one of these — see sprites.ts).
  *     See docs/investigations/home-depositability-audit.md section 3.
- *   - The forms.length > 1 signal above false-positives for a handful of species whose
- *     multi-entry forms array is a PokeAPI artifact rather than real sub-forms (Mothim,
- *     Scatterbug, Spewpa) — see SPURIOUS_MULTI_FORM_SPECIES below, which excludes them
- *     from that path entirely so they get the plain single-'base'-form treatment instead.
+ *   - The forms.length > 1 signal above false-positives for two different reasons, each
+ *     excluded from fetchDefaultVarietySubForms entirely so the affected species fall
+ *     through to the plain single-'base'-form path instead: a handful of species whose
+ *     multi-entry forms array is a PokeAPI structural artifact rather than real sub-forms
+ *     (Mothim, Scatterbug, Spewpa — see SPURIOUS_MULTI_FORM_SPECIES), and Frillish/
+ *     Jellicent/Pyroar, whose forms array is real but just a male/female pair already
+ *     covered by hasGenderDifference on the single base row (see
+ *     GENDER_PAIR_MULTI_FORM_SPECIES and TODO.md's "Female-form sprites missing" leg).
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -341,12 +345,32 @@ const LETS_GO_STARTER_SPECIES = [25, 133] // Pikachu, Eevee
  * Burmy's/Vivillon's own sub-forms, which all have real, distinct sprites. A blanket
  * "front_default is null" check can't replace this exclusion list — it would also drop
  * real, sprite-less dex entries elsewhere (Xerneas's Active Mode, Sinistea/Polteageist's
- * Antique, Poltchageist/Sinistcha's second form, and Frillish/Jellicent/Pyroar's female
- * sub-form all come back null on every sprite field too, despite being real, trackable
- * forms — see TODO.md's "Female-form sprites missing" leg). Species here fall through to
- * fetchSpeciesForms' plain single-'base'-form branch instead. See TODO.md's Leg 22.
+ * Antique, and Poltchageist/Sinistcha's second form all come back null on every sprite
+ * field too, despite being real, trackable forms — they simply have no known sprite
+ * source via the API at all, per TODO.md's "Female-form sprites missing" leg). Species
+ * here fall through to fetchSpeciesForms' plain single-'base'-form branch instead. See
+ * TODO.md's Leg 22.
  */
 const SPURIOUS_MULTI_FORM_SPECIES = new Set([414, 664, 665]) // Mothim, Scatterbug, Spewpa
+
+/**
+ * A second, differently-caused reason a species' defaultPokemon.forms array has length
+ * > 1 without real sub-forms belonging in forms.json: Frillish, Jellicent, and Pyroar
+ * each expose their male/female difference as two pokemon-form entries ("<species>-male",
+ * is_default, and "<species>-female") rather than via a second variety or a plain
+ * front_female field on one form — confirmed live 2026-09-02. Running these through
+ * fetchDefaultVarietySubForms would create a real-looking but broken 'female' row: that
+ * sub-form's own sprite fields are all null (the art actually lives on the *male*
+ * sub-form's front_female field — see TODO.md's "Female-form sprites missing" leg), and
+ * it's pure duplication besides — hasGenderDifference is already correctly computed as
+ * true on the single 'base' row via hasDistinctFemaleSprite's species-level check, and
+ * the renderer (buildDexSections.ts's splitGenderRows, sprites.ts's `female` param)
+ * derives both the male and female display rows and sprite URLs from that one row.
+ * Falls through to the plain single-'base'-form path below like
+ * SPURIOUS_MULTI_FORM_SPECIES, for the same reason but not the same cause: this isn't a
+ * PokeAPI structural artifact, just a form the existing gender-diff model already covers.
+ */
+const GENDER_PAIR_MULTI_FORM_SPECIES = new Set([592, 593, 668]) // Frillish, Jellicent, Pyroar
 
 /**
  * Varieties that shouldn't occupy a dex slot at all — not "boxable but not yet
@@ -452,7 +476,11 @@ async function fetchSpeciesForms(species: SeedSpecies): Promise<SeedForm[]> {
 
   const forms: SeedForm[] = []
 
-  if (defaultPokemon.forms.length > 1 && !SPURIOUS_MULTI_FORM_SPECIES.has(species.id)) {
+  if (
+    defaultPokemon.forms.length > 1 &&
+    !SPURIOUS_MULTI_FORM_SPECIES.has(species.id) &&
+    !GENDER_PAIR_MULTI_FORM_SPECIES.has(species.id)
+  ) {
     forms.push(...(await fetchDefaultVarietySubForms(species, defaultPokemon)))
   } else {
     forms.push(

@@ -23,6 +23,7 @@ function buildRow(entry: CollectionEntry, species: Species, form: Form): Collect
     displayName: `${baseName}${genderSuffix(entry.gender)}${entry.shiny ? ' ✨' : ''}`,
     pokeapiId: form.pokeapiId,
     spriteFormSuffix: form.spriteFormSuffix,
+    femaleSprite: entry.gender === 'female',
     firstAvailableGeneration: form.firstAvailableGeneration
   }
 }

@@ -43,11 +43,13 @@ export function DexRow({ row, onToggleEntry, onOpenSprite, onOpenOrigin, onSaveO
         <SpriteThumbnail
           pokeapiId={row.pokeapiId}
           spriteFormSuffix={row.spriteFormSuffix}
+          female={row.femaleSprite}
           displayName={row.displayName}
           onClick={() =>
             onOpenSprite({
               pokeapiId: row.pokeapiId,
               spriteFormSuffix: row.spriteFormSuffix,
+              female: row.femaleSprite,
               displayName: row.displayName,
               firstAvailableGeneration: row.firstAvailableGeneration
             })

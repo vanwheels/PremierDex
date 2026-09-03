@@ -4,6 +4,9 @@ import { defaultSpriteUrl } from './sprites'
 interface SpriteThumbnailProps {
   pokeapiId: number
   spriteFormSuffix: string | null
+  /** True for a split-out female dex/collection row — see Form.hasGenderDifference and
+   * sprites.ts's module comment for the CDN's "female/" subfolder convention. */
+  female: boolean
   displayName: string
   onClick: () => void
 }
@@ -19,6 +22,7 @@ const THUMBNAIL_SIZE = 32
 export function SpriteThumbnail({
   pokeapiId,
   spriteFormSuffix,
+  female,
   displayName,
   onClick
 }: SpriteThumbnailProps): JSX.Element {
@@ -35,7 +39,7 @@ export function SpriteThumbnail({
         '?'
       ) : (
         <img
-          src={defaultSpriteUrl(pokeapiId, spriteFormSuffix, false)}
+          src={defaultSpriteUrl(pokeapiId, spriteFormSuffix, false, female)}
           alt={displayName}
           loading="lazy"
           width={THUMBNAIL_SIZE}

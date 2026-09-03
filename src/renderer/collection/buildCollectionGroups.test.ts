@@ -63,6 +63,17 @@ describe('buildCollectionGroups', () => {
     expect(groups[1].rows[0].entry.id).toBe(1)
   })
 
+  it('sets femaleSprite from the entry’s own gender, not the form', () => {
+    const entries = [
+      makeEntry({ id: 1, formId: 1, gender: 'female' }),
+      makeEntry({ id: 2, formId: 4, gender: 'male' })
+    ]
+    const groups = buildCollectionGroups(SPECIES, FORMS, entries, 'shiny')
+    const rows = groups[0].rows
+    expect(rows.find((r) => r.entry.id === 1)!.femaleSprite).toBe(true)
+    expect(rows.find((r) => r.entry.id === 2)!.femaleSprite).toBe(false)
+  })
+
   it('groups by origin game in release order, with unset origin last', () => {
     const entries = [
       makeEntry({ id: 1, formId: 1, originGame: null }),
