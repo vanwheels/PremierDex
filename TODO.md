@@ -110,24 +110,40 @@ the chosen mode across reloads — this is what actually delivers "define how yo
 displays as a persisted choice," the layout-customization milestone's original ask.
 Otherwise the current table's behavior stays as-is; this leg is mostly plumbing the
 mode switch + persistence around it.
+All three view modes share one underlying data path (buildDexSections ->
+filterDexSections -> sortDexSections) rather than each mode having its own filtering —
+confirmed with Vanny 2026-09-03: a scope like "generation 1-6 only" must apply
+identically across List/Box/Hybrid, species outside the active filter don't appear in
+any of them, not just List.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## [Box view mode] — Leg 8
-New HOME-style read-only grid: sprite-only cells, 30 per box (5 rows x 6 columns per
+New HOME-style read-only grid: 30 sprite-only cells per box (5 rows x 6 columns per
 Vanny's Pokémon HOME reference), right-click opens an action menu (contents TBD at leg
 time — likely Origin modal/sprite modal shortcuts, mirroring what's already reachable
 from a Dex Table row). On today's data, slots auto-fill in dex-number order rather than
 a real saved arrangement — arbitrary placement/duplicates wait on the Box Arrangement
 future milestone below actually existing.
+Tile population, confirmed 2026-09-03: each DexRowData row contributes up to two tiles —
+a regular-slot tile and a shiny-slot tile, exactly mirroring List view's existing
+two-column pairing. Each tile renders as a real sprite when that slot is owned, or a
+greyed-out placeholder when it's within the active filter scope but unowned. A
+species/row outside the active filter (e.g. wrong generation) contributes no tiles at
+all — greyed placeholders are for "in scope but missing," not "every species that
+exists."
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## [Hybrid view mode] — Leg 9
-Second HOME-derived read-only grid: same sprite-only cells as Box view, but flowing
-continuously (row width reflows with the window instead of a fixed 30-per-box page) with
-a detail panel pinned to the bottom of the page showing the selected entry, mirroring
-HOME's own List View screen. Shares most of its cell-rendering with Leg 8's Box view —
-worth building second and factoring the shared grid-cell component out rather than
-duplicating it.
+Second HOME-derived read-only grid, same tile-population rules as Leg 8's Box view (up
+to two tiles per row, greyed placeholders for in-scope-but-unowned), but flowing
+continuously — no box-style page boundaries, confirmed 2026-09-03 over the paginated
+alternative real HOME's own List View screen actually uses. Row width reflows with the
+window instead of a fixed 6-column grid. Detail panel pinned to the bottom of the page,
+confirmed 2026-09-03 to reuse the Origin modal's existing fields (OT/TID/SID/nickname/
+origin game/ball/met location/storage location, plus the home-boxable/shiny-locked/
+invalid-combo badges) rather than HOME's own Nature/stats block, which PremierDex has no
+data for. Shares its tile-cell rendering with Leg 8's Box view — worth building second
+and factoring the shared grid-cell component out rather than duplicating it.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## Future Milestones (unscheduled)
