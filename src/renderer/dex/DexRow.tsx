@@ -32,8 +32,12 @@ interface DexRowProps {
   onOpenSprite: (target: SpriteModalTarget) => void
   onOpenOrigin: (target: OriginModalTarget) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
-  /** Minimal interim assignment picker (Leg 3) — moves into the redesigned per-location
-   * Dex table itself at Leg 9, per TODO.md. */
+  /** Per-entry assignment picker (Leg 3), given its own Non-Shiny/Shiny Loc. table
+   * columns at Leg 9 rather than sitting inline in the owned/shiny cells. Disabled for an
+   * unowned entry — there's nothing to place in a box until it's actually caught. Checking
+   * an entry owned while a real location tab is selected assigns it there automatically
+   * (App.tsx's handleToggleEntry); this picker is for reassigning afterward, or assigning
+   * while on the Unassigned tab. */
   storageLocations: StorageLocation[]
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
   /** Leg 6: backs the invalid-combo badge below — see invalidCombo.ts. */
@@ -192,7 +196,6 @@ export function DexRow({
         >
           Origin
         </button>
-        {storageLocationSelect(row.regular)}
         {row.alwaysShiny && (
           <span className="dex-always-shiny-badge" title="No legitimate non-shiny of this form has ever existed">
             Always shiny
@@ -200,6 +203,7 @@ export function DexRow({
         )}
         {invalidComboBadge(row.regular)}
       </td>
+      <td>{storageLocationSelect(row.regular)}</td>
       <td>
         <input
           type="checkbox"
@@ -216,7 +220,6 @@ export function DexRow({
         >
           Origin
         </button>
-        {storageLocationSelect(row.shinyEntry)}
         {row.shinyLocked && (
           <span className="dex-shiny-locked-badge" title="No legitimate shiny of this form has ever existed">
             Shiny-locked
@@ -224,6 +227,7 @@ export function DexRow({
         )}
         {invalidComboBadge(row.shinyEntry)}
       </td>
+      <td>{storageLocationSelect(row.shinyEntry)}</td>
     </tr>
   )
 }

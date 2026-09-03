@@ -18,7 +18,8 @@ interface DexTableProps {
   onToggleEntry: (entryId: number, owned: boolean) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   onSetCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
-  /** Minimal interim assignment picker (Leg 3) — see DexRow's doc comment. */
+  /** Per-entry assignment picker (Leg 3), its own Loc. columns since Leg 9 — see DexRow's
+   * doc comment. */
   storageLocations: StorageLocation[]
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
   /** Leg 6's derived invalid-combo badge — see DexRow's doc comment. */
@@ -97,7 +98,9 @@ export function DexTable({
               <SortableHeader label="Gen" sortKey="generation" sort={sort} onSortChange={onSortChange} />
               <th>Nickname</th>
               <SortableHeader label="Non-Shiny" sortKey="owned" sort={sort} onSortChange={onSortChange} />
+              <th>Non-Shiny Loc.</th>
               <SortableHeader label="Shiny" sortKey="shiny" sort={sort} onSortChange={onSortChange} />
+              <th>Shiny Loc.</th>
             </tr>
           </thead>
           <tbody>

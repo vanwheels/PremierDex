@@ -16,11 +16,11 @@ interface DexLocationTabsProps {
  * here, since a tab isn't tied to a single game the way a save-file location's Trainer
  * Profile is. The fixed Unassigned tab (`null`) always renders last, after every real
  * location, so creating a new location can't shift it around. It's also where an entry
- * lives from the moment it's first checked owned until it's actually assigned a location
- * (Leg 3's interim per-row picker still does that assignment; Leg 9 moves it into this
- * table) — so a species nobody's caught yet only ever shows as checkable from here, not
- * from a real location's tab. That's expected under this filter, not a bug: an entry has
- * no location to belong to until someone gives it one.
+ * lives until it's given a real location — checking it owned while a real tab is selected
+ * assigns it there in the same action (Leg 9's auto-assign, in App.tsx's
+ * handleToggleEntry); checking it owned from here, or unchecking anywhere, leaves it here.
+ * So a species nobody's caught yet only ever shows as checkable from this tab, not from a
+ * real location's tab — expected under this filter, not a bug.
  */
 export function DexLocationTabs({ storageLocations, selected, onSelect }: DexLocationTabsProps): JSX.Element {
   const sorted = [...storageLocations].sort((a, b) => a.name.localeCompare(b.name))

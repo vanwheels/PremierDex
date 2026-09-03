@@ -11,6 +11,7 @@ import { filterDexSections } from './dex/filterDexSections'
 import { sortDexSections } from './dex/sortDexSections'
 import { computeCompletionStats, DEFAULT_COMPLETION_STATS_OPTIONS, filterEntriesByStorageLocation } from './dex/completionStats'
 import type { CompletionStatsOptions } from './dex/completionStats'
+import { autoAssignedLocationOnCheckIn } from './dex/autoAssignLocation'
 import { DexTable } from './dex/DexTable'
 import { DexLocationTabs } from './dex/DexLocationTabs'
 import { DexToolbar } from './dex/DexToolbar'
@@ -42,8 +43,8 @@ export function App(): JSX.Element {
   const [forms, setForms] = useState<Form[]>([])
   const [entries, setEntries] = useState<CollectionEntry[]>([])
   // Fetched here (rather than left to StorageLocationsPanel's own load) so DexTable's
-  // interim assignment picker (Leg 3) has the list to populate its dropdown from, and so
-  // DexLocationTabs (Leg 8) has it for the per-location tab bar.
+  // per-row assignment picker (Leg 3, Leg 9) has the list to populate its dropdown from,
+  // and so DexLocationTabs (Leg 8) has it for the per-location tab bar.
   const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([])
   const [speciesAvailability, setSpeciesAvailability] = useState<SpeciesAvailabilityData>(EMPTY_SPECIES_AVAILABILITY)
   const [loading, setLoading] = useState(true)
@@ -102,7 +103,8 @@ export function App(): JSX.Element {
   // Leg 7's filter, applied once here rather than in each consumer. An entry that's
   // unowned everywhere sits at storageLocationId: null, same as an owned-but-unassigned
   // one — so it only ever appears (checkable) under the Unassigned tab; see
-  // DexLocationTabs' doc comment for why that's the intended Leg 8/9 workflow, not a bug.
+  // DexLocationTabs' doc comment. Leg 9's auto-assign-on-check-in (handleToggleEntry
+  // below) is what gets a freshly-checked entry off that tab in the common case.
   const entriesForLocationTab = useMemo(
     () => filterEntriesByStorageLocation(entries, selectedLocationTab),
     [entries, selectedLocationTab]
@@ -121,20 +123,28 @@ export function App(): JSX.Element {
     [forms, entriesForLocationTab, completionStatsOptions]
   )
 
+  const handleSaveStorageLocation = (entryId: number, storageLocationId: number | null): void => {
+    window.premierDex.setEntryStorageLocation(entryId, storageLocationId).then((updated) => {
+      setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
+    })
+  }
+
+  // Leg 9: checking an entry owned while a real location tab is selected assigns it there
+  // in the same action, via autoAssignedLocationOnCheckIn — the per-row picker (now its own
+  // table column, see DexRow) stays for reassigning afterward or assigning while on the
+  // Unassigned tab.
   const handleToggleEntry = (entryId: number, owned: boolean): void => {
     window.premierDex.setOwned(entryId, owned).then((updated) => {
       setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
     })
+    const autoLocationId = autoAssignedLocationOnCheckIn(owned, selectedLocationTab)
+    if (autoLocationId !== null) {
+      handleSaveStorageLocation(entryId, autoLocationId)
+    }
   }
 
   const handleSaveOrigin = (entryId: number, input: CollectionEntryOriginInput): void => {
     window.premierDex.setEntryOrigin(entryId, input).then((updated) => {
-      setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
-    })
-  }
-
-  const handleSaveStorageLocation = (entryId: number, storageLocationId: number | null): void => {
-    window.premierDex.setEntryStorageLocation(entryId, storageLocationId).then((updated) => {
       setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
     })
   }

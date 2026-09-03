@@ -145,10 +145,10 @@ tbody tr:hover {
   cursor: default;
 }
 
-/* Minimal interim assignment picker (Leg 3) — moves into the redesigned per-location Dex
- * table at Leg 9. Same compact treatment as dex-collapsed-display-select. */
+/* Per-entry assignment picker (Leg 3), in its own Loc. column since Leg 9 — same compact
+ * treatment as dex-collapsed-display-select, minus the inline margin it no longer needs
+ * now that it's not sharing a cell with the checkbox/Origin button/badges. */
 .dex-storage-location-select {
-  margin-left: 0.35rem;
   font-size: 0.68rem;
   padding: 0.1rem 0.3rem;
   max-width: 6.5rem;
