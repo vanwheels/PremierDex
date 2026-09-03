@@ -34,16 +34,23 @@ Confirmed 2026-09-03: deliberately kept out of the User-Customizable Dex Layout 
 leg in that milestone happens to touch this file anyway.
 Last touched: 2026-09-03. Re-check count: 0.
 
-## Current Milestone: User-Customizable Dex Layout
+## Current Milestone: User-Customizable Dex Layout (Phase 1: View Modes)
 
 Started 2026-09-03. Legs 1-6 below are the real-usage bug/UI fixes surfaced right after
 the Nav/Visual/Dex-Table-Redesign milestone shipped (see that milestone's post-mortem) —
 folded in here as foundation work rather than their own milestone, since several touch
-the same Dex Table/Completion Stats surface the layout-customization feature will build
-on. The layout-customization feature itself (the milestone's actual goal — letting Vanny
-define how their Living Dex displays as a persisted choice, not just a transient filter)
-still needs a scoping/design pass with Vanny before its legs get numbered; it'll be added
-as Leg 7+ once that spec exists.
+the same Dex Table/Completion Stats surface the view-mode work will build on.
+
+Scoped 2026-09-03: the original ask ("let Vanny pick a persisted display layout") turned
+out to bundle two very different pieces once Vanny described the target — three view
+modes (List/Box/Hybrid, mockups from Pokémon HOME) plus arbitrary box arrangement with
+duplicate owned copies and unowned-but-placed placeholder slots. The second piece needs
+`CollectionEntry`'s `UNIQUE(form_id, gender, shiny)` constraint dropped (owned becomes a
+real per-individual count, not a checkbox) and a real box/slot data model tied to Storage
+Locations — too large and too load-bearing to design inline. Split in two per Vanny's
+call: this milestone (Legs 1-9) ships the three view modes read-only on today's data;
+[Box Arrangement / Real Inventory Data Model] (future milestone, below) covers the
+editing/duplicates/slot-position piece once that's separately scoped.
 
 ## [Ball column shows text instead of the ball icon] — Leg 1
 The Dex Table's Non-Shiny/Shiny Ball columns (Leg 10 of the prior milestone) render
@@ -96,11 +103,60 @@ active never got backfilled. Needs investigation into whether a one-time backfil
 whether this is an import-path bug instead.
 Last touched: 2026-09-03. Re-check count: 0.
 
+## [List view mode] — Leg 7
+Reframe the existing Dex Table as one of three selectable view modes (a mode
+switcher alongside/replacing DexFilterBar) rather than the only layout, and persist
+the chosen mode across reloads — this is what actually delivers "define how your dex
+displays as a persisted choice," the layout-customization milestone's original ask.
+Otherwise the current table's behavior stays as-is; this leg is mostly plumbing the
+mode switch + persistence around it.
+Last touched: 2026-09-03. Re-check count: 0.
+
+## [Box view mode] — Leg 8
+New HOME-style read-only grid: sprite-only cells, 30 per box (5 rows x 6 columns per
+Vanny's Pokémon HOME reference), right-click opens an action menu (contents TBD at leg
+time — likely Origin modal/sprite modal shortcuts, mirroring what's already reachable
+from a Dex Table row). On today's data, slots auto-fill in dex-number order rather than
+a real saved arrangement — arbitrary placement/duplicates wait on the Box Arrangement
+future milestone below actually existing.
+Last touched: 2026-09-03. Re-check count: 0.
+
+## [Hybrid view mode] — Leg 9
+Second HOME-derived read-only grid: same sprite-only cells as Box view, but flowing
+continuously (row width reflows with the window instead of a fixed 30-per-box page) with
+a detail panel pinned to the bottom of the page showing the selected entry, mirroring
+HOME's own List View screen. Shares most of its cell-rendering with Leg 8's Box view —
+worth building second and factoring the shared grid-cell component out rather than
+duplicating it.
+Last touched: 2026-09-03. Re-check count: 0.
+
 ## Future Milestones (unscheduled)
 
 Large items Vanny explicitly flagged as out of scope for a past milestone — logged here
 so they aren't lost, not queued into a leg yet. Candidates for whatever gets scoped after
 the current milestone.
+
+## [Box Arrangement / Real Inventory Data Model] — future milestone
+Split out of the User-Customizable Dex Layout milestone during its 2026-09-03
+leg-planning pass (see that milestone's intro note) — the harder half of Vanny's
+original ask, deliberately deferred past Phase 1's three read-only view modes. Vanny's
+calls so far: (1) duplicate owned copies of the same species/form should be real tracked
+individuals, not a visual trick — drop CollectionEntry's `UNIQUE(form_id, gender,
+shiny)` constraint (a SQLite table-rebuild migration, same class of hazard as the
+CHECK-widen rebuilds already handled in schema.ts) and turn "owned" into a per-individual
+count/list rather than a boolean, the way the Collection view already models entries; (2)
+arranged boxes are the same thing as real Storage Locations, not a separate planning
+concept — a box becomes a numbered sub-unit of a Storage Location (e.g. HOME Box 3) with
+real per-entry slot positions, and unowned species can still be placed into a slot as a
+greyed-out placeholder.
+Needs its own scoping pass before picked up: this touches completionStats.ts,
+filterDexSections.ts, invalidCombo.ts, autoAssignLocation.ts, and
+exportCollection/importCollection's natural-key matching (currently keyed on
+form_id/gender/shiny, which collides once duplicates are real) — plus the editing UX
+itself (drag-and-drop vs. a menu-based add/remove/swap flow, per Vanny's own "without
+overcomplicating UI" concern). Depends on the Box/Hybrid grid components from Phase 1
+existing first, since editing extends those views rather than replacing them.
+Last touched: 2026-09-03. Re-check count: 0.
 
 ## [Dex completeness tier migration] — future milestone
 Migrating a collection from a regular living dex/shiny living dex (species-only) up to a
