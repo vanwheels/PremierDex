@@ -15,7 +15,7 @@ and it reverts), not a persistent Home-depositable state — reclassified `non_b
 `OVERRIDES` rather than left `dex_distinct`, so they're filtered from the dex entirely
 instead of needing to "fold." Wormadam's 3 cloaks were investigated and left as-is: they
 genuinely differ in type/stats and are separate Living Dex slots in the real games (unlike
-Burmy's, which are cosmetic-only) — not a bug. See commit `<pending>`.
+Burmy's, which are cosmetic-only) — not a bug. See commit `11992b8`.
 
 ## [Group by Dex number in Collection] — Leg 21 — 2026-09-02
 Added `dexNumber` as a fourth `CollectionGroupBy` mode alongside Origin Game/OT/Shiny.
