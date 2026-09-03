@@ -8,7 +8,7 @@ a dedicated setter, kept off `CollectionEntryOriginInput` since current location
 origin are different axes; `metLocation` rides along with the origin fields in
 OriginModal instead. Interim assignment picker is a plain `<select>` next to each row's
 Origin button in DexRow, reading App.tsx's own `storageLocations` fetch — moves into the
-redesigned per-location table at Leg 9. See commit `<pending>`.
+redesigned per-location table at Leg 9. See commit `db448d6`.
 
 ## [Diamond Theming + In-App Diamond/Pearl Toggle] — 2026-09-03
 Diamond palette pulled from Dialga (steel-blue plated body → --surface family, its pale
