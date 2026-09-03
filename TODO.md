@@ -1,23 +1,5 @@
 # TODO
 
-## [Configurable completion stats breakdown] — Leg 19
-Replace `completionStats.ts`'s single hardcoded "By Generation" breakdown with a
-toggle-driven one: three independent toggles — include cosmetic variants, split by
-gender, fold regional forms into generation totals (default off) — drive one computation
-instead of four parallel named-tier functions. Vanny's four proposed tiers (Base Dex /
-Base Form Dex / Complete Gender Dex / Complete Dex, each by generation) fall out as toggle
-combinations rather than separate code paths. Regional forms are currently double-counted
-— folded into both their own generation bucket (by `Form.firstAvailableGeneration`, e.g.
-Alolan/Galarian Meowth land in Gen 7/8, not Gen 1 as Vanny first thought — likely a stale
-packaged-build observation) and `byRegionalGroup` — the "exclude from generation totals"
-toggle default fixes that; Regional stays its own always-separate section regardless of
-toggle state. Possible overlap worth checking against the "Dex completeness tier
-migration" future-milestone item below (regular vs. complete living dex) once this is
-scoped in detail — that item is about migrating stored *ownership* data between tiers,
-this one is about how the *stats display* is computed, but the tier vocabulary may end up
-shared.
-Last touched: 2026-09-02. Re-check count: 0.
-
 ## [Pokémon name punctuation exceptions] — unscheduled
 Leg 7 title-cases raw PokeAPI slugs (hyphens preserved as separators) at every display
 site, but ~14 species have real names the slug format can't represent: apostrophes

@@ -23,6 +23,34 @@ export interface CompletionStats {
   byRegionalGroup: CompletionBucket[]
 }
 
+/**
+ * The three independent axes Vanny's proposed completion tiers (Base Dex / Base Form Dex
+ * / Complete Gender Dex / Complete Dex) fall out of as combinations, rather than as
+ * separate named computations (Leg 19). All three default off, matching the two existing
+ * precedents for these exact axes elsewhere in the dex UI: DexOptions.splitGenderRows
+ * (gender variants collapse to one row until split on) and DexSection.cosmeticRows
+ * (cosmetic variants stay collapsed/hidden until expanded).
+ */
+export interface CompletionStatsOptions {
+  /** Count cosmetic_variant forms (Vivillon patterns, Unown letters, etc.), not just
+   * dex_distinct ones. */
+  includeCosmeticVariants: boolean
+  /** Count a gender-diff form's male and female entries as two separate collectible
+   * units. Off: the form counts as one unit, owned if either gender's entry is owned. */
+  splitByGender: boolean
+  /** Also fold regional-group forms (Alolan/Galarian/Hisuian/Paldean) into their
+   * by-generation bucket, on top of always appearing in their own Regional section. Off
+   * by default — on reproduces the pre-Leg-19 double count (regional forms landing in
+   * both their generation bucket and byRegionalGroup). */
+  foldRegionalIntoGeneration: boolean
+}
+
+export const DEFAULT_COMPLETION_STATS_OPTIONS: CompletionStatsOptions = {
+  includeCosmeticVariants: false,
+  splitByGender: false,
+  foldRegionalIntoGeneration: false
+}
+
 function emptyBucket(key: string, label: string): CompletionBucket {
   return { key, label, regular: { owned: 0, total: 0 }, shiny: { owned: 0, total: 0 } }
 }
@@ -46,19 +74,23 @@ function addUnit(bucket: CompletionBucket, form: Form, ownedRegular: boolean, ow
 }
 
 /**
- * Owned%/shiny% completion, broken down by generation and by regional group (Leg 17).
- * Counts every non-non_boxable form's collectible units directly against
- * CollectionEntry, deliberately independent of buildDexSections' row shaping: its
- * splitGenderRows option hides the female entry of a gender-diff form entirely when
- * off, but completion needs both genders counted regardless of that display toggle. Also
- * independent of the active search/filter/sort (Legs 15-16) — a stats dashboard should
- * reflect the whole collection, not the currently-visible slice.
+ * Owned%/shiny% completion, broken down by generation and by regional group (Leg 17),
+ * configurable via `options` (Leg 19 — see CompletionStatsOptions). Counts collectible
+ * units directly against CollectionEntry, deliberately independent of buildDexSections'
+ * row shaping — its splitGenderRows option is purely a display toggle, unrelated to
+ * whether *completion* counts genders separately. Also independent of the active
+ * search/filter/sort (Legs 15-16) — a stats dashboard should reflect the whole
+ * collection, not the currently-visible slice.
  *
  * Species-only for now, per Vanny's 2026-09-02 scoping call on the TODO item: no
  * dex-tier (regular vs. complete living dex) breakdown until that concept exists in the
  * schema — see TODO.md's [Dex completeness tier migration].
  */
-export function computeCompletionStats(forms: Form[], entries: CollectionEntry[]): CompletionStats {
+export function computeCompletionStats(
+  forms: Form[],
+  entries: CollectionEntry[],
+  options: CompletionStatsOptions = DEFAULT_COMPLETION_STATS_OPTIONS
+): CompletionStats {
   const entriesByForm = indexEntriesByForm(entries)
   const overall = emptyBucket('overall', 'Overall')
   const byGeneration = new Map<number, CompletionBucket>()
@@ -66,14 +98,8 @@ export function computeCompletionStats(forms: Form[], entries: CollectionEntry[]
 
   for (const form of forms) {
     if (form.formCategory === 'non_boxable') continue
+    if (form.formCategory === 'cosmetic_variant' && !options.includeCosmeticVariants) continue
     const entriesByGender = entriesByForm.get(form.id)
-    const genders = form.hasGenderDifference ? (['male', 'female'] as const) : (['unknown'] as const)
-
-    let genBucket = byGeneration.get(form.firstAvailableGeneration)
-    if (!genBucket) {
-      genBucket = emptyBucket(String(form.firstAvailableGeneration), `Gen ${form.firstAvailableGeneration}`)
-      byGeneration.set(form.firstAvailableGeneration, genBucket)
-    }
 
     let regionalBucket: CompletionBucket | undefined
     if (form.regionalGroup !== null) {
@@ -83,14 +109,38 @@ export function computeCompletionStats(forms: Form[], entries: CollectionEntry[]
         byRegionalGroup.set(form.regionalGroup, regionalBucket)
       }
     }
+    const includeInGeneration = form.regionalGroup === null || options.foldRegionalIntoGeneration
+    let genBucket: CompletionBucket | undefined
+    if (includeInGeneration) {
+      genBucket = byGeneration.get(form.firstAvailableGeneration)
+      if (!genBucket) {
+        genBucket = emptyBucket(String(form.firstAvailableGeneration), `Gen ${form.firstAvailableGeneration}`)
+        byGeneration.set(form.firstAvailableGeneration, genBucket)
+      }
+    }
 
-    for (const gender of genders) {
-      const slot = entriesByGender?.get(gender)
-      const ownedRegular = slot?.regular?.owned ?? false
-      const ownedShiny = slot?.shiny?.owned ?? false
+    const addForGender = (ownedRegular: boolean, ownedShiny: boolean): void => {
       addUnit(overall, form, ownedRegular, ownedShiny)
-      addUnit(genBucket, form, ownedRegular, ownedShiny)
+      if (genBucket) addUnit(genBucket, form, ownedRegular, ownedShiny)
       if (regionalBucket) addUnit(regionalBucket, form, ownedRegular, ownedShiny)
+    }
+
+    if (form.hasGenderDifference && options.splitByGender) {
+      for (const gender of ['male', 'female'] as const) {
+        const slot = entriesByGender?.get(gender)
+        addForGender(slot?.regular?.owned ?? false, slot?.shiny?.owned ?? false)
+      }
+    } else if (form.hasGenderDifference) {
+      // Not splitting: one unit for the form, owned if either gender's entry is owned.
+      const maleSlot = entriesByGender?.get('male')
+      const femaleSlot = entriesByGender?.get('female')
+      addForGender(
+        (maleSlot?.regular?.owned ?? false) || (femaleSlot?.regular?.owned ?? false),
+        (maleSlot?.shiny?.owned ?? false) || (femaleSlot?.shiny?.owned ?? false)
+      )
+    } else {
+      const slot = entriesByGender?.get('unknown')
+      addForGender(slot?.regular?.owned ?? false, slot?.shiny?.owned ?? false)
     }
   }
 

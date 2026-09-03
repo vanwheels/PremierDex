@@ -1,5 +1,16 @@
 # COMPLETED
 
+## [Configurable completion stats breakdown] — Leg 19 — 2026-09-02
+Replaced `completionStats.ts`'s single hardcoded "By Generation" breakdown with one
+computation driven by three independent toggles — include cosmetic variants, split by
+gender, fold regional forms into generation totals — surfaced as checkboxes in
+`CompletionStatsPanel`, all defaulting off (matching the two existing precedents for these
+exact axes: `DexOptions.splitGenderRows` and `DexSection.cosmeticRows`, both
+collapsed/hidden by default). Fixes the regional-form double count along the way: a
+regional form (e.g. Alolan Meowth, Gen 7) now lands only in `byRegionalGroup` by default
+instead of also inflating its own generation's bucket; the fold-in toggle restores the old
+behavior on top of the always-separate Regional section. See commit `e92c686`.
+
 ## [Collection view by origin/OT/Shiny] — Leg 18 — 2026-09-02
 A separate top-level view (tab toggle next to the existing Living Dex grid) that browses
 owned entries grouped by one dimension at a time — Origin Game, OT, or Shiny — rather than

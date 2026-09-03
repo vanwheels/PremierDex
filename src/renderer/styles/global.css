@@ -92,6 +92,13 @@ td {
   margin-bottom: 1rem;
 }
 
+.completion-stats-toolbar {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .completion-stats-table {
   width: auto;
 }

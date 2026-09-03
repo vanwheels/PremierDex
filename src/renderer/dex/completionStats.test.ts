@@ -43,15 +43,64 @@ describe('computeCompletionStats', () => {
     expect(stats.overall.regular.total).toBe(1)
   })
 
-  it('counts a gender-diff form as two units regardless of any display toggle', () => {
+  it('counts a gender-diff form as one unit, owned if either gender is, when splitByGender is off', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base', hasGenderDifference: true })]
     const entries: CollectionEntry[] = [
       makeEntry({ id: 10, formId: 1, gender: 'male', owned: true }),
       makeEntry({ id: 11, formId: 1, gender: 'female', owned: false })
     ]
     const stats = computeCompletionStats(forms, entries)
+    expect(stats.overall.regular.total).toBe(1)
+    expect(stats.overall.regular.owned).toBe(1)
+  })
+
+  it('counts a gender-diff form as two units when splitByGender is on', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base', hasGenderDifference: true })]
+    const entries: CollectionEntry[] = [
+      makeEntry({ id: 10, formId: 1, gender: 'male', owned: true }),
+      makeEntry({ id: 11, formId: 1, gender: 'female', owned: false })
+    ]
+    const stats = computeCompletionStats(forms, entries, {
+      includeCosmeticVariants: false,
+      splitByGender: true,
+      foldRegionalIntoGeneration: false
+    })
     expect(stats.overall.regular.total).toBe(2)
     expect(stats.overall.regular.owned).toBe(1)
+  })
+
+  it('excludes cosmetic_variant forms by default, includes them when includeCosmeticVariants is on', () => {
+    const forms: Form[] = [
+      makeForm({ id: 1, speciesId: 666, formName: 'meadow' }),
+      makeForm({ id: 2, speciesId: 666, formName: 'icy-snow', formCategory: 'cosmetic_variant' })
+    ]
+    const stats = computeCompletionStats(forms, [])
+    expect(stats.overall.regular.total).toBe(1)
+
+    const withCosmetics = computeCompletionStats(forms, [], {
+      includeCosmeticVariants: true,
+      splitByGender: false,
+      foldRegionalIntoGeneration: false
+    })
+    expect(withCosmetics.overall.regular.total).toBe(2)
+  })
+
+  it('excludes regional forms from their generation bucket by default, includes them when foldRegionalIntoGeneration is on', () => {
+    const forms: Form[] = [
+      makeForm({ id: 1, speciesId: 26, formName: 'alolan', regionalGroup: 'alolan', firstAvailableGeneration: 7 })
+    ]
+    const stats = computeCompletionStats(forms, [])
+    expect(stats.byGeneration).toEqual([])
+    expect(stats.byRegionalGroup[0].regular.total).toBe(1)
+
+    const folded = computeCompletionStats(forms, [], {
+      includeCosmeticVariants: false,
+      splitByGender: false,
+      foldRegionalIntoGeneration: true
+    })
+    expect(folded.byGeneration.map((b) => b.key)).toEqual(['7'])
+    expect(folded.byGeneration[0].regular.total).toBe(1)
+    expect(folded.byRegionalGroup[0].regular.total).toBe(1)
   })
 
   it('excludes an alwaysShiny form from the regular denominator', () => {

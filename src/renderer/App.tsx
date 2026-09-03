@@ -5,7 +5,8 @@ import { UpdateControls } from './UpdateControls'
 import { buildDexSections } from './dex/buildDexSections'
 import { filterDexSections } from './dex/filterDexSections'
 import { sortDexSections } from './dex/sortDexSections'
-import { computeCompletionStats } from './dex/completionStats'
+import { computeCompletionStats, DEFAULT_COMPLETION_STATS_OPTIONS } from './dex/completionStats'
+import type { CompletionStatsOptions } from './dex/completionStats'
 import { DexTable } from './dex/DexTable'
 import { DexToolbar } from './dex/DexToolbar'
 import { DexFilterBar } from './dex/DexFilterBar'
@@ -31,6 +32,9 @@ export function App(): JSX.Element {
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
   const [filters, setFilters] = useState<DexFilters>(DEFAULT_DEX_FILTERS)
   const [sort, setSort] = useState<DexSort | null>(DEFAULT_DEX_SORT)
+  const [completionStatsOptions, setCompletionStatsOptions] = useState<CompletionStatsOptions>(
+    DEFAULT_COMPLETION_STATS_OPTIONS
+  )
   const [view, setView] = useState<AppView>('dex')
   // Bumped after a JSON import (Leg 13 added Trainer Profiles/Storage Locations to the
   // backup) so both panels below remount and refetch — they load their own data on
@@ -68,7 +72,10 @@ export function App(): JSX.Element {
   const visibleSections = useMemo(() => sortDexSections(filteredSections, sort), [filteredSections, sort])
   // Independent of options/filters/sort (all display-only) — stats reflect the whole
   // collection, not the currently-visible slice. See completionStats.ts.
-  const completionStats = useMemo(() => computeCompletionStats(forms, entries), [forms, entries])
+  const completionStats = useMemo(
+    () => computeCompletionStats(forms, entries, completionStatsOptions),
+    [forms, entries, completionStatsOptions]
+  )
 
   const handleToggleEntry = (entryId: number, owned: boolean): void => {
     window.premierDex.setOwned(entryId, owned).then((updated) => {
@@ -93,7 +100,11 @@ export function App(): JSX.Element {
       <UpdateControls />
       <TrainerProfilesPanel key={importVersion} />
       <StorageLocationsPanel key={importVersion} />
-      <CompletionStatsPanel stats={completionStats} />
+      <CompletionStatsPanel
+        stats={completionStats}
+        options={completionStatsOptions}
+        onOptionsChange={setCompletionStatsOptions}
+      />
       <div className="app-view-tabs">
         <button type="button" className={view === 'dex' ? 'app-view-tab active' : 'app-view-tab'} onClick={() => setView('dex')}>
           Living Dex
