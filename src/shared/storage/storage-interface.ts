@@ -43,6 +43,15 @@ export interface StorageAdapter {
    * still occupied by the first entry's own pre-move row. Rejects if either entry has no
    * box position yet. */
   swapEntryBoxPositions(entryIdA: number, entryIdB: number): Promise<[CollectionEntry, CollectionEntry]>
+  /** Places a batch of entries into a contiguous run of slots starting at `startSlot`,
+   * in `entryIds` order, in one atomic step (Leg 4 of the Box View Polish milestone,
+   * DexBoxPane's multi-select drag-drop flow) — same UNIQUE-index workaround as
+   * swapEntryBoxPositions above, generalized to N entries instead of 2. Rejects if any
+   * entry has no storageLocationId; does not itself check the target slots are free of
+   * non-`entryIds` occupants or in range — DexBoxPane's own drop-target rejection covers
+   * that before this is ever called, and the DB's existing box_slot/UNIQUE constraints
+   * still apply as a backstop. */
+  fillBoxSlots(entryIds: number[], boxNumber: number, startSlot: number): Promise<CollectionEntry[]>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>

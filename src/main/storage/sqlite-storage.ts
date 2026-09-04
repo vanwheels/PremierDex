@@ -86,6 +86,30 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     setEntryBoxPositionStmt.run({ id: b.id, boxNumber: a.box_number, boxSlot: a.box_slot })
     setEntryBoxPositionStmt.run({ id: a.id, boxNumber: b.box_number, boxSlot: b.box_slot })
   })
+  // fillBoxSlots (Leg 4 of the Box View Polish milestone, DexBoxPane's multi-select
+  // drag-drop flow) — places a batch of entries into a contiguous run of slots, in call
+  // order, in one atomic step. Same vacate-first workaround as swapEntryBoxPositionsTx
+  // above: DexBoxPane only ever calls this once it's confirmed a target slot's existing
+  // occupant (if any) is itself one of entryIds, so any of these entries might already sit
+  // on one of the target slots, and idx_entries_box_slot's UNIQUE index isn't deferrable —
+  // writing straight into an as-yet-still-occupied slot collides with that entry's own
+  // pre-move row.
+  const fillBoxSlotsTx = db.transaction((entryIds: number[], boxNumber: number, startSlot: number) => {
+    const entries = entryIds.map((id) => {
+      const entry = getEntryStmt.get(id) as CollectionEntryRow | undefined
+      if (!entry) throw new Error('Entry not found')
+      if (!entry.storage_location_id) {
+        throw new Error('Cannot assign a box position to an entry with no storage location')
+      }
+      return entry
+    })
+    for (const entry of entries) {
+      setEntryBoxPositionStmt.run({ id: entry.id, boxNumber: null, boxSlot: null })
+    }
+    entries.forEach((entry, i) => {
+      setEntryBoxPositionStmt.run({ id: entry.id, boxNumber, boxSlot: startSlot + i })
+    })
+  })
   const orphanEntriesByTrainerProfileStmt = db.prepare(
     'UPDATE collection_entries SET trainer_profile_id = NULL WHERE trainer_profile_id = ?'
   )
@@ -210,6 +234,11 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
         toCollectionEntry(getEntryStmt.get(entryIdA) as CollectionEntryRow),
         toCollectionEntry(getEntryStmt.get(entryIdB) as CollectionEntryRow)
       ]
+    },
+
+    async fillBoxSlots(entryIds: number[], boxNumber: number, startSlot: number): Promise<CollectionEntry[]> {
+      fillBoxSlotsTx(entryIds, boxNumber, startSlot)
+      return entryIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
     },
 
     // exportCollection/importCollection live in collection-backup.ts (Leg 3 of the Box

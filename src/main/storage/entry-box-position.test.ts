@@ -169,3 +169,57 @@ describe('swapEntryBoxPositions', () => {
     await expect(storage.swapEntryBoxPositions(regular.id, shiny.id)).rejects.toThrow()
   })
 })
+
+/**
+ * fillBoxSlots (Leg 4 of the Box View Polish milestone, DexBoxPane's multi-select
+ * drag-drop flow) — see sqlite-storage.ts's own comment for why a naive per-entry
+ * setEntryBoxPosition loop can't do this when the batch includes an entry already sitting
+ * on one of the target slots: same non-deferrable UNIQUE index problem as
+ * swapEntryBoxPositions above, generalized to N entries.
+ */
+describe('fillBoxSlots', () => {
+  it('places a batch of unboxed entries into contiguous slots, in call order', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const regular = await findBulbasaurEntry(storage, false)
+    const shiny = await findBulbasaurEntry(storage, true)
+    await storage.setEntryStorageLocation(regular.id, location.id)
+    await storage.setEntryStorageLocation(shiny.id, location.id)
+
+    const [updatedRegular, updatedShiny] = await storage.fillBoxSlots([regular.id, shiny.id], 1, 10)
+
+    expect(updatedRegular.boxNumber).toBe(1)
+    expect(updatedRegular.boxSlot).toBe(10)
+    expect(updatedShiny.boxNumber).toBe(1)
+    expect(updatedShiny.boxSlot).toBe(11)
+  })
+
+  it('reshuffles entries that already occupy one of the target slots without colliding', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const regular = await findBulbasaurEntry(storage, false)
+    const shiny = await findBulbasaurEntry(storage, true)
+    await storage.setEntryStorageLocation(regular.id, location.id)
+    await storage.setEntryStorageLocation(shiny.id, location.id)
+    // shiny already sits on slot 5, the slot regular is about to move into — a naive
+    // per-entry write would collide with shiny's own still-there row.
+    await storage.setEntryBoxPosition(shiny.id, 1, 5)
+
+    const [updatedRegular, updatedShiny] = await storage.fillBoxSlots([regular.id, shiny.id], 1, 5)
+
+    expect(updatedRegular.boxSlot).toBe(5)
+    expect(updatedShiny.boxSlot).toBe(6)
+  })
+
+  it('rejects the whole batch when an entry has no storage location', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const regular = await findBulbasaurEntry(storage, false)
+    const shiny = await findBulbasaurEntry(storage, true)
+    await storage.setEntryStorageLocation(regular.id, location.id)
+    // shiny is left unassigned.
+
+    await expect(storage.fillBoxSlots([regular.id, shiny.id], 1, 0)).rejects.toThrow()
+    expect((await findBulbasaurEntry(storage, false)).boxNumber).toBeNull()
+  })
+})

@@ -89,6 +89,7 @@ export function App(): JSX.Element {
               onSaveOrigin={data.setEntryOrigin}
               onSetEntryBoxPosition={data.setEntryBoxPosition}
               onSwapEntryBoxPositions={data.swapEntryBoxPositions}
+              onFillBoxSlots={data.fillBoxSlots}
               onSetCollapsedDisplayForm={data.setCollapsedDisplayForm}
               onAddBox={data.addBox}
               onRenameBox={data.renameBox}

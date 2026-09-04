@@ -29,6 +29,8 @@ export interface CollectionData {
   setEntryOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   setEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   swapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
+  /** See StorageAdapter.fillBoxSlots' own doc comment. */
+  fillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
   setCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
   /** "Add Box" (Leg 2 of the Box View Polish milestone) — resolves with the newly created
    * box so DexBoxGrid can jump straight to it. */
@@ -142,6 +144,13 @@ export function useCollectionData(): CollectionData {
     })
   }, [])
 
+  const fillBoxSlots = useCallback((entryIds: number[], boxNumber: number, startSlot: number): void => {
+    window.premierDex.fillBoxSlots(entryIds, boxNumber, startSlot).then((updated) => {
+      const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
+      setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
+    })
+  }, [])
+
   const setCollapsedDisplayForm = useCallback((speciesId: number, formId: number | null): void => {
     window.premierDex.setCollapsedDisplayForm(speciesId, formId).then((updated) => {
       setSpecies((prev) => prev.map((sp) => (sp.id === updated.id ? updated : sp)))
@@ -180,6 +189,7 @@ export function useCollectionData(): CollectionData {
     setEntryOrigin,
     setEntryBoxPosition,
     swapEntryBoxPositions,
+    fillBoxSlots,
     setCollapsedDisplayForm,
     addBox,
     renameBox

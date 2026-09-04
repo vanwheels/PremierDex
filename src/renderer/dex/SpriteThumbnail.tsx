@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type MouseEvent } from 'react'
 import { defaultSpriteUrl } from './sprites'
 
 interface SpriteThumbnailProps {
@@ -8,7 +8,10 @@ interface SpriteThumbnailProps {
    * sprites.ts's module comment for the CDN's "female/" subfolder convention. */
   female: boolean
   displayName: string
-  onClick: () => void
+  /** Takes the click event mainly for DexBoxPane's Leg 4 multi-select (shift/ctrl-click
+   * on a box cell) — every other caller ignores the argument, which TypeScript allows
+   * (a callback may declare fewer parameters than it's given). */
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void
   /** Defaults to false: DexRow's single leftmost sprite column is a row-identity icon
    * shared by both the regular and shiny entry, not entry-specific. Leg 8's Hybrid grid
    * passes true for its shiny-slot tiles, where the two slots really are two different

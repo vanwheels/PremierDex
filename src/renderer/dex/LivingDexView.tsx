@@ -38,6 +38,9 @@ export interface LivingDexViewProps {
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   onSetEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   onSwapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
+  /** Leg 4 of the Box View Polish milestone: multi-select drag-drop — see DexBoxGrid's
+   * own doc comment. */
+  onFillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
   onSetCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
   onAddBox: (storageLocationId: number) => Promise<StorageBox>
   onRenameBox: (boxId: number, name: string | null) => void
@@ -67,6 +70,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onSaveOrigin,
     onSetEntryBoxPosition,
     onSwapEntryBoxPositions,
+    onFillBoxSlots,
     onSetCollapsedDisplayForm,
     onAddBox,
     onRenameBox
@@ -200,6 +204,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onSaveOrigin={onSaveOrigin}
           onSetEntryBoxPosition={onSetEntryBoxPosition}
           onSwapEntryBoxPositions={onSwapEntryBoxPositions}
+          onFillBoxSlots={onFillBoxSlots}
           onAddBox={onAddBox}
           onRenameBox={onRenameBox}
         />

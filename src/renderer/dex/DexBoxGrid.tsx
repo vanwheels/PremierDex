@@ -29,6 +29,9 @@ interface DexBoxGridProps {
   onSetEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   /** Leg 7: drag-a-cell-onto-another-cell — see DexBoxPane's handleDropOnSlot. */
   onSwapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
+  /** Leg 4 of the Box View Polish milestone: dragging a multi-selection of cells — see
+   * DexBoxPane's handleDropOnSlot. */
+  onFillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
   /** Leg 2 of the Box View Polish milestone: "+ Add Box" in the pager. Resolves with the
    * created box so DexBoxPane's handleAddBox can jump straight to it. */
   onAddBox: (storageLocationId: number) => Promise<StorageBox>
@@ -68,6 +71,7 @@ export function DexBoxGrid({
   onSaveOrigin,
   onSetEntryBoxPosition,
   onSwapEntryBoxPositions,
+  onFillBoxSlots,
   onAddBox,
   onRenameBox
 }: DexBoxGridProps): JSX.Element {
@@ -104,9 +108,14 @@ export function DexBoxGrid({
     return <div className="dex-box-empty-state">Loading this location's boxes…</div>
   }
 
-  const handleDropOnTray = (draggedEntryId: number): void => {
-    if (!boxedEntryIds.has(draggedEntryId)) return
-    onSetEntryBoxPosition(draggedEntryId, null, null)
+  // Leg 4: a multi-selection dropped on the tray unboxes every dragged id that's actually
+  // boxed (same per-id guard as the pre-Leg-4 single-drag version) — no all-or-nothing
+  // rejection here, unlike a multi-drop onto a box cell, since unboxing has no slot
+  // conflicts to guard against.
+  const handleDropOnTray = (draggedEntryIds: number[]): void => {
+    for (const entryId of draggedEntryIds) {
+      if (boxedEntryIds.has(entryId)) onSetEntryBoxPosition(entryId, null, null)
+    }
   }
 
   // Vanny feedback 2026-09-03: left-clicking an unboxed entry places it in the current
@@ -145,6 +154,7 @@ export function DexBoxGrid({
           onSaveOrigin={onSaveOrigin}
           onSetEntryBoxPosition={onSetEntryBoxPosition}
           onSwapEntryBoxPositions={onSwapEntryBoxPositions}
+          onFillBoxSlots={onFillBoxSlots}
           onAddBox={onAddBox}
           onRenameBox={onRenameBox}
           onCurrentBoxChange={handlePrimaryBoxChange}
@@ -161,6 +171,7 @@ export function DexBoxGrid({
             onSaveOrigin={onSaveOrigin}
             onSetEntryBoxPosition={onSetEntryBoxPosition}
             onSwapEntryBoxPositions={onSwapEntryBoxPositions}
+            onFillBoxSlots={onFillBoxSlots}
             onAddBox={onAddBox}
             onRenameBox={onRenameBox}
           />

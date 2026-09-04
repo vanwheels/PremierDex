@@ -10,7 +10,9 @@ const TRAY_SPRITE_SIZE = 64
 
 interface DexBoxTrayProps {
   entries: UnboxedEntry[]
-  onDropEntry: (entryId: number) => void
+  /** Leg 4 of the Box View Polish milestone: a box-cell drop can carry a multi-selection
+   * — see dragEntryPayload.ts. Always at least one id. */
+  onDropEntry: (entryIds: number[]) => void
   /** Vanny feedback 2026-09-03: left-clicking a tray item places it into the current
    * box's first open slot, same entry id the drag payload already carries. */
   onClickEntry: (entryId: number) => void
@@ -41,8 +43,8 @@ export function DexBoxTray({ entries, onDropEntry, onClickEntry }: DexBoxTrayPro
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => {
         e.preventDefault()
-        const entryId = readDragEntryPayload(e)
-        if (entryId !== null) onDropEntry(entryId)
+        const entryIds = readDragEntryPayload(e)
+        if (entryIds !== null) onDropEntry(entryIds)
       }}
     >
       <h3 className="dex-box-tray-heading">Unboxed ({entries.length})</h3>
@@ -63,7 +65,7 @@ export function DexBoxTray({ entries, onDropEntry, onClickEntry }: DexBoxTrayPro
             key={item.entry.id}
             className="dex-box-tray-item"
             draggable
-            onDragStart={(e) => setDragEntryPayload(e, item.entry.id)}
+            onDragStart={(e) => setDragEntryPayload(e, [item.entry.id])}
             title={item.displayName}
           >
             <SpriteThumbnail

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
 import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { StorageBox } from '@shared/types/box'
@@ -36,6 +36,9 @@ interface DexBoxPaneProps {
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   onSetEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   onSwapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
+  /** Leg 4 of the Box View Polish milestone: dragging a multi-selection of cells — see
+   * handleDropOnSlot below. */
+  onFillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
   onAddBox: (storageLocationId: number) => Promise<StorageBox>
   onRenameBox: (boxId: number, name: string | null) => void
   /** Fires on mount and on every box navigation — lets DexBoxGrid track which box the
@@ -69,12 +72,21 @@ export function DexBoxPane({
   onSaveOrigin,
   onSetEntryBoxPosition,
   onSwapEntryBoxPositions,
+  onFillBoxSlots,
   onAddBox,
   onRenameBox,
   onCurrentBoxChange
 }: DexBoxPaneProps): JSX.Element {
   const [boxIndex, setBoxIndex] = useState(initialBoxIndex)
-  const [selectedCellKey, setSelectedCellKey] = useState<string | null>(null)
+  // Leg 4 of the Box View Polish milestone: multi-select. `selectedSlots` is ordered by
+  // *selection* order, not slot order — a ctrl-click appends to the end, a shift-click
+  // range is written in ascending slot order (see handleCellClick) — since that order is
+  // what a multi-drag's payload carries through to a contiguous fill (handleDropOnSlot).
+  // `selectionAnchor` is the slot a plain or ctrl-click last landed on, i.e. the far end a
+  // subsequent shift-click range is computed from; only a plain click moves it back
+  // (Explorer-style), so repeated shift-clicks re-select from the same anchor.
+  const [selectedSlots, setSelectedSlots] = useState<number[]>([])
+  const [selectionAnchor, setSelectionAnchor] = useState<number | null>(null)
   const [editingOrigin, setEditingOrigin] = useState(false)
   const [dragOverSlot, setDragOverSlot] = useState<number | null>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; entryId: number } | null>(null)
@@ -82,7 +94,54 @@ export function DexBoxPane({
   const clampedIndex = Math.min(boxIndex, boxes.length - 1)
   const box = boxes[clampedIndex]
   const cells = box.cells
-  const selectedCell = cells.find((c): c is BoxCell => c !== null && `${c.boxNumber}-${c.slot}` === selectedCellKey) ?? null
+  // The detail panel only ever shows one Pokémon's info — a multi-selection shows nothing
+  // rather than guessing which of several to display (Vanny's implicit call: this leg's
+  // design decisions only specify drag/drop behavior, not a multi-select detail view).
+  const selectedCell = selectedSlots.length === 1 ? cells[selectedSlots[0]] : null
+
+  const clearSelection = (): void => {
+    setSelectedSlots([])
+    setSelectionAnchor(null)
+  }
+
+  // Plain click replaces the selection with just this slot; ctrl/cmd-click toggles it
+  // into/out of the current selection; shift-click selects every filled slot in the
+  // contiguous index range between the anchor and this slot. Only ever wired to a filled
+  // cell's SpriteThumbnail (see the empty-cell branch below), so `cells[slot]` is always
+  // non-null here.
+  const handleCellClick = (slot: number, e: MouseEvent): void => {
+    if (e.shiftKey && selectionAnchor !== null) {
+      const [lo, hi] = selectionAnchor <= slot ? [selectionAnchor, slot] : [slot, selectionAnchor]
+      const range: number[] = []
+      for (let i = lo; i <= hi; i++) {
+        if (cells[i]) range.push(i)
+      }
+      setSelectedSlots(range)
+    } else if (e.ctrlKey || e.metaKey) {
+      setSelectedSlots((prev) => (prev.includes(slot) ? prev.filter((s) => s !== slot) : [...prev, slot]))
+      setSelectionAnchor(slot)
+    } else {
+      setSelectedSlots([slot])
+      setSelectionAnchor(slot)
+    }
+  }
+
+  // Dragging a slot that's part of the current selection carries the whole selection, in
+  // its selection order; dragging any other filled slot (no selection, or a cell outside
+  // it) drags just that one cell and collapses the selection down to it first, same as a
+  // plain click would — matching how file-manager drag-and-drop treats an unselected item.
+  const handleDragStart = (slot: number): number[] => {
+    if (selectedSlots.includes(slot)) {
+      // Filters rather than asserts non-null: `cells` is shared across panes (see
+      // boxedEntryIds' doc comment), so a slot that was filled when selected could in
+      // principle have been vacated by the other pane since — drop it from the drag
+      // rather than crash on a stale selection.
+      return selectedSlots.map((s) => cells[s]).filter((c): c is BoxCell => c !== null).map((c) => c.entry.id)
+    }
+    setSelectedSlots([slot])
+    setSelectionAnchor(slot)
+    return [cells[slot]!.entry.id]
+  }
 
   // DexBoxGrid wraps its handler in useCallback so this doesn't re-fire on every unrelated
   // parent render — only when this pane's own displayed box actually changes.
@@ -92,21 +151,42 @@ export function DexBoxPane({
 
   const goToBox = (index: number): void => {
     setBoxIndex(index)
-    setSelectedCellKey(null)
+    clearSelection()
   }
 
   // Same logic as pre-Leg-3 DexBoxGrid.handleDropOnSlot, but gated on the shared
   // boxedEntryIds set instead of this pane's own cells — see the prop's doc comment.
-  const handleDropOnSlot = (targetSlot: number, draggedEntryId: number): void => {
+  // A single-id drop keeps this exact pre-Leg-4 swap/move behavior regardless of
+  // selection state (see handleDragStart) — only a real multi-selection drag (2+ ids)
+  // gets the new contiguous-fill treatment below.
+  const handleDropOnSlot = (targetSlot: number, draggedEntryIds: number[]): void => {
     setDragOverSlot(null)
-    const targetCell = cells[targetSlot]
-    if (targetCell?.entry.id === draggedEntryId) return
-    if (targetCell) {
-      if (!boxedEntryIds.has(draggedEntryId)) return
-      onSwapEntryBoxPositions(draggedEntryId, targetCell.entry.id)
-    } else {
-      onSetEntryBoxPosition(draggedEntryId, box.boxNumber, targetSlot)
+    if (draggedEntryIds.length === 1) {
+      const draggedEntryId = draggedEntryIds[0]
+      const targetCell = cells[targetSlot]
+      if (targetCell?.entry.id === draggedEntryId) return
+      if (targetCell) {
+        if (!boxedEntryIds.has(draggedEntryId)) return
+        onSwapEntryBoxPositions(draggedEntryId, targetCell.entry.id)
+      } else {
+        onSetEntryBoxPosition(draggedEntryId, box.boxNumber, targetSlot)
+      }
+      return
     }
+
+    // Multi-select drop (Leg 4 of the Box View Polish milestone, Vanny's design decision
+    // 2026-09-03): fills slots contiguously starting at targetSlot, in the dragged
+    // selection's original order. Rejected outright — no partial fill — if the run would
+    // spill past the end of the box, or if any needed slot is already occupied by an
+    // entry that isn't itself part of the dragged selection.
+    if (targetSlot + draggedEntryIds.length > cells.length) return
+    const draggedIdSet = new Set(draggedEntryIds)
+    for (let i = 0; i < draggedEntryIds.length; i++) {
+      const occupant = cells[targetSlot + i]
+      if (occupant && !draggedIdSet.has(occupant.entry.id)) return
+    }
+    onFillBoxSlots(draggedEntryIds, box.boxNumber, targetSlot)
+    clearSelection()
   }
 
   // New boxes always land at the end (see DexBoxGrid's pre-Leg-3 version of this comment) —
@@ -137,14 +217,14 @@ export function DexBoxPane({
                   .join(' ')
               }
               draggable={cell !== null}
-              onDragStart={cell ? (e) => setDragEntryPayload(e, cell.entry.id) : undefined}
+              onDragStart={cell ? (e) => setDragEntryPayload(e, handleDragStart(slot)) : undefined}
               onDragOver={(e) => e.preventDefault()}
               onDragEnter={() => setDragOverSlot(slot)}
               onDragLeave={() => setDragOverSlot((prev) => (prev === slot ? null : prev))}
               onDrop={(e) => {
                 e.preventDefault()
-                const draggedEntryId = readDragEntryPayload(e)
-                if (draggedEntryId !== null) handleDropOnSlot(slot, draggedEntryId)
+                const draggedEntryIds = readDragEntryPayload(e)
+                if (draggedEntryIds !== null) handleDropOnSlot(slot, draggedEntryIds)
               }}
               onContextMenu={
                 cell
@@ -179,12 +259,12 @@ export function DexBoxPane({
                       [
                         'dex-hybrid-tile',
                         !cell.entry.owned && 'dex-hybrid-tile-unowned',
-                        `${cell.boxNumber}-${cell.slot}` === selectedCellKey && 'dex-hybrid-tile-selected'
+                        selectedSlots.includes(slot) && 'dex-hybrid-tile-selected'
                       ]
                         .filter(Boolean)
                         .join(' ')
                     }
-                    onClick={() => setSelectedCellKey(`${cell.boxNumber}-${cell.slot}`)}
+                    onClick={(e) => handleCellClick(slot, e)}
                   />
                 </>
               )}
