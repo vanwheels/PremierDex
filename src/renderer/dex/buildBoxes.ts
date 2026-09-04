@@ -36,29 +36,17 @@ function buildCell(boxNumber: number, slot: number, entry: CollectionEntry, spec
   return { ...buildEntryDisplayInfo(entry, species, form), kind: 'entry', boxNumber, slot }
 }
 
-/** A representative form for a placeholder's sprite — there's no real Form tied to a
- * placeholder (species id only, see BoxPlaceholder's doc comment), so this picks the
- * species' first boxable form, falling back to its first form at all if every one of its
- * forms is non_boxable. `forms` is the caller's full unfiltered list (DB order: species_id
- * then id ascending, see sqlite-storage.ts's listFormsStmt), so the first match here is
- * the species' base form in the common case — same "first form in list order" convention
- * pickCollapsedRow (buildDexSections.ts) falls back to for its own display pick. */
-function pickPlaceholderForm(speciesId: number, forms: Form[]): Form | undefined {
-  let firstAny: Form | undefined
-  for (const form of forms) {
-    if (form.speciesId !== speciesId) continue
-    if (!firstAny) firstAny = form
-    if (form.formCategory !== 'non_boxable') return form
-  }
-  return firstAny
-}
-
 function buildPlaceholderCell(placeholder: BoxPlaceholder, species: Species, form: Form): BoxPlaceholderCell {
   return {
     kind: 'placeholder',
     boxNumber: placeholder.boxNumber,
     slot: placeholder.boxSlot,
-    speciesId: placeholder.speciesId,
+    speciesId: species.id,
+    gender: placeholder.gender,
+    shiny: placeholder.shiny,
+    // Rendering deliberately stays plain regardless of gender/shiny (Vanny's call, Leg 2 of
+    // the Dex completeness tier migration) — see DexBoxDetailPanel for where those actually
+    // surface, as text rather than sprite art.
     displayName: speciesDisplayName(species.name),
     pokeapiId: form.pokeapiId,
     spriteFormSuffix: form.spriteFormSuffix
@@ -121,10 +109,10 @@ export function buildBoxes(
     if (placeholder.boxSlot < 0 || placeholder.boxSlot >= BOX_SIZE) continue
     const box = boxByNumber.get(placeholder.boxNumber)
     if (!box || box.cells[placeholder.boxSlot] !== null) continue
-    const sp = speciesById.get(placeholder.speciesId)
-    if (!sp) continue
-    const form = pickPlaceholderForm(placeholder.speciesId, forms)
+    const form = formsById.get(placeholder.formId)
     if (!form) continue
+    const sp = speciesById.get(form.speciesId)
+    if (!sp) continue
 
     box.cells[placeholder.boxSlot] = buildPlaceholderCell(placeholder, sp, form)
   }

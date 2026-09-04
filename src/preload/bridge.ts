@@ -1,4 +1,4 @@
-import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
@@ -50,6 +50,18 @@ export interface AppBridge extends UpdaterBridge {
   addBox(storageLocationId: number): Promise<StorageBox>
   renameBox(boxId: number, name: string | null): Promise<StorageBox>
   listBoxPlaceholders(): Promise<BoxPlaceholder[]>
-  setBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number): Promise<BoxPlaceholder>
+  setBoxPlaceholder(
+    storageLocationId: number,
+    boxNumber: number,
+    boxSlot: number,
+    formId: number,
+    gender: Gender,
+    shiny: boolean
+  ): Promise<BoxPlaceholder>
+  /** See StorageAdapter.setBoxPlaceholders' own doc comment. */
+  setBoxPlaceholders(
+    storageLocationId: number,
+    placements: Array<{ boxNumber: number; boxSlot: number; formId: number; gender: Gender; shiny: boolean }>
+  ): Promise<BoxPlaceholder[]>
   clearBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void>
 }

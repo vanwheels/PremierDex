@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
+import type { TemplatePlacement } from './dex/boxTemplates'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 
@@ -38,8 +39,11 @@ export interface CollectionData {
   addBox: (storageLocationId: number) => Promise<StorageBox>
   renameBox: (boxId: number, name: string | null) => void
   /** "Set placeholder…"/"Change species" (Leg 5 of the Box View Polish milestone) — set
-   * doubles as create-or-change-species, see StorageAdapter.setBoxPlaceholder. */
-  setBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number) => void
+   * doubles as create-or-change-form, see StorageAdapter.setBoxPlaceholder. */
+  setBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, formId: number, gender: Gender, shiny: boolean) => void
+  /** "Apply Template" (Leg 2 of the Dex completeness tier migration) — see
+   * StorageAdapter.setBoxPlaceholders' own doc comment. */
+  setBoxPlaceholders: (storageLocationId: number, placements: TemplatePlacement[]) => Promise<void>
   /** "Clear placeholder". */
   clearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
 }
@@ -60,7 +64,7 @@ export function useCollectionData(): CollectionData {
   const [entries, setEntries] = useState<CollectionEntry[]>([])
   const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([])
   const [boxes, setBoxes] = useState<StorageBox[]>([])
-  const [boxPlaceholders, setBoxPlaceholders] = useState<BoxPlaceholder[]>([])
+  const [boxPlaceholders, setBoxPlaceholdersState] = useState<BoxPlaceholder[]>([])
   const [trainerProfiles, setTrainerProfiles] = useState<TrainerProfile[]>([])
   const [speciesAvailability, setSpeciesAvailability] = useState<SpeciesAvailabilityData>(EMPTY_SPECIES_AVAILABILITY)
   const [loading, setLoading] = useState(true)
@@ -88,7 +92,7 @@ export function useCollectionData(): CollectionData {
         setEntries(entryList)
         setStorageLocations(storageLocationList)
         setBoxes(boxList)
-        setBoxPlaceholders(placeholderList)
+        setBoxPlaceholdersState(placeholderList)
         setSpeciesAvailability(availability)
         setTrainerProfiles(trainerProfileList)
       }
@@ -146,7 +150,7 @@ export function useCollectionData(): CollectionData {
       // off that slot again.
       if (boxNumber !== null && boxSlot !== null && updated.storageLocationId !== null) {
         const { storageLocationId } = updated
-        setBoxPlaceholders((prev) =>
+        setBoxPlaceholdersState((prev) =>
           prev.filter((p) => !(p.storageLocationId === storageLocationId && p.boxNumber === boxNumber && p.boxSlot === boxSlot))
         )
       }
@@ -171,7 +175,7 @@ export function useCollectionData(): CollectionData {
       setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
       // Same local mirror as setEntryBoxPosition above, one slot per filled entry.
       const clearedSlots = new Set(updated.map((entry) => `${entry.storageLocationId}:${boxNumber}:${entry.boxSlot}`))
-      setBoxPlaceholders((prev) =>
+      setBoxPlaceholdersState((prev) =>
         prev.filter((p) => !clearedSlots.has(`${p.storageLocationId}:${p.boxNumber}:${p.boxSlot}`))
       )
     })
@@ -202,9 +206,9 @@ export function useCollectionData(): CollectionData {
   // (storageLocationId, boxNumber, boxSlot), same identity the DB's own UNIQUE index uses,
   // covers both cases in one replace-or-append.
   const setBoxPlaceholder = useCallback(
-    (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number): void => {
-      window.premierDex.setBoxPlaceholder(storageLocationId, boxNumber, boxSlot, speciesId).then((updated) => {
-        setBoxPlaceholders((prev) => {
+    (storageLocationId: number, boxNumber: number, boxSlot: number, formId: number, gender: Gender, shiny: boolean): void => {
+      window.premierDex.setBoxPlaceholder(storageLocationId, boxNumber, boxSlot, formId, gender, shiny).then((updated) => {
+        setBoxPlaceholdersState((prev) => {
           const withoutSlot = prev.filter(
             (p) => !(p.storageLocationId === storageLocationId && p.boxNumber === boxNumber && p.boxSlot === boxSlot)
           )
@@ -215,9 +219,22 @@ export function useCollectionData(): CollectionData {
     []
   )
 
+  // Apply Template (Leg 2 of the Dex completeness tier migration) — bulk version of
+  // setBoxPlaceholder above. The IPC call resolves with every placeholder now in
+  // `storageLocationId` (not just the newly written ones, see StorageAdapter's own doc
+  // comment), so the merge is a wholesale replace of that location's slice rather than the
+  // single-set method's per-slot patch.
+  const setBoxPlaceholders = useCallback(
+    async (storageLocationId: number, placements: TemplatePlacement[]): Promise<void> => {
+      const updated = await window.premierDex.setBoxPlaceholders(storageLocationId, placements)
+      setBoxPlaceholdersState((prev) => [...prev.filter((p) => p.storageLocationId !== storageLocationId), ...updated])
+    },
+    []
+  )
+
   const clearBoxPlaceholder = useCallback((storageLocationId: number, boxNumber: number, boxSlot: number): void => {
     window.premierDex.clearBoxPlaceholder(storageLocationId, boxNumber, boxSlot).then(() => {
-      setBoxPlaceholders((prev) =>
+      setBoxPlaceholdersState((prev) =>
         prev.filter((p) => !(p.storageLocationId === storageLocationId && p.boxNumber === boxNumber && p.boxSlot === boxSlot))
       )
     })
@@ -248,6 +265,7 @@ export function useCollectionData(): CollectionData {
     addBox,
     renameBox,
     setBoxPlaceholder,
+    setBoxPlaceholders,
     clearBoxPlaceholder
   }
 }

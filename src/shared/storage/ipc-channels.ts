@@ -57,5 +57,8 @@ export const BoxIpcChannel = {
 export const BoxPlaceholderIpcChannel = {
   list: 'boxPlaceholder:list',
   set: 'boxPlaceholder:set',
+  /** Bulk apply (Leg 2 of the Dex completeness tier migration) — see
+   * StorageAdapter.setBoxPlaceholders' own doc comment. */
+  batchSet: 'boxPlaceholder:batchSet',
   clear: 'boxPlaceholder:clear'
 } as const

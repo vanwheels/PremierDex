@@ -1,4 +1,4 @@
-import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, Form, Gender, Species } from '@shared/types/pokemon'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
@@ -82,7 +82,9 @@ export interface BoxPlaceholderRow {
   storage_location_id: number
   box_number: number
   box_slot: number
-  species_id: number
+  form_id: number
+  gender: Gender
+  shiny: number
 }
 
 export function toSpecies(row: SpeciesRow): Species {
@@ -171,6 +173,8 @@ export function toBoxPlaceholder(row: BoxPlaceholderRow): BoxPlaceholder {
     storageLocationId: row.storage_location_id,
     boxNumber: row.box_number,
     boxSlot: row.box_slot,
-    speciesId: row.species_id
+    formId: row.form_id,
+    gender: row.gender,
+    shiny: row.shiny === 1
   }
 }

@@ -95,6 +95,7 @@ export function App(): JSX.Element {
               onAddBox={data.addBox}
               onRenameBox={data.renameBox}
               onSetBoxPlaceholder={data.setBoxPlaceholder}
+              onSetBoxPlaceholders={data.setBoxPlaceholders}
               onClearBoxPlaceholder={data.clearBoxPlaceholder}
             />
           </div>

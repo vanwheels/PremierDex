@@ -1,7 +1,7 @@
 import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
-import type { BoxCell } from './types'
+import type { BoxCell, BoxPlaceholderCell } from './types'
 import { checkEntryValidity } from './invalidCombo'
 import { defaultSpriteUrl } from './sprites'
 import { BallIcon } from './BallIcon'
@@ -10,7 +10,7 @@ import { useNicknameEditor } from './useNicknameEditor'
 const DETAIL_SPRITE_SIZE = 64
 
 interface DexBoxDetailPanelProps {
-  cell: BoxCell | null
+  cell: BoxCell | BoxPlaceholderCell | null
   storageLocations: StorageLocation[]
   speciesAvailability: SpeciesAvailabilityData
   onEditOrigin: () => void
@@ -48,15 +48,41 @@ export function DexBoxDetailPanel({
   onEditOrigin,
   onSaveOrigin
 }: DexBoxDetailPanelProps): JSX.Element {
-  // Hook order can't depend on `cell` being non-null, so this runs every render — it's a
-  // no-op (blank, disabled input) once the null-cell branch below returns instead.
+  // Hook order can't depend on `cell` being non-null (or being an entry at all), so this
+  // runs every render — it's a no-op (blank, disabled input) once the null-cell/placeholder
+  // branches below return instead.
   const { text: nicknameText, setText: setNicknameText, commit: commitNickname } = useNicknameEditor(
-    cell?.entry.owned ? cell.entry : null,
+    cell?.kind === 'entry' && cell.entry.owned ? cell.entry : null,
     onSaveOrigin
   )
 
   if (!cell) {
     return <div className="dex-hybrid-detail-panel dex-hybrid-detail-empty">Select a Pokémon in the box above to see its details.</div>
+  }
+
+  if (cell.kind === 'placeholder') {
+    // Read-only — a "planned" ghost has no real entry behind it to edit (Leg 2 of the Dex
+    // completeness tier migration). Sprite stays the same plain rendering the grid cell
+    // uses (no gender/shiny art); the specific requirement shows as text instead, per
+    // Vanny's call.
+    const requirement = [cell.gender === 'male' && '♂', cell.gender === 'female' && '♀', cell.shiny && 'Shiny'].filter(
+      (part): part is string => Boolean(part)
+    )
+    return (
+      <div className="dex-hybrid-detail-panel">
+        <img
+          className="dex-hybrid-detail-sprite"
+          src={defaultSpriteUrl(cell.pokeapiId, cell.spriteFormSuffix, false, false)}
+          alt={cell.displayName}
+          width={DETAIL_SPRITE_SIZE}
+          height={DETAIL_SPRITE_SIZE}
+        />
+        <div className="dex-hybrid-detail-body">
+          <h3>{cell.displayName}</h3>
+          <p className="dex-hybrid-detail-unowned">Planned{requirement.length > 0 ? `: ${requirement.join(' · ')}` : ''}</p>
+        </div>
+      </div>
+    )
   }
 
   const { entry } = cell

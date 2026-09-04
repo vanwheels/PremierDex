@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3'
-import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
@@ -192,10 +192,37 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     'SELECT id FROM collection_entries WHERE storage_location_id = @storageLocationId AND box_number = @boxNumber AND box_slot = @boxSlot'
   )
   const setBoxPlaceholderStmt = db.prepare(`
-    INSERT INTO box_placeholders (storage_location_id, box_number, box_slot, species_id)
-    VALUES (@storageLocationId, @boxNumber, @boxSlot, @speciesId)
-    ON CONFLICT(storage_location_id, box_number, box_slot) DO UPDATE SET species_id = excluded.species_id
+    INSERT INTO box_placeholders (storage_location_id, box_number, box_slot, form_id, gender, shiny)
+    VALUES (@storageLocationId, @boxNumber, @boxSlot, @formId, @gender, @shiny)
+    ON CONFLICT(storage_location_id, box_number, box_slot)
+      DO UPDATE SET form_id = excluded.form_id, gender = excluded.gender, shiny = excluded.shiny
   `)
+  // Bulk placeholder insert (Leg 2 of the Dex completeness tier migration) — applying a Box
+  // Template can mean 1000+ rows (a Living Form tier's full required set), so this wraps the
+  // same per-slot upsert/occupancy-guard as the single setBoxPlaceholder above in one
+  // transaction rather than paying an IPC round trip per row. Same "never clobber a real
+  // entry's slot" guard, just skipping the offending placement instead of throwing — a
+  // template's own planner (boxTemplates.ts) already excludes occupied slots, so hitting
+  // this in practice would mean stale renderer-side state, not a real conflict worth
+  // aborting the whole batch over.
+  const setBoxPlaceholdersTx = db.transaction(
+    (
+      storageLocationId: number,
+      placements: Array<{ boxNumber: number; boxSlot: number; formId: number; gender: string; shiny: boolean }>
+    ) => {
+      for (const p of placements) {
+        if (entryAtSlotStmt.get({ storageLocationId, boxNumber: p.boxNumber, boxSlot: p.boxSlot })) continue
+        setBoxPlaceholderStmt.run({
+          storageLocationId,
+          boxNumber: p.boxNumber,
+          boxSlot: p.boxSlot,
+          formId: p.formId,
+          gender: p.gender,
+          shiny: p.shiny ? 1 : 0
+        })
+      }
+    }
+  )
   const clearBoxPlaceholderStmt = db.prepare(
     'DELETE FROM box_placeholders WHERE storage_location_id = @storageLocationId AND box_number = @boxNumber AND box_slot = @boxSlot'
   )
@@ -354,13 +381,27 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       storageLocationId: number,
       boxNumber: number,
       boxSlot: number,
-      speciesId: number
+      formId: number,
+      gender: Gender,
+      shiny: boolean
     ): Promise<BoxPlaceholder> {
       if (entryAtSlotStmt.get({ storageLocationId, boxNumber, boxSlot })) {
         throw new Error('Cannot set a placeholder on a slot that already holds a real entry')
       }
-      setBoxPlaceholderStmt.run({ storageLocationId, boxNumber, boxSlot, speciesId })
+      setBoxPlaceholderStmt.run({ storageLocationId, boxNumber, boxSlot, formId, gender, shiny: shiny ? 1 : 0 })
       return toBoxPlaceholder(getBoxPlaceholderStmt.get({ storageLocationId, boxNumber, boxSlot }) as BoxPlaceholderRow)
+    },
+
+    async setBoxPlaceholders(
+      storageLocationId: number,
+      placements: Array<{ boxNumber: number; boxSlot: number; formId: number; gender: Gender; shiny: boolean }>
+    ): Promise<BoxPlaceholder[]> {
+      setBoxPlaceholdersTx(storageLocationId, placements)
+      return (
+        listBoxPlaceholdersStmt.all() as BoxPlaceholderRow[]
+      )
+        .map(toBoxPlaceholder)
+        .filter((p) => p.storageLocationId === storageLocationId)
     },
 
     async clearBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void> {

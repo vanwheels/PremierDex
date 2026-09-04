@@ -1,16 +1,17 @@
 import { useEffect, useState, type MouseEvent } from 'react'
-import type { CollectionEntryOriginInput, Species } from '@shared/types/pokemon'
+import type { CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { BOX_COLS } from './buildBoxes'
+import { canonicalPlaceholderForm } from './boxTemplates'
 import { DexBoxDetailPanel } from './DexBoxDetailPanel'
 import { DexBoxContextMenu, type DexBoxContextMenuAction } from './DexBoxContextMenu'
 import { DexBoxGridCell } from './DexBoxGridCell'
 import { DexBoxPlaceholderModal } from './DexBoxPlaceholderModal'
 import { DexBoxPager } from './DexBoxPager'
 import { OriginModal } from './OriginModal'
-import type { Box, BoxCell, CellTarget } from './types'
+import type { Box, BoxCell, BoxPlaceholderCell, CellTarget } from './types'
 
 interface DexBoxPaneProps {
   /** The selected location's full box list, shared by every open pane — see buildBoxes.ts.
@@ -22,6 +23,10 @@ interface DexBoxPaneProps {
   /** Leg 5 of the Box View Polish milestone: the full species list, threaded down purely
    * for DexBoxPlaceholderModal's search — nothing else here needs it. */
   species: Species[]
+  /** Leg 2 of the Dex completeness tier migration: resolves a manually-picked speciesId
+   * into the (formId, gender) a placeholder actually stores — see
+   * boxTemplates.ts's canonicalPlaceholderForm. */
+  forms: Form[]
   /** The real (non-null) location id — a pane never renders for the Unassigned tab, same
    * guard as DexBoxGrid's own selectedLocationTab === null branch. */
   storageLocationId: number
@@ -44,7 +49,7 @@ interface DexBoxPaneProps {
    * DexBoxPlaceholderModal. Signature mirrors StorageAdapter.setBoxPlaceholder exactly
    * (storageLocationId included) rather than relying on this pane's own storageLocationId
    * prop implicitly, so the call reads the same all the way down the chain. */
-  onSetBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number) => void
+  onSetBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, formId: number, gender: Gender, shiny: boolean) => void
   /** Right-click a placeholder cell -> "Clear placeholder". */
   onClearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
   /** Fires on mount and on every box navigation — lets DexBoxGrid track which box the
@@ -74,6 +79,7 @@ export function DexBoxPane({
   storageLocations,
   speciesAvailability,
   species,
+  forms,
   storageLocationId,
   boxedEntryIds,
   onSaveOrigin,
@@ -96,6 +102,12 @@ export function DexBoxPane({
   // (Explorer-style), so repeated shift-clicks re-select from the same anchor.
   const [selectedSlots, setSelectedSlots] = useState<number[]>([])
   const [selectionAnchor, setSelectionAnchor] = useState<number | null>(null)
+  // Leg 2 of the Dex completeness tier migration: a placeholder can now be single-selected
+  // (click to view its specifics in the detail panel) — deliberately a separate piece of
+  // state from selectedSlots/selectionAnchor above rather than folding placeholders into
+  // that multi-select machinery, since a placeholder supports neither multi-select nor
+  // drag (see DexBoxGridCell's onClickPlaceholder wiring below).
+  const [selectedPlaceholderSlot, setSelectedPlaceholderSlot] = useState<number | null>(null)
   const [editingOrigin, setEditingOrigin] = useState(false)
   const [dragOverSlot, setDragOverSlot] = useState<number | null>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; target: CellTarget } | null>(null)
@@ -112,7 +124,12 @@ export function DexBoxPane({
   // Narrowed to 'entry' specifically: selectedSlots (see handleCellClick below) only ever
   // holds real-entry slots, but cells' own type still allows a placeholder there.
   const selectedSlotCell = selectedSlots.length === 1 ? cells[selectedSlots[0]] : null
-  const selectedCell = selectedSlotCell?.kind === 'entry' ? selectedSlotCell : null
+  const selectedEntryCell = selectedSlotCell?.kind === 'entry' ? selectedSlotCell : null
+  // Leg 2 of the Dex completeness tier migration: a single selected placeholder, shown
+  // read-only in the same detail panel — see selectedPlaceholderSlot's own doc comment.
+  const selectedPlaceholderSlotCell = selectedPlaceholderSlot !== null ? cells[selectedPlaceholderSlot] : null
+  const selectedPlaceholderCell = selectedPlaceholderSlotCell?.kind === 'placeholder' ? selectedPlaceholderSlotCell : null
+  const detailCell: BoxCell | BoxPlaceholderCell | null = selectedEntryCell ?? selectedPlaceholderCell
 
   const clearSelection = (): void => {
     setSelectedSlots([])
@@ -125,6 +142,7 @@ export function DexBoxPane({
   // entry cell's SpriteThumbnail (see the grid render below) — a placeholder cell's own
   // SpriteThumbnail has a no-op onClick — so `cells[slot]` is always an entry cell here.
   const handleCellClick = (slot: number, e: MouseEvent): void => {
+    setSelectedPlaceholderSlot(null)
     if (e.shiftKey && selectionAnchor !== null) {
       const [lo, hi] = selectionAnchor <= slot ? [selectionAnchor, slot] : [slot, selectionAnchor]
       const range: number[] = []
@@ -142,6 +160,14 @@ export function DexBoxPane({
       setSelectedSlots([slot])
       setSelectionAnchor(slot)
     }
+  }
+
+  // A placeholder click always replaces the selection with just this slot — no
+  // multi-select, no drag, matching "view its info" as the only interaction this leg adds
+  // (see selectedPlaceholderSlot's own doc comment above).
+  const handleClickPlaceholder = (slot: number): void => {
+    clearSelection()
+    setSelectedPlaceholderSlot(slot)
   }
 
   // Dragging a slot that's part of the current selection carries the whole selection, in
@@ -170,6 +196,7 @@ export function DexBoxPane({
   const goToBox = (index: number): void => {
     setBoxIndex(index)
     clearSelection()
+    setSelectedPlaceholderSlot(null)
   }
 
   // Same logic as pre-Leg-3 DexBoxGrid.handleDropOnSlot, but gated on the shared
@@ -280,28 +307,29 @@ export function DexBoxPane({
               cell={cell}
               slot={slot}
               isDragOver={dragOverSlot === slot}
-              isSelected={selectedSlots.includes(slot)}
+              isSelected={selectedSlots.includes(slot) || selectedPlaceholderSlot === slot}
               onDragStart={() => handleDragStart(slot)}
               onDragEnter={() => setDragOverSlot(slot)}
               onDragLeave={() => setDragOverSlot((prev) => (prev === slot ? null : prev))}
               onDrop={(draggedEntryIds) => handleDropOnSlot(slot, draggedEntryIds)}
               onContextMenu={(x, y, target) => setContextMenu({ x, y, target })}
               onClickEntry={(e) => handleCellClick(slot, e)}
+              onClickPlaceholder={() => handleClickPlaceholder(slot)}
             />
           ))}
         </div>
         <DexBoxDetailPanel
-          cell={selectedCell}
+          cell={detailCell}
           storageLocations={storageLocations}
           speciesAvailability={speciesAvailability}
           onEditOrigin={() => setEditingOrigin(true)}
           onSaveOrigin={onSaveOrigin}
         />
       </div>
-      {editingOrigin && selectedCell?.entry.owned && (
+      {editingOrigin && selectedEntryCell?.entry.owned && (
         <OriginModal
-          entry={selectedCell.entry}
-          displayName={selectedCell.displayName}
+          entry={selectedEntryCell.entry}
+          displayName={selectedEntryCell.displayName}
           onClose={() => setEditingOrigin(false)}
           onSave={onSaveOrigin}
         />
@@ -320,7 +348,21 @@ export function DexBoxPane({
           initialSpeciesId={placeholderTarget.kind === 'placeholder' ? placeholderTarget.speciesId : null}
           onClose={() => setPlaceholderTarget(null)}
           onSave={(speciesId) => {
-            onSetBoxPlaceholder(storageLocationId, box.boxNumber, placeholderTarget.slot, speciesId)
+            // Species-only in the UI (Vanny's call) — resolved to a concrete form/gender
+            // here so the stored placeholder can dedupe against a template-stamped one for
+            // the same requirement. Silently no-ops if the species somehow has no forms at
+            // all (shouldn't happen post-seed).
+            const form = canonicalPlaceholderForm(speciesId, forms)
+            if (form) {
+              onSetBoxPlaceholder(
+                storageLocationId,
+                box.boxNumber,
+                placeholderTarget.slot,
+                form.id,
+                form.hasGenderDifference ? 'male' : 'unknown',
+                false
+              )
+            }
             setPlaceholderTarget(null)
           }}
         />

@@ -1,4 +1,4 @@
-import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '../types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '../types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '../types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '../types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '../types/box'
@@ -74,10 +74,27 @@ export interface StorageAdapter {
   /** Every "planned" placeholder across every Storage Location (Leg 5 of the Box View
    * Polish milestone) — same flat-list-filtered-client-side convention as listBoxes. */
   listBoxPlaceholders(): Promise<BoxPlaceholder[]>
-  /** Sets (or, if one already exists there, changes the species of) the placeholder at a
-   * box slot. Rejects if that slot already holds a real CollectionEntry — see
-   * schema.ts's `box_placeholders` table comment. */
-  setBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number): Promise<BoxPlaceholder>
+  /** Sets (or, if one already exists there, changes the form/gender/color of) the
+   * placeholder at a box slot. Rejects if that slot already holds a real CollectionEntry —
+   * see schema.ts's `box_placeholders` table comment. */
+  setBoxPlaceholder(
+    storageLocationId: number,
+    boxNumber: number,
+    boxSlot: number,
+    formId: number,
+    gender: Gender,
+    shiny: boolean
+  ): Promise<BoxPlaceholder>
+  /** Bulk version of setBoxPlaceholder (Leg 2 of the Dex completeness tier migration) —
+   * applying a Box Template can stamp 1000+ placeholders in one go. Silently skips any
+   * placement whose slot already holds a real entry (same guard as the single-set method,
+   * just non-throwing here — see sqlite-storage.ts's own comment). Resolves with every
+   * placeholder now in `storageLocationId`, not just the newly written ones, so a caller
+   * can simply replace its local copy of that location's placeholders wholesale. */
+  setBoxPlaceholders(
+    storageLocationId: number,
+    placements: Array<{ boxNumber: number; boxSlot: number; formId: number; gender: Gender; shiny: boolean }>
+  ): Promise<BoxPlaceholder[]>
   /** Removes the placeholder at a box slot, if any. A no-op if that slot has none. */
   clearBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void>
 }

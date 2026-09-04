@@ -119,14 +119,18 @@ export function applySchema(db: Database.Database): void {
     CREATE INDEX IF NOT EXISTS idx_boxes_location ON boxes(storage_location_id);
 
     -- "Planned" placeholders (Leg 5 of the Box View Polish & Multi-Box Editing milestone) —
-    -- a user's intent to eventually put some species in a given empty slot, right-clicked
-    -- in from Box view. Deliberately its own table rather than a special CollectionEntry
-    -- (owned = 0 already means "not yet owned" and is real inventory-shaped: it carries
-    -- gender/shiny/individual fields that mean nothing for a bare intent, and it would
-    -- count toward completion stats and the tray's unboxed list, which a placeholder must
-    -- never do). species_id only — no form/gender/shiny, matching the milestone note's
-    -- explicit scope. box_number/box_slot (not a boxes(id) FK) mirrors collection_entries'
-    -- own box position columns for the same reason: a placeholder is scoped to a location's
+    -- a user's intent to eventually put some form/gender/color in a given empty slot, set
+    -- either by right-clicking an empty Box view slot (species-only picker, resolved to a
+    -- canonical form/gender) or, since Leg 2 of the Dex completeness tier migration,
+    -- auto-stamped by applying a Box Template. Deliberately its own table rather than a
+    -- special CollectionEntry (owned = 0 already means "not yet owned" and is real
+    -- inventory-shaped: it carries individual-identity fields that mean nothing for a bare
+    -- intent, and it would count toward completion stats and the tray's unboxed list, which
+    -- a placeholder must never do). form_id/gender/shiny (species_id only through Leg 5;
+    -- widened by Leg 2 of the Dex completeness tier migration — see shared/types/box.ts's
+    -- BoxPlaceholder doc comment for why a bare species can't represent a tier's required
+    -- units). box_number/box_slot (not a boxes(id) FK) mirrors collection_entries' own box
+    -- position columns for the same reason: a placeholder is scoped to a location's
     -- numbered box, not the boxes row's identity. Same ON DELETE CASCADE as boxes above —
     -- a placeholder has no "orphaned but kept" state worth preserving once its location is
     -- gone, same reasoning as that table's own comment. The UNIQUE index is what makes "one
@@ -139,7 +143,9 @@ export function applySchema(db: Database.Database): void {
       storage_location_id INTEGER NOT NULL REFERENCES storage_locations(id) ON DELETE CASCADE,
       box_number INTEGER NOT NULL CHECK (box_number >= 1),
       box_slot INTEGER NOT NULL CHECK (box_slot BETWEEN 0 AND 29),
-      species_id INTEGER NOT NULL REFERENCES species(id),
+      form_id INTEGER NOT NULL REFERENCES forms(id),
+      gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
+      shiny INTEGER NOT NULL DEFAULT 0,
       UNIQUE(storage_location_id, box_number, box_slot)
     );
     CREATE INDEX IF NOT EXISTS idx_box_placeholders_location ON box_placeholders(storage_location_id);
@@ -465,6 +471,58 @@ export function applySchema(db: Database.Database): void {
       ALTER TABLE collection_entries_dropunique RENAME TO collection_entries;
       CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
       CREATE UNIQUE INDEX IF NOT EXISTS idx_entries_box_slot ON collection_entries(storage_location_id, box_number, box_slot);
+    `)
+  }
+
+  // box_placeholders species_id -> form_id/gender/shiny (Leg 2 of the Dex completeness
+  // tier migration) — CREATE TABLE IF NOT EXISTS above doesn't retrofit a pre-existing
+  // install's box_placeholders table, which this same milestone created just days ago
+  // (Leg 5 of Box View Polish) with the old species_id-only shape. Detected via
+  // PRAGMA table_info directly (a version flag would be overkill for a table this new and
+  // this small) and rebuilt in place, same "copy rows across" approach as the
+  // collection_entries CHECK-widen rebuilds above — nothing references box_placeholders(id)
+  // as an FK target, so no foreign_keys=OFF dance is needed. form_id is backed into each
+  // row via the same "species' first boxable form, else its first form at all" pick
+  // buildBoxes.ts's pickPlaceholderForm/boxTemplates.ts's canonicalPlaceholderForm use at
+  // runtime; gender backfills to 'male' when that resolved form has a gender difference
+  // (the same collapsed-representative convention requiredUnits() uses), else 'unknown';
+  // shiny backfills to 0 (regular) — the old shape had no way to record either, so this is
+  // the closest faithful default, not a guess at real prior intent.
+  const boxPlaceholderColumns = db.prepare('PRAGMA table_info(box_placeholders)').all() as Array<{ name: string }>
+  if (boxPlaceholderColumns.some((c) => c.name === 'species_id')) {
+    db.exec(`
+      CREATE TABLE box_placeholders_formid (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        storage_location_id INTEGER NOT NULL REFERENCES storage_locations(id) ON DELETE CASCADE,
+        box_number INTEGER NOT NULL CHECK (box_number >= 1),
+        box_slot INTEGER NOT NULL CHECK (box_slot BETWEEN 0 AND 29),
+        form_id INTEGER NOT NULL REFERENCES forms(id),
+        gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
+        shiny INTEGER NOT NULL DEFAULT 0,
+        UNIQUE(storage_location_id, box_number, box_slot)
+      );
+      INSERT INTO box_placeholders_formid (id, storage_location_id, box_number, box_slot, form_id, gender, shiny)
+      SELECT
+        bp.id,
+        bp.storage_location_id,
+        bp.box_number,
+        bp.box_slot,
+        COALESCE(
+          (SELECT f.id FROM forms f WHERE f.species_id = bp.species_id AND f.form_category != 'non_boxable' ORDER BY f.id LIMIT 1),
+          (SELECT f.id FROM forms f WHERE f.species_id = bp.species_id ORDER BY f.id LIMIT 1)
+        ),
+        CASE WHEN (
+          SELECT f2.has_gender_difference FROM forms f2
+          WHERE f2.id = COALESCE(
+            (SELECT f.id FROM forms f WHERE f.species_id = bp.species_id AND f.form_category != 'non_boxable' ORDER BY f.id LIMIT 1),
+            (SELECT f.id FROM forms f WHERE f.species_id = bp.species_id ORDER BY f.id LIMIT 1)
+          )
+        ) = 1 THEN 'male' ELSE 'unknown' END,
+        0
+      FROM box_placeholders bp;
+      DROP TABLE box_placeholders;
+      ALTER TABLE box_placeholders_formid RENAME TO box_placeholders;
+      CREATE INDEX IF NOT EXISTS idx_box_placeholders_location ON box_placeholders(storage_location_id);
     `)
   }
 

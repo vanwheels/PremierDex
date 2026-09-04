@@ -1,4 +1,5 @@
-import type { CompletionBucket, CompletionCount, CompletionStats, CompletionStatsOptions } from './completionStats'
+import type { CompletionBucket, CompletionCount, CompletionStats, CompletionStatsOptions, DexTier } from './completionStats'
+import { applyTierToOptions, BUILDABLE_TIERS, matchingTier, TIER_LABELS } from './completionStats'
 
 function formatPercent(count: CompletionCount): string {
   if (count.total === 0) return '—'
@@ -63,6 +64,29 @@ export function CompletionStatsPanel({ stats, options, onOptionsChange }: Comple
     <section className="completion-stats">
       <h2>Completion</h2>
       <div className="completion-stats-toolbar">
+        <label>
+          Tier
+          <select
+            value={matchingTier(options) ?? 'custom'}
+            onChange={(e) => onOptionsChange(applyTierToOptions(e.target.value as DexTier, options))}
+          >
+            {/* Only shown (never selectable — a plain <option> with no value the picker
+             * ever sets) once the checkboxes below have drifted off every named tier, e.g.
+             * a lone splitByGender toggle with includeCosmeticVariants off. Picking a tier
+             * is a shortcut into a point in the same options space, not a locked mode: the
+             * checkboxes stay live afterward and can drift back to "Custom" again. */}
+            {matchingTier(options) === null && (
+              <option value="custom" disabled>
+                Custom
+              </option>
+            )}
+            {BUILDABLE_TIERS.map((tier) => (
+              <option key={tier} value={tier}>
+                {TIER_LABELS[tier]}
+              </option>
+            ))}
+          </select>
+        </label>
         <label>
           <input
             type="checkbox"

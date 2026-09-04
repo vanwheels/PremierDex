@@ -70,6 +70,33 @@
   color: var(--muted);
 }
 
+/* Apply Template's color picker (Leg 2 of the Dex completeness tier migration) — same
+ * label-row spirit as origin-modal-field above, just a fieldset since it's a radio group
+ * rather than a single input. */
+.dex-apply-template-color {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1rem;
+  border: none;
+  padding: 0;
+  margin: 0.7rem 0;
+  font-size: 0.85rem;
+}
+
+.dex-apply-template-color legend {
+  width: 100%;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.dex-apply-template-preview {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
 .origin-modal-actions {
   display: flex;
   justify-content: flex-end;

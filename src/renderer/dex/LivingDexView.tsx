@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
@@ -14,6 +14,7 @@ import { autoAssignedLocationOnCheckIn } from './autoAssignLocation'
 import { DexTable } from './DexTable'
 import { DexHybridGrid } from './DexHybridGrid'
 import { DexBoxGrid } from './DexBoxGrid'
+import type { TemplatePlacement } from './boxTemplates'
 import { DexLocationTabs } from './DexLocationTabs'
 import { DexToolbar } from './DexToolbar'
 import { DexFilterBar } from './DexFilterBar'
@@ -46,7 +47,9 @@ export interface LivingDexViewProps {
   onSetCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
   onAddBox: (storageLocationId: number) => Promise<StorageBox>
   onRenameBox: (boxId: number, name: string | null) => void
-  onSetBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number) => void
+  onSetBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, formId: number, gender: Gender, shiny: boolean) => void
+  /** Leg 2 of the Dex completeness tier migration: Apply Template's bulk write. */
+  onSetBoxPlaceholders: (storageLocationId: number, placements: TemplatePlacement[]) => Promise<void>
   onClearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
 }
 
@@ -80,6 +83,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onAddBox,
     onRenameBox,
     onSetBoxPlaceholder,
+    onSetBoxPlaceholders,
     onClearBoxPlaceholder
   } = props
 
@@ -211,6 +215,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
       <div hidden={viewMode !== 'box'}>
         <DexBoxGrid
           entries={entriesForLocationTab}
+          allEntries={entries}
           species={species}
           forms={forms}
           storageLocations={storageLocations}
@@ -225,6 +230,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onAddBox={onAddBox}
           onRenameBox={onRenameBox}
           onSetBoxPlaceholder={onSetBoxPlaceholder}
+          onSetBoxPlaceholders={onSetBoxPlaceholders}
           onClearBoxPlaceholder={onClearBoxPlaceholder}
         />
       </div>

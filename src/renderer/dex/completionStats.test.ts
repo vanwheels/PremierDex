@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import type { CollectionEntry, Form } from '@shared/types/pokemon'
-import { computeCompletionStats, filterEntriesByStorageLocation } from './completionStats'
+import {
+  applyTierToOptions,
+  BUILDABLE_TIERS,
+  computeCompletionStats,
+  DEFAULT_COMPLETION_STATS_OPTIONS,
+  filterEntriesByStorageLocation,
+  matchingTier,
+  TIER_CONFIGS
+} from './completionStats'
 
 function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'formName'>): Form {
   return {
@@ -180,6 +188,27 @@ describe('computeCompletionStats', () => {
     const boxTwo = computeCompletionStats(forms, filterEntriesByStorageLocation(entries, 2))
     expect(boxTwo.overall.regular.total).toBe(2)
     expect(boxTwo.overall.regular.owned).toBe(1)
+  })
+})
+
+describe('applyTierToOptions / matchingTier', () => {
+  it('round-trips every buildable tier through both functions', () => {
+    for (const tier of BUILDABLE_TIERS) {
+      const options = applyTierToOptions(tier, DEFAULT_COMPLETION_STATS_OPTIONS)
+      expect(options.includeCosmeticVariants).toBe(TIER_CONFIGS[tier].includeCosmeticVariants)
+      expect(options.splitByGender).toBe(TIER_CONFIGS[tier].splitByGender)
+      expect(matchingTier(options)).toBe(tier)
+    }
+  })
+
+  it('leaves foldRegionalIntoGeneration untouched — not part of any tier', () => {
+    const options = applyTierToOptions('livingForm', { ...DEFAULT_COMPLETION_STATS_OPTIONS, foldRegionalIntoGeneration: true })
+    expect(options.foldRegionalIntoGeneration).toBe(true)
+  })
+
+  it('matches null once the checkboxes drift off every named tier', () => {
+    const offTier = { includeCosmeticVariants: false, splitByGender: true, foldRegionalIntoGeneration: false }
+    expect(matchingTier(offTier)).toBeNull()
   })
 })
 

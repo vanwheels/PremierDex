@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import type { CollectionEntry, CollectionEntryOriginInput, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Gender, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
@@ -57,8 +57,19 @@ const bridge: AppBridge = {
   renameBox: (boxId: number, name: string | null): Promise<StorageBox> =>
     ipcRenderer.invoke(BoxIpcChannel.rename, boxId, name),
   listBoxPlaceholders: (): Promise<BoxPlaceholder[]> => ipcRenderer.invoke(BoxPlaceholderIpcChannel.list),
-  setBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number): Promise<BoxPlaceholder> =>
-    ipcRenderer.invoke(BoxPlaceholderIpcChannel.set, storageLocationId, boxNumber, boxSlot, speciesId),
+  setBoxPlaceholder: (
+    storageLocationId: number,
+    boxNumber: number,
+    boxSlot: number,
+    formId: number,
+    gender: Gender,
+    shiny: boolean
+  ): Promise<BoxPlaceholder> =>
+    ipcRenderer.invoke(BoxPlaceholderIpcChannel.set, storageLocationId, boxNumber, boxSlot, formId, gender, shiny),
+  setBoxPlaceholders: (
+    storageLocationId: number,
+    placements: Array<{ boxNumber: number; boxSlot: number; formId: number; gender: Gender; shiny: boolean }>
+  ): Promise<BoxPlaceholder[]> => ipcRenderer.invoke(BoxPlaceholderIpcChannel.batchSet, storageLocationId, placements),
   clearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void> =>
     ipcRenderer.invoke(BoxPlaceholderIpcChannel.clear, storageLocationId, boxNumber, boxSlot),
   getAppVersion: () => ipcRenderer.invoke(UpdaterIpcChannel.getAppVersion),

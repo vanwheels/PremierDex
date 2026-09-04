@@ -146,28 +146,68 @@ describe('buildBoxes', () => {
   })
 
   it('places a placeholder at its slot', () => {
-    const placeholder: BoxPlaceholder = { id: 1, storageLocationId: 1, boxNumber: 1, boxSlot: 3, speciesId: 25 }
+    const placeholder: BoxPlaceholder = {
+      id: 1,
+      storageLocationId: 1,
+      boxNumber: 1,
+      boxSlot: 3,
+      formId: 2,
+      gender: 'unknown',
+      shiny: false
+    }
     const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [], [placeholder])
     expect(boxes[0].cells[3]).toEqual({
       kind: 'placeholder',
       boxNumber: 1,
       slot: 3,
       speciesId: 25,
+      gender: 'unknown',
+      shiny: false,
       displayName: 'Pikachu',
       pokeapiId: 2,
       spriteFormSuffix: null
     })
   })
 
+  it('carries a placeholder\'s gender/shiny through, for the detail panel to show', () => {
+    const placeholder: BoxPlaceholder = {
+      id: 1,
+      storageLocationId: 1,
+      boxNumber: 1,
+      boxSlot: 3,
+      formId: 2,
+      gender: 'female',
+      shiny: true
+    }
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [], [placeholder])
+    expect(boxes[0].cells[3]).toMatchObject({ gender: 'female', shiny: true })
+  })
+
   it('never lets a placeholder clobber a real entry already at that slot', () => {
     const entry = makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: 0 })
-    const placeholder: BoxPlaceholder = { id: 1, storageLocationId: 1, boxNumber: 1, boxSlot: 0, speciesId: 25 }
+    const placeholder: BoxPlaceholder = {
+      id: 1,
+      storageLocationId: 1,
+      boxNumber: 1,
+      boxSlot: 0,
+      formId: 2,
+      gender: 'unknown',
+      shiny: false
+    }
     const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry], [placeholder])
     expect(boxes[0].cells[0]).toMatchObject({ kind: 'entry', entry })
   })
 
-  it('skips a placeholder whose species cannot be resolved', () => {
-    const placeholder: BoxPlaceholder = { id: 1, storageLocationId: 1, boxNumber: 1, boxSlot: 0, speciesId: 999 }
+  it('skips a placeholder whose form cannot be resolved', () => {
+    const placeholder: BoxPlaceholder = {
+      id: 1,
+      storageLocationId: 1,
+      boxNumber: 1,
+      boxSlot: 0,
+      formId: 999,
+      gender: 'unknown',
+      shiny: false
+    }
     const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [], [placeholder])
     expect(boxes[0].cells[0]).toBeNull()
   })

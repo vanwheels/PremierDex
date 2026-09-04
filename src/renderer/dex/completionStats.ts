@@ -52,6 +52,67 @@ export const DEFAULT_COMPLETION_STATS_OPTIONS: CompletionStatsOptions = {
 }
 
 /**
+ * The 5 named dex-completeness tiers from Austin John's HOME Living Dex Organizer
+ * spreadsheet, per Leg 1 of the Dex completeness tier migration
+ * (docs/investigations/dex-completeness-tiers.md) — fixed presets over
+ * `includeCosmeticVariants`/`splitByGender` (both already tracked by
+ * CompletionStatsOptions) plus `excludePreEvolutions`, which isn't yet since nothing can
+ * compute it — no evolution-chain data exists in the schema (tracked as the separate,
+ * unscheduled [Evolution-chain data (Pre-Evos axis)] TODO item). Regional Diffs isn't a
+ * 4th axis here: it's always on (every dex_distinct form, regional or not, already counts
+ * unconditionally below), per Leg 1's mapping.
+ */
+export type DexTier = 'living' | 'livingFormLite' | 'livingForm' | 'finalFormForm' | 'finalForm'
+
+export interface DexTierConfig {
+  includeCosmeticVariants: boolean
+  splitByGender: boolean
+  excludePreEvolutions: boolean
+}
+
+export const TIER_CONFIGS: Record<DexTier, DexTierConfig> = {
+  living: { includeCosmeticVariants: false, splitByGender: false, excludePreEvolutions: false },
+  livingFormLite: { includeCosmeticVariants: true, splitByGender: false, excludePreEvolutions: false },
+  livingForm: { includeCosmeticVariants: true, splitByGender: true, excludePreEvolutions: false },
+  finalFormForm: { includeCosmeticVariants: true, splitByGender: false, excludePreEvolutions: true },
+  finalForm: { includeCosmeticVariants: false, splitByGender: false, excludePreEvolutions: true }
+}
+
+export const TIER_LABELS: Record<DexTier, string> = {
+  living: 'Living Dex',
+  livingFormLite: 'Living Form Dex (LITE)',
+  livingForm: 'Living Form Dex',
+  finalFormForm: 'Final Form + Form Dex',
+  finalForm: 'Final Form Dex'
+}
+
+/** The only tiers computable today — `finalFormForm`/`finalForm` need
+ * `excludePreEvolutions` for real, which is blocked on the Pre-Evos data leg above. Both
+ * the Completion Stats tier picker and Box Templates' tier picker offer only these. */
+export const BUILDABLE_TIERS: DexTier[] = ['living', 'livingFormLite', 'livingForm']
+
+/** Applies a tier's `includeCosmeticVariants`/`splitByGender` onto an existing options
+ * object — `foldRegionalIntoGeneration` is untouched: it's a purely cosmetic display-bucket
+ * toggle unrelated to any tier (Leg 1's mapping notes), not one of the 3 axes a tier fixes. */
+export function applyTierToOptions(tier: DexTier, options: CompletionStatsOptions): CompletionStatsOptions {
+  const config = TIER_CONFIGS[tier]
+  return { ...options, includeCosmeticVariants: config.includeCosmeticVariants, splitByGender: config.splitByGender }
+}
+
+/** Which buildable tier (if any) `options`' current includeCosmeticVariants/splitByGender
+ * combo matches — for the tier picker's controlled value. `null` once the individual
+ * checkboxes drift off every named tier (e.g. splitByGender on with includeCosmeticVariants
+ * off has no tier name in Leg 1's table). */
+export function matchingTier(options: CompletionStatsOptions): DexTier | null {
+  return (
+    BUILDABLE_TIERS.find((tier) => {
+      const config = TIER_CONFIGS[tier]
+      return config.includeCosmeticVariants === options.includeCosmeticVariants && config.splitByGender === options.splitByGender
+    }) ?? null
+  )
+}
+
+/**
  * Narrows entries to one Storage Location's worth (Leg 7), for scoping
  * computeCompletionStats to a single tab of Leg 8's per-location table. `null` selects the
  * Unassigned bucket (entries never assigned a location) rather than "no filter" — a caller

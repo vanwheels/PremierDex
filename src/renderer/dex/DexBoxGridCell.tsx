@@ -12,8 +12,9 @@ interface DexBoxGridCellProps {
   cell: BoxCell | BoxPlaceholderCell | null
   slot: number
   isDragOver: boolean
-  /** Only meaningful for a real entry cell — a placeholder is never selectable (see
-   * DexBoxPane's handleCellClick doc comment). */
+  /** True when this slot is the current selection — a real entry (part of a possible
+   * multi-select) or, since Leg 2 of the Dex completeness tier migration, a single
+   * selected placeholder (see DexBoxPane's selectedPlaceholderSlot doc comment). */
   isSelected: boolean
   /** Returns the dragged entry id(s) to carry — DexBoxPane's handleDragStart, already
    * bound to this slot; only ever invoked for a real entry cell (see `draggable` below). */
@@ -22,9 +23,11 @@ interface DexBoxGridCellProps {
   onDragLeave: () => void
   onDrop: (draggedEntryIds: number[]) => void
   onContextMenu: (x: number, y: number, target: CellTarget) => void
-  /** Only wired to a real entry cell's sprite — a placeholder's own SpriteThumbnail has no
-   * click handler at all (right-click is its only interaction this leg). */
   onClickEntry: (e: MouseEvent) => void
+  /** Leg 2 of the Dex completeness tier migration: click a placeholder to view its
+   * specific form/gender/color requirement in the detail panel — see DexBoxPane's
+   * handleClickPlaceholder. */
+  onClickPlaceholder: () => void
 }
 
 /**
@@ -44,7 +47,8 @@ export function DexBoxGridCell({
   onDragLeave,
   onDrop,
   onContextMenu,
-  onClickEntry
+  onClickEntry,
+  onClickPlaceholder
 }: DexBoxGridCellProps): JSX.Element {
   const isEntry = cell?.kind === 'entry'
   const isPlaceholder = cell?.kind === 'placeholder'
@@ -119,10 +123,15 @@ export function DexBoxGridCell({
           female={false}
           displayName={cell.displayName}
           ariaLabel={`${cell.displayName} — planned`}
-          className="dex-hybrid-tile dex-box-cell-placeholder-tile"
-          // Not selectable/draggable (see `draggable`/isSelected above) — right-click is
-          // the only interaction a placeholder cell supports this leg.
-          onClick={() => {}}
+          className={
+            ['dex-hybrid-tile', 'dex-box-cell-placeholder-tile', isSelected && 'dex-hybrid-tile-selected']
+              .filter(Boolean)
+              .join(' ')
+          }
+          // Not draggable (see `draggable` above) — click-to-select (Leg 2 of the Dex
+          // completeness tier migration) and right-click are the only interactions a
+          // placeholder cell supports.
+          onClick={onClickPlaceholder}
         />
       )}
     </div>

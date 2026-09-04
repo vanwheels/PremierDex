@@ -1,15 +1,34 @@
 import { useCallback, useMemo, useState } from 'react'
-import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { buildBoxes, buildUnboxedEntries } from './buildBoxes'
+import type { DexTier } from './completionStats'
+import { TIER_CONFIGS } from './completionStats'
+import {
+  buildOwnedUnitIndex,
+  buildPlaceholderKeys,
+  countAvailableSlots,
+  extraBoxesNeeded,
+  pendingRequiredUnits,
+  placeUnitsIntoSlots,
+  slotKey,
+  type DexColor,
+  type TemplatePlacement
+} from './boxTemplates'
+import { DexApplyTemplateModal } from './DexApplyTemplateModal'
 import { DexBoxPane } from './DexBoxPane'
 import { DexBoxTray } from './DexBoxTray'
 import type { Box } from './types'
 
 interface DexBoxGridProps {
   entries: CollectionEntry[]
+  /** Leg 2 of the Dex completeness tier migration: the full, unscoped entry list —
+   * Apply Template's "already owned" check is location-independent (see
+   * boxTemplates.ts's buildOwnedUnitIndex), unlike every other prop here which is
+   * pre-scoped to the selected location. */
+  allEntries: CollectionEntry[]
   species: Species[]
   forms: Form[]
   storageLocations: StorageLocation[]
@@ -41,7 +60,10 @@ interface DexBoxGridProps {
   /** Leg 2: the pager label's inline "Rename" control. */
   onRenameBox: (boxId: number, name: string | null) => void
   /** Leg 5: right-click an empty slot or an existing placeholder — see DexBoxPane. */
-  onSetBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number) => void
+  onSetBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, formId: number, gender: Gender, shiny: boolean) => void
+  /** Leg 2 of the Dex completeness tier migration: Apply Template's bulk write — see
+   * StorageAdapter.setBoxPlaceholders' own doc comment. */
+  onSetBoxPlaceholders: (storageLocationId: number, placements: TemplatePlacement[]) => Promise<void>
   onClearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
 }
 
@@ -68,6 +90,7 @@ interface DexBoxGridProps {
  */
 export function DexBoxGrid({
   entries,
+  allEntries,
   species,
   forms,
   storageLocations,
@@ -82,6 +105,7 @@ export function DexBoxGrid({
   onAddBox,
   onRenameBox,
   onSetBoxPlaceholder,
+  onSetBoxPlaceholders,
   onClearBoxPlaceholder
 }: DexBoxGridProps): JSX.Element {
   const boxes = useMemo(
@@ -100,6 +124,8 @@ export function DexBoxGrid({
   // pane is open. Not used for anything else; the two panes are otherwise independent.
   const [primaryBox, setPrimaryBox] = useState<Box | null>(null)
   const handlePrimaryBoxChange = useCallback((box: Box) => setPrimaryBox(box), [])
+  // Leg 2 of the Dex completeness tier migration.
+  const [templateModalOpen, setTemplateModalOpen] = useState(false)
 
   if (selectedLocationTab === null) {
     return (
@@ -138,6 +164,43 @@ export function DexBoxGrid({
     onSetEntryBoxPosition(draggedEntryId, primaryBox.boxNumber, firstEmptySlot)
   }
 
+  // Apply Template (Leg 2 of the Dex completeness tier migration): computes the tier's
+  // still-needed units (owned/already-placeholder'd already filtered out), creates
+  // whatever new boxes are needed to fit all of them (sequential awaits — same one-box-
+  // at-a-time creation DexBoxPane.handleAddBox already does, just looped), then writes
+  // every placement in one batch call. `selectedLocationTab` is narrowed non-null here by
+  // the early return above.
+  const handleApplyTemplate = async (tier: DexTier, color: DexColor): Promise<void> => {
+    const tierConfig = TIER_CONFIGS[tier]
+    const ownedUnitIndex = buildOwnedUnitIndex(allEntries)
+    const existingPlaceholderKeys = buildPlaceholderKeys(boxPlaceholders)
+    const units = pendingRequiredUnits({ tierConfig, color, forms, ownedUnitIndex, existingPlaceholderKeys })
+    if (units.length === 0) {
+      setTemplateModalOpen(false)
+      return
+    }
+
+    const occupiedSlots = new Set<string>()
+    for (const entry of entries) {
+      if (entry.boxNumber !== null && entry.boxSlot !== null) occupiedSlots.add(slotKey(entry.boxNumber, entry.boxSlot))
+    }
+    for (const placeholder of boxPlaceholders) {
+      occupiedSlots.add(slotKey(placeholder.boxNumber, placeholder.boxSlot))
+    }
+
+    const boxNumbers = storageBoxes.map((b) => b.boxNumber)
+    const available = countAvailableSlots(boxNumbers.length, occupiedSlots.size)
+    const shortfall = extraBoxesNeeded(units.length, available)
+    for (let i = 0; i < shortfall; i++) {
+      const created = await onAddBox(selectedLocationTab)
+      boxNumbers.push(created.boxNumber)
+    }
+
+    const placements = placeUnitsIntoSlots(units, boxNumbers, occupiedSlots)
+    await onSetBoxPlaceholders(selectedLocationTab, placements)
+    setTemplateModalOpen(false)
+  }
+
   // Opens the second pane on the box right after whatever the primary is currently
   // showing (falling back to the same box if there's only one) — the pairing most likely
   // to be useful for an immediate cross-box drag, rather than always defaulting to box 1.
@@ -150,6 +213,9 @@ export function DexBoxGrid({
         <button type="button" onClick={() => setSecondBoxOpen((open) => !open)}>
           {secondBoxOpen ? '✕ Close Second Box' : '⧉ Open Second Box'}
         </button>
+        <button type="button" onClick={() => setTemplateModalOpen(true)}>
+          Apply Template…
+        </button>
       </div>
       <div className="dex-box-columns">
         <DexBoxPane
@@ -159,6 +225,7 @@ export function DexBoxGrid({
           storageLocations={storageLocations}
           speciesAvailability={speciesAvailability}
           species={species}
+          forms={forms}
           storageLocationId={selectedLocationTab}
           boxedEntryIds={boxedEntryIds}
           onSaveOrigin={onSaveOrigin}
@@ -179,6 +246,7 @@ export function DexBoxGrid({
             storageLocations={storageLocations}
             speciesAvailability={speciesAvailability}
             species={species}
+            forms={forms}
             storageLocationId={selectedLocationTab}
             boxedEntryIds={boxedEntryIds}
             onSaveOrigin={onSaveOrigin}
@@ -193,6 +261,16 @@ export function DexBoxGrid({
         )}
         <DexBoxTray entries={unboxedEntries} onDropEntry={handleDropOnTray} onClickEntry={handleClickUnboxedEntry} />
       </div>
+      {templateModalOpen && (
+        <DexApplyTemplateModal
+          forms={forms}
+          allEntries={allEntries}
+          storageBoxes={storageBoxes}
+          boxPlaceholders={boxPlaceholders}
+          onApply={handleApplyTemplate}
+          onClose={() => setTemplateModalOpen(false)}
+        />
+      )}
     </div>
   )
 }

@@ -37,6 +37,8 @@
 /* Leg 3: the "Open/Close Second Box" toggle, above the columns row so it applies to the
  * whole view rather than living inside either pane's own pager. */
 .dex-box-toggle-row {
+  display: flex;
+  gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
 

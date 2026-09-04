@@ -1,4 +1,4 @@
-import type { CollectionEntry } from '@shared/types/pokemon'
+import type { CollectionEntry, Gender } from '@shared/types/pokemon'
 
 /** One renderable grid row: either a whole form, or one gender split of a form. */
 export interface DexRowData {
@@ -141,16 +141,22 @@ export interface BoxCell extends EntryDisplayInfo {
 }
 
 /** A "planned" placeholder slot (Leg 5 of the Box View Polish milestone) — the user's
- * intent to eventually put some species here, set via a right-click on an empty slot. See
- * shared/types/box.ts's BoxPlaceholder. No gender/shiny/individual data to denormalize
- * (unlike BoxCell), so this doesn't extend EntryDisplayInfo — just enough to render a
- * dimmed sprite and label. pokeapiId/spriteFormSuffix come from buildBoxes.ts's own pick
- * of a representative form for the species (there's no real Form tied to a placeholder). */
+ * intent to eventually put some form/gender/color here, set either via a right-click on an
+ * empty slot (species-only picker) or by applying a Box Template (Leg 2 of the Dex
+ * completeness tier migration). See shared/types/box.ts's BoxPlaceholder. `gender`/`shiny`
+ * are carried through for the detail panel's read-only "what specifically goes here" text
+ * (DexBoxDetailPanel) — sprite rendering deliberately ignores them and always shows the
+ * plain base-form art (Vanny's call), so this doesn't extend EntryDisplayInfo the way
+ * BoxCell does. pokeapiId/spriteFormSuffix/speciesId are denormalized from the
+ * placeholder's own formId at build time (buildBoxes.ts), same convention BoxCell already
+ * follows for its own lookups. */
 export interface BoxPlaceholderCell {
   kind: 'placeholder'
   boxNumber: number
   slot: number
   speciesId: number
+  gender: Gender
+  shiny: boolean
   displayName: string
   pokeapiId: number
   spriteFormSuffix: string | null
