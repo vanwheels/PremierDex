@@ -1,5 +1,14 @@
 # COMPLETED
 
+## Box View Polish & Multi-Box Editing
+
+### [Box view quick polish] — Leg 1 — 2026-09-03
+Unboxed tray widened and height-matched to the box grid (shared CSS vars, not a hardcoded
+height), tray sprite bumped 32px -> 64px, shiny/caught-ball badges overlaid on filled
+cells, left-click-to-auto-place from Unboxed, National Dex # + inline-editable nickname
+added to the info panel, red tile-selected border dropped for Box view. See commit
+`5fd5ab1`.
+
 Legs 1-10 plus an unnumbered Diamond/Pearl theming addendum (Nav Restructuring, Visual
 Pass & Dex Table Redesign milestone) archived at
 `docs/completed-archive/nav-visual-dex-table-redesign.md`. Legs 1-31 (Collection &
