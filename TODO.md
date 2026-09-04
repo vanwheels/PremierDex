@@ -6,17 +6,6 @@ Picked up 2026-09-04 from Future Milestones. Both halves (tier migration and Box
 Templates) share a "what counts as complete for tier X" definition, so scoping is bundled
 into Leg 1 before either gets built.
 
-### [Dex completeness tier migration] — Leg 2
-Build user-customizable Box Templates (living dex, living form dex,
-exclude-gender-differences, etc.) from the ghost/placeholder forms already in Box view,
-using Leg 1's tier definition (`docs/investigations/dex-completeness-tiers.md`) — a
-template is a (tier, color) pair; auto-populate stamps that tier's `requiredUnits()` minus
-already-owned/placed entries into `box_placeholders`. `BoxPlaceholder` currently only
-carries `speciesId`, not form/gender/shiny — needs widening before it can represent
-anything past the `Living` tier. Only the 3 tiers not blocked on Pre-Evos data
-(Living/LivingFormLITE/Living Form, see the new Leg 5 below) are buildable for now.
-Last touched: 2026-09-04. Re-check count: 0.
-
 ### [Dex completeness tier migration] — Leg 3
 Build the upgrade path: migrating a collection up through the tiers defined in
 `docs/investigations/dex-completeness-tiers.md` (Living -> LivingFormLITE -> Living Form,
@@ -103,21 +92,27 @@ Last touched: 2026-09-03. Re-check count: 0.
 ### [Split schema.ts] — unscheduled
 Crossed the ~300-line soft cap at Leg 5 (341 lines), 421 after Leg 3 of Box Arrangement's
 box_number/box_slot retrofit, 466 after Leg 2 of Box View Polish added the `boxes` table +
-backfillBoxes, now 492 after that same milestone's Leg 5 added `box_placeholders` — one
-line under the 500 hard cap, and past the "~480 lines, pick up proactively" line named
-below. Each closed-set CHECK column (language, caught_ball) has picked up its own
-"ALTER-time CHECK can't be widened later" rebuild block over time, and that pattern will
-likely repeat if another CHECK-constrained column needs the same treatment. Candidate
-split: pull the CHECK-widen rebuild blocks (sid-4294, caught_ball) into their own module
-alongside the retrofit ALTERs, mirroring how sqlite-storage.ts's export/import logic got
-split into collection-backup.ts (Leg 3 of Box Arrangement — see COMPLETED.md).
-Confirmed 2026-09-03: deliberately kept out of the User-Customizable Dex Layout milestone
-— orthogonal code health, not blocking. The "pick up proactively past ~480 lines" line
-from that confirmation has now been crossed (Box View Polish's Leg 5, 2026-09-04) without
-a leg of its own — flagged in that milestone's post-mortem rather than actioned inline,
-since the split itself was orthogonal to what that leg needed. Should be picked up before,
-or as part of, whichever future leg next adds a table or retrofit block here.
-Last touched: 2026-09-04. Re-check count: 0.
+backfillBoxes, 492 after that same milestone's Leg 5 added `box_placeholders`, now 550 after
+Leg 2 of the Dex completeness tier migration widened `box_placeholders` and added its own
+rebuild block — 50 lines past the 500 hard cap. Each closed-set CHECK column (language,
+caught_ball) has picked up its own "ALTER-time CHECK can't be widened later" rebuild block
+over time, and that pattern will likely repeat if another CHECK-constrained column needs
+the same treatment.
+Deliberately NOT split as part of Leg 2 despite that leg adding the table/retrofit block
+this item already flagged as the trigger to act on: investigating the split surfaced a real
+ordering hazard first — several of the CHECK-widen rebuilds (the two sid 4294->999999
+ones, at minimum) must run *before* later ADD COLUMN retrofits (language, caught_ball,
+storage_location_id, box_number/box_slot) because their rebuilt table's column list doesn't
+include those not-yet-added columns; naively extracting "the rebuild blocks" into one
+function called once would silently drop that data on any install still carrying the old
+sid CHECK. A correct split needs to either preserve that interleaving across two call sites
+or thread the dependency explicitly — a design decision worth its own leg, not a fold-in
+alongside unrelated feature work. Candidate split (unchanged from before): pull the
+CHECK-widen rebuild blocks into their own module alongside the retrofit ALTERs, mirroring
+how sqlite-storage.ts's export/import logic got split into collection-backup.ts (Leg 3 of
+Box Arrangement — see COMPLETED.md) — just with the ordering hazard above designed around
+explicitly this time.
+Last touched: 2026-09-04. Re-check count: 1.
 
 ### [Jump directly to a Box] — unscheduled
 Raised by Vanny 2026-09-04: no way to select a specific box directly — currently requires
