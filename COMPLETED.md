@@ -10,6 +10,16 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Existing dex entries stuck in Unassigned instead of vanny's HOME dex] — Leg 6 (2026-09-03)
+Confirmed with Vanny it wasn't a filter/import bug — old entries genuinely had
+storage_location_id NULL in the DB. `createStorageLocation` now backfills every owned,
+unassigned entry onto a location the moment it's the first one ever created (the 0->1
+transition), so this can't recur for new installs; her own dev DB (739 entries,
+storage_locations already existing) got a one-off manual UPDATE to location 1 ('vanny'
+HOME) since the new hook only fires on that first-ever creation. Raised a "bulk move/
+duplicate between locations" feature idea for later, added to TODO.md. See commit
+`e440c20`.
+
 ## [Non-HOME locations show all 1025 species as depositable] — Leg 5 (2026-09-03)
 Added `locationDepositability.ts`: a generation-cap dataset for ranch (Gen 4)/box (Gen
 3)/bank (Gen 7), and a save_file check that reuses Legs 4/6's per-game
