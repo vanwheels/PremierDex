@@ -11,7 +11,11 @@ import { OriginModal } from './OriginModal'
 import { readDragEntryPayload, setDragEntryPayload } from './dragEntryPayload'
 import type { BoxCell } from './types'
 
-const CELL_SPRITE_SIZE = 48
+// Vanny feedback 2026-09-03: cells were flex-stretched to fill the remaining column width,
+// making a 30-slot box enormous even with a small sprite. Sprite size doubled and the grid
+// switched to a fixed cell size (box-grid.css) so it renders compact — mirroring HOME's
+// box view — instead of growing to fill available space.
+const CELL_SPRITE_SIZE = 96
 
 interface DexBoxGridProps {
   entries: CollectionEntry[]
@@ -139,7 +143,7 @@ export function DexBoxGrid({
               Next →
             </button>
           </div>
-          <div className="dex-box-grid" style={{ gridTemplateColumns: `repeat(${BOX_COLS}, 1fr)` }}>
+          <div className="dex-box-grid" style={{ gridTemplateColumns: `repeat(${BOX_COLS}, var(--dex-box-cell-size))` }}>
             {cells.map((cell, slot) => (
               <div
                 key={slot}

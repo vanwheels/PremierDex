@@ -18,10 +18,16 @@
   min-width: 0;
 }
 
+/* Cell size is sprite (96px, DexBoxGrid's CELL_SPRITE_SIZE) plus a small margin — not a
+ * fraction of the container. display: inline-grid keeps the grid sized to its own 6
+ * columns instead of stretching to fill dex-box-main's flex:1 width, which is what made a
+ * 30-slot box enormous before (Vanny feedback 2026-09-03: should mirror HOME's compact box
+ * view, not fill the pane). */
 .dex-box-grid {
-  display: grid;
-  gap: 0.5rem;
-  padding: 1rem;
+  --dex-box-cell-size: 108px;
+  display: inline-grid;
+  gap: 0.35rem;
+  padding: 0.75rem;
   background-color: var(--surface);
   background-image: var(--grain);
   background-size: 160px 160px;
