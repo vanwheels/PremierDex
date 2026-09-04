@@ -25,11 +25,6 @@ single-shiny-per-species schema can't represent at all. (Hybrid view shipped in 
 instead — Vanny only ever described it as "the list, just sprites," so the same ceiling
 didn't misrepresent it.)
 
-### [Fix downstream logic assuming one entry per species] — Leg 4
-Audit and update completionStats.ts, filterDexSections.ts, invalidCombo.ts, and
-autoAssignLocation.ts against the per-individual model from Legs 2-3.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ### [Export/import natural-key rework] — Leg 5
 exportCollection/importCollection's natural-key matching is currently keyed on
 form_id/gender/shiny, which collides once duplicates are real (post Leg 2). Needs a new

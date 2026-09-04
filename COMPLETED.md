@@ -10,6 +10,21 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Fix downstream logic assuming one entry per species] — Leg 4 (2026-09-03)
+Audited completionStats.ts, filterDexSections.ts, invalidCombo.ts, and
+autoAssignLocation.ts against the per-individual model from Legs 2-3. invalidCombo.ts and
+autoAssignLocation.ts already operate strictly per-entry-id and needed no changes; the
+real bug lived one layer up, in buildDexSections.ts's shared `indexEntriesByForm` (which
+completionStats.ts also consumes directly): its per-slot picker kept whichever entry came
+last during iteration, which was safe before Leg 2 (the DB guaranteed exactly one row per
+form/gender/shiny) but wrong now that a duplicate owned individual can coexist with the
+unowned seed placeholder in the same slot — last-wins could pick the placeholder and
+under-report that unit as unowned in completion stats, search, and filters. Fixed by
+making the picker prefer an owned entry over an unowned one (first-owned-wins,
+deterministic); List/Hybrid view still only surfaces one representative entry per slot by
+design — enumerating every duplicate individually stays Box view's job (Leg 6-7). See
+commit `29563a2`.
+
 ## [Storage Locations get box sub-units] — Leg 3 (2026-09-03)
 Data layer only, no Box view UI. Added nullable `box_number`/`box_slot` to
 collection_entries (self-referential CHECKs, so a plain ALTER retrofit — no rebuild
