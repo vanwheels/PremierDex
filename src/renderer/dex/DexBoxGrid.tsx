@@ -4,6 +4,7 @@ import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { BOX_COLS, buildBoxes, buildUnboxedEntries } from './buildBoxes'
 import { SpriteThumbnail } from './SpriteThumbnail'
+import { BallIcon } from './BallIcon'
 import { DexBoxDetailPanel } from './DexBoxDetailPanel'
 import { DexBoxTray } from './DexBoxTray'
 import { DexBoxContextMenu } from './DexBoxContextMenu'
@@ -128,6 +129,16 @@ export function DexBoxGrid({
     onSetEntryBoxPosition(draggedEntryId, null, null)
   }
 
+  // Vanny feedback 2026-09-03: left-clicking an unboxed entry places it in the current
+  // box directly, instead of requiring a drag every time — a no-op (rather than spilling
+  // into the next box) once the current box is full, since the ask was specifically "the
+  // current box".
+  const handleClickUnboxedEntry = (draggedEntryId: number): void => {
+    const firstEmptySlot = cells.findIndex((c) => c === null)
+    if (firstEmptySlot === -1) return
+    onSetEntryBoxPosition(draggedEntryId, box.boxNumber, firstEmptySlot)
+  }
+
   return (
     <div className="dex-box-view">
       <div className="dex-box-columns">
@@ -176,25 +187,37 @@ export function DexBoxGrid({
                 }
               >
                 {cell && (
-                  <SpriteThumbnail
-                    pokeapiId={cell.pokeapiId}
-                    spriteFormSuffix={cell.spriteFormSuffix}
-                    female={cell.femaleSprite}
-                    shiny={cell.entry.shiny}
-                    size={CELL_SPRITE_SIZE}
-                    displayName={cell.displayName}
-                    ariaLabel={`${cell.displayName}${cell.entry.owned ? '' : ' — not yet owned'}`}
-                    className={
-                      [
-                        'dex-hybrid-tile',
-                        !cell.entry.owned && 'dex-hybrid-tile-unowned',
-                        `${cell.boxNumber}-${cell.slot}` === selectedCellKey && 'dex-hybrid-tile-selected'
-                      ]
-                        .filter(Boolean)
-                        .join(' ')
-                    }
-                    onClick={() => setSelectedCellKey(`${cell.boxNumber}-${cell.slot}`)}
-                  />
+                  <>
+                    {cell.entry.shiny && (
+                      <span className="dex-box-cell-shiny-badge" aria-hidden="true">
+                        ✨
+                      </span>
+                    )}
+                    {cell.entry.caughtBall && (
+                      <span className="dex-box-cell-ball-badge">
+                        <BallIcon ball={cell.entry.caughtBall} />
+                      </span>
+                    )}
+                    <SpriteThumbnail
+                      pokeapiId={cell.pokeapiId}
+                      spriteFormSuffix={cell.spriteFormSuffix}
+                      female={cell.femaleSprite}
+                      shiny={cell.entry.shiny}
+                      size={CELL_SPRITE_SIZE}
+                      displayName={cell.displayName}
+                      ariaLabel={`${cell.displayName}${cell.entry.owned ? '' : ' — not yet owned'}`}
+                      className={
+                        [
+                          'dex-hybrid-tile',
+                          !cell.entry.owned && 'dex-hybrid-tile-unowned',
+                          `${cell.boxNumber}-${cell.slot}` === selectedCellKey && 'dex-hybrid-tile-selected'
+                        ]
+                          .filter(Boolean)
+                          .join(' ')
+                      }
+                      onClick={() => setSelectedCellKey(`${cell.boxNumber}-${cell.slot}`)}
+                    />
+                  </>
                 )}
               </div>
             ))}
@@ -204,9 +227,10 @@ export function DexBoxGrid({
             storageLocations={storageLocations}
             speciesAvailability={speciesAvailability}
             onEditOrigin={() => setEditingOrigin(true)}
+            onSaveOrigin={onSaveOrigin}
           />
         </div>
-        <DexBoxTray entries={unboxedEntries} onDropEntry={handleDropOnTray} />
+        <DexBoxTray entries={unboxedEntries} onDropEntry={handleDropOnTray} onClickEntry={handleClickUnboxedEntry} />
       </div>
       {editingOrigin && selectedCell?.entry.owned && (
         <OriginModal

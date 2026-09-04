@@ -3,11 +3,17 @@ import type { UnboxedEntry } from './types'
 import { SpriteThumbnail } from './SpriteThumbnail'
 import { readDragEntryPayload, setDragEntryPayload } from './dragEntryPayload'
 
-const TRAY_SPRITE_SIZE = 32
+// Vanny feedback 2026-09-03: a middle ground between the old 32px tray sprite and the
+// 96px box-cell sprite (DexBoxGrid's CELL_SPRITE_SIZE) — the tray reads more like a
+// scaled-down box now rather than a plain list.
+const TRAY_SPRITE_SIZE = 64
 
 interface DexBoxTrayProps {
   entries: UnboxedEntry[]
   onDropEntry: (entryId: number) => void
+  /** Vanny feedback 2026-09-03: left-clicking a tray item places it into the current
+   * box's first open slot, same entry id the drag payload already carries. */
+  onClickEntry: (entryId: number) => void
 }
 
 /**
@@ -18,11 +24,11 @@ interface DexBoxTrayProps {
  *
  * Each item wraps SpriteThumbnail in a plain draggable <div> rather than adding drag
  * props to SpriteThumbnail itself — that component is shared with DexRow/DexHybridGrid
- * and has no reason to know about Box view's drag-and-drop. SpriteThumbnail's own
- * onClick stays a no-op here: items are drag-only this leg, there's no click action to
- * wire it to yet.
+ * and has no reason to know about Box view's drag-and-drop. SpriteThumbnail's own onClick
+ * is wired to onClickEntry (Vanny feedback 2026-09-03) as a one-click shortcut for the
+ * drag: place into the current box's first open slot.
  */
-export function DexBoxTray({ entries, onDropEntry }: DexBoxTrayProps): JSX.Element {
+export function DexBoxTray({ entries, onDropEntry, onClickEntry }: DexBoxTrayProps): JSX.Element {
   const [query, setQuery] = useState('')
 
   const filtered = query.trim()
@@ -69,7 +75,7 @@ export function DexBoxTray({ entries, onDropEntry }: DexBoxTrayProps): JSX.Eleme
               displayName={item.displayName}
               ariaLabel={item.displayName}
               className={item.entry.owned ? undefined : 'dex-hybrid-tile-unowned'}
-              onClick={() => {}}
+              onClick={() => onClickEntry(item.entry.id)}
             />
           </div>
         ))}

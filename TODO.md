@@ -1,14 +1,63 @@
 # TODO
 
-No milestone currently in progress — Box Arrangement / Real Inventory Data Model shipped
-2026-09-03 (see `MILESTONES.md` and its
-[post-mortem](docs/postmortems/box-arrangement-real-inventory-data-model.md)). Next
-milestone not yet scoped; pick from "Future Milestones" below when ready.
+## Current Milestone: Box View Polish & Multi-Box Editing
+
+Vanny's design pass on Box view after Leg 6/7 landed (2026-09-03) — a batch of feedback
+plus four design decisions confirmed via AskUserQuestion (adjacent box = full interactive
+second grid; phantom Pokémon = persisted placeholder, not local-only; multi-drag = drop
+target fills contiguously in selection order, blocked if any needed slot is occupied by
+something outside the selection; box add/rename = new per-location schema is in scope).
+
+### [Add / rename boxes] — Leg 2
+No box schema exists yet — `boxNumber` is purely derived from what entries currently sit
+in it (buildBoxes.ts only shows a box if it has >=1 real cell, or is Box 1). Needs a new
+per-Storage-Location box count (so "Add Box" has something to increment past, and empty
+boxes stay navigable/visible) plus an optional name-per-box-number store for renaming.
+Scope this leg's actual shape (new table vs. columns on storage_locations) before writing
+migrations.
+Last touched: 2026-09-03. Re-check count: 0.
+
+### [Adjacent second box] — Leg 3
+A second fully interactive box grid (own pager, same drag/drop/click rules as the
+primary one) opens side by side with the current box — confirmed over a read-only
+preview. Layout placement (replacing the Unboxed tray vs. a third column, and where the
+tray goes if displaced) needs a concrete decision during implementation; default to
+whatever keeps both boxes at their real Leg-1 cell size rather than shrinking either.
+Depends loosely on Leg 2 (an empty box needs to exist to be worth opening as the second
+one) but isn't hard-blocked by it.
+Last touched: 2026-09-03. Re-check count: 0.
+
+### [Multi-select + multi-drag] — Leg 4
+Shift-click selects a contiguous range from the first selected index to the second;
+ctrl-click toggles individual cells into/out of the selection. Dragging a multi-selection
+carries all selected entry ids (payload rework — today's dragEntryPayload.ts carries a
+single id); dropping fills slots contiguously starting at the drop target, in the
+selection's original order, and is rejected outright if any needed slot is already
+occupied by something not in the dragged selection. Most useful once Leg 3's second box
+exists (cross-box drags), but the selection/payload rework itself doesn't need it.
+Last touched: 2026-09-03. Re-check count: 0.
+
+### [Phantom placeholder Pokémon] — Leg 5
+Right-click an empty slot to pick a species and mark that slot as a persisted "planned"
+placeholder — saved to the DB as its own concept distinct from real owned/unowned
+CollectionEntry rows (so it survives reload and never counts toward real collection
+totals). Renders dimmed/marked-as-planned. Needs its own small schema (species id per
+box slot, no gender/shiny/individual data — it's just "I intend to put something of this
+species here").
+Last touched: 2026-09-03. Re-check count: 0.
 
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized.
+
+### [Regional dex number in Box detail panel] — unscheduled
+Raised alongside the Box View Polish milestone but out of scope for it: Species currently
+only carries `regionalGroup` (a label), no actual per-game regional dex *number* — that
+field doesn't exist in the data model at all yet. Needs its own scoping (which
+game/region's numbering, one column vs. per-game) before it can be added to the info bar
+alongside National Dex #.
+Last touched: 2026-09-03. Re-check count: 0.
 
 ### [Bulk move/duplicate entries between storage locations] — unscheduled
 Raised by Vanny 2026-09-03 while scoping the Unassigned-backfill fix (Leg 6): a way to
@@ -96,3 +145,4 @@ catchable there, but reachable by evolving a caught Bulbasaur). Both are obtaina
 gaps in the current data model, not edge cases. Vanny confirmed 2026-09-03 this stays
 queued behind the current milestone despite the urgency.
 Last touched: 2026-09-03. Re-check count: 0.
+</content>

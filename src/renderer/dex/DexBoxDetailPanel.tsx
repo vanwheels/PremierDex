@@ -1,9 +1,11 @@
+import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { BoxCell } from './types'
 import { checkEntryValidity } from './invalidCombo'
 import { defaultSpriteUrl } from './sprites'
 import { BallIcon } from './BallIcon'
+import { useNicknameEditor } from './useNicknameEditor'
 
 const DETAIL_SPRITE_SIZE = 64
 
@@ -12,6 +14,9 @@ interface DexBoxDetailPanelProps {
   storageLocations: StorageLocation[]
   speciesAvailability: SpeciesAvailabilityData
   onEditOrigin: () => void
+  /** Vanny feedback 2026-09-03: feeds the panel's own inline nickname editor, same
+   * commit-on-blur pattern as DexRow's useNicknameEditor. */
+  onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
 }
 
 /** Same label/value pair as DexHybridDetailPanel's own DetailField — not shared directly
@@ -27,21 +32,29 @@ function DetailField({ label, value }: { label: string; value: string }): JSX.El
 }
 
 /**
- * Read-only detail panel for Leg 6's Box grid, shown when a filled cell is clicked
- * (Vanny's call, 2026-09-03) — deliberately the same field set and CSS classes as
- * DexHybridDetailPanel (dex-hybrid-detail-*) rather than a parallel dex-box-detail-*
- * stylesheet, since the two panels are visually identical and only differ in what feeds
- * them (a BoxCell's single real individual vs. a DexHybridTile's form-slot pairing). An
- * Edit Origin button still opens the real OriginModal (DexBoxGrid owns that), matching
- * Hybrid's "read-only grid, real edit modal" split even though Box view's own arrangement
- * stays read-only until Leg 7.
+ * Detail panel for Leg 6's Box grid, shown when a filled cell is clicked (Vanny's call,
+ * 2026-09-03) — deliberately the same field set and CSS classes as DexHybridDetailPanel
+ * (dex-hybrid-detail-*) rather than a parallel dex-box-detail-* stylesheet, since the two
+ * panels are visually identical and only differ in what feeds them (a BoxCell's single
+ * real individual vs. a DexHybridTile's form-slot pairing). An Edit Origin button still
+ * opens the real OriginModal (DexBoxGrid owns that) for everything except nickname; the
+ * nickname field itself is inline-editable here (Vanny feedback 2026-09-03), same
+ * commit-on-blur pattern as DexRow's dex-nickname-input, via useNicknameEditor.
  */
 export function DexBoxDetailPanel({
   cell,
   storageLocations,
   speciesAvailability,
-  onEditOrigin
+  onEditOrigin,
+  onSaveOrigin
 }: DexBoxDetailPanelProps): JSX.Element {
+  // Hook order can't depend on `cell` being non-null, so this runs every render — it's a
+  // no-op (blank, disabled input) once the null-cell branch below returns instead.
+  const { text: nicknameText, setText: setNicknameText, commit: commitNickname } = useNicknameEditor(
+    cell?.entry.owned ? cell.entry : null,
+    onSaveOrigin
+  )
+
   if (!cell) {
     return <div className="dex-hybrid-detail-panel dex-hybrid-detail-empty">Select a Pokémon in the box above to see its details.</div>
   }
@@ -74,7 +87,22 @@ export function DexBoxDetailPanel({
         {entry.owned ? (
           <>
             <dl className="dex-hybrid-detail-fields">
-              {entry.nickname && <DetailField label="Nickname" value={entry.nickname} />}
+              <DetailField label="National Dex #" value={String(cell.dexNumber)} />
+              <div className="dex-hybrid-detail-field">
+                <dt>Nickname</dt>
+                <dd>
+                  <input
+                    className="dex-nickname-input"
+                    value={nicknameText}
+                    onChange={(e) => setNicknameText(e.target.value)}
+                    onBlur={commitNickname}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') e.currentTarget.blur()
+                    }}
+                    placeholder="Optional"
+                  />
+                </dd>
+              </div>
               {entry.otName && <DetailField label="OT" value={entry.otName} />}
               {entry.tid !== null && <DetailField label="TID" value={String(entry.tid)} />}
               {entry.sid !== null && <DetailField label="SID" value={String(entry.sid)} />}

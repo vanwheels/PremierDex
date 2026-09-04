@@ -7,7 +7,13 @@
  * drag-and-drop cell wrapper, the unboxed tray, and the right-click context menu.
  */
 
+/* Cell-sizing vars live here (not on .dex-box-grid) so .dex-box-tray can size its own
+ * height off the same numbers — see its comment below. Cell size is sprite (96px,
+ * DexBoxGrid's CELL_SPRITE_SIZE) plus a small margin, not a fraction of the container. */
 .dex-box-columns {
+  --dex-box-cell-size: 108px;
+  --dex-box-gap: 0.35rem;
+  --dex-box-pad: 0.75rem;
   display: flex;
   gap: 1rem;
   align-items: flex-start;
@@ -18,16 +24,13 @@
   min-width: 0;
 }
 
-/* Cell size is sprite (96px, DexBoxGrid's CELL_SPRITE_SIZE) plus a small margin — not a
- * fraction of the container. display: inline-grid keeps the grid sized to its own 6
- * columns instead of stretching to fill dex-box-main's flex:1 width, which is what made a
- * 30-slot box enormous before (Vanny feedback 2026-09-03: should mirror HOME's compact box
- * view, not fill the pane). */
+/* display: inline-grid keeps the grid sized to its own 6 columns instead of stretching to
+ * fill dex-box-main's flex:1 width, which is what made a 30-slot box enormous before
+ * (Vanny feedback 2026-09-03: should mirror HOME's compact box view, not fill the pane). */
 .dex-box-grid {
-  --dex-box-cell-size: 108px;
   display: inline-grid;
-  gap: 0.35rem;
-  padding: 0.75rem;
+  gap: var(--dex-box-gap);
+  padding: var(--dex-box-pad);
   background-color: var(--surface);
   background-image: var(--grain);
   background-size: 160px 160px;
@@ -39,12 +42,49 @@
 /* Leg 7: every cell (filled or empty) is now a wrapper div rather than the tile/empty
  * marker being the grid item directly — it owns the drag-and-drop/right-click handlers.
  * aspect-ratio here (rather than on dex-box-cell-empty alone, pre-Leg-7) keeps filled and
- * empty cells the same size regardless of content. */
+ * empty cells the same size regardless of content. position: relative anchors the
+ * shiny/ball badges below. */
 .dex-box-cell {
+  position: relative;
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Vanny feedback 2026-09-03: shiny sparkle (top-right) and caught-ball icon (top-left)
+ * overlaid on a filled cell — pointer-events: none so they never intercept the cell's own
+ * drag/click/context-menu handlers. */
+.dex-box-cell-shiny-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 0.85rem;
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7));
+}
+
+.dex-box-cell-ball-badge {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  pointer-events: none;
+}
+
+.dex-box-cell-ball-badge .ball-icon,
+.dex-box-cell-ball-badge .ball-icon-fallback {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Vanny feedback 2026-09-03: the selection border read as an alarm-red blemish rather
+ * than a highlight — dropped for Box view specifically (Hybrid view's own
+ * dex-hybrid-tile-selected, which this class is shared with, is untouched). */
+.dex-box-grid .dex-hybrid-tile-selected {
+  border-color: transparent;
+  background: none;
 }
 
 .dex-box-cell-empty {
@@ -75,32 +115,46 @@
   padding: 1rem;
 }
 
-/* Leg 7: the unboxed-entries drag source, next to the grid. */
+/* Leg 7: the unboxed-entries drag source, next to the grid. Widened (200px -> 260px) for
+ * the larger sprites below, and its height mirrors the box grid's own natural height —
+ * same --dex-box-cell-size/-gap/-pad vars, same row count (BOX_ROWS in buildBoxes.ts) —
+ * rather than a value picked to look right once and drift the next time cell size changes
+ * (Vanny feedback 2026-09-03: "mirror the height of the box"). display: flex/column +
+ * dex-box-tray-list's flex: 1 lets the list itself absorb that height, independent of the
+ * heading/search bar above it. */
 .dex-box-tray {
-  width: 200px;
+  width: 260px;
   flex-shrink: 0;
+  height: calc(5 * var(--dex-box-cell-size) + 4 * var(--dex-box-gap) + 2 * var(--dex-box-pad) + 2px);
+  display: flex;
+  flex-direction: column;
   padding: 0.75rem;
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
+  box-sizing: border-box;
 }
 
 .dex-box-tray-heading {
   margin: 0 0 0.5rem;
   font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
 .dex-box-tray-search {
   width: 100%;
   margin-bottom: 0.5rem;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .dex-box-tray-list {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   gap: 0.35rem;
-  max-height: 420px;
   overflow-y: auto;
 }
 
