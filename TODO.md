@@ -1,8 +1,41 @@
 # TODO
 
-No milestone currently in progress — Box View Polish & Multi-Box Editing shipped
-2026-09-04 (see MILESTONES.md/COMPLETED.md). Pick the next one from Unscheduled or Future
-Milestones below, or scope a new one.
+## Current Milestone: Dex Completeness Tier Migration & Box Templates
+
+Picked up 2026-09-04 from Future Milestones. Both halves (tier migration and Box
+Templates) share a "what counts as complete for tier X" definition, so scoping is bundled
+into Leg 1 before either gets built.
+
+### [Dex completeness tier migration] — Leg 2
+Build user-customizable Box Templates (living dex, living form dex,
+exclude-gender-differences, etc.) from the ghost/placeholder forms already in Box view,
+using Leg 1's tier definition (`docs/investigations/dex-completeness-tiers.md`) — a
+template is a (tier, color) pair; auto-populate stamps that tier's `requiredUnits()` minus
+already-owned/placed entries into `box_placeholders`. `BoxPlaceholder` currently only
+carries `speciesId`, not form/gender/shiny — needs widening before it can represent
+anything past the `Living` tier. Only the 3 tiers not blocked on Pre-Evos data
+(Living/LivingFormLITE/Living Form, see the new Leg 5 below) are buildable for now.
+Last touched: 2026-09-04. Re-check count: 0.
+
+### [Dex completeness tier migration] — Leg 3
+Build the upgrade path: migrating a collection up through the tiers defined in
+`docs/investigations/dex-completeness-tiers.md` (Living -> LivingFormLITE -> Living Form,
+regular or shiny) by diffing the target tier's `requiredUnits()` against owned
+`collection_entries`. Still needs its own design for the one gap Leg 1 deliberately left
+open: when a gender-diff form was collapsed (owned under the `male` placeholder key
+regardless of which gender the user actually has), upgrading to a gender-split tier needs
+a way to ask which gender that individual actually is before it can mark the right entry
+owned.
+Last touched: 2026-09-04. Re-check count: 0.
+
+### [Evolution-chain data (Pre-Evos axis)] — Leg 5
+Add evolution-chain membership/stage data (PokeAPI `/evolution-chain` fetch pass, new
+`Species` column, seed backfill) — nothing in the schema encodes this today. Unblocks the
+FinalFormForm/FinalForm tiers from `docs/investigations/dex-completeness-tiers.md`, which
+can't be computed without it. Not on Leg 2/3's critical path — those tiers just stay
+unavailable in the tier picker until this ships. Split out of Leg 1 2026-09-04 per Vanny's
+call: design all 3 tier axes now, defer this data work rather than block on it.
+Last touched: 2026-09-04. Re-check count: 0.
 
 ## Unscheduled
 
@@ -86,18 +119,62 @@ since the split itself was orthogonal to what that leg needed. Should be picked 
 or as part of, whichever future leg next adds a table or retrofit block here.
 Last touched: 2026-09-04. Re-check count: 0.
 
+### [Jump directly to a Box] — unscheduled
+Raised by Vanny 2026-09-04: no way to select a specific box directly — currently requires
+paging through boxes in order via the box tray/scroller. Wants a direct picker (box
+number entry, list, or grid) to jump straight there. Not scoped, but looks like a small,
+self-contained addition to DexBoxTray/DexBoxPane — candidate quick win.
+Last touched: 2026-09-04. Re-check count: 0.
+
+### [Remove "Unassigned" as the default check-in bucket] — unscheduled
+Raised by Vanny 2026-09-04: the Unassigned storage location is bad UX as a default landing
+spot — better to let the user add a mon directly into whichever storage/box they want at
+check-in time than default to Unassigned and require a manual move afterward. Leg 9 (see
+COMPLETED.md; autoAssignLocation.ts) already covers the case where a specific location tab
+is selected when checking a mon owned. The remaining gap is checking owned from a context
+with no location tab selected (e.g. the main Dex Table) — that still lands in Unassigned.
+Overlaps with [Bulk move/duplicate entries between storage locations] (would reduce the
+need for it) and the false-positive Invalid Combo badges under [Deeper per-game validity:
+form/gender legality + curated Met Location list] (many are on Unassigned entries). Needs
+scoping: prompt for a location at check-in time? Keep Unassigned only as a fallback when no
+locations exist yet?
+Last touched: 2026-09-04. Re-check count: 0.
+
+### [Multi-select highlight verification] — unscheduled
+Raised by Vanny 2026-09-04: multi-selected mons in Box view should all read as highlighted.
+Leg 4 of Box View Polish (see COMPLETED.md) already added ctrl/shift multi-select with a
+per-slot `isSelected` prop driving the `dex-hybrid-tile-selected` CSS class
+(DexBoxPane.tsx, DexBoxGridCell.tsx) — needs a look at why that isn't reading as
+sufficiently highlighted in practice: could be the style is too subtle across several
+selected tiles at once, or an interaction bug clearing/limiting selection.
+Last touched: 2026-09-04. Re-check count: 0.
+
+### [Undo support for Box moves] — unscheduled
+Raised by Vanny 2026-09-04: Ctrl+Z to undo, plus a visible undo-move button, for Box view
+drag/move operations (including Leg 4's multi-drag). No undo history exists today. Real
+feature, not a quick fix — needs its own scoping (how deep a history, whether it covers
+placeholder edits/deletes too or just moves).
+Last touched: 2026-09-04. Re-check count: 0.
+
+### [Placeholder sprites sized to match Box sprites] — unscheduled
+Raised by Vanny 2026-09-04: planned-placeholder sprites (added in Leg 5 of Box View
+Polish, see COMPLETED.md) render at a different size than the regular Box view sprites.
+Likely a small CSS/sizing fix in DexBoxGridCell.tsx/SpriteThumbnail.tsx — candidate quick
+win.
+Last touched: 2026-09-04. Re-check count: 0.
+
+### [Box view scroller lag] — unscheduled
+Raised by Vanny 2026-09-04: noticeable lag/delay scrolling through boxes in Box view.
+Distinct from [Virtualize the Dex Table body] (that's the main Dex Table; this is the Box
+view/box tray). Some cost is expected given the sprite grid rendering, but worth
+investigating load/render strategy (e.g. lazy-loading offscreen boxes, sprite caching)
+before accepting it as a hard limit.
+Last touched: 2026-09-04. Re-check count: 0.
+
 ## Future Milestones (unscheduled)
 
 Large items Vanny explicitly flagged as out of scope for a past milestone — logged here
 so they aren't lost, not queued into a leg yet.
-
-### [Dex completeness tier migration] — future milestone
-Migrating a collection from a regular living dex/shiny living dex (species-only) up to a
-complete living dex/shiny living dex (form + gender included), and figuring out whether
-downgrading is even possible. Upgrading needs a way to flag previously-unspecified-gender
-entries with the correct gender the user actually possesses. Vanny called this out as
-large and needing real scoping work before it's picked up — not for this milestone.
-Last touched: 2026-09-02. Re-check count: 0.
 
 ### [Ribbons/Alpha/size/capture-date tracking] — future milestone
 Ribbon tracking, with an Alpha marker bundled into the same pass since both are per-entry
