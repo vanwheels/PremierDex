@@ -8,16 +8,6 @@ second grid; phantom Pokémon = persisted placeholder, not local-only; multi-dra
 target fills contiguously in selection order, blocked if any needed slot is occupied by
 something outside the selection; box add/rename = new per-location schema is in scope).
 
-### [Multi-select + multi-drag] — Leg 4
-Shift-click selects a contiguous range from the first selected index to the second;
-ctrl-click toggles individual cells into/out of the selection. Dragging a multi-selection
-carries all selected entry ids (payload rework — today's dragEntryPayload.ts carries a
-single id); dropping fills slots contiguously starting at the drop target, in the
-selection's original order, and is rejected outright if any needed slot is already
-occupied by something not in the dragged selection. Most useful once Leg 3's second box
-exists (cross-box drags), but the selection/payload rework itself doesn't need it.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ### [Phantom placeholder Pokémon] — Leg 5
 Right-click an empty slot to pick a species and mark that slot as a persisted "planned"
 placeholder — saved to the DB as its own concept distinct from real owned/unowned

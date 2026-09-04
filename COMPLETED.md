@@ -2,6 +2,18 @@
 
 ## Box View Polish & Multi-Box Editing
 
+### [Multi-select + multi-drag] — Leg 4 — 2026-09-04
+DexBoxPane's cell selection reworked from a single slot to an ordered array: plain click
+replaces it, ctrl-click toggles a slot in/out, shift-click selects the contiguous filled
+range between the anchor and the click. dragEntryPayload.ts reworked to carry a
+comma-joined list of entry ids instead of one, so dragging a selected cell carries the
+whole selection in selection order. A single-id drop keeps the pre-existing swap/move
+behavior; a multi-id drop fills slots contiguously from the drop target in selection
+order, rejected outright (no partial fill) if the run spills past the box or any needed
+slot is occupied by an entry outside the selection. New StorageAdapter.fillBoxSlots
+method (vacate-then-place, same UNIQUE-index workaround as swapEntryBoxPositions)
+threaded through IPC end to end. See commit `29be928`.
+
 ### [Adjacent second box] — Leg 3 — 2026-09-04
 DexBoxGrid's pager/grid/detail-panel/drag-and-drop rendering split into a new DexBoxPane
 component so a second one can mount side by side with the primary via an "Open Second
