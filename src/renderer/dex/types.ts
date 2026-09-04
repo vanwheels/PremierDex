@@ -108,3 +108,33 @@ export interface DexSort {
 /** No sort applied: sections render in buildDexSections' natural order (species/dex
  * order, with grouped-mode regional clusters appended after). */
 export const DEFAULT_DEX_SORT: DexSort | null = null
+
+/** One occupied slot in a Box view grid (Leg 6 of the Box Arrangement milestone) — always
+ * backed by a real CollectionEntry, owned or not (an unowned placeholder can occupy a box
+ * slot too, see CollectionEntry's doc comment). Denormalizes the same display fields
+ * DexRowData/CollectionRowData already carry rather than joining Species/Form at render
+ * time, same convention both of those follow. */
+export interface BoxCell {
+  boxNumber: number
+  /** 0-based position within the box, matching CollectionEntry.boxSlot. */
+  slot: number
+  entry: CollectionEntry
+  dexNumber: number
+  /** Species + form name, already carrying the entry's own gender symbol and shiny
+   * marker, same as CollectionRowData.displayName — a box cell shows one specific
+   * individual, not a form pairing. */
+  displayName: string
+  pokeapiId: number
+  spriteFormSuffix: string | null
+  femaleSprite: boolean
+  homeBoxable: boolean
+  shinyLocked: boolean
+  alwaysShiny: boolean
+}
+
+/** One paginated box (see buildBoxes.ts's BOX_SIZE) — `cells` is always exactly
+ * BOX_SIZE long, indexed by slot, with `null` for an empty slot. */
+export interface Box {
+  boxNumber: number
+  cells: (BoxCell | null)[]
+}

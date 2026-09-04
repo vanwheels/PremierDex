@@ -25,12 +25,6 @@ single-shiny-per-species schema can't represent at all. (Hybrid view shipped in 
 instead — Vanny only ever described it as "the list, just sprites," so the same ceiling
 didn't misrepresent it.)
 
-### [Box view UI: grid + pagination] — Leg 6
-Read-only first. HOME-style grid (5 rows x 6 columns, sprite-only) reusing Hybrid's tile
-rendering (DexHybridGrid) per the Phase 1 post-mortem's dependency note, plus pagination.
-No editing yet.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ### [Box view editing: drag-and-drop add/remove/swap] — Leg 7
 Drag-and-drop add/remove/swap flow plus the right-click action menu, on top of Leg 6's
 grid. UX approach (drag-and-drop over a menu-based flow) decided 2026-09-03.

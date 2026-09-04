@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 
-/** Which layout the Living Dex renders as: the spreadsheet-style table, or Leg 8's
- * HOME-derived sprite grid. */
-export type DexViewMode = 'list' | 'hybrid'
+/** Which layout the Living Dex renders as: the spreadsheet-style table, Leg 8's
+ * HOME-derived flowing sprite grid, or Leg 6 of the Box Arrangement milestone's
+ * paginated, real-per-individual-box grid. */
+export type DexViewMode = 'list' | 'hybrid' | 'box'
 
 const DEFAULT_VIEW_MODE: DexViewMode = 'list'
 const STORAGE_KEY = 'premierdex.dexViewMode'
@@ -10,7 +11,7 @@ const STORAGE_KEY = 'premierdex.dexViewMode'
 /** Exported for testing — the only real logic in this file, everything else is
  * localStorage/React plumbing mirroring theme-store's loadThemeMode. */
 export function isDexViewMode(value: string | null): value is DexViewMode {
-  return value === 'list' || value === 'hybrid'
+  return value === 'list' || value === 'hybrid' || value === 'box'
 }
 
 function loadDexViewMode(): DexViewMode {

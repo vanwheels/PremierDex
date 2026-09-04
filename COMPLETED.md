@@ -10,6 +10,25 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Box view UI: grid + pagination] — Leg 6 (2026-09-03)
+Added a third Living Dex view mode: `buildBoxes` shapes a location-scoped entry list into
+real per-box 5x6 grids keyed on Leg 3's `boxNumber`/`boxSlot`, mirroring
+`buildCollectionGroups`' per-entry pattern rather than `buildDexSections`' per-form-slot
+one. `DexBoxGrid` paginates one box at a time (HOME's own Box view screen, unlike
+Hybrid's continuous flow) and reuses hybrid-grid.css's tile/detail-panel classes instead
+of duplicating them; `DexBoxDetailPanel` mirrors `DexHybridDetailPanel` for a
+click-a-cell read-only panel with an Edit Origin action (Vanny's call to include it this
+leg rather than deferring to Leg 7). Box view deliberately ignores DexFilters/DexOptions
+— it shows a box's literal physical contents, scoped only by the selected Storage
+Location tab — and shows an explanatory empty state on the Unassigned tab, which can
+never hold a box (`setEntryBoxPosition` requires a real location). Box 1 always appears
+in the pager even with zero placed entries (Vanny's call), since nothing sets a box
+position until Leg 7's editing UI ships; every other box number only appears once it
+actually holds an entry, rather than padding out every integer in between. Post-
+implementation subagent review found no correctness bugs; one test-coverage gap it
+flagged (two entries in the same box at different slots) was added. See commit
+`<pending>`.
+
 ## [Export/import natural-key rework] — Leg 5 (2026-09-03)
 formId/gender/shiny alone stopped being unique once duplicate individuals became real
 (Leg 2); import matching now breaks the tie with each row's 0-indexed position within its

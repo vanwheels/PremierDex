@@ -12,6 +12,7 @@ import type { CompletionStatsOptions } from './completionStats'
 import { autoAssignedLocationOnCheckIn } from './autoAssignLocation'
 import { DexTable } from './DexTable'
 import { DexHybridGrid } from './DexHybridGrid'
+import { DexBoxGrid } from './DexBoxGrid'
 import { DexLocationTabs } from './DexLocationTabs'
 import { DexToolbar } from './DexToolbar'
 import { DexFilterBar } from './DexFilterBar'
@@ -162,6 +163,21 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           sections={visibleSections}
           storageLocations={storageLocations}
           speciesAvailability={speciesAvailability}
+          onSaveOrigin={onSaveOrigin}
+        />
+      </div>
+      {/* Same hidden-not-unmounted treatment. Unlike List/Hybrid above, Box view reads
+       * entriesForLocationTab directly rather than the filtered/sorted visibleSections
+       * pipeline — see DexViewModeSwitcher's doc comment for why it's deliberately outside
+       * DexFilters' scope. */}
+      <div hidden={viewMode !== 'box'}>
+        <DexBoxGrid
+          entries={entriesForLocationTab}
+          species={species}
+          forms={forms}
+          storageLocations={storageLocations}
+          speciesAvailability={speciesAvailability}
+          selectedLocationTab={selectedLocationTab}
           onSaveOrigin={onSaveOrigin}
         />
       </div>

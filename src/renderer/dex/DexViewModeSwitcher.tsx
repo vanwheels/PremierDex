@@ -2,7 +2,8 @@ import type { DexViewMode } from './useDexViewMode'
 
 const OPTIONS: { mode: DexViewMode; label: string }[] = [
   { mode: 'list', label: 'List' },
-  { mode: 'hybrid', label: 'Hybrid' }
+  { mode: 'hybrid', label: 'Hybrid' },
+  { mode: 'box', label: 'Box' }
 ]
 
 interface DexViewModeSwitcherProps {
@@ -17,7 +18,12 @@ interface DexViewModeSwitcherProps {
  * ThemeModeToggle: `.active` reuses the shared border-color/color: var(--accent) look
  * rather than a bespoke segmented control.
  *
- * 'Hybrid' (Leg 8) is the HOME-derived sprite grid — see DexHybridGrid.
+ * 'Hybrid' (Leg 8) is the HOME-derived flowing sprite grid — see DexHybridGrid. 'Box'
+ * (Leg 6 of the Box Arrangement milestone) is the paginated, real-per-individual-box
+ * grid — see DexBoxGrid. Unlike List/Hybrid, Box view is deliberately NOT scoped by
+ * DexFilters (see LivingDexView) — it shows a box's literal physical contents rather
+ * than a filtered dex-browsing lens, so the "every filter applies to every view mode"
+ * rule above stops at Hybrid.
  */
 export function DexViewModeSwitcher({ viewMode, onChange }: DexViewModeSwitcherProps): JSX.Element {
   return (
