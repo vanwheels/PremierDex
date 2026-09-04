@@ -108,6 +108,15 @@ export interface CollectionEntry {
    * origin stays fixed, so this is written by its own setEntryStorageLocation setter,
    * never by setEntryOrigin. See shared/types/storage-location.ts. */
   storageLocationId: number | null
+  /** Numbered sub-unit of storageLocationId this individual is boxed in (e.g. "Box 3"),
+   * and its 0-based slot position within that box (Leg 3 of the Box Arrangement/Real
+   * Inventory Data Model milestone — a HOME-style 30-cell grid, 5 rows x 6 columns,
+   * decided ahead of Leg 6's Box view UI). Both null together (not placed in a box) or
+   * both set together — enforced by sqlite-storage.ts's setEntryBoxPosition, not a DB
+   * CHECK (see schema.ts). An unowned placeholder entry can occupy a box slot too, shown
+   * greyed-out once Box view ships. */
+  boxNumber: number | null
+  boxSlot: number | null
 }
 
 /** Field set for setEntryOrigin — everything but the assigned id, mirroring

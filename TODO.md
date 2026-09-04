@@ -25,12 +25,6 @@ single-shiny-per-species schema can't represent at all. (Hybrid view shipped in 
 instead — Vanny only ever described it as "the list, just sprites," so the same ceiling
 didn't misrepresent it.)
 
-### [Storage Locations get box sub-units] — Leg 3
-Data layer only. A box becomes a numbered sub-unit of a Storage Location (e.g. "HOME Box
-3") with real per-entry slot positions; unowned species can occupy a slot as a
-greyed-out placeholder. Depends on Leg 2's per-individual model. Still no Box view UI.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ### [Fix downstream logic assuming one entry per species] — Leg 4
 Audit and update completionStats.ts, filterDexSections.ts, invalidCombo.ts, and
 autoAssignLocation.ts against the per-individual model from Legs 2-3.
@@ -91,28 +85,18 @@ only if it becomes a real problem, not proactively.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ### [Split schema.ts] — unscheduled
-Crossed the ~300-line soft cap at Leg 5 (341 lines, still well under the 500 hard cap) —
-each closed-set CHECK column (language, caught_ball) has picked up its own "ALTER-time
-CHECK can't be widened later" rebuild block over time, and that pattern will likely repeat
-if another CHECK-constrained column needs the same treatment. Candidate split: pull the
-CHECK-widen rebuild blocks (sid-4294, caught_ball) into their own module alongside the
-retrofit ALTERs, mirroring the sqlite-storage.ts split idea below.
+Crossed the ~300-line soft cap at Leg 5 (341 lines) and now at 421 after Leg 3's
+box_number/box_slot retrofit — still well under the 500 hard cap. Each closed-set CHECK
+column (language, caught_ball) has picked up its own "ALTER-time CHECK can't be widened
+later" rebuild block over time, and that pattern will likely repeat if another
+CHECK-constrained column needs the same treatment. Candidate split: pull the CHECK-widen
+rebuild blocks (sid-4294, caught_ball) into their own module alongside the retrofit
+ALTERs, mirroring how sqlite-storage.ts's export/import logic got split into
+collection-backup.ts (Leg 3 — see COMPLETED.md).
 Confirmed 2026-09-03: deliberately kept out of the User-Customizable Dex Layout milestone
-— orthogonal code health, not blocking. Stays standalone; pick up opportunistically if a
-leg in the current milestone happens to touch this file anyway.
-Last touched: 2026-09-03. Re-check count: 0.
-
-### [Split sqlite-storage.ts] — unscheduled
-Already over the ~300-line soft cap before Leg 3 (415 lines) and now at 471 after later
-storage-location FK/met-location additions — still under the 500-line hard cap, so not
-urgent, but growing. Candidate split: pull the exportCollection/importCollection backup
-logic (and its natural-key matching helpers) into its own module, mirroring how
-schema.ts's retrofit blocks already got split out into schema-ball.test.ts/
-schema-language.test.ts on the test side. Current milestone's Leg 5 (export/import
-natural-key rework) touches this same logic — worth reassessing whether to fold the split
-into that leg when it starts.
-Confirmed 2026-09-03: deliberately kept out of the User-Customizable Dex Layout milestone
-— orthogonal code health, not blocking.
+— orthogonal code health, not blocking. Leg 3 touched this file (new retrofit block) but
+didn't fold the split in, since it only added ~30 lines to an already-flagged-for-later
+file. Stays standalone; pick up opportunistically if a future leg touches this file again.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## Future Milestones (unscheduled)

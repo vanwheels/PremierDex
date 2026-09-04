@@ -41,6 +41,8 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
     caughtBall: null,
     metLocation: null,
     storageLocationId: null,
+    boxNumber: null,
+    boxSlot: null,
     ...overrides
   }
 }
@@ -234,7 +236,9 @@ function ownedEntry(id: number, shiny = false): CollectionEntry {
     nickname: null,
     caughtBall: null,
     metLocation: null,
-    storageLocationId: null
+    storageLocationId: null,
+    boxNumber: null,
+    boxSlot: null
   }
 }
 

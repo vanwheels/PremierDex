@@ -39,7 +39,9 @@ function ownedEntry(id: number, shiny: boolean, nickname: string | null = null):
     nickname,
     caughtBall: null,
     metLocation: null,
-    storageLocationId: null
+    storageLocationId: null,
+    boxNumber: null,
+    boxSlot: null
   }
 }
 

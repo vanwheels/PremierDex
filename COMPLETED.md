@@ -10,6 +10,23 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Storage Locations get box sub-units] — Leg 3 (2026-09-03)
+Data layer only, no Box view UI. Added nullable `box_number`/`box_slot` to
+collection_entries (self-referential CHECKs, so a plain ALTER retrofit — no rebuild
+needed) plus a `UNIQUE(storage_location_id, box_number, box_slot)` index (safe to create
+unconditionally: SQLite treats every NULL as distinct for uniqueness, so unboxed rows
+never collide). New `setEntryBoxPosition` requires the entry already have a storage
+location and rejects setting boxNumber/boxSlot independently — enforced in
+sqlite-storage.ts rather than a cross-column DB CHECK, which ALTER TABLE ADD COLUMN can't
+express. `setEntryStorageLocation` now also clears box position, since a slot is only
+meaningful within the location it was set for. Wired through export/import too (dropping
+box position if the resolved storageLocationId comes back null). Pushed sqlite-storage.ts
+to 514 lines (over the 500 hard cap), so folded in the already-earmarked "Split
+sqlite-storage.ts" TODO item: exportCollection/importCollection and their natural-key
+matching helpers moved to new `collection-backup.ts`, and the five Row
+interfaces/toXxx mappers moved to new `row-mappers.ts` (shared by both, avoiding a
+circular import) — sqlite-storage.ts back to 222 lines. See commit `<hash>`.
+
 ## [Drop CollectionEntry's owned-copy uniqueness constraint] — Leg 2 (2026-09-03)
 Schema/migration only, no UI changes. Dropped collection_entries' `UNIQUE(form_id,
 gender, shiny)` via a table-rebuild migration (same hazard class as schema.ts's

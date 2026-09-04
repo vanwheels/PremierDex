@@ -3,140 +3,27 @@ import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from 
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
-import type { CollectionExport, CollectionImportResult } from '@shared/storage/collection-export'
 import { applySchema } from './schema'
 import { runSeed } from './seed'
-
-interface SpeciesRow {
-  id: number
-  name: string
-  generation: number
-  collapsed_display_form_id: number | null
-}
-
-interface FormRow {
-  id: number
-  species_id: number
-  form_name: string
-  form_category: Form['formCategory']
-  home_boxable: 0 | 1
-  shiny_locked: 0 | 1
-  always_shiny: 0 | 1
-  has_gender_difference: 0 | 1
-  first_available_generation: number
-  regional_group: string | null
-  pokeapi_id: number | null
-  sprite_form_suffix: string | null
-}
-
-interface CollectionEntryRow {
-  id: number
-  form_id: number
-  gender: CollectionEntry['gender']
-  shiny: 0 | 1
-  owned: 0 | 1
-  trainer_profile_id: number | null
-  origin_game: string | null
-  ot_name: string | null
-  tid: number | null
-  sid: number | null
-  language: string | null
-  nickname: string | null
-  caught_ball: string | null
-  storage_location_id: number | null
-  met_location: string | null
-}
-
-interface TrainerProfileRow {
-  id: number
-  game: string
-  ot_name: string
-  tid: number | null
-  sid: number | null
-  label: string | null
-  language: string | null
-}
-
-interface StorageLocationRow {
-  id: number
-  location_type: StorageLocation['locationType']
-  name: string
-  trainer_profile_id: number | null
-}
-
-function toSpecies(row: SpeciesRow): Species {
-  return {
-    id: row.id,
-    name: row.name,
-    generation: row.generation,
-    collapsedDisplayFormId: row.collapsed_display_form_id
-  }
-}
-
-function toForm(row: FormRow): Form {
-  return {
-    id: row.id,
-    speciesId: row.species_id,
-    formName: row.form_name,
-    formCategory: row.form_category,
-    homeBoxable: row.home_boxable === 1,
-    shinyLocked: row.shiny_locked === 1,
-    alwaysShiny: row.always_shiny === 1,
-    hasGenderDifference: row.has_gender_difference === 1,
-    firstAvailableGeneration: row.first_available_generation,
-    regionalGroup: row.regional_group,
-    // Non-null by the time this runs: runSeed's backfill (seed.ts) always completes
-    // before createSqliteStorage prepares the listForms statement below.
-    pokeapiId: row.pokeapi_id as number,
-    spriteFormSuffix: row.sprite_form_suffix
-  }
-}
-
-function toCollectionEntry(row: CollectionEntryRow): CollectionEntry {
-  return {
-    id: row.id,
-    formId: row.form_id,
-    gender: row.gender,
-    shiny: row.shiny === 1,
-    owned: row.owned === 1,
-    trainerProfileId: row.trainer_profile_id,
-    originGame: row.origin_game,
-    otName: row.ot_name,
-    tid: row.tid,
-    sid: row.sid,
-    language: row.language,
-    nickname: row.nickname,
-    caughtBall: row.caught_ball,
-    storageLocationId: row.storage_location_id,
-    metLocation: row.met_location
-  }
-}
-
-function toTrainerProfile(row: TrainerProfileRow): TrainerProfile {
-  return {
-    id: row.id,
-    game: row.game,
-    otName: row.ot_name,
-    tid: row.tid,
-    sid: row.sid,
-    label: row.label,
-    language: row.language
-  }
-}
-
-function toStorageLocation(row: StorageLocationRow): StorageLocation {
-  return {
-    id: row.id,
-    locationType: row.location_type,
-    name: row.name,
-    trainerProfileId: row.trainer_profile_id
-  }
-}
+import { createBackupOperations } from './collection-backup'
+import {
+  toCollectionEntry,
+  toForm,
+  toSpecies,
+  toStorageLocation,
+  toTrainerProfile,
+  type CollectionEntryRow,
+  type FormRow,
+  type SpeciesRow,
+  type StorageLocationRow,
+  type TrainerProfileRow
+} from './row-mappers'
 
 export function createSqliteStorage(dbPath: string): StorageAdapter {
   const db = new Database(dbPath)
   applySchema(db)
   runSeed(db)
+  const backupOperations = createBackupOperations(db)
 
   const listSpeciesStmt = db.prepare(
     'SELECT id, name, generation, collapsed_display_form_id FROM species ORDER BY id'
@@ -161,8 +48,20 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   // Separate from setEntryOriginStmt above — storage location is its own axis (Leg 3),
   // never touched by an origin save. No CHECK to violate here (a plain nullable FK), so
   // an invalid id simply throws FOREIGN KEY constraint failed, same as any other FK write.
+  // Also clears box_number/box_slot (Leg 3 of the Box Arrangement milestone): a box
+  // position is only meaningful within the location it was set for, so moving an entry
+  // to a different location (or back to unassigned) always vacates its old slot rather
+  // than silently carrying a now-meaningless position along.
   const setEntryStorageLocationStmt = db.prepare(
-    'UPDATE collection_entries SET storage_location_id = @storageLocationId WHERE id = @id'
+    'UPDATE collection_entries SET storage_location_id = @storageLocationId, box_number = NULL, box_slot = NULL WHERE id = @id'
+  )
+  // setEntryStorageLocation above always clears box position; this is the only way to
+  // set one. Requires the entry already have a storage_location_id — enforced in the
+  // setEntryBoxPosition method below rather than a DB CHECK (see schema.ts's box_number/
+  // box_slot comment). The (storage_location_id, box_number, box_slot) UNIQUE index
+  // (schema.ts) throws if the target slot is already occupied by a different entry.
+  const setEntryBoxPositionStmt = db.prepare(
+    'UPDATE collection_entries SET box_number = @boxNumber, box_slot = @boxSlot WHERE id = @id'
   )
   const orphanEntriesByTrainerProfileStmt = db.prepare(
     'UPDATE collection_entries SET trainer_profile_id = NULL WHERE trainer_profile_id = ?'
@@ -173,7 +72,6 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const orphanEntriesByStorageLocationStmt = db.prepare(
     'UPDATE collection_entries SET storage_location_id = NULL WHERE storage_location_id = ?'
   )
-  const listFormKeysStmt = db.prepare('SELECT id, species_id, form_name FROM forms')
   const listTrainerProfilesStmt = db.prepare('SELECT * FROM trainer_profiles ORDER BY id')
   const getTrainerProfileStmt = db.prepare('SELECT * FROM trainer_profiles WHERE id = ?')
   const insertTrainerProfileStmt = db.prepare(`
@@ -217,47 +115,6 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     'UPDATE collection_entries SET storage_location_id = ? WHERE owned = 1 AND storage_location_id IS NULL'
   )
 
-  // Backup restore (Leg 13): Trainer Profiles/Storage Locations are pure user data with
-  // no seed path to fall back on (unlike species/forms), so restoring them is a full
-  // wipe-and-recreate that preserves each row's original id rather than a natural-key
-  // match. A natural key can't work here the way it does for forms — TrainerProfile's
-  // `label` exists specifically so two profiles can share the same game/otName/tid/sid
-  // (e.g. two playthroughs of the same game) — and preserving ids is what keeps
-  // collection_entries.trainer_profile_id and storage_locations.trainer_profile_id valid
-  // post-restore with no remapping step. See importCollection below.
-  const clearAllEntryTrainerProfilesStmt = db.prepare('UPDATE collection_entries SET trainer_profile_id = NULL')
-  // Same FK hazard as clearAllEntryTrainerProfilesStmt: storage_location_id (Leg 3) has
-  // no ON DELETE clause, so wiping storage_locations below would otherwise fail the FK
-  // check against any entry still assigned to one.
-  const clearAllEntryStorageLocationsStmt = db.prepare('UPDATE collection_entries SET storage_location_id = NULL')
-  const deleteAllStorageLocationsStmt = db.prepare('DELETE FROM storage_locations')
-  const deleteAllTrainerProfilesStmt = db.prepare('DELETE FROM trainer_profiles')
-  const insertTrainerProfileWithIdStmt = db.prepare(`
-    INSERT INTO trainer_profiles (id, game, ot_name, tid, sid, label, language)
-    VALUES (@id, @game, @otName, @tid, @sid, @label, @language)
-  `)
-  const insertStorageLocationWithIdStmt = db.prepare(`
-    INSERT INTO storage_locations (id, location_type, name, trainer_profile_id)
-    VALUES (@id, @locationType, @name, @trainerProfileId)
-  `)
-  const restoreEntryStmt = db.prepare(`
-    UPDATE collection_entries
-    SET owned = @owned, trainer_profile_id = @trainerProfileId, origin_game = @originGame,
-      ot_name = @otName, tid = @tid, sid = @sid, language = @language, nickname = @nickname,
-      caught_ball = @caughtBall, storage_location_id = @storageLocationId, met_location = @metLocation
-    WHERE id = @id
-  `)
-
-  /** `${speciesId}::${formName}` — stable across reinstalls, unlike the AUTOINCREMENT
-   * form id, which is what import matching keys on instead of raw ids. */
-  function formNaturalKey(speciesId: number, formName: string): string {
-    return `${speciesId}::${formName}`
-  }
-
-  function entryKey(formId: number, gender: CollectionEntry['gender'], shiny: 0 | 1): string {
-    return `${formId}::${gender}::${shiny}`
-  }
-
   return {
     async listSpecies(): Promise<Species[]> {
       return (listSpeciesStmt.all() as SpeciesRow[]).map(toSpecies)
@@ -291,132 +148,26 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
     },
 
-    async exportCollection(): Promise<CollectionExport> {
-      return {
-        version: 2,
-        exportedAt: new Date().toISOString(),
-        species: (listSpeciesStmt.all() as SpeciesRow[]).map(toSpecies),
-        forms: (listFormsStmt.all() as FormRow[]).map(toForm),
-        collectionEntries: (listEntriesStmt.all() as CollectionEntryRow[]).map(toCollectionEntry),
-        trainerProfiles: (listTrainerProfilesStmt.all() as TrainerProfileRow[]).map(toTrainerProfile),
-        storageLocations: (listStorageLocationsStmt.all() as StorageLocationRow[]).map(toStorageLocation)
+    async setEntryBoxPosition(entryId: number, boxNumber: number | null, boxSlot: number | null): Promise<CollectionEntry> {
+      if ((boxNumber === null) !== (boxSlot === null)) {
+        throw new Error('boxNumber and boxSlot must be set or cleared together')
       }
+      if (boxNumber !== null) {
+        const entry = getEntryStmt.get(entryId) as CollectionEntryRow | undefined
+        if (!entry?.storage_location_id) {
+          throw new Error('Cannot assign a box position to an entry with no storage location')
+        }
+      }
+      setEntryBoxPositionStmt.run({ id: entryId, boxNumber, boxSlot })
+      return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
     },
 
-    /** Restores collection state from a backup, full-replace: every current entry ends
-     * up owned/origin-linked exactly as the backup says, including reset to
-     * unowned/unlinked when the backup doesn't mention it at all. That's the expected
-     * meaning of "import a backup". Trainer Profiles and Storage Locations get the same
-     * full-replace treatment (Leg 13) — see the prepared statements above for why ids are
-     * preserved rather than remapped. species/forms themselves are never touched here,
-     * since runSeed already owns keeping those current on every startup. */
-    async importCollection(data: CollectionExport): Promise<CollectionImportResult> {
-      const importFormKeys = new Map<number, string>()
-      for (const form of data.forms) {
-        importFormKeys.set(form.id, formNaturalKey(form.speciesId, form.formName))
-      }
-
-      const currentFormIdByKey = new Map<string, number>()
-      const currentForms = listFormKeysStmt.all() as Array<{
-        id: number
-        species_id: number
-        form_name: string
-      }>
-      for (const form of currentForms) {
-        currentFormIdByKey.set(formNaturalKey(form.species_id, form.form_name), form.id)
-      }
-
-      // Guards against a malformed/hand-edited backup whose entry points at a
-      // trainerProfileId absent from its own trainerProfiles array — a well-formed
-      // export can never disagree with itself here, since trainerProfiles is a full
-      // dump of the same live table the entries' FK was read from.
-      const importedTrainerProfileIds = new Set(data.trainerProfiles.map((profile) => profile.id))
-      // Same guard, same reasoning, for storageLocationId against data.storageLocations.
-      const importedStorageLocationIds = new Set(data.storageLocations.map((location) => location.id))
-
-      interface WantedEntry {
-        owned: boolean
-        trainerProfileId: number | null
-        originGame: string | null
-        otName: string | null
-        tid: number | null
-        sid: number | null
-        language: string | null
-        nickname: string | null
-        caughtBall: string | null
-        storageLocationId: number | null
-        metLocation: string | null
-      }
-      const wantedByKey = new Map<string, WantedEntry>()
-      let matched = 0
-      let skipped = 0
-      for (const entry of data.collectionEntries) {
-        const naturalKey = importFormKeys.get(entry.formId)
-        const currentFormId = naturalKey !== undefined ? currentFormIdByKey.get(naturalKey) : undefined
-        if (currentFormId === undefined) {
-          skipped++
-          continue
-        }
-        matched++
-        wantedByKey.set(entryKey(currentFormId, entry.gender, entry.shiny ? 1 : 0), {
-          owned: entry.owned,
-          trainerProfileId:
-            entry.trainerProfileId !== null && importedTrainerProfileIds.has(entry.trainerProfileId)
-              ? entry.trainerProfileId
-              : null,
-          originGame: entry.originGame,
-          otName: entry.otName,
-          tid: entry.tid,
-          sid: entry.sid,
-          language: entry.language,
-          nickname: entry.nickname,
-          caughtBall: entry.caughtBall,
-          storageLocationId:
-            entry.storageLocationId !== null && importedStorageLocationIds.has(entry.storageLocationId)
-              ? entry.storageLocationId
-              : null,
-          metLocation: entry.metLocation
-        })
-      }
-
-      const applyImport = db.transaction(() => {
-        // Order matters under foreign_keys = ON: clear collection_entries' FK to
-        // trainer_profiles first, then delete storage_locations (child) before
-        // trainer_profiles (parent) — otherwise either delete fails against a row still
-        // referencing it. Reinsertion is parent-then-child for the same reason.
-        clearAllEntryTrainerProfilesStmt.run()
-        clearAllEntryStorageLocationsStmt.run()
-        deleteAllStorageLocationsStmt.run()
-        deleteAllTrainerProfilesStmt.run()
-        for (const profile of data.trainerProfiles) {
-          insertTrainerProfileWithIdStmt.run(profile)
-        }
-        for (const location of data.storageLocations) {
-          insertStorageLocationWithIdStmt.run(location)
-        }
-
-        for (const row of listEntriesStmt.all() as CollectionEntryRow[]) {
-          const wanted = wantedByKey.get(entryKey(row.form_id, row.gender, row.shiny))
-          restoreEntryStmt.run({
-            id: row.id,
-            owned: wanted?.owned ? 1 : 0,
-            trainerProfileId: wanted?.trainerProfileId ?? null,
-            originGame: wanted?.originGame ?? null,
-            otName: wanted?.otName ?? null,
-            tid: wanted?.tid ?? null,
-            sid: wanted?.sid ?? null,
-            language: wanted?.language ?? null,
-            nickname: wanted?.nickname ?? null,
-            caughtBall: wanted?.caughtBall ?? null,
-            storageLocationId: wanted?.storageLocationId ?? null,
-            metLocation: wanted?.metLocation ?? null
-          })
-        }
-      })
-      applyImport()
-
-      return { matched, skipped }
-    },
+    // exportCollection/importCollection live in collection-backup.ts (Leg 3 of the Box
+    // Arrangement milestone's split, see its file-level doc comment) — thin delegation
+    // here keeps them on the StorageAdapter surface without this file owning their
+    // (much longer) implementation.
+    exportCollection: backupOperations.exportCollection,
+    importCollection: backupOperations.importCollection,
 
     async listTrainerProfiles(): Promise<TrainerProfile[]> {
       return (listTrainerProfilesStmt.all() as TrainerProfileRow[]).map(toTrainerProfile)

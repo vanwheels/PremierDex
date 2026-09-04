@@ -30,6 +30,11 @@ export interface StorageAdapter {
    * different axes, see CollectionEntry's doc comment. Null clears the assignment back
    * to unassigned. */
   setEntryStorageLocation(entryId: number, storageLocationId: number | null): Promise<CollectionEntry>
+  /** Places (or, with both null, removes) an entry at a box/slot position within its
+   * already-assigned storage location (Leg 3 of the Box Arrangement milestone). Both
+   * boxNumber/boxSlot must be null or non-null together; rejects assigning a position to
+   * an entry with no storageLocationId. See CollectionEntry's doc comment. */
+  setEntryBoxPosition(entryId: number, boxNumber: number | null, boxSlot: number | null): Promise<CollectionEntry>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>

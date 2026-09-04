@@ -300,6 +300,36 @@ export function applySchema(db: Database.Database): void {
     db.exec('ALTER TABLE collection_entries ADD COLUMN met_location TEXT')
   }
 
+  // box_number/box_slot (Leg 3 of the Box Arrangement/Real Inventory Data Model
+  // milestone) — a box is a numbered sub-unit of a Storage Location (e.g. "HOME Box 3"),
+  // per Vanny's call in TODO.md's milestone intro, with real per-entry slot positions
+  // rather than a separate planning concept. box_slot is 0-29 (30 cells: a HOME-style
+  // 5-row x 6-column grid, decided ahead of Leg 6's Box view UI). Both CHECKs
+  // are self-referential (only constrain the new column against itself), so — same as
+  // caught_ball/tid/sid above — a plain ALTER TABLE ADD COLUMN can carry them; no rebuild
+  // needed. The "box requires a location, box_number/box_slot travel together" invariant
+  // is deliberately NOT a CHECK here (would need to reference storage_location_id, which
+  // ALTER TABLE ADD COLUMN can't do without a rebuild) — enforced in sqlite-storage.ts's
+  // setEntryBoxPosition instead, same app-level-invariant pattern as the FK orphaning
+  // elsewhere in this file.
+  if (!entryColumnsFinal.some((c) => c.name === 'box_number')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN box_number INTEGER CHECK (box_number IS NULL OR box_number >= 1)')
+  }
+  if (!entryColumnsFinal.some((c) => c.name === 'box_slot')) {
+    db.exec(
+      'ALTER TABLE collection_entries ADD COLUMN box_slot INTEGER CHECK (box_slot IS NULL OR box_slot BETWEEN 0 AND 29)'
+    )
+  }
+  // One individual per box slot. A plain (non-partial) UNIQUE index is enough: SQLite
+  // treats every NULL as distinct for uniqueness purposes, so the many rows with
+  // box_number/box_slot NULL (unboxed, or a fresh install where every column just
+  // defaulted to NULL) never collide with each other — only two rows that both name the
+  // same real (location, box, slot) triple do. Safe to create unconditionally on every
+  // startup regardless of existing data for exactly that reason.
+  db.exec(
+    'CREATE UNIQUE INDEX IF NOT EXISTS idx_entries_box_slot ON collection_entries(storage_location_id, box_number, box_slot)'
+  )
+
   // caught_ball's CHECK list was fixed at ALTER-time above and SQLite can't ALTER a CHECK
   // constraint (same limitation as the sid-4294 rebuilds earlier in this function) — Leg 5
   // added Legends Arceus's Feather/Wing/Jet/Leaden/Gigaton/Origin Ball names to

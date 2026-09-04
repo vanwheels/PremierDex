@@ -20,6 +20,8 @@ function makeEntry(overrides: Partial<CollectionEntry> = {}): CollectionEntry {
     caughtBall: null,
     metLocation: null,
     storageLocationId: null,
+    boxNumber: null,
+    boxSlot: null,
     ...overrides
   }
 }

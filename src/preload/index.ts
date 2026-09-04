@@ -25,6 +25,8 @@ const bridge: AppBridge = {
     ipcRenderer.invoke(PokemonIpcChannel.setEntryOrigin, entryId, input),
   setEntryStorageLocation: (entryId: number, storageLocationId: number | null): Promise<CollectionEntry> =>
     ipcRenderer.invoke(PokemonIpcChannel.setEntryStorageLocation, entryId, storageLocationId),
+  setEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null): Promise<CollectionEntry> =>
+    ipcRenderer.invoke(PokemonIpcChannel.setEntryBoxPosition, entryId, boxNumber, boxSlot),
   setCollapsedDisplayForm: (speciesId: number, formId: number | null): Promise<Species> =>
     ipcRenderer.invoke(PokemonIpcChannel.setCollapsedDisplayForm, speciesId, formId),
   loadSpeciesAvailability: () => ipcRenderer.invoke(PokemonIpcChannel.loadSpeciesAvailability),

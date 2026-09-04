@@ -6,6 +6,7 @@ export const PokemonIpcChannel = {
   setOwned: 'pokemon:collectionEntries:setOwned',
   setEntryOrigin: 'pokemon:collectionEntries:setOrigin',
   setEntryStorageLocation: 'pokemon:collectionEntries:setStorageLocation',
+  setEntryBoxPosition: 'pokemon:collectionEntries:setBoxPosition',
   setCollapsedDisplayForm: 'pokemon:species:setCollapsedDisplayForm',
   /** Leg 6: static per-game species-availability data (see load-species-data.ts),
    * not a StorageAdapter/DB method — there's no collection_entries-shaped row to read,

@@ -285,7 +285,9 @@ describe('exportCollection / importCollection', () => {
           nickname: null,
           caughtBall: null,
           storageLocationId: null,
-          metLocation: null
+          metLocation: null,
+          boxNumber: null,
+          boxSlot: null
         }
       ]
     }

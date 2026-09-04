@@ -39,6 +39,8 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
     caughtBall: null,
     metLocation: null,
     storageLocationId: null,
+    boxNumber: null,
+    boxSlot: null,
     ...overrides
   }
 }
