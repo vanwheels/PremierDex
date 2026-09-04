@@ -1,34 +1,9 @@
 # TODO
 
-## Current Milestone: Box Arrangement / Real Inventory Data Model
-
-Continuation of the User-Customizable Dex Layout work, split out of Phase 1 during its
-2026-09-03 leg-planning pass (see that milestone's
-[post-mortem](docs/postmortems/user-customizable-dex-layout-phase-1.md)) — the harder
-half of Vanny's original ask, deliberately deferred past Phase 1's read-only view modes.
-Legs planned 2026-09-03. Vanny's calls so far: (1) duplicate owned copies of the same
-species/form are real tracked individuals, not a visual trick — drop CollectionEntry's
-`UNIQUE(form_id, gender, shiny)` constraint (a SQLite table-rebuild migration, same class
-of hazard as the CHECK-widen rebuilds already handled in schema.ts) and turn "owned" into
-a per-individual count/list rather than a boolean, the way the Collection view already
-models entries; (2) arranged boxes are the same thing as real Storage Locations, not a
-separate planning concept — a box becomes a numbered sub-unit of a Storage Location (e.g.
-HOME Box 3) with real per-entry slot positions, and unowned species can still be placed
-into a slot as a greyed-out placeholder; (3) Box view editing uses drag-and-drop, decided
-2026-09-03 ahead of Leg 7.
-Box view mode itself (a HOME-style 30-cell grid, 5 rows x 6 columns, sprite-only,
-right-click action menu) moved into this milestone from Phase 1 on 2026-09-03: Vanny
-pointed out a real box can hold several regular and shiny copies of one species mixed
-together (e.g. a box of assorted shiny/non-shiny Woopers) — Box view's entire premise is
-showing real per-individual box contents, which the pre-Leg-2 single-regular/
-single-shiny-per-species schema can't represent at all. (Hybrid view shipped in Phase 1
-instead — Vanny only ever described it as "the list, just sprites," so the same ceiling
-didn't misrepresent it.)
-
-### [Box view editing: drag-and-drop add/remove/swap] — Leg 7
-Drag-and-drop add/remove/swap flow plus the right-click action menu, on top of Leg 6's
-grid. UX approach (drag-and-drop over a menu-based flow) decided 2026-09-03.
-Last touched: 2026-09-03. Re-check count: 0.
+No milestone currently in progress — Box Arrangement / Real Inventory Data Model shipped
+2026-09-03 (see `MILESTONES.md` and its
+[post-mortem](docs/postmortems/box-arrangement-real-inventory-data-model.md)). Next
+milestone not yet scoped; pick from "Future Milestones" below when ready.
 
 ## Unscheduled
 
