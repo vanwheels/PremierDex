@@ -86,26 +86,12 @@ looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the 
 just sprites" — it never claimed to reflect real box contents, so the same checklist
 ceiling doesn't misrepresent it the way it would Box view.
 
-## [Hybrid view mode] — Leg 8
-HOME-derived read-only grid: sprite-only tiles flowing continuously with the window
-width — no box-style page boundaries, confirmed 2026-09-03 over the paginated
-alternative real HOME's own List View screen actually uses. Tile population: each
-DexRowData row contributes up to two tiles (regular-slot + shiny-slot, mirroring List
-view's existing two-column pairing) — a real sprite when that slot is owned, a
-greyed-out placeholder when it's within the active filter scope but unowned, nothing at
-all when the row itself is filtered out. Detail panel pinned to the bottom of the page,
-confirmed 2026-09-03 to reuse the Origin modal's existing fields (OT/TID/SID/nickname/
-origin game/ball/met location/storage location, plus the home-boxable/shiny-locked/
-invalid-combo badges) rather than HOME's own Nature/stats block, which PremierDex has no
-data for.
-Shares the same buildDexSections -> filterDexSections -> sortDexSections pipeline as
-List (confirmed with Vanny during Leg 7 planning) — Hybrid reads `visibleSections`,
-it doesn't run its own filtering. Plumbing from Leg 7 to build on: `useDexViewMode`
-(dex/useDexViewMode.ts) holds the persisted mode, `DexViewMode` is currently just
-`'list'` and needs `'hybrid'` added there and to `DexViewModeSwitcher`'s OPTIONS; wire
-the new grid into App.tsx as a `hidden={viewMode !== 'hybrid'}` sibling of DexTable's
-existing wrapper div, not a second mounted-on-demand branch, to keep Leg 2's
-mount-cost fix intact.
+## [Split App.tsx] — unscheduled
+Crossed the ~300-line soft cap at Leg 8 (303 lines, well under the 500 hard cap) — Leg 8
+added a second `hidden={viewMode !== ...}` view-mode branch (DexHybridGrid) alongside
+DexTable's existing one, and any future view mode (e.g. Box) would add a third. No
+concrete split candidate yet; worth a look if another leg pushes this further before a
+milestone boundary forces the question.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## Future Milestones (unscheduled)

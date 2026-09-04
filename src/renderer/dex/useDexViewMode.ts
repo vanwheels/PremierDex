@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
-/** Which layout the Living Dex renders as. Only 'list' exists so far — Leg 8 adds
- * 'hybrid' (the HOME-derived sprite grid) as a second value read by this same hook. */
-export type DexViewMode = 'list'
+/** Which layout the Living Dex renders as: the spreadsheet-style table, or Leg 8's
+ * HOME-derived sprite grid. */
+export type DexViewMode = 'list' | 'hybrid'
 
 const DEFAULT_VIEW_MODE: DexViewMode = 'list'
 const STORAGE_KEY = 'premierdex.dexViewMode'
@@ -10,7 +10,7 @@ const STORAGE_KEY = 'premierdex.dexViewMode'
 /** Exported for testing — the only real logic in this file, everything else is
  * localStorage/React plumbing mirroring theme-store's loadThemeMode. */
 export function isDexViewMode(value: string | null): value is DexViewMode {
-  return value === 'list'
+  return value === 'list' || value === 'hybrid'
 }
 
 function loadDexViewMode(): DexViewMode {

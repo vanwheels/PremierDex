@@ -10,6 +10,27 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Hybrid view mode] — Leg 8 (2026-09-03)
+Added `buildHybridTiles` (pure, tested) flattening `visibleSections.rows` into up to two
+tiles per row (regular/shiny slot) — a real sprite when the slot's entry is owned, a
+greyed-out placeholder when it merely exists and passed the active filters, no tile at
+all when the slot has no CollectionEntry (alwaysShiny/shinyLocked forms). Deliberately
+skips `cosmeticRows`: a sprite grid has no expand/collapse affordance, so Hybrid always
+shows the same default-collapsed slice List view shows before a species is expanded — a
+cosmetic row matched by search still appears, since filterDexSections already promotes
+it into `rows` in that case. `DexHybridGrid` renders the flowing tile grid (CSS flex-wrap,
+no pagination) plus a bottom-pinned `DexHybridDetailPanel` (read-only OT/TID/SID/
+nickname/origin game/ball/met location/storage location + badges, matching the "read-only
+grid" framing) with an Edit Origin button that opens the existing `OriginModal` for actual
+edits. `SpriteThumbnail` gained optional `shiny`/`size`/`className`/`ariaLabel` props
+(all defaulted to DexRow's existing behavior) rather than a second sprite-icon component.
+`useDexViewMode`/`DexViewModeSwitcher` got their `'hybrid'` branch; App.tsx wires
+`DexHybridGrid` in as a `hidden`-not-unmounted sibling of DexTable, same Leg 2 mount-cost
+treatment. App.tsx crossed the 300-line soft cap (303 lines) as a result — logged as a
+new unscheduled TODO item rather than split now. This was the last planned leg of Phase
+1 (List + Hybrid view modes) — pending Vanny's manual verification before the milestone
+is marked Shipped in MILESTONES.md.
+
 ## [List view mode] — Leg 7 (2026-09-03)
 Added `useDexViewMode` (localStorage-backed, mirrors theme-store's ThemeMode) and
 `DexViewModeSwitcher`, rendered alongside DexFilterBar in App.tsx. Only `'list'` exists

@@ -15,6 +15,7 @@ import { computeCompletionStats, DEFAULT_COMPLETION_STATS_OPTIONS, filterEntries
 import type { CompletionStatsOptions } from './dex/completionStats'
 import { autoAssignedLocationOnCheckIn } from './dex/autoAssignLocation'
 import { DexTable } from './dex/DexTable'
+import { DexHybridGrid } from './dex/DexHybridGrid'
 import { DexLocationTabs } from './dex/DexLocationTabs'
 import { DexToolbar } from './dex/DexToolbar'
 import { DexFilterBar } from './dex/DexFilterBar'
@@ -68,9 +69,8 @@ export function App(): JSX.Element {
   // DexLocationTabs' doc comment).
   const [selectedLocationTab, setSelectedLocationTab] = useState<number | null>(null)
   const [view, setView] = useState<AppView>('dex')
-  // Leg 7: persisted Living Dex layout choice — see useDexViewMode's doc comment. Only
-  // 'list' exists yet, so the table below always renders; Leg 8 adds a 'hybrid' branch
-  // alongside it.
+  // Leg 7: persisted Living Dex layout choice — see useDexViewMode's doc comment. Leg 8
+  // added the 'hybrid' branch alongside DexTable's below.
   const [viewMode, setViewMode] = useDexViewMode()
   // Bumped after a JSON import (Leg 13 added Trainer Profiles/Storage Locations to the
   // backup) so both panels below remount and refetch — they load their own data on
@@ -262,8 +262,8 @@ export function App(): JSX.Element {
               <DexViewModeSwitcher viewMode={viewMode} onChange={setViewMode} />
             </div>
             {/* Hidden rather than conditionally rendered, same reasoning as the `view`
-             * wrapper above (Leg 2) — once Leg 8 adds a Hybrid sibling here, switching
-             * modes shouldn't pay DexTable's mount cost again on switching back. */}
+             * wrapper above (Leg 2) — switching modes shouldn't pay DexTable's mount cost
+             * again on switching back. */}
             <div hidden={viewMode !== 'list'}>
               <DexTable
                 sections={visibleSections}
@@ -275,6 +275,17 @@ export function App(): JSX.Element {
                 storageLocations={storageLocations}
                 onSaveStorageLocation={handleSaveStorageLocation}
                 speciesAvailability={speciesAvailability}
+              />
+            </div>
+            {/* Leg 8: same hidden-not-unmounted treatment as DexTable above, so switching
+             * back and forth between List and Hybrid doesn't re-pay either one's mount
+             * cost or lose Hybrid's own tile-selection state. */}
+            <div hidden={viewMode !== 'hybrid'}>
+              <DexHybridGrid
+                sections={visibleSections}
+                storageLocations={storageLocations}
+                speciesAvailability={speciesAvailability}
+                onSaveOrigin={handleSaveOrigin}
               />
             </div>
           </div>
