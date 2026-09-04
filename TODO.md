@@ -1,21 +1,8 @@
 # TODO
 
-## Current Milestone: Box View Polish & Multi-Box Editing
-
-Vanny's design pass on Box view after Leg 6/7 landed (2026-09-03) — a batch of feedback
-plus four design decisions confirmed via AskUserQuestion (adjacent box = full interactive
-second grid; phantom Pokémon = persisted placeholder, not local-only; multi-drag = drop
-target fills contiguously in selection order, blocked if any needed slot is occupied by
-something outside the selection; box add/rename = new per-location schema is in scope).
-
-### [Phantom placeholder Pokémon] — Leg 5
-Right-click an empty slot to pick a species and mark that slot as a persisted "planned"
-placeholder — saved to the DB as its own concept distinct from real owned/unowned
-CollectionEntry rows (so it survives reload and never counts toward real collection
-totals). Renders dimmed/marked-as-planned. Needs its own small schema (species id per
-box slot, no gender/shiny/individual data — it's just "I intend to put something of this
-species here").
-Last touched: 2026-09-03. Re-check count: 0.
+No milestone currently in progress — Box View Polish & Multi-Box Editing shipped
+2026-09-04 (see MILESTONES.md/COMPLETED.md). Pick the next one from Unscheduled or Future
+Milestones below, or scope a new one.
 
 ## Unscheduled
 
@@ -37,17 +24,22 @@ existing per-row picker) would help now that the 0->1 location auto-backfill onl
 fires once. Not scoped or designed — just a decent-feature idea, not urgent.
 Last touched: 2026-09-03. Re-check count: 0.
 
-### [Box names/empty boxes missing from JSON backup export/import] — unscheduled
+### [Box names/empty boxes/placeholders missing from JSON backup export/import] — unscheduled
 Surfaced while implementing [Add / rename boxes] (Leg 2 of Box View Polish, see
-COMPLETED.md): the new `boxes` table (id/storage_location_id/box_number/name) isn't part
-of CollectionExport, so a backup round-trip silently drops every box's custom name and
-any box with zero entries in it — same class of gap Leg 13 of Collection & Origin Tracking
+COMPLETED.md): the `boxes` table (id/storage_location_id/box_number/name) isn't part of
+CollectionExport, so a backup round-trip silently drops every box's custom name and any
+box with zero entries in it — same class of gap Leg 13 of Collection & Origin Tracking
 fixed for trainerProfiles/storageLocations. Import itself is safe (collection-backup.ts's
 importCollection re-runs schema.ts's backfillBoxes after restoring entries, so Box view
 stays functional — no crash, no missing Box 1), it just can't restore a name or an
-intentionally-empty box the export never captured. Needs a CollectionExport version bump
-(v2 -> v3, same "reject the old version outright" precedent as v1->v2) plus a `boxes`
-array in the export/import shape.
+intentionally-empty box the export never captured. Widened at Leg 5 of Box View Polish
+(see COMPLETED.md): the new `box_placeholders` table (storage_location_id/box_number/
+box_slot/species_id) has the exact same gap — a backup round-trip silently drops every
+"planned" placeholder too, same reasoning, same missing table. Needs a CollectionExport
+version bump (v2 -> v3, same "reject the old version outright" precedent as v1->v2) plus
+`boxes` and `boxPlaceholders` arrays in the export/import shape — worth fixing together
+since both are the same underlying "a Box View Polish milestone table never got added to
+CollectionExport" gap.
 Last touched: 2026-09-04. Re-check count: 0.
 
 ### [App icon] — unscheduled
@@ -77,18 +69,21 @@ Last touched: 2026-09-03. Re-check count: 0.
 
 ### [Split schema.ts] — unscheduled
 Crossed the ~300-line soft cap at Leg 5 (341 lines), 421 after Leg 3 of Box Arrangement's
-box_number/box_slot retrofit, now 466 after this milestone's Leg 2 added the `boxes` table
-+ backfillBoxes — still under the 500 hard cap, but the margin is shrinking each time a
-storage-shaped leg touches this file. Each closed-set CHECK column (language, caught_ball)
-has picked up its own "ALTER-time CHECK can't be widened later" rebuild block over time,
-and that pattern will likely repeat if another CHECK-constrained column needs the same
-treatment. Candidate split: pull the CHECK-widen rebuild blocks (sid-4294, caught_ball)
-into their own module alongside the retrofit ALTERs, mirroring how sqlite-storage.ts's
-export/import logic got split into collection-backup.ts (Leg 3 of Box Arrangement — see
-COMPLETED.md).
+box_number/box_slot retrofit, 466 after Leg 2 of Box View Polish added the `boxes` table +
+backfillBoxes, now 492 after that same milestone's Leg 5 added `box_placeholders` — one
+line under the 500 hard cap, and past the "~480 lines, pick up proactively" line named
+below. Each closed-set CHECK column (language, caught_ball) has picked up its own
+"ALTER-time CHECK can't be widened later" rebuild block over time, and that pattern will
+likely repeat if another CHECK-constrained column needs the same treatment. Candidate
+split: pull the CHECK-widen rebuild blocks (sid-4294, caught_ball) into their own module
+alongside the retrofit ALTERs, mirroring how sqlite-storage.ts's export/import logic got
+split into collection-backup.ts (Leg 3 of Box Arrangement — see COMPLETED.md).
 Confirmed 2026-09-03: deliberately kept out of the User-Customizable Dex Layout milestone
-— orthogonal code health, not blocking. Stays standalone; pick up opportunistically if a
-future leg touches this file again, or proactively if it crosses ~480 lines first.
+— orthogonal code health, not blocking. The "pick up proactively past ~480 lines" line
+from that confirmation has now been crossed (Box View Polish's Leg 5, 2026-09-04) without
+a leg of its own — flagged in that milestone's post-mortem rather than actioned inline,
+since the split itself was orthogonal to what that leg needed. Should be picked up before,
+or as part of, whichever future leg next adds a table or retrofit block here.
 Last touched: 2026-09-04. Re-check count: 0.
 
 ## Future Milestones (unscheduled)
@@ -128,6 +123,8 @@ reachable by evolving a catchable pre-evolution even when the evolved form itsel
 the wild encounter table (e.g. Ivysaur logged as Ultra Moon origin — not directly
 catchable there, but reachable by evolving a caught Bulbasaur). Both are obtainability
 gaps in the current data model, not edge cases. Vanny confirmed 2026-09-03 this stays
-queued behind the current milestone despite the urgency.
-Last touched: 2026-09-03. Re-check count: 0.
+queued behind the then-current milestone despite the urgency; that milestone (Box View
+Polish & Multi-Box Editing) has since shipped 2026-09-04, so nothing is queued ahead of
+this any more — worth a fresh call on whether it's picked up next given the urgency.
+Last touched: 2026-09-04. Re-check count: 1.
 </content>
