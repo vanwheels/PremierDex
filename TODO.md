@@ -8,16 +8,6 @@ second grid; phantom Pokémon = persisted placeholder, not local-only; multi-dra
 target fills contiguously in selection order, blocked if any needed slot is occupied by
 something outside the selection; box add/rename = new per-location schema is in scope).
 
-### [Adjacent second box] — Leg 3
-A second fully interactive box grid (own pager, same drag/drop/click rules as the
-primary one) opens side by side with the current box — confirmed over a read-only
-preview. Layout placement (replacing the Unboxed tray vs. a third column, and where the
-tray goes if displaced) needs a concrete decision during implementation; default to
-whatever keeps both boxes at their real Leg-1 cell size rather than shrinking either.
-Depends loosely on Leg 2 (an empty box needs to exist to be worth opening as the second
-one) but isn't hard-blocked by it.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ### [Multi-select + multi-drag] — Leg 4
 Shift-click selects a contiguous range from the first selected index to the second;
 ctrl-click toggles individual cells into/out of the selection. Dragging a multi-selection

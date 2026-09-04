@@ -17,16 +17,33 @@
   display: flex;
   gap: 1rem;
   align-items: flex-start;
+  /* Leg 3 of the Box View Polish milestone: a second pane can join the primary and the
+   * tray as a third column. Horizontal scroll rather than shrinking any column — the
+   * milestone note's explicit call: neither box gives up its real Leg-1 cell size to fit
+   * a narrower window. */
+  overflow-x: auto;
 }
 
+/* flex: 0 0 auto (was flex: 1 pre-Leg-3) — with only one pane, flex:1 just left it padded
+ * with blank leftover width; with two panes open side by side that same rule would split
+ * the leftover unevenly between them instead. Each pane already sizes itself to its own
+ * content (the grid below is inline-grid, not stretched — see .dex-box-grid), so hugging
+ * that width keeps two open panes tight against each other rather than spread apart. */
 .dex-box-main {
-  flex: 1;
+  flex: 0 0 auto;
   min-width: 0;
 }
 
+/* Leg 3: the "Open/Close Second Box" toggle, above the columns row so it applies to the
+ * whole view rather than living inside either pane's own pager. */
+.dex-box-toggle-row {
+  margin-bottom: 0.75rem;
+}
+
 /* display: inline-grid keeps the grid sized to its own 6 columns instead of stretching to
- * fill dex-box-main's flex:1 width, which is what made a 30-slot box enormous before
- * (Vanny feedback 2026-09-03: should mirror HOME's compact box view, not fill the pane). */
+ * fill dex-box-main's width, which is what made a 30-slot box enormous before (Vanny
+ * feedback 2026-09-03: should mirror HOME's compact box view, not fill the pane) — still
+ * true now that dex-box-main itself no longer grows past its content (see above). */
 .dex-box-grid {
   display: inline-grid;
   gap: var(--dex-box-gap);

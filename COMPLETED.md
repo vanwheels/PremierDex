@@ -2,6 +2,18 @@
 
 ## Box View Polish & Multi-Box Editing
 
+### [Adjacent second box] — Leg 3 — 2026-09-04
+DexBoxGrid's pager/grid/detail-panel/drag-and-drop rendering split into a new DexBoxPane
+component so a second one can mount side by side with the primary via an "Open Second
+Box" toggle, each with independent navigation/selection state. Placement: a third column
+next to the tray rather than displacing it (the simpler of the two layouts the leg note
+flagged as an implementation-time call); `.dex-box-main` changed from flex:1 to
+flex:0 0 auto so two open panes hug together instead of splitting leftover width. The
+per-pane "is this entry already boxed" swap-vs-move gate was generalized from
+pane-local cells to a location-wide `boxedEntryIds` set, so a cell dragged from one open
+pane onto an occupied cell in the other correctly swaps instead of being silently
+rejected. See commit `<pending>`.
+
 ### [Add / rename boxes] — Leg 2 — 2026-09-04
 New `boxes` table (id/storage_location_id/box_number/name, ON DELETE CASCADE) is now the
 real source of which boxes exist per location, replacing buildBoxes.ts's old
