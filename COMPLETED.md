@@ -28,8 +28,9 @@ edits. `SpriteThumbnail` gained optional `shiny`/`size`/`className`/`ariaLabel` 
 `DexHybridGrid` in as a `hidden`-not-unmounted sibling of DexTable, same Leg 2 mount-cost
 treatment. App.tsx crossed the 300-line soft cap (303 lines) as a result — logged as a
 new unscheduled TODO item rather than split now. This was the last planned leg of Phase
-1 (List + Hybrid view modes) — pending Vanny's manual verification before the milestone
-is marked Shipped in MILESTONES.md.
+1 (List + Hybrid view modes). Vanny manually verified both view modes; milestone marked
+Shipped in MILESTONES.md — see the
+[post-mortem](docs/postmortems/user-customizable-dex-layout-phase-1.md).
 
 ## [List view mode] — Leg 7 (2026-09-03)
 Added `useDexViewMode` (localStorage-backed, mirrors theme-store's ThemeMode) and

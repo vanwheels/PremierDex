@@ -56,36 +56,6 @@ Confirmed 2026-09-03: deliberately kept out of the User-Customizable Dex Layout 
 leg in that milestone happens to touch this file anyway.
 Last touched: 2026-09-03. Re-check count: 0.
 
-## Current Milestone: User-Customizable Dex Layout (Phase 1: View Modes)
-
-Started 2026-09-03. Legs 1-6 below are the real-usage bug/UI fixes surfaced right after
-the Nav/Visual/Dex-Table-Redesign milestone shipped (see that milestone's post-mortem) —
-folded in here as foundation work rather than their own milestone, since several touch
-the same Dex Table/Completion Stats surface the view-mode work will build on.
-
-Scoped 2026-09-03: the original ask ("let Vanny pick a persisted display layout") turned
-out to bundle two very different pieces once Vanny described the target — three view
-modes (List/Box/Hybrid, mockups from Pokémon HOME) plus arbitrary box arrangement with
-duplicate owned copies and unowned-but-placed placeholder slots. The second piece needs
-`CollectionEntry`'s `UNIQUE(form_id, gender, shiny)` constraint dropped (owned becomes a
-real per-individual count, not a checkbox) and a real box/slot data model tied to Storage
-Locations — too large and too load-bearing to design inline. Split in two per Vanny's
-call: this milestone (Legs 1-8) ships List and Hybrid read-only on today's data;
-[Box Arrangement / Real Inventory Data Model] (future milestone, below) covers
-editing/duplicates/slot-position once that's separately scoped.
-
-Re-scoped further 2026-09-03, same day: Box view (originally Leg 8) got pulled out of
-this milestone entirely and folded into the Box Arrangement future-milestone item
-instead of staying a Phase 1 leg. Vanny pointed out a real box can hold several regular
-and shiny copies of the same species mixed together (e.g. a box of assorted shiny and
-non-shiny Woopers) — a "Box view" that's supposed to look like a real box is a claim
-about real per-individual contents, not a rendering choice, and today's schema can't
-represent more than one regular + one shiny per species at all. Building it now would
-mean shipping something that calls itself a box but can never show what a real box
-looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the list,
-just sprites" — it never claimed to reflect real box contents, so the same checklist
-ceiling doesn't misrepresent it the way it would Box view.
-
 ## [Split App.tsx] — unscheduled
 Crossed the ~300-line soft cap at Leg 8 (303 lines, well under the 500 hard cap) — Leg 8
 added a second `hidden={viewMode !== ...}` view-mode branch (DexHybridGrid) alongside
@@ -97,15 +67,16 @@ Last touched: 2026-09-03. Re-check count: 0.
 ## Future Milestones (unscheduled)
 
 Large items Vanny explicitly flagged as out of scope for a past milestone — logged here
-so they aren't lost, not queued into a leg yet. Candidates for whatever gets scoped after
-the current milestone.
+so they aren't lost, not queued into a leg yet. Candidates for whatever gets scoped next,
+now that User-Customizable Dex Layout (Phase 1: View Modes) has shipped.
 
 ## [Box Arrangement / Real Inventory Data Model] — future milestone
-Split out of the User-Customizable Dex Layout milestone during its 2026-09-03
-leg-planning pass (see that milestone's intro note) — the harder half of Vanny's
-original ask, deliberately deferred past Phase 1's read-only view modes. Vanny's calls so
-far: (1) duplicate owned copies of the same species/form should be real tracked
-individuals, not a visual trick — drop CollectionEntry's `UNIQUE(form_id, gender,
+Split out of the User-Customizable Dex Layout (Phase 1: View Modes) milestone during its
+2026-09-03 leg-planning pass (see that milestone's
+[post-mortem](docs/postmortems/user-customizable-dex-layout-phase-1.md)) — the harder
+half of Vanny's original ask, deliberately deferred past Phase 1's read-only view modes.
+Vanny's calls so far: (1) duplicate owned copies of the same species/form should be real
+tracked individuals, not a visual trick — drop CollectionEntry's `UNIQUE(form_id, gender,
 shiny)` constraint (a SQLite table-rebuild migration, same class of hazard as the
 CHECK-widen rebuilds already handled in schema.ts) and turn "owned" into a per-individual
 count/list rather than a boolean, the way the Collection view already models entries; (2)
@@ -120,8 +91,8 @@ out a real box can hold several regular and shiny copies of one species mixed to
 real per-individual box contents, which today's single-regular/single-shiny-per-species
 schema can't represent at all. Building it before this milestone's data model exists
 would ship something that calls itself a box but can never look like one. (Hybrid view
-stayed in Phase 1 — Vanny only ever described it as "the list, just sprites," so the same
-ceiling doesn't misrepresent it.)
+shipped in Phase 1 instead — Vanny only ever described it as "the list, just sprites," so
+the same ceiling doesn't misrepresent it.)
 Needs its own scoping pass before picked up: this touches completionStats.ts,
 filterDexSections.ts, invalidCombo.ts, autoAssignLocation.ts, and
 exportCollection/importCollection's natural-key matching (currently keyed on
