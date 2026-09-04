@@ -27,7 +27,7 @@ position until Leg 7's editing UI ships; every other box number only appears onc
 actually holds an entry, rather than padding out every integer in between. Post-
 implementation subagent review found no correctness bugs; one test-coverage gap it
 flagged (two entries in the same box at different slots) was added. See commit
-`<pending>`.
+`b5316ea`.
 
 ## [Export/import natural-key rework] — Leg 5 (2026-09-03)
 formId/gender/shiny alone stopped being unique once duplicate individuals became real
