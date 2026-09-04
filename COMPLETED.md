@@ -25,7 +25,7 @@ to 514 lines (over the 500 hard cap), so folded in the already-earmarked "Split
 sqlite-storage.ts" TODO item: exportCollection/importCollection and their natural-key
 matching helpers moved to new `collection-backup.ts`, and the five Row
 interfaces/toXxx mappers moved to new `row-mappers.ts` (shared by both, avoiding a
-circular import) — sqlite-storage.ts back to 222 lines. See commit `<hash>`.
+circular import) — sqlite-storage.ts back to 222 lines. See commit `8f19842`.
 
 ## [Drop CollectionEntry's owned-copy uniqueness constraint] — Leg 2 (2026-09-03)
 Schema/migration only, no UI changes. Dropped collection_entries' `UNIQUE(form_id,
