@@ -10,6 +10,16 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Export/import natural-key rework] — Leg 5 (2026-09-03)
+formId/gender/shiny alone stopped being unique once duplicate individuals became real
+(Leg 2); import matching now breaks the tie with each row's 0-indexed position within its
+group (id-order walk, both on the export dump and the live table at restore time), added
+as a 4th key segment in collection-backup.ts's entryKey. Scoped to match-only per Vanny's
+call: a backup with more copies in a group than the target DB has rows for drops the
+extras rather than inserting new rows — real duplicates can't be created anywhere in the
+app yet (Leg 7), so this is forward-proofing, not a reachable bug today. See commit
+`<hash>`.
+
 ## [Fix downstream logic assuming one entry per species] — Leg 4 (2026-09-03)
 Audited completionStats.ts, filterDexSections.ts, invalidCombo.ts, and
 autoAssignLocation.ts against the per-individual model from Legs 2-3. invalidCombo.ts and

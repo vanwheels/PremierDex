@@ -28,8 +28,12 @@ export interface CollectionExport {
  * Import matches collection entries by natural key (species id + form name, then
  * gender + shiny) rather than by raw row id — ids are SQLite AUTOINCREMENT values that
  * aren't guaranteed to line up across a reinstall or a different app version's seed run.
- * `skipped` counts entries whose form no longer exists in this install (e.g. dropped by
- * a later species-exclusion pass) — those are left alone, not errored.
+ * Since duplicate individuals became real (Leg 2 of Box Arrangement/Real Inventory Data
+ * Model), that natural key alone can name more than one row; matching breaks the tie by
+ * each row's 0-indexed position within its group (see collection-backup.ts's entryKey) —
+ * a best-effort positional match, not true individual identity. `skipped` counts entries
+ * whose form no longer exists in this install (e.g. dropped by a later species-exclusion
+ * pass) — those are left alone, not errored.
  */
 export interface CollectionImportResult {
   matched: number

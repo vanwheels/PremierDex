@@ -30,7 +30,11 @@ export function createBackupOperations(db: Database.Database): {
 } {
   const listSpeciesStmt = db.prepare('SELECT id, name, generation, collapsed_display_form_id FROM species ORDER BY id')
   const listFormsStmt = db.prepare('SELECT * FROM forms ORDER BY species_id, id')
-  const listEntriesStmt = db.prepare('SELECT * FROM collection_entries ORDER BY form_id, gender, shiny')
+  // `, id` tiebreaker (Leg 5): matters now that a group can hold more than one row
+  // (duplicates, post Leg 2) — entryKey below relies on both the export dump and the
+  // restore loop enumerating a group in the same order (insertion/id order) to line up
+  // duplicates with their counterpart across a reinstall.
+  const listEntriesStmt = db.prepare('SELECT * FROM collection_entries ORDER BY form_id, gender, shiny, id')
   const listTrainerProfilesStmt = db.prepare('SELECT * FROM trainer_profiles ORDER BY id')
   const listStorageLocationsStmt = db.prepare('SELECT * FROM storage_locations ORDER BY id')
   const listFormKeysStmt = db.prepare('SELECT id, species_id, form_name FROM forms')
@@ -73,8 +77,37 @@ export function createBackupOperations(db: Database.Database): {
     return `${speciesId}::${formName}`
   }
 
-  function entryKey(formId: number, gender: CollectionEntry['gender'], shiny: 0 | 1): string {
-    return `${formId}::${gender}::${shiny}`
+  /** `${formId}::${gender}::${shiny}::${ordinal}` — the `formId`/`gender`/`shiny` group
+   * alone stopped being unique once duplicate individuals became real (Leg 2): a group can
+   * now hold more than one row, and nothing on the row itself distinguishes which
+   * individual is which. `ordinal` is that row's 0-indexed position within its group under
+   * `assignGroupOrdinal` below (first-inserted is #0, second is #1, ...) — the closest
+   * thing to a stable per-individual identity duplicates have, given both the export dump
+   * and the restore loop walk their rows in the same insertion (id) order. It's a
+   * position-based match, not a true identity: importing a backup with more copies in a
+   * group than the target database currently has rows for silently drops the extras (same
+   * "nothing to write into" outcome as any other unmatched entry), and importing one with
+   * fewer resets the target's extra copies to defaults, same as today's full-replace
+   * behavior for any other row absent from the backup. Decided 2026-09-03 as Leg 5's
+   * scope: revisit if Leg 7's duplicate-adding UI makes that gap reachable in practice. */
+  function entryKey(formId: number, gender: CollectionEntry['gender'], shiny: 0 | 1, ordinal: number): string {
+    return `${formId}::${gender}::${shiny}::${ordinal}`
+  }
+
+  /** Returns `formId`/`gender`/`shiny`'s next 0-indexed ordinal and advances `counters` for
+   * it — see entryKey's doc comment above. Caller must enumerate rows in a consistent order
+   * (id order, via listEntriesStmt's `ORDER BY ..., id`) for ordinals to line up across two
+   * separate calls (e.g. once over `data.collectionEntries`, once over the live table). */
+  function assignGroupOrdinal(
+    counters: Map<string, number>,
+    formId: number,
+    gender: CollectionEntry['gender'],
+    shiny: 0 | 1
+  ): number {
+    const groupKey = `${formId}::${gender}::${shiny}`
+    const ordinal = counters.get(groupKey) ?? 0
+    counters.set(groupKey, ordinal + 1)
+    return ordinal
   }
 
   return {
@@ -137,6 +170,7 @@ export function createBackupOperations(db: Database.Database): {
         boxSlot: number | null
       }
       const wantedByKey = new Map<string, WantedEntry>()
+      const importOrdinalCounters = new Map<string, number>()
       let matched = 0
       let skipped = 0
       for (const entry of data.collectionEntries) {
@@ -147,6 +181,11 @@ export function createBackupOperations(db: Database.Database): {
           continue
         }
         matched++
+        // Ordinal within (currentFormId, gender, shiny) — see entryKey's doc comment.
+        // data.collectionEntries is in export order (form_id, gender, shiny, id), so
+        // walking it in order and grouping by the remapped currentFormId reproduces each
+        // duplicate's original id-order position.
+        const ordinal = assignGroupOrdinal(importOrdinalCounters, currentFormId, entry.gender, entry.shiny ? 1 : 0)
         // A box position only means anything alongside a location (see CollectionEntry's
         // doc comment): if the import's storageLocationId was dropped (null in the
         // backup, or invalidated by the guard above), box_number/box_slot must drop too —
@@ -156,7 +195,7 @@ export function createBackupOperations(db: Database.Database): {
           entry.storageLocationId !== null && importedStorageLocationIds.has(entry.storageLocationId)
             ? entry.storageLocationId
             : null
-        wantedByKey.set(entryKey(currentFormId, entry.gender, entry.shiny ? 1 : 0), {
+        wantedByKey.set(entryKey(currentFormId, entry.gender, entry.shiny ? 1 : 0, ordinal), {
           owned: entry.owned,
           trainerProfileId:
             entry.trainerProfileId !== null && importedTrainerProfileIds.has(entry.trainerProfileId)
@@ -192,8 +231,12 @@ export function createBackupOperations(db: Database.Database): {
           insertStorageLocationWithIdStmt.run(location)
         }
 
+        const restoreOrdinalCounters = new Map<string, number>()
         for (const row of listEntriesStmt.all() as CollectionEntryRow[]) {
-          const wanted = wantedByKey.get(entryKey(row.form_id, row.gender, row.shiny))
+          // Same id-order walk as the import loop above, over the live table this time —
+          // see entryKey's doc comment for why this lines up duplicates across the two.
+          const ordinal = assignGroupOrdinal(restoreOrdinalCounters, row.form_id, row.gender, row.shiny)
+          const wanted = wantedByKey.get(entryKey(row.form_id, row.gender, row.shiny, ordinal))
           restoreEntryStmt.run({
             id: row.id,
             owned: wanted?.owned ? 1 : 0,
