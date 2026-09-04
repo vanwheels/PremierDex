@@ -33,6 +33,12 @@ export interface CollectionData {
   swapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
   /** See StorageAdapter.fillBoxSlots' own doc comment. */
   fillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
+  /** List view's multi-select "Move to…" — see StorageAdapter.bulkSetEntryStorageLocation's
+   * own doc comment. */
+  bulkMoveEntries: (entryIds: number[], storageLocationId: number | null) => void
+  /** List view's multi-select "Duplicate to…" — see StorageAdapter.duplicateEntries' own
+   * doc comment. */
+  bulkDuplicateEntries: (entryIds: number[], storageLocationId: number | null) => void
   setCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
   /** "Add Box" (Leg 2 of the Box View Polish milestone) — resolves with the newly created
    * box so DexBoxGrid can jump straight to it. */
@@ -181,6 +187,21 @@ export function useCollectionData(): CollectionData {
     })
   }, [])
 
+  const bulkMoveEntries = useCallback((entryIds: number[], storageLocationId: number | null): void => {
+    window.premierDex.bulkSetEntryStorageLocation(entryIds, storageLocationId).then((updated) => {
+      const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
+      setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
+    })
+  }, [])
+
+  // Duplicate always creates brand-new entry ids, so unlike every other setter above this
+  // appends to local state rather than replacing an existing entry in place.
+  const bulkDuplicateEntries = useCallback((entryIds: number[], storageLocationId: number | null): void => {
+    window.premierDex.duplicateEntries(entryIds, storageLocationId).then((created) => {
+      setEntries((prev) => [...prev, ...created])
+    })
+  }, [])
+
   const setCollapsedDisplayForm = useCallback((speciesId: number, formId: number | null): void => {
     window.premierDex.setCollapsedDisplayForm(speciesId, formId).then((updated) => {
       setSpecies((prev) => prev.map((sp) => (sp.id === updated.id ? updated : sp)))
@@ -261,6 +282,8 @@ export function useCollectionData(): CollectionData {
     setEntryBoxPosition,
     swapEntryBoxPositions,
     fillBoxSlots,
+    bulkMoveEntries,
+    bulkDuplicateEntries,
     setCollapsedDisplayForm,
     addBox,
     renameBox,

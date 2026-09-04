@@ -8,6 +8,7 @@ import { SpriteModal } from './SpriteModal'
 import type { SpriteModalTarget } from './SpriteModal'
 import { OriginModal } from './OriginModal'
 import type { OriginModalTarget } from './OriginModal'
+import { DexBulkActionsBar } from './DexBulkActionsBar'
 import { pickCollapsedRow } from './buildDexSections'
 import type { DexSection, DexSort, DexSortKey } from './types'
 
@@ -23,6 +24,9 @@ interface DexTableProps {
    * OriginModal). */
   storageLocations: StorageLocation[]
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
+  /** [Bulk move/duplicate entries between storage locations] — see DexBulkActionsBar. */
+  onBulkMove: (entryIds: number[], storageLocationId: number | null) => void
+  onBulkDuplicate: (entryIds: number[], storageLocationId: number | null) => void
   /** Leg 6's derived invalid-combo badge — see DexRow's doc comment. */
   speciesAvailability: SpeciesAvailabilityData
 }
@@ -69,6 +73,8 @@ export function DexTable({
   onSetCollapsedDisplayForm,
   storageLocations,
   onSaveStorageLocation,
+  onBulkMove,
+  onBulkDuplicate,
   speciesAvailability
 }: DexTableProps): JSX.Element {
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
@@ -78,6 +84,20 @@ export function DexTable({
   // writes to SQLite (via onSaveOrigin), so this isn't purely UI state — but "which modal
   // is open" still belongs local to DexTable, same as spriteTarget.
   const [originTarget, setOriginTarget] = useState<OriginModalTarget | null>(null)
+  // [Bulk move/duplicate entries between storage locations]: entry ids checked via the
+  // per-entry checkboxes beside each Loc. cell — see DexRow's own doc comment for why this
+  // is entry-id-keyed rather than row-keyed. UI-only, same as the state above; cleared
+  // after a bulk action fires (DexBulkActionsBar) rather than carried forward, so a repeat
+  // click can't silently reapply to a stale selection.
+  const [selectedEntryIds, setSelectedEntryIds] = useState<Set<number>>(new Set())
+  const toggleSelected = (entryId: number): void => {
+    setSelectedEntryIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(entryId)) next.delete(entryId)
+      else next.add(entryId)
+      return next
+    })
+  }
 
   const toggleExpanded = (speciesId: number): void => {
     setExpandedSpeciesIds((prev) => {
@@ -90,6 +110,13 @@ export function DexTable({
 
   return (
     <>
+      <DexBulkActionsBar
+        selectedEntryIds={selectedEntryIds}
+        storageLocations={storageLocations}
+        onMove={onBulkMove}
+        onDuplicate={onBulkDuplicate}
+        onClearSelection={() => setSelectedEntryIds(new Set())}
+      />
       <div className="dex-table-panel">
         <table className="dex-table">
           {/* Leg 3: gives table-layout: fixed (Leg 2) a real proportional basis instead of
@@ -168,6 +195,8 @@ export function DexTable({
                         onSaveOrigin={onSaveOrigin}
                         storageLocations={storageLocations}
                         onSaveStorageLocation={onSaveStorageLocation}
+                        selectedEntryIds={selectedEntryIds}
+                        onToggleSelected={toggleSelected}
                         speciesAvailability={speciesAvailability}
                         expandControl={
                           isCollapseSlot
@@ -193,6 +222,8 @@ export function DexTable({
                         onSaveOrigin={onSaveOrigin}
                         storageLocations={storageLocations}
                         onSaveStorageLocation={onSaveStorageLocation}
+                        selectedEntryIds={selectedEntryIds}
+                        onToggleSelected={toggleSelected}
                         speciesAvailability={speciesAvailability}
                         indent
                       />

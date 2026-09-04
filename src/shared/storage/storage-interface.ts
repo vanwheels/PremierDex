@@ -52,6 +52,15 @@ export interface StorageAdapter {
    * that before this is ever called, and the DB's existing box_slot/UNIQUE constraints
    * still apply as a backstop. */
   fillBoxSlots(entryIds: number[], boxNumber: number, startSlot: number): Promise<CollectionEntry[]>
+  /** Bulk version of setEntryStorageLocation (List view's multi-select move) — same
+   * per-entry semantics (box position always clears), just looped in one DB round trip. */
+  bulkSetEntryStorageLocation(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]>
+  /** Clones each entry into a brand-new row in `storageLocationId`, unassigned within it
+   * (List view's multi-select duplicate) — the first UI path able to create a real
+   * duplicate individual, see the UNIQUE(form_id, gender, shiny) drop in schema.ts. Every
+   * field carries over except id/storageLocationId/boxNumber/boxSlot, so the clone starts
+   * as a full independent individual sharing the source's origin/nickname. */
+  duplicateEntries(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>

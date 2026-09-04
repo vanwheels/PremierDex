@@ -9,6 +9,10 @@ export const PokemonIpcChannel = {
   setEntryBoxPosition: 'pokemon:collectionEntries:setBoxPosition',
   swapEntryBoxPositions: 'pokemon:collectionEntries:swapBoxPositions',
   fillBoxSlots: 'pokemon:collectionEntries:fillBoxSlots',
+  /** Bulk move/duplicate (List view multi-select) — see StorageAdapter's own doc
+   * comments. */
+  bulkSetEntryStorageLocation: 'pokemon:collectionEntries:bulkSetStorageLocation',
+  duplicateEntries: 'pokemon:collectionEntries:duplicate',
   setCollapsedDisplayForm: 'pokemon:species:setCollapsedDisplayForm',
   /** Leg 6: static per-game species-availability data (see load-species-data.ts),
    * not a StorageAdapter/DB method — there's no collection_entries-shaped row to read,

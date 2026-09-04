@@ -41,6 +41,12 @@ interface DexRowProps {
    * while on the Unassigned tab. */
   storageLocations: StorageLocation[]
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
+  /** [Bulk move/duplicate entries between storage locations]: same per-entry granularity
+   * as the Loc. picker above (a row can carry two independent owned entries, regular and
+   * shiny), so selection lives at that level too — one checkbox beside each Loc. cell,
+   * not one per row. */
+  selectedEntryIds: Set<number>
+  onToggleSelected: (entryId: number) => void
   /** Leg 6: backs the invalid-combo badge below — see invalidCombo.ts. */
   speciesAvailability: SpeciesAvailabilityData
   expandControl?: ExpandControl
@@ -79,6 +85,8 @@ export function DexRow({
   onSaveOrigin,
   storageLocations,
   onSaveStorageLocation,
+  selectedEntryIds,
+  onToggleSelected,
   speciesAvailability,
   expandControl,
   collapsedDisplayControl,
@@ -101,22 +109,32 @@ export function DexRow({
   }
 
   const storageLocationSelect = (entry: CollectionEntry | null): JSX.Element => (
-    <select
-      className="dex-storage-location-select"
-      disabled={!entry?.owned}
-      value={entry?.storageLocationId ?? UNASSIGNED}
-      onChange={(e) =>
-        entry && onSaveStorageLocation(entry.id, e.target.value === UNASSIGNED ? null : Number(e.target.value))
-      }
-      title="Storage location"
-    >
-      <option value={UNASSIGNED}>Unassigned</option>
-      {storageLocations.map((location) => (
-        <option key={location.id} value={location.id}>
-          {location.name}
-        </option>
-      ))}
-    </select>
+    <>
+      <input
+        type="checkbox"
+        className="dex-bulk-select-checkbox"
+        disabled={!entry?.owned}
+        checked={entry ? selectedEntryIds.has(entry.id) : false}
+        onChange={() => entry && onToggleSelected(entry.id)}
+        title="Select for bulk move/duplicate"
+      />
+      <select
+        className="dex-storage-location-select"
+        disabled={!entry?.owned}
+        value={entry?.storageLocationId ?? UNASSIGNED}
+        onChange={(e) =>
+          entry && onSaveStorageLocation(entry.id, e.target.value === UNASSIGNED ? null : Number(e.target.value))
+        }
+        title="Storage location"
+      >
+        <option value={UNASSIGNED}>Unassigned</option>
+        {storageLocations.map((location) => (
+          <option key={location.id} value={location.id}>
+            {location.name}
+          </option>
+        ))}
+      </select>
+    </>
   )
 
   return (

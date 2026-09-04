@@ -116,6 +116,41 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       clearBoxPlaceholderStmt.run({ storageLocationId: entry.storage_location_id, boxNumber, boxSlot })
     })
   })
+  // Bulk move (Bulk move/duplicate entries between storage locations item) — same
+  // per-row statement as setEntryStorageLocation above, looped in one transaction so a
+  // multi-select in List view is one DB round trip instead of N. Same box-position clear
+  // as the single-entry setter: the target may be a different location entirely, and a
+  // box position is only ever meaningful within the location it was set for.
+  const bulkSetEntryStorageLocationTx = db.transaction((entryIds: number[], storageLocationId: number | null) => {
+    for (const id of entryIds) {
+      if (!getEntryStmt.get(id)) throw new Error('Entry not found')
+      setEntryStorageLocationStmt.run({ id, storageLocationId })
+    }
+  })
+  // Clones a batch of entries into a target storage location (same item as above) — the
+  // first UI path that can ever create a real duplicate individual; see schema.ts's
+  // dropped UNIQUE(form_id, gender, shiny) and commit 7f5f1cd's message, which left this
+  // as future work. Copies every field except id/storage_location_id/box_number/box_slot
+  // (a straight column-for-column carry, deliberately not itemized field-by-field so a
+  // future CollectionEntry column doesn't silently fail to carry over): the clone is a
+  // full, independent individual sharing the source's origin/nickname/etc, landing
+  // unassigned-within-location same as a bulk move — the user places it manually
+  // afterward, same as any newly-moved entry.
+  const insertDuplicateEntryStmt = db.prepare(`
+    INSERT INTO collection_entries
+      (form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
+       language, nickname, caught_ball, storage_location_id, met_location, box_number, box_slot)
+    SELECT form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
+       language, nickname, caught_ball, @storageLocationId, met_location, NULL, NULL
+    FROM collection_entries WHERE id = @sourceId
+  `)
+  const duplicateEntriesTx = db.transaction((entryIds: number[], storageLocationId: number | null) => {
+    return entryIds.map((sourceId) => {
+      if (!getEntryStmt.get(sourceId)) throw new Error('Entry not found')
+      const result = insertDuplicateEntryStmt.run({ sourceId, storageLocationId })
+      return result.lastInsertRowid as number
+    })
+  })
   const orphanEntriesByTrainerProfileStmt = db.prepare(
     'UPDATE collection_entries SET trainer_profile_id = NULL WHERE trainer_profile_id = ?'
   )
@@ -297,6 +332,16 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     async fillBoxSlots(entryIds: number[], boxNumber: number, startSlot: number): Promise<CollectionEntry[]> {
       fillBoxSlotsTx(entryIds, boxNumber, startSlot)
       return entryIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
+    },
+
+    async bulkSetEntryStorageLocation(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]> {
+      bulkSetEntryStorageLocationTx(entryIds, storageLocationId)
+      return entryIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
+    },
+
+    async duplicateEntries(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]> {
+      const newIds = duplicateEntriesTx(entryIds, storageLocationId)
+      return newIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
     },
 
     // exportCollection/importCollection live in collection-backup.ts (Leg 3 of the Box

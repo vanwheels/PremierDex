@@ -170,6 +170,28 @@ tbody tr:hover {
   opacity: 0.4;
 }
 
+/* [Bulk move/duplicate entries between storage locations]: sits directly before its Loc.
+ * cell's dex-storage-location-select, same disabled-when-unowned/vertical-align treatment
+ * so the pair reads as one unit rather than two unrelated controls. */
+.dex-bulk-select-checkbox {
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.dex-bulk-select-checkbox:disabled {
+  opacity: 0.4;
+}
+
+.dex-bulk-actions-count {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.dex-bulk-clear-button {
+  margin-left: auto;
+}
+
 /* Leg 10: read-only Game/Ball columns, same truncate-with-tooltip treatment as
  * dex-origin-button's title attribute since these can run longer than the column.
  * max-width: 100% (not a fixed rem cap, since Leg 3) so this fills whatever width the

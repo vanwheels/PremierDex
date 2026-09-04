@@ -39,12 +39,18 @@ game/region's numbering, one column vs. per-game) before it can be added to the 
 alongside National Dex #.
 Last touched: 2026-09-03. Re-check count: 0.
 
-### [Bulk move/duplicate entries between storage locations] — unscheduled
-Raised by Vanny 2026-09-03 while scoping the Unassigned-backfill fix (Leg 6): a way to
-move or duplicate a batch of entries from one storage location to another (not just the
-existing per-row picker) would help now that the 0->1 location auto-backfill only ever
-fires once. Not scoped or designed — just a decent-feature idea, not urgent.
-Last touched: 2026-09-03. Re-check count: 0.
+### [Bulk move/duplicate: Box view support] — unscheduled
+Follow-up to [Bulk move/duplicate entries between storage locations] (List view, see
+COMPLETED.md), confirmed by Vanny 2026-09-04 while scoping that item: List view's
+multi-select checkboxes act on one representative entry per form/gender/shiny slot (Box
+Arrangement Leg 4's design), so a slot that already has hidden duplicate individuals can't
+select or move/duplicate the non-representative copies, and a newly-created duplicate
+won't visibly appear in List view afterward either — only Box view enumerates every
+individual. Vanny confirmed proceeding List-view-only for now is fine, with this filed as
+the deferred widen-to-Box-view leg. Not scoped: likely extends Leg 4 of Box View Polish's
+existing ctrl/shift multi-select (currently drag-move within one location's boxes) to
+support moving/duplicating a selection across Storage Locations too.
+Last touched: 2026-09-04. Re-check count: 0.
 
 ### [Box names/empty boxes/placeholders missing from JSON backup export/import] — unscheduled
 Surfaced while implementing [Add / rename boxes] (Leg 2 of Box View Polish, see

@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Bulk move/duplicate entries between storage locations] — 2026-09-04
+Built for List view only, per Vanny's call while scoping it: a checkbox beside each
+Non-Shiny/Shiny Loc. cell (DexRow, same per-entry granularity as the existing picker
+there) feeds a selection toolbar above the table (new DexBulkActionsBar) offering Move or
+Duplicate to a chosen Storage Location. Move batches the existing per-entry setter
+(`bulkSetEntryStorageLocation`); Duplicate (`duplicateEntries`) is the first UI path able
+to create a real duplicate individual — clones every field except id/location/box
+position into a brand-new row, landing unassigned within the target location same as a
+move. Both land as one DB transaction. Confirmed with Vanny mid-scoping: List view only
+ever surfaces one representative entry per form/gender/shiny slot (Box Arrangement Leg
+4's design), so this can't reach or duplicate-reveal hidden duplicate individuals — Box
+view support filed separately, see TODO.md's [Bulk move/duplicate: Box view support].
+
 Legs 1-5 (Box View Polish & Multi-Box Editing milestone) archived at
 `docs/completed-archive/box-view-polish-multi-box-editing.md`. Legs 1-10 plus an
 unnumbered Diamond/Pearl theming addendum (Nav Restructuring, Visual Pass & Dex Table

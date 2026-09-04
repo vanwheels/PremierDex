@@ -32,6 +32,16 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
     (_event, entryIds: number[], boxNumber: number, startSlot: number) =>
       storage.fillBoxSlots(entryIds, boxNumber, startSlot)
   )
+  ipcMain.handle(
+    PokemonIpcChannel.bulkSetEntryStorageLocation,
+    (_event, entryIds: number[], storageLocationId: number | null) =>
+      storage.bulkSetEntryStorageLocation(entryIds, storageLocationId)
+  )
+  ipcMain.handle(
+    PokemonIpcChannel.duplicateEntries,
+    (_event, entryIds: number[], storageLocationId: number | null) =>
+      storage.duplicateEntries(entryIds, storageLocationId)
+  )
   ipcMain.handle(PokemonIpcChannel.setCollapsedDisplayForm, (_event, speciesId: number, formId: number | null) =>
     storage.setCollapsedDisplayForm(speciesId, formId)
   )
