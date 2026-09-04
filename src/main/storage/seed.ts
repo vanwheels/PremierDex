@@ -53,10 +53,13 @@ function prunePreLeg7ExcludedForms(db: Database.Database): void {
 }
 
 /**
- * Seeds reference data (species/forms/collection-entry rows) on every startup.
- * Entirely INSERT OR IGNORE keyed on schema.ts's unique constraints, so this is always
- * safe to re-run: it only ever adds rows that don't exist yet and never touches a
- * player's existing owned/shiny state.
+ * Seeds reference data (species/forms/collection-entry rows) on every startup. species/
+ * forms inserts are INSERT OR IGNORE keyed on schema.ts's unique constraints there;
+ * collection_entries has no such constraint since Leg 2 of the Box Arrangement milestone
+ * (duplicate owned copies are real individuals, not a dedup target), so its insert uses an
+ * explicit NOT EXISTS guard instead (see insertEntry below). Either way this is always
+ * safe to re-run: it only ever plants a combo's initial unowned placeholder once and never
+ * touches a player's existing owned/shiny state.
  *
  * Forms come from `data/pokemon/forms.json` (see `scripts/fetch-pokemon-forms.ts` and
  * `docs/investigations/form-categorization.md` for how form_category/regional_group/
@@ -112,9 +115,20 @@ export function runSeed(db: Database.Database): void {
     WHERE species_id = @speciesId AND form_name = @formName AND always_shiny != @alwaysShiny
   `)
   const selectFormId = db.prepare('SELECT id FROM forms WHERE species_id = ? AND form_name = ?')
-  const insertEntry = db.prepare(
-    'INSERT OR IGNORE INTO collection_entries (form_id, gender, shiny, owned) VALUES (@formId, @gender, @shiny, 0)'
-  )
+  // Leg 2 of the Box Arrangement milestone dropped collection_entries' UNIQUE(form_id,
+  // gender, shiny) constraint (duplicate owned copies are now real tracked individuals),
+  // so INSERT OR IGNORE can no longer dedupe against it — every startup would otherwise
+  // insert a fresh blank placeholder row on top of whatever's already there. Guard with an
+  // explicit NOT EXISTS instead: seed only ever needs to plant the initial unowned
+  // placeholder for a combo that has no row at all yet, never add another once any row
+  // (placeholder or a real owned copy) exists for it.
+  const insertEntry = db.prepare(`
+    INSERT INTO collection_entries (form_id, gender, shiny, owned)
+    SELECT @formId, @gender, @shiny, 0
+    WHERE NOT EXISTS (
+      SELECT 1 FROM collection_entries WHERE form_id = @formId AND gender = @gender AND shiny = @shiny
+    )
+  `)
 
   const seedAll = db.transaction(() => {
     prunePreLeg7ExcludedForms(db)

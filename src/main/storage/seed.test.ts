@@ -81,6 +81,51 @@ describe('runSeed', () => {
     expect(() => runSeed(db)).not.toThrow()
   })
 
+  it('does not duplicate a combo\'s placeholder row on repeated runs (no UNIQUE constraint to rely on since Leg 2)', () => {
+    const db = makeDb()
+    runSeed(db)
+    const countAfterFirst = (
+      db.prepare('SELECT COUNT(*) AS n FROM collection_entries').get() as { n: number }
+    ).n
+
+    runSeed(db)
+    runSeed(db)
+    const countAfterMore = (
+      db.prepare('SELECT COUNT(*) AS n FROM collection_entries').get() as { n: number }
+    ).n
+
+    expect(countAfterMore).toBe(countAfterFirst)
+  })
+
+  it('still seeds a placeholder for a combo once a real owned duplicate exists for it', () => {
+    const db = makeDb()
+    runSeed(db)
+    const bulbasaurBase = db.prepare("SELECT id FROM forms WHERE species_id = 1 AND form_name = 'base'").get() as {
+      id: number
+    }
+    // Simulate the user owning two real copies of the same (form, gender, shiny) combo —
+    // the whole point of Leg 2's dropped constraint.
+    db.prepare('INSERT INTO collection_entries (form_id, gender, shiny, owned) VALUES (?, ?, ?, 1)').run(
+      bulbasaurBase.id,
+      'unknown',
+      0
+    )
+    const countBeforeReseed = (
+      db.prepare('SELECT COUNT(*) AS n FROM collection_entries WHERE form_id = ?').get(bulbasaurBase.id) as {
+        n: number
+      }
+    ).n
+
+    runSeed(db)
+
+    const countAfterReseed = (
+      db.prepare('SELECT COUNT(*) AS n FROM collection_entries WHERE form_id = ?').get(bulbasaurBase.id) as {
+        n: number
+      }
+    ).n
+    expect(countAfterReseed).toBe(countBeforeReseed)
+  })
+
   it('backfills a stale home_boxable value on a row that already existed', () => {
     const db = makeDb()
 

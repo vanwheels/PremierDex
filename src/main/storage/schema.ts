@@ -48,13 +48,19 @@ export function applySchema(db: Database.Database): void {
     );
     CREATE INDEX IF NOT EXISTS idx_forms_species ON forms(species_id);
 
+    -- No UNIQUE(form_id, gender, shiny) here (dropped Leg 2 of the Box Arrangement
+    -- milestone, see TODO.md/COMPLETED.md): duplicate owned copies of the same species/
+    -- form/gender/shiny combo are real tracked individuals, not a visual trick, so more
+    -- than one row can legitimately share that triple. A pre-Leg-2 database that already
+    -- has the constraint gets it dropped by the rebuild block at the bottom of this
+    -- function instead — SQLite can't ALTER a table to remove a UNIQUE constraint, same
+    -- limitation as the CHECK-widen rebuilds elsewhere in this file.
     CREATE TABLE IF NOT EXISTS collection_entries (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       form_id INTEGER NOT NULL REFERENCES forms(id),
       gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
       shiny INTEGER NOT NULL DEFAULT 0,
-      owned INTEGER NOT NULL DEFAULT 0,
-      UNIQUE(form_id, gender, shiny)
+      owned INTEGER NOT NULL DEFAULT 0
     );
     CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
 
@@ -335,6 +341,50 @@ export function applySchema(db: Database.Database): void {
         FROM collection_entries;
       DROP TABLE collection_entries;
       ALTER TABLE collection_entries_ballcheck RENAME TO collection_entries;
+      CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
+    `)
+  }
+
+  // Drop UNIQUE(form_id, gender, shiny) (Leg 2 of the Box Arrangement/Real Inventory Data
+  // Model milestone — see TODO.md/COMPLETED.md): a real box can hold several regular and
+  // shiny copies of one species mixed together, so duplicate owned copies are real tracked
+  // individuals, not a visual trick the old one-row-per-combo model could represent.
+  // SQLite can't ALTER a table to drop a UNIQUE constraint (same limitation as the
+  // CHECK-widen rebuilds above), so detect it via the stored CREATE TABLE SQL and rebuild.
+  // Runs last and rebuilds with every column this function can have added by this point,
+  // copied straight across, same reasoning as the caught_ball rebuild directly above — and
+  // for the same reason, no foreign_keys=OFF dance is needed (nothing references
+  // collection_entries(id) as an FK target).
+  const entriesSqlForUniqueCheck = db
+    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entries'")
+    .get() as { sql: string } | undefined
+  if (entriesSqlForUniqueCheck?.sql.includes('UNIQUE(form_id, gender, shiny)')) {
+    db.exec(`
+      CREATE TABLE collection_entries_dropunique (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        form_id INTEGER NOT NULL REFERENCES forms(id),
+        gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
+        shiny INTEGER NOT NULL DEFAULT 0,
+        owned INTEGER NOT NULL DEFAULT 0,
+        trainer_profile_id INTEGER REFERENCES trainer_profiles(id),
+        origin_game TEXT,
+        ot_name TEXT,
+        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
+        nickname TEXT,
+        language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL})),
+        caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN (${POKE_BALL_LIST_SQL})),
+        storage_location_id INTEGER REFERENCES storage_locations(id),
+        met_location TEXT
+      );
+      INSERT INTO collection_entries_dropunique
+        (id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
+         language, caught_ball, storage_location_id, met_location)
+        SELECT id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
+               language, caught_ball, storage_location_id, met_location
+        FROM collection_entries;
+      DROP TABLE collection_entries;
+      ALTER TABLE collection_entries_dropunique RENAME TO collection_entries;
       CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
     `)
   }

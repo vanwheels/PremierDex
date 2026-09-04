@@ -36,7 +36,7 @@ describe('applySchema', () => {
     ).toThrow()
   })
 
-  it('enforces one collection_entries row per (form_id, gender, shiny)', () => {
+  it('allows multiple collection_entries rows for the same (form_id, gender, shiny) — duplicate owned copies are real individuals (Leg 2)', () => {
     const db = makeDb()
     db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
     db.prepare(
@@ -46,7 +46,11 @@ describe('applySchema', () => {
     db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
     expect(() =>
       db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
-    ).toThrow()
+    ).not.toThrow()
+    const count = (
+      db.prepare('SELECT COUNT(*) AS n FROM collection_entries WHERE form_id = 1').get() as { n: number }
+    ).n
+    expect(count).toBe(2)
   })
 
   it('rejects a trainer_profiles tid past the 6-digit range via the CHECK constraint', () => {
