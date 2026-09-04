@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
-import type { StorageBox } from '@shared/types/box'
+import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { buildBoxes, buildUnboxedEntries } from './buildBoxes'
 import { DexBoxPane } from './DexBoxPane'
@@ -17,6 +17,9 @@ interface DexBoxGridProps {
    * `entries` — see buildBoxes.ts's doc comment (Leg 2 of the Box View Polish
    * milestone). */
   storageBoxes: StorageBox[]
+  /** Leg 5 of the Box View Polish milestone: same pre-scoped-to-the-selected-location
+   * convention as storageBoxes. */
+  boxPlaceholders: BoxPlaceholder[]
   speciesAvailability: SpeciesAvailabilityData
   /** Same axis as DexLocationTabs' `selected` — needed here (unlike DexHybridGrid, which
    * only ever sees already-scoped `sections`) because Box view has to tell "the Unassigned
@@ -37,6 +40,9 @@ interface DexBoxGridProps {
   onAddBox: (storageLocationId: number) => Promise<StorageBox>
   /** Leg 2: the pager label's inline "Rename" control. */
   onRenameBox: (boxId: number, name: string | null) => void
+  /** Leg 5: right-click an empty slot or an existing placeholder — see DexBoxPane. */
+  onSetBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number) => void
+  onClearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
 }
 
 /**
@@ -66,6 +72,7 @@ export function DexBoxGrid({
   forms,
   storageLocations,
   storageBoxes,
+  boxPlaceholders,
   speciesAvailability,
   selectedLocationTab,
   onSaveOrigin,
@@ -73,11 +80,13 @@ export function DexBoxGrid({
   onSwapEntryBoxPositions,
   onFillBoxSlots,
   onAddBox,
-  onRenameBox
+  onRenameBox,
+  onSetBoxPlaceholder,
+  onClearBoxPlaceholder
 }: DexBoxGridProps): JSX.Element {
   const boxes = useMemo(
-    () => buildBoxes(storageBoxes, species, forms, entries),
-    [storageBoxes, species, forms, entries]
+    () => buildBoxes(storageBoxes, species, forms, entries, boxPlaceholders),
+    [storageBoxes, species, forms, entries, boxPlaceholders]
   )
   const unboxedEntries = useMemo(() => buildUnboxedEntries(species, forms, entries), [species, forms, entries])
   // Every entry currently occupying a slot in *any* box of this location, not just the box
@@ -149,6 +158,7 @@ export function DexBoxGrid({
           initialBoxIndex={0}
           storageLocations={storageLocations}
           speciesAvailability={speciesAvailability}
+          species={species}
           storageLocationId={selectedLocationTab}
           boxedEntryIds={boxedEntryIds}
           onSaveOrigin={onSaveOrigin}
@@ -157,6 +167,8 @@ export function DexBoxGrid({
           onFillBoxSlots={onFillBoxSlots}
           onAddBox={onAddBox}
           onRenameBox={onRenameBox}
+          onSetBoxPlaceholder={onSetBoxPlaceholder}
+          onClearBoxPlaceholder={onClearBoxPlaceholder}
           onCurrentBoxChange={handlePrimaryBoxChange}
         />
         {secondBoxOpen && (
@@ -166,6 +178,7 @@ export function DexBoxGrid({
             initialBoxIndex={secondBoxInitialIndex}
             storageLocations={storageLocations}
             speciesAvailability={speciesAvailability}
+            species={species}
             storageLocationId={selectedLocationTab}
             boxedEntryIds={boxedEntryIds}
             onSaveOrigin={onSaveOrigin}
@@ -173,6 +186,8 @@ export function DexBoxGrid({
             onSwapEntryBoxPositions={onSwapEntryBoxPositions}
             onFillBoxSlots={onFillBoxSlots}
             onAddBox={onAddBox}
+            onSetBoxPlaceholder={onSetBoxPlaceholder}
+            onClearBoxPlaceholder={onClearBoxPlaceholder}
             onRenameBox={onRenameBox}
           />
         )}

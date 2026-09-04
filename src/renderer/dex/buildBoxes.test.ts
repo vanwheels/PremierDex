@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
-import type { StorageBox } from '@shared/types/box'
+import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
+import type { BoxCell } from './types'
 import { BOX_SIZE, buildBoxes, buildUnboxedEntries } from './buildBoxes'
+
+// Test-only narrowing: every cell these tests build from a real CollectionEntry is known
+// to come back as an 'entry' cell (never a placeholder), same assumption pre-Leg-5 tests
+// made implicitly before Box.cells' type grew a second cell kind.
+function asEntryCell(cell: unknown): BoxCell {
+  return cell as BoxCell
+}
 
 function makeBox(overrides: Partial<StorageBox> & Pick<StorageBox, 'id' | 'boxNumber'>): StorageBox {
   return { storageLocationId: 1, name: null, ...overrides }
@@ -55,23 +63,23 @@ const FORMS: Form[] = [makeForm({ id: 1, speciesId: 1 }), makeForm({ id: 2, spec
 
 describe('buildBoxes', () => {
   it('includes every box passed in, even with no boxed entries', () => {
-    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [], [])
     expect(boxes).toEqual([{ id: 1, boxNumber: 1, name: null, cells: new Array(BOX_SIZE).fill(null) }])
   })
 
   it('carries a box\'s name through', () => {
     const named = [makeBox({ id: 1, boxNumber: 1, name: 'Starters' })]
-    const boxes = buildBoxes(named, SPECIES, FORMS, [])
+    const boxes = buildBoxes(named, SPECIES, FORMS, [], [])
     expect(boxes[0].name).toBe('Starters')
   })
 
   it('produces no boxes at all when none are passed in', () => {
-    expect(buildBoxes([], SPECIES, FORMS, [])).toEqual([])
+    expect(buildBoxes([], SPECIES, FORMS, [], [])).toEqual([])
   })
 
   it('places a boxed entry at its slot, leaving the rest null', () => {
     const entry = makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: 5 })
-    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry], [])
     expect(boxes).toHaveLength(1)
     expect(boxes[0].cells[5]).toMatchObject({ boxNumber: 1, slot: 5, displayName: 'Bulbasaur', entry })
     expect(boxes[0].cells.filter((c) => c !== null)).toHaveLength(1)
@@ -79,8 +87,8 @@ describe('buildBoxes', () => {
 
   it('renders an unowned placeholder entry as a real cell too', () => {
     const entry = makeEntry({ id: 1, formId: 1, owned: false, boxNumber: 1, boxSlot: 0 })
-    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
-    expect(boxes[0].cells[0]?.entry.owned).toBe(false)
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry], [])
+    expect(asEntryCell(boxes[0].cells[0]).entry.owned).toBe(false)
   })
 
   it('places two entries in the same box at their own independent slots', () => {
@@ -88,10 +96,10 @@ describe('buildBoxes', () => {
       makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: 0 }),
       makeEntry({ id: 2, formId: 2, boxNumber: 1, boxSlot: 5 })
     ]
-    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, entries)
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, entries, [])
     expect(boxes).toHaveLength(1)
-    expect(boxes[0].cells[0]?.entry.id).toBe(1)
-    expect(boxes[0].cells[5]?.entry.id).toBe(2)
+    expect(asEntryCell(boxes[0].cells[0]).entry.id).toBe(1)
+    expect(asEntryCell(boxes[0].cells[5]).entry.id).toBe(2)
     expect(boxes[0].cells.filter((c) => c !== null)).toHaveLength(2)
   })
 
@@ -101,40 +109,67 @@ describe('buildBoxes', () => {
       makeEntry({ id: 1, formId: 1, boxNumber: 3, boxSlot: 0 }),
       makeEntry({ id: 2, formId: 2, boxNumber: 1, boxSlot: 0 })
     ]
-    const boxes = buildBoxes(boxesIn, SPECIES, FORMS, entries)
+    const boxes = buildBoxes(boxesIn, SPECIES, FORMS, entries, [])
     expect(boxes.map((b) => b.boxNumber)).toEqual([1, 3])
   })
 
   it('ignores an entry with only one of boxNumber/boxSlot set', () => {
     const entry = makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: null })
-    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry], [])
     expect(boxes[0].cells.every((c) => c === null)).toBe(true)
   })
 
   it('skips an entry whose box number has no matching boxes row', () => {
     const entry = makeEntry({ id: 1, formId: 1, boxNumber: 2, boxSlot: 0 })
-    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry], [])
     expect(boxes).toHaveLength(1)
     expect(boxes[0].cells.every((c) => c === null)).toBe(true)
   })
 
   it('skips an entry whose slot is out of the 0-29 range', () => {
     const entry = makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: 30 })
-    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry], [])
     expect(boxes[0].cells.every((c) => c === null)).toBe(true)
   })
 
   it('skips an entry whose form or species cannot be resolved', () => {
     const entry = makeEntry({ id: 1, formId: 999, boxNumber: 1, boxSlot: 0 })
-    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry], [])
     expect(boxes[0].cells[0]).toBeNull()
   })
 
   it('appends gender symbol and shiny marker to the display name', () => {
     const genderedForm = makeForm({ id: 3, speciesId: 25, hasGenderDifference: true })
     const entry = makeEntry({ id: 1, formId: 3, gender: 'female', shiny: true, boxNumber: 1, boxSlot: 0 })
-    const boxes = buildBoxes(BOX_1, SPECIES, [...FORMS, genderedForm], [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, [...FORMS, genderedForm], [entry], [])
     expect(boxes[0].cells[0]?.displayName).toBe('Pikachu ♀ ✨')
+  })
+
+  it('places a placeholder at its slot', () => {
+    const placeholder: BoxPlaceholder = { id: 1, storageLocationId: 1, boxNumber: 1, boxSlot: 3, speciesId: 25 }
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [], [placeholder])
+    expect(boxes[0].cells[3]).toEqual({
+      kind: 'placeholder',
+      boxNumber: 1,
+      slot: 3,
+      speciesId: 25,
+      displayName: 'Pikachu',
+      pokeapiId: 2,
+      spriteFormSuffix: null
+    })
+  })
+
+  it('never lets a placeholder clobber a real entry already at that slot', () => {
+    const entry = makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: 0 })
+    const placeholder: BoxPlaceholder = { id: 1, storageLocationId: 1, boxNumber: 1, boxSlot: 0, speciesId: 25 }
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry], [placeholder])
+    expect(boxes[0].cells[0]).toMatchObject({ kind: 'entry', entry })
+  })
+
+  it('skips a placeholder whose species cannot be resolved', () => {
+    const placeholder: BoxPlaceholder = { id: 1, storageLocationId: 1, boxNumber: 1, boxSlot: 0, speciesId: 999 }
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [], [placeholder])
+    expect(boxes[0].cells[0]).toBeNull()
   })
 })
 

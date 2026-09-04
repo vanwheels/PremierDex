@@ -117,6 +117,32 @@ export function applySchema(db: Database.Database): void {
       UNIQUE(storage_location_id, box_number)
     );
     CREATE INDEX IF NOT EXISTS idx_boxes_location ON boxes(storage_location_id);
+
+    -- "Planned" placeholders (Leg 5 of the Box View Polish & Multi-Box Editing milestone) —
+    -- a user's intent to eventually put some species in a given empty slot, right-clicked
+    -- in from Box view. Deliberately its own table rather than a special CollectionEntry
+    -- (owned = 0 already means "not yet owned" and is real inventory-shaped: it carries
+    -- gender/shiny/individual fields that mean nothing for a bare intent, and it would
+    -- count toward completion stats and the tray's unboxed list, which a placeholder must
+    -- never do). species_id only — no form/gender/shiny, matching the milestone note's
+    -- explicit scope. box_number/box_slot (not a boxes(id) FK) mirrors collection_entries'
+    -- own box position columns for the same reason: a placeholder is scoped to a location's
+    -- numbered box, not the boxes row's identity. Same ON DELETE CASCADE as boxes above —
+    -- a placeholder has no "orphaned but kept" state worth preserving once its location is
+    -- gone, same reasoning as that table's own comment. The UNIQUE index is what makes "one
+    -- placeholder per slot" a DB-level invariant; sqlite-storage.ts's setBoxPlaceholder
+    -- additionally refuses to place one on a slot a real CollectionEntry already occupies,
+    -- and setEntryBoxPosition/fillBoxSlots clear any placeholder sitting in a slot a real
+    -- entry is moved into, so a slot is never both a real cell and a "planned" one at once.
+    CREATE TABLE IF NOT EXISTS box_placeholders (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      storage_location_id INTEGER NOT NULL REFERENCES storage_locations(id) ON DELETE CASCADE,
+      box_number INTEGER NOT NULL CHECK (box_number >= 1),
+      box_slot INTEGER NOT NULL CHECK (box_slot BETWEEN 0 AND 29),
+      species_id INTEGER NOT NULL REFERENCES species(id),
+      UNIQUE(storage_location_id, box_number, box_slot)
+    );
+    CREATE INDEX IF NOT EXISTS idx_box_placeholders_location ON box_placeholders(storage_location_id);
   `)
 
   // Same retrofit story for species: collapsed_display_form_id postdates every existing

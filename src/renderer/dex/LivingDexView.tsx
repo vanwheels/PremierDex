@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
-import type { StorageBox } from '@shared/types/box'
+import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { buildDexSections } from './buildDexSections'
@@ -31,6 +31,8 @@ export interface LivingDexViewProps {
   entries: CollectionEntry[]
   storageLocations: StorageLocation[]
   boxes: StorageBox[]
+  /** Leg 5 of the Box View Polish milestone — see DexBoxGrid's boxPlaceholders prop. */
+  boxPlaceholders: BoxPlaceholder[]
   trainerProfiles: TrainerProfile[]
   speciesAvailability: SpeciesAvailabilityData
   onSetEntryOwned: (entryId: number, owned: boolean) => void
@@ -44,6 +46,8 @@ export interface LivingDexViewProps {
   onSetCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
   onAddBox: (storageLocationId: number) => Promise<StorageBox>
   onRenameBox: (boxId: number, name: string | null) => void
+  onSetBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number) => void
+  onClearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
 }
 
 /** The Living Dex tab's own content: the per-location tab bar, completion stats, the
@@ -63,6 +67,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     entries,
     storageLocations,
     boxes,
+    boxPlaceholders,
     trainerProfiles,
     speciesAvailability,
     onSetEntryOwned,
@@ -73,7 +78,9 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onFillBoxSlots,
     onSetCollapsedDisplayForm,
     onAddBox,
-    onRenameBox
+    onRenameBox,
+    onSetBoxPlaceholder,
+    onClearBoxPlaceholder
   } = props
 
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
@@ -105,6 +112,15 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
   const boxesForLocationTab = useMemo(
     () => (selectedLocationTab === null ? [] : boxes.filter((box) => box.storageLocationId === selectedLocationTab)),
     [boxes, selectedLocationTab]
+  )
+  // Same pre-scoping convention as boxesForLocationTab above (Leg 5 of the Box View Polish
+  // milestone).
+  const boxPlaceholdersForLocationTab = useMemo(
+    () =>
+      selectedLocationTab === null
+        ? []
+        : boxPlaceholders.filter((placeholder) => placeholder.storageLocationId === selectedLocationTab),
+    [boxPlaceholders, selectedLocationTab]
   )
 
   const sections = useMemo(
@@ -199,6 +215,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           forms={forms}
           storageLocations={storageLocations}
           storageBoxes={boxesForLocationTab}
+          boxPlaceholders={boxPlaceholdersForLocationTab}
           speciesAvailability={speciesAvailability}
           selectedLocationTab={selectedLocationTab}
           onSaveOrigin={onSaveOrigin}
@@ -207,6 +224,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onFillBoxSlots={onFillBoxSlots}
           onAddBox={onAddBox}
           onRenameBox={onRenameBox}
+          onSetBoxPlaceholder={onSetBoxPlaceholder}
+          onClearBoxPlaceholder={onClearBoxPlaceholder}
         />
       </div>
     </>

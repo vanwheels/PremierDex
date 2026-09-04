@@ -1,21 +1,16 @@
 import { useEffect, useState, type MouseEvent } from 'react'
-import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
+import type { CollectionEntryOriginInput, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { BOX_COLS } from './buildBoxes'
-import { SpriteThumbnail } from './SpriteThumbnail'
-import { BallIcon } from './BallIcon'
 import { DexBoxDetailPanel } from './DexBoxDetailPanel'
-import { DexBoxContextMenu } from './DexBoxContextMenu'
+import { DexBoxContextMenu, type DexBoxContextMenuAction } from './DexBoxContextMenu'
+import { DexBoxGridCell } from './DexBoxGridCell'
+import { DexBoxPlaceholderModal } from './DexBoxPlaceholderModal'
 import { DexBoxPager } from './DexBoxPager'
 import { OriginModal } from './OriginModal'
-import { readDragEntryPayload, setDragEntryPayload } from './dragEntryPayload'
-import type { Box, BoxCell } from './types'
-
-// Same fixed sprite size as before Leg 3 split this out of DexBoxGrid — see that file's
-// own doc comment on why it's fixed rather than flex-stretched.
-const CELL_SPRITE_SIZE = 96
+import type { Box, BoxCell, CellTarget } from './types'
 
 interface DexBoxPaneProps {
   /** The selected location's full box list, shared by every open pane — see buildBoxes.ts.
@@ -24,6 +19,9 @@ interface DexBoxPaneProps {
   initialBoxIndex: number
   storageLocations: StorageLocation[]
   speciesAvailability: SpeciesAvailabilityData
+  /** Leg 5 of the Box View Polish milestone: the full species list, threaded down purely
+   * for DexBoxPlaceholderModal's search — nothing else here needs it. */
+  species: Species[]
   /** The real (non-null) location id — a pane never renders for the Unassigned tab, same
    * guard as DexBoxGrid's own selectedLocationTab === null branch. */
   storageLocationId: number
@@ -41,6 +39,14 @@ interface DexBoxPaneProps {
   onFillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
   onAddBox: (storageLocationId: number) => Promise<StorageBox>
   onRenameBox: (boxId: number, name: string | null) => void
+  /** Leg 5 of the Box View Polish milestone: right-click an empty slot ("Set
+   * placeholder…") or an existing placeholder ("Change species") — see
+   * DexBoxPlaceholderModal. Signature mirrors StorageAdapter.setBoxPlaceholder exactly
+   * (storageLocationId included) rather than relying on this pane's own storageLocationId
+   * prop implicitly, so the call reads the same all the way down the chain. */
+  onSetBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number) => void
+  /** Right-click a placeholder cell -> "Clear placeholder". */
+  onClearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
   /** Fires on mount and on every box navigation — lets DexBoxGrid track which box the
    * primary pane is currently showing, for the tray's click-to-place shortcut (always
    * targets the primary pane; see DexBoxGrid's own doc comment). The secondary pane passes
@@ -67,6 +73,7 @@ export function DexBoxPane({
   initialBoxIndex,
   storageLocations,
   speciesAvailability,
+  species,
   storageLocationId,
   boxedEntryIds,
   onSaveOrigin,
@@ -75,6 +82,8 @@ export function DexBoxPane({
   onFillBoxSlots,
   onAddBox,
   onRenameBox,
+  onSetBoxPlaceholder,
+  onClearBoxPlaceholder,
   onCurrentBoxChange
 }: DexBoxPaneProps): JSX.Element {
   const [boxIndex, setBoxIndex] = useState(initialBoxIndex)
@@ -89,7 +98,10 @@ export function DexBoxPane({
   const [selectionAnchor, setSelectionAnchor] = useState<number | null>(null)
   const [editingOrigin, setEditingOrigin] = useState(false)
   const [dragOverSlot, setDragOverSlot] = useState<number | null>(null)
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; entryId: number } | null>(null)
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; target: CellTarget } | null>(null)
+  // Leg 5 of the Box View Polish milestone: the slot a "Set placeholder…"/"Change species"
+  // context-menu action opened DexBoxPlaceholderModal for — null means the modal is closed.
+  const [placeholderTarget, setPlaceholderTarget] = useState<CellTarget | null>(null)
 
   const clampedIndex = Math.min(boxIndex, boxes.length - 1)
   const box = boxes[clampedIndex]
@@ -97,7 +109,10 @@ export function DexBoxPane({
   // The detail panel only ever shows one Pokémon's info — a multi-selection shows nothing
   // rather than guessing which of several to display (Vanny's implicit call: this leg's
   // design decisions only specify drag/drop behavior, not a multi-select detail view).
-  const selectedCell = selectedSlots.length === 1 ? cells[selectedSlots[0]] : null
+  // Narrowed to 'entry' specifically: selectedSlots (see handleCellClick below) only ever
+  // holds real-entry slots, but cells' own type still allows a placeholder there.
+  const selectedSlotCell = selectedSlots.length === 1 ? cells[selectedSlots[0]] : null
+  const selectedCell = selectedSlotCell?.kind === 'entry' ? selectedSlotCell : null
 
   const clearSelection = (): void => {
     setSelectedSlots([])
@@ -106,15 +121,18 @@ export function DexBoxPane({
 
   // Plain click replaces the selection with just this slot; ctrl/cmd-click toggles it
   // into/out of the current selection; shift-click selects every filled slot in the
-  // contiguous index range between the anchor and this slot. Only ever wired to a filled
-  // cell's SpriteThumbnail (see the empty-cell branch below), so `cells[slot]` is always
-  // non-null here.
+  // contiguous index range between the anchor and this slot. Only ever wired to a real
+  // entry cell's SpriteThumbnail (see the grid render below) — a placeholder cell's own
+  // SpriteThumbnail has a no-op onClick — so `cells[slot]` is always an entry cell here.
   const handleCellClick = (slot: number, e: MouseEvent): void => {
     if (e.shiftKey && selectionAnchor !== null) {
       const [lo, hi] = selectionAnchor <= slot ? [selectionAnchor, slot] : [slot, selectionAnchor]
       const range: number[] = []
       for (let i = lo; i <= hi; i++) {
-        if (cells[i]) range.push(i)
+        // Only real entries are selectable — a placeholder cell has no onClick wired to
+        // this handler (see the grid render below), but a shift-click range can still span
+        // over one sitting between two real cells, so it's excluded here too.
+        if (cells[i]?.kind === 'entry') range.push(i)
       }
       setSelectedSlots(range)
     } else if (e.ctrlKey || e.metaKey) {
@@ -134,13 +152,13 @@ export function DexBoxPane({
     if (selectedSlots.includes(slot)) {
       // Filters rather than asserts non-null: `cells` is shared across panes (see
       // boxedEntryIds' doc comment), so a slot that was filled when selected could in
-      // principle have been vacated by the other pane since — drop it from the drag
-      // rather than crash on a stale selection.
-      return selectedSlots.map((s) => cells[s]).filter((c): c is BoxCell => c !== null).map((c) => c.entry.id)
+      // principle have been vacated (or, since Leg 5, replaced by a placeholder) by the
+      // other pane since — drop it from the drag rather than crash on a stale selection.
+      return selectedSlots.map((s) => cells[s]).filter((c): c is BoxCell => c?.kind === 'entry').map((c) => c.entry.id)
     }
     setSelectedSlots([slot])
     setSelectionAnchor(slot)
-    return [cells[slot]!.entry.id]
+    return [(cells[slot] as BoxCell).entry.id]
   }
 
   // DexBoxGrid wraps its handler in useCallback so this doesn't re-fire on every unrelated
@@ -161,13 +179,17 @@ export function DexBoxPane({
   // gets the new contiguous-fill treatment below.
   const handleDropOnSlot = (targetSlot: number, draggedEntryIds: number[]): void => {
     setDragOverSlot(null)
+    // A placeholder cell is treated as empty for drop purposes (dropping a real entry
+    // there fulfills the plan and clears it — see sqlite-storage.ts's
+    // clearBoxPlaceholderStmt) — only a real entry occupant is a swap/reject target below.
+    const targetCell = cells[targetSlot]
+    const targetEntry = targetCell?.kind === 'entry' ? targetCell : null
     if (draggedEntryIds.length === 1) {
       const draggedEntryId = draggedEntryIds[0]
-      const targetCell = cells[targetSlot]
-      if (targetCell?.entry.id === draggedEntryId) return
-      if (targetCell) {
+      if (targetEntry?.entry.id === draggedEntryId) return
+      if (targetEntry) {
         if (!boxedEntryIds.has(draggedEntryId)) return
-        onSwapEntryBoxPositions(draggedEntryId, targetCell.entry.id)
+        onSwapEntryBoxPositions(draggedEntryId, targetEntry.entry.id)
       } else {
         onSetEntryBoxPosition(draggedEntryId, box.boxNumber, targetSlot)
       }
@@ -177,13 +199,14 @@ export function DexBoxPane({
     // Multi-select drop (Leg 4 of the Box View Polish milestone, Vanny's design decision
     // 2026-09-03): fills slots contiguously starting at targetSlot, in the dragged
     // selection's original order. Rejected outright — no partial fill — if the run would
-    // spill past the end of the box, or if any needed slot is already occupied by an
-    // entry that isn't itself part of the dragged selection.
+    // spill past the end of the box, or if any needed slot is already occupied by a real
+    // entry that isn't itself part of the dragged selection (a placeholder occupant is
+    // fine, same "fulfills the plan" treatment as the single-drop branch above).
     if (targetSlot + draggedEntryIds.length > cells.length) return
     const draggedIdSet = new Set(draggedEntryIds)
     for (let i = 0; i < draggedEntryIds.length; i++) {
       const occupant = cells[targetSlot + i]
-      if (occupant && !draggedIdSet.has(occupant.entry.id)) return
+      if (occupant?.kind === 'entry' && !draggedIdSet.has(occupant.entry.id)) return
     }
     onFillBoxSlots(draggedEntryIds, box.boxNumber, targetSlot)
     clearSelection()
@@ -194,6 +217,49 @@ export function DexBoxPane({
   const handleAddBox = (): void => {
     const newBoxIndex = boxes.length
     onAddBox(storageLocationId).then(() => goToBox(newBoxIndex))
+  }
+
+  // Right-click action set per cell kind (Leg 5 of the Box View Polish milestone) — see
+  // CellTarget's own doc comment.
+  const contextMenuActions = (target: CellTarget): DexBoxContextMenuAction[] => {
+    if (target.kind === 'entry') {
+      return [
+        {
+          label: 'Remove from box',
+          onClick: () => {
+            onSetEntryBoxPosition(target.entryId, null, null)
+            setContextMenu(null)
+          }
+        }
+      ]
+    }
+    if (target.kind === 'placeholder') {
+      return [
+        {
+          label: 'Change species',
+          onClick: () => {
+            setPlaceholderTarget(target)
+            setContextMenu(null)
+          }
+        },
+        {
+          label: 'Clear placeholder',
+          onClick: () => {
+            onClearBoxPlaceholder(storageLocationId, box.boxNumber, target.slot)
+            setContextMenu(null)
+          }
+        }
+      ]
+    }
+    return [
+      {
+        label: 'Set placeholder…',
+        onClick: () => {
+          setPlaceholderTarget(target)
+          setContextMenu(null)
+        }
+      }
+    ]
   }
 
   return (
@@ -209,66 +275,19 @@ export function DexBoxPane({
         />
         <div className="dex-box-grid" style={{ gridTemplateColumns: `repeat(${BOX_COLS}, var(--dex-box-cell-size))` }}>
           {cells.map((cell, slot) => (
-            <div
+            <DexBoxGridCell
               key={slot}
-              className={
-                ['dex-box-cell', !cell && 'dex-box-cell-empty', dragOverSlot === slot && 'dex-box-cell-drag-over']
-                  .filter(Boolean)
-                  .join(' ')
-              }
-              draggable={cell !== null}
-              onDragStart={cell ? (e) => setDragEntryPayload(e, handleDragStart(slot)) : undefined}
-              onDragOver={(e) => e.preventDefault()}
+              cell={cell}
+              slot={slot}
+              isDragOver={dragOverSlot === slot}
+              isSelected={selectedSlots.includes(slot)}
+              onDragStart={() => handleDragStart(slot)}
               onDragEnter={() => setDragOverSlot(slot)}
               onDragLeave={() => setDragOverSlot((prev) => (prev === slot ? null : prev))}
-              onDrop={(e) => {
-                e.preventDefault()
-                const draggedEntryIds = readDragEntryPayload(e)
-                if (draggedEntryIds !== null) handleDropOnSlot(slot, draggedEntryIds)
-              }}
-              onContextMenu={
-                cell
-                  ? (e) => {
-                      e.preventDefault()
-                      setContextMenu({ x: e.clientX, y: e.clientY, entryId: cell.entry.id })
-                    }
-                  : undefined
-              }
-            >
-              {cell && (
-                <>
-                  {cell.entry.shiny && (
-                    <span className="dex-box-cell-shiny-badge" aria-hidden="true">
-                      ✨
-                    </span>
-                  )}
-                  {cell.entry.caughtBall && (
-                    <span className="dex-box-cell-ball-badge">
-                      <BallIcon ball={cell.entry.caughtBall} />
-                    </span>
-                  )}
-                  <SpriteThumbnail
-                    pokeapiId={cell.pokeapiId}
-                    spriteFormSuffix={cell.spriteFormSuffix}
-                    female={cell.femaleSprite}
-                    shiny={cell.entry.shiny}
-                    size={CELL_SPRITE_SIZE}
-                    displayName={cell.displayName}
-                    ariaLabel={`${cell.displayName}${cell.entry.owned ? '' : ' — not yet owned'}`}
-                    className={
-                      [
-                        'dex-hybrid-tile',
-                        !cell.entry.owned && 'dex-hybrid-tile-unowned',
-                        selectedSlots.includes(slot) && 'dex-hybrid-tile-selected'
-                      ]
-                        .filter(Boolean)
-                        .join(' ')
-                    }
-                    onClick={(e) => handleCellClick(slot, e)}
-                  />
-                </>
-              )}
-            </div>
+              onDrop={(draggedEntryIds) => handleDropOnSlot(slot, draggedEntryIds)}
+              onContextMenu={(x, y, target) => setContextMenu({ x, y, target })}
+              onClickEntry={(e) => handleCellClick(slot, e)}
+            />
           ))}
         </div>
         <DexBoxDetailPanel
@@ -291,11 +310,19 @@ export function DexBoxPane({
         <DexBoxContextMenu
           x={contextMenu.x}
           y={contextMenu.y}
-          onRemove={() => {
-            onSetEntryBoxPosition(contextMenu.entryId, null, null)
-            setContextMenu(null)
-          }}
+          actions={contextMenuActions(contextMenu.target)}
           onClose={() => setContextMenu(null)}
+        />
+      )}
+      {placeholderTarget && (
+        <DexBoxPlaceholderModal
+          species={species}
+          initialSpeciesId={placeholderTarget.kind === 'placeholder' ? placeholderTarget.speciesId : null}
+          onClose={() => setPlaceholderTarget(null)}
+          onSave={(speciesId) => {
+            onSetBoxPlaceholder(storageLocationId, box.boxNumber, placeholderTarget.slot, speciesId)
+            setPlaceholderTarget(null)
+          }}
         />
       )}
     </>

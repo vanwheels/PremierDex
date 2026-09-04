@@ -131,17 +131,44 @@ export interface EntryDisplayInfo {
   alwaysShiny: boolean
 }
 
-/** One occupied slot in a Box view grid. */
+/** One occupied slot in a Box view grid, backed by a real CollectionEntry. `kind`
+ * discriminates it from BoxPlaceholderCell below within Box.cells' union type. */
 export interface BoxCell extends EntryDisplayInfo {
+  kind: 'entry'
   boxNumber: number
   /** 0-based position within the box, matching CollectionEntry.boxSlot. */
   slot: number
+}
+
+/** A "planned" placeholder slot (Leg 5 of the Box View Polish milestone) — the user's
+ * intent to eventually put some species here, set via a right-click on an empty slot. See
+ * shared/types/box.ts's BoxPlaceholder. No gender/shiny/individual data to denormalize
+ * (unlike BoxCell), so this doesn't extend EntryDisplayInfo — just enough to render a
+ * dimmed sprite and label. pokeapiId/spriteFormSuffix come from buildBoxes.ts's own pick
+ * of a representative form for the species (there's no real Form tied to a placeholder). */
+export interface BoxPlaceholderCell {
+  kind: 'placeholder'
+  boxNumber: number
+  slot: number
+  speciesId: number
+  displayName: string
+  pokeapiId: number
+  spriteFormSuffix: string | null
 }
 
 /** One entry in a Storage Location with no box position yet (Leg 7 of the Box Arrangement
  * milestone) — DexBoxTray's drag source for the "add to box" flow. See buildBoxes.ts's
  * buildUnboxedEntries. */
 export type UnboxedEntry = EntryDisplayInfo
+
+/** Which cell a Box view right-click (context menu) or the placeholder modal targets — a
+ * real entry, an existing "planned" placeholder, or an empty slot with neither (Leg 5 of
+ * the Box View Polish milestone). Shared between DexBoxPane and DexBoxGridCell so both
+ * agree on the same "what did the user right-click" shape. */
+export type CellTarget =
+  | { kind: 'entry'; slot: number; entryId: number }
+  | { kind: 'placeholder'; slot: number; speciesId: number }
+  | { kind: 'empty'; slot: number }
 
 /** One paginated box (see buildBoxes.ts's BOX_SIZE) — `cells` is always exactly
  * BOX_SIZE long, indexed by slot, with `null` for an empty slot. `id`/`name` come straight
@@ -152,5 +179,8 @@ export interface Box {
   id: number
   boxNumber: number
   name: string | null
-  cells: (BoxCell | null)[]
+  /** Leg 5 of the Box View Polish milestone: a slot is a real entry, a "planned"
+   * placeholder, or empty (null) — never more than one at once, see BoxPlaceholder's own
+   * doc comment. */
+  cells: (BoxCell | BoxPlaceholderCell | null)[]
 }

@@ -6,6 +6,7 @@ import { registerBackupIpc } from './ipc/backup-ipc'
 import { registerTrainerProfileIpc } from './ipc/trainer-profile-ipc'
 import { registerStorageLocationIpc } from './ipc/storage-location-ipc'
 import { registerBoxIpc } from './ipc/box-ipc'
+import { registerBoxPlaceholderIpc } from './ipc/box-placeholder-ipc'
 import { registerUpdaterIpc } from './updater/auto-updater'
 import { loadRenderer } from './renderer-url'
 
@@ -54,6 +55,7 @@ app.whenReady().then(() => {
   registerTrainerProfileIpc(storage)
   registerStorageLocationIpc(storage)
   registerBoxIpc(storage)
+  registerBoxPlaceholderIpc(storage)
   registerUpdaterIpc(() => activeWindow)
 
   createWindow()

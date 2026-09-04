@@ -50,3 +50,12 @@ export const BoxIpcChannel = {
   add: 'box:add',
   rename: 'box:rename'
 } as const
+
+/** "Planned" placeholder CRUD, minus a standalone update — set doubles as both create and
+ * change-species (see main/ipc/box-placeholder-ipc.ts). See [Phantom placeholder Pokémon]
+ * in TODO.md. */
+export const BoxPlaceholderIpcChannel = {
+  list: 'boxPlaceholder:list',
+  set: 'boxPlaceholder:set',
+  clear: 'boxPlaceholder:clear'
+} as const

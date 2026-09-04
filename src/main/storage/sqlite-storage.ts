@@ -2,18 +2,20 @@ import Database from 'better-sqlite3'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
-import type { StorageBox } from '@shared/types/box'
+import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
 import { applySchema } from './schema'
 import { runSeed } from './seed'
 import { createBackupOperations } from './collection-backup'
 import {
+  toBoxPlaceholder,
   toCollectionEntry,
   toForm,
   toSpecies,
   toStorageBox,
   toStorageLocation,
   toTrainerProfile,
+  type BoxPlaceholderRow,
   type BoxRow,
   type CollectionEntryRow,
   type FormRow,
@@ -107,7 +109,11 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       setEntryBoxPositionStmt.run({ id: entry.id, boxNumber: null, boxSlot: null })
     }
     entries.forEach((entry, i) => {
-      setEntryBoxPositionStmt.run({ id: entry.id, boxNumber, boxSlot: startSlot + i })
+      const boxSlot = startSlot + i
+      setEntryBoxPositionStmt.run({ id: entry.id, boxNumber, boxSlot })
+      // Same "a real entry landing here fulfills the plan" clear as setEntryBoxPosition
+      // below — see clearBoxPlaceholderStmt's own comment.
+      clearBoxPlaceholderStmt.run({ storageLocationId: entry.storage_location_id, boxNumber, boxSlot })
     })
   })
   const orphanEntriesByTrainerProfileStmt = db.prepare(
@@ -171,6 +177,28 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     )
   `)
   const renameBoxStmt = db.prepare('UPDATE boxes SET name = @name WHERE id = @id')
+  // Box placeholders (Leg 5 of the Box View Polish & Multi-Box Editing milestone) — see
+  // schema.ts's `box_placeholders` table comment. entryAtSlotStmt backs setBoxPlaceholder's
+  // occupancy guard (a slot already holding a real entry can't also get a placeholder);
+  // clearBoxPlaceholderStmt is reused both by the public clearBoxPlaceholder method and,
+  // below, by setEntryBoxPositionStmt/fillBoxSlotsTx's own callers — placing a real entry
+  // into a slot always vacates whatever placeholder was "planning" that same slot, since
+  // the plan is now fulfilled.
+  const listBoxPlaceholdersStmt = db.prepare('SELECT * FROM box_placeholders ORDER BY storage_location_id, box_number, box_slot')
+  const getBoxPlaceholderStmt = db.prepare(
+    'SELECT * FROM box_placeholders WHERE storage_location_id = @storageLocationId AND box_number = @boxNumber AND box_slot = @boxSlot'
+  )
+  const entryAtSlotStmt = db.prepare(
+    'SELECT id FROM collection_entries WHERE storage_location_id = @storageLocationId AND box_number = @boxNumber AND box_slot = @boxSlot'
+  )
+  const setBoxPlaceholderStmt = db.prepare(`
+    INSERT INTO box_placeholders (storage_location_id, box_number, box_slot, species_id)
+    VALUES (@storageLocationId, @boxNumber, @boxSlot, @speciesId)
+    ON CONFLICT(storage_location_id, box_number, box_slot) DO UPDATE SET species_id = excluded.species_id
+  `)
+  const clearBoxPlaceholderStmt = db.prepare(
+    'DELETE FROM box_placeholders WHERE storage_location_id = @storageLocationId AND box_number = @boxNumber AND box_slot = @boxSlot'
+  )
   // Leg 6: an app starts with zero storage locations, so the very first one ever created
   // (of any type — HOME is the common case, but nothing here assumes it) is where every
   // owned entry that's currently unassigned logically belongs: they were checked in before
@@ -223,6 +251,9 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
         if (!entry?.storage_location_id) {
           throw new Error('Cannot assign a box position to an entry with no storage location')
         }
+        // A real entry landing on a slot fulfills whatever placeholder was "planning" it —
+        // see clearBoxPlaceholderStmt's own comment.
+        clearBoxPlaceholderStmt.run({ storageLocationId: entry.storage_location_id, boxNumber, boxSlot })
       }
       setEntryBoxPositionStmt.run({ id: entryId, boxNumber, boxSlot })
       return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
@@ -313,6 +344,27 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     async renameBox(boxId: number, name: string | null): Promise<StorageBox> {
       renameBoxStmt.run({ id: boxId, name })
       return toStorageBox(getBoxStmt.get(boxId) as BoxRow)
+    },
+
+    async listBoxPlaceholders(): Promise<BoxPlaceholder[]> {
+      return (listBoxPlaceholdersStmt.all() as BoxPlaceholderRow[]).map(toBoxPlaceholder)
+    },
+
+    async setBoxPlaceholder(
+      storageLocationId: number,
+      boxNumber: number,
+      boxSlot: number,
+      speciesId: number
+    ): Promise<BoxPlaceholder> {
+      if (entryAtSlotStmt.get({ storageLocationId, boxNumber, boxSlot })) {
+        throw new Error('Cannot set a placeholder on a slot that already holds a real entry')
+      }
+      setBoxPlaceholderStmt.run({ storageLocationId, boxNumber, boxSlot, speciesId })
+      return toBoxPlaceholder(getBoxPlaceholderStmt.get({ storageLocationId, boxNumber, boxSlot }) as BoxPlaceholderRow)
+    },
+
+    async clearBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void> {
+      clearBoxPlaceholderStmt.run({ storageLocationId, boxNumber, boxSlot })
     }
   }
 }

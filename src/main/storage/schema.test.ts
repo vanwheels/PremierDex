@@ -15,7 +15,15 @@ describe('applySchema', () => {
       .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name")
       .all()
       .map((row) => (row as { name: string }).name)
-    expect(tables).toEqual(['boxes', 'collection_entries', 'forms', 'species', 'storage_locations', 'trainer_profiles'])
+    expect(tables).toEqual([
+      'box_placeholders',
+      'boxes',
+      'collection_entries',
+      'forms',
+      'species',
+      'storage_locations',
+      'trainer_profiles'
+    ])
   })
 
   it('is safe to apply twice (idempotent DDL)', () => {

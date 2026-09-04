@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
-import type { StorageBox } from '@shared/types/box'
+import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 
@@ -16,6 +16,7 @@ export interface CollectionData {
   entries: CollectionEntry[]
   storageLocations: StorageLocation[]
   boxes: StorageBox[]
+  boxPlaceholders: BoxPlaceholder[]
   trainerProfiles: TrainerProfile[]
   speciesAvailability: SpeciesAvailabilityData
   loading: boolean
@@ -36,6 +37,11 @@ export interface CollectionData {
    * box so DexBoxGrid can jump straight to it. */
   addBox: (storageLocationId: number) => Promise<StorageBox>
   renameBox: (boxId: number, name: string | null) => void
+  /** "Set placeholder…"/"Change species" (Leg 5 of the Box View Polish milestone) — set
+   * doubles as create-or-change-species, see StorageAdapter.setBoxPlaceholder. */
+  setBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number) => void
+  /** "Clear placeholder". */
+  clearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
 }
 
 /** Owns every piece of data fetched from the main process (species/forms/entries/storage
@@ -54,6 +60,7 @@ export function useCollectionData(): CollectionData {
   const [entries, setEntries] = useState<CollectionEntry[]>([])
   const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([])
   const [boxes, setBoxes] = useState<StorageBox[]>([])
+  const [boxPlaceholders, setBoxPlaceholders] = useState<BoxPlaceholder[]>([])
   const [trainerProfiles, setTrainerProfiles] = useState<TrainerProfile[]>([])
   const [speciesAvailability, setSpeciesAvailability] = useState<SpeciesAvailabilityData>(EMPTY_SPECIES_AVAILABILITY)
   const [loading, setLoading] = useState(true)
@@ -71,17 +78,21 @@ export function useCollectionData(): CollectionData {
       window.premierDex.listCollectionEntries(),
       window.premierDex.listStorageLocations(),
       window.premierDex.listBoxes(),
+      window.premierDex.listBoxPlaceholders(),
       window.premierDex.loadSpeciesAvailability(),
       window.premierDex.listTrainerProfiles()
-    ]).then(([speciesList, formList, entryList, storageLocationList, boxList, availability, trainerProfileList]) => {
-      setSpecies(speciesList)
-      setForms(formList)
-      setEntries(entryList)
-      setStorageLocations(storageLocationList)
-      setBoxes(boxList)
-      setSpeciesAvailability(availability)
-      setTrainerProfiles(trainerProfileList)
-    })
+    ]).then(
+      ([speciesList, formList, entryList, storageLocationList, boxList, placeholderList, availability, trainerProfileList]) => {
+        setSpecies(speciesList)
+        setForms(formList)
+        setEntries(entryList)
+        setStorageLocations(storageLocationList)
+        setBoxes(boxList)
+        setBoxPlaceholders(placeholderList)
+        setSpeciesAvailability(availability)
+        setTrainerProfiles(trainerProfileList)
+      }
+    )
   }, [])
 
   const handleImported = useCallback((): void => {
@@ -129,6 +140,16 @@ export function useCollectionData(): CollectionData {
   const setEntryBoxPosition = useCallback((entryId: number, boxNumber: number | null, boxSlot: number | null): void => {
     window.premierDex.setEntryBoxPosition(entryId, boxNumber, boxSlot).then((updated) => {
       setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
+      // A real entry landing on a slot clears whatever placeholder was there server-side
+      // (see sqlite-storage.ts's clearBoxPlaceholderStmt) — mirror that locally so a stale
+      // placeholder can't reappear from this hook's own state once the entry later moves
+      // off that slot again.
+      if (boxNumber !== null && boxSlot !== null && updated.storageLocationId !== null) {
+        const { storageLocationId } = updated
+        setBoxPlaceholders((prev) =>
+          prev.filter((p) => !(p.storageLocationId === storageLocationId && p.boxNumber === boxNumber && p.boxSlot === boxSlot))
+        )
+      }
     })
   }, [])
 
@@ -148,6 +169,11 @@ export function useCollectionData(): CollectionData {
     window.premierDex.fillBoxSlots(entryIds, boxNumber, startSlot).then((updated) => {
       const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
       setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
+      // Same local mirror as setEntryBoxPosition above, one slot per filled entry.
+      const clearedSlots = new Set(updated.map((entry) => `${entry.storageLocationId}:${boxNumber}:${entry.boxSlot}`))
+      setBoxPlaceholders((prev) =>
+        prev.filter((p) => !clearedSlots.has(`${p.storageLocationId}:${p.boxNumber}:${p.boxSlot}`))
+      )
     })
   }, [])
 
@@ -170,12 +196,40 @@ export function useCollectionData(): CollectionData {
     })
   }, [])
 
+  // set/clearBoxPlaceholder (Leg 5 of the Box View Polish milestone) — set both creates a
+  // fresh placeholder and changes an existing one's species (see StorageAdapter's own
+  // doc comment), so there's no separate updatedById merge step needed: matching on
+  // (storageLocationId, boxNumber, boxSlot), same identity the DB's own UNIQUE index uses,
+  // covers both cases in one replace-or-append.
+  const setBoxPlaceholder = useCallback(
+    (storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number): void => {
+      window.premierDex.setBoxPlaceholder(storageLocationId, boxNumber, boxSlot, speciesId).then((updated) => {
+        setBoxPlaceholders((prev) => {
+          const withoutSlot = prev.filter(
+            (p) => !(p.storageLocationId === storageLocationId && p.boxNumber === boxNumber && p.boxSlot === boxSlot)
+          )
+          return [...withoutSlot, updated]
+        })
+      })
+    },
+    []
+  )
+
+  const clearBoxPlaceholder = useCallback((storageLocationId: number, boxNumber: number, boxSlot: number): void => {
+    window.premierDex.clearBoxPlaceholder(storageLocationId, boxNumber, boxSlot).then(() => {
+      setBoxPlaceholders((prev) =>
+        prev.filter((p) => !(p.storageLocationId === storageLocationId && p.boxNumber === boxNumber && p.boxSlot === boxSlot))
+      )
+    })
+  }, [])
+
   return {
     species,
     forms,
     entries,
     storageLocations,
     boxes,
+    boxPlaceholders,
     trainerProfiles,
     speciesAvailability,
     loading,
@@ -192,6 +246,8 @@ export function useCollectionData(): CollectionData {
     fillBoxSlots,
     setCollapsedDisplayForm,
     addBox,
-    renameBox
+    renameBox,
+    setBoxPlaceholder,
+    clearBoxPlaceholder
   }
 }

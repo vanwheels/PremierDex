@@ -110,6 +110,27 @@
   opacity: 0.4;
 }
 
+/* Leg 5 of the Box View Polish milestone: a "planned" placeholder cell — visually its own
+ * thing, not just a dimmer real cell (dex-hybrid-tile-unowned, which an unowned *real*
+ * boxed entry already uses — see buildBoxes.ts's own doc comment on why those two must
+ * stay distinguishable). Accent-tinted dashed border (vs. dex-box-cell-empty's plain
+ * var(--border) dashing) plus a heavier sprite dim than unowned's own grayscale/brightness
+ * recipe, so a glance tells "nothing decided yet" (empty), "planned" (this), and "owned
+ * but not physically here" (unowned-in-box) apart from each other. */
+.dex-box-cell-placeholder {
+  border: 1px dashed color-mix(in srgb, var(--accent) 55%, var(--border));
+  border-radius: 8px;
+}
+
+.dex-box-cell-placeholder-tile {
+  cursor: default;
+}
+
+.dex-box-cell-placeholder-tile img {
+  filter: grayscale(1) brightness(0.35);
+  opacity: 0.55;
+}
+
 .dex-box-cell-drag-over {
   border: 1px solid var(--accent);
   border-radius: 8px;
@@ -225,4 +246,25 @@
 
 .dex-box-context-menu button:hover {
   background: var(--surface);
+}
+
+/* Leg 5: DexBoxPlaceholderModal's species list — reuses origin-game-options' own
+ * scrollable-list-of-buttons styling (modals.css) since it's the same shape, just laid out
+ * inline in the dialog body (position: static) rather than absolutely anchored under an
+ * input. */
+.dex-box-placeholder-options {
+  position: static;
+  max-height: 14rem;
+  margin: 0.5rem 0 0;
+}
+
+.origin-game-options button.dex-box-placeholder-option-selected {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  font-weight: 600;
+}
+
+.dex-box-placeholder-no-matches {
+  padding: 0.4rem 0.7rem;
+  color: var(--muted);
+  font-size: 0.85rem;
 }

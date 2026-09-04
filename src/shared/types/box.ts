@@ -14,3 +14,20 @@ export interface StorageBox {
    * plain "Box N". */
   name: string | null
 }
+
+/**
+ * A "planned" placeholder (Leg 5 of the Box View Polish & Multi-Box Editing milestone) —
+ * the user's intent to eventually put some species in a given empty box slot, set via a
+ * right-click in Box view. Distinct from a real (owned or unowned) CollectionEntry: it
+ * carries no gender/shiny/individual data, never counts toward completion stats, and
+ * never appears in the unboxed tray — see schema.ts's `box_placeholders` table comment.
+ * At most one of a real entry or a placeholder occupies a given (storageLocationId,
+ * boxNumber, boxSlot) triple at a time.
+ */
+export interface BoxPlaceholder {
+  id: number
+  storageLocationId: number
+  boxNumber: number
+  boxSlot: number
+  speciesId: number
+}

@@ -1,7 +1,7 @@
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '../types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '../types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '../types/storage-location'
-import type { StorageBox } from '../types/box'
+import type { BoxPlaceholder, StorageBox } from '../types/box'
 import type { CollectionExport, CollectionImportResult } from './collection-export'
 
 /**
@@ -71,4 +71,13 @@ export interface StorageAdapter {
   addBox(storageLocationId: number): Promise<StorageBox>
   /** Renames (or, with null, clears the name of) a box. */
   renameBox(boxId: number, name: string | null): Promise<StorageBox>
+  /** Every "planned" placeholder across every Storage Location (Leg 5 of the Box View
+   * Polish milestone) — same flat-list-filtered-client-side convention as listBoxes. */
+  listBoxPlaceholders(): Promise<BoxPlaceholder[]>
+  /** Sets (or, if one already exists there, changes the species of) the placeholder at a
+   * box slot. Rejects if that slot already holds a real CollectionEntry — see
+   * schema.ts's `box_placeholders` table comment. */
+  setBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number, speciesId: number): Promise<BoxPlaceholder>
+  /** Removes the placeholder at a box slot, if any. A no-op if that slot has none. */
+  clearBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void>
 }

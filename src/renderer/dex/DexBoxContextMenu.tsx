@@ -1,20 +1,27 @@
 import { useEffect, useRef } from 'react'
 
+export interface DexBoxContextMenuAction {
+  label: string
+  onClick: () => void
+}
+
 interface DexBoxContextMenuProps {
   x: number
   y: number
-  onRemove: () => void
+  actions: DexBoxContextMenuAction[]
   onClose: () => void
 }
 
 /**
- * Right-click action menu for a filled Box view cell (Leg 7 of the Box Arrangement
- * milestone) — currently just "Remove from box" (Vanny's call, 2026-09-03): drag-and-drop
- * already covers add/move/swap, so this exists purely as a non-drag alternative for
- * removal. Closes on outside pointerdown or Escape, the standard lightweight-popover
- * pattern (same idea as OriginGameInput's own outside-click handling).
+ * Right-click action menu for a Box view cell (Leg 7 of the Box Arrangement milestone;
+ * generalized from a single hardcoded "Remove from box" action to an arbitrary action list
+ * at Leg 5 of the Box View Polish milestone, so the same popup serves a filled cell
+ * ("Remove from box"), an empty one ("Set placeholder…"), and a "planned" placeholder cell
+ * ("Change species" / "Clear placeholder") — DexBoxPane decides which actions apply.
+ * Closes on outside pointerdown or Escape, the standard lightweight-popover pattern (same
+ * idea as OriginGameInput's own outside-click handling).
  */
-export function DexBoxContextMenu({ x, y, onRemove, onClose }: DexBoxContextMenuProps): JSX.Element {
+export function DexBoxContextMenu({ x, y, actions, onClose }: DexBoxContextMenuProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -34,9 +41,11 @@ export function DexBoxContextMenu({ x, y, onRemove, onClose }: DexBoxContextMenu
 
   return (
     <div ref={ref} className="dex-box-context-menu" style={{ left: x, top: y }} role="menu">
-      <button type="button" role="menuitem" onClick={onRemove}>
-        Remove from box
-      </button>
+      {actions.map((action) => (
+        <button key={action.label} type="button" role="menuitem" onClick={action.onClick}>
+          {action.label}
+        </button>
+      ))}
     </div>
   )
 }
