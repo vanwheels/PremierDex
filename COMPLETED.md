@@ -12,7 +12,7 @@ flex:0 0 auto so two open panes hug together instead of splitting leftover width
 per-pane "is this entry already boxed" swap-vs-move gate was generalized from
 pane-local cells to a location-wide `boxedEntryIds` set, so a cell dragged from one open
 pane onto an occupied cell in the other correctly swaps instead of being silently
-rejected. See commit `<pending>`.
+rejected. See commit `84660fd`.
 
 ### [Add / rename boxes] — Leg 2 — 2026-09-04
 New `boxes` table (id/storage_location_id/box_number/name, ON DELETE CASCADE) is now the
