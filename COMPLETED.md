@@ -18,7 +18,7 @@ views) and `dex/LivingDexView.tsx` (the Living Dex tab's own state — view-mode
 sort, selected location tab — plus its derived memos and the List/Hybrid `hidden`-toggle
 markup); App.tsx itself is left as shell: view-tab nav and per-view mount/hide wiring.
 303 -> 103/140/170 lines across the three files. Leg 6's Box view branch lands inside
-LivingDexView rather than pushing App back over cap. See commit `<pending>`.
+LivingDexView rather than pushing App back over cap. See commit `52d46f2`.
 
 ## [Hybrid view mode] — Leg 8 (2026-09-03)
 Added `buildHybridTiles` (pure, tested) flattening `visibleSections.rows` into up to two
