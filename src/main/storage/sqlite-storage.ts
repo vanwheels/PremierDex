@@ -2,6 +2,7 @@ import Database from 'better-sqlite3'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
+import type { StorageBox } from '@shared/types/box'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
 import { applySchema } from './schema'
 import { runSeed } from './seed'
@@ -10,8 +11,10 @@ import {
   toCollectionEntry,
   toForm,
   toSpecies,
+  toStorageBox,
   toStorageLocation,
   toTrainerProfile,
+  type BoxRow,
   type CollectionEntryRow,
   type FormRow,
   type SpeciesRow,
@@ -125,6 +128,25 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   `)
   const deleteStorageLocationStmt = db.prepare('DELETE FROM storage_locations WHERE id = ?')
   const countStorageLocationsStmt = db.prepare('SELECT COUNT(*) AS count FROM storage_locations')
+  // Boxes (Leg 2 of the Box View Polish & Multi-Box Editing milestone) — see schema.ts's
+  // `boxes` table comment. insertBoxNumberOneStmt seeds a fresh location's Box 1 at create
+  // time (INSERT OR IGNORE: harmless if backfillBoxes already covered it); insertBoxStmt is
+  // "Add Box", computing the next box_number for that location inline rather than a
+  // read-then-write round trip.
+  const listBoxesStmt = db.prepare('SELECT * FROM boxes ORDER BY storage_location_id, box_number')
+  const getBoxStmt = db.prepare('SELECT * FROM boxes WHERE id = ?')
+  const insertBoxNumberOneStmt = db.prepare(
+    'INSERT OR IGNORE INTO boxes (storage_location_id, box_number, name) VALUES (@storageLocationId, 1, NULL)'
+  )
+  const insertBoxStmt = db.prepare(`
+    INSERT INTO boxes (storage_location_id, box_number, name)
+    VALUES (
+      @storageLocationId,
+      (SELECT COALESCE(MAX(box_number), 0) + 1 FROM boxes WHERE storage_location_id = @storageLocationId),
+      NULL
+    )
+  `)
+  const renameBoxStmt = db.prepare('UPDATE boxes SET name = @name WHERE id = @id')
   // Leg 6: an app starts with zero storage locations, so the very first one ever created
   // (of any type — HOME is the common case, but nothing here assumes it) is where every
   // owned entry that's currently unassigned logically belongs: they were checked in before
@@ -228,6 +250,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     async createStorageLocation(input: StorageLocationInput): Promise<StorageLocation> {
       const isFirstLocation = (countStorageLocationsStmt.get() as { count: number }).count === 0
       const result = insertStorageLocationStmt.run(input)
+      insertBoxNumberOneStmt.run({ storageLocationId: result.lastInsertRowid })
       if (isFirstLocation) {
         backfillUnassignedOwnedEntriesStmt.run(result.lastInsertRowid)
       }
@@ -242,9 +265,25 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     async deleteStorageLocation(id: number): Promise<void> {
       // Orphan first, same reasoning as deleteTrainerProfile above: storage_location_id
       // has no ON DELETE clause, so deleting a still-assigned location would otherwise
-      // fail the FK check.
+      // fail the FK check. boxes needs no equivalent orphan step — its own FK is
+      // ON DELETE CASCADE (schema.ts), so this delete removes that location's box rows
+      // too.
       orphanEntriesByStorageLocationStmt.run(id)
       deleteStorageLocationStmt.run(id)
+    },
+
+    async listBoxes(): Promise<StorageBox[]> {
+      return (listBoxesStmt.all() as BoxRow[]).map(toStorageBox)
+    },
+
+    async addBox(storageLocationId: number): Promise<StorageBox> {
+      const result = insertBoxStmt.run({ storageLocationId })
+      return toStorageBox(getBoxStmt.get(result.lastInsertRowid) as BoxRow)
+    },
+
+    async renameBox(boxId: number, name: string | null): Promise<StorageBox> {
+      renameBoxStmt.run({ id: boxId, name })
+      return toStorageBox(getBoxStmt.get(boxId) as BoxRow)
     }
   }
 }

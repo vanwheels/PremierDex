@@ -5,6 +5,7 @@ import { registerPokemonIpc } from './ipc/pokemon-ipc'
 import { registerBackupIpc } from './ipc/backup-ipc'
 import { registerTrainerProfileIpc } from './ipc/trainer-profile-ipc'
 import { registerStorageLocationIpc } from './ipc/storage-location-ipc'
+import { registerBoxIpc } from './ipc/box-ipc'
 import { registerUpdaterIpc } from './updater/auto-updater'
 import { loadRenderer } from './renderer-url'
 
@@ -52,6 +53,7 @@ app.whenReady().then(() => {
   registerBackupIpc(storage)
   registerTrainerProfileIpc(storage)
   registerStorageLocationIpc(storage)
+  registerBoxIpc(storage)
   registerUpdaterIpc(() => activeWindow)
 
   createWindow()

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
+import type { StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 
@@ -14,6 +15,7 @@ export interface CollectionData {
   forms: Form[]
   entries: CollectionEntry[]
   storageLocations: StorageLocation[]
+  boxes: StorageBox[]
   trainerProfiles: TrainerProfile[]
   speciesAvailability: SpeciesAvailabilityData
   loading: boolean
@@ -28,6 +30,10 @@ export interface CollectionData {
   setEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   swapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
   setCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
+  /** "Add Box" (Leg 2 of the Box View Polish milestone) — resolves with the newly created
+   * box so DexBoxGrid can jump straight to it. */
+  addBox: (storageLocationId: number) => Promise<StorageBox>
+  renameBox: (boxId: number, name: string | null) => void
 }
 
 /** Owns every piece of data fetched from the main process (species/forms/entries/storage
@@ -45,6 +51,7 @@ export function useCollectionData(): CollectionData {
   const [forms, setForms] = useState<Form[]>([])
   const [entries, setEntries] = useState<CollectionEntry[]>([])
   const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([])
+  const [boxes, setBoxes] = useState<StorageBox[]>([])
   const [trainerProfiles, setTrainerProfiles] = useState<TrainerProfile[]>([])
   const [speciesAvailability, setSpeciesAvailability] = useState<SpeciesAvailabilityData>(EMPTY_SPECIES_AVAILABILITY)
   const [loading, setLoading] = useState(true)
@@ -61,13 +68,15 @@ export function useCollectionData(): CollectionData {
       window.premierDex.listForms(),
       window.premierDex.listCollectionEntries(),
       window.premierDex.listStorageLocations(),
+      window.premierDex.listBoxes(),
       window.premierDex.loadSpeciesAvailability(),
       window.premierDex.listTrainerProfiles()
-    ]).then(([speciesList, formList, entryList, storageLocationList, availability, trainerProfileList]) => {
+    ]).then(([speciesList, formList, entryList, storageLocationList, boxList, availability, trainerProfileList]) => {
       setSpecies(speciesList)
       setForms(formList)
       setEntries(entryList)
       setStorageLocations(storageLocationList)
+      setBoxes(boxList)
       setSpeciesAvailability(availability)
       setTrainerProfiles(trainerProfileList)
     })
@@ -139,11 +148,25 @@ export function useCollectionData(): CollectionData {
     })
   }, [])
 
+  const addBox = useCallback((storageLocationId: number): Promise<StorageBox> => {
+    return window.premierDex.addBox(storageLocationId).then((created) => {
+      setBoxes((prev) => [...prev, created])
+      return created
+    })
+  }, [])
+
+  const renameBox = useCallback((boxId: number, name: string | null): void => {
+    window.premierDex.renameBox(boxId, name).then((updated) => {
+      setBoxes((prev) => prev.map((box) => (box.id === updated.id ? updated : box)))
+    })
+  }, [])
+
   return {
     species,
     forms,
     entries,
     storageLocations,
+    boxes,
     trainerProfiles,
     speciesAvailability,
     loading,
@@ -157,6 +180,8 @@ export function useCollectionData(): CollectionData {
     setEntryOrigin,
     setEntryBoxPosition,
     swapEntryBoxPositions,
-    setCollapsedDisplayForm
+    setCollapsedDisplayForm,
+    addBox,
+    renameBox
   }
 }

@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
+import type { StorageBox } from '@shared/types/box'
 import { BOX_SIZE, buildBoxes, buildUnboxedEntries } from './buildBoxes'
+
+function makeBox(overrides: Partial<StorageBox> & Pick<StorageBox, 'id' | 'boxNumber'>): StorageBox {
+  return { storageLocationId: 1, name: null, ...overrides }
+}
+
+const BOX_1: StorageBox[] = [makeBox({ id: 1, boxNumber: 1 })]
 
 const SPECIES: Species[] = [
   { id: 1, name: 'bulbasaur', generation: 1, collapsedDisplayFormId: null },
@@ -47,14 +54,24 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
 const FORMS: Form[] = [makeForm({ id: 1, speciesId: 1 }), makeForm({ id: 2, speciesId: 25 })]
 
 describe('buildBoxes', () => {
-  it('always includes box 1 even with no boxed entries', () => {
-    const boxes = buildBoxes(SPECIES, FORMS, [])
-    expect(boxes).toEqual([{ boxNumber: 1, cells: new Array(BOX_SIZE).fill(null) }])
+  it('includes every box passed in, even with no boxed entries', () => {
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [])
+    expect(boxes).toEqual([{ id: 1, boxNumber: 1, name: null, cells: new Array(BOX_SIZE).fill(null) }])
+  })
+
+  it('carries a box\'s name through', () => {
+    const named = [makeBox({ id: 1, boxNumber: 1, name: 'Starters' })]
+    const boxes = buildBoxes(named, SPECIES, FORMS, [])
+    expect(boxes[0].name).toBe('Starters')
+  })
+
+  it('produces no boxes at all when none are passed in', () => {
+    expect(buildBoxes([], SPECIES, FORMS, [])).toEqual([])
   })
 
   it('places a boxed entry at its slot, leaving the rest null', () => {
     const entry = makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: 5 })
-    const boxes = buildBoxes(SPECIES, FORMS, [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
     expect(boxes).toHaveLength(1)
     expect(boxes[0].cells[5]).toMatchObject({ boxNumber: 1, slot: 5, displayName: 'Bulbasaur', entry })
     expect(boxes[0].cells.filter((c) => c !== null)).toHaveLength(1)
@@ -62,7 +79,7 @@ describe('buildBoxes', () => {
 
   it('renders an unowned placeholder entry as a real cell too', () => {
     const entry = makeEntry({ id: 1, formId: 1, owned: false, boxNumber: 1, boxSlot: 0 })
-    const boxes = buildBoxes(SPECIES, FORMS, [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
     expect(boxes[0].cells[0]?.entry.owned).toBe(false)
   })
 
@@ -71,44 +88,52 @@ describe('buildBoxes', () => {
       makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: 0 }),
       makeEntry({ id: 2, formId: 2, boxNumber: 1, boxSlot: 5 })
     ]
-    const boxes = buildBoxes(SPECIES, FORMS, entries)
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, entries)
     expect(boxes).toHaveLength(1)
     expect(boxes[0].cells[0]?.entry.id).toBe(1)
     expect(boxes[0].cells[5]?.entry.id).toBe(2)
     expect(boxes[0].cells.filter((c) => c !== null)).toHaveLength(2)
   })
 
-  it('produces one Box per distinct box number, sorted ascending, skipping unused numbers', () => {
+  it('produces one Box per box passed in, sorted ascending by box number', () => {
+    const boxesIn = [makeBox({ id: 2, boxNumber: 3 }), makeBox({ id: 1, boxNumber: 1 })]
     const entries = [
       makeEntry({ id: 1, formId: 1, boxNumber: 3, boxSlot: 0 }),
       makeEntry({ id: 2, formId: 2, boxNumber: 1, boxSlot: 0 })
     ]
-    const boxes = buildBoxes(SPECIES, FORMS, entries)
+    const boxes = buildBoxes(boxesIn, SPECIES, FORMS, entries)
     expect(boxes.map((b) => b.boxNumber)).toEqual([1, 3])
   })
 
   it('ignores an entry with only one of boxNumber/boxSlot set', () => {
-    const entry = makeEntry({ id: 1, formId: 1, boxNumber: 2, boxSlot: null })
-    const boxes = buildBoxes(SPECIES, FORMS, [entry])
-    expect(boxes).toHaveLength(1) // just the always-present Box 1
+    const entry = makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: null })
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
+    expect(boxes[0].cells.every((c) => c === null)).toBe(true)
+  })
+
+  it('skips an entry whose box number has no matching boxes row', () => {
+    const entry = makeEntry({ id: 1, formId: 1, boxNumber: 2, boxSlot: 0 })
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
+    expect(boxes).toHaveLength(1)
+    expect(boxes[0].cells.every((c) => c === null)).toBe(true)
   })
 
   it('skips an entry whose slot is out of the 0-29 range', () => {
     const entry = makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: 30 })
-    const boxes = buildBoxes(SPECIES, FORMS, [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
     expect(boxes[0].cells.every((c) => c === null)).toBe(true)
   })
 
   it('skips an entry whose form or species cannot be resolved', () => {
     const entry = makeEntry({ id: 1, formId: 999, boxNumber: 1, boxSlot: 0 })
-    const boxes = buildBoxes(SPECIES, FORMS, [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, FORMS, [entry])
     expect(boxes[0].cells[0]).toBeNull()
   })
 
   it('appends gender symbol and shiny marker to the display name', () => {
     const genderedForm = makeForm({ id: 3, speciesId: 25, hasGenderDifference: true })
     const entry = makeEntry({ id: 1, formId: 3, gender: 'female', shiny: true, boxNumber: 1, boxSlot: 0 })
-    const boxes = buildBoxes(SPECIES, [...FORMS, genderedForm], [entry])
+    const boxes = buildBoxes(BOX_1, SPECIES, [...FORMS, genderedForm], [entry])
     expect(boxes[0].cells[0]?.displayName).toBe('Pikachu ♀ ✨')
   })
 })

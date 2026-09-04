@@ -144,8 +144,13 @@ export interface BoxCell extends EntryDisplayInfo {
 export type UnboxedEntry = EntryDisplayInfo
 
 /** One paginated box (see buildBoxes.ts's BOX_SIZE) — `cells` is always exactly
- * BOX_SIZE long, indexed by slot, with `null` for an empty slot. */
+ * BOX_SIZE long, indexed by slot, with `null` for an empty slot. `id`/`name` come straight
+ * from the backing StorageBox row (Leg 2 of the Box View Polish milestone) — `id` is what
+ * DexBoxGrid's rename control writes back through, `name` is the optional user label
+ * shown alongside "Box N", null meaning unnamed. */
 export interface Box {
+  id: number
   boxNumber: number
+  name: string | null
   cells: (BoxCell | null)[]
 }

@@ -100,6 +100,23 @@ export function applySchema(db: Database.Database): void {
         (location_type != 'save_file' AND trainer_profile_id IS NULL)
       )
     );
+
+    -- One row per real box within a Storage Location (Leg 2 of the Box View Polish &
+    -- Multi-Box Editing milestone) — box *existence* is what makes a box navigable in Box
+    -- view now, not "does it happen to hold >=1 real cell" (buildBoxes.ts's old rule, see
+    -- its own doc comment pre-Leg-2). name is an optional user label set via "Rename
+    -- box" in DexBoxGrid; null means unnamed, shown there as just "Box N". ON DELETE
+    -- CASCADE, unlike collection_entries.storage_location_id: an entry survives its
+    -- location's deletion by falling back to Unassigned, but a box has no equivalent
+    -- "orphaned but kept" state worth preserving once its location is gone.
+    CREATE TABLE IF NOT EXISTS boxes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      storage_location_id INTEGER NOT NULL REFERENCES storage_locations(id) ON DELETE CASCADE,
+      box_number INTEGER NOT NULL CHECK (box_number >= 1),
+      name TEXT,
+      UNIQUE(storage_location_id, box_number)
+    );
+    CREATE INDEX IF NOT EXISTS idx_boxes_location ON boxes(storage_location_id);
   `)
 
   // Same retrofit story for species: collapsed_display_form_id postdates every existing
@@ -361,17 +378,20 @@ export function applySchema(db: Database.Database): void {
         caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN (${POKE_BALL_LIST_SQL})),
         storage_location_id INTEGER REFERENCES storage_locations(id),
         met_location TEXT,
+        box_number INTEGER CHECK (box_number IS NULL OR box_number >= 1),
+        box_slot INTEGER CHECK (box_slot IS NULL OR box_slot BETWEEN 0 AND 29),
         UNIQUE(form_id, gender, shiny)
       );
       INSERT INTO collection_entries_ballcheck
         (id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
-         language, caught_ball, storage_location_id, met_location)
+         language, caught_ball, storage_location_id, met_location, box_number, box_slot)
         SELECT id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
-               language, caught_ball, storage_location_id, met_location
+               language, caught_ball, storage_location_id, met_location, box_number, box_slot
         FROM collection_entries;
       DROP TABLE collection_entries;
       ALTER TABLE collection_entries_ballcheck RENAME TO collection_entries;
       CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_entries_box_slot ON collection_entries(storage_location_id, box_number, box_slot);
     `)
   }
 
@@ -405,17 +425,42 @@ export function applySchema(db: Database.Database): void {
         language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL})),
         caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN (${POKE_BALL_LIST_SQL})),
         storage_location_id INTEGER REFERENCES storage_locations(id),
-        met_location TEXT
+        met_location TEXT,
+        box_number INTEGER CHECK (box_number IS NULL OR box_number >= 1),
+        box_slot INTEGER CHECK (box_slot IS NULL OR box_slot BETWEEN 0 AND 29)
       );
       INSERT INTO collection_entries_dropunique
         (id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
-         language, caught_ball, storage_location_id, met_location)
+         language, caught_ball, storage_location_id, met_location, box_number, box_slot)
         SELECT id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
-               language, caught_ball, storage_location_id, met_location
+               language, caught_ball, storage_location_id, met_location, box_number, box_slot
         FROM collection_entries;
       DROP TABLE collection_entries;
       ALTER TABLE collection_entries_dropunique RENAME TO collection_entries;
       CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_entries_box_slot ON collection_entries(storage_location_id, box_number, box_slot);
     `)
   }
+
+  // Backfills `boxes` rows so every Storage Location has at least a Box 1, plus a row for
+  // any box_number collection_entries already reference — covers a pre-Leg-2 install
+  // (whose entries can already sit in boxes with no row for them yet, since buildBoxes.ts
+  // used to derive box existence straight from entries) and collection-backup.ts's
+  // importCollection, which cascade-deletes every boxes row when storage_locations gets
+  // wiped-and-reinserted (see its own comment). INSERT OR IGNORE against the UNIQUE
+  // (storage_location_id, box_number) index makes this safe to run unconditionally on
+  // every startup, not just once.
+  backfillBoxes(db)
+}
+
+export function backfillBoxes(db: Database.Database): void {
+  db.exec(`
+    INSERT OR IGNORE INTO boxes (storage_location_id, box_number, name)
+    SELECT id, 1, NULL FROM storage_locations;
+
+    INSERT OR IGNORE INTO boxes (storage_location_id, box_number, name)
+    SELECT DISTINCT storage_location_id, box_number, NULL
+    FROM collection_entries
+    WHERE storage_location_id IS NOT NULL AND box_number IS NOT NULL;
+  `)
 }

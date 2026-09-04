@@ -1,6 +1,7 @@
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '../types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '../types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '../types/storage-location'
+import type { StorageBox } from '../types/box'
 import type { CollectionExport, CollectionImportResult } from './collection-export'
 
 /**
@@ -52,4 +53,13 @@ export interface StorageAdapter {
   createStorageLocation(input: StorageLocationInput): Promise<StorageLocation>
   updateStorageLocation(id: number, input: StorageLocationInput): Promise<StorageLocation>
   deleteStorageLocation(id: number): Promise<void>
+  /** Every box across every Storage Location (Leg 2 of the Box View Polish milestone) —
+   * a location's own boxes are filtered out of this flat list client-side, same convention
+   * as listCollectionEntries. */
+  listBoxes(): Promise<StorageBox[]>
+  /** Creates the next-numbered, unnamed box for a Storage Location (MAX(boxNumber)+1;
+   * 1 if it has none yet, though every location always has at least Box 1 in practice). */
+  addBox(storageLocationId: number): Promise<StorageBox>
+  /** Renames (or, with null, clears the name of) a box. */
+  renameBox(boxId: number, name: string | null): Promise<StorageBox>
 }

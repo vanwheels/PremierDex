@@ -41,3 +41,11 @@ export const StorageLocationIpcChannel = {
   update: 'storageLocation:update',
   delete: 'storageLocation:delete'
 } as const
+
+/** Box CRUD, minus delete — not asked for this leg (see main/ipc/box-ipc.ts). See
+ * [Add / rename boxes] in TODO.md. */
+export const BoxIpcChannel = {
+  list: 'box:list',
+  add: 'box:add',
+  rename: 'box:rename'
+} as const

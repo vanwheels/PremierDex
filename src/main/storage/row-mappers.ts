@@ -1,6 +1,7 @@
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import type { StorageLocation } from '@shared/types/storage-location'
+import type { StorageBox } from '@shared/types/box'
 
 /**
  * Raw SQLite row shapes plus their conversion to the shared/types/pokemon.ts domain
@@ -67,6 +68,13 @@ export interface StorageLocationRow {
   location_type: StorageLocation['locationType']
   name: string
   trainer_profile_id: number | null
+}
+
+export interface BoxRow {
+  id: number
+  storage_location_id: number
+  box_number: number
+  name: string | null
 }
 
 export function toSpecies(row: SpeciesRow): Species {
@@ -137,5 +145,14 @@ export function toStorageLocation(row: StorageLocationRow): StorageLocation {
     locationType: row.location_type,
     name: row.name,
     trainerProfileId: row.trainer_profile_id
+  }
+}
+
+export function toStorageBox(row: BoxRow): StorageBox {
+  return {
+    id: row.id,
+    storageLocationId: row.storage_location_id,
+    boxNumber: row.box_number,
+    name: row.name
   }
 }

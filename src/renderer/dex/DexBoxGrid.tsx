@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
+import type { StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { BOX_COLS, buildBoxes, buildUnboxedEntries } from './buildBoxes'
 import { SpriteThumbnail } from './SpriteThumbnail'
@@ -8,6 +9,7 @@ import { BallIcon } from './BallIcon'
 import { DexBoxDetailPanel } from './DexBoxDetailPanel'
 import { DexBoxTray } from './DexBoxTray'
 import { DexBoxContextMenu } from './DexBoxContextMenu'
+import { DexBoxPager } from './DexBoxPager'
 import { OriginModal } from './OriginModal'
 import { readDragEntryPayload, setDragEntryPayload } from './dragEntryPayload'
 import type { BoxCell } from './types'
@@ -23,6 +25,10 @@ interface DexBoxGridProps {
   species: Species[]
   forms: Form[]
   storageLocations: StorageLocation[]
+  /** Already scoped to `selectedLocationTab` by LivingDexView, same convention as
+   * `entries` — see buildBoxes.ts's doc comment (Leg 2 of the Box View Polish
+   * milestone). */
+  storageBoxes: StorageBox[]
   speciesAvailability: SpeciesAvailabilityData
   /** Same axis as DexLocationTabs' `selected` — needed here (unlike DexHybridGrid, which
    * only ever sees already-scoped `sections`) because Box view has to tell "the Unassigned
@@ -34,6 +40,11 @@ interface DexBoxGridProps {
   onSetEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   /** Leg 7: drag-a-cell-onto-another-cell — see handleDropOnSlot below. */
   onSwapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
+  /** Leg 2 of the Box View Polish milestone: "+ Add Box" in the pager. Resolves with the
+   * created box so handleAddBox can jump straight to it. */
+  onAddBox: (storageLocationId: number) => Promise<StorageBox>
+  /** Leg 2: the pager label's inline "Rename" control. */
+  onRenameBox: (boxId: number, name: string | null) => void
 }
 
 /**
@@ -64,13 +75,19 @@ export function DexBoxGrid({
   species,
   forms,
   storageLocations,
+  storageBoxes,
   speciesAvailability,
   selectedLocationTab,
   onSaveOrigin,
   onSetEntryBoxPosition,
-  onSwapEntryBoxPositions
+  onSwapEntryBoxPositions,
+  onAddBox,
+  onRenameBox
 }: DexBoxGridProps): JSX.Element {
-  const boxes = useMemo(() => buildBoxes(species, forms, entries), [species, forms, entries])
+  const boxes = useMemo(
+    () => buildBoxes(storageBoxes, species, forms, entries),
+    [storageBoxes, species, forms, entries]
+  )
   const unboxedEntries = useMemo(() => buildUnboxedEntries(species, forms, entries), [species, forms, entries])
   const [boxIndex, setBoxIndex] = useState(0)
   const [selectedCellKey, setSelectedCellKey] = useState<string | null>(null)
@@ -81,7 +98,8 @@ export function DexBoxGrid({
   // Switching Storage Location tabs swaps which location's boxes `entries`/`boxes`
   // describe without remounting this component (LivingDexView keeps it mounted-and-hidden,
   // same as List/Hybrid) — a stale box index or selection from the old location would
-  // otherwise silently carry over and land on an unrelated box.
+  // otherwise silently carry over and land on an unrelated box. DexBoxPager resets its own
+  // in-progress rename independently, keyed off the displayed box's id.
   useEffect(() => {
     setBoxIndex(0)
     setSelectedCellKey(null)
@@ -93,6 +111,14 @@ export function DexBoxGrid({
         Select a Storage Location tab above to see its boxes — Unassigned entries have no box to show.
       </div>
     )
+  }
+
+  // Shouldn't happen in practice — createStorageLocation seeds a Box 1 for every location
+  // and schema.ts's backfillBoxes covers any pre-Leg-2 install — but storageBoxes still
+  // loads over IPC, so guard the moment between switching to a brand-new tab and that
+  // fetch actually resolving rather than let boxes[-1] crash the render.
+  if (boxes.length === 0) {
+    return <div className="dex-box-empty-state">Loading this location's boxes…</div>
   }
 
   const clampedIndex = Math.min(boxIndex, boxes.length - 1)
@@ -139,21 +165,27 @@ export function DexBoxGrid({
     onSetEntryBoxPosition(draggedEntryId, box.boxNumber, firstEmptySlot)
   }
 
+  // New boxes always land at the end (box_number only ever increases — see
+  // sqlite-storage.ts's addBox, and there's no delete-box in this leg to open a gap), so
+  // the pre-add `boxes.length` is exactly the new box's index once it lands in `boxes`
+  // on the next render.
+  const handleAddBox = (): void => {
+    const newBoxIndex = boxes.length
+    onAddBox(selectedLocationTab).then(() => goToBox(newBoxIndex))
+  }
+
   return (
     <div className="dex-box-view">
       <div className="dex-box-columns">
         <div className="dex-box-main">
-          <div className="dex-box-pager">
-            <button type="button" onClick={() => goToBox(clampedIndex - 1)} disabled={clampedIndex === 0}>
-              ← Prev
-            </button>
-            <span className="dex-box-pager-label">
-              Box {box.boxNumber} ({clampedIndex + 1} of {boxes.length})
-            </span>
-            <button type="button" onClick={() => goToBox(clampedIndex + 1)} disabled={clampedIndex === boxes.length - 1}>
-              Next →
-            </button>
-          </div>
+          <DexBoxPager
+            box={box}
+            index={clampedIndex}
+            count={boxes.length}
+            onGoTo={goToBox}
+            onAddBox={handleAddBox}
+            onRenameBox={onRenameBox}
+          />
           <div className="dex-box-grid" style={{ gridTemplateColumns: `repeat(${BOX_COLS}, var(--dex-box-cell-size))` }}>
             {cells.map((cell, slot) => (
               <div

@@ -1,4 +1,5 @@
 import type { CollectionEntry, Form, Gender, Species } from '@shared/types/pokemon'
+import type { StorageBox } from '@shared/types/box'
 import { formDisplayName, speciesDisplayName } from './formNames'
 import type { Box, BoxCell, EntryDisplayInfo, UnboxedEntry } from './types'
 
@@ -45,42 +46,38 @@ function buildCell(boxNumber: number, slot: number, entry: CollectionEntry, spec
  * cell — Box view's whole premise is real physical contents, greyed out the same way
  * Hybrid's unowned placeholders are (see DexBoxGrid).
  *
- * Box 1 always appears even with zero placed entries (Vanny's call, 2026-09-03) so the
- * grid layout is visible/testable ahead of Leg 7's editing UI actually placing anything.
- * Only boxes with at least one real cell otherwise appear — box_number has no "how many
- * boxes does this location have" bound in the data model, so paginating every integer
- * between the lowest and highest used number would show long runs of boxes nobody placed
- * anything in.
+ * `boxes` (already scoped to the caller's selected location, same convention as `entries`)
+ * is the actual source of which boxes exist and are navigable (Leg 2 of the Box View
+ * Polish milestone) — a real persisted `boxes` row per box, not "Box 1 always shows, plus
+ * anything with >=1 real cell" (this function's own pre-Leg-2 rule, back when box_number
+ * had no independent existence in the data model at all). An entry naming a box_number
+ * with no matching row is simply skipped, same treatment as an unresolvable form/species —
+ * shouldn't happen post-migration (schema.ts's backfillBoxes covers every box_number any
+ * entry already references) but isn't assumed.
  */
-export function buildBoxes(species: Species[], forms: Form[], entries: CollectionEntry[]): Box[] {
+export function buildBoxes(boxes: StorageBox[], species: Species[], forms: Form[], entries: CollectionEntry[]): Box[] {
   const speciesById = new Map(species.map((s) => [s.id, s]))
   const formsById = new Map(forms.map((f) => [f.id, f]))
 
-  const boxCells = new Map<number, (BoxCell | null)[]>()
-  const boxFor = (boxNumber: number): (BoxCell | null)[] => {
-    let cells = boxCells.get(boxNumber)
-    if (!cells) {
-      cells = new Array(BOX_SIZE).fill(null)
-      boxCells.set(boxNumber, cells)
-    }
-    return cells
+  const boxByNumber = new Map<number, Box>()
+  for (const box of boxes) {
+    boxByNumber.set(box.boxNumber, { id: box.id, boxNumber: box.boxNumber, name: box.name, cells: new Array(BOX_SIZE).fill(null) })
   }
-  boxFor(1)
 
   for (const entry of entries) {
     if (entry.boxNumber === null || entry.boxSlot === null) continue
     if (entry.boxSlot < 0 || entry.boxSlot >= BOX_SIZE) continue
+    const box = boxByNumber.get(entry.boxNumber)
+    if (!box) continue
     const form = formsById.get(entry.formId)
     if (!form) continue
     const sp = speciesById.get(form.speciesId)
     if (!sp) continue
 
-    boxFor(entry.boxNumber)[entry.boxSlot] = buildCell(entry.boxNumber, entry.boxSlot, entry, sp, form)
+    box.cells[entry.boxSlot] = buildCell(entry.boxNumber, entry.boxSlot, entry, sp, form)
   }
 
-  return [...boxCells.entries()]
-    .sort(([a], [b]) => a - b)
-    .map(([boxNumber, cells]) => ({ boxNumber, cells }))
+  return [...boxByNumber.values()].sort((a, b) => a.boxNumber - b.boxNumber)
 }
 
 /**

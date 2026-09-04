@@ -2,9 +2,11 @@ import { contextBridge, ipcRenderer } from 'electron'
 import type { CollectionEntry, CollectionEntryOriginInput, Species } from '@shared/types/pokemon'
 import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-profile'
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
+import type { StorageBox } from '@shared/types/box'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
 import {
   BackupIpcChannel,
+  BoxIpcChannel,
   PokemonIpcChannel,
   StorageLocationIpcChannel,
   TrainerProfileIpcChannel
@@ -47,6 +49,10 @@ const bridge: AppBridge = {
   updateStorageLocation: (id: number, input: StorageLocationInput): Promise<StorageLocation> =>
     ipcRenderer.invoke(StorageLocationIpcChannel.update, id, input),
   deleteStorageLocation: (id: number): Promise<void> => ipcRenderer.invoke(StorageLocationIpcChannel.delete, id),
+  listBoxes: (): Promise<StorageBox[]> => ipcRenderer.invoke(BoxIpcChannel.list),
+  addBox: (storageLocationId: number): Promise<StorageBox> => ipcRenderer.invoke(BoxIpcChannel.add, storageLocationId),
+  renameBox: (boxId: number, name: string | null): Promise<StorageBox> =>
+    ipcRenderer.invoke(BoxIpcChannel.rename, boxId, name),
   getAppVersion: () => ipcRenderer.invoke(UpdaterIpcChannel.getAppVersion),
   isSupported: () => ipcRenderer.invoke(UpdaterIpcChannel.isSupported),
   checkForUpdates: () => ipcRenderer.invoke(UpdaterIpcChannel.check),

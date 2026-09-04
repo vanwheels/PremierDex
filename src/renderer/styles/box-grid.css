@@ -108,6 +108,22 @@
 
 .dex-box-pager-label {
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Leg 2 of the Box View Polish milestone: "Rename" sits inline in the pager label rather
+ * than its own row — deliberately understated (no button chrome beyond the shared base
+ * style) so it doesn't compete with the label text for attention. */
+.dex-box-rename-button {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.dex-box-rename-form {
+  display: inline-flex;
 }
 
 .dex-box-empty-state {

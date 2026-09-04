@@ -81,6 +81,7 @@ export function App(): JSX.Element {
               forms={data.forms}
               entries={data.entries}
               storageLocations={data.storageLocations}
+              boxes={data.boxes}
               trainerProfiles={data.trainerProfiles}
               speciesAvailability={data.speciesAvailability}
               onSetEntryOwned={data.setEntryOwned}
@@ -89,6 +90,8 @@ export function App(): JSX.Element {
               onSetEntryBoxPosition={data.setEntryBoxPosition}
               onSwapEntryBoxPositions={data.swapEntryBoxPositions}
               onSetCollapsedDisplayForm={data.setCollapsedDisplayForm}
+              onAddBox={data.addBox}
+              onRenameBox={data.renameBox}
             />
           </div>
           {view === 'collection' && (

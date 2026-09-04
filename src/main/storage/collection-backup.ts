@@ -1,6 +1,7 @@
 import type Database from 'better-sqlite3'
 import type { CollectionEntry } from '@shared/types/pokemon'
 import type { CollectionExport, CollectionImportResult } from '@shared/storage/collection-export'
+import { backfillBoxes } from './schema'
 import {
   toCollectionEntry,
   toForm,
@@ -254,6 +255,16 @@ export function createBackupOperations(db: Database.Database): {
             boxSlot: wanted?.boxSlot ?? null
           })
         }
+
+        // deleteAllStorageLocationsStmt above cascade-deletes every `boxes` row
+        // (schema.ts's ON DELETE CASCADE) — CollectionExport doesn't carry box names/
+        // empty-box state yet (see TODO.md), so this rebuilds bare (unnamed) Box 1s plus
+        // whatever box_number the just-restored entries above reference, same backfill
+        // schema.ts runs on every startup. Runs after the restore loop, not before: it
+        // reads collection_entries' box_number/storage_location_id, which only hold their
+        // final restored values once that loop above has finished. Good enough to keep
+        // Box view functional post-import; not a full round-trip of renamed/empty boxes.
+        backfillBoxes(db)
       })
       applyImport()
 

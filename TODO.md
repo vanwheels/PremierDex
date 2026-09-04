@@ -8,15 +8,6 @@ second grid; phantom Pokémon = persisted placeholder, not local-only; multi-dra
 target fills contiguously in selection order, blocked if any needed slot is occupied by
 something outside the selection; box add/rename = new per-location schema is in scope).
 
-### [Add / rename boxes] — Leg 2
-No box schema exists yet — `boxNumber` is purely derived from what entries currently sit
-in it (buildBoxes.ts only shows a box if it has >=1 real cell, or is Box 1). Needs a new
-per-Storage-Location box count (so "Add Box" has something to increment past, and empty
-boxes stay navigable/visible) plus an optional name-per-box-number store for renaming.
-Scope this leg's actual shape (new table vs. columns on storage_locations) before writing
-migrations.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ### [Adjacent second box] — Leg 3
 A second fully interactive box grid (own pager, same drag/drop/click rules as the
 primary one) opens side by side with the current box — confirmed over a read-only
@@ -66,6 +57,19 @@ existing per-row picker) would help now that the 0->1 location auto-backfill onl
 fires once. Not scoped or designed — just a decent-feature idea, not urgent.
 Last touched: 2026-09-03. Re-check count: 0.
 
+### [Box names/empty boxes missing from JSON backup export/import] — unscheduled
+Surfaced while implementing [Add / rename boxes] (Leg 2 of Box View Polish, see
+COMPLETED.md): the new `boxes` table (id/storage_location_id/box_number/name) isn't part
+of CollectionExport, so a backup round-trip silently drops every box's custom name and
+any box with zero entries in it — same class of gap Leg 13 of Collection & Origin Tracking
+fixed for trainerProfiles/storageLocations. Import itself is safe (collection-backup.ts's
+importCollection re-runs schema.ts's backfillBoxes after restoring entries, so Box view
+stays functional — no crash, no missing Box 1), it just can't restore a name or an
+intentionally-empty box the export never captured. Needs a CollectionExport version bump
+(v2 -> v3, same "reject the old version outright" precedent as v1->v2) plus a `boxes`
+array in the export/import shape.
+Last touched: 2026-09-04. Re-check count: 0.
+
 ### [App icon] — unscheduled
 No custom icon exists yet (`build/icon.png` per electron-builder convention, matching
 GW2-Squaded) — packaged builds currently ship with Electron's default icon. Not blocking
@@ -92,19 +96,20 @@ only if it becomes a real problem, not proactively.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ### [Split schema.ts] — unscheduled
-Crossed the ~300-line soft cap at Leg 5 (341 lines) and now at 421 after Leg 3's
-box_number/box_slot retrofit — still well under the 500 hard cap. Each closed-set CHECK
-column (language, caught_ball) has picked up its own "ALTER-time CHECK can't be widened
-later" rebuild block over time, and that pattern will likely repeat if another
-CHECK-constrained column needs the same treatment. Candidate split: pull the CHECK-widen
-rebuild blocks (sid-4294, caught_ball) into their own module alongside the retrofit
-ALTERs, mirroring how sqlite-storage.ts's export/import logic got split into
-collection-backup.ts (Leg 3 — see COMPLETED.md).
+Crossed the ~300-line soft cap at Leg 5 (341 lines), 421 after Leg 3 of Box Arrangement's
+box_number/box_slot retrofit, now 466 after this milestone's Leg 2 added the `boxes` table
++ backfillBoxes — still under the 500 hard cap, but the margin is shrinking each time a
+storage-shaped leg touches this file. Each closed-set CHECK column (language, caught_ball)
+has picked up its own "ALTER-time CHECK can't be widened later" rebuild block over time,
+and that pattern will likely repeat if another CHECK-constrained column needs the same
+treatment. Candidate split: pull the CHECK-widen rebuild blocks (sid-4294, caught_ball)
+into their own module alongside the retrofit ALTERs, mirroring how sqlite-storage.ts's
+export/import logic got split into collection-backup.ts (Leg 3 of Box Arrangement — see
+COMPLETED.md).
 Confirmed 2026-09-03: deliberately kept out of the User-Customizable Dex Layout milestone
-— orthogonal code health, not blocking. Leg 3 touched this file (new retrofit block) but
-didn't fold the split in, since it only added ~30 lines to an already-flagged-for-later
-file. Stays standalone; pick up opportunistically if a future leg touches this file again.
-Last touched: 2026-09-03. Re-check count: 0.
+— orthogonal code health, not blocking. Stays standalone; pick up opportunistically if a
+future leg touches this file again, or proactively if it crosses ~480 lines first.
+Last touched: 2026-09-04. Re-check count: 0.
 
 ## Future Milestones (unscheduled)
 
