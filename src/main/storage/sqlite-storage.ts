@@ -206,6 +206,16 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     WHERE id = @id
   `)
   const deleteStorageLocationStmt = db.prepare('DELETE FROM storage_locations WHERE id = ?')
+  const countStorageLocationsStmt = db.prepare('SELECT COUNT(*) AS count FROM storage_locations')
+  // Leg 6: an app starts with zero storage locations, so the very first one ever created
+  // (of any type — HOME is the common case, but nothing here assumes it) is where every
+  // owned entry that's currently unassigned logically belongs: they were checked in before
+  // the user had anywhere to file them. Scoped to that 0->1 transition only — once a
+  // second location exists, an entry sitting at Unassigned is a deliberate state, not a
+  // backlog, and must not get swept anywhere automatically.
+  const backfillUnassignedOwnedEntriesStmt = db.prepare(
+    'UPDATE collection_entries SET storage_location_id = ? WHERE owned = 1 AND storage_location_id IS NULL'
+  )
 
   // Backup restore (Leg 13): Trainer Profiles/Storage Locations are pure user data with
   // no seed path to fall back on (unlike species/forms), so restoring them is a full
@@ -437,7 +447,11 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     },
 
     async createStorageLocation(input: StorageLocationInput): Promise<StorageLocation> {
+      const isFirstLocation = (countStorageLocationsStmt.get() as { count: number }).count === 0
       const result = insertStorageLocationStmt.run(input)
+      if (isFirstLocation) {
+        backfillUnassignedOwnedEntriesStmt.run(result.lastInsertRowid)
+      }
       return toStorageLocation(getStorageLocationStmt.get(result.lastInsertRowid) as StorageLocationRow)
     },
 

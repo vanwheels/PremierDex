@@ -114,3 +114,62 @@ describe('collection entry storage location', () => {
     expect((await findBulbasaurBaseEntry(storage)).storageLocationId).toBeNull()
   })
 })
+
+/**
+ * Leg 6 of the User-Customizable Dex Layout milestone: entries checked in owned before
+ * any storage location existed sat at storage_location_id NULL forever, with nothing to
+ * sweep them in once a location finally got created. Scoped to the 0->1 location
+ * transition specifically (see createStorageLocation's comment) — creating a second
+ * location must never re-sweep, since by then Unassigned is a deliberate state.
+ */
+describe('unassigned owned entries backfill onto the first-ever storage location', () => {
+  it('assigns every owned, unassigned entry to the first storage location created', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entry = await findBulbasaurBaseEntry(storage)
+    await storage.setOwned(entry.id, true)
+    expect((await findBulbasaurBaseEntry(storage)).storageLocationId).toBeNull()
+
+    const location = await storage.createStorageLocation({
+      locationType: 'home',
+      name: 'My HOME Account',
+      trainerProfileId: null
+    })
+
+    expect((await findBulbasaurBaseEntry(storage)).storageLocationId).toBe(location.id)
+  })
+
+  it('does not touch an unowned entry', async () => {
+    const storage = createSqliteStorage(':memory:')
+
+    await storage.createStorageLocation({ locationType: 'home', name: 'My HOME Account', trainerProfileId: null })
+
+    expect((await findBulbasaurBaseEntry(storage)).storageLocationId).toBeNull()
+  })
+
+  it('does not re-sweep entries when a second location is created', async () => {
+    const storage = createSqliteStorage(':memory:')
+    await storage.createStorageLocation({ locationType: 'home', name: 'My HOME Account', trainerProfileId: null })
+    const entry = await findBulbasaurBaseEntry(storage)
+    await storage.setOwned(entry.id, true)
+    // Deliberately left Unassigned after the first location already exists.
+    expect((await findBulbasaurBaseEntry(storage)).storageLocationId).toBeNull()
+
+    await storage.createStorageLocation({ locationType: 'box', name: 'Box 1', trainerProfileId: null })
+
+    expect((await findBulbasaurBaseEntry(storage)).storageLocationId).toBeNull()
+  })
+
+  it('does not overwrite an entry that already has a different location assigned', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entry = await findBulbasaurBaseEntry(storage)
+    await storage.setOwned(entry.id, true)
+    // No prior location exists yet, so this creation is itself the 0->1 transition —
+    // it should assign the entry to it.
+    const first = await storage.createStorageLocation({ locationType: 'box', name: 'Box 1', trainerProfileId: null })
+    expect((await findBulbasaurBaseEntry(storage)).storageLocationId).toBe(first.id)
+
+    await storage.createStorageLocation({ locationType: 'ranch', name: 'Ranch', trainerProfileId: null })
+
+    expect((await findBulbasaurBaseEntry(storage)).storageLocationId).toBe(first.id)
+  })
+})

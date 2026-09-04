@@ -1,5 +1,12 @@
 # TODO
 
+## [Bulk move/duplicate entries between storage locations] — unscheduled
+Raised by Vanny 2026-09-03 while scoping the Unassigned-backfill fix (Leg 6): a way to
+move or duplicate a batch of entries from one storage location to another (not just the
+existing per-row picker) would help now that the 0->1 location auto-backfill only ever
+fires once. Not scoped or designed — just a decent-feature idea, not urgent.
+Last touched: 2026-09-03. Re-check count: 0.
+
 ## [App icon] — unscheduled
 No custom icon exists yet (`build/icon.png` per electron-builder convention, matching
 GW2-Squaded) — packaged builds currently ship with Electron's default icon. Not blocking
@@ -78,16 +85,6 @@ mean shipping something that calls itself a box but can never show what a real b
 looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the list,
 just sprites" — it never claimed to reflect real box contents, so the same checklist
 ceiling doesn't misrepresent it the way it would Box view.
-
-## [Existing dex entries stuck in Unassigned instead of vanny's HOME dex] — Leg 6
-Vanny's pre-existing collection entries are showing under the Unassigned location tab
-instead of the 'vanny' HOME storage location. autoAssignLocation.ts (Leg 9 of the prior
-milestone) only assigns a location on a fresh check-in while a location tab is selected —
-entries checked in before storage locations existed (Leg 3) or while a different tab was
-active never got backfilled. Needs investigation into whether a one-time backfill
-(default un-located owned entries to the trainer's HOME location) is the right fix, or
-whether this is an import-path bug instead.
-Last touched: 2026-09-03. Re-check count: 0.
 
 ## [List view mode] — Leg 7
 Reframe the existing Dex Table as one of three selectable view modes (a mode
