@@ -178,6 +178,38 @@
   width: 16rem;
 }
 
+/* Wraps DexFilterBar + DexViewModeSwitcher (Leg 7) on one line — the switcher sits
+   alongside the filter bar rather than inside it, since it's a separate concern
+   (which layout renders) from what DexFilterBar controls (which built rows are
+   visible). wrap+gap so a narrow window drops the switcher to its own line instead of
+   crowding the filter inputs. */
+.dex-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.dex-controls-row .dex-filter-bar {
+  flex: 1 1 auto;
+  margin-bottom: 0;
+}
+
+/* Same plain-buttons-as-radio-group treatment as theme-mode-row/theme-mode-option —
+   kept as its own class rather than reusing those directly, matching how
+   dex-location-tab stays separate from app-view-tab despite the similar look. */
+.dex-view-mode-row {
+  display: flex;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+}
+
+.dex-view-mode-option.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /**
  * Card framing (added after the first re-skin pass read as too flat — tables sitting
  * directly on .app-content's bg with no container "bled into the background"). Applied

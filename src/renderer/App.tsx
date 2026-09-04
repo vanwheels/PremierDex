@@ -18,6 +18,8 @@ import { DexTable } from './dex/DexTable'
 import { DexLocationTabs } from './dex/DexLocationTabs'
 import { DexToolbar } from './dex/DexToolbar'
 import { DexFilterBar } from './dex/DexFilterBar'
+import { DexViewModeSwitcher } from './dex/DexViewModeSwitcher'
+import { useDexViewMode } from './dex/useDexViewMode'
 import { CompletionStatsPanel } from './dex/CompletionStatsPanel'
 import type { DexFilters, DexOptions, DexSort } from './dex/types'
 import { DEFAULT_DEX_FILTERS, DEFAULT_DEX_SORT } from './dex/types'
@@ -66,6 +68,10 @@ export function App(): JSX.Element {
   // DexLocationTabs' doc comment).
   const [selectedLocationTab, setSelectedLocationTab] = useState<number | null>(null)
   const [view, setView] = useState<AppView>('dex')
+  // Leg 7: persisted Living Dex layout choice — see useDexViewMode's doc comment. Only
+  // 'list' exists yet, so the table below always renders; Leg 8 adds a 'hybrid' branch
+  // alongside it.
+  const [viewMode, setViewMode] = useDexViewMode()
   // Bumped after a JSON import (Leg 13 added Trainer Profiles/Storage Locations to the
   // backup) so both panels below remount and refetch — they load their own data on
   // mount only and have no other way to learn the DB moved out from under them.
@@ -251,18 +257,26 @@ export function App(): JSX.Element {
               onOptionsChange={setCompletionStatsOptions}
             />
             <DexToolbar options={options} onChange={setOptions} />
-            <DexFilterBar filters={filters} onChange={setFilters} />
-            <DexTable
-              sections={visibleSections}
-              sort={sort}
-              onSortChange={setSort}
-              onToggleEntry={handleToggleEntry}
-              onSaveOrigin={handleSaveOrigin}
-              onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
-              storageLocations={storageLocations}
-              onSaveStorageLocation={handleSaveStorageLocation}
-              speciesAvailability={speciesAvailability}
-            />
+            <div className="dex-controls-row">
+              <DexFilterBar filters={filters} onChange={setFilters} />
+              <DexViewModeSwitcher viewMode={viewMode} onChange={setViewMode} />
+            </div>
+            {/* Hidden rather than conditionally rendered, same reasoning as the `view`
+             * wrapper above (Leg 2) — once Leg 8 adds a Hybrid sibling here, switching
+             * modes shouldn't pay DexTable's mount cost again on switching back. */}
+            <div hidden={viewMode !== 'list'}>
+              <DexTable
+                sections={visibleSections}
+                sort={sort}
+                onSortChange={setSort}
+                onToggleEntry={handleToggleEntry}
+                onSaveOrigin={handleSaveOrigin}
+                onSetCollapsedDisplayForm={handleSetCollapsedDisplayForm}
+                storageLocations={storageLocations}
+                onSaveStorageLocation={handleSaveStorageLocation}
+                speciesAvailability={speciesAvailability}
+              />
+            </div>
           </div>
           {view === 'collection' && (
             <CollectionView species={species} forms={forms} entries={entries} onSaveOrigin={handleSaveOrigin} />
