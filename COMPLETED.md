@@ -2,6 +2,12 @@
 
 ## Box View Polish & Multi-Box Editing
 
+### [Add / rename boxes] — Leg 2 — 2026-09-04
+New `boxes` table (id/storage_location_id/box_number/name, ON DELETE CASCADE) is now the
+real source of which boxes exist per location, replacing buildBoxes.ts's old
+"Box 1 or has cells" derivation. DexBoxGrid gained a "+ Add Box" button and an inline
+Rename control (split into DexBoxPager.tsx). See commit `d9a67aa`.
+
 ### [Box view quick polish] — Leg 1 — 2026-09-03
 Unboxed tray widened and height-matched to the box grid (shared CSS vars, not a hardcoded
 height), tray sprite bumped 32px -> 64px, shiny/caught-ball badges overlaid on filled
