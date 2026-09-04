@@ -10,6 +10,13 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [List view mode] — Leg 7 (2026-09-03)
+Added `useDexViewMode` (localStorage-backed, mirrors theme-store's ThemeMode) and
+`DexViewModeSwitcher`, rendered alongside DexFilterBar in App.tsx. Only `'list'` exists
+as a mode (Vanny's call: no non-functional 'Hybrid' option on master ahead of Leg 8).
+DexTable stays mounted-and-hidden behind `viewMode`, preserving Leg 2's remount-cost
+fix. See commit `c41389f`.
+
 ## [Existing dex entries stuck in Unassigned instead of vanny's HOME dex] — Leg 6 (2026-09-03)
 Confirmed with Vanny it wasn't a filter/import bug — old entries genuinely had
 storage_location_id NULL in the DB. `createStorageLocation` now backfills every owned,

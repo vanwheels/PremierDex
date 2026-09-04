@@ -86,20 +86,6 @@ looks like. Hybrid stayed in Phase 1 since Vanny only ever described it as "the 
 just sprites" — it never claimed to reflect real box contents, so the same checklist
 ceiling doesn't misrepresent it the way it would Box view.
 
-## [List view mode] — Leg 7
-Reframe the existing Dex Table as one of three selectable view modes (a mode
-switcher alongside/replacing DexFilterBar) rather than the only layout, and persist
-the chosen mode across reloads — this is what actually delivers "define how your dex
-displays as a persisted choice," the layout-customization milestone's original ask.
-Otherwise the current table's behavior stays as-is; this leg is mostly plumbing the
-mode switch + persistence around it.
-All three view modes share one underlying data path (buildDexSections ->
-filterDexSections -> sortDexSections) rather than each mode having its own filtering —
-confirmed with Vanny 2026-09-03: a scope like "generation 1-6 only" must apply
-identically across List/Box/Hybrid, species outside the active filter don't appear in
-any of them, not just List.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ## [Hybrid view mode] — Leg 8
 HOME-derived read-only grid: sprite-only tiles flowing continuously with the window
 width — no box-style page boundaries, confirmed 2026-09-03 over the paginated
@@ -112,6 +98,14 @@ confirmed 2026-09-03 to reuse the Origin modal's existing fields (OT/TID/SID/nic
 origin game/ball/met location/storage location, plus the home-boxable/shiny-locked/
 invalid-combo badges) rather than HOME's own Nature/stats block, which PremierDex has no
 data for.
+Shares the same buildDexSections -> filterDexSections -> sortDexSections pipeline as
+List (confirmed with Vanny during Leg 7 planning) — Hybrid reads `visibleSections`,
+it doesn't run its own filtering. Plumbing from Leg 7 to build on: `useDexViewMode`
+(dex/useDexViewMode.ts) holds the persisted mode, `DexViewMode` is currently just
+`'list'` and needs `'hybrid'` added there and to `DexViewModeSwitcher`'s OPTIONS; wire
+the new grid into App.tsx as a `hidden={viewMode !== 'hybrid'}` sibling of DexTable's
+existing wrapper div, not a second mounted-on-demand branch, to keep Leg 2's
+mount-cost fix intact.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## Future Milestones (unscheduled)
