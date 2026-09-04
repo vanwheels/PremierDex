@@ -18,7 +18,7 @@ as a 4th key segment in collection-backup.ts's entryKey. Scoped to match-only pe
 call: a backup with more copies in a group than the target DB has rows for drops the
 extras rather than inserting new rows — real duplicates can't be created anywhere in the
 app yet (Leg 7), so this is forward-proofing, not a reachable bug today. See commit
-`<hash>`.
+`94cbe64`.
 
 ## [Fix downstream logic assuming one entry per species] — Leg 4 (2026-09-03)
 Audited completionStats.ts, filterDexSections.ts, invalidCombo.ts, and
