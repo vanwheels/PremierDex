@@ -35,6 +35,13 @@ export interface StorageAdapter {
    * boxNumber/boxSlot must be null or non-null together; rejects assigning a position to
    * an entry with no storageLocationId. See CollectionEntry's doc comment. */
   setEntryBoxPosition(entryId: number, boxNumber: number | null, boxSlot: number | null): Promise<CollectionEntry>
+  /** Exchanges two entries' box positions in one atomic step (Leg 7 of the Box Arrangement
+   * milestone, DexBoxGrid's drag-a-cell-onto-another-cell flow) — a naive two-call
+   * setEntryBoxPosition/setEntryBoxPosition sequence throws on the UNIQUE(storage_
+   * location_id, box_number, box_slot) index, since the second call's target slot is
+   * still occupied by the first entry's own pre-move row. Rejects if either entry has no
+   * box position yet. */
+  swapEntryBoxPositions(entryIdA: number, entryIdB: number): Promise<[CollectionEntry, CollectionEntry]>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>

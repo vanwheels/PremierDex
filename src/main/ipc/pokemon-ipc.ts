@@ -24,6 +24,9 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
     (_event, entryId: number, boxNumber: number | null, boxSlot: number | null) =>
       storage.setEntryBoxPosition(entryId, boxNumber, boxSlot)
   )
+  ipcMain.handle(PokemonIpcChannel.swapEntryBoxPositions, (_event, entryIdA: number, entryIdB: number) =>
+    storage.swapEntryBoxPositions(entryIdA, entryIdB)
+  )
   ipcMain.handle(PokemonIpcChannel.setCollapsedDisplayForm, (_event, speciesId: number, formId: number | null) =>
     storage.setCollapsedDisplayForm(speciesId, formId)
   )

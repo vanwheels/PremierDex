@@ -22,6 +22,8 @@ export interface AppBridge extends UpdaterBridge {
   setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry>
   setEntryStorageLocation(entryId: number, storageLocationId: number | null): Promise<CollectionEntry>
   setEntryBoxPosition(entryId: number, boxNumber: number | null, boxSlot: number | null): Promise<CollectionEntry>
+  /** See StorageAdapter.swapEntryBoxPositions' own doc comment. */
+  swapEntryBoxPositions(entryIdA: number, entryIdB: number): Promise<[CollectionEntry, CollectionEntry]>
   setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species>
   /** Leg 6: static per-game species-availability data, for the Living Dex's derived
    * invalid-combo badge (see renderer/dex/invalidCombo.ts). Not DB-backed — see

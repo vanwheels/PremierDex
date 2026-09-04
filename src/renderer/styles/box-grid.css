@@ -2,10 +2,21 @@
  * Leg 6 (Box Arrangement milestone) — HOME-style paginated box grid. Filled-cell tile
  * styling (dex-hybrid-tile / -unowned / -selected) and the detail panel (dex-hybrid-
  * detail-*) are deliberately reused from hybrid-grid.css rather than duplicated here —
- * see DexBoxGrid/DexBoxDetailPanel's doc comments. This file only covers what's actually
- * different: the fixed 5x6 grid layout (vs. Hybrid's flowing flex-wrap), empty slots, and
- * the box pager.
+ * see DexBoxGrid/DexBoxDetailPanel's doc comments. This file covers the fixed 5x6 grid
+ * layout (vs. Hybrid's flowing flex-wrap), empty slots, the box pager, and (Leg 7) the
+ * drag-and-drop cell wrapper, the unboxed tray, and the right-click context menu.
  */
+
+.dex-box-columns {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.dex-box-main {
+  flex: 1;
+  min-width: 0;
+}
 
 .dex-box-grid {
   display: grid;
@@ -19,11 +30,27 @@
   margin-bottom: 1rem;
 }
 
-.dex-box-cell-empty {
+/* Leg 7: every cell (filled or empty) is now a wrapper div rather than the tile/empty
+ * marker being the grid item directly — it owns the drag-and-drop/right-click handlers.
+ * aspect-ratio here (rather than on dex-box-cell-empty alone, pre-Leg-7) keeps filled and
+ * empty cells the same size regardless of content. */
+.dex-box-cell {
   aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dex-box-cell-empty {
   border: 1px dashed var(--border);
   border-radius: 8px;
   opacity: 0.4;
+}
+
+.dex-box-cell-drag-over {
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .dex-box-pager {
@@ -40,4 +67,69 @@
 .dex-box-empty-state {
   color: var(--muted);
   padding: 1rem;
+}
+
+/* Leg 7: the unboxed-entries drag source, next to the grid. */
+.dex-box-tray {
+  width: 200px;
+  flex-shrink: 0;
+  padding: 0.75rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.dex-box-tray-heading {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.dex-box-tray-search {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  box-sizing: border-box;
+}
+
+.dex-box-tray-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.dex-box-tray-item {
+  cursor: grab;
+}
+
+.dex-box-tray-empty {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Leg 7: DexBoxContextMenu's single-action popup. */
+.dex-box-context-menu {
+  position: fixed;
+  z-index: 1000;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  padding: 0.25rem;
+}
+
+.dex-box-context-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dex-box-context-menu button:hover {
+  background: var(--surface);
 }

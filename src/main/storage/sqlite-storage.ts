@@ -63,6 +63,26 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const setEntryBoxPositionStmt = db.prepare(
     'UPDATE collection_entries SET box_number = @boxNumber, box_slot = @boxSlot WHERE id = @id'
   )
+  // swapEntryBoxPositions (Leg 7 of the Box Arrangement milestone, DexBoxGrid's drag-a-
+  // cell-onto-another-cell flow) — idx_entries_box_slot (schema.ts) is a plain, non-
+  // deferrable UNIQUE index, so writing entry A straight into entry B's current slot
+  // collides with B's own still-there row regardless of write order. Vacates A to NULL
+  // first (NULL never collides, per that index's own comment), moves B into A's old
+  // slot, then places A into B's old slot — all inside one transaction so a mid-swap
+  // failure can't leave one entry unboxed.
+  const swapEntryBoxPositionsTx = db.transaction((entryIdA: number, entryIdB: number) => {
+    const a = getEntryStmt.get(entryIdA) as CollectionEntryRow | undefined
+    const b = getEntryStmt.get(entryIdB) as CollectionEntryRow | undefined
+    if (!a || !b) {
+      throw new Error('Entry not found')
+    }
+    if (a.box_number === null || a.box_slot === null || b.box_number === null || b.box_slot === null) {
+      throw new Error('Both entries must already have a box position to swap')
+    }
+    setEntryBoxPositionStmt.run({ id: a.id, boxNumber: null, boxSlot: null })
+    setEntryBoxPositionStmt.run({ id: b.id, boxNumber: a.box_number, boxSlot: a.box_slot })
+    setEntryBoxPositionStmt.run({ id: a.id, boxNumber: b.box_number, boxSlot: b.box_slot })
+  })
   const orphanEntriesByTrainerProfileStmt = db.prepare(
     'UPDATE collection_entries SET trainer_profile_id = NULL WHERE trainer_profile_id = ?'
   )
@@ -160,6 +180,14 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       }
       setEntryBoxPositionStmt.run({ id: entryId, boxNumber, boxSlot })
       return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
+    },
+
+    async swapEntryBoxPositions(entryIdA: number, entryIdB: number): Promise<[CollectionEntry, CollectionEntry]> {
+      swapEntryBoxPositionsTx(entryIdA, entryIdB)
+      return [
+        toCollectionEntry(getEntryStmt.get(entryIdA) as CollectionEntryRow),
+        toCollectionEntry(getEntryStmt.get(entryIdB) as CollectionEntryRow)
+      ]
     },
 
     // exportCollection/importCollection live in collection-backup.ts (Leg 3 of the Box

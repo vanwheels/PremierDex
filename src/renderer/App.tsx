@@ -86,6 +86,8 @@ export function App(): JSX.Element {
               onSetEntryOwned={data.setEntryOwned}
               onSaveStorageLocation={data.setEntryStorageLocation}
               onSaveOrigin={data.setEntryOrigin}
+              onSetEntryBoxPosition={data.setEntryBoxPosition}
+              onSwapEntryBoxPositions={data.swapEntryBoxPositions}
               onSetCollapsedDisplayForm={data.setCollapsedDisplayForm}
             />
           </div>

@@ -25,6 +25,8 @@ export interface CollectionData {
   setEntryOwned: (entryId: number, owned: boolean) => void
   setEntryStorageLocation: (entryId: number, storageLocationId: number | null) => void
   setEntryOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
+  setEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
+  swapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
   setCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
 }
 
@@ -113,6 +115,24 @@ export function useCollectionData(): CollectionData {
     })
   }, [])
 
+  const setEntryBoxPosition = useCallback((entryId: number, boxNumber: number | null, boxSlot: number | null): void => {
+    window.premierDex.setEntryBoxPosition(entryId, boxNumber, boxSlot).then((updated) => {
+      setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
+    })
+  }, [])
+
+  const swapEntryBoxPositions = useCallback((entryIdA: number, entryIdB: number): void => {
+    window.premierDex.swapEntryBoxPositions(entryIdA, entryIdB).then(([updatedA, updatedB]) => {
+      setEntries((prev) =>
+        prev.map((entry) => {
+          if (entry.id === updatedA.id) return updatedA
+          if (entry.id === updatedB.id) return updatedB
+          return entry
+        })
+      )
+    })
+  }, [])
+
   const setCollapsedDisplayForm = useCallback((speciesId: number, formId: number | null): void => {
     window.premierDex.setCollapsedDisplayForm(speciesId, formId).then((updated) => {
       setSpecies((prev) => prev.map((sp) => (sp.id === updated.id ? updated : sp)))
@@ -135,6 +155,8 @@ export function useCollectionData(): CollectionData {
     setEntryOwned,
     setEntryStorageLocation,
     setEntryOrigin,
+    setEntryBoxPosition,
+    swapEntryBoxPositions,
     setCollapsedDisplayForm
   }
 }

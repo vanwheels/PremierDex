@@ -34,6 +34,8 @@ export interface LivingDexViewProps {
   onSetEntryOwned: (entryId: number, owned: boolean) => void
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
+  onSetEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
+  onSwapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
   onSetCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
 }
 
@@ -58,6 +60,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onSetEntryOwned,
     onSaveStorageLocation,
     onSaveOrigin,
+    onSetEntryBoxPosition,
+    onSwapEntryBoxPositions,
     onSetCollapsedDisplayForm
   } = props
 
@@ -179,6 +183,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           speciesAvailability={speciesAvailability}
           selectedLocationTab={selectedLocationTab}
           onSaveOrigin={onSaveOrigin}
+          onSetEntryBoxPosition={onSetEntryBoxPosition}
+          onSwapEntryBoxPositions={onSwapEntryBoxPositions}
         />
       </div>
     </>

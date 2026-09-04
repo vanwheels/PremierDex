@@ -130,3 +130,42 @@ describe('collection entry box position', () => {
     expect(updated.boxSlot).toBe(0)
   })
 })
+
+/**
+ * swapEntryBoxPositions (Leg 7 of the Box Arrangement/Real Inventory Data Model
+ * milestone, DexBoxGrid's drag-a-cell-onto-another-cell flow) — see sqlite-storage.ts's
+ * own comment for why a naive two-call setEntryBoxPosition sequence can't do this: the
+ * UNIQUE(storage_location_id, box_number, box_slot) index isn't deferrable, so the second
+ * call's target slot is still occupied by the first entry's own pre-move row.
+ */
+describe('swapEntryBoxPositions', () => {
+  it('exchanges two occupied entries positions', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const regular = await findBulbasaurEntry(storage, false)
+    const shiny = await findBulbasaurEntry(storage, true)
+    await storage.setEntryStorageLocation(regular.id, location.id)
+    await storage.setEntryStorageLocation(shiny.id, location.id)
+    await storage.setEntryBoxPosition(regular.id, 1, 0)
+    await storage.setEntryBoxPosition(shiny.id, 1, 5)
+
+    const [updatedRegular, updatedShiny] = await storage.swapEntryBoxPositions(regular.id, shiny.id)
+
+    expect(updatedRegular.boxNumber).toBe(1)
+    expect(updatedRegular.boxSlot).toBe(5)
+    expect(updatedShiny.boxNumber).toBe(1)
+    expect(updatedShiny.boxSlot).toBe(0)
+  })
+
+  it('rejects swapping when either entry has no box position yet', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const regular = await findBulbasaurEntry(storage, false)
+    const shiny = await findBulbasaurEntry(storage, true)
+    await storage.setEntryStorageLocation(regular.id, location.id)
+    await storage.setEntryStorageLocation(shiny.id, location.id)
+    await storage.setEntryBoxPosition(regular.id, 1, 0)
+
+    await expect(storage.swapEntryBoxPositions(regular.id, shiny.id)).rejects.toThrow()
+  })
+})

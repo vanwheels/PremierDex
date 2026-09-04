@@ -109,15 +109,14 @@ export interface DexSort {
  * order, with grouped-mode regional clusters appended after). */
 export const DEFAULT_DEX_SORT: DexSort | null = null
 
-/** One occupied slot in a Box view grid (Leg 6 of the Box Arrangement milestone) — always
- * backed by a real CollectionEntry, owned or not (an unowned placeholder can occupy a box
- * slot too, see CollectionEntry's doc comment). Denormalizes the same display fields
- * DexRowData/CollectionRowData already carry rather than joining Species/Form at render
- * time, same convention both of those follow. */
-export interface BoxCell {
-  boxNumber: number
-  /** 0-based position within the box, matching CollectionEntry.boxSlot. */
-  slot: number
+/** Display info for one real individual, resolved from its CollectionEntry + Species/Form
+ * (Leg 6 of the Box Arrangement milestone) — always backed by a real CollectionEntry,
+ * owned or not (an unowned placeholder can occupy a box slot too, see CollectionEntry's
+ * doc comment). Denormalizes the same display fields DexRowData/CollectionRowData already
+ * carry rather than joining Species/Form at render time, same convention both of those
+ * follow. Shared base for BoxCell (a placed individual) and UnboxedEntry (Leg 7: one not
+ * yet placed in any box) — see buildBoxes.ts's buildEntryDisplayInfo. */
+export interface EntryDisplayInfo {
   entry: CollectionEntry
   dexNumber: number
   /** Species + form name, already carrying the entry's own gender symbol and shiny
@@ -131,6 +130,18 @@ export interface BoxCell {
   shinyLocked: boolean
   alwaysShiny: boolean
 }
+
+/** One occupied slot in a Box view grid. */
+export interface BoxCell extends EntryDisplayInfo {
+  boxNumber: number
+  /** 0-based position within the box, matching CollectionEntry.boxSlot. */
+  slot: number
+}
+
+/** One entry in a Storage Location with no box position yet (Leg 7 of the Box Arrangement
+ * milestone) — DexBoxTray's drag source for the "add to box" flow. See buildBoxes.ts's
+ * buildUnboxedEntries. */
+export type UnboxedEntry = EntryDisplayInfo
 
 /** One paginated box (see buildBoxes.ts's BOX_SIZE) — `cells` is always exactly
  * BOX_SIZE long, indexed by slot, with `null` for an empty slot. */

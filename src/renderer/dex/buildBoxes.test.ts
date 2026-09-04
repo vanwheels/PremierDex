@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
-import { BOX_SIZE, buildBoxes } from './buildBoxes'
+import { BOX_SIZE, buildBoxes, buildUnboxedEntries } from './buildBoxes'
 
 const SPECIES: Species[] = [
   { id: 1, name: 'bulbasaur', generation: 1, collapsedDisplayFormId: null },
@@ -110,5 +110,37 @@ describe('buildBoxes', () => {
     const entry = makeEntry({ id: 1, formId: 3, gender: 'female', shiny: true, boxNumber: 1, boxSlot: 0 })
     const boxes = buildBoxes(SPECIES, [...FORMS, genderedForm], [entry])
     expect(boxes[0].cells[0]?.displayName).toBe('Pikachu ♀ ✨')
+  })
+})
+
+describe('buildUnboxedEntries', () => {
+  it('excludes entries that already have a box position', () => {
+    const entries = [
+      makeEntry({ id: 1, formId: 1, boxNumber: 1, boxSlot: 0 }),
+      makeEntry({ id: 2, formId: 2 })
+    ]
+    const result = buildUnboxedEntries(SPECIES, FORMS, entries)
+    expect(result.map((e) => e.entry.id)).toEqual([2])
+  })
+
+  it('includes an unowned placeholder entry', () => {
+    const entry = makeEntry({ id: 1, formId: 1, owned: false })
+    const result = buildUnboxedEntries(SPECIES, FORMS, [entry])
+    expect(result).toHaveLength(1)
+    expect(result[0].entry.owned).toBe(false)
+  })
+
+  it('skips an entry whose form or species cannot be resolved', () => {
+    const entry = makeEntry({ id: 1, formId: 999 })
+    expect(buildUnboxedEntries(SPECIES, FORMS, [entry])).toEqual([])
+  })
+
+  it('sorts by dex number, then display name', () => {
+    const entries = [
+      makeEntry({ id: 1, formId: 2 }), // pikachu, dex 25
+      makeEntry({ id: 2, formId: 1 }) // bulbasaur, dex 1
+    ]
+    const result = buildUnboxedEntries(SPECIES, FORMS, entries)
+    expect(result.map((e) => e.entry.id)).toEqual([2, 1])
   })
 })

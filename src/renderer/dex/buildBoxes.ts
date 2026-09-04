@@ -1,6 +1,6 @@
 import type { CollectionEntry, Form, Gender, Species } from '@shared/types/pokemon'
 import { formDisplayName, speciesDisplayName } from './formNames'
-import type { Box, BoxCell } from './types'
+import type { Box, BoxCell, EntryDisplayInfo, UnboxedEntry } from './types'
 
 /** HOME's own box dimensions (Leg 3 of this milestone decided the grid shape ahead of
  * this leg's UI) — 5 rows x 6 columns, 0-indexed slots 0-29 top-left to bottom-right. */
@@ -14,11 +14,11 @@ function genderSuffix(gender: Gender): string {
   return ''
 }
 
-function buildCell(boxNumber: number, slot: number, entry: CollectionEntry, species: Species, form: Form): BoxCell {
+/** Shared by buildCell (a placed individual) and buildUnboxedEntries (Leg 7: one not yet
+ * placed) — see EntryDisplayInfo's own doc comment. */
+function buildEntryDisplayInfo(entry: CollectionEntry, species: Species, form: Form): EntryDisplayInfo {
   const baseName = formDisplayName(speciesDisplayName(species.name), form)
   return {
-    boxNumber,
-    slot,
     entry,
     dexNumber: species.id,
     displayName: `${baseName}${genderSuffix(entry.gender)}${entry.shiny ? ' ✨' : ''}`,
@@ -29,6 +29,10 @@ function buildCell(boxNumber: number, slot: number, entry: CollectionEntry, spec
     shinyLocked: form.shinyLocked,
     alwaysShiny: form.alwaysShiny
   }
+}
+
+function buildCell(boxNumber: number, slot: number, entry: CollectionEntry, species: Species, form: Form): BoxCell {
+  return { ...buildEntryDisplayInfo(entry, species, form), boxNumber, slot }
 }
 
 /**
@@ -77,4 +81,28 @@ export function buildBoxes(species: Species[], forms: Form[], entries: Collectio
   return [...boxCells.entries()]
     .sort(([a], [b]) => a - b)
     .map(([boxNumber, cells]) => ({ boxNumber, cells }))
+}
+
+/**
+ * Entries in a location-scoped list with no box position yet (Leg 7 of the Box
+ * Arrangement milestone) — DexBoxTray's drag source for placing an entry into a box.
+ * Same species/form resolution as buildBoxes, and same "entries are already
+ * location-scoped by the caller" assumption. Sorted dex-number-then-name, same comparator
+ * convention as buildCollectionGroups.ts's row sort.
+ */
+export function buildUnboxedEntries(species: Species[], forms: Form[], entries: CollectionEntry[]): UnboxedEntry[] {
+  const speciesById = new Map(species.map((s) => [s.id, s]))
+  const formsById = new Map(forms.map((f) => [f.id, f]))
+
+  const result: UnboxedEntry[] = []
+  for (const entry of entries) {
+    if (entry.boxNumber !== null) continue
+    const form = formsById.get(entry.formId)
+    if (!form) continue
+    const sp = speciesById.get(form.speciesId)
+    if (!sp) continue
+    result.push(buildEntryDisplayInfo(entry, sp, form))
+  }
+
+  return result.sort((a, b) => a.dexNumber - b.dexNumber || a.displayName.localeCompare(b.displayName))
 }
