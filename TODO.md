@@ -25,13 +25,6 @@ single-shiny-per-species schema can't represent at all. (Hybrid view shipped in 
 instead — Vanny only ever described it as "the list, just sprites," so the same ceiling
 didn't misrepresent it.)
 
-### [Drop CollectionEntry's owned-copy uniqueness constraint] — Leg 2
-Schema/migration only, no UI changes. Rebuild CollectionEntry off `UNIQUE(form_id,
-gender, shiny)` (SQLite table-rebuild migration, same hazard class as schema.ts's
-CHECK-widen rebuilds) and turn "owned" into a per-individual count/list rather than a
-boolean. Highest-hazard piece of this milestone — isolated in its own leg deliberately.
-Last touched: 2026-09-03. Re-check count: 0.
-
 ### [Storage Locations get box sub-units] — Leg 3
 Data layer only. A box becomes a numbered sub-unit of a Storage Location (e.g. "HOME Box
 3") with real per-entry slot positions; unowned species can occupy a slot as a

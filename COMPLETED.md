@@ -10,6 +10,16 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Drop CollectionEntry's owned-copy uniqueness constraint] — Leg 2 (2026-09-03)
+Schema/migration only, no UI changes. Dropped collection_entries' `UNIQUE(form_id,
+gender, shiny)` via a table-rebuild migration (same hazard class as schema.ts's
+CHECK-widen rebuilds), gated on detecting the constraint in the stored CREATE TABLE SQL.
+seed.ts's placeholder insert switched from `INSERT OR IGNORE` (which relied on that
+constraint to dedupe) to an explicit `NOT EXISTS` guard. No "owned" boolean-to-count
+schema change was needed: `setOwned` already operates per-row-id and Collection view
+already renders one row per CollectionEntry id, so duplicates already display correctly
+once the constraint stops blocking them. See commit `7f5f1cd`.
+
 ## [Split App.tsx ahead of a third view-mode branch] — Leg 1 (2026-09-03)
 Pure refactor, no behavior change. Pulled App.tsx apart into `useCollectionData` (all
 fetched data — species/forms/entries/storage locations/trainer profiles/species
