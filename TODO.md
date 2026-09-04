@@ -1,13 +1,78 @@
 # TODO
 
-## [Bulk move/duplicate entries between storage locations] — unscheduled
+## Current Milestone: Box Arrangement / Real Inventory Data Model
+
+Continuation of the User-Customizable Dex Layout work, split out of Phase 1 during its
+2026-09-03 leg-planning pass (see that milestone's
+[post-mortem](docs/postmortems/user-customizable-dex-layout-phase-1.md)) — the harder
+half of Vanny's original ask, deliberately deferred past Phase 1's read-only view modes.
+Legs planned 2026-09-03. Vanny's calls so far: (1) duplicate owned copies of the same
+species/form are real tracked individuals, not a visual trick — drop CollectionEntry's
+`UNIQUE(form_id, gender, shiny)` constraint (a SQLite table-rebuild migration, same class
+of hazard as the CHECK-widen rebuilds already handled in schema.ts) and turn "owned" into
+a per-individual count/list rather than a boolean, the way the Collection view already
+models entries; (2) arranged boxes are the same thing as real Storage Locations, not a
+separate planning concept — a box becomes a numbered sub-unit of a Storage Location (e.g.
+HOME Box 3) with real per-entry slot positions, and unowned species can still be placed
+into a slot as a greyed-out placeholder; (3) Box view editing uses drag-and-drop, decided
+2026-09-03 ahead of Leg 7.
+Box view mode itself (a HOME-style 30-cell grid, 5 rows x 6 columns, sprite-only,
+right-click action menu) moved into this milestone from Phase 1 on 2026-09-03: Vanny
+pointed out a real box can hold several regular and shiny copies of one species mixed
+together (e.g. a box of assorted shiny/non-shiny Woopers) — Box view's entire premise is
+showing real per-individual box contents, which the pre-Leg-2 single-regular/
+single-shiny-per-species schema can't represent at all. (Hybrid view shipped in Phase 1
+instead — Vanny only ever described it as "the list, just sprites," so the same ceiling
+didn't misrepresent it.)
+
+### [Drop CollectionEntry's owned-copy uniqueness constraint] — Leg 2
+Schema/migration only, no UI changes. Rebuild CollectionEntry off `UNIQUE(form_id,
+gender, shiny)` (SQLite table-rebuild migration, same hazard class as schema.ts's
+CHECK-widen rebuilds) and turn "owned" into a per-individual count/list rather than a
+boolean. Highest-hazard piece of this milestone — isolated in its own leg deliberately.
+Last touched: 2026-09-03. Re-check count: 0.
+
+### [Storage Locations get box sub-units] — Leg 3
+Data layer only. A box becomes a numbered sub-unit of a Storage Location (e.g. "HOME Box
+3") with real per-entry slot positions; unowned species can occupy a slot as a
+greyed-out placeholder. Depends on Leg 2's per-individual model. Still no Box view UI.
+Last touched: 2026-09-03. Re-check count: 0.
+
+### [Fix downstream logic assuming one entry per species] — Leg 4
+Audit and update completionStats.ts, filterDexSections.ts, invalidCombo.ts, and
+autoAssignLocation.ts against the per-individual model from Legs 2-3.
+Last touched: 2026-09-03. Re-check count: 0.
+
+### [Export/import natural-key rework] — Leg 5
+exportCollection/importCollection's natural-key matching is currently keyed on
+form_id/gender/shiny, which collides once duplicates are real (post Leg 2). Needs a new
+per-individual key.
+Last touched: 2026-09-03. Re-check count: 0.
+
+### [Box view UI: grid + pagination] — Leg 6
+Read-only first. HOME-style grid (5 rows x 6 columns, sprite-only) reusing Hybrid's tile
+rendering (DexHybridGrid) per the Phase 1 post-mortem's dependency note, plus pagination.
+No editing yet.
+Last touched: 2026-09-03. Re-check count: 0.
+
+### [Box view editing: drag-and-drop add/remove/swap] — Leg 7
+Drag-and-drop add/remove/swap flow plus the right-click action menu, on top of Leg 6's
+grid. UX approach (drag-and-drop over a menu-based flow) decided 2026-09-03.
+Last touched: 2026-09-03. Re-check count: 0.
+
+## Unscheduled
+
+Standalone items not part of the current milestone — pick up opportunistically or when
+explicitly prioritized.
+
+### [Bulk move/duplicate entries between storage locations] — unscheduled
 Raised by Vanny 2026-09-03 while scoping the Unassigned-backfill fix (Leg 6): a way to
 move or duplicate a batch of entries from one storage location to another (not just the
 existing per-row picker) would help now that the 0->1 location auto-backfill only ever
 fires once. Not scoped or designed — just a decent-feature idea, not urgent.
 Last touched: 2026-09-03. Re-check count: 0.
 
-## [App icon] — unscheduled
+### [App icon] — unscheduled
 No custom icon exists yet (`build/icon.png` per electron-builder convention, matching
 GW2-Squaded) — packaged builds currently ship with Electron's default icon. Not blocking
 local/internal packaging, so left off the leg sequence. Confirmed 2026-09-02: stays
@@ -17,7 +82,7 @@ Blocked: needs production-quality PokéBall-or-similar artwork before a real pub
 release.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [Virtualize the Dex Table body] — unscheduled
+### [Virtualize the Dex Table body] — unscheduled
 Leg 2 (2026-09-03) fixed the worst of the resize/tab-switch lag (memoized data pipeline
 was already fine; the real costs were a full unmount/remount on tab switch and
 table-layout: auto forcing per-row remeasurement on resize) — see COMPLETED.md. A smaller
@@ -32,7 +97,7 @@ Confirmed 2026-09-03: Vanny finds the post-Leg-2 delay acceptable for now — pi
 only if it becomes a real problem, not proactively.
 Last touched: 2026-09-03. Re-check count: 0.
 
-## [Split schema.ts] — unscheduled
+### [Split schema.ts] — unscheduled
 Crossed the ~300-line soft cap at Leg 5 (341 lines, still well under the 500 hard cap) —
 each closed-set CHECK column (language, caught_ball) has picked up its own "ALTER-time
 CHECK can't be widened later" rebuild block over time, and that pattern will likely repeat
@@ -41,69 +106,28 @@ CHECK-widen rebuild blocks (sid-4294, caught_ball) into their own module alongsi
 retrofit ALTERs, mirroring the sqlite-storage.ts split idea below.
 Confirmed 2026-09-03: deliberately kept out of the User-Customizable Dex Layout milestone
 — orthogonal code health, not blocking. Stays standalone; pick up opportunistically if a
-leg in that milestone happens to touch this file anyway.
+leg in the current milestone happens to touch this file anyway.
 Last touched: 2026-09-03. Re-check count: 0.
 
-## [Split sqlite-storage.ts] — unscheduled
-Already over the ~300-line soft cap before Leg 3 (415 lines) and now at 457 after Leg 3's
+### [Split sqlite-storage.ts] — unscheduled
+Already over the ~300-line soft cap before Leg 3 (415 lines) and now at 471 after later
 storage-location FK/met-location additions — still under the 500-line hard cap, so not
 urgent, but growing. Candidate split: pull the exportCollection/importCollection backup
 logic (and its natural-key matching helpers) into its own module, mirroring how
 schema.ts's retrofit blocks already got split out into schema-ball.test.ts/
-schema-language.test.ts on the test side.
+schema-language.test.ts on the test side. Current milestone's Leg 5 (export/import
+natural-key rework) touches this same logic — worth reassessing whether to fold the split
+into that leg when it starts.
 Confirmed 2026-09-03: deliberately kept out of the User-Customizable Dex Layout milestone
-— orthogonal code health, not blocking. Stays standalone; pick up opportunistically if a
-leg in that milestone happens to touch this file anyway.
-Last touched: 2026-09-03. Re-check count: 0.
-
-## [Split App.tsx] — unscheduled
-Crossed the ~300-line soft cap at Leg 8 (303 lines, well under the 500 hard cap) — Leg 8
-added a second `hidden={viewMode !== ...}` view-mode branch (DexHybridGrid) alongside
-DexTable's existing one, and any future view mode (e.g. Box) would add a third. No
-concrete split candidate yet; worth a look if another leg pushes this further before a
-milestone boundary forces the question.
+— orthogonal code health, not blocking.
 Last touched: 2026-09-03. Re-check count: 0.
 
 ## Future Milestones (unscheduled)
 
 Large items Vanny explicitly flagged as out of scope for a past milestone — logged here
-so they aren't lost, not queued into a leg yet. Candidates for whatever gets scoped next,
-now that User-Customizable Dex Layout (Phase 1: View Modes) has shipped.
+so they aren't lost, not queued into a leg yet.
 
-## [Box Arrangement / Real Inventory Data Model] — future milestone
-Split out of the User-Customizable Dex Layout (Phase 1: View Modes) milestone during its
-2026-09-03 leg-planning pass (see that milestone's
-[post-mortem](docs/postmortems/user-customizable-dex-layout-phase-1.md)) — the harder
-half of Vanny's original ask, deliberately deferred past Phase 1's read-only view modes.
-Vanny's calls so far: (1) duplicate owned copies of the same species/form should be real
-tracked individuals, not a visual trick — drop CollectionEntry's `UNIQUE(form_id, gender,
-shiny)` constraint (a SQLite table-rebuild migration, same class of hazard as the
-CHECK-widen rebuilds already handled in schema.ts) and turn "owned" into a per-individual
-count/list rather than a boolean, the way the Collection view already models entries; (2)
-arranged boxes are the same thing as real Storage Locations, not a separate planning
-concept — a box becomes a numbered sub-unit of a Storage Location (e.g. HOME Box 3) with
-real per-entry slot positions, and unowned species can still be placed into a slot as a
-greyed-out placeholder.
-Box view mode itself (a HOME-style 30-cell grid, 5 rows x 6 columns, sprite-only,
-right-click action menu) moved here from Phase 1 the same day, 2026-09-03: Vanny pointed
-out a real box can hold several regular and shiny copies of one species mixed together
-(e.g. a box of assorted shiny/non-shiny Woopers) — Box view's entire premise is showing
-real per-individual box contents, which today's single-regular/single-shiny-per-species
-schema can't represent at all. Building it before this milestone's data model exists
-would ship something that calls itself a box but can never look like one. (Hybrid view
-shipped in Phase 1 instead — Vanny only ever described it as "the list, just sprites," so
-the same ceiling doesn't misrepresent it.)
-Needs its own scoping pass before picked up: this touches completionStats.ts,
-filterDexSections.ts, invalidCombo.ts, autoAssignLocation.ts, and
-exportCollection/importCollection's natural-key matching (currently keyed on
-form_id/gender/shiny, which collides once duplicates are real) — plus the editing UX
-itself (drag-and-drop vs. a menu-based add/remove/swap flow, per Vanny's own "without
-overcomplicating UI" concern) and Box view's own build (grid, pagination, right-click
-menu) on top of the new data. Depends on Phase 1's Hybrid grid component existing first
-as a starting point, since Box view's tile rendering will likely share code with it.
-Last touched: 2026-09-03. Re-check count: 0.
-
-## [Dex completeness tier migration] — future milestone
+### [Dex completeness tier migration] — future milestone
 Migrating a collection from a regular living dex/shiny living dex (species-only) up to a
 complete living dex/shiny living dex (form + gender included), and figuring out whether
 downgrading is even possible. Upgrading needs a way to flag previously-unspecified-gender
@@ -111,14 +135,14 @@ entries with the correct gender the user actually possesses. Vanny called this o
 large and needing real scoping work before it's picked up — not for this milestone.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [Ribbons/Alpha/size/capture-date tracking] — future milestone
+### [Ribbons/Alpha/size/capture-date tracking] — future milestone
 Ribbon tracking, with an Alpha marker bundled into the same pass since both are per-entry
 badges. Size classification and capture date noted as possible additions at the same
 time, capture date flagged by Vanny as very low priority. All blocked on Ribbons being
 scoped first.
 Last touched: 2026-09-02. Re-check count: 0.
 
-## [Deeper per-game validity: form/gender legality + curated Met Location list] — future milestone
+### [Deeper per-game validity: form/gender legality + curated Met Location list] — future milestone
 Split out of a past milestone during its 2026-09-02 leg-planning pass: the initial
 validity dataset only covers species-availability-per-game + Legends Arceus's ball pool,
 and Met Location ships as free text — both deliberately narrowed so that milestone's legs
@@ -135,5 +159,5 @@ reachable by evolving a catchable pre-evolution even when the evolved form itsel
 the wild encounter table (e.g. Ivysaur logged as Ultra Moon origin — not directly
 catchable there, but reachable by evolving a caught Bulbasaur). Both are obtainability
 gaps in the current data model, not edge cases. Vanny confirmed 2026-09-03 this stays
-queued behind the User-Customizable Dex Layout milestone despite the urgency.
+queued behind the current milestone despite the urgency.
 Last touched: 2026-09-03. Re-check count: 0.

@@ -10,6 +10,16 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. See `MILESTONES.md` for the shipped-milestone
 index.
 
+## [Split App.tsx ahead of a third view-mode branch] — Leg 1 (2026-09-03)
+Pure refactor, no behavior change. Pulled App.tsx apart into `useCollectionData` (all
+fetched data — species/forms/entries/storage locations/trainer profiles/species
+availability — plus the CRUD operations that mutate it, shared across all four top-level
+views) and `dex/LivingDexView.tsx` (the Living Dex tab's own state — view-mode, filters/
+sort, selected location tab — plus its derived memos and the List/Hybrid `hidden`-toggle
+markup); App.tsx itself is left as shell: view-tab nav and per-view mount/hide wiring.
+303 -> 103/140/170 lines across the three files. Leg 6's Box view branch lands inside
+LivingDexView rather than pushing App back over cap. See commit `<pending>`.
+
 ## [Hybrid view mode] — Leg 8 (2026-09-03)
 Added `buildHybridTiles` (pure, tested) flattening `visibleSections.rows` into up to two
 tiles per row (regular/shiny slot) — a real sprite when the slot's entry is owned, a
