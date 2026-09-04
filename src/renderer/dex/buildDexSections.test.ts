@@ -85,6 +85,31 @@ describe('buildDexSections', () => {
     expect(rows[0].regular?.id).toBe(10)
   })
 
+  it('picks an owned entry over an unowned one sharing a slot (Leg 4: duplicates are real post Leg 2)', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base' })]
+    const entries: CollectionEntry[] = [
+      // Seed placeholder, unowned, lowest id — inserted first, same as a real seed run.
+      makeEntry({ id: 10, formId: 1, gender: 'unknown', shiny: false, owned: false }),
+      // A duplicate owned individual added later, higher id.
+      makeEntry({ id: 11, formId: 1, gender: 'unknown', shiny: false, owned: true, nickname: 'Sparky' })
+    ]
+    const sections = buildDexSections(SPECIES, forms, entries, OPTIONS_DEFAULT)
+    const row = sections.find((s) => s.speciesId === 25)!.rows[0]
+    expect(row.regular?.id).toBe(11)
+    expect(row.regular?.owned).toBe(true)
+  })
+
+  it('keeps the already-picked owned entry when a further owned duplicate appears in the same slot', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base' })]
+    const entries: CollectionEntry[] = [
+      makeEntry({ id: 10, formId: 1, gender: 'unknown', shiny: false, owned: true, nickname: 'First' }),
+      makeEntry({ id: 11, formId: 1, gender: 'unknown', shiny: false, owned: true, nickname: 'Second' })
+    ]
+    const sections = buildDexSections(SPECIES, forms, entries, OPTIONS_DEFAULT)
+    const row = sections.find((s) => s.speciesId === 25)!.rows[0]
+    expect(row.regular?.id).toBe(10)
+  })
+
   it('splits a gender-diff form into ♂/♀ rows when splitGenderRows is on', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base', hasGenderDifference: true })]
     const entries: CollectionEntry[] = [

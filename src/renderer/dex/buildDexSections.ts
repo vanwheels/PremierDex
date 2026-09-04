@@ -19,7 +19,18 @@ interface EntrySlot {
 type EntriesByGender = Map<Gender, EntrySlot>
 
 /** Exported for completionStats.ts (Leg 17), which needs the same per-form/per-gender
- * entry lookup but over the raw entry set rather than shaped display rows. */
+ * entry lookup but over the raw entry set rather than shaped display rows.
+ *
+ * One form/gender/shiny slot can now hold more than one CollectionEntry row — duplicate
+ * owned individuals are real since Leg 2 dropped the DB's uniqueness constraint, so a
+ * slot can see an owned duplicate alongside the unowned seed placeholder (or, once a
+ * future leg adds a way to add further duplicates, more than one owned row). This index
+ * still only ever surfaces one representative entry per slot — full per-individual
+ * enumeration is Box view's job, not List/Hybrid's (see the milestone note in TODO.md) —
+ * but it must pick an *owned* entry whenever one exists, never an unowned placeholder
+ * merely because it happened to sort last. First-owned-wins keeps that deterministic;
+ * further owned duplicates in the same slot are invisible here for the same reason a
+ * second duplicate's nickname doesn't get its own List-view cell. */
 export function indexEntriesByForm(entries: CollectionEntry[]): Map<number, EntriesByGender> {
   const byForm = new Map<number, EntriesByGender>()
   for (const entry of entries) {
@@ -33,8 +44,11 @@ export function indexEntriesByForm(entries: CollectionEntry[]): Map<number, Entr
       slot = { regular: null, shiny: null }
       byGender.set(entry.gender, slot)
     }
-    if (entry.shiny) slot.shiny = entry
-    else slot.regular = entry
+    if (entry.shiny) {
+      if (slot.shiny === null || (!slot.shiny.owned && entry.owned)) slot.shiny = entry
+    } else if (slot.regular === null || (!slot.regular.owned && entry.owned)) {
+      slot.regular = entry
+    }
   }
   return byForm
 }

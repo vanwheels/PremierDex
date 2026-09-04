@@ -48,6 +48,17 @@ describe('computeCompletionStats', () => {
     expect(stats.overall.regular.total).toBe(1)
   })
 
+  it('counts a unit owned when an owned duplicate shares its slot with an unowned placeholder (Leg 4)', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base' })]
+    const entries: CollectionEntry[] = [
+      makeEntry({ id: 10, formId: 1, owned: false }),
+      makeEntry({ id: 11, formId: 1, owned: true })
+    ]
+    const stats = computeCompletionStats(forms, entries)
+    expect(stats.overall.regular.total).toBe(1)
+    expect(stats.overall.regular.owned).toBe(1)
+  })
+
   it('counts a gender-diff form as one unit, owned if either gender is, when splitByGender is off', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base', hasGenderDifference: true })]
     const entries: CollectionEntry[] = [
