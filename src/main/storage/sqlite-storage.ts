@@ -166,20 +166,36 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   // in this single-window app, but not impossible) could mean an entry named in it got
   // boxed, unowned, or deleted since. Clears the fulfilled placeholder same as
   // setEntryBoxPositionStmt/fillBoxSlotsTx's own callers do.
-  // Returns the subset of placements actually written — the caller needs this (not just a
-  // void/all-or-nothing signal) so it only reports success for, and only clears local
-  // placeholder state for, placements that really landed.
+  // Returns the subset of placements actually written plus, for anything skipped, why —
+  // added while diagnosing a Leg 7 bug report (an entry silently staying unboxed with no
+  // console error): the caller needs a reason, not just a void/all-or-nothing signal, to
+  // tell a stale-state skip apart from a real bug in what computeFillInPlacements picked.
   const fillInPlaceholdersTx = db.transaction(
     (storageLocationId: number, placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>) => {
       const applied: number[] = []
+      const skipped: Array<{ entryId: number; reason: string }> = []
       for (const p of placements) {
         const entry = getEntryStmt.get(p.entryId) as CollectionEntryRow | undefined
-        if (!entry || !entry.owned || entry.box_number !== null) continue
+        if (!entry) {
+          skipped.push({ entryId: p.entryId, reason: 'not_found' })
+          continue
+        }
+        if (!entry.owned) {
+          skipped.push({ entryId: p.entryId, reason: 'not_owned' })
+          continue
+        }
+        if (entry.box_number !== null) {
+          skipped.push({
+            entryId: p.entryId,
+            reason: `already_boxed (storageLocationId=${entry.storage_location_id}, box=${entry.box_number}:${entry.box_slot})`
+          })
+          continue
+        }
         fillInPlaceholderEntryStmt.run({ id: p.entryId, storageLocationId, boxNumber: p.boxNumber, boxSlot: p.boxSlot })
         clearBoxPlaceholderStmt.run({ storageLocationId, boxNumber: p.boxNumber, boxSlot: p.boxSlot })
         applied.push(p.entryId)
       }
-      return applied
+      return { applied, skipped }
     }
   )
   // Clones one entry into a target storage location — backs duplicateStorageLocationTx
@@ -428,9 +444,12 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     async fillInPlaceholders(
       storageLocationId: number,
       placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
-    ): Promise<CollectionEntry[]> {
-      const appliedIds = fillInPlaceholdersTx(storageLocationId, placements)
-      return appliedIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
+    ): Promise<{ applied: CollectionEntry[]; skipped: Array<{ entryId: number; reason: string }> }> {
+      const { applied, skipped } = fillInPlaceholdersTx(storageLocationId, placements)
+      return {
+        applied: applied.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow)),
+        skipped
+      }
     },
 
     // exportCollection/importCollection live in collection-backup.ts (Leg 3 of the Box

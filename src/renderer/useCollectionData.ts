@@ -212,15 +212,20 @@ export function useCollectionData(): CollectionData {
 
   // "Fill In" (Leg 7 of the Dex completeness tier migration) — merges the moved entries
   // into local state (same updatedById pattern as bulkSetEntryGender/bulkMoveEntries
-  // above). fillInPlaceholders only resolves with the placements that actually landed
-  // (see its own doc comment — a placement can be silently skipped against stale state),
-  // so which placeholders to drop locally is read back off `updated`'s entry ids rather
-  // than assumed from the full `placements` list, or a still-a-ghost placeholder could get
-  // dropped from local state despite surviving in the DB.
+  // above). fillInPlaceholders only resolves `applied` for the placements that actually
+  // landed (see its own doc comment — a placement can be skipped against stale state), so
+  // which placeholders to drop locally is read back off `applied`'s entry ids rather than
+  // assumed from the full `placements` list, or a still-a-ghost placeholder could get
+  // dropped from local state despite surviving in the DB. `skipped` is logged rather than
+  // silently dropped — added while diagnosing a report of an entry staying unboxed with no
+  // visible error, so a repeat gives a concrete reason instead of another guess.
   const fillInPlaceholders = useCallback(async (storageLocationId: number, placements: FillInPlacement[]): Promise<void> => {
     if (placements.length === 0) return
-    const updated = await window.premierDex.fillInPlaceholders(storageLocationId, placements)
-    const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
+    const { applied, skipped } = await window.premierDex.fillInPlaceholders(storageLocationId, placements)
+    if (skipped.length > 0) {
+      console.warn('Fill In: skipped placement(s)', skipped)
+    }
+    const updatedById = new Map(applied.map((entry) => [entry.id, entry]))
     setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
     const filledSlots = new Set(
       placements.filter((p) => updatedById.has(p.entryId)).map((p) => `${storageLocationId}:${p.boxNumber}:${p.boxSlot}`)

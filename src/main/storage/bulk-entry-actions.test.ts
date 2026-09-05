@@ -145,10 +145,11 @@ describe('fillInPlaceholders', () => {
     await storage.setOwned(entries[0].id, true)
     await storage.setBoxPlaceholder(location.id, 1, 5, entries[0].formId, 'unknown', false)
 
-    const updated = await storage.fillInPlaceholders(location.id, [{ entryId: entries[0].id, boxNumber: 1, boxSlot: 5 }])
+    const { applied, skipped } = await storage.fillInPlaceholders(location.id, [{ entryId: entries[0].id, boxNumber: 1, boxSlot: 5 }])
 
-    expect(updated).toHaveLength(1)
-    expect(updated[0]).toMatchObject({ storageLocationId: location.id, boxNumber: 1, boxSlot: 5 })
+    expect(applied).toHaveLength(1)
+    expect(applied[0]).toMatchObject({ storageLocationId: location.id, boxNumber: 1, boxSlot: 5 })
+    expect(skipped).toEqual([])
     expect(await storage.listBoxPlaceholders()).toEqual([])
   })
 
@@ -162,9 +163,10 @@ describe('fillInPlaceholders', () => {
     await storage.setEntryBoxPosition(entries[0].id, 1, 0)
     await storage.setBoxPlaceholder(home.id, 1, 5, entries[0].formId, 'unknown', false)
 
-    const updated = await storage.fillInPlaceholders(home.id, [{ entryId: entries[0].id, boxNumber: 1, boxSlot: 5 }])
+    const { applied, skipped } = await storage.fillInPlaceholders(home.id, [{ entryId: entries[0].id, boxNumber: 1, boxSlot: 5 }])
 
-    expect(updated).toEqual([])
+    expect(applied).toEqual([])
+    expect(skipped).toEqual([{ entryId: entries[0].id, reason: expect.stringContaining('already_boxed') }])
     expect(await storage.listBoxPlaceholders()).toHaveLength(1)
     const untouched = (await bulbasaurEntries(storage)).find((e) => e.id === entries[0].id)!
     expect(untouched.storageLocationId).toBe(box.id)
@@ -177,10 +179,23 @@ describe('fillInPlaceholders', () => {
     const entries = await bulbasaurEntries(storage)
     await storage.setBoxPlaceholder(location.id, 1, 5, entries[0].formId, 'unknown', false)
 
-    const updated = await storage.fillInPlaceholders(location.id, [{ entryId: entries[0].id, boxNumber: 1, boxSlot: 5 }])
+    const { applied, skipped } = await storage.fillInPlaceholders(location.id, [{ entryId: entries[0].id, boxNumber: 1, boxSlot: 5 }])
 
-    expect(updated).toEqual([])
+    expect(applied).toEqual([])
+    expect(skipped).toEqual([{ entryId: entries[0].id, reason: 'not_owned' }])
     expect(await storage.listBoxPlaceholders()).toHaveLength(1)
+  })
+
+  it('skips a placement naming an entry id that does not exist', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const entries = await bulbasaurEntries(storage)
+    await storage.setBoxPlaceholder(location.id, 1, 5, entries[0].formId, 'unknown', false)
+
+    const { applied, skipped } = await storage.fillInPlaceholders(location.id, [{ entryId: 999_999, boxNumber: 1, boxSlot: 5 }])
+
+    expect(applied).toEqual([])
+    expect(skipped).toEqual([{ entryId: 999_999, reason: 'not_found' }])
   })
 })
 

@@ -35,7 +35,7 @@ export interface AppBridge extends UpdaterBridge {
   fillInPlaceholders(
     storageLocationId: number,
     placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
-  ): Promise<CollectionEntry[]>
+  ): Promise<{ applied: CollectionEntry[]; skipped: Array<{ entryId: number; reason: string }> }>
   setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species>
   /** Leg 6: static per-game species-availability data, for the Living Dex's derived
    * invalid-combo badge (see renderer/dex/invalidCombo.ts). Not DB-backed — see

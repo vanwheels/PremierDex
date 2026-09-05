@@ -70,15 +70,18 @@ export interface StorageAdapter {
    * currently-unboxed individual per fillable placeholder), moves that entry into
    * `storageLocationId` at the given box position and clears whatever placeholder was
    * "planning" that slot — same real-entry-fulfills-the-plan clear setEntryBoxPosition/
-   * fillBoxSlots already do. Silently skips a placement whose entry no longer qualifies
-   * (not found, not owned, or already boxed elsewhere) rather than aborting the whole
-   * batch — same stale-state tolerance as setBoxPlaceholders. Resolves with every touched
-   * entry (in `placements` order) so a caller can merge them into local state the same way
-   * bulkSetEntryStorageLocation/bulkSetEntryGender already do. */
+   * fillBoxSlots already do. Skips (rather than aborts the whole batch on) a placement
+   * whose entry no longer qualifies — same stale-state tolerance as setBoxPlaceholders —
+   * but unlike that method, reports *why* each one was skipped (`not_found`/`not_owned`/
+   * `already_boxed (...)`), added while diagnosing a report of an entry staying unboxed
+   * with no visible error: a caller can log `skipped` to tell a real bug in what it asked
+   * to fill from an ordinary stale-state race. `applied` carries every touched entry so a
+   * caller can merge it into local state the same way bulkSetEntryStorageLocation/
+   * bulkSetEntryGender already do. */
   fillInPlaceholders(
     storageLocationId: number,
     placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
-  ): Promise<CollectionEntry[]>
+  ): Promise<{ applied: CollectionEntry[]; skipped: Array<{ entryId: number; reason: string }> }>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>
