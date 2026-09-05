@@ -127,15 +127,14 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       setEntryStorageLocationStmt.run({ id, storageLocationId })
     }
   })
-  // Clones a batch of entries into a target storage location (same item as above) — the
-  // first UI path that can ever create a real duplicate individual; see schema.ts's
-  // dropped UNIQUE(form_id, gender, shiny) and commit 7f5f1cd's message, which left this
-  // as future work. Copies every field except id/storage_location_id/box_number/box_slot
-  // (a straight column-for-column carry, deliberately not itemized field-by-field so a
-  // future CollectionEntry column doesn't silently fail to carry over): the clone is a
-  // full, independent individual sharing the source's origin/nickname/etc, landing
-  // unassigned-within-location same as a bulk move — the user places it manually
-  // afterward, same as any newly-moved entry.
+  // Clones one entry into a target storage location — backs duplicateStorageLocationTx
+  // below (Storage Locations tab's "Duplicate" button). Copies every field except
+  // id/storage_location_id/box_number/box_slot (a straight column-for-column carry,
+  // deliberately not itemized field-by-field so a future CollectionEntry column doesn't
+  // silently fail to carry over): the clone is a full, independent individual sharing the
+  // source's origin/nickname/etc, landing unassigned-within-location same as a bulk move.
+  // See schema.ts's dropped UNIQUE(form_id, gender, shiny), which is what makes a second
+  // real copy of the same individual possible at all.
   const insertDuplicateEntryStmt = db.prepare(`
     INSERT INTO collection_entries
       (form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
@@ -144,13 +143,6 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
        language, nickname, caught_ball, @storageLocationId, met_location, NULL, NULL
     FROM collection_entries WHERE id = @sourceId
   `)
-  const duplicateEntriesTx = db.transaction((entryIds: number[], storageLocationId: number | null) => {
-    return entryIds.map((sourceId) => {
-      if (!getEntryStmt.get(sourceId)) throw new Error('Entry not found')
-      const result = insertDuplicateEntryStmt.run({ sourceId, storageLocationId })
-      return result.lastInsertRowid as number
-    })
-  })
   const orphanEntriesByTrainerProfileStmt = db.prepare(
     'UPDATE collection_entries SET trainer_profile_id = NULL WHERE trainer_profile_id = ?'
   )
@@ -203,6 +195,33 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const insertBoxNumberOneStmt = db.prepare(
     'INSERT OR IGNORE INTO boxes (storage_location_id, box_number, name) VALUES (@storageLocationId, 1, NULL)'
   )
+  // Duplicate a Storage Location — the Storage Locations tab's "Duplicate" button,
+  // replacing the per-entry List-view duplicate that briefly shipped in commit 74c73c9:
+  // checking off entries one at a time to clone a whole location's 1025+-entry roster was
+  // unworkable. Clones the location's own type/trainer link (name gets " (Copy)"
+  // appended; storage_locations carries no uniqueness constraint on name, so a repeat
+  // duplicate just appends again rather than colliding) and every entry currently sitting
+  // in it, each landing unassigned-within-the-new-location via insertDuplicateEntryStmt
+  // above — same convention as a bulk move. Deliberately does not clone box arrangement
+  // (box_number/box_slot, box_placeholders) — see TODO.md's [Clear box] follow-up, which
+  // will let a freshly duplicated location's box view be wiped back to empty instead.
+  const listEntryIdsByStorageLocationStmt = db.prepare('SELECT id FROM collection_entries WHERE storage_location_id = ?')
+  const duplicateStorageLocationTx = db.transaction((sourceId: number) => {
+    const source = getStorageLocationStmt.get(sourceId) as StorageLocationRow | undefined
+    if (!source) throw new Error('Storage location not found')
+    const result = insertStorageLocationStmt.run({
+      locationType: source.location_type,
+      name: `${source.name} (Copy)`,
+      trainerProfileId: source.trainer_profile_id
+    })
+    const newLocationId = result.lastInsertRowid as number
+    insertBoxNumberOneStmt.run({ storageLocationId: newLocationId })
+    const entryIds = (listEntryIdsByStorageLocationStmt.all(sourceId) as Array<{ id: number }>).map((row) => row.id)
+    for (const sourceEntryId of entryIds) {
+      insertDuplicateEntryStmt.run({ sourceId: sourceEntryId, storageLocationId: newLocationId })
+    }
+    return newLocationId
+  })
   const insertBoxStmt = db.prepare(`
     INSERT INTO boxes (storage_location_id, box_number, name)
     VALUES (
@@ -339,11 +358,6 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       return entryIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
     },
 
-    async duplicateEntries(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]> {
-      const newIds = duplicateEntriesTx(entryIds, storageLocationId)
-      return newIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
-    },
-
     // exportCollection/importCollection live in collection-backup.ts (Leg 3 of the Box
     // Arrangement milestone's split, see its file-level doc comment) — thin delegation
     // here keeps them on the StorageAdapter surface without this file owning their
@@ -392,6 +406,11 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     async updateStorageLocation(id: number, input: StorageLocationInput): Promise<StorageLocation> {
       updateStorageLocationStmt.run({ id, ...input })
       return toStorageLocation(getStorageLocationStmt.get(id) as StorageLocationRow)
+    },
+
+    async duplicateStorageLocation(id: number): Promise<StorageLocation> {
+      const newLocationId = duplicateStorageLocationTx(id)
+      return toStorageLocation(getStorageLocationStmt.get(newLocationId) as StorageLocationRow)
     },
 
     async deleteStorageLocation(id: number): Promise<void> {

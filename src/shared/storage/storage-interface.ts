@@ -55,12 +55,6 @@ export interface StorageAdapter {
   /** Bulk version of setEntryStorageLocation (List view's multi-select move) — same
    * per-entry semantics (box position always clears), just looped in one DB round trip. */
   bulkSetEntryStorageLocation(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]>
-  /** Clones each entry into a brand-new row in `storageLocationId`, unassigned within it
-   * (List view's multi-select duplicate) — the first UI path able to create a real
-   * duplicate individual, see the UNIQUE(form_id, gender, shiny) drop in schema.ts. Every
-   * field carries over except id/storageLocationId/boxNumber/boxSlot, so the clone starts
-   * as a full independent individual sharing the source's origin/nickname. */
-  duplicateEntries(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>
@@ -70,6 +64,13 @@ export interface StorageAdapter {
   listStorageLocations(): Promise<StorageLocation[]>
   createStorageLocation(input: StorageLocationInput): Promise<StorageLocation>
   updateStorageLocation(id: number, input: StorageLocationInput): Promise<StorageLocation>
+  /** Storage Locations tab's "Duplicate" button — clones the location itself (name gets
+   * " (Copy)" appended) plus every entry currently sitting in it, each landing unassigned
+   * within the new location. Does not clone box arrangement — see TODO.md's [Clear box]
+   * follow-up. Replaces the per-entry List-view duplicate from commit 74c73c9, unworkable
+   * at 1025+ entries; see sqlite-storage.ts's duplicateStorageLocationTx for the rest of
+   * that reasoning. */
+  duplicateStorageLocation(id: number): Promise<StorageLocation>
   deleteStorageLocation(id: number): Promise<void>
   /** Every box across every Storage Location (Leg 2 of the Box View Polish milestone) —
    * a location's own boxes are filtered out of this flat list client-side, same convention

@@ -41,10 +41,10 @@ interface DexRowProps {
    * while on the Unassigned tab. */
   storageLocations: StorageLocation[]
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
-  /** [Bulk move/duplicate entries between storage locations]: same per-entry granularity
-   * as the Loc. picker above (a row can carry two independent owned entries, regular and
-   * shiny), so selection lives at that level too — one checkbox beside each Loc. cell,
-   * not one per row. */
+  /** [Bulk move entries between storage locations]: same per-entry granularity as the
+   * Loc. picker above (a row can carry two independent owned entries, regular and shiny),
+   * so selection lives at that level too — one checkbox beside each Loc. cell, not one per
+   * row. */
   selectedEntryIds: Set<number>
   onToggleSelected: (entryId: number) => void
   /** Leg 6: backs the invalid-combo badge below — see invalidCombo.ts. */
@@ -116,7 +116,7 @@ export function DexRow({
         disabled={!entry?.owned}
         checked={entry ? selectedEntryIds.has(entry.id) : false}
         onChange={() => entry && onToggleSelected(entry.id)}
-        title="Select for bulk move/duplicate"
+        title="Select for bulk move"
       />
       <select
         className="dex-storage-location-select"

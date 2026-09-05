@@ -27,9 +27,8 @@ export interface AppBridge extends UpdaterBridge {
   swapEntryBoxPositions(entryIdA: number, entryIdB: number): Promise<[CollectionEntry, CollectionEntry]>
   /** See StorageAdapter.fillBoxSlots' own doc comment. */
   fillBoxSlots(entryIds: number[], boxNumber: number, startSlot: number): Promise<CollectionEntry[]>
-  /** See StorageAdapter.bulkSetEntryStorageLocation/duplicateEntries' own doc comments. */
+  /** See StorageAdapter.bulkSetEntryStorageLocation's own doc comment. */
   bulkSetEntryStorageLocation(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]>
-  duplicateEntries(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]>
   setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species>
   /** Leg 6: static per-game species-availability data, for the Living Dex's derived
    * invalid-combo badge (see renderer/dex/invalidCombo.ts). Not DB-backed — see
@@ -48,6 +47,8 @@ export interface AppBridge extends UpdaterBridge {
   listStorageLocations(): Promise<StorageLocation[]>
   createStorageLocation(input: StorageLocationInput): Promise<StorageLocation>
   updateStorageLocation(id: number, input: StorageLocationInput): Promise<StorageLocation>
+  /** See StorageAdapter.duplicateStorageLocation's own doc comment. */
+  duplicateStorageLocation(id: number): Promise<StorageLocation>
   deleteStorageLocation(id: number): Promise<void>
   listBoxes(): Promise<StorageBox[]>
   addBox(storageLocationId: number): Promise<StorageBox>

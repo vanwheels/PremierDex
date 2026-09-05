@@ -9,10 +9,9 @@ export const PokemonIpcChannel = {
   setEntryBoxPosition: 'pokemon:collectionEntries:setBoxPosition',
   swapEntryBoxPositions: 'pokemon:collectionEntries:swapBoxPositions',
   fillBoxSlots: 'pokemon:collectionEntries:fillBoxSlots',
-  /** Bulk move/duplicate (List view multi-select) — see StorageAdapter's own doc
-   * comments. */
+  /** Bulk move (List view multi-select) — see StorageAdapter.bulkSetEntryStorageLocation's
+   * own doc comment. */
   bulkSetEntryStorageLocation: 'pokemon:collectionEntries:bulkSetStorageLocation',
-  duplicateEntries: 'pokemon:collectionEntries:duplicate',
   setCollapsedDisplayForm: 'pokemon:species:setCollapsedDisplayForm',
   /** Leg 6: static per-game species-availability data (see load-species-data.ts),
    * not a StorageAdapter/DB method — there's no collection_entries-shaped row to read,
@@ -44,6 +43,9 @@ export const StorageLocationIpcChannel = {
   list: 'storageLocation:list',
   create: 'storageLocation:create',
   update: 'storageLocation:update',
+  /** "Duplicate" button (Storage Locations tab) — see StorageAdapter.duplicateStorageLocation's
+   * own doc comment. */
+  duplicate: 'storageLocation:duplicate',
   delete: 'storageLocation:delete'
 } as const
 

@@ -88,7 +88,6 @@ export function App(): JSX.Element {
               onSetEntryOwned={data.setEntryOwned}
               onSaveStorageLocation={data.setEntryStorageLocation}
               onBulkMoveEntries={data.bulkMoveEntries}
-              onBulkDuplicateEntries={data.bulkDuplicateEntries}
               onSaveOrigin={data.setEntryOrigin}
               onSetEntryBoxPosition={data.setEntryBoxPosition}
               onSwapEntryBoxPositions={data.swapEntryBoxPositions}

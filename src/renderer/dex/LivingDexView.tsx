@@ -38,9 +38,8 @@ export interface LivingDexViewProps {
   speciesAvailability: SpeciesAvailabilityData
   onSetEntryOwned: (entryId: number, owned: boolean) => void
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
-  /** [Bulk move/duplicate entries between storage locations] — see DexBulkActionsBar. */
+  /** [Bulk move entries between storage locations] — see DexBulkActionsBar. */
   onBulkMoveEntries: (entryIds: number[], storageLocationId: number | null) => void
-  onBulkDuplicateEntries: (entryIds: number[], storageLocationId: number | null) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   onSetEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   onSwapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
@@ -79,7 +78,6 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onSetEntryOwned,
     onSaveStorageLocation,
     onBulkMoveEntries,
-    onBulkDuplicateEntries,
     onSaveOrigin,
     onSetEntryBoxPosition,
     onSwapEntryBoxPositions,
@@ -200,7 +198,6 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           storageLocations={storageLocations}
           onSaveStorageLocation={onSaveStorageLocation}
           onBulkMove={onBulkMoveEntries}
-          onBulkDuplicate={onBulkDuplicateEntries}
           speciesAvailability={speciesAvailability}
         />
       </div>

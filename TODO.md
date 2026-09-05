@@ -39,17 +39,18 @@ game/region's numbering, one column vs. per-game) before it can be added to the 
 alongside National Dex #.
 Last touched: 2026-09-03. Re-check count: 0.
 
-### [Bulk move/duplicate: Box view support] — unscheduled
+### [Bulk move: Box view support] — unscheduled
 Follow-up to [Bulk move/duplicate entries between storage locations] (List view, see
 COMPLETED.md), confirmed by Vanny 2026-09-04 while scoping that item: List view's
 multi-select checkboxes act on one representative entry per form/gender/shiny slot (Box
 Arrangement Leg 4's design), so a slot that already has hidden duplicate individuals can't
-select or move/duplicate the non-representative copies, and a newly-created duplicate
-won't visibly appear in List view afterward either — only Box view enumerates every
-individual. Vanny confirmed proceeding List-view-only for now is fine, with this filed as
-the deferred widen-to-Box-view leg. Not scoped: likely extends Leg 4 of Box View Polish's
-existing ctrl/shift multi-select (currently drag-move within one location's boxes) to
-support moving/duplicating a selection across Storage Locations too.
+select or move the non-representative copies. Narrowed 2026-09-04: the Duplicate half of
+this concern is resolved by [Storage Location "Duplicate" button] (see COMPLETED.md) —
+that clones a whole location's roster directly at the DB level, bypassing List view's
+one-representative-per-slot limit entirely. Only the Move half remains open. Not scoped:
+likely extends Leg 4 of Box View Polish's existing ctrl/shift multi-select (currently
+drag-move within one location's boxes) to support moving a selection across Storage
+Locations too.
 Last touched: 2026-09-04. Re-check count: 0.
 
 ### [Box names/empty boxes/placeholders missing from JSON backup export/import] — unscheduled

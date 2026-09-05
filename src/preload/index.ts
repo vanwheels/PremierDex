@@ -36,8 +36,6 @@ const bridge: AppBridge = {
     ipcRenderer.invoke(PokemonIpcChannel.fillBoxSlots, entryIds, boxNumber, startSlot),
   bulkSetEntryStorageLocation: (entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]> =>
     ipcRenderer.invoke(PokemonIpcChannel.bulkSetEntryStorageLocation, entryIds, storageLocationId),
-  duplicateEntries: (entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]> =>
-    ipcRenderer.invoke(PokemonIpcChannel.duplicateEntries, entryIds, storageLocationId),
   setCollapsedDisplayForm: (speciesId: number, formId: number | null): Promise<Species> =>
     ipcRenderer.invoke(PokemonIpcChannel.setCollapsedDisplayForm, speciesId, formId),
   loadSpeciesAvailability: () => ipcRenderer.invoke(PokemonIpcChannel.loadSpeciesAvailability),
@@ -55,6 +53,8 @@ const bridge: AppBridge = {
     ipcRenderer.invoke(StorageLocationIpcChannel.create, input),
   updateStorageLocation: (id: number, input: StorageLocationInput): Promise<StorageLocation> =>
     ipcRenderer.invoke(StorageLocationIpcChannel.update, id, input),
+  duplicateStorageLocation: (id: number): Promise<StorageLocation> =>
+    ipcRenderer.invoke(StorageLocationIpcChannel.duplicate, id),
   deleteStorageLocation: (id: number): Promise<void> => ipcRenderer.invoke(StorageLocationIpcChannel.delete, id),
   listBoxes: (): Promise<StorageBox[]> => ipcRenderer.invoke(BoxIpcChannel.list),
   addBox: (storageLocationId: number): Promise<StorageBox> => ipcRenderer.invoke(BoxIpcChannel.add, storageLocationId),

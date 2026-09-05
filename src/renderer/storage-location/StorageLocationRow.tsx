@@ -8,6 +8,8 @@ interface StorageLocationRowProps {
   location: StorageLocation
   trainerProfiles: TrainerProfile[]
   onSave: (input: StorageLocationInput) => void
+  /** "Duplicate" — see StorageAdapter.duplicateStorageLocation's own doc comment. */
+  onDuplicate: () => void
   onDelete: () => void
 }
 
@@ -21,6 +23,7 @@ export function StorageLocationRow({
   location,
   trainerProfiles,
   onSave,
+  onDuplicate,
   onDelete
 }: StorageLocationRowProps): JSX.Element {
   const [editing, setEditing] = useState(false)
@@ -51,6 +54,9 @@ export function StorageLocationRow({
       <td>
         <button type="button" onClick={() => setEditing(true)}>
           Edit
+        </button>
+        <button type="button" onClick={onDuplicate} title="Clone this location's entire list of entries into a new storage location">
+          Duplicate
         </button>
         <button type="button" className="button-danger" onClick={onDelete}>
           Delete

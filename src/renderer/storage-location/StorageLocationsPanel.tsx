@@ -66,6 +66,17 @@ export function StorageLocationsPanel({ onLocationsChanged }: StorageLocationsPa
     onLocationsChanged()
   }
 
+  // "Duplicate" (replaces the per-entry List-view duplicate from commit 74c73c9, unworkable
+  // at 1025+ entries — see StorageAdapter.duplicateStorageLocation's own doc comment).
+  // onLocationsChanged is App's full data.loadAll, not just this panel's own load() — the
+  // clone brings along a whole new set of collection_entries rows, which live in App's
+  // data, not this panel's.
+  const handleDuplicate = async (id: number): Promise<void> => {
+    await window.premierDex.duplicateStorageLocation(id)
+    await load()
+    onLocationsChanged()
+  }
+
   if (loading) {
     return <p>Loading storage locations…</p>
   }
@@ -92,6 +103,7 @@ export function StorageLocationsPanel({ onLocationsChanged }: StorageLocationsPa
               location={location}
               trainerProfiles={trainerProfiles}
               onSave={(input) => handleUpdate(location.id, input)}
+              onDuplicate={() => handleDuplicate(location.id)}
               onDelete={() => handleDelete(location.id)}
             />
           ))}

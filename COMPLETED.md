@@ -1,5 +1,21 @@
 # COMPLETED
 
+## [Storage Location "Duplicate" button] — 2026-09-04
+Replaces the per-entry Duplicate path from [Bulk move/duplicate entries between storage
+locations] below — Vanny called it out same-day as unworkable: picking entries one at a
+time via checkbox to clone a whole location's 1025+-entry roster isn't a real workflow.
+Duplicate now lives on the Storage Locations tab instead, one button per location
+(StorageLocationRow) that clones the location itself (type/trainer link carried over,
+" (Copy)" appended to the name) plus every entry currently sitting in it, in one atomic
+transaction — `duplicateStorageLocation`, new IPC channel on `StorageLocationIpcChannel`.
+Lands unassigned within the new location, same convention as before; box arrangement
+(box_number/box_slot, box_placeholders) is deliberately not cloned — a real "start this
+location fresh" flow needs a Clear-box button first, filed as a follow-up. List view's
+checkbox/toolbar Move stays as-is (`bulkSetEntryStorageLocation`) — moving a handful of
+specific entries after a trade is still a reasonable checkbox-driven flow; only Duplicate
+needed the redesign. See TODO.md's [Bulk move: Box view support] for the still-open Move
+follow-up.
+
 ## [Bulk move/duplicate entries between storage locations] — 2026-09-04
 Built for List view only, per Vanny's call while scoping it: a checkbox beside each
 Non-Shiny/Shiny Loc. cell (DexRow, same per-entry granularity as the existing picker
@@ -11,7 +27,9 @@ position into a brand-new row, landing unassigned within the target location sam
 move. Both land as one DB transaction. Confirmed with Vanny mid-scoping: List view only
 ever surfaces one representative entry per form/gender/shiny slot (Box Arrangement Leg
 4's design), so this can't reach or duplicate-reveal hidden duplicate individuals — Box
-view support filed separately, see TODO.md's [Bulk move/duplicate: Box view support].
+view support filed separately, see TODO.md's [Bulk move: Box view support] (renamed
+2026-09-04 when the Duplicate half of that follow-up was resolved by [Storage Location
+"Duplicate" button] above).
 
 Legs 1-5 (Box View Polish & Multi-Box Editing milestone) archived at
 `docs/completed-archive/box-view-polish-multi-box-editing.md`. Legs 1-10 plus an

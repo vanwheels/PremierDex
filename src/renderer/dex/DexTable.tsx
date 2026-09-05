@@ -24,9 +24,8 @@ interface DexTableProps {
    * OriginModal). */
   storageLocations: StorageLocation[]
   onSaveStorageLocation: (entryId: number, storageLocationId: number | null) => void
-  /** [Bulk move/duplicate entries between storage locations] — see DexBulkActionsBar. */
+  /** [Bulk move entries between storage locations] — see DexBulkActionsBar. */
   onBulkMove: (entryIds: number[], storageLocationId: number | null) => void
-  onBulkDuplicate: (entryIds: number[], storageLocationId: number | null) => void
   /** Leg 6's derived invalid-combo badge — see DexRow's doc comment. */
   speciesAvailability: SpeciesAvailabilityData
 }
@@ -74,7 +73,6 @@ export function DexTable({
   storageLocations,
   onSaveStorageLocation,
   onBulkMove,
-  onBulkDuplicate,
   speciesAvailability
 }: DexTableProps): JSX.Element {
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
@@ -84,11 +82,11 @@ export function DexTable({
   // writes to SQLite (via onSaveOrigin), so this isn't purely UI state — but "which modal
   // is open" still belongs local to DexTable, same as spriteTarget.
   const [originTarget, setOriginTarget] = useState<OriginModalTarget | null>(null)
-  // [Bulk move/duplicate entries between storage locations]: entry ids checked via the
-  // per-entry checkboxes beside each Loc. cell — see DexRow's own doc comment for why this
-  // is entry-id-keyed rather than row-keyed. UI-only, same as the state above; cleared
-  // after a bulk action fires (DexBulkActionsBar) rather than carried forward, so a repeat
-  // click can't silently reapply to a stale selection.
+  // [Bulk move entries between storage locations]: entry ids checked via the per-entry
+  // checkboxes beside each Loc. cell — see DexRow's own doc comment for why this is
+  // entry-id-keyed rather than row-keyed. UI-only, same as the state above; cleared after
+  // a bulk move fires (DexBulkActionsBar) rather than carried forward, so a repeat click
+  // can't silently reapply to a stale selection.
   const [selectedEntryIds, setSelectedEntryIds] = useState<Set<number>>(new Set())
   const toggleSelected = (entryId: number): void => {
     setSelectedEntryIds((prev) => {
@@ -114,7 +112,6 @@ export function DexTable({
         selectedEntryIds={selectedEntryIds}
         storageLocations={storageLocations}
         onMove={onBulkMove}
-        onDuplicate={onBulkDuplicate}
         onClearSelection={() => setSelectedEntryIds(new Set())}
       />
       <div className="dex-table-panel">

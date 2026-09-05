@@ -7,32 +7,33 @@ interface DexBulkActionsBarProps {
   selectedEntryIds: Set<number>
   storageLocations: StorageLocation[]
   onMove: (entryIds: number[], storageLocationId: number | null) => void
-  onDuplicate: (entryIds: number[], storageLocationId: number | null) => void
   onClearSelection: () => void
 }
 
 /**
- * [Bulk move/duplicate entries between storage locations]: appears above List view's table
- * once at least one per-entry checkbox (DexRow's Loc. cells) is checked. Move reassigns the
+ * [Bulk move entries between storage locations]: appears above List view's table once at
+ * least one per-entry checkbox (DexRow's Loc. cells) is checked. Move reassigns the
  * selected entries' storage location in place — same semantics as the existing per-row
- * picker, just batched (StorageAdapter.bulkSetEntryStorageLocation). Duplicate instead
- * clones each selected entry into a brand-new row in the target location
- * (StorageAdapter.duplicateEntries) — the first UI path able to create a real duplicate
- * individual, see that method's own doc comment. Both land unassigned-within-location; the
- * user places the result into a specific box afterward via Box view, same as any
- * newly-moved entry. Selection clears once either action fires, so a repeat click can't
- * silently reapply to a stale selection.
+ * picker, just batched (StorageAdapter.bulkSetEntryStorageLocation). Lands
+ * unassigned-within-location; the user places the result into a specific box afterward via
+ * Box view, same as any newly-moved entry. Selection clears once the action fires, so a
+ * repeat click can't silently reapply to a stale selection.
  *
- * Deliberately List-view-only for now, not Box view too — see TODO.md's own item for the
- * design tradeoff that decision carries (List view only ever surfaces one representative
- * entry per form/gender/shiny slot, so a slot with hidden duplicate individuals can't
- * select or act on anything but the one shown).
+ * This bar originally also offered "Duplicate" (clone each selected entry into a new row),
+ * but picking entries one at a time to clone a whole storage location's 1025+-entry roster
+ * proved unworkable — see commit 74c73c9. That's now the Storage Locations tab's own
+ * "Duplicate" button instead (StorageAdapter.duplicateStorageLocation), which clones every
+ * entry currently in a location in one step.
+ *
+ * Deliberately List-view-only, not Box view too — see TODO.md's own item for the design
+ * tradeoff that decision carries (List view only ever surfaces one representative entry per
+ * form/gender/shiny slot, so a slot with hidden duplicate individuals can't select or act
+ * on anything but the one shown).
  */
 export function DexBulkActionsBar({
   selectedEntryIds,
   storageLocations,
   onMove,
-  onDuplicate,
   onClearSelection
 }: DexBulkActionsBarProps): JSX.Element | null {
   const [targetLocation, setTargetLocation] = useState<string>(UNASSIGNED)
@@ -66,15 +67,6 @@ export function DexBulkActionsBar({
         }}
       >
         Move
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          onDuplicate(entryIds, storageLocationId)
-          onClearSelection()
-        }}
-      >
-        Duplicate
       </button>
       <button type="button" className="dex-bulk-clear-button" onClick={onClearSelection}>
         Clear selection
