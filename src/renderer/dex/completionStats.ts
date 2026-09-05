@@ -56,9 +56,9 @@ export const DEFAULT_COMPLETION_STATS_OPTIONS: CompletionStatsOptions = {
  * spreadsheet, per Leg 1 of the Dex completeness tier migration
  * (docs/investigations/dex-completeness-tiers.md) — fixed presets over
  * `includeCosmeticVariants`/`splitByGender` (both already tracked by
- * CompletionStatsOptions) plus `excludePreEvolutions`, which isn't yet since nothing can
- * compute it — no evolution-chain data exists in the schema (tracked as the separate,
- * unscheduled [Evolution-chain data (Pre-Evos axis)] TODO item). Regional Diffs isn't a
+ * CompletionStatsOptions) plus `excludePreEvolutions`, which isn't wired up yet even
+ * though the data it needs now exists (`Species.isFinalEvolutionStage`, added by Leg 5 —
+ * see docs/investigations/dex-completeness-tiers.md). Regional Diffs isn't a
  * 4th axis here: it's always on (every dex_distinct form, regional or not, already counts
  * unconditionally below), per Leg 1's mapping.
  */
@@ -87,8 +87,10 @@ export const TIER_LABELS: Record<DexTier, string> = {
 }
 
 /** The only tiers computable today — `finalFormForm`/`finalForm` need
- * `excludePreEvolutions` for real, which is blocked on the Pre-Evos data leg above. Both
- * the Completion Stats tier picker and Box Templates' tier picker offer only these. */
+ * `excludePreEvolutions` for real, which needs its own tier-computation-wiring leg even
+ * though the underlying data exists (Leg 5, see docs/investigations/
+ * dex-completeness-tiers.md). Both the Completion Stats tier picker and Box Templates'
+ * tier picker offer only these. */
 export const BUILDABLE_TIERS: DexTier[] = ['living', 'livingFormLite', 'livingForm']
 
 /** Applies a tier's `includeCosmeticVariants`/`splitByGender` onto an existing options

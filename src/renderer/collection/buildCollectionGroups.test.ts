@@ -3,9 +3,9 @@ import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import { buildCollectionGroups } from './buildCollectionGroups'
 
 const SPECIES: Species[] = [
-  { id: 1, name: 'bulbasaur', generation: 1, collapsedDisplayFormId: null },
-  { id: 4, name: 'charmander', generation: 1, collapsedDisplayFormId: null },
-  { id: 25, name: 'pikachu', generation: 1, collapsedDisplayFormId: null }
+  { id: 1, name: 'bulbasaur', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: false },
+  { id: 4, name: 'charmander', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: false },
+  { id: 25, name: 'pikachu', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: false }
 ]
 
 function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId'>): Form {

@@ -1,5 +1,5 @@
 import type Database from 'better-sqlite3'
-import { loadFormsData, loadSpeciesData } from './load-species-data'
+import { loadFormsData, loadSpeciesData, loadSpeciesEvolutionData } from './load-species-data'
 
 /**
  * Leg 7 cleanup: forms.json used to include rows for varieties that shouldn't occupy a
@@ -68,11 +68,25 @@ function prunePreLeg7ExcludedForms(db: Database.Database): void {
  * `docs/investigations/shiny-locked-audit.md` for shiny_locked; always_shiny is the
  * opposite-axis fact, hand-maintained the same way — see fetch-pokemon-forms.ts's
  * ALWAYS_SHINY set) — real per-form data, not the single 'base' placeholder Leg 1 seeded.
+ *
+ * Species' `is_final_evolution_stage` comes from `data/pokemon/species-evolution.json`
+ * (see `scripts/fetch-evolution-chains.ts`) — a separate PokeAPI pass keyed on species
+ * alone, not per-form like the fields above.
  */
 export function runSeed(db: Database.Database): void {
   const insertSpecies = db.prepare(
     'INSERT OR IGNORE INTO species (id, name, generation) VALUES (@id, @name, @generation)'
   )
+  // Same pattern as forms' backfillHomeBoxable/backfillShinyLocked/backfillAlwaysShiny
+  // below: is_final_evolution_stage (Leg 5 of the Dex completeness tier migration) is
+  // PokeAPI-derived, not hand-maintained, but can still drift — a species that's final
+  // today can gain a new evolution in a later game (Tangela -> Tangrowth, Ursaring ->
+  // Ursaluna), so this re-syncs unconditionally on every startup rather than gating on a
+  // NULL check, same reasoning as those three.
+  const backfillFinalEvolutionStage = db.prepare(`
+    UPDATE species SET is_final_evolution_stage = @isFinalEvolutionStage
+    WHERE id = @speciesId AND is_final_evolution_stage != @isFinalEvolutionStage
+  `)
   const insertForm = db.prepare(`
     INSERT OR IGNORE INTO forms
       (species_id, form_name, form_category, home_boxable, shiny_locked, always_shiny, has_gender_difference, first_available_generation, regional_group, pokeapi_id, sprite_form_suffix)
@@ -135,6 +149,13 @@ export function runSeed(db: Database.Database): void {
 
     for (const species of loadSpeciesData()) {
       insertSpecies.run(species)
+    }
+
+    for (const evolution of loadSpeciesEvolutionData()) {
+      backfillFinalEvolutionStage.run({
+        speciesId: evolution.speciesId,
+        isFinalEvolutionStage: evolution.isFinalEvolutionStage ? 1 : 0
+      })
     }
 
     for (const form of loadFormsData()) {

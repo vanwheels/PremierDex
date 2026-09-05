@@ -342,6 +342,31 @@ describe('applySchema', () => {
     expect(row.collapsed_display_form_id).toBeNull()
   })
 
+  it('defaults a fresh species row to is_final_evolution_stage = 1', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    const row = db.prepare('SELECT is_final_evolution_stage FROM species WHERE id = 1').get() as {
+      is_final_evolution_stage: number
+    }
+    expect(row.is_final_evolution_stage).toBe(1)
+  })
+
+  it('retrofits is_final_evolution_stage onto a species table that predates Leg 5 of the Dex completeness tier migration', () => {
+    const db = new Database(':memory:')
+    db.exec(`
+      CREATE TABLE species (id INTEGER PRIMARY KEY, name TEXT NOT NULL, generation INTEGER NOT NULL);
+      INSERT INTO species (id, name, generation) VALUES (1, 'bulbasaur', 1);
+    `)
+
+    applySchema(db)
+
+    const columns = db.prepare('PRAGMA table_info(species)').all() as Array<{ name: string }>
+    expect(columns.some((c) => c.name === 'is_final_evolution_stage')).toBe(true)
+    const row = db.prepare('SELECT * FROM species WHERE id = 1').get() as Record<string, unknown>
+    expect(row.name).toBe('bulbasaur')
+    expect(row.is_final_evolution_stage).toBe(1)
+  })
+
   it('rebuilds trainer_profiles without violating FKs from linked collection_entries/storage_locations rows', () => {
     const db = new Database(':memory:')
     db.pragma('foreign_keys = ON')

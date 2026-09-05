@@ -27,6 +27,11 @@ export interface Species {
    * Sticks even if the picked form's owned/shiny status later changes; only an explicit
    * "Auto" reselect clears it back to null. */
   collapsedDisplayFormId: number | null
+  /** Whether this species is the end of its evolutionary line — no further species it
+   * evolves into (PokeAPI /evolution-chain data, see scripts/fetch-evolution-chains.ts).
+   * Drives the "Pre Evos" axis (docs/investigations/dex-completeness-tiers.md's
+   * excludePreEvolutions): a species is a pre-evolution exactly when this is false. */
+  isFinalEvolutionStage: boolean
 }
 
 export interface Form {

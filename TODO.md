@@ -6,13 +6,52 @@ Picked up 2026-09-04 from Future Milestones. Both halves (tier migration and Box
 Templates) share a "what counts as complete for tier X" definition, so scoping is bundled
 into Leg 1 before either gets built.
 
-### [Evolution-chain data (Pre-Evos axis)] — Leg 5
-Add evolution-chain membership/stage data (PokeAPI `/evolution-chain` fetch pass, new
-`Species` column, seed backfill) — nothing in the schema encodes this today. Unblocks the
-FinalFormForm/FinalForm tiers from `docs/investigations/dex-completeness-tiers.md`, which
-can't be computed without it. Not on Leg 2/3's critical path — those tiers just stay
-unavailable in the tier picker until this ships. Split out of Leg 1 2026-09-04 per Vanny's
-call: design all 3 tier axes now, defer this data work rather than block on it.
+### [Redefine Apply Template as total-based + Remove Template] — Leg 6
+Redesign surfaced 2026-09-04 investigating a "Living Form Dex totals look wrong" report:
+the totals themselves checked out fine (verified against Vanny's live DB — see
+`docs/investigations/dex-completeness-tiers.md` for the math), but it exposed that Leg 2's
+actual concept was wrong. Apply Template currently stamps `pendingRequiredUnits()` — the
+required set *minus* anything owned anywhere in the collection. Vanny's call: a template
+should stamp the *total* required set regardless of global ownership, skipping only units a
+real entry already physically occupies in *this* location (still dedupes against
+already-owned-here and already-placeholder'd-here, just drops the "owned anywhere" exclusion
+that made it pending-based). The box becomes a fixed full layout of the tier/color; Fill In
+(Leg 7, below) is what later reconciles it against what you actually own. Also folds in
+Vanny's original ask: a "Clear Placeholders" action per Storage Location that wipes every
+`box_placeholders` row there (template-stamped and manually right-click-set alike) — more
+necessary now that a template stamps its full size every time. `boxTemplates.ts`'s
+`pendingRequiredUnits`/`isUnitSatisfied` need reworking around the narrower "occupied in this
+location" check instead of `buildOwnedUnitIndex`'s global one; `DexApplyTemplateModal`'s
+preview line simplifies too, since the count it shows is now a real total for the location,
+not a global-ownership-dependent pending count.
+Last touched: 2026-09-04. Re-check count: 0.
+
+### [Fill In from owned collection] — Leg 7
+Companion to Leg 6, per Vanny's 2026-09-04 clarification: once a location's boxes hold a
+full template layout of ghost placeholders, a "Fill In" action walks them and, for each
+placeholder with a matching owned individual somewhere in the collection, moves that entry
+into the placeholder's slot (ghost -> real entry). Scoped per Vanny's answers: prefer an
+owned individual that isn't already boxed anywhere (no existing home) over one that would
+have to be pulled out of another box; if only already-boxed copies exist, leave the
+placeholder as a ghost rather than relocating one. When multiple unboxed copies match one
+required unit (e.g. 3 shiny female Eevees), move the first and leave the rest where they
+are — same "one representative individual, others untouched" precedent already used
+elsewhere (List view's bulk actions, box arrangement). Needs its own implementation design
+(new IPC bulk-write, matching/ordering rule for "first" when several unboxed candidates
+tie) before a leg estimate — not detailed further here since Leg 6 has to land first (Fill
+In depends on templates being total-based, not pending-based).
+Last touched: 2026-09-04. Re-check count: 0.
+
+### [Wire excludePreEvolutions into tier computation] — Leg 8
+Follow-up to Leg 5 (evolution-chain data acquisition, see COMPLETED.md): `Species.
+isFinalEvolutionStage` exists and is seeded/backfilled correctly, but nothing reads it yet.
+`requiredUnits()` (boxTemplates.ts) has an `excludePreEvolutions` branch that's always a
+no-op today ("never true for BUILDABLE_TIERS"); `computeCompletionStats` needs the same
+filter. Once both honor it, `BUILDABLE_TIERS` (completionStats.ts) can add `finalFormForm`/
+`finalForm`, surfacing them in both the Completion Stats and Box Templates tier pickers.
+Not scoped further — needs a look at whether `requiredUnits`/`computeCompletionStats` take
+`Species[]` today or would need a new param to look up `isFinalEvolutionStage` by
+`form.speciesId`.
 Last touched: 2026-09-04. Re-check count: 0.
 
 ## Unscheduled
@@ -88,9 +127,10 @@ Last touched: 2026-09-03. Re-check count: 0.
 ### [Split schema.ts] — unscheduled
 Crossed the ~300-line soft cap at Leg 5 (341 lines), 421 after Leg 3 of Box Arrangement's
 box_number/box_slot retrofit, 466 after Leg 2 of Box View Polish added the `boxes` table +
-backfillBoxes, 492 after that same milestone's Leg 5 added `box_placeholders`, now 550 after
+backfillBoxes, 492 after that same milestone's Leg 5 added `box_placeholders`, 550 after
 Leg 2 of the Dex completeness tier migration widened `box_placeholders` and added its own
-rebuild block — 50 lines past the 500 hard cap. Each closed-set CHECK column (language,
+rebuild block, now 567 after that same milestone's Leg 5 added `is_final_evolution_stage`
+and its retrofit — 67 lines past the 500 hard cap. Each closed-set CHECK column (language,
 caught_ball) has picked up its own "ALTER-time CHECK can't be widened later" rebuild block
 over time, and that pattern will likely repeat if another CHECK-constrained column needs
 the same treatment.
@@ -166,6 +206,15 @@ Likely a small CSS/sizing fix in DexBoxGridCell.tsx/SpriteThumbnail.tsx — cand
 win.
 Last touched: 2026-09-04. Re-check count: 0.
 
+### [Apply Template: combined regular+shiny option] — unscheduled
+Surfaced 2026-09-04 investigating a "Living Form Dex totals look wrong" report (see
+COMPLETED.md's Leg 6 writeup — the totals themselves checked out fine). Vanny's actual ask:
+Apply Template only takes one color (Regular or Shiny) per run today, requiring two separate
+applies to stock a location for both. Not a small fix — doubles the placement math (each
+required unit needs a regular *and* shiny ghost, competing for the same slots) — needs its
+own scoping rather than folding into Leg 6.
+Last touched: 2026-09-04. Re-check count: 0.
+
 ### [Box view scroller lag] — unscheduled
 Raised by Vanny 2026-09-04: noticeable lag/delay scrolling through boxes in Box view.
 Distinct from [Virtualize the Dex Table body] (that's the main Dex Table; this is the Box
@@ -185,6 +234,16 @@ badges. Size classification and capture date noted as possible additions at the 
 time, capture date flagged by Vanny as very low priority. All blocked on Ribbons being
 scoped first.
 Last touched: 2026-09-02. Re-check count: 0.
+
+### [Full UI/UX pass on the Dex interface] — future milestone
+Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones
+— many input fields, some overlapping in function (e.g. the tier picker's shortcut checkboxes
+vs. the underlying `includeCosmeticVariants`/`splitByGender` checkboxes it drives, per-entry
+vs. bulk vs. per-location Duplicate/Move actions). Wants a full pass over the UI to find a
+more user-friendly, less redundant layout. Deliberately not scoped or folded into the current
+milestone — milestone-sized investigation on its own, not a leg. Needs its own scoping pass
+(which panels/modals, what "simpler" means concretely) before a leg sequence can be planned.
+Last touched: 2026-09-04. Re-check count: 0.
 
 ### [Deeper per-game validity: form/gender legality + curated Met Location list] — future milestone
 Split out of a past milestone during its 2026-09-02 leg-planning pass: the initial

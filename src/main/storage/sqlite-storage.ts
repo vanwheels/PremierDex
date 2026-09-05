@@ -31,10 +31,10 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const backupOperations = createBackupOperations(db)
 
   const listSpeciesStmt = db.prepare(
-    'SELECT id, name, generation, collapsed_display_form_id FROM species ORDER BY id'
+    'SELECT id, name, generation, collapsed_display_form_id, is_final_evolution_stage FROM species ORDER BY id'
   )
   const getSpeciesStmt = db.prepare(
-    'SELECT id, name, generation, collapsed_display_form_id FROM species WHERE id = ?'
+    'SELECT id, name, generation, collapsed_display_form_id, is_final_evolution_stage FROM species WHERE id = ?'
   )
   const setCollapsedDisplayFormStmt = db.prepare(
     'UPDATE species SET collapsed_display_form_id = @formId WHERE id = @id'

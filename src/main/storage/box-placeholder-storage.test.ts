@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from 'vitest'
 // tripping the form_id FK; the first form is also what setEntryBoxPosition needs a real
 // collection_entries row against, to test the placeholder-clearing interaction.
 vi.mock('./load-species-data', () => ({
+  loadSpeciesEvolutionData: () => [],
   loadSpeciesData: () => [
     { id: 1, name: 'bulbasaur', generation: 1 },
     { id: 25, name: 'pikachu', generation: 1 }

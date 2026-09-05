@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 // seed, which reads real data files via load-species-data.ts. These tests don't touch
 // species/forms at all, so stub both loaders out to empty lists.
 vi.mock('./load-species-data', () => ({
+  loadSpeciesEvolutionData: () => [],
   loadSpeciesData: () => [],
   loadFormsData: () => []
 }))

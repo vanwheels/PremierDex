@@ -16,6 +16,7 @@ export interface SpeciesRow {
   name: string
   generation: number
   collapsed_display_form_id: number | null
+  is_final_evolution_stage: 0 | 1
 }
 
 export interface FormRow {
@@ -92,7 +93,8 @@ export function toSpecies(row: SpeciesRow): Species {
     id: row.id,
     name: row.name,
     generation: row.generation,
-    collapsedDisplayFormId: row.collapsed_display_form_id
+    collapsedDisplayFormId: row.collapsed_display_form_id,
+    isFinalEvolutionStage: row.is_final_evolution_stage === 1
   }
 }
 

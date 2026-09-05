@@ -42,8 +42,8 @@ export function slotKey(boxNumber: number, boxSlot: number): string {
  * loop (Leg 1 flagged that factoring as optional, not required): same shape, smaller diff.
  *
  * `excludePreEvolutions` is never true for `BUILDABLE_TIERS`, so it's not implemented as a
- * real filter yet — that needs the evolution-chain data the separate, unscheduled
- * [Evolution-chain data (Pre-Evos axis)] TODO item will add.
+ * real filter yet — the data it needs now exists (`Species.isFinalEvolutionStage`, Leg 5),
+ * but wiring it into this filter is its own follow-up leg (see TODO.md).
  */
 export function requiredUnits(tierConfig: DexTierConfig, color: DexColor, forms: Form[]): RequiredUnit[] {
   const shiny = color === 'shiny'

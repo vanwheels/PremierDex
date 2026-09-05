@@ -45,28 +45,35 @@ Three of the four rows already exist in some form:
   rule). Already implemented, already wired to a checkbox in `CompletionStatsPanel.tsx`.
 - **Gender Diffs = `CompletionStatsOptions.splitByGender`.** Already implemented, already
   wired to a checkbox.
-- **Pre Evos does not exist.** Nothing in the schema encodes evolution-chain membership
-  or stage (no `evolvesFrom`, no stage number, nothing on `Species` or elsewhere) —
-  confirmed by search, not assumed. This is the one row that needs new data before it's
-  computable at all: a fetch-script pass against PokeAPI's `/evolution-chain` endpoint
-  (same shape as the form-categorization and shiny-lock audits) to add something like
-  `Species.evolvesFromSpeciesId` or `isFinalEvolutionStage`, plus a schema column and seed
-  backfill. Per Vanny's call on this leg: design all 3 toggle axes now, ship the tiers
-  that don't need it, defer the data work to its own leg (tracked as a new unscheduled
-  TODO item, see below) rather than block Legs 2/3 on it.
+- **Pre Evos: `Species.isFinalEvolutionStage` (Leg 5, 2026-09-04).** Originally nothing in
+  the schema encoded evolution-chain membership or stage — confirmed by search, not
+  assumed, at the time this doc was first written. Leg 5 closed that gap: `scripts/
+  fetch-evolution-chains.ts` walks every PokeAPI `/evolution-chain` tree (branches
+  included — Eevee's 8 eeveelutions, Tyrogue's 3, item-based branches like Slowpoke ->
+  Slowbro/Slowking each mark their own target species final) and writes `data/pokemon/
+  species-evolution.json`; `is_final_evolution_stage` is a plain species-level column,
+  backfilled unconditionally on every `runSeed` (same re-sync pattern as forms'
+  `home_boxable`/`shiny_locked`/`always_shiny`, since a species that's final today can
+  gain a new evolution in a later game — Tangela -> Tangrowth, Ursaring -> Ursaluna).
+  `isFinalEvolutionStage(form.speciesId)` in the pseudocode below now resolves directly to
+  this column — no further data work needed. **Not done by Leg 5:** wiring
+  `excludePreEvolutions` itself into `requiredUnits()`/`computeCompletionStats`/
+  `BUILDABLE_TIERS` so FinalFormForm/FinalForm actually become selectable — that's the
+  data acquisition only; the tier-computation wiring is its own follow-up (see TODO.md).
 
 So the working model is **3 boolean axes** (`includeCosmeticVariants`, `splitByGender`,
-and a not-yet-buildable `excludePreEvolutions`), with dex_distinct/regional forms always
-included as the floor every tier shares. The 5 named tiers are fixed presets over those
-axes, not a 4-axis system:
+and `excludePreEvolutions` — the data for the third exists as of Leg 5, but nothing yet
+consumes it, see above), with dex_distinct/regional forms always included as the floor
+every tier shares. The 5 named tiers are fixed presets over those axes, not a 4-axis
+system:
 
 | Tier | includeCosmeticVariants | splitByGender | excludePreEvolutions | Buildable today |
 |---|---|---|---|---|
 | Living Form | true | true | false | yes |
 | LivingFormLITE | true | false | false | yes |
 | Living | false | false | false | yes |
-| FinalFormForm | true | false | true | blocked on Pre-Evos data |
-| FinalForm | false | false | true | blocked on Pre-Evos data |
+| FinalFormForm | true | false | true | blocked on tier-computation wiring (Leg 5's data exists, unconsumed) |
+| FinalForm | false | false | true | blocked on tier-computation wiring (Leg 5's data exists, unconsumed) |
 
 ("Living" is the closest match to what the milestone's original wording called "regular
 species-only" — it isn't species-only in the literal sense (regional forms still each
@@ -100,7 +107,7 @@ requiredUnits(tier, color, forms, species):
   for each form in forms:
     if form.formCategory == 'non_boxable': skip
     if form.formCategory == 'cosmetic_variant' and not tier.includeCosmeticVariants: skip
-    if tier.excludePreEvolutions and not isFinalEvolutionStage(form.speciesId): skip   # blocked until Pre-Evos data exists
+    if tier.excludePreEvolutions and not isFinalEvolutionStage(form.speciesId): skip   # data exists as of Leg 5 (species.isFinalEvolutionStage); this call site is not yet wired up
     if color == 'regular' and form.alwaysShiny: skip
     if color == 'shiny' and form.shinyLocked: skip
     genders = (form.hasGenderDifference and tier.splitByGender) ? [male, female]
@@ -139,6 +146,18 @@ select a coarser tier to display/track against, which Leg 2's tier-aware UI alre
 them for free. Leg 4 should close as this decision (see TODO.md), not as an
 implementation.
 
+## Correction (2026-09-04, Leg 6): a template is total-based, not pending-based
+
+Leg 2 (below) built Apply Template around `pendingRequiredUnits()` — `requiredUnits()` minus
+anything owned *anywhere* in the collection. Vanny's call after a same-day investigation
+(TODO.md's Leg 6/7): that's the wrong concept. A template should stamp the *full*
+`requiredUnits()` set every time, skipping only units a real entry already physically
+occupies *in the target location* — not ones owned elsewhere. The box becomes a fixed full
+layout of the tier/color; reconciling it against what's actually owned (wherever it sits) is
+a separate action, Fill In (Leg 7), not something Apply Template itself does. This doc's
+`requiredUnits()` pseudocode/table above is unaffected — only how a *template* consumes it
+changes.
+
 ## Handoff
 
 - **Leg 2 (Box Templates):** a template is a (tier, color) pair. Auto-populate stamps
@@ -149,7 +168,9 @@ implementation.
 - **Leg 3 (upgrade migration):** diff `requiredUnits(targetTier, color, ...)` against
   owned `collection_entries`; the gender-collapse question above is the one piece this doc
   deliberately leaves for that leg to design.
-- **Leg 5 (new, unscheduled):** evolution-chain data acquisition (PokeAPI
-  `/evolution-chain` fetch pass + schema column + seed backfill), unblocking
-  FinalFormForm/FinalForm. Not on Legs 2/3's critical path — those two tiers simply stay
-  unavailable in the tier picker until this ships.
+- **Leg 5 (done, 2026-09-04):** evolution-chain data acquisition (PokeAPI
+  `/evolution-chain` fetch pass + `species.is_final_evolution_stage` schema column + seed
+  backfill) — see the corrected "Pre Evos" bullet above. Data-only, per its TODO scope: it
+  does not wire `excludePreEvolutions` into `requiredUnits()`/`computeCompletionStats`/
+  `BUILDABLE_TIERS`, so FinalFormForm/FinalForm still don't appear in the tier picker.
+  That wiring is a new follow-up leg (see TODO.md), not part of this one.

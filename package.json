@@ -18,6 +18,7 @@
     "fetch-pokemon-species": "tsx scripts/fetch-pokemon-species.ts",
     "fetch-pokemon-forms": "tsx scripts/fetch-pokemon-forms.ts",
     "fetch-species-availability": "tsx scripts/fetch-species-availability.ts",
+    "fetch-evolution-chains": "tsx scripts/fetch-evolution-chains.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",

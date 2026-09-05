@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 // formId to pin as the collapsed-display override, without touching the real
 // ~1500-species dataset or Electron's app.isPackaged path resolution.
 vi.mock('./load-species-data', () => ({
+  loadSpeciesEvolutionData: () => [],
   loadSpeciesData: () => [{ id: 201, name: 'unown', generation: 2 }],
   loadFormsData: () => [
     {

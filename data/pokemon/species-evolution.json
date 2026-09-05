@@ -1,0 +1,4102 @@
+[
+  {
+    "speciesId": 1,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 2,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 3,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 4,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 5,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 6,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 7,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 8,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 9,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 10,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 11,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 12,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 13,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 14,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 15,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 16,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 17,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 18,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 19,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 20,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 21,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 22,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 23,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 24,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 25,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 26,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 27,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 28,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 29,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 30,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 31,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 32,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 33,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 34,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 35,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 36,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 37,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 38,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 39,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 40,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 41,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 42,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 43,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 44,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 45,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 46,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 47,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 48,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 49,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 50,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 51,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 52,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 53,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 54,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 55,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 56,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 57,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 58,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 59,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 60,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 61,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 62,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 63,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 64,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 65,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 66,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 67,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 68,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 69,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 70,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 71,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 72,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 73,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 74,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 75,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 76,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 77,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 78,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 79,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 80,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 81,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 82,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 83,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 84,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 85,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 86,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 87,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 88,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 89,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 90,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 91,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 92,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 93,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 94,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 95,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 96,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 97,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 98,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 99,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 100,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 101,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 102,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 103,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 104,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 105,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 106,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 107,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 108,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 109,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 110,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 111,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 112,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 113,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 114,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 115,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 116,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 117,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 118,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 119,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 120,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 121,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 122,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 123,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 124,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 125,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 126,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 127,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 128,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 129,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 130,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 131,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 132,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 133,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 134,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 135,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 136,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 137,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 138,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 139,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 140,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 141,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 142,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 143,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 144,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 145,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 146,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 147,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 148,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 149,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 150,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 151,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 152,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 153,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 154,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 155,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 156,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 157,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 158,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 159,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 160,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 161,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 162,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 163,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 164,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 165,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 166,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 167,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 168,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 169,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 170,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 171,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 172,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 173,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 174,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 175,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 176,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 177,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 178,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 179,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 180,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 181,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 182,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 183,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 184,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 185,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 186,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 187,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 188,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 189,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 190,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 191,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 192,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 193,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 194,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 195,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 196,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 197,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 198,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 199,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 200,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 201,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 202,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 203,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 204,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 205,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 206,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 207,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 208,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 209,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 210,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 211,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 212,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 213,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 214,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 215,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 216,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 217,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 218,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 219,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 220,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 221,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 222,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 223,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 224,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 225,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 226,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 227,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 228,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 229,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 230,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 231,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 232,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 233,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 234,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 235,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 236,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 237,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 238,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 239,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 240,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 241,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 242,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 243,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 244,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 245,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 246,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 247,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 248,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 249,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 250,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 251,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 252,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 253,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 254,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 255,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 256,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 257,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 258,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 259,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 260,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 261,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 262,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 263,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 264,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 265,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 266,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 267,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 268,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 269,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 270,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 271,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 272,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 273,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 274,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 275,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 276,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 277,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 278,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 279,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 280,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 281,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 282,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 283,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 284,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 285,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 286,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 287,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 288,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 289,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 290,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 291,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 292,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 293,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 294,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 295,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 296,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 297,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 298,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 299,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 300,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 301,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 302,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 303,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 304,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 305,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 306,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 307,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 308,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 309,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 310,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 311,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 312,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 313,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 314,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 315,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 316,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 317,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 318,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 319,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 320,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 321,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 322,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 323,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 324,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 325,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 326,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 327,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 328,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 329,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 330,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 331,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 332,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 333,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 334,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 335,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 336,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 337,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 338,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 339,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 340,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 341,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 342,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 343,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 344,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 345,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 346,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 347,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 348,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 349,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 350,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 351,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 352,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 353,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 354,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 355,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 356,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 357,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 358,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 359,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 360,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 361,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 362,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 363,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 364,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 365,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 366,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 367,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 368,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 369,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 370,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 371,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 372,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 373,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 374,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 375,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 376,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 377,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 378,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 379,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 380,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 381,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 382,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 383,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 384,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 385,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 386,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 387,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 388,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 389,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 390,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 391,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 392,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 393,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 394,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 395,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 396,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 397,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 398,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 399,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 400,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 401,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 402,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 403,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 404,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 405,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 406,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 407,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 408,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 409,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 410,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 411,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 412,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 413,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 414,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 415,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 416,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 417,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 418,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 419,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 420,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 421,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 422,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 423,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 424,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 425,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 426,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 427,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 428,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 429,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 430,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 431,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 432,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 433,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 434,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 435,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 436,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 437,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 438,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 439,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 440,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 441,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 442,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 443,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 444,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 445,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 446,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 447,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 448,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 449,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 450,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 451,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 452,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 453,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 454,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 455,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 456,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 457,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 458,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 459,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 460,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 461,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 462,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 463,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 464,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 465,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 466,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 467,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 468,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 469,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 470,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 471,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 472,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 473,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 474,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 475,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 476,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 477,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 478,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 479,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 480,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 481,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 482,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 483,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 484,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 485,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 486,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 487,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 488,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 489,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 490,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 491,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 492,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 493,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 494,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 495,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 496,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 497,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 498,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 499,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 500,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 501,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 502,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 503,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 504,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 505,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 506,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 507,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 508,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 509,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 510,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 511,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 512,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 513,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 514,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 515,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 516,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 517,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 518,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 519,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 520,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 521,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 522,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 523,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 524,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 525,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 526,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 527,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 528,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 529,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 530,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 531,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 532,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 533,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 534,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 535,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 536,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 537,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 538,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 539,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 540,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 541,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 542,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 543,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 544,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 545,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 546,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 547,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 548,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 549,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 550,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 551,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 552,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 553,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 554,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 555,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 556,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 557,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 558,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 559,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 560,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 561,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 562,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 563,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 564,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 565,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 566,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 567,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 568,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 569,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 570,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 571,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 572,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 573,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 574,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 575,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 576,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 577,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 578,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 579,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 580,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 581,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 582,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 583,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 584,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 585,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 586,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 587,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 588,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 589,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 590,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 591,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 592,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 593,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 594,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 595,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 596,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 597,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 598,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 599,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 600,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 601,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 602,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 603,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 604,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 605,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 606,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 607,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 608,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 609,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 610,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 611,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 612,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 613,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 614,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 615,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 616,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 617,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 618,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 619,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 620,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 621,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 622,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 623,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 624,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 625,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 626,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 627,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 628,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 629,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 630,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 631,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 632,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 633,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 634,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 635,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 636,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 637,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 638,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 639,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 640,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 641,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 642,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 643,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 644,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 645,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 646,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 647,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 648,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 649,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 650,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 651,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 652,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 653,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 654,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 655,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 656,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 657,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 658,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 659,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 660,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 661,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 662,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 663,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 664,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 665,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 666,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 667,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 668,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 669,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 670,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 671,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 672,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 673,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 674,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 675,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 676,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 677,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 678,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 679,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 680,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 681,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 682,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 683,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 684,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 685,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 686,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 687,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 688,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 689,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 690,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 691,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 692,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 693,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 694,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 695,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 696,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 697,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 698,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 699,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 700,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 701,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 702,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 703,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 704,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 705,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 706,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 707,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 708,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 709,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 710,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 711,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 712,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 713,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 714,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 715,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 716,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 717,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 718,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 719,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 720,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 721,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 722,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 723,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 724,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 725,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 726,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 727,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 728,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 729,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 730,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 731,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 732,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 733,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 734,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 735,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 736,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 737,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 738,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 739,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 740,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 741,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 742,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 743,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 744,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 745,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 746,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 747,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 748,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 749,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 750,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 751,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 752,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 753,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 754,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 755,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 756,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 757,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 758,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 759,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 760,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 761,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 762,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 763,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 764,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 765,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 766,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 767,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 768,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 769,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 770,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 771,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 772,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 773,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 774,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 775,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 776,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 777,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 778,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 779,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 780,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 781,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 782,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 783,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 784,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 785,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 786,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 787,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 788,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 789,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 790,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 791,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 792,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 793,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 794,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 795,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 796,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 797,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 798,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 799,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 800,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 801,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 802,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 803,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 804,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 805,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 806,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 807,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 808,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 809,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 810,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 811,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 812,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 813,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 814,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 815,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 816,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 817,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 818,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 819,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 820,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 821,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 822,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 823,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 824,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 825,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 826,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 827,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 828,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 829,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 830,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 831,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 832,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 833,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 834,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 835,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 836,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 837,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 838,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 839,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 840,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 841,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 842,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 843,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 844,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 845,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 846,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 847,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 848,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 849,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 850,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 851,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 852,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 853,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 854,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 855,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 856,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 857,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 858,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 859,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 860,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 861,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 862,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 863,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 864,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 865,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 866,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 867,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 868,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 869,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 870,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 871,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 872,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 873,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 874,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 875,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 876,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 877,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 878,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 879,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 880,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 881,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 882,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 883,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 884,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 885,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 886,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 887,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 888,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 889,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 890,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 891,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 892,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 893,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 894,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 895,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 896,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 897,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 898,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 899,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 900,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 901,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 902,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 903,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 904,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 905,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 906,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 907,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 908,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 909,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 910,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 911,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 912,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 913,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 914,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 915,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 916,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 917,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 918,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 919,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 920,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 921,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 922,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 923,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 924,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 925,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 926,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 927,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 928,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 929,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 930,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 931,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 932,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 933,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 934,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 935,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 936,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 937,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 938,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 939,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 940,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 941,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 942,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 943,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 944,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 945,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 946,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 947,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 948,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 949,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 950,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 951,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 952,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 953,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 954,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 955,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 956,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 957,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 958,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 959,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 960,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 961,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 962,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 963,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 964,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 965,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 966,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 967,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 968,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 969,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 970,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 971,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 972,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 973,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 974,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 975,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 976,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 977,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 978,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 979,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 980,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 981,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 982,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 983,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 984,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 985,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 986,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 987,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 988,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 989,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 990,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 991,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 992,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 993,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 994,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 995,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 996,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 997,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 998,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 999,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 1000,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1001,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1002,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1003,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1004,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1005,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1006,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1007,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1008,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1009,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1010,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1011,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 1012,
+    "isFinalEvolutionStage": false
+  },
+  {
+    "speciesId": 1013,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1014,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1015,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1016,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1017,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1018,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1019,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1020,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1021,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1022,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1023,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1024,
+    "isFinalEvolutionStage": true
+  },
+  {
+    "speciesId": 1025,
+    "isFinalEvolutionStage": true
+  }
+]

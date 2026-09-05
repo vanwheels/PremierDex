@@ -28,7 +28,16 @@ export function applySchema(db: Database.Database): void {
       -- means "auto" (pickCollapsedRow's default). Forward reference to forms(id) is fine
       -- here — SQLite only resolves FK targets at enforcement time, not CREATE TABLE
       -- parse time, and forms is created immediately below.
-      collapsed_display_form_id INTEGER REFERENCES forms(id)
+      collapsed_display_form_id INTEGER REFERENCES forms(id),
+      -- Evolution-chain membership (Leg 5 of the Dex completeness tier migration): true
+      -- when this species has no further evolution (PokeAPI's evolves_to is empty for it
+      -- in every chain it appears in -- see scripts/fetch-evolution-chains.ts). Drives the
+      -- "Pre Evos" axis (docs/investigations/dex-completeness-tiers.md's
+      -- excludePreEvolutions) that unblocks the FinalFormForm/FinalForm tiers. Defaults to
+      -- 1 on a fresh row; runSeed's backfill (seed.ts) is what actually keeps this correct
+      -- for every species, same "insert a default, then unconditionally re-sync" pattern
+      -- as forms' home_boxable/shiny_locked/always_shiny above.
+      is_final_evolution_stage INTEGER NOT NULL DEFAULT 1
     );
 
     CREATE TABLE IF NOT EXISTS forms (
@@ -156,6 +165,14 @@ export function applySchema(db: Database.Database): void {
   const speciesColumns = db.prepare('PRAGMA table_info(species)').all() as Array<{ name: string }>
   if (!speciesColumns.some((c) => c.name === 'collapsed_display_form_id')) {
     db.exec('ALTER TABLE species ADD COLUMN collapsed_display_form_id INTEGER REFERENCES forms(id)')
+  }
+  // is_final_evolution_stage (Leg 5 of the Dex completeness tier migration) postdates
+  // every existing install's species table, same retrofit story as
+  // collapsed_display_form_id above. The CHECK-free NOT NULL DEFAULT 1 is safe to add via
+  // a plain ALTER TABLE (self-referential, nothing to rebuild); runSeed's unconditional
+  // backfill is what corrects every row to its real value right after.
+  if (!speciesColumns.some((c) => c.name === 'is_final_evolution_stage')) {
+    db.exec('ALTER TABLE species ADD COLUMN is_final_evolution_stage INTEGER NOT NULL DEFAULT 1')
   }
 
   // CREATE TABLE IF NOT EXISTS above doesn't retrofit new columns onto a forms table

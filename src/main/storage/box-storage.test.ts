@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 // Same reasoning as storage-location-storage.test.ts: these tests never touch
 // species/forms, so stub both loaders out to empty lists.
 vi.mock('./load-species-data', () => ({
+  loadSpeciesEvolutionData: () => [],
   loadSpeciesData: () => [],
   loadFormsData: () => []
 }))

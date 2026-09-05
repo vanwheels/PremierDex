@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from 'vitest'
 // instead of the real ~1500-species dataset — isolates these tests from that path
 // resolution entirely and keeps them fast.
 vi.mock('./load-species-data', () => ({
+  loadSpeciesEvolutionData: () => [],
   loadSpeciesData: () => [
     { id: 1, name: 'bulbasaur', generation: 1 },
     { id: 2, name: 'ivysaur', generation: 1 }

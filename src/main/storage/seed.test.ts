@@ -6,6 +6,7 @@ import { applySchema } from './schema'
 // Electron's app.isPackaged — doesn't hold under plain vitest. Stub with a minimal
 // fixture, same pattern as sqlite-storage.test.ts.
 vi.mock('./load-species-data', () => ({
+  loadSpeciesEvolutionData: () => [{ speciesId: 1, isFinalEvolutionStage: false }],
   loadSpeciesData: () => [{ id: 1, name: 'bulbasaur', generation: 1 }],
   loadFormsData: () => [
     {
@@ -165,5 +166,25 @@ describe('runSeed', () => {
       shiny_locked: number
     }
     expect(row.shiny_locked).toBe(0)
+  })
+
+  it('backfills a stale is_final_evolution_stage value on a species row that already existed', () => {
+    const db = makeDb()
+
+    // Same reasoning as the home_boxable/shiny_locked backfill tests above, but on
+    // species rather than forms: species' own INSERT OR IGNORE won't touch an existing
+    // row, so only the backfill can correct a stale value. The fixture's evolution data
+    // says species 1 is not a final stage; seed the row as if it were.
+    db.prepare('INSERT INTO species (id, name, generation, is_final_evolution_stage) VALUES (1, ?, ?, 1)').run(
+      'bulbasaur',
+      1
+    )
+
+    runSeed(db)
+
+    const row = db.prepare('SELECT is_final_evolution_stage FROM species WHERE id = 1').get() as {
+      is_final_evolution_stage: number
+    }
+    expect(row.is_final_evolution_stage).toBe(0)
   })
 })

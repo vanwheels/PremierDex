@@ -9,6 +9,14 @@ export interface SeedSpecies {
   generation: number
 }
 
+/** One row per species from `scripts/fetch-evolution-chains.ts`'s PokeAPI /evolution-chain
+ * pass — see that script's doc comment and docs/investigations/dex-completeness-tiers.md
+ * for what isFinalEvolutionStage means and drives (the "Pre Evos" axis). */
+export interface SeedSpeciesEvolution {
+  speciesId: number
+  isFinalEvolutionStage: boolean
+}
+
 export interface SeedForm {
   speciesId: number
   formName: string
@@ -49,4 +57,11 @@ export function loadFormsData(): SeedForm[] {
 export function loadSpeciesAvailabilityData(): SpeciesAvailabilityData {
   const filePath = join(DATA_DIR, 'species-availability.json')
   return JSON.parse(readFileSync(filePath, 'utf-8')) as SpeciesAvailabilityData
+}
+
+/** Loads the static per-species evolution-chain data written by
+ * `npm run fetch-evolution-chains`. */
+export function loadSpeciesEvolutionData(): SeedSpeciesEvolution[] {
+  const filePath = join(DATA_DIR, 'species-evolution.json')
+  return JSON.parse(readFileSync(filePath, 'utf-8')) as SeedSpeciesEvolution[]
 }

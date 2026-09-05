@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 // real collection_entries row exists to assign a box position to, without touching the
 // real ~1500-species dataset.
 vi.mock('./load-species-data', () => ({
+  loadSpeciesEvolutionData: () => [],
   loadSpeciesData: () => [{ id: 1, name: 'bulbasaur', generation: 1 }],
   loadFormsData: () => [
     {

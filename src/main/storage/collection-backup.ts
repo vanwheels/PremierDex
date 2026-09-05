@@ -29,7 +29,9 @@ export function createBackupOperations(db: Database.Database): {
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
 } {
-  const listSpeciesStmt = db.prepare('SELECT id, name, generation, collapsed_display_form_id FROM species ORDER BY id')
+  const listSpeciesStmt = db.prepare(
+    'SELECT id, name, generation, collapsed_display_form_id, is_final_evolution_stage FROM species ORDER BY id'
+  )
   const listFormsStmt = db.prepare('SELECT * FROM forms ORDER BY species_id, id')
   // `, id` tiebreaker (Leg 5): matters now that a group can hold more than one row
   // (duplicates, post Leg 2) — entryKey below relies on both the export dump and the
