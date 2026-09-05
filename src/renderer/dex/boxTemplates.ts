@@ -1,4 +1,4 @@
-import type { CollectionEntry, Form, Gender } from '@shared/types/pokemon'
+import type { CollectionEntry, Form, Gender, Species } from '@shared/types/pokemon'
 import type { BoxPlaceholder } from '@shared/types/box'
 import type { DexTierConfig } from './completionStats'
 import { BOX_SIZE } from './buildBoxes'
@@ -42,16 +42,17 @@ export function slotKey(boxNumber: number, boxSlot: number): string {
  * too. A fresh implementation rather than refactoring computeCompletionStats to share this
  * loop (Leg 1 flagged that factoring as optional, not required): same shape, smaller diff.
  *
- * `excludePreEvolutions` is never true for `BUILDABLE_TIERS`, so it's not implemented as a
- * real filter yet — the data it needs now exists (`Species.isFinalEvolutionStage`, Leg 5),
- * but wiring it into this filter is its own follow-up leg (see TODO.md).
+ * `species` (Leg 8) is only consulted when `tierConfig.excludePreEvolutions` is on —
+ * looked up per form by `form.speciesId` for `Species.isFinalEvolutionStage`.
  */
-export function requiredUnits(tierConfig: DexTierConfig, color: DexColor, forms: Form[]): RequiredUnit[] {
+export function requiredUnits(tierConfig: DexTierConfig, color: DexColor, forms: Form[], species: Species[]): RequiredUnit[] {
   const shiny = color === 'shiny'
+  const speciesById = new Map(species.map((s) => [s.id, s]))
   const units: RequiredUnit[] = []
   for (const form of forms) {
     if (form.formCategory === 'non_boxable') continue
     if (form.formCategory === 'cosmetic_variant' && !tierConfig.includeCosmeticVariants) continue
+    if (tierConfig.excludePreEvolutions && !speciesById.get(form.speciesId)?.isFinalEvolutionStage) continue
     if (shiny && form.shinyLocked) continue
     if (!shiny && form.alwaysShiny) continue
     if (form.hasGenderDifference && tierConfig.splitByGender) {
@@ -106,12 +107,13 @@ export function pendingRequiredUnits(params: {
   tierConfig: DexTierConfig
   color: DexColor
   forms: Form[]
+  species: Species[]
   occupiedUnitIndex: Set<string>
   existingPlaceholderKeys: Set<string>
 }): RequiredUnit[] {
-  const { tierConfig, color, forms, occupiedUnitIndex, existingPlaceholderKeys } = params
+  const { tierConfig, color, forms, species, occupiedUnitIndex, existingPlaceholderKeys } = params
   const formsById = new Map(forms.map((f) => [f.id, f]))
-  return requiredUnits(tierConfig, color, forms).filter((unit) => {
+  return requiredUnits(tierConfig, color, forms, species).filter((unit) => {
     if (isUnitSatisfied(unit, tierConfig, formsById.get(unit.formId), occupiedUnitIndex)) return false
     if (existingPlaceholderKeys.has(unitKey(unit.formId, unit.gender, unit.shiny))) return false
     return true

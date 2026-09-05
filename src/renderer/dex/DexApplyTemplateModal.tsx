@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { CollectionEntry, Form } from '@shared/types/pokemon'
+import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import { BUILDABLE_TIERS, TIER_CONFIGS, TIER_LABELS, type DexTier } from './completionStats'
 import {
@@ -13,6 +13,7 @@ import {
 
 interface DexApplyTemplateModalProps {
   forms: Form[]
+  species: Species[]
   /** Already scoped to the target location, same convention as storageBoxes/
    * boxPlaceholders below — total-based as of Leg 6, so unlike the pre-Leg-6 modal this no
    * longer needs the collection's full, unscoped entry list. See boxTemplates.ts's
@@ -37,6 +38,7 @@ interface DexApplyTemplateModalProps {
  */
 export function DexApplyTemplateModal({
   forms,
+  species,
   entries,
   storageBoxes,
   boxPlaceholders,
@@ -58,10 +60,10 @@ export function DexApplyTemplateModal({
 
   const preview = useMemo(() => {
     const tierConfig = TIER_CONFIGS[tier]
-    const units = pendingRequiredUnits({ tierConfig, color, forms, occupiedUnitIndex, existingPlaceholderKeys })
+    const units = pendingRequiredUnits({ tierConfig, color, forms, species, occupiedUnitIndex, existingPlaceholderKeys })
     const available = countAvailableSlots(storageBoxes.length, occupiedSlotCount)
     return { unitCount: units.length, extraBoxes: extraBoxesNeeded(units.length, available) }
-  }, [tier, color, forms, occupiedUnitIndex, existingPlaceholderKeys, storageBoxes.length, occupiedSlotCount])
+  }, [tier, color, forms, species, occupiedUnitIndex, existingPlaceholderKeys, storageBoxes.length, occupiedSlotCount])
 
   return (
     <div className="origin-modal-backdrop" onClick={onClose}>

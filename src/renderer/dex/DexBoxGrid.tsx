@@ -192,7 +192,7 @@ export function DexBoxGrid({
     const tierConfig = TIER_CONFIGS[tier]
     const occupiedUnitIndex = buildOccupiedUnitIndex(entries)
     const existingPlaceholderKeys = buildPlaceholderKeys(boxPlaceholders)
-    const units = pendingRequiredUnits({ tierConfig, color, forms, occupiedUnitIndex, existingPlaceholderKeys })
+    const units = pendingRequiredUnits({ tierConfig, color, forms, species, occupiedUnitIndex, existingPlaceholderKeys })
     if (units.length === 0) {
       setTemplateModalOpen(false)
       return
@@ -306,6 +306,7 @@ export function DexBoxGrid({
       {templateModalOpen && (
         <DexApplyTemplateModal
           forms={forms}
+          species={species}
           entries={entries}
           storageBoxes={storageBoxes}
           boxPlaceholders={boxPlaceholders}

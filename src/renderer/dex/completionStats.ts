@@ -1,4 +1,4 @@
-import type { CollectionEntry, Form } from '@shared/types/pokemon'
+import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import { indexEntriesByForm, REGIONAL_LABELS, REGIONAL_ORDER } from './buildDexSections'
 
 /** How many of `total` collectible units are owned. Percent is left for the caller to
@@ -43,24 +43,28 @@ export interface CompletionStatsOptions {
    * by default — on reproduces the pre-Leg-19 double count (regional forms landing in
    * both their generation bucket and byRegionalGroup). */
   foldRegionalIntoGeneration: boolean
+  /** Only count a form whose species is the end of its evolutionary line
+   * (`Species.isFinalEvolutionStage`) — the "Pre Evos" axis (Leg 8, see
+   * docs/investigations/dex-completeness-tiers.md). Off by default, same convention as
+   * the other two tier axes above. */
+  excludePreEvolutions: boolean
 }
 
 export const DEFAULT_COMPLETION_STATS_OPTIONS: CompletionStatsOptions = {
   includeCosmeticVariants: false,
   splitByGender: false,
-  foldRegionalIntoGeneration: false
+  foldRegionalIntoGeneration: false,
+  excludePreEvolutions: false
 }
 
 /**
  * The 5 named dex-completeness tiers from Austin John's HOME Living Dex Organizer
  * spreadsheet, per Leg 1 of the Dex completeness tier migration
  * (docs/investigations/dex-completeness-tiers.md) — fixed presets over
- * `includeCosmeticVariants`/`splitByGender` (both already tracked by
- * CompletionStatsOptions) plus `excludePreEvolutions`, which isn't wired up yet even
- * though the data it needs now exists (`Species.isFinalEvolutionStage`, added by Leg 5 —
- * see docs/investigations/dex-completeness-tiers.md). Regional Diffs isn't a
- * 4th axis here: it's always on (every dex_distinct form, regional or not, already counts
- * unconditionally below), per Leg 1's mapping.
+ * `includeCosmeticVariants`/`splitByGender`/`excludePreEvolutions` (all three tracked by
+ * CompletionStatsOptions). Regional Diffs isn't a 4th axis here: it's always on (every
+ * dex_distinct form, regional or not, already counts unconditionally below), per Leg 1's
+ * mapping.
  */
 export type DexTier = 'living' | 'livingFormLite' | 'livingForm' | 'finalFormForm' | 'finalForm'
 
@@ -86,30 +90,39 @@ export const TIER_LABELS: Record<DexTier, string> = {
   finalForm: 'Final Form Dex'
 }
 
-/** The only tiers computable today — `finalFormForm`/`finalForm` need
- * `excludePreEvolutions` for real, which needs its own tier-computation-wiring leg even
- * though the underlying data exists (Leg 5, see docs/investigations/
- * dex-completeness-tiers.md). Both the Completion Stats tier picker and Box Templates'
- * tier picker offer only these. */
-export const BUILDABLE_TIERS: DexTier[] = ['living', 'livingFormLite', 'livingForm']
+/** Every named tier — all 5 are computable as of Leg 8 (`excludePreEvolutions` now filters
+ * for real in both `requiredUnits` and `computeCompletionStats`, see boxTemplates.ts and
+ * this file's own `computeCompletionStats`). Both the Completion Stats tier picker and Box
+ * Templates' tier picker offer all of these. */
+export const BUILDABLE_TIERS: DexTier[] = ['living', 'livingFormLite', 'livingForm', 'finalFormForm', 'finalForm']
 
-/** Applies a tier's `includeCosmeticVariants`/`splitByGender` onto an existing options
- * object — `foldRegionalIntoGeneration` is untouched: it's a purely cosmetic display-bucket
- * toggle unrelated to any tier (Leg 1's mapping notes), not one of the 3 axes a tier fixes. */
+/** Applies a tier's `includeCosmeticVariants`/`splitByGender`/`excludePreEvolutions` onto
+ * an existing options object — `foldRegionalIntoGeneration` is untouched: it's a purely
+ * cosmetic display-bucket toggle unrelated to any tier (Leg 1's mapping notes), not one of
+ * the 3 axes a tier fixes. */
 export function applyTierToOptions(tier: DexTier, options: CompletionStatsOptions): CompletionStatsOptions {
   const config = TIER_CONFIGS[tier]
-  return { ...options, includeCosmeticVariants: config.includeCosmeticVariants, splitByGender: config.splitByGender }
+  return {
+    ...options,
+    includeCosmeticVariants: config.includeCosmeticVariants,
+    splitByGender: config.splitByGender,
+    excludePreEvolutions: config.excludePreEvolutions
+  }
 }
 
-/** Which buildable tier (if any) `options`' current includeCosmeticVariants/splitByGender
- * combo matches — for the tier picker's controlled value. `null` once the individual
- * checkboxes drift off every named tier (e.g. splitByGender on with includeCosmeticVariants
- * off has no tier name in Leg 1's table). */
+/** Which buildable tier (if any) `options`' current includeCosmeticVariants/splitByGender/
+ * excludePreEvolutions combo matches — for the tier picker's controlled value. `null` once
+ * the individual checkboxes drift off every named tier (e.g. splitByGender on with
+ * includeCosmeticVariants off has no tier name in Leg 1's table). */
 export function matchingTier(options: CompletionStatsOptions): DexTier | null {
   return (
     BUILDABLE_TIERS.find((tier) => {
       const config = TIER_CONFIGS[tier]
-      return config.includeCosmeticVariants === options.includeCosmeticVariants && config.splitByGender === options.splitByGender
+      return (
+        config.includeCosmeticVariants === options.includeCosmeticVariants &&
+        config.splitByGender === options.splitByGender &&
+        config.excludePreEvolutions === options.excludePreEvolutions
+      )
     }) ?? null
   )
 }
@@ -165,13 +178,19 @@ function addUnit(bucket: CompletionBucket, form: Form, ownedRegular: boolean, ow
  * Species-only for now, per Vanny's 2026-09-02 scoping call on the TODO item: no
  * dex-tier (regular vs. complete living dex) breakdown until that concept exists in the
  * schema — see TODO.md's [Dex completeness tier migration].
+ *
+ * `species` (Leg 8) is only consulted when `options.excludePreEvolutions` is on — looked
+ * up per form by `form.speciesId` for `Species.isFinalEvolutionStage`, same pattern
+ * boxTemplates.ts's `requiredUnits` uses.
  */
 export function computeCompletionStats(
   forms: Form[],
   entries: CollectionEntry[],
+  species: Species[],
   options: CompletionStatsOptions = DEFAULT_COMPLETION_STATS_OPTIONS
 ): CompletionStats {
   const entriesByForm = indexEntriesByForm(entries)
+  const speciesById = new Map(species.map((s) => [s.id, s]))
   const overall = emptyBucket('overall', 'Overall')
   const byGeneration = new Map<number, CompletionBucket>()
   const byRegionalGroup = new Map<string, CompletionBucket>()
@@ -179,6 +198,7 @@ export function computeCompletionStats(
   for (const form of forms) {
     if (form.formCategory === 'non_boxable') continue
     if (form.formCategory === 'cosmetic_variant' && !options.includeCosmeticVariants) continue
+    if (options.excludePreEvolutions && !speciesById.get(form.speciesId)?.isFinalEvolutionStage) continue
     const entriesByGender = entriesByForm.get(form.id)
 
     let regionalBucket: CompletionBucket | undefined

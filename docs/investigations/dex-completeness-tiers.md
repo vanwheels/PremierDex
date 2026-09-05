@@ -58,12 +58,12 @@ Three of the four rows already exist in some form:
   `isFinalEvolutionStage(form.speciesId)` in the pseudocode below now resolves directly to
   this column — no further data work needed. **Not done by Leg 5:** wiring
   `excludePreEvolutions` itself into `requiredUnits()`/`computeCompletionStats`/
-  `BUILDABLE_TIERS` so FinalFormForm/FinalForm actually become selectable — that's the
-  data acquisition only; the tier-computation wiring is its own follow-up (see TODO.md).
+  `BUILDABLE_TIERS` so FinalFormForm/FinalForm actually become selectable — that was the
+  data acquisition only; the tier-computation wiring landed as its own follow-up, Leg 8
+  (see TODO.md/COMPLETED.md).
 
 So the working model is **3 boolean axes** (`includeCosmeticVariants`, `splitByGender`,
-and `excludePreEvolutions` — the data for the third exists as of Leg 5, but nothing yet
-consumes it, see above), with dex_distinct/regional forms always included as the floor
+`excludePreEvolutions`), with dex_distinct/regional forms always included as the floor
 every tier shares. The 5 named tiers are fixed presets over those axes, not a 4-axis
 system:
 
@@ -72,8 +72,8 @@ system:
 | Living Form | true | true | false | yes |
 | LivingFormLITE | true | false | false | yes |
 | Living | false | false | false | yes |
-| FinalFormForm | true | false | true | blocked on tier-computation wiring (Leg 5's data exists, unconsumed) |
-| FinalForm | false | false | true | blocked on tier-computation wiring (Leg 5's data exists, unconsumed) |
+| FinalFormForm | true | false | true | yes (Leg 8) |
+| FinalForm | false | false | true | yes (Leg 8) |
 
 ("Living" is the closest match to what the milestone's original wording called "regular
 species-only" — it isn't species-only in the literal sense (regional forms still each
@@ -107,7 +107,7 @@ requiredUnits(tier, color, forms, species):
   for each form in forms:
     if form.formCategory == 'non_boxable': skip
     if form.formCategory == 'cosmetic_variant' and not tier.includeCosmeticVariants: skip
-    if tier.excludePreEvolutions and not isFinalEvolutionStage(form.speciesId): skip   # data exists as of Leg 5 (species.isFinalEvolutionStage); this call site is not yet wired up
+    if tier.excludePreEvolutions and not isFinalEvolutionStage(form.speciesId): skip   # wired up at Leg 8
     if color == 'regular' and form.alwaysShiny: skip
     if color == 'shiny' and form.shinyLocked: skip
     genders = (form.hasGenderDifference and tier.splitByGender) ? [male, female]
@@ -171,6 +171,11 @@ changes.
 - **Leg 5 (done, 2026-09-04):** evolution-chain data acquisition (PokeAPI
   `/evolution-chain` fetch pass + `species.is_final_evolution_stage` schema column + seed
   backfill) — see the corrected "Pre Evos" bullet above. Data-only, per its TODO scope: it
-  does not wire `excludePreEvolutions` into `requiredUnits()`/`computeCompletionStats`/
-  `BUILDABLE_TIERS`, so FinalFormForm/FinalForm still don't appear in the tier picker.
-  That wiring is a new follow-up leg (see TODO.md), not part of this one.
+  did not wire `excludePreEvolutions` into `requiredUnits()`/`computeCompletionStats`/
+  `BUILDABLE_TIERS` itself.
+- **Leg 8 (done, 2026-09-04):** wired `excludePreEvolutions` into `requiredUnits()` and
+  `computeCompletionStats` (both now take `species` to look up
+  `Species.isFinalEvolutionStage` by `form.speciesId`), added it to
+  `CompletionStatsOptions` with its own checkbox in `CompletionStatsPanel`, and widened
+  `BUILDABLE_TIERS` to all 5 named tiers — FinalFormForm/FinalForm are now selectable in
+  both the Completion Stats and Box Templates tier pickers.

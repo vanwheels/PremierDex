@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { CollectionEntry, Form } from '@shared/types/pokemon'
+import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import type { BoxPlaceholder } from '@shared/types/box'
 import { TIER_CONFIGS } from './completionStats'
 import {
@@ -30,6 +30,10 @@ function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId'>): Fo
   }
 }
 
+function makeSpecies(overrides: Partial<Species> & Pick<Species, 'id'>): Species {
+  return { name: 'species', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: true, ...overrides }
+}
+
 function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, 'id' | 'formId'>): CollectionEntry {
   return {
     gender: 'unknown',
@@ -55,7 +59,7 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
 describe('requiredUnits', () => {
   it('excludes non_boxable forms under every tier', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 1, formCategory: 'non_boxable' })]
-    expect(requiredUnits(TIER_CONFIGS.living, 'regular', forms)).toEqual([])
+    expect(requiredUnits(TIER_CONFIGS.living, 'regular', forms, [])).toEqual([])
   })
 
   it('excludes cosmetic_variant forms unless the tier includes them', () => {
@@ -63,8 +67,8 @@ describe('requiredUnits', () => {
       makeForm({ id: 1, speciesId: 1 }),
       makeForm({ id: 2, speciesId: 1, formCategory: 'cosmetic_variant' })
     ]
-    expect(requiredUnits(TIER_CONFIGS.living, 'regular', forms)).toEqual([{ formId: 1, gender: 'unknown', shiny: false }])
-    expect(requiredUnits(TIER_CONFIGS.livingFormLite, 'regular', forms)).toEqual([
+    expect(requiredUnits(TIER_CONFIGS.living, 'regular', forms, [])).toEqual([{ formId: 1, gender: 'unknown', shiny: false }])
+    expect(requiredUnits(TIER_CONFIGS.livingFormLite, 'regular', forms, [])).toEqual([
       { formId: 1, gender: 'unknown', shiny: false },
       { formId: 2, gender: 'unknown', shiny: false }
     ])
@@ -72,12 +76,12 @@ describe('requiredUnits', () => {
 
   it('collapses a gender-diff form to one male-keyed unit when the tier doesn\'t split by gender', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 1, hasGenderDifference: true })]
-    expect(requiredUnits(TIER_CONFIGS.living, 'regular', forms)).toEqual([{ formId: 1, gender: 'male', shiny: false }])
+    expect(requiredUnits(TIER_CONFIGS.living, 'regular', forms, [])).toEqual([{ formId: 1, gender: 'male', shiny: false }])
   })
 
   it('splits a gender-diff form into male and female units when the tier does', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 1, hasGenderDifference: true })]
-    expect(requiredUnits(TIER_CONFIGS.livingForm, 'regular', forms)).toEqual([
+    expect(requiredUnits(TIER_CONFIGS.livingForm, 'regular', forms, [])).toEqual([
       { formId: 1, gender: 'male', shiny: false },
       { formId: 1, gender: 'female', shiny: false }
     ])
@@ -88,8 +92,28 @@ describe('requiredUnits', () => {
       makeForm({ id: 1, speciesId: 1, alwaysShiny: true }),
       makeForm({ id: 2, speciesId: 2, shinyLocked: true })
     ]
-    expect(requiredUnits(TIER_CONFIGS.living, 'regular', forms)).toEqual([{ formId: 2, gender: 'unknown', shiny: false }])
-    expect(requiredUnits(TIER_CONFIGS.living, 'shiny', forms)).toEqual([{ formId: 1, gender: 'unknown', shiny: true }])
+    expect(requiredUnits(TIER_CONFIGS.living, 'regular', forms, [])).toEqual([{ formId: 2, gender: 'unknown', shiny: false }])
+    expect(requiredUnits(TIER_CONFIGS.living, 'shiny', forms, [])).toEqual([{ formId: 1, gender: 'unknown', shiny: true }])
+  })
+
+  it('excludes a pre-evolution species when the tier excludes pre-evolutions', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 1 }), makeForm({ id: 2, speciesId: 2 })]
+    const species: Species[] = [
+      makeSpecies({ id: 1, isFinalEvolutionStage: false }),
+      makeSpecies({ id: 2, isFinalEvolutionStage: true })
+    ]
+    expect(requiredUnits(TIER_CONFIGS.finalForm, 'regular', forms, species)).toEqual([{ formId: 2, gender: 'unknown', shiny: false }])
+  })
+
+  it('does not exclude pre-evolutions when the tier leaves excludePreEvolutions off', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 1 })]
+    const species: Species[] = [makeSpecies({ id: 1, isFinalEvolutionStage: false })]
+    expect(requiredUnits(TIER_CONFIGS.living, 'regular', forms, species)).toEqual([{ formId: 1, gender: 'unknown', shiny: false }])
+  })
+
+  it('treats a form whose species is missing from the list as a pre-evolution (excluded)', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 1 })]
+    expect(requiredUnits(TIER_CONFIGS.finalForm, 'regular', forms, [])).toEqual([])
   })
 })
 
@@ -102,6 +126,7 @@ describe('pendingRequiredUnits', () => {
       tierConfig: TIER_CONFIGS.living,
       color: 'regular',
       forms,
+      species: [],
       occupiedUnitIndex,
       existingPlaceholderKeys: new Set()
     })
@@ -114,6 +139,7 @@ describe('pendingRequiredUnits', () => {
       tierConfig: TIER_CONFIGS.living,
       color: 'regular',
       forms,
+      species: [],
       occupiedUnitIndex,
       existingPlaceholderKeys: new Set()
     })
@@ -126,6 +152,7 @@ describe('pendingRequiredUnits', () => {
       tierConfig: TIER_CONFIGS.livingForm,
       color: 'regular',
       forms,
+      species: [],
       occupiedUnitIndex,
       existingPlaceholderKeys: new Set()
     })
@@ -138,6 +165,7 @@ describe('pendingRequiredUnits', () => {
       tierConfig: TIER_CONFIGS.living,
       color: 'regular',
       forms,
+      species: [],
       occupiedUnitIndex: new Set(),
       existingPlaceholderKeys
     })
@@ -152,6 +180,7 @@ describe('pendingRequiredUnits', () => {
       tierConfig: TIER_CONFIGS.living,
       color: 'regular',
       forms,
+      species: [],
       occupiedUnitIndex,
       existingPlaceholderKeys: new Set()
     })

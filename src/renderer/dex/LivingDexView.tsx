@@ -172,8 +172,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
   // Independent of options/filters/sort (all display-only) — stats reflect the whole of the
   // selected tab's location, not the currently-visible slice. See completionStats.ts.
   const completionStats = useMemo(
-    () => computeCompletionStats(forms, entriesForLocationTab, completionStatsOptions),
-    [forms, entriesForLocationTab, completionStatsOptions]
+    () => computeCompletionStats(forms, entriesForLocationTab, species, completionStatsOptions),
+    [forms, entriesForLocationTab, species, completionStatsOptions]
   )
   // Unscoped (every location, including unboxed) — which entries need a gender
   // confirmation is location-independent, unlike boxTemplates.ts's Leg-6-redefined

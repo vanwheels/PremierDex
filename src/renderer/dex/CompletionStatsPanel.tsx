@@ -133,6 +133,14 @@ export function CompletionStatsPanel({
           />
           Fold regional forms into generation totals
         </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={options.excludePreEvolutions}
+            onChange={(e) => onOptionsChange({ ...options, excludePreEvolutions: e.target.checked })}
+          />
+          Exclude pre-evolutions
+        </label>
       </div>
       <div className="completion-stats-tables">
         <StatsTable title="Overall" rows={[stats.overall]} />

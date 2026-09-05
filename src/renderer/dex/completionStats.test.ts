@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { CollectionEntry, Form } from '@shared/types/pokemon'
+import type { CollectionEntry, Form, Species } from '@shared/types/pokemon'
 import {
   applyTierToOptions,
   BUILDABLE_TIERS,
@@ -23,6 +23,10 @@ function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'fo
     spriteFormSuffix: null,
     ...overrides
   }
+}
+
+function makeSpecies(overrides: Partial<Species> & Pick<Species, 'id'>): Species {
+  return { name: 'species', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: true, ...overrides }
 }
 
 function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, 'id' | 'formId'>): CollectionEntry {
@@ -53,7 +57,7 @@ describe('computeCompletionStats', () => {
       makeForm({ id: 1, speciesId: 25, formName: 'base' }),
       makeForm({ id: 2, speciesId: 25, formName: 'gmax', formCategory: 'non_boxable' })
     ]
-    const stats = computeCompletionStats(forms, [])
+    const stats = computeCompletionStats(forms, [], [])
     expect(stats.overall.regular.total).toBe(1)
   })
 
@@ -63,7 +67,7 @@ describe('computeCompletionStats', () => {
       makeEntry({ id: 10, formId: 1, owned: false }),
       makeEntry({ id: 11, formId: 1, owned: true })
     ]
-    const stats = computeCompletionStats(forms, entries)
+    const stats = computeCompletionStats(forms, entries, [])
     expect(stats.overall.regular.total).toBe(1)
     expect(stats.overall.regular.owned).toBe(1)
   })
@@ -74,7 +78,7 @@ describe('computeCompletionStats', () => {
       makeEntry({ id: 10, formId: 1, gender: 'male', owned: true }),
       makeEntry({ id: 11, formId: 1, gender: 'female', owned: false })
     ]
-    const stats = computeCompletionStats(forms, entries)
+    const stats = computeCompletionStats(forms, entries, [])
     expect(stats.overall.regular.total).toBe(1)
     expect(stats.overall.regular.owned).toBe(1)
   })
@@ -85,10 +89,11 @@ describe('computeCompletionStats', () => {
       makeEntry({ id: 10, formId: 1, gender: 'male', owned: true }),
       makeEntry({ id: 11, formId: 1, gender: 'female', owned: false })
     ]
-    const stats = computeCompletionStats(forms, entries, {
+    const stats = computeCompletionStats(forms, entries, [], {
       includeCosmeticVariants: false,
       splitByGender: true,
-      foldRegionalIntoGeneration: false
+      foldRegionalIntoGeneration: false,
+      excludePreEvolutions: false
     })
     expect(stats.overall.regular.total).toBe(2)
     expect(stats.overall.regular.owned).toBe(1)
@@ -99,13 +104,14 @@ describe('computeCompletionStats', () => {
       makeForm({ id: 1, speciesId: 666, formName: 'meadow' }),
       makeForm({ id: 2, speciesId: 666, formName: 'icy-snow', formCategory: 'cosmetic_variant' })
     ]
-    const stats = computeCompletionStats(forms, [])
+    const stats = computeCompletionStats(forms, [], [])
     expect(stats.overall.regular.total).toBe(1)
 
-    const withCosmetics = computeCompletionStats(forms, [], {
+    const withCosmetics = computeCompletionStats(forms, [], [], {
       includeCosmeticVariants: true,
       splitByGender: false,
-      foldRegionalIntoGeneration: false
+      foldRegionalIntoGeneration: false,
+      excludePreEvolutions: false
     })
     expect(withCosmetics.overall.regular.total).toBe(2)
   })
@@ -114,14 +120,15 @@ describe('computeCompletionStats', () => {
     const forms: Form[] = [
       makeForm({ id: 1, speciesId: 26, formName: 'alolan', regionalGroup: 'alolan', firstAvailableGeneration: 7 })
     ]
-    const stats = computeCompletionStats(forms, [])
+    const stats = computeCompletionStats(forms, [], [])
     expect(stats.byGeneration).toEqual([])
     expect(stats.byRegionalGroup[0].regular.total).toBe(1)
 
-    const folded = computeCompletionStats(forms, [], {
+    const folded = computeCompletionStats(forms, [], [], {
       includeCosmeticVariants: false,
       splitByGender: false,
-      foldRegionalIntoGeneration: true
+      foldRegionalIntoGeneration: true,
+      excludePreEvolutions: false
     })
     expect(folded.byGeneration.map((b) => b.key)).toEqual(['7'])
     expect(folded.byGeneration[0].regular.total).toBe(1)
@@ -131,7 +138,7 @@ describe('computeCompletionStats', () => {
   it('excludes an alwaysShiny form from the regular denominator', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 172, formName: 'spiky-eared', alwaysShiny: true })]
     const entries: CollectionEntry[] = [makeEntry({ id: 10, formId: 1, gender: 'unknown', shiny: true, owned: true })]
-    const stats = computeCompletionStats(forms, entries)
+    const stats = computeCompletionStats(forms, entries, [])
     expect(stats.overall.regular.total).toBe(0)
     expect(stats.overall.regular.owned).toBe(0)
     expect(stats.overall.shiny.total).toBe(1)
@@ -141,7 +148,7 @@ describe('computeCompletionStats', () => {
   it('excludes a shinyLocked form from the shiny denominator', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base', shinyLocked: true })]
     const entries: CollectionEntry[] = [makeEntry({ id: 10, formId: 1, owned: true })]
-    const stats = computeCompletionStats(forms, entries)
+    const stats = computeCompletionStats(forms, entries, [])
     expect(stats.overall.shiny.total).toBe(0)
     expect(stats.overall.regular.total).toBe(1)
     expect(stats.overall.regular.owned).toBe(1)
@@ -152,7 +159,7 @@ describe('computeCompletionStats', () => {
       makeForm({ id: 1, speciesId: 3, formName: 'base', firstAvailableGeneration: 3 }),
       makeForm({ id: 2, speciesId: 1, formName: 'base', firstAvailableGeneration: 1 })
     ]
-    const stats = computeCompletionStats(forms, [])
+    const stats = computeCompletionStats(forms, [], [])
     expect(stats.byGeneration.map((b) => b.key)).toEqual(['1', '3'])
   })
 
@@ -161,14 +168,14 @@ describe('computeCompletionStats', () => {
       makeForm({ id: 1, speciesId: 26, formName: 'alolan', regionalGroup: 'alolan' }),
       makeForm({ id: 2, speciesId: 37, formName: 'base' }) // no regional group
     ]
-    const stats = computeCompletionStats(forms, [])
+    const stats = computeCompletionStats(forms, [], [])
     expect(stats.byRegionalGroup.map((b) => b.key)).toEqual(['alolan'])
     expect(stats.byRegionalGroup[0].regular.total).toBe(1)
   })
 
   it('leaves byRegionalGroup empty when no form has a regional group', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 1, formName: 'base' })]
-    const stats = computeCompletionStats(forms, [])
+    const stats = computeCompletionStats(forms, [], [])
     expect(stats.byRegionalGroup).toEqual([])
   })
 
@@ -182,13 +189,35 @@ describe('computeCompletionStats', () => {
       makeEntry({ id: 11, formId: 2, owned: true, storageLocationId: 2 })
     ]
 
-    const boxOne = computeCompletionStats(forms, filterEntriesByStorageLocation(entries, 1))
+    const boxOne = computeCompletionStats(forms, filterEntriesByStorageLocation(entries, 1), [])
     expect(boxOne.overall.regular.total).toBe(2)
     expect(boxOne.overall.regular.owned).toBe(1)
 
-    const boxTwo = computeCompletionStats(forms, filterEntriesByStorageLocation(entries, 2))
+    const boxTwo = computeCompletionStats(forms, filterEntriesByStorageLocation(entries, 2), [])
     expect(boxTwo.overall.regular.total).toBe(2)
     expect(boxTwo.overall.regular.owned).toBe(1)
+  })
+
+  it('excludes a pre-evolution species when excludePreEvolutions is on', () => {
+    const forms: Form[] = [
+      makeForm({ id: 1, speciesId: 1, formName: 'base' }),
+      makeForm({ id: 2, speciesId: 2, formName: 'base' })
+    ]
+    const species: Species[] = [
+      makeSpecies({ id: 1, isFinalEvolutionStage: false }),
+      makeSpecies({ id: 2, isFinalEvolutionStage: true })
+    ]
+    const stats = computeCompletionStats(forms, [], species, {
+      ...DEFAULT_COMPLETION_STATS_OPTIONS,
+      excludePreEvolutions: true
+    })
+    expect(stats.overall.regular.total).toBe(1)
+  })
+
+  it('does not consult species when excludePreEvolutions is off', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 1, formName: 'base' })]
+    const stats = computeCompletionStats(forms, [], [])
+    expect(stats.overall.regular.total).toBe(1)
   })
 })
 
@@ -198,6 +227,7 @@ describe('applyTierToOptions / matchingTier', () => {
       const options = applyTierToOptions(tier, DEFAULT_COMPLETION_STATS_OPTIONS)
       expect(options.includeCosmeticVariants).toBe(TIER_CONFIGS[tier].includeCosmeticVariants)
       expect(options.splitByGender).toBe(TIER_CONFIGS[tier].splitByGender)
+      expect(options.excludePreEvolutions).toBe(TIER_CONFIGS[tier].excludePreEvolutions)
       expect(matchingTier(options)).toBe(tier)
     }
   })
@@ -208,7 +238,12 @@ describe('applyTierToOptions / matchingTier', () => {
   })
 
   it('matches null once the checkboxes drift off every named tier', () => {
-    const offTier = { includeCosmeticVariants: false, splitByGender: true, foldRegionalIntoGeneration: false }
+    const offTier = {
+      includeCosmeticVariants: false,
+      splitByGender: true,
+      foldRegionalIntoGeneration: false,
+      excludePreEvolutions: false
+    }
     expect(matchingTier(offTier)).toBeNull()
   })
 })
