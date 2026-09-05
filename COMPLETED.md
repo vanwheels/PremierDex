@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Evolution-chain data (Pre-Evos axis)] — Leg 5 — 2026-09-04
+PokeAPI `/evolution-chain` fetch pass (`scripts/fetch-evolution-chains.ts`) writing
+`data/pokemon/species-evolution.json`, new `species.is_final_evolution_stage` schema
+column + retrofit, and an unconditional `runSeed` backfill. Data acquisition only — the
+`excludePreEvolutions` axis still isn't wired into `requiredUnits()`/
+`computeCompletionStats`/`BUILDABLE_TIERS`, filed as a new follow-up (Leg 8). See commit
+`15461fa`.
+
 ## [Dex completeness tier migration] — Leg 3 — 2026-09-04
 Resolve Gender Ambiguities: the flow Leg 1's investigation doc deliberately left
 undesigned. Scoped down from a generic tier-migration wizard to just this one action —
