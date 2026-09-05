@@ -44,14 +44,21 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const setOwnedStmt = db.prepare('UPDATE collection_entries SET owned = @owned WHERE id = @id')
   const getEntryStmt = db.prepare('SELECT * FROM collection_entries WHERE id = ?')
   // Gender correction ([Dex completeness tier migration] Leg 3's "Resolve Gender
-  // Ambiguities" flow) — a gender-diff form's owned entry gets written under the
-  // collapsed 'male' key regardless of the individual's real gender whenever
-  // splitByGender display is off (see buildDexSections.ts's collapsed row), so this is
-  // how a user-confirmed correction lands once a splitByGender tier needs to trust it.
-  // A plain per-row UPDATE, not tied to any (form, gender, shiny) uniqueness — that
-  // constraint was dropped (Leg 2 of the Box Arrangement milestone) precisely so
-  // duplicate individuals can each carry an independently correct gender.
-  const setEntryGenderStmt = db.prepare('UPDATE collection_entries SET gender = @gender WHERE id = @id')
+  // Ambiguities" flow, plus the per-row gender toggle in DexRow) — a gender-diff form's
+  // owned entry gets written under the collapsed 'male' key regardless of the
+  // individual's real gender whenever splitByGender display is off (see
+  // buildDexSections.ts's collapsed row), so this is how a user-confirmed correction
+  // lands once a splitByGender tier needs to trust it. A plain per-row UPDATE, not tied
+  // to any (form, gender, shiny) uniqueness — that constraint was dropped (Leg 2 of the
+  // Box Arrangement milestone) precisely so duplicate individuals can each carry an
+  // independently correct gender. Always sets gender_confirmed too: every call to this
+  // statement is an explicit user decision about this entry's gender (whether via the
+  // Resolve modal or the inline toggle), so it's the one place that flag ever flips —
+  // genderResolution.ts's findAmbiguousGenderEntries is what actually reads it back to
+  // stop re-flagging a reviewed entry.
+  const setEntryGenderStmt = db.prepare(
+    'UPDATE collection_entries SET gender = @gender, gender_confirmed = 1 WHERE id = @id'
+  )
   const setEntryOriginStmt = db.prepare(`
     UPDATE collection_entries
     SET trainer_profile_id = @trainerProfileId, origin_game = @originGame, ot_name = @otName,

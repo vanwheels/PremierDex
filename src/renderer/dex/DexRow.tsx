@@ -1,4 +1,4 @@
-import type { CollectionEntry, CollectionEntryOriginInput } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Gender } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { SpriteThumbnail } from './SpriteThumbnail'
@@ -33,6 +33,12 @@ interface DexRowProps {
   onOpenSprite: (target: SpriteModalTarget) => void
   onOpenOrigin: (target: OriginModalTarget) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
+  /** Resolve Gender Ambiguities bugfix follow-up: a per-entry Male/Female control, shown
+   * whenever row.hasGenderDifference so a mislabeled entry can be corrected any time, not
+   * only from the bulk Resolve modal's one-time backlog sweep — see genderResolution.ts.
+   * Writes straight through (no separate "confirm" step): picking a value here is itself
+   * the confirmation. */
+  onSetEntryGender: (entryId: number, gender: Gender) => void
   /** Per-entry assignment picker (Leg 3), given its own Non-Shiny/Shiny Loc. table
    * columns at Leg 9 rather than sitting inline in the owned/shiny cells. Disabled for an
    * unowned entry — there's nothing to place in a box until it's actually caught. Checking
@@ -83,6 +89,7 @@ export function DexRow({
   onOpenSprite,
   onOpenOrigin,
   onSaveOrigin,
+  onSetEntryGender,
   storageLocations,
   onSaveStorageLocation,
   selectedEntryIds,
@@ -105,6 +112,26 @@ export function DexRow({
       <span className="dex-invalid-combo-badge" title={result.reasons.join('; ')}>
         Invalid combo
       </span>
+    )
+  }
+
+  // Only rendered for gender-diff forms (row.hasGenderDifference) — see onSetEntryGender's
+  // doc comment above. Not gated on the entry's current gender or genderConfirmed: showing
+  // it unconditionally for any owned entry here is what lets a correction happen anytime,
+  // not just while an entry is still flagged ambiguous.
+  const genderSelect = (entry: CollectionEntry | null): JSX.Element | null => {
+    if (!row.hasGenderDifference) return null
+    return (
+      <select
+        className="dex-gender-select"
+        disabled={!entry?.owned}
+        value={entry?.gender === 'female' ? 'female' : 'male'}
+        onChange={(e) => entry && onSetEntryGender(entry.id, e.target.value as Gender)}
+        title="Gender"
+      >
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
     )
   }
 
@@ -227,6 +254,7 @@ export function DexRow({
         >
           Origin
         </button>
+        {genderSelect(row.regular)}
         {row.alwaysShiny && (
           <span className="dex-always-shiny-badge" title="No legitimate non-shiny of this form has ever existed">
             Always shiny
@@ -257,6 +285,7 @@ export function DexRow({
         >
           Origin
         </button>
+        {genderSelect(row.shinyEntry)}
         {row.shinyLocked && (
           <span className="dex-shiny-locked-badge" title="No legitimate shiny of this form has ever existed">
             Shiny-locked

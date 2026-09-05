@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react'
-import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
+import type { CollectionEntryOriginInput, Gender } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { DexRow } from './DexRow'
@@ -19,6 +19,8 @@ interface DexTableProps {
   onToggleEntry: (entryId: number, owned: boolean) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   onSetCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
+  /** See DexRow's own doc comment on the prop of the same name. */
+  onSetEntryGender: (entryId: number, gender: Gender) => void
   /** Per-entry assignment picker (Leg 3), its own Loc. columns since Leg 9 — see DexRow's
    * doc comment. Game/Ball columns joined it at Leg 10, read-only there (edited only via
    * OriginModal). */
@@ -70,6 +72,7 @@ export function DexTable({
   onToggleEntry,
   onSaveOrigin,
   onSetCollapsedDisplayForm,
+  onSetEntryGender,
   storageLocations,
   onSaveStorageLocation,
   onBulkMove,
@@ -190,6 +193,7 @@ export function DexTable({
                         onOpenSprite={setSpriteTarget}
                         onOpenOrigin={setOriginTarget}
                         onSaveOrigin={onSaveOrigin}
+                        onSetEntryGender={onSetEntryGender}
                         storageLocations={storageLocations}
                         onSaveStorageLocation={onSaveStorageLocation}
                         selectedEntryIds={selectedEntryIds}
@@ -217,6 +221,7 @@ export function DexTable({
                         onOpenSprite={setSpriteTarget}
                         onOpenOrigin={setOriginTarget}
                         onSaveOrigin={onSaveOrigin}
+                        onSetEntryGender={onSetEntryGender}
                         storageLocations={storageLocations}
                         onSaveStorageLocation={onSaveStorageLocation}
                         selectedEntryIds={selectedEntryIds}

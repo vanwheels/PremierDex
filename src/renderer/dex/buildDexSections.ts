@@ -83,7 +83,8 @@ function buildRows(
       homeBoxable: form.homeBoxable,
       shinyLocked: form.shinyLocked,
       alwaysShiny: form.alwaysShiny,
-      regionalGroup: form.regionalGroup
+      regionalGroup: form.regionalGroup,
+      hasGenderDifference: form.hasGenderDifference
     }
   }
 

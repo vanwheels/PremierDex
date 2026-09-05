@@ -543,6 +543,25 @@ export function applySchema(db: Database.Database): void {
     `)
   }
 
+  // gender_confirmed (Resolve Gender Ambiguities bugfix, see TODO.md/COMPLETED.md) —
+  // `gender` alone can't distinguish "reviewed, actually Male" from "never reviewed,
+  // defaulted Male" on a gender-diff form's collapsed entry (buildDexSections.ts's
+  // collapsed row always writes 'male' regardless of the individual's real gender), so
+  // findAmbiguousGenderEntries (genderResolution.ts) kept re-flagging every entry the
+  // Resolve modal's Save left on Male forever — there was nowhere to persist "yes, this
+  // one really is Male." This column is that persisted confirmation, set independently of
+  // which gender value ends up stored. Defaults to 0 (unconfirmed) for every existing row,
+  // which is correct: a female-gender row is never flagged as ambiguous regardless of this
+  // flag (see genderResolution.ts), and a male-gender row that predates this column
+  // genuinely hasn't been reviewed yet. Runs after the caught_ball/UNIQUE rebuilds above so
+  // it's never present at the current point those trigger.
+  const entryColumnsGenderConfirmed = db.prepare('PRAGMA table_info(collection_entries)').all() as Array<{
+    name: string
+  }>
+  if (!entryColumnsGenderConfirmed.some((c) => c.name === 'gender_confirmed')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN gender_confirmed INTEGER NOT NULL DEFAULT 0')
+  }
+
   // Backfills `boxes` rows so every Storage Location has at least a Box 1, plus a row for
   // any box_number collection_entries already reference — covers a pre-Leg-2 install
   // (whose entries can already sit in boxes with no row for them yet, since buildBoxes.ts

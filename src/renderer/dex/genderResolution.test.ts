@@ -35,6 +35,7 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
     storageLocationId: null,
     boxNumber: null,
     boxSlot: null,
+    genderConfirmed: false,
     ...overrides
   }
 }
@@ -76,6 +77,13 @@ describe('findAmbiguousGenderEntries', () => {
   it('ignores an owned male-keyed entry on a form with no gender difference', () => {
     const forms = [makeForm({ id: 1, speciesId: 1, hasGenderDifference: false })]
     const entries = [makeEntry({ id: 1, formId: 1, gender: 'male', owned: true })]
+
+    expect(findAmbiguousGenderEntries(forms, entries)).toEqual([])
+  })
+
+  it('ignores a confirmed male-keyed entry — genderConfirmed is what Resolve actually clears', () => {
+    const forms = [makeForm({ id: 1, speciesId: 1, hasGenderDifference: true })]
+    const entries = [makeEntry({ id: 1, formId: 1, gender: 'male', owned: true, genderConfirmed: true })]
 
     expect(findAmbiguousGenderEntries(forms, entries)).toEqual([])
   })

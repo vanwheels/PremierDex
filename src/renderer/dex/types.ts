@@ -35,6 +35,9 @@ export interface DexRowData {
    * filter to regional forms independent of DexOptions.regionalMode's inline/grouped
    * *layout* toggle. Always null for cosmetic-variant rows. */
   regionalGroup: string | null
+  /** Mirrors Form.hasGenderDifference — lets DexRow show its inline Male/Female gender
+   * toggle only on rows where the gender axis is meaningful at all. */
+  hasGenderDifference: boolean
 }
 
 /**

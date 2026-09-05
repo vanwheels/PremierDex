@@ -288,7 +288,8 @@ describe('exportCollection / importCollection', () => {
           storageLocationId: null,
           metLocation: null,
           boxNumber: null,
-          boxSlot: null
+          boxSlot: null,
+          genderConfirmed: false
         }
       ]
     }

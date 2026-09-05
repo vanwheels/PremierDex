@@ -22,6 +22,7 @@ function makeEntry(overrides: Partial<CollectionEntry> = {}): CollectionEntry {
     storageLocationId: null,
     boxNumber: null,
     boxSlot: null,
+    genderConfirmed: false,
     ...overrides
   }
 }

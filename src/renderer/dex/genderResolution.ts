@@ -18,16 +18,21 @@ export interface AmbiguousGenderEntry {
 
 /**
  * Every owned entry a Living Form Dex migration needs the user to confirm before its
- * completion diff can be trusted: an owned entry on a `hasGenderDifference` form, stored
- * under the collapsed 'male' key. A form's 'female' rows are always seeded as their own
- * entries (seed.ts) and are never themselves ambiguous — only 'male' ever collapses two
- * possible physical individuals into one key.
+ * completion diff can be trusted: an owned, unconfirmed entry on a `hasGenderDifference`
+ * form, stored under the collapsed 'male' key. A form's 'female' rows are always seeded
+ * as their own entries (seed.ts) and are never themselves ambiguous — only 'male' ever
+ * collapses two possible physical individuals into one key.
+ *
+ * Gated on `!genderConfirmed`, not just `gender === 'male'` — the gender value alone
+ * can't distinguish "reviewed, actually Male" from "never reviewed, defaulted Male" (see
+ * CollectionEntry.genderConfirmed's own doc comment), so an entry the user has already
+ * confirmed as Male stops appearing here even though its stored gender didn't change.
  */
 export function findAmbiguousGenderEntries(forms: Form[], entries: CollectionEntry[]): AmbiguousGenderEntry[] {
   const formsById = new Map(forms.map((form) => [form.id, form]))
   const result: AmbiguousGenderEntry[] = []
   for (const entry of entries) {
-    if (!entry.owned || entry.gender !== 'male') continue
+    if (!entry.owned || entry.gender !== 'male' || entry.genderConfirmed) continue
     const form = formsById.get(entry.formId)
     if (form?.hasGenderDifference) result.push({ entry, form })
   }

@@ -52,6 +52,7 @@ export interface CollectionEntryRow {
   met_location: string | null
   box_number: number | null
   box_slot: number | null
+  gender_confirmed: 0 | 1
 }
 
 export interface TrainerProfileRow {
@@ -135,7 +136,8 @@ export function toCollectionEntry(row: CollectionEntryRow): CollectionEntry {
     storageLocationId: row.storage_location_id,
     metLocation: row.met_location,
     boxNumber: row.box_number,
-    boxSlot: row.box_slot
+    boxSlot: row.box_slot,
+    genderConfirmed: row.gender_confirmed === 1
   }
 }
 

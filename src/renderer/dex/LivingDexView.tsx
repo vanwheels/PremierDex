@@ -202,8 +202,13 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
         <DexResolveGenderModal
           species={species}
           ambiguousEntries={ambiguousGenderEntries}
-          onResolve={(femaleEntryIds) => {
-            onBulkSetEntryGender(femaleEntryIds, 'female')
+          onResolve={(femaleEntryIds, maleEntryIds) => {
+            // Both calls go through setEntryGenderStmt (sqlite-storage.ts), which always
+            // marks genderConfirmed too — so every listed entry actually leaves the
+            // ambiguous list, not just the ones flipped to Female. See
+            // DexResolveGenderModal's doc comment.
+            if (femaleEntryIds.length > 0) onBulkSetEntryGender(femaleEntryIds, 'female')
+            if (maleEntryIds.length > 0) onBulkSetEntryGender(maleEntryIds, 'male')
             setResolveGenderModalOpen(false)
           }}
           onClose={() => setResolveGenderModalOpen(false)}
@@ -225,6 +230,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onToggleEntry={handleToggleEntry}
           onSaveOrigin={onSaveOrigin}
           onSetCollapsedDisplayForm={onSetCollapsedDisplayForm}
+          onSetEntryGender={(entryId, gender) => onBulkSetEntryGender([entryId], gender)}
           storageLocations={storageLocations}
           onSaveStorageLocation={onSaveStorageLocation}
           onBulkMove={onBulkMoveEntries}

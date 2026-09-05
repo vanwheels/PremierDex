@@ -19,6 +19,7 @@ function makeRow(overrides: Partial<DexRowData>): DexRowData {
     shinyLocked: false,
     alwaysShiny: false,
     regionalGroup: null,
+    hasGenderDifference: false,
     ...overrides
   }
 }
@@ -41,7 +42,8 @@ function ownedEntry(id: number, shiny: boolean, nickname: string | null = null):
     metLocation: null,
     storageLocationId: null,
     boxNumber: null,
-    boxSlot: null
+    boxSlot: null,
+    genderConfirmed: false
   }
 }
 

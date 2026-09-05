@@ -122,6 +122,16 @@ export interface CollectionEntry {
    * greyed-out once Box view ships. */
   boxNumber: number | null
   boxSlot: number | null
+  /** Whether `gender` above has actually been reviewed for this individual, independent of
+   * which value it holds — see genderResolution.ts's own doc comment. A gender-diff form's
+   * collapsed entry (splitByGender off) always writes 'male' regardless of the individual's
+   * real gender, so `gender === 'male'` alone can't tell a confirmed Male from a
+   * never-reviewed one; this flag is what makes "Resolve Gender Ambiguities" able to
+   * actually clear an entry instead of re-flagging it forever. Set true by
+   * bulkSetEntryGender whenever a gender gets written explicitly (bulk resolve, or the
+   * per-row gender toggle) — never reset back to false, so re-confirming later is always
+   * possible. */
+  genderConfirmed: boolean
 }
 
 /** Field set for setEntryOrigin — everything but the assigned id, mirroring

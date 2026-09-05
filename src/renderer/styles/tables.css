@@ -156,6 +156,20 @@ tbody tr:hover {
   cursor: default;
 }
 
+/* Resolve Gender Ambiguities bugfix follow-up: sits right after the Origin button, same
+ * compact treatment as dex-storage-location-select — only rendered at all on a gender-diff
+ * form's row (see DexRow's onSetEntryGender doc comment). */
+.dex-gender-select {
+  margin-left: 0.35rem;
+  font-size: 0.68rem;
+  padding: 0.1rem 0.3rem;
+  vertical-align: middle;
+}
+
+.dex-gender-select:disabled {
+  opacity: 0.4;
+}
+
 /* Per-entry assignment picker (Leg 3), in its own Loc. column since Leg 9 — same compact
  * treatment as dex-collapsed-display-select, minus the inline margin it no longer needs
  * now that it's not sharing a cell with the checkbox/Origin button/badges. */

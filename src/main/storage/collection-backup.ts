@@ -70,7 +70,7 @@ export function createBackupOperations(db: Database.Database): {
     SET owned = @owned, trainer_profile_id = @trainerProfileId, origin_game = @originGame,
       ot_name = @otName, tid = @tid, sid = @sid, language = @language, nickname = @nickname,
       caught_ball = @caughtBall, storage_location_id = @storageLocationId, met_location = @metLocation,
-      box_number = @boxNumber, box_slot = @boxSlot
+      box_number = @boxNumber, box_slot = @boxSlot, gender_confirmed = @genderConfirmed
     WHERE id = @id
   `)
 
@@ -171,6 +171,7 @@ export function createBackupOperations(db: Database.Database): {
         metLocation: string | null
         boxNumber: number | null
         boxSlot: number | null
+        genderConfirmed: boolean
       }
       const wantedByKey = new Map<string, WantedEntry>()
       const importOrdinalCounters = new Map<string, number>()
@@ -214,7 +215,12 @@ export function createBackupOperations(db: Database.Database): {
           storageLocationId: resolvedStorageLocationId,
           metLocation: entry.metLocation,
           boxNumber: resolvedStorageLocationId !== null ? entry.boxNumber : null,
-          boxSlot: resolvedStorageLocationId !== null ? entry.boxSlot : null
+          boxSlot: resolvedStorageLocationId !== null ? entry.boxSlot : null,
+          // `?? false` guards a pre-genderConfirmed backup file (the field didn't exist
+          // yet) rather than trusting CollectionExport's compile-time type, same defensive
+          // stance parseCollectionExport already takes on the rest of a hand-edited or
+          // stale backup's shape.
+          genderConfirmed: entry.genderConfirmed ?? false
         })
       }
 
@@ -254,7 +260,8 @@ export function createBackupOperations(db: Database.Database): {
             storageLocationId: wanted?.storageLocationId ?? null,
             metLocation: wanted?.metLocation ?? null,
             boxNumber: wanted?.boxNumber ?? null,
-            boxSlot: wanted?.boxSlot ?? null
+            boxSlot: wanted?.boxSlot ?? null,
+            genderConfirmed: wanted?.genderConfirmed ? 1 : 0
           })
         }
 

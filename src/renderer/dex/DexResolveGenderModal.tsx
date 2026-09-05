@@ -6,20 +6,29 @@ import { formDisplayName, speciesDisplayName } from './formNames'
 interface DexResolveGenderModalProps {
   species: Species[]
   ambiguousEntries: AmbiguousGenderEntry[]
-  onResolve: (femaleEntryIds: number[]) => void
+  /** Save always confirms every listed entry, not just the ones flipped to Female — an
+   * entry left on the default Male needs writing too, or it has no way to record "this was
+   * reviewed" and just re-appears here forever (the bug this modal used to have). See
+   * LivingDexView's onResolve wiring. */
+  onResolve: (femaleEntryIds: number[], maleEntryIds: number[]) => void
   onClose: () => void
 }
 
 /**
  * "Resolve Gender Ambiguities" (Leg 3 of the Dex completeness tier migration) — the
  * gap docs/investigations/dex-completeness-tiers.md deliberately left for this leg to
- * design. Every owned entry on a gender-diff form recorded under the collapsed 'male'
- * key (see genderResolution.ts) is listed here, defaulting to its current stored value
- * (Male) — the user flips only the ones they know are actually female; anything left
- * alone keeps its existing recorded gender untouched. One bulk save rather than a
- * one-at-a-time wizard, matching Vanny's call: a reviewable list is easier to scan and
- * correct than stepping through entries individually, especially once duplicates mean
+ * design. Every owned, unconfirmed entry on a gender-diff form recorded under the
+ * collapsed 'male' key (see genderResolution.ts) is listed here, defaulting to its
+ * current stored value (Male) — the user flips only the ones they know are actually
+ * female; anything left alone keeps its existing recorded gender. One bulk save rather
+ * than a one-at-a-time wizard, matching Vanny's call: a reviewable list is easier to scan
+ * and correct than stepping through entries individually, especially once duplicates mean
  * more than one row per species/form/shiny combo can need review.
+ *
+ * Save confirms every entry shown here, whichever radio it's left on — leaving one on
+ * Male is itself a reviewed answer ("yes, this individual really is Male"), not "skip
+ * this one," so it needs writing back same as a flip to Female. Without that, an entry
+ * that's genuinely Male could never leave this list (see CollectionEntry.genderConfirmed).
  */
 export function DexResolveGenderModal({ species, ambiguousEntries, onResolve, onClose }: DexResolveGenderModalProps): JSX.Element {
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
@@ -71,7 +80,13 @@ export function DexResolveGenderModal({ species, ambiguousEntries, onResolve, on
           })}
         </ul>
         <div className="origin-modal-actions">
-          <button type="button" onClick={() => onResolve([...femaleEntryIds])}>
+          <button
+            type="button"
+            onClick={() => {
+              const maleEntryIds = ambiguousEntries.map(({ entry }) => entry.id).filter((id) => !femaleEntryIds.has(id))
+              onResolve([...femaleEntryIds], maleEntryIds)
+            }}
+          >
             Save
           </button>
           <button type="button" onClick={onClose}>

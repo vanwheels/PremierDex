@@ -23,6 +23,7 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
     storageLocationId: null,
     boxNumber: null,
     boxSlot: null,
+    genderConfirmed: false,
     ...overrides
   }
 }
@@ -40,6 +41,7 @@ function makeRow(overrides: Partial<DexRowData> & Pick<DexRowData, 'key' | 'dexN
     shinyLocked: false,
     alwaysShiny: false,
     regionalGroup: null,
+    hasGenderDifference: false,
     ...overrides
   }
 }

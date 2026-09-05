@@ -105,6 +105,21 @@ describe('bulk set entry gender', () => {
     expect(untouched.gender).toBe('unknown')
   })
 
+  // Resolve Gender Ambiguities bugfix: this is what actually lets genderResolution.ts's
+  // findAmbiguousGenderEntries stop re-flagging an entry the user already reviewed, even
+  // one left on the same gender value it already had (see CollectionEntry.genderConfirmed).
+  it('marks every listed entry gender-confirmed, regardless of the chosen gender', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entries = await bulbasaurEntries(storage)
+
+    const updated = await storage.bulkSetEntryGender(
+      entries.map((e) => e.id),
+      'male'
+    )
+
+    expect(updated.every((e) => e.genderConfirmed)).toBe(true)
+  })
+
   it('rejects an entry id that does not exist, leaving no partial writes', async () => {
     const storage = createSqliteStorage(':memory:')
     const entries = await bulbasaurEntries(storage)
