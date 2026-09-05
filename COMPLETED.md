@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Fill In raided sibling locations bugfix] — 2026-09-04
+Reported by Vanny: after Duplicate Storage Location, Fill In on the duplicate left an
+individual showing as both boxed and unboxed, surviving a reload. Root cause: Duplicate
+clones every entry as a fresh higher-id row landing unboxed in the new location, and Fill
+In's lowest-id-wins tie-break reached past that local clone to raid the original
+location's own (lower-id) individual instead, stranding the clone unboxed while draining
+the original. `computeFillInPlacements` now prefers a same-location candidate before
+falling back to lowest-id collection-wide. See commits `9db814d` (diagnostic logging added
+mid-investigation, superseded by the actual fix) and `56d0e40` (the fix).
+
 ## [Fill In from owned collection] — Leg 7 — 2026-09-04
 Companion to Leg 6: walks a location's ghost placeholders and, for each, moves an
 already-owned individual with no existing box home into its slot — preferring the
