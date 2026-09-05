@@ -6,17 +6,6 @@ Picked up 2026-09-04 from Future Milestones. Both halves (tier migration and Box
 Templates) share a "what counts as complete for tier X" definition, so scoping is bundled
 into Leg 1 before either gets built.
 
-### [Dex completeness tier migration] — Leg 3
-Build the upgrade path: migrating a collection up through the tiers defined in
-`docs/investigations/dex-completeness-tiers.md` (Living -> LivingFormLITE -> Living Form,
-regular or shiny) by diffing the target tier's `requiredUnits()` against owned
-`collection_entries`. Still needs its own design for the one gap Leg 1 deliberately left
-open: when a gender-diff form was collapsed (owned under the `male` placeholder key
-regardless of which gender the user actually has), upgrading to a gender-split tier needs
-a way to ask which gender that individual actually is before it can mark the right entry
-owned.
-Last touched: 2026-09-04. Re-check count: 0.
-
 ### [Evolution-chain data (Pre-Evos axis)] — Leg 5
 Add evolution-chain membership/stage data (PokeAPI `/evolution-chain` fetch pass, new
 `Species` column, seed backfill) — nothing in the schema encodes this today. Unblocks the
@@ -120,6 +109,18 @@ how sqlite-storage.ts's export/import logic got split into collection-backup.ts 
 Box Arrangement — see COMPLETED.md) — just with the ordering hazard above designed around
 explicitly this time.
 Last touched: 2026-09-04. Re-check count: 1.
+
+### [Split sqlite-storage.ts] — unscheduled
+Surfaced while implementing Leg 3 of the Dex completeness tier migration: adding
+`bulkSetEntryGender` (the "Resolve Gender Ambiguities" flow's write) pushed this file to
+498 lines — 1 line under the 500 hard cap. Same file that already had its export/import
+logic split out into collection-backup.ts (Leg 3 of Box Arrangement, see COMPLETED.md);
+that precedent is the template if/when this needs to happen again. Not split now —
+Scope says an adjacent improvement goes on TODO rather than folding into the leg that
+surfaced it. Candidate split: the CollectionEntry-specific prepared statements/methods
+(setOwned/setEntryOrigin/setEntryStorageLocation/box-position/bulk-* — roughly a third of
+the file) into their own module, mirroring collection-backup.ts's pattern.
+Last touched: 2026-09-04. Re-check count: 0.
 
 ### [Jump directly to a Box] — unscheduled
 Raised by Vanny 2026-09-04: no way to select a specific box directly — currently requires

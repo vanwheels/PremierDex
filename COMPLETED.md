@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Dex completeness tier migration] — Leg 3 — 2026-09-04
+Resolve Gender Ambiguities: the flow Leg 1's investigation doc deliberately left
+undesigned. Scoped down from a generic tier-migration wizard to just this one action —
+only the splitByGender axis ever needs a real data correction, the other two tiers are
+already a live diff. See commit `77c8038`.
+
 ## [Storage Location "Duplicate" button] — 2026-09-04
 Replaces the per-entry Duplicate path from [Bulk move/duplicate entries between storage
 locations] below — Vanny called it out same-day as unworkable: picking entries one at a
