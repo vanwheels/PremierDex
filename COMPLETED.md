@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Fill In from owned collection] — Leg 7 — 2026-09-04
+Companion to Leg 6: walks a location's ghost placeholders and, for each, moves an
+already-owned individual with no existing box home into its slot — preferring the
+lowest-id unboxed candidate and leaving already-boxed-elsewhere copies alone. Gender
+matching mirrors `isUnitSatisfied`'s existing collapsed-representative rule (a `'male'`
+placeholder on a gender-diff form accepts either gender; `'female'` is strict), confirmed
+with Vanny this session. See commit `e2e8ca9`.
+
 ## [Resolve Gender Ambiguities bugfix] — 2026-09-04
 Reported by Vanny: clicking Resolve didn't make the banner go away. Root cause was Leg 3's
 own design gap — leaving an entry on Male wrote nothing back, so it had no way to record

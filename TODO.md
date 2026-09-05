@@ -6,21 +6,6 @@ Picked up 2026-09-04 from Future Milestones. Both halves (tier migration and Box
 Templates) share a "what counts as complete for tier X" definition, so scoping is bundled
 into Leg 1 before either gets built.
 
-### [Fill In from owned collection] — Leg 7
-Companion to Leg 6 (now landed, see COMPLETED.md), per Vanny's 2026-09-04 clarification:
-once a location's boxes hold a full template layout of ghost placeholders, a "Fill In"
-action walks them and, for each placeholder with a matching owned individual somewhere in
-the collection, moves that entry into the placeholder's slot (ghost -> real entry). Scoped
-per Vanny's answers: prefer an owned individual that isn't already boxed anywhere (no
-existing home) over one that would have to be pulled out of another box; if only
-already-boxed copies exist, leave the placeholder as a ghost rather than relocating one.
-When multiple unboxed copies match one required unit (e.g. 3 shiny female Eevees), move the
-first and leave the rest where they are — same "one representative individual, others
-untouched" precedent already used elsewhere (List view's bulk actions, box arrangement).
-Needs its own implementation design (new IPC bulk-write, matching/ordering rule for "first"
-when several unboxed candidates tie) before a leg estimate.
-Last touched: 2026-09-04. Re-check count: 0.
-
 ### [Wire excludePreEvolutions into tier computation] — Leg 8
 Follow-up to Leg 5 (evolution-chain data acquisition, see COMPLETED.md): `Species.
 isFinalEvolutionStage` exists and is seeded/backfilled correctly, but nothing reads it yet.
