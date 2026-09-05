@@ -1,23 +1,5 @@
 # TODO
 
-## Current Milestone: Dex Completeness Tier Migration & Box Templates
-
-Picked up 2026-09-04 from Future Milestones. Both halves (tier migration and Box
-Templates) share a "what counts as complete for tier X" definition, so scoping is bundled
-into Leg 1 before either gets built.
-
-### [Wire excludePreEvolutions into tier computation] — Leg 8
-Follow-up to Leg 5 (evolution-chain data acquisition, see COMPLETED.md): `Species.
-isFinalEvolutionStage` exists and is seeded/backfilled correctly, but nothing reads it yet.
-`requiredUnits()` (boxTemplates.ts) has an `excludePreEvolutions` branch that's always a
-no-op today ("never true for BUILDABLE_TIERS"); `computeCompletionStats` needs the same
-filter. Once both honor it, `BUILDABLE_TIERS` (completionStats.ts) can add `finalFormForm`/
-`finalForm`, surfacing them in both the Completion Stats and Box Templates tier pickers.
-Not scoped further — needs a look at whether `requiredUnits`/`computeCompletionStats` take
-`Species[]` today or would need a new param to look up `isFinalEvolutionStage` by
-`form.speciesId`.
-Last touched: 2026-09-04. Re-check count: 0.
-
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
