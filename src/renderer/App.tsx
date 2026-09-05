@@ -100,6 +100,7 @@ export function App(): JSX.Element {
               onSetBoxPlaceholders={data.setBoxPlaceholders}
               onClearBoxPlaceholder={data.clearBoxPlaceholder}
               onClearAllBoxPlaceholders={data.clearAllBoxPlaceholders}
+              onFillInPlaceholders={data.fillInPlaceholders}
             />
           </div>
           {view === 'collection' && (

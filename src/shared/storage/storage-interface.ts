@@ -65,6 +65,20 @@ export interface StorageAdapter {
    * milestone — each listed entry is corrected independently of any other row sharing its
    * old key. */
   bulkSetEntryGender(entryIds: number[], gender: Gender): Promise<CollectionEntry[]>
+  /** "Fill In" (Leg 7 of the Dex completeness tier migration) — for each `placements`
+   * entry (computed by boxTemplates.ts's computeFillInPlacements: one already-owned,
+   * currently-unboxed individual per fillable placeholder), moves that entry into
+   * `storageLocationId` at the given box position and clears whatever placeholder was
+   * "planning" that slot — same real-entry-fulfills-the-plan clear setEntryBoxPosition/
+   * fillBoxSlots already do. Silently skips a placement whose entry no longer qualifies
+   * (not found, not owned, or already boxed elsewhere) rather than aborting the whole
+   * batch — same stale-state tolerance as setBoxPlaceholders. Resolves with every touched
+   * entry (in `placements` order) so a caller can merge them into local state the same way
+   * bulkSetEntryStorageLocation/bulkSetEntryGender already do. */
+  fillInPlaceholders(
+    storageLocationId: number,
+    placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
+  ): Promise<CollectionEntry[]>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>

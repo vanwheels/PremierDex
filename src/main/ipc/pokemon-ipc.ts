@@ -40,6 +40,11 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
   ipcMain.handle(PokemonIpcChannel.bulkSetEntryGender, (_event, entryIds: number[], gender: Gender) =>
     storage.bulkSetEntryGender(entryIds, gender)
   )
+  ipcMain.handle(
+    PokemonIpcChannel.fillInPlaceholders,
+    (_event, storageLocationId: number, placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>) =>
+      storage.fillInPlaceholders(storageLocationId, placements)
+  )
   ipcMain.handle(PokemonIpcChannel.setCollapsedDisplayForm, (_event, speciesId: number, formId: number | null) =>
     storage.setCollapsedDisplayForm(speciesId, formId)
   )

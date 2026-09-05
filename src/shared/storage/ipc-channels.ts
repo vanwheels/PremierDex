@@ -15,6 +15,9 @@ export const PokemonIpcChannel = {
   /** [Dex completeness tier migration] Leg 3's "Resolve Gender Ambiguities" flow — see
    * StorageAdapter.bulkSetEntryGender's own doc comment. */
   bulkSetEntryGender: 'pokemon:collectionEntries:bulkSetGender',
+  /** "Fill In" (Leg 7 of the Dex completeness tier migration) — see
+   * StorageAdapter.fillInPlaceholders' own doc comment. */
+  fillInPlaceholders: 'pokemon:collectionEntries:fillInPlaceholders',
   setCollapsedDisplayForm: 'pokemon:species:setCollapsedDisplayForm',
   /** Leg 6: static per-game species-availability data (see load-species-data.ts),
    * not a StorageAdapter/DB method — there's no collection_entries-shaped row to read,

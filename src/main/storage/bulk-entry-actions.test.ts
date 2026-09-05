@@ -130,6 +130,61 @@ describe('bulk set entry gender', () => {
 })
 
 /**
+ * "Fill In" (Leg 7 of the Dex completeness tier migration) — moves an already-owned,
+ * currently-unboxed entry straight into a placeholder's slot and clears that placeholder.
+ * The matching/ordering logic itself (which entry a placeholder resolves to) lives in
+ * boxTemplates.ts's computeFillInPlacements and is covered by boxTemplates.test.ts; these
+ * tests cover the write side only — a placement is assumed to already name a valid
+ * (entryId, boxNumber, boxSlot) triple, same convention as fillBoxSlots' own tests.
+ */
+describe('fillInPlaceholders', () => {
+  it('moves an unboxed owned entry into the placeholder slot and clears the placeholder', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const entries = await bulbasaurEntries(storage)
+    await storage.setOwned(entries[0].id, true)
+    await storage.setBoxPlaceholder(location.id, 1, 5, entries[0].formId, 'unknown', false)
+
+    const updated = await storage.fillInPlaceholders(location.id, [{ entryId: entries[0].id, boxNumber: 1, boxSlot: 5 }])
+
+    expect(updated).toHaveLength(1)
+    expect(updated[0]).toMatchObject({ storageLocationId: location.id, boxNumber: 1, boxSlot: 5 })
+    expect(await storage.listBoxPlaceholders()).toEqual([])
+  })
+
+  it('skips a placement whose entry is already boxed elsewhere, leaving its placeholder intact', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const home = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const box = await storage.createStorageLocation({ locationType: 'box', name: 'Box 1', trainerProfileId: null })
+    const entries = await bulbasaurEntries(storage)
+    await storage.setOwned(entries[0].id, true)
+    await storage.setEntryStorageLocation(entries[0].id, box.id)
+    await storage.setEntryBoxPosition(entries[0].id, 1, 0)
+    await storage.setBoxPlaceholder(home.id, 1, 5, entries[0].formId, 'unknown', false)
+
+    const updated = await storage.fillInPlaceholders(home.id, [{ entryId: entries[0].id, boxNumber: 1, boxSlot: 5 }])
+
+    expect(updated).toEqual([])
+    expect(await storage.listBoxPlaceholders()).toHaveLength(1)
+    const untouched = (await bulbasaurEntries(storage)).find((e) => e.id === entries[0].id)!
+    expect(untouched.storageLocationId).toBe(box.id)
+    expect(untouched.boxNumber).toBe(1)
+  })
+
+  it('skips an unowned entry, leaving its placeholder intact', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const entries = await bulbasaurEntries(storage)
+    await storage.setBoxPlaceholder(location.id, 1, 5, entries[0].formId, 'unknown', false)
+
+    const updated = await storage.fillInPlaceholders(location.id, [{ entryId: entries[0].id, boxNumber: 1, boxSlot: 5 }])
+
+    expect(updated).toEqual([])
+    expect(await storage.listBoxPlaceholders()).toHaveLength(1)
+  })
+})
+
+/**
  * Storage Locations tab's "Duplicate" button — clones a whole location's entry roster in
  * one call, replacing the per-entry List-view duplicate above (picking entries one at a
  * time to clone a 1025+-entry roster was unworkable, see commit 74c73c9). See

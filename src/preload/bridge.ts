@@ -31,6 +31,11 @@ export interface AppBridge extends UpdaterBridge {
   bulkSetEntryStorageLocation(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]>
   /** See StorageAdapter.bulkSetEntryGender's own doc comment. */
   bulkSetEntryGender(entryIds: number[], gender: Gender): Promise<CollectionEntry[]>
+  /** See StorageAdapter.fillInPlaceholders' own doc comment. */
+  fillInPlaceholders(
+    storageLocationId: number,
+    placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
+  ): Promise<CollectionEntry[]>
   setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species>
   /** Leg 6: static per-game species-availability data, for the Living Dex's derived
    * invalid-combo badge (see renderer/dex/invalidCombo.ts). Not DB-backed — see

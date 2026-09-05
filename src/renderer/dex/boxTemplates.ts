@@ -1,4 +1,5 @@
 import type { CollectionEntry, Form, Gender } from '@shared/types/pokemon'
+import type { BoxPlaceholder } from '@shared/types/box'
 import type { DexTierConfig } from './completionStats'
 import { BOX_SIZE } from './buildBoxes'
 
@@ -163,6 +164,78 @@ export function placeUnitsIntoSlots(units: RequiredUnit[], boxNumbers: number[],
       placements.push({ boxNumber, boxSlot, formId: unit.formId, gender: unit.gender, shiny: unit.shiny })
       unitIndex++
     }
+  }
+  return placements
+}
+
+export interface FillInPlacement {
+  entryId: number
+  boxNumber: number
+  boxSlot: number
+}
+
+/**
+ * "Fill In" (Leg 7 of the Dex completeness tier migration) — for each placeholder in
+ * `placeholders` (already scoped to the target location, walked in their existing
+ * box-number-then-slot order, same convention `placeUnitsIntoSlots` places into), finds an
+ * owned individual somewhere in the collection that satisfies it and hasn't already been
+ * consumed by an earlier placeholder in this same walk. `entries` is deliberately
+ * collection-wide, not location-scoped (unlike this file's other functions) — a matching
+ * owned individual can be sitting unboxed in any location's tray, or in Unassigned.
+ *
+ * Per Vanny's scoping: only an unboxed individual (`boxNumber === null`, wherever it
+ * currently lives) is a candidate — one already occupying a slot in some other box is left
+ * alone, so a placeholder with only already-boxed matches stays a ghost. When several
+ * unboxed individuals match the same unit, the lowest `id` (insertion order) is picked and
+ * the rest are left untouched, same "one representative individual, others untouched"
+ * precedent as List view's bulk actions.
+ *
+ * Gender: a placeholder's `gender` follows the same collapsed-representative convention
+ * `requiredUnits`/`isUnitSatisfied` use — `'male'` on a gender-diff form means "either
+ * gender satisfies it" (the common case: every tier except `livingForm`, plus every
+ * manually-set placeholder, collapses this way), so both the male and female candidate
+ * pools are checked and whichever has the lower id wins. `'female'` only ever comes from a
+ * real split-by-gender tier and is matched strictly.
+ */
+export function computeFillInPlacements(params: {
+  placeholders: BoxPlaceholder[]
+  entries: CollectionEntry[]
+  forms: Form[]
+}): FillInPlacement[] {
+  const { placeholders, entries, forms } = params
+  const formsById = new Map(forms.map((f) => [f.id, f]))
+
+  const pools = new Map<string, CollectionEntry[]>()
+  for (const entry of entries) {
+    if (!entry.owned || entry.boxNumber !== null) continue
+    const key = unitKey(entry.formId, entry.gender, entry.shiny)
+    const pool = pools.get(key)
+    if (pool) pool.push(entry)
+    else pools.set(key, [entry])
+  }
+  for (const pool of pools.values()) pool.sort((a, b) => a.id - b.id)
+
+  const placements: FillInPlacement[] = []
+  for (const placeholder of placeholders) {
+    const form = formsById.get(placeholder.formId)
+    const keys = [unitKey(placeholder.formId, placeholder.gender, placeholder.shiny)]
+    if (form?.hasGenderDifference && placeholder.gender === 'male') {
+      keys.push(unitKey(placeholder.formId, 'female', placeholder.shiny))
+    }
+
+    let bestKey: string | undefined
+    let bestEntry: CollectionEntry | undefined
+    for (const key of keys) {
+      const candidate = pools.get(key)?.[0]
+      if (candidate && (!bestEntry || candidate.id < bestEntry.id)) {
+        bestKey = key
+        bestEntry = candidate
+      }
+    }
+    if (!bestEntry || !bestKey) continue
+
+    pools.get(bestKey)!.shift()
+    placements.push({ entryId: bestEntry.id, boxNumber: placeholder.boxNumber, boxSlot: placeholder.boxSlot })
   }
   return placements
 }

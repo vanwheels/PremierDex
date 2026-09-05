@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import type { CollectionEntry, Form } from '@shared/types/pokemon'
+import type { BoxPlaceholder } from '@shared/types/box'
 import { TIER_CONFIGS } from './completionStats'
 import {
   buildOccupiedUnitIndex,
   buildPlaceholderKeys,
   canonicalPlaceholderForm,
+  computeFillInPlacements,
   countAvailableSlots,
   extraBoxesNeeded,
   pendingRequiredUnits,
@@ -199,6 +201,68 @@ describe('countAvailableSlots / extraBoxesNeeded', () => {
 
   it('rounds up to a whole extra box for any shortfall', () => {
     expect(extraBoxesNeeded(31, 0)).toBe(2)
+  })
+})
+
+function makePlaceholder(overrides: Partial<BoxPlaceholder> & Pick<BoxPlaceholder, 'id' | 'boxNumber' | 'boxSlot' | 'formId'>): BoxPlaceholder {
+  return { storageLocationId: 1, gender: 'unknown', shiny: false, ...overrides }
+}
+
+describe('computeFillInPlacements', () => {
+  it('fills a placeholder from an unboxed owned individual matching its exact key', () => {
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1 })]
+    const entries = [makeEntry({ id: 10, formId: 1 })]
+    expect(computeFillInPlacements({ placeholders, entries, forms: [] })).toEqual([
+      { entryId: 10, boxNumber: 1, boxSlot: 0 }
+    ])
+  })
+
+  it('leaves the placeholder a ghost when only an already-boxed copy matches', () => {
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1 })]
+    const entries = [makeEntry({ id: 10, formId: 1, boxNumber: 2, boxSlot: 5 })]
+    expect(computeFillInPlacements({ placeholders, entries, forms: [] })).toEqual([])
+  })
+
+  it('ignores an unowned entry even if it otherwise matches', () => {
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1 })]
+    const entries = [makeEntry({ id: 10, formId: 1, owned: false })]
+    expect(computeFillInPlacements({ placeholders, entries, forms: [] })).toEqual([])
+  })
+
+  it('picks the lowest-id candidate and leaves the rest untouched', () => {
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1 })]
+    const entries = [makeEntry({ id: 20, formId: 1 }), makeEntry({ id: 10, formId: 1 }), makeEntry({ id: 30, formId: 1 })]
+    expect(computeFillInPlacements({ placeholders, entries, forms: [] })).toEqual([{ entryId: 10, boxNumber: 1, boxSlot: 0 }])
+  })
+
+  it('never consumes the same candidate twice across two placeholders', () => {
+    const placeholders = [
+      makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1 }),
+      makePlaceholder({ id: 2, boxNumber: 1, boxSlot: 1, formId: 1 })
+    ]
+    const entries = [makeEntry({ id: 10, formId: 1 })]
+    expect(computeFillInPlacements({ placeholders, entries, forms: [] })).toEqual([{ entryId: 10, boxNumber: 1, boxSlot: 0 }])
+  })
+
+  it('a male-keyed placeholder on a gender-diff form is satisfied by an unboxed female individual', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 1, hasGenderDifference: true })]
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1, gender: 'male' })]
+    const entries = [makeEntry({ id: 10, formId: 1, gender: 'female' })]
+    expect(computeFillInPlacements({ placeholders, entries, forms })).toEqual([{ entryId: 10, boxNumber: 1, boxSlot: 0 }])
+  })
+
+  it('a female-keyed placeholder is NOT satisfied by an unboxed male individual (strict)', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 1, hasGenderDifference: true })]
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1, gender: 'female' })]
+    const entries = [makeEntry({ id: 10, formId: 1, gender: 'male' })]
+    expect(computeFillInPlacements({ placeholders, entries, forms })).toEqual([])
+  })
+
+  it('a male-keyed collapsed placeholder prefers the lowest id across both gender pools', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 1, hasGenderDifference: true })]
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1, gender: 'male' })]
+    const entries = [makeEntry({ id: 20, formId: 1, gender: 'male' }), makeEntry({ id: 10, formId: 1, gender: 'female' })]
+    expect(computeFillInPlacements({ placeholders, entries, forms })).toEqual([{ entryId: 10, boxNumber: 1, boxSlot: 0 }])
   })
 })
 

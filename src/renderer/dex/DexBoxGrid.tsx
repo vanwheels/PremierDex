@@ -9,12 +9,14 @@ import { TIER_CONFIGS } from './completionStats'
 import {
   buildOccupiedUnitIndex,
   buildPlaceholderKeys,
+  computeFillInPlacements,
   countAvailableSlots,
   extraBoxesNeeded,
   pendingRequiredUnits,
   placeUnitsIntoSlots,
   slotKey,
   type DexColor,
+  type FillInPlacement,
   type TemplatePlacement
 } from './boxTemplates'
 import { DexApplyTemplateModal } from './DexApplyTemplateModal'
@@ -24,6 +26,11 @@ import type { Box } from './types'
 
 interface DexBoxGridProps {
   entries: CollectionEntry[]
+  /** Leg 7 of the Dex completeness tier migration: "Fill In" — unlike `entries` above,
+   * deliberately collection-wide rather than scoped to the selected location, since a
+   * matching owned individual can be sitting unboxed in any location's tray (or in
+   * Unassigned). See boxTemplates.ts's computeFillInPlacements. */
+  allEntries: CollectionEntry[]
   species: Species[]
   forms: Form[]
   storageLocations: StorageLocation[]
@@ -64,6 +71,9 @@ interface DexBoxGridProps {
    * `box_placeholders` row in the selected location, template-stamped and manually
    * right-click-set alike. See StorageAdapter.clearAllBoxPlaceholders' own doc comment. */
   onClearAllBoxPlaceholders: (storageLocationId: number) => Promise<void>
+  /** Leg 7 of the Dex completeness tier migration: "Fill In" — see
+   * StorageAdapter.fillInPlaceholders' own doc comment. */
+  onFillInPlaceholders: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
 }
 
 /**
@@ -89,6 +99,7 @@ interface DexBoxGridProps {
  */
 export function DexBoxGrid({
   entries,
+  allEntries,
   species,
   forms,
   storageLocations,
@@ -105,7 +116,8 @@ export function DexBoxGrid({
   onSetBoxPlaceholder,
   onSetBoxPlaceholders,
   onClearBoxPlaceholder,
-  onClearAllBoxPlaceholders
+  onClearAllBoxPlaceholders,
+  onFillInPlaceholders
 }: DexBoxGridProps): JSX.Element {
   const boxes = useMemo(
     () => buildBoxes(storageBoxes, species, forms, entries, boxPlaceholders),
@@ -115,6 +127,12 @@ export function DexBoxGrid({
   // Every entry currently occupying a slot in *any* box of this location, not just the box
   // a given pane happens to be displaying — see DexBoxPane's boxedEntryIds doc comment.
   const boxedEntryIds = useMemo(() => new Set(entries.filter((e) => e.boxNumber !== null).map((e) => e.id)), [entries])
+  // Leg 7 of the Dex completeness tier migration: "Fill In" — see
+  // boxTemplates.ts's computeFillInPlacements' own doc comment.
+  const fillInPlacements = useMemo(
+    () => computeFillInPlacements({ placeholders: boxPlaceholders, entries: allEntries, forms }),
+    [boxPlaceholders, allEntries, forms]
+  )
 
   const [secondBoxOpen, setSecondBoxOpen] = useState(false)
   // Tracks the primary pane's currently displayed box, purely so the tray's click-to-place
@@ -212,6 +230,13 @@ export function DexBoxGrid({
     onClearAllBoxPlaceholders(selectedLocationTab)
   }
 
+  // Fill In (Leg 7 of the Dex completeness tier migration) — no confirm, unlike Clear
+  // Placeholders above: this only ever moves an already-owned individual into a slot it
+  // wasn't otherwise using, which stays undoable by dragging it back out.
+  const handleFillIn = async (): Promise<void> => {
+    await onFillInPlaceholders(selectedLocationTab, fillInPlacements)
+  }
+
   // Opens the second pane on the box right after whatever the primary is currently
   // showing (falling back to the same box if there's only one) — the pairing most likely
   // to be useful for an immediate cross-box drag, rather than always defaulting to box 1.
@@ -229,6 +254,9 @@ export function DexBoxGrid({
         </button>
         <button type="button" onClick={handleClearAllPlaceholders} disabled={boxPlaceholders.length === 0}>
           Clear Placeholders
+        </button>
+        <button type="button" onClick={handleFillIn} disabled={fillInPlacements.length === 0}>
+          Fill In
         </button>
       </div>
       <div className="dex-box-columns">

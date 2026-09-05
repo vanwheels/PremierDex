@@ -152,6 +152,36 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       setEntryGenderStmt.run({ id, gender })
     }
   })
+  // Fill In (Leg 7 of the Dex completeness tier migration) — moves an already-owned,
+  // currently-unboxed entry straight into a placeholder's slot in one UPDATE, rather than
+  // the setEntryStorageLocation-then-setEntryBoxPosition two-step a cross-location move
+  // otherwise needs (that first step's box-position clear is a no-op here anyway, since
+  // fillInPlaceholdersTx only ever targets an entry with box_number already NULL).
+  const fillInPlaceholderEntryStmt = db.prepare(
+    'UPDATE collection_entries SET storage_location_id = @storageLocationId, box_number = @boxNumber, box_slot = @boxSlot WHERE id = @id'
+  )
+  // Re-checks each placement against the current DB state before writing (skip, don't
+  // throw, on a stale one — same tolerance as setBoxPlaceholdersTx below): the renderer
+  // computed `placements` from its own last-fetched snapshot, and a concurrent change (rare
+  // in this single-window app, but not impossible) could mean an entry named in it got
+  // boxed, unowned, or deleted since. Clears the fulfilled placeholder same as
+  // setEntryBoxPositionStmt/fillBoxSlotsTx's own callers do.
+  // Returns the subset of placements actually written — the caller needs this (not just a
+  // void/all-or-nothing signal) so it only reports success for, and only clears local
+  // placeholder state for, placements that really landed.
+  const fillInPlaceholdersTx = db.transaction(
+    (storageLocationId: number, placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>) => {
+      const applied: number[] = []
+      for (const p of placements) {
+        const entry = getEntryStmt.get(p.entryId) as CollectionEntryRow | undefined
+        if (!entry || !entry.owned || entry.box_number !== null) continue
+        fillInPlaceholderEntryStmt.run({ id: p.entryId, storageLocationId, boxNumber: p.boxNumber, boxSlot: p.boxSlot })
+        clearBoxPlaceholderStmt.run({ storageLocationId, boxNumber: p.boxNumber, boxSlot: p.boxSlot })
+        applied.push(p.entryId)
+      }
+      return applied
+    }
+  )
   // Clones one entry into a target storage location — backs duplicateStorageLocationTx
   // below (Storage Locations tab's "Duplicate" button). Copies every field except
   // id/storage_location_id/box_number/box_slot (a straight column-for-column carry,
@@ -393,6 +423,14 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     async bulkSetEntryGender(entryIds: number[], gender: Gender): Promise<CollectionEntry[]> {
       bulkSetEntryGenderTx(entryIds, gender)
       return entryIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
+    },
+
+    async fillInPlaceholders(
+      storageLocationId: number,
+      placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
+    ): Promise<CollectionEntry[]> {
+      const appliedIds = fillInPlaceholdersTx(storageLocationId, placements)
+      return appliedIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
     },
 
     // exportCollection/importCollection live in collection-backup.ts (Leg 3 of the Box

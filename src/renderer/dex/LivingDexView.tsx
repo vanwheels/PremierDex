@@ -14,7 +14,7 @@ import { autoAssignedLocationOnCheckIn } from './autoAssignLocation'
 import { DexTable } from './DexTable'
 import { DexHybridGrid } from './DexHybridGrid'
 import { DexBoxGrid } from './DexBoxGrid'
-import type { TemplatePlacement } from './boxTemplates'
+import type { FillInPlacement, TemplatePlacement } from './boxTemplates'
 import { DexLocationTabs } from './DexLocationTabs'
 import { DexToolbar } from './DexToolbar'
 import { DexFilterBar } from './DexFilterBar'
@@ -61,6 +61,9 @@ export interface LivingDexViewProps {
   /** Leg 3 of the Dex completeness tier migration: Resolve Gender Ambiguities' bulk
    * write. */
   onBulkSetEntryGender: (entryIds: number[], gender: Gender) => void
+  /** Leg 7 of the Dex completeness tier migration: "Fill In"'s bulk write — see
+   * StorageAdapter.fillInPlaceholders' own doc comment. */
+  onFillInPlaceholders: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
 }
 
 /** The Living Dex tab's own content: the per-location tab bar, completion stats, the
@@ -97,7 +100,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onSetBoxPlaceholders,
     onClearBoxPlaceholder,
     onClearAllBoxPlaceholders,
-    onBulkSetEntryGender
+    onBulkSetEntryGender,
+    onFillInPlaceholders
   } = props
 
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
@@ -255,6 +259,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
       <div hidden={viewMode !== 'box'}>
         <DexBoxGrid
           entries={entriesForLocationTab}
+          allEntries={entries}
           species={species}
           forms={forms}
           storageLocations={storageLocations}
@@ -272,6 +277,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onSetBoxPlaceholders={onSetBoxPlaceholders}
           onClearBoxPlaceholder={onClearBoxPlaceholder}
           onClearAllBoxPlaceholders={onClearAllBoxPlaceholders}
+          onFillInPlaceholders={onFillInPlaceholders}
         />
       </div>
     </>

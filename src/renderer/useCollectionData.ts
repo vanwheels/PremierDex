@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
-import type { TemplatePlacement } from './dex/boxTemplates'
+import type { FillInPlacement, TemplatePlacement } from './dex/boxTemplates'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 
@@ -41,6 +41,9 @@ export interface CollectionData {
    * calls this with 'female' (the only correction it ever makes); kept general here to
    * match bulkMoveEntries' own shape. */
   bulkSetEntryGender: (entryIds: number[], gender: Gender) => void
+  /** "Fill In" (Leg 7 of the Dex completeness tier migration) — see
+   * StorageAdapter.fillInPlaceholders' own doc comment. */
+  fillInPlaceholders: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
   setCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
   /** "Add Box" (Leg 2 of the Box View Polish milestone) — resolves with the newly created
    * box so DexBoxGrid can jump straight to it. */
@@ -207,6 +210,26 @@ export function useCollectionData(): CollectionData {
     })
   }, [])
 
+  // "Fill In" (Leg 7 of the Dex completeness tier migration) — merges the moved entries
+  // into local state (same updatedById pattern as bulkSetEntryGender/bulkMoveEntries
+  // above). fillInPlaceholders only resolves with the placements that actually landed
+  // (see its own doc comment — a placement can be silently skipped against stale state),
+  // so which placeholders to drop locally is read back off `updated`'s entry ids rather
+  // than assumed from the full `placements` list, or a still-a-ghost placeholder could get
+  // dropped from local state despite surviving in the DB.
+  const fillInPlaceholders = useCallback(async (storageLocationId: number, placements: FillInPlacement[]): Promise<void> => {
+    if (placements.length === 0) return
+    const updated = await window.premierDex.fillInPlaceholders(storageLocationId, placements)
+    const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
+    setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
+    const filledSlots = new Set(
+      placements.filter((p) => updatedById.has(p.entryId)).map((p) => `${storageLocationId}:${p.boxNumber}:${p.boxSlot}`)
+    )
+    setBoxPlaceholdersState((prev) =>
+      prev.filter((p) => !filledSlots.has(`${p.storageLocationId}:${p.boxNumber}:${p.boxSlot}`))
+    )
+  }, [])
+
   const setCollapsedDisplayForm = useCallback((speciesId: number, formId: number | null): void => {
     window.premierDex.setCollapsedDisplayForm(speciesId, formId).then((updated) => {
       setSpecies((prev) => prev.map((sp) => (sp.id === updated.id ? updated : sp)))
@@ -297,6 +320,7 @@ export function useCollectionData(): CollectionData {
     fillBoxSlots,
     bulkMoveEntries,
     bulkSetEntryGender,
+    fillInPlaceholders,
     setCollapsedDisplayForm,
     addBox,
     renameBox,
