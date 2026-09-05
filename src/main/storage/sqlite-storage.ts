@@ -198,21 +198,25 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       return { applied, skipped }
     }
   )
-  // Clones one entry into a target storage location — backs duplicateStorageLocationTx
-  // below (Storage Locations tab's "Duplicate" button). Copies every field except
-  // id/storage_location_id/box_number/box_slot (a straight column-for-column carry,
-  // deliberately not itemized field-by-field so a future CollectionEntry column doesn't
-  // silently fail to carry over): the clone is a full, independent individual sharing the
-  // source's origin/nickname/etc, landing unassigned-within-location same as a bulk move.
-  // See schema.ts's dropped UNIQUE(form_id, gender, shiny), which is what makes a second
-  // real copy of the same individual possible at all.
-  const insertDuplicateEntryStmt = db.prepare(`
+  // Clones every entry currently in a source storage location into a target one in a
+  // single statement — backs duplicateStorageLocationTx below (Storage Locations tab's
+  // "Duplicate" button). Copies every field except id/storage_location_id/box_number/
+  // box_slot (a straight column-for-column carry, deliberately not itemized field-by-field
+  // so a future CollectionEntry column doesn't silently fail to carry over): each clone is
+  // a full, independent individual sharing its source's origin/nickname/etc, landing
+  // unassigned-within-location same as a bulk move. See schema.ts's dropped UNIQUE(form_id,
+  // gender, shiny), which is what makes a second real copy of the same individual possible
+  // at all. Originally one INSERT per source row run in a JS loop over 1025+ entry ids —
+  // that many separate statement executions blocked the main process long enough to freeze
+  // renderer input (typing/dropdowns) for a visible stretch; a single INSERT...SELECT lets
+  // SQLite do the whole copy in one call.
+  const insertDuplicateEntriesStmt = db.prepare(`
     INSERT INTO collection_entries
       (form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
        language, nickname, caught_ball, storage_location_id, met_location, box_number, box_slot)
     SELECT form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
-       language, nickname, caught_ball, @storageLocationId, met_location, NULL, NULL
-    FROM collection_entries WHERE id = @sourceId
+       language, nickname, caught_ball, @newLocationId, met_location, NULL, NULL
+    FROM collection_entries WHERE storage_location_id = @sourceId
   `)
   const orphanEntriesByTrainerProfileStmt = db.prepare(
     'UPDATE collection_entries SET trainer_profile_id = NULL WHERE trainer_profile_id = ?'
@@ -272,11 +276,10 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   // unworkable. Clones the location's own type/trainer link (name gets " (Copy)"
   // appended; storage_locations carries no uniqueness constraint on name, so a repeat
   // duplicate just appends again rather than colliding) and every entry currently sitting
-  // in it, each landing unassigned-within-the-new-location via insertDuplicateEntryStmt
+  // in it, each landing unassigned-within-the-new-location via insertDuplicateEntriesStmt
   // above — same convention as a bulk move. Deliberately does not clone box arrangement
   // (box_number/box_slot, box_placeholders) — see TODO.md's [Clear box] follow-up, which
   // will let a freshly duplicated location's box view be wiped back to empty instead.
-  const listEntryIdsByStorageLocationStmt = db.prepare('SELECT id FROM collection_entries WHERE storage_location_id = ?')
   const duplicateStorageLocationTx = db.transaction((sourceId: number) => {
     const source = getStorageLocationStmt.get(sourceId) as StorageLocationRow | undefined
     if (!source) throw new Error('Storage location not found')
@@ -287,10 +290,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     })
     const newLocationId = result.lastInsertRowid as number
     insertBoxNumberOneStmt.run({ storageLocationId: newLocationId })
-    const entryIds = (listEntryIdsByStorageLocationStmt.all(sourceId) as Array<{ id: number }>).map((row) => row.id)
-    for (const sourceEntryId of entryIds) {
-      insertDuplicateEntryStmt.run({ sourceId: sourceEntryId, storageLocationId: newLocationId })
-    }
+    insertDuplicateEntriesStmt.run({ sourceId, newLocationId })
     return newLocationId
   })
   const insertBoxStmt = db.prepare(`
