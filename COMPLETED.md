@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Resolve Gender Ambiguities bugfix] — 2026-09-04
+Reported by Vanny: clicking Resolve didn't make the banner go away. Root cause was Leg 3's
+own design gap — leaving an entry on Male wrote nothing back, so it had no way to record
+"reviewed" and re-appeared forever. Added a real `gender_confirmed` column (schema
+migration) instead of overloading the `gender` value itself, plus a per-row Male/Female
+toggle in the Dex table so a gender can still be corrected after confirming, per Vanny's
+call — box position isn't auto-reconciled when that happens (accepted manual cleanup). See
+commit `f4fb715`.
+
 ## [Redefine Apply Template as total-based + Remove Template] — Leg 6 — 2026-09-04
 Corrects Leg 2's original concept (surfaced investigating a "totals look wrong" report —
 the totals themselves were fine, see `docs/investigations/dex-completeness-tiers.md`'s
