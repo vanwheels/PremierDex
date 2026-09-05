@@ -70,4 +70,6 @@ export interface AppBridge extends UpdaterBridge {
     placements: Array<{ boxNumber: number; boxSlot: number; formId: number; gender: Gender; shiny: boolean }>
   ): Promise<BoxPlaceholder[]>
   clearBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void>
+  /** See StorageAdapter.clearAllBoxPlaceholders' own doc comment. */
+  clearAllBoxPlaceholders(storageLocationId: number): Promise<void>
 }

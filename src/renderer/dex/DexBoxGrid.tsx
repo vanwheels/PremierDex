@@ -7,7 +7,7 @@ import { buildBoxes, buildUnboxedEntries } from './buildBoxes'
 import type { DexTier } from './completionStats'
 import { TIER_CONFIGS } from './completionStats'
 import {
-  buildOwnedUnitIndex,
+  buildOccupiedUnitIndex,
   buildPlaceholderKeys,
   countAvailableSlots,
   extraBoxesNeeded,
@@ -24,11 +24,6 @@ import type { Box } from './types'
 
 interface DexBoxGridProps {
   entries: CollectionEntry[]
-  /** Leg 2 of the Dex completeness tier migration: the full, unscoped entry list —
-   * Apply Template's "already owned" check is location-independent (see
-   * boxTemplates.ts's buildOwnedUnitIndex), unlike every other prop here which is
-   * pre-scoped to the selected location. */
-  allEntries: CollectionEntry[]
   species: Species[]
   forms: Form[]
   storageLocations: StorageLocation[]
@@ -65,6 +60,10 @@ interface DexBoxGridProps {
    * StorageAdapter.setBoxPlaceholders' own doc comment. */
   onSetBoxPlaceholders: (storageLocationId: number, placements: TemplatePlacement[]) => Promise<void>
   onClearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
+  /** Leg 6 of the Dex completeness tier migration: "Clear Placeholders" — wipes every
+   * `box_placeholders` row in the selected location, template-stamped and manually
+   * right-click-set alike. See StorageAdapter.clearAllBoxPlaceholders' own doc comment. */
+  onClearAllBoxPlaceholders: (storageLocationId: number) => Promise<void>
 }
 
 /**
@@ -90,7 +89,6 @@ interface DexBoxGridProps {
  */
 export function DexBoxGrid({
   entries,
-  allEntries,
   species,
   forms,
   storageLocations,
@@ -106,7 +104,8 @@ export function DexBoxGrid({
   onRenameBox,
   onSetBoxPlaceholder,
   onSetBoxPlaceholders,
-  onClearBoxPlaceholder
+  onClearBoxPlaceholder,
+  onClearAllBoxPlaceholders
 }: DexBoxGridProps): JSX.Element {
   const boxes = useMemo(
     () => buildBoxes(storageBoxes, species, forms, entries, boxPlaceholders),
@@ -164,17 +163,18 @@ export function DexBoxGrid({
     onSetEntryBoxPosition(draggedEntryId, primaryBox.boxNumber, firstEmptySlot)
   }
 
-  // Apply Template (Leg 2 of the Dex completeness tier migration): computes the tier's
-  // still-needed units (owned/already-placeholder'd already filtered out), creates
-  // whatever new boxes are needed to fit all of them (sequential awaits — same one-box-
-  // at-a-time creation DexBoxPane.handleAddBox already does, just looped), then writes
-  // every placement in one batch call. `selectedLocationTab` is narrowed non-null here by
-  // the early return above.
+  // Apply Template (Leg 2 of the Dex completeness tier migration, redefined total-based at
+  // Leg 6): computes the tier's still-needed units (whatever already occupies a slot or
+  // placeholder in *this* location already filtered out — no longer whatever's owned
+  // elsewhere in the collection), creates whatever new boxes are needed to fit all of them
+  // (sequential awaits — same one-box-at-a-time creation DexBoxPane.handleAddBox already
+  // does, just looped), then writes every placement in one batch call.
+  // `selectedLocationTab` is narrowed non-null here by the early return above.
   const handleApplyTemplate = async (tier: DexTier, color: DexColor): Promise<void> => {
     const tierConfig = TIER_CONFIGS[tier]
-    const ownedUnitIndex = buildOwnedUnitIndex(allEntries)
+    const occupiedUnitIndex = buildOccupiedUnitIndex(entries)
     const existingPlaceholderKeys = buildPlaceholderKeys(boxPlaceholders)
-    const units = pendingRequiredUnits({ tierConfig, color, forms, ownedUnitIndex, existingPlaceholderKeys })
+    const units = pendingRequiredUnits({ tierConfig, color, forms, occupiedUnitIndex, existingPlaceholderKeys })
     if (units.length === 0) {
       setTemplateModalOpen(false)
       return
@@ -201,6 +201,17 @@ export function DexBoxGrid({
     setTemplateModalOpen(false)
   }
 
+  // Clear Placeholders (Leg 6 of the Dex completeness tier migration): wipes every
+  // `box_placeholders` row in this location in one go — template-stamped and manually
+  // right-click-set alike (Vanny's ask, folded into this leg since a template now stamps
+  // its full size every time, making a bulk undo more necessary than before). Destructive
+  // and unscoped to any one box, so confirm first, same convention as
+  // TrainerProfilesPanel/StorageLocationsPanel's own delete confirmations.
+  const handleClearAllPlaceholders = (): void => {
+    if (!window.confirm('Clear every placeholder in this Storage Location? This cannot be undone.')) return
+    onClearAllBoxPlaceholders(selectedLocationTab)
+  }
+
   // Opens the second pane on the box right after whatever the primary is currently
   // showing (falling back to the same box if there's only one) — the pairing most likely
   // to be useful for an immediate cross-box drag, rather than always defaulting to box 1.
@@ -215,6 +226,9 @@ export function DexBoxGrid({
         </button>
         <button type="button" onClick={() => setTemplateModalOpen(true)}>
           Apply Template…
+        </button>
+        <button type="button" onClick={handleClearAllPlaceholders} disabled={boxPlaceholders.length === 0}>
+          Clear Placeholders
         </button>
       </div>
       <div className="dex-box-columns">
@@ -264,7 +278,7 @@ export function DexBoxGrid({
       {templateModalOpen && (
         <DexApplyTemplateModal
           forms={forms}
-          allEntries={allEntries}
+          entries={entries}
           storageBoxes={storageBoxes}
           boxPlaceholders={boxPlaceholders}
           onApply={handleApplyTemplate}

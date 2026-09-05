@@ -66,42 +66,52 @@ export function requiredUnits(tierConfig: DexTierConfig, color: DexColor, forms:
   return units
 }
 
-/** One `formId|gender|shiny` key per **owned** entry, from an unscoped (every Storage
- * Location, including unboxed) entry list — ownership is location-independent, so a mon
- * owned anywhere shouldn't get a duplicate ghost stamped into a different location. */
-export function buildOwnedUnitIndex(entries: CollectionEntry[]): Set<string> {
+/** One `formId|gender|shiny` key per real entry that already physically occupies a box
+ * slot **in the target location** — `entries` must already be scoped to that location
+ * (same convention as DexBoxGrid's own `entries` prop), unlike the global, ownership-wide
+ * index this replaced (see this file's Leg 6 correction below). Deliberately not filtered
+ * on `entry.owned`: an unowned "planned" entry occupying a slot (see CollectionEntry's own
+ * boxNumber doc comment) still counts as physically occupying that slot. */
+export function buildOccupiedUnitIndex(entries: CollectionEntry[]): Set<string> {
   const index = new Set<string>()
   for (const entry of entries) {
-    if (entry.owned) index.add(unitKey(entry.formId, entry.gender, entry.shiny))
+    if (entry.boxNumber !== null) index.add(unitKey(entry.formId, entry.gender, entry.shiny))
   }
   return index
 }
 
-function isUnitSatisfied(unit: RequiredUnit, tierConfig: DexTierConfig, form: Form | undefined, ownedUnitIndex: Set<string>): boolean {
+function isUnitSatisfied(unit: RequiredUnit, tierConfig: DexTierConfig, form: Form | undefined, occupiedUnitIndex: Set<string>): boolean {
   if (form?.hasGenderDifference && !tierConfig.splitByGender) {
     // Collapsed representative: either gender's individual satisfies it (Leg 1).
-    return ownedUnitIndex.has(unitKey(unit.formId, 'male', unit.shiny)) || ownedUnitIndex.has(unitKey(unit.formId, 'female', unit.shiny))
+    return (
+      occupiedUnitIndex.has(unitKey(unit.formId, 'male', unit.shiny)) || occupiedUnitIndex.has(unitKey(unit.formId, 'female', unit.shiny))
+    )
   }
-  return ownedUnitIndex.has(unitKey(unit.formId, unit.gender, unit.shiny))
+  return occupiedUnitIndex.has(unitKey(unit.formId, unit.gender, unit.shiny))
 }
 
 /**
- * The units a Box Template still needs to stamp: `requiredUnits()` minus whatever's
- * already owned (anywhere) or already placeholder'd (anywhere in the target location) —
- * additive-only re-apply, per Vanny's call: re-running the same or a broader tier only ever
- * tops up the gap, never touches an existing placeholder.
+ * The units a Box Template still needs to stamp in the target location:
+ * `requiredUnits()` minus whatever already occupies a slot there — a real entry
+ * (`occupiedUnitIndex`) or an existing placeholder (`existingPlaceholderKeys`). Total-based
+ * as of Leg 6 of the Dex completeness tier migration, correcting Leg 2's original
+ * ownership-based concept (docs/investigations/dex-completeness-tiers.md's "Correction"
+ * section): a template stamps the tier's *full* required set every time regardless of
+ * whether a unit is owned elsewhere in the collection, only skipping what this location
+ * already accounts for. Still additive-only re-apply within that location: re-running the
+ * same or a broader tier only ever tops up the gap, never touches an existing placeholder.
  */
 export function pendingRequiredUnits(params: {
   tierConfig: DexTierConfig
   color: DexColor
   forms: Form[]
-  ownedUnitIndex: Set<string>
+  occupiedUnitIndex: Set<string>
   existingPlaceholderKeys: Set<string>
 }): RequiredUnit[] {
-  const { tierConfig, color, forms, ownedUnitIndex, existingPlaceholderKeys } = params
+  const { tierConfig, color, forms, occupiedUnitIndex, existingPlaceholderKeys } = params
   const formsById = new Map(forms.map((f) => [f.id, f]))
   return requiredUnits(tierConfig, color, forms).filter((unit) => {
-    if (isUnitSatisfied(unit, tierConfig, formsById.get(unit.formId), ownedUnitIndex)) return false
+    if (isUnitSatisfied(unit, tierConfig, formsById.get(unit.formId), occupiedUnitIndex)) return false
     if (existingPlaceholderKeys.has(unitKey(unit.formId, unit.gender, unit.shiny))) return false
     return true
   })

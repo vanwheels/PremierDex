@@ -23,4 +23,7 @@ export function registerBoxPlaceholderIpc(storage: StorageAdapter): void {
     (_event, storageLocationId: number, boxNumber: number, boxSlot: number) =>
       storage.clearBoxPlaceholder(storageLocationId, boxNumber, boxSlot)
   )
+  ipcMain.handle(BoxPlaceholderIpcChannel.clearAll, (_event, storageLocationId: number) =>
+    storage.clearAllBoxPlaceholders(storageLocationId)
+  )
 }

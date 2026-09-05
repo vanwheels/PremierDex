@@ -54,6 +54,9 @@ export interface CollectionData {
   setBoxPlaceholders: (storageLocationId: number, placements: TemplatePlacement[]) => Promise<void>
   /** "Clear placeholder". */
   clearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
+  /** "Clear Placeholders" (Leg 6 of the Dex completeness tier migration) — see
+   * StorageAdapter.clearAllBoxPlaceholders' own doc comment. */
+  clearAllBoxPlaceholders: (storageLocationId: number) => Promise<void>
 }
 
 /** Owns every piece of data fetched from the main process (species/forms/entries/storage
@@ -263,6 +266,14 @@ export function useCollectionData(): CollectionData {
     })
   }, [])
 
+  // "Clear Placeholders" (Leg 6 of the Dex completeness tier migration) — bulk counterpart
+  // to clearBoxPlaceholder above: drops every placeholder row for one location from local
+  // state in a single filter, rather than the single-slot removal above.
+  const clearAllBoxPlaceholders = useCallback(async (storageLocationId: number): Promise<void> => {
+    await window.premierDex.clearAllBoxPlaceholders(storageLocationId)
+    setBoxPlaceholdersState((prev) => prev.filter((p) => p.storageLocationId !== storageLocationId))
+  }, [])
+
   return {
     species,
     forms,
@@ -291,6 +302,7 @@ export function useCollectionData(): CollectionData {
     renameBox,
     setBoxPlaceholder,
     setBoxPlaceholders,
-    clearBoxPlaceholder
+    clearBoxPlaceholder,
+    clearAllBoxPlaceholders
   }
 }

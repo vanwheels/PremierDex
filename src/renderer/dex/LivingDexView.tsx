@@ -55,6 +55,9 @@ export interface LivingDexViewProps {
   /** Leg 2 of the Dex completeness tier migration: Apply Template's bulk write. */
   onSetBoxPlaceholders: (storageLocationId: number, placements: TemplatePlacement[]) => Promise<void>
   onClearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
+  /** Leg 6 of the Dex completeness tier migration: "Clear Placeholders" — see
+   * StorageAdapter.clearAllBoxPlaceholders' own doc comment. */
+  onClearAllBoxPlaceholders: (storageLocationId: number) => Promise<void>
   /** Leg 3 of the Dex completeness tier migration: Resolve Gender Ambiguities' bulk
    * write. */
   onBulkSetEntryGender: (entryIds: number[], gender: Gender) => void
@@ -93,6 +96,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onSetBoxPlaceholder,
     onSetBoxPlaceholders,
     onClearBoxPlaceholder,
+    onClearAllBoxPlaceholders,
     onBulkSetEntryGender
   } = props
 
@@ -167,9 +171,9 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     () => computeCompletionStats(forms, entriesForLocationTab, completionStatsOptions),
     [forms, entriesForLocationTab, completionStatsOptions]
   )
-  // Unscoped (every location, including unboxed) — same convention as boxTemplates.ts's
-  // buildOwnedUnitIndex: ownership, and which entries need a gender confirmation, is
-  // location-independent.
+  // Unscoped (every location, including unboxed) — which entries need a gender
+  // confirmation is location-independent, unlike boxTemplates.ts's Leg-6-redefined
+  // buildOccupiedUnitIndex (which is deliberately location-scoped).
   const ambiguousGenderEntries = useMemo(() => findAmbiguousGenderEntries(forms, entries), [forms, entries])
 
   // Checking an entry owned while a real location tab is selected assigns it there in the
@@ -245,7 +249,6 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
       <div hidden={viewMode !== 'box'}>
         <DexBoxGrid
           entries={entriesForLocationTab}
-          allEntries={entries}
           species={species}
           forms={forms}
           storageLocations={storageLocations}
@@ -262,6 +265,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onSetBoxPlaceholder={onSetBoxPlaceholder}
           onSetBoxPlaceholders={onSetBoxPlaceholders}
           onClearBoxPlaceholder={onClearBoxPlaceholder}
+          onClearAllBoxPlaceholders={onClearAllBoxPlaceholders}
         />
       </div>
     </>

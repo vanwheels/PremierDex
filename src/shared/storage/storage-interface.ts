@@ -117,4 +117,9 @@ export interface StorageAdapter {
   ): Promise<BoxPlaceholder[]>
   /** Removes the placeholder at a box slot, if any. A no-op if that slot has none. */
   clearBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void>
+  /** "Clear Placeholders" (Leg 6 of the Dex completeness tier migration): removes every
+   * placeholder in a Storage Location in one go, template-stamped and manually
+   * right-click-set alike — more necessary now that Apply Template stamps a full tier
+   * layout every time rather than just the pending gap. */
+  clearAllBoxPlaceholders(storageLocationId: number): Promise<void>
 }

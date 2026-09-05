@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { CollectionEntry, Form } from '@shared/types/pokemon'
 import { TIER_CONFIGS } from './completionStats'
 import {
-  buildOwnedUnitIndex,
+  buildOccupiedUnitIndex,
   buildPlaceholderKeys,
   canonicalPlaceholderForm,
   countAvailableSlots,
@@ -93,37 +93,37 @@ describe('requiredUnits', () => {
 describe('pendingRequiredUnits', () => {
   const forms: Form[] = [makeForm({ id: 1, speciesId: 1, hasGenderDifference: true })]
 
-  it('drops a unit already owned under its literal key', () => {
-    const ownedUnitIndex = buildOwnedUnitIndex([makeEntry({ id: 1, formId: 1, gender: 'male', owned: true })])
+  it('drops a unit a real entry already occupies a slot for, under its literal key', () => {
+    const occupiedUnitIndex = buildOccupiedUnitIndex([makeEntry({ id: 1, formId: 1, gender: 'male', boxNumber: 1, boxSlot: 0 })])
     const pending = pendingRequiredUnits({
       tierConfig: TIER_CONFIGS.living,
       color: 'regular',
       forms,
-      ownedUnitIndex,
+      occupiedUnitIndex,
       existingPlaceholderKeys: new Set()
     })
     expect(pending).toEqual([])
   })
 
-  it('collapsed representative: a female owned entry also satisfies the male-keyed unit', () => {
-    const ownedUnitIndex = buildOwnedUnitIndex([makeEntry({ id: 1, formId: 1, gender: 'female', owned: true })])
+  it('collapsed representative: a female occupying a slot also satisfies the male-keyed unit', () => {
+    const occupiedUnitIndex = buildOccupiedUnitIndex([makeEntry({ id: 1, formId: 1, gender: 'female', boxNumber: 1, boxSlot: 0 })])
     const pending = pendingRequiredUnits({
       tierConfig: TIER_CONFIGS.living,
       color: 'regular',
       forms,
-      ownedUnitIndex,
+      occupiedUnitIndex,
       existingPlaceholderKeys: new Set()
     })
     expect(pending).toEqual([])
   })
 
-  it('splitByGender tiers still need the other gender even once one is owned', () => {
-    const ownedUnitIndex = buildOwnedUnitIndex([makeEntry({ id: 1, formId: 1, gender: 'male', owned: true })])
+  it('splitByGender tiers still need the other gender even once one occupies a slot', () => {
+    const occupiedUnitIndex = buildOccupiedUnitIndex([makeEntry({ id: 1, formId: 1, gender: 'male', boxNumber: 1, boxSlot: 0 })])
     const pending = pendingRequiredUnits({
       tierConfig: TIER_CONFIGS.livingForm,
       color: 'regular',
       forms,
-      ownedUnitIndex,
+      occupiedUnitIndex,
       existingPlaceholderKeys: new Set()
     })
     expect(pending).toEqual([{ formId: 1, gender: 'female', shiny: false }])
@@ -135,10 +135,24 @@ describe('pendingRequiredUnits', () => {
       tierConfig: TIER_CONFIGS.living,
       color: 'regular',
       forms,
-      ownedUnitIndex: new Set(),
+      occupiedUnitIndex: new Set(),
       existingPlaceholderKeys
     })
     expect(pending).toEqual([])
+  })
+
+  it('total-based (Leg 6): a unit owned but not boxed in this location is NOT dropped', () => {
+    // owned: true but boxNumber/boxSlot null (makeEntry's own defaults) — owned somewhere
+    // else, or not currently boxed at all, neither of which excludes it any more.
+    const occupiedUnitIndex = buildOccupiedUnitIndex([makeEntry({ id: 1, formId: 1, gender: 'male', owned: true })])
+    const pending = pendingRequiredUnits({
+      tierConfig: TIER_CONFIGS.living,
+      color: 'regular',
+      forms,
+      occupiedUnitIndex,
+      existingPlaceholderKeys: new Set()
+    })
+    expect(pending).toEqual([{ formId: 1, gender: 'male', shiny: false }])
   })
 })
 

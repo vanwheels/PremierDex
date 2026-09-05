@@ -69,5 +69,8 @@ export const BoxPlaceholderIpcChannel = {
   /** Bulk apply (Leg 2 of the Dex completeness tier migration) — see
    * StorageAdapter.setBoxPlaceholders' own doc comment. */
   batchSet: 'boxPlaceholder:batchSet',
-  clear: 'boxPlaceholder:clear'
+  clear: 'boxPlaceholder:clear',
+  /** "Clear Placeholders" (Leg 6 of the Dex completeness tier migration) — see
+   * StorageAdapter.clearAllBoxPlaceholders' own doc comment. */
+  clearAll: 'boxPlaceholder:clearAll'
 } as const

@@ -78,6 +78,8 @@ const bridge: AppBridge = {
   ): Promise<BoxPlaceholder[]> => ipcRenderer.invoke(BoxPlaceholderIpcChannel.batchSet, storageLocationId, placements),
   clearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void> =>
     ipcRenderer.invoke(BoxPlaceholderIpcChannel.clear, storageLocationId, boxNumber, boxSlot),
+  clearAllBoxPlaceholders: (storageLocationId: number): Promise<void> =>
+    ipcRenderer.invoke(BoxPlaceholderIpcChannel.clearAll, storageLocationId),
   getAppVersion: () => ipcRenderer.invoke(UpdaterIpcChannel.getAppVersion),
   isSupported: () => ipcRenderer.invoke(UpdaterIpcChannel.isSupported),
   checkForUpdates: () => ipcRenderer.invoke(UpdaterIpcChannel.check),

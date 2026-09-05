@@ -298,6 +298,13 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const clearBoxPlaceholderStmt = db.prepare(
     'DELETE FROM box_placeholders WHERE storage_location_id = @storageLocationId AND box_number = @boxNumber AND box_slot = @boxSlot'
   )
+  // "Clear Placeholders" (Leg 6 of the Dex completeness tier migration) — wipes every
+  // placeholder in a location regardless of slot, unlike clearBoxPlaceholderStmt above
+  // which targets one. No occupancy guard needed: a real entry never has a
+  // box_placeholders row of its own (setBoxPlaceholder/setBoxPlaceholdersTx both reject/
+  // skip a slot a real entry already occupies), so this can never delete a real entry's
+  // data.
+  const clearAllBoxPlaceholdersStmt = db.prepare('DELETE FROM box_placeholders WHERE storage_location_id = @storageLocationId')
   // Leg 6: an app starts with zero storage locations, so the very first one ever created
   // (of any type — HOME is the common case, but nothing here assumes it) is where every
   // owned entry that's currently unassigned logically belongs: they were checked in before
@@ -493,6 +500,10 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
 
     async clearBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void> {
       clearBoxPlaceholderStmt.run({ storageLocationId, boxNumber, boxSlot })
+    },
+
+    async clearAllBoxPlaceholders(storageLocationId: number): Promise<void> {
+      clearAllBoxPlaceholdersStmt.run({ storageLocationId })
     }
   }
 }

@@ -99,6 +99,7 @@ export function App(): JSX.Element {
               onSetBoxPlaceholder={data.setBoxPlaceholder}
               onSetBoxPlaceholders={data.setBoxPlaceholders}
               onClearBoxPlaceholder={data.clearBoxPlaceholder}
+              onClearAllBoxPlaceholders={data.clearAllBoxPlaceholders}
             />
           </div>
           {view === 'collection' && (

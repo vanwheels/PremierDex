@@ -131,6 +131,38 @@ describe('box placeholders', () => {
     expect(await storage.listBoxPlaceholders()).toEqual([])
   })
 
+  describe('clearAllBoxPlaceholders (Leg 6 of the Dex completeness tier migration)', () => {
+    it('clears every placeholder in a location, template-stamped and manually-set alike', async () => {
+      const storage = createSqliteStorage(':memory:')
+      const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+      await storage.setBoxPlaceholder(location.id, 1, 0, 1, 'unknown', false)
+      await storage.setBoxPlaceholders(location.id, [{ boxNumber: 1, boxSlot: 1, formId: 2, gender: 'unknown', shiny: true }])
+
+      await storage.clearAllBoxPlaceholders(location.id)
+
+      expect(await storage.listBoxPlaceholders()).toEqual([])
+    })
+
+    it('leaves another location\'s placeholders untouched', async () => {
+      const storage = createSqliteStorage(':memory:')
+      const locationA = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+      const locationB = await storage.createStorageLocation({ locationType: 'home', name: 'Bank', trainerProfileId: null })
+      await storage.setBoxPlaceholder(locationA.id, 1, 0, 1, 'unknown', false)
+      const untouched = await storage.setBoxPlaceholder(locationB.id, 1, 0, 1, 'unknown', false)
+
+      await storage.clearAllBoxPlaceholders(locationA.id)
+
+      expect(await storage.listBoxPlaceholders()).toEqual([untouched])
+    })
+
+    it('is a no-op on a location with no placeholders', async () => {
+      const storage = createSqliteStorage(':memory:')
+      const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+
+      await expect(storage.clearAllBoxPlaceholders(location.id)).resolves.toBeUndefined()
+    })
+  })
+
   it('deletes a location\'s placeholders when the location itself is deleted', async () => {
     const storage = createSqliteStorage(':memory:')
     const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
