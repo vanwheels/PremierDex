@@ -75,6 +75,45 @@ describe('bulk move entries between storage locations', () => {
 })
 
 /**
+ * [Dex completeness tier migration] Leg 3's "Resolve Gender Ambiguities" flow — flips a
+ * batch of entries' stored gender directly. Not gated on hasGenderDifference here (that
+ * check lives in genderResolution.ts, one layer up) — the storage method itself is a
+ * plain per-row gender write, same as any other bulk entry mutation.
+ */
+describe('bulk set entry gender', () => {
+  it('sets the gender on every listed entry', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entries = await bulbasaurEntries(storage)
+
+    const updated = await storage.bulkSetEntryGender(
+      entries.map((e) => e.id),
+      'female'
+    )
+
+    expect(updated).toHaveLength(entries.length)
+    expect(updated.every((e) => e.gender === 'female')).toBe(true)
+  })
+
+  it('leaves entries not listed untouched', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entries = await bulbasaurEntries(storage)
+
+    await storage.bulkSetEntryGender([entries[0].id], 'female')
+
+    const untouched = (await bulbasaurEntries(storage)).find((e) => e.id === entries[1].id)!
+    expect(untouched.gender).toBe('unknown')
+  })
+
+  it('rejects an entry id that does not exist, leaving no partial writes', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entries = await bulbasaurEntries(storage)
+
+    await expect(storage.bulkSetEntryGender([entries[0].id, 999_999], 'female')).rejects.toThrow()
+    expect((await bulbasaurEntries(storage)).find((e) => e.id === entries[0].id)!.gender).toBe('unknown')
+  })
+})
+
+/**
  * Storage Locations tab's "Duplicate" button — clones a whole location's entry roster in
  * one call, replacing the per-entry List-view duplicate above (picking entries one at a
  * time to clone a 1025+-entry roster was unworkable, see commit 74c73c9). See

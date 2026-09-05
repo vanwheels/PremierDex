@@ -36,6 +36,11 @@ export interface CollectionData {
   /** List view's multi-select "Move to…" — see StorageAdapter.bulkSetEntryStorageLocation's
    * own doc comment. */
   bulkMoveEntries: (entryIds: number[], storageLocationId: number | null) => void
+  /** "Resolve Gender Ambiguities" (Leg 3 of the Dex completeness tier migration) — see
+   * StorageAdapter.bulkSetEntryGender's own doc comment. LivingDexView's modal always
+   * calls this with 'female' (the only correction it ever makes); kept general here to
+   * match bulkMoveEntries' own shape. */
+  bulkSetEntryGender: (entryIds: number[], gender: Gender) => void
   setCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
   /** "Add Box" (Leg 2 of the Box View Polish milestone) — resolves with the newly created
    * box so DexBoxGrid can jump straight to it. */
@@ -191,6 +196,14 @@ export function useCollectionData(): CollectionData {
     })
   }, [])
 
+  const bulkSetEntryGender = useCallback((entryIds: number[], gender: Gender): void => {
+    if (entryIds.length === 0) return
+    window.premierDex.bulkSetEntryGender(entryIds, gender).then((updated) => {
+      const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
+      setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
+    })
+  }, [])
+
   const setCollapsedDisplayForm = useCallback((speciesId: number, formId: number | null): void => {
     window.premierDex.setCollapsedDisplayForm(speciesId, formId).then((updated) => {
       setSpecies((prev) => prev.map((sp) => (sp.id === updated.id ? updated : sp)))
@@ -272,6 +285,7 @@ export function useCollectionData(): CollectionData {
     swapEntryBoxPositions,
     fillBoxSlots,
     bulkMoveEntries,
+    bulkSetEntryGender,
     setCollapsedDisplayForm,
     addBox,
     renameBox,

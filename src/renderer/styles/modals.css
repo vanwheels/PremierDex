@@ -97,6 +97,52 @@
   color: var(--muted);
 }
 
+/* Resolve Gender Ambiguities (Leg 3 of the Dex completeness tier migration) — wider than
+   the default .origin-modal so its per-entry list has room, and the list itself scrolls
+   rather than growing the modal past the viewport once there are many entries. */
+.dex-resolve-gender-modal {
+  min-width: 26rem;
+  max-width: 34rem;
+}
+
+.dex-resolve-gender-intro {
+  margin: 0.5rem 0 0.85rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.dex-resolve-gender-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.dex-resolve-gender-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.dex-resolve-gender-list li:last-child {
+  border-bottom: none;
+}
+
+.dex-resolve-gender-label {
+  flex: 1 1 auto;
+}
+
+.dex-resolve-gender-list label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+
 .origin-modal-actions {
   display: flex;
   justify-content: flex-end;

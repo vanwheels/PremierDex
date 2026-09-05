@@ -50,6 +50,11 @@ interface CompletionStatsPanelProps {
   stats: CompletionStats
   options: CompletionStatsOptions
   onOptionsChange: (options: CompletionStatsOptions) => void
+  /** [Dex completeness tier migration] Leg 3 — how many owned entries still need a
+   * gender confirmation before Living Form Dex's completion count can trust them (see
+   * genderResolution.ts). 0 hides the banner entirely. */
+  ambiguousGenderCount: number
+  onOpenResolveGender: () => void
 }
 
 /**
@@ -59,10 +64,27 @@ interface CompletionStatsPanelProps {
  * table is omitted entirely when no regional forms exist in the data (shouldn't happen
  * post-seed, but keeps this component honest about its input rather than assuming).
  */
-export function CompletionStatsPanel({ stats, options, onOptionsChange }: CompletionStatsPanelProps): JSX.Element {
+export function CompletionStatsPanel({
+  stats,
+  options,
+  onOptionsChange,
+  ambiguousGenderCount,
+  onOpenResolveGender
+}: CompletionStatsPanelProps): JSX.Element {
   return (
     <section className="completion-stats">
       <h2>Completion</h2>
+      {ambiguousGenderCount > 0 && (
+        <div className="completion-stats-gender-banner">
+          <span>
+            {ambiguousGenderCount} owned {ambiguousGenderCount === 1 ? 'entry needs' : 'entries need'} gender
+            confirmation for Living Form Dex.
+          </span>
+          <button type="button" onClick={onOpenResolveGender}>
+            Resolve…
+          </button>
+        </div>
+      )}
       <div className="completion-stats-toolbar">
         <label>
           Tier

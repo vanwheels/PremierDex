@@ -21,6 +21,8 @@ import { DexFilterBar } from './DexFilterBar'
 import { DexViewModeSwitcher } from './DexViewModeSwitcher'
 import { useDexViewMode } from './useDexViewMode'
 import { CompletionStatsPanel } from './CompletionStatsPanel'
+import { findAmbiguousGenderEntries } from './genderResolution'
+import { DexResolveGenderModal } from './DexResolveGenderModal'
 import type { DexFilters, DexOptions, DexSort } from './types'
 import { DEFAULT_DEX_FILTERS, DEFAULT_DEX_SORT } from './types'
 
@@ -53,6 +55,9 @@ export interface LivingDexViewProps {
   /** Leg 2 of the Dex completeness tier migration: Apply Template's bulk write. */
   onSetBoxPlaceholders: (storageLocationId: number, placements: TemplatePlacement[]) => Promise<void>
   onClearBoxPlaceholder: (storageLocationId: number, boxNumber: number, boxSlot: number) => void
+  /** Leg 3 of the Dex completeness tier migration: Resolve Gender Ambiguities' bulk
+   * write. */
+  onBulkSetEntryGender: (entryIds: number[], gender: Gender) => void
 }
 
 /** The Living Dex tab's own content: the per-location tab bar, completion stats, the
@@ -87,7 +92,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onRenameBox,
     onSetBoxPlaceholder,
     onSetBoxPlaceholders,
-    onClearBoxPlaceholder
+    onClearBoxPlaceholder,
+    onBulkSetEntryGender
   } = props
 
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
@@ -102,6 +108,9 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
   const [selectedLocationTab, setSelectedLocationTab] = useState<number | null>(null)
   // Persisted Living Dex layout choice — see useDexViewMode's doc comment.
   const [viewMode, setViewMode] = useDexViewMode()
+  // Resolve Gender Ambiguities modal (Leg 3 of the Dex completeness tier migration) — see
+  // CompletionStatsPanel's banner below.
+  const [resolveGenderModalOpen, setResolveGenderModalOpen] = useState(false)
 
   // Both the table and the stats panel scope to the selected location tab via this filter,
   // applied once here rather than in each consumer. An entry that's unowned everywhere sits
@@ -158,6 +167,10 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     () => computeCompletionStats(forms, entriesForLocationTab, completionStatsOptions),
     [forms, entriesForLocationTab, completionStatsOptions]
   )
+  // Unscoped (every location, including unboxed) — same convention as boxTemplates.ts's
+  // buildOwnedUnitIndex: ownership, and which entries need a gender confirmation, is
+  // location-independent.
+  const ambiguousGenderEntries = useMemo(() => findAmbiguousGenderEntries(forms, entries), [forms, entries])
 
   // Checking an entry owned while a real location tab is selected assigns it there in the
   // same action, via autoAssignedLocationOnCheckIn — the per-row picker (its own table
@@ -178,7 +191,20 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
         stats={completionStats}
         options={completionStatsOptions}
         onOptionsChange={setCompletionStatsOptions}
+        ambiguousGenderCount={ambiguousGenderEntries.length}
+        onOpenResolveGender={() => setResolveGenderModalOpen(true)}
       />
+      {resolveGenderModalOpen && (
+        <DexResolveGenderModal
+          species={species}
+          ambiguousEntries={ambiguousGenderEntries}
+          onResolve={(femaleEntryIds) => {
+            onBulkSetEntryGender(femaleEntryIds, 'female')
+            setResolveGenderModalOpen(false)
+          }}
+          onClose={() => setResolveGenderModalOpen(false)}
+        />
+      )}
       <DexToolbar options={options} onChange={setOptions} />
       <div className="dex-controls-row">
         <DexFilterBar filters={filters} onChange={setFilters} />

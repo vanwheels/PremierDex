@@ -12,6 +12,9 @@ export const PokemonIpcChannel = {
   /** Bulk move (List view multi-select) — see StorageAdapter.bulkSetEntryStorageLocation's
    * own doc comment. */
   bulkSetEntryStorageLocation: 'pokemon:collectionEntries:bulkSetStorageLocation',
+  /** [Dex completeness tier migration] Leg 3's "Resolve Gender Ambiguities" flow — see
+   * StorageAdapter.bulkSetEntryGender's own doc comment. */
+  bulkSetEntryGender: 'pokemon:collectionEntries:bulkSetGender',
   setCollapsedDisplayForm: 'pokemon:species:setCollapsedDisplayForm',
   /** Leg 6: static per-game species-availability data (see load-species-data.ts),
    * not a StorageAdapter/DB method — there's no collection_entries-shaped row to read,

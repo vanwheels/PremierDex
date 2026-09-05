@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
-import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
+import type { CollectionEntryOriginInput, Gender } from '@shared/types/pokemon'
 import { PokemonIpcChannel } from '@shared/storage/ipc-channels'
 import { loadSpeciesAvailabilityData } from '../storage/load-species-data'
 
@@ -36,6 +36,9 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
     PokemonIpcChannel.bulkSetEntryStorageLocation,
     (_event, entryIds: number[], storageLocationId: number | null) =>
       storage.bulkSetEntryStorageLocation(entryIds, storageLocationId)
+  )
+  ipcMain.handle(PokemonIpcChannel.bulkSetEntryGender, (_event, entryIds: number[], gender: Gender) =>
+    storage.bulkSetEntryGender(entryIds, gender)
   )
   ipcMain.handle(PokemonIpcChannel.setCollapsedDisplayForm, (_event, speciesId: number, formId: number | null) =>
     storage.setCollapsedDisplayForm(speciesId, formId)

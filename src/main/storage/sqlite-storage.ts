@@ -43,6 +43,15 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const listEntriesStmt = db.prepare('SELECT * FROM collection_entries ORDER BY form_id, gender, shiny')
   const setOwnedStmt = db.prepare('UPDATE collection_entries SET owned = @owned WHERE id = @id')
   const getEntryStmt = db.prepare('SELECT * FROM collection_entries WHERE id = ?')
+  // Gender correction ([Dex completeness tier migration] Leg 3's "Resolve Gender
+  // Ambiguities" flow) — a gender-diff form's owned entry gets written under the
+  // collapsed 'male' key regardless of the individual's real gender whenever
+  // splitByGender display is off (see buildDexSections.ts's collapsed row), so this is
+  // how a user-confirmed correction lands once a splitByGender tier needs to trust it.
+  // A plain per-row UPDATE, not tied to any (form, gender, shiny) uniqueness — that
+  // constraint was dropped (Leg 2 of the Box Arrangement milestone) precisely so
+  // duplicate individuals can each carry an independently correct gender.
+  const setEntryGenderStmt = db.prepare('UPDATE collection_entries SET gender = @gender WHERE id = @id')
   const setEntryOriginStmt = db.prepare(`
     UPDATE collection_entries
     SET trainer_profile_id = @trainerProfileId, origin_game = @originGame, ot_name = @otName,
@@ -125,6 +134,15 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     for (const id of entryIds) {
       if (!getEntryStmt.get(id)) throw new Error('Entry not found')
       setEntryStorageLocationStmt.run({ id, storageLocationId })
+    }
+  })
+  // Bulk gender correction — same shape as bulkSetEntryStorageLocationTx above, one
+  // transaction so a Resolve Gender Ambiguities save (potentially hundreds of entries)
+  // is one DB round trip instead of N.
+  const bulkSetEntryGenderTx = db.transaction((entryIds: number[], gender: Gender) => {
+    for (const id of entryIds) {
+      if (!getEntryStmt.get(id)) throw new Error('Entry not found')
+      setEntryGenderStmt.run({ id, gender })
     }
   })
   // Clones one entry into a target storage location — backs duplicateStorageLocationTx
@@ -355,6 +373,11 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
 
     async bulkSetEntryStorageLocation(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]> {
       bulkSetEntryStorageLocationTx(entryIds, storageLocationId)
+      return entryIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
+    },
+
+    async bulkSetEntryGender(entryIds: number[], gender: Gender): Promise<CollectionEntry[]> {
+      bulkSetEntryGenderTx(entryIds, gender)
       return entryIds.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow))
     },
 

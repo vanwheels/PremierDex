@@ -260,6 +260,23 @@
   margin-bottom: 1.75rem;
 }
 
+/* Resolve Gender Ambiguities banner (Leg 3 of the Dex completeness tier migration) —
+   --accent rather than --danger: an outstanding confirmation worth doing, not something
+   already wrong (see tables.css's --danger invalid-combo badge for that contrast). */
+.completion-stats-gender-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
 .completion-stats-tables {
   display: flex;
   flex-wrap: wrap;

@@ -55,6 +55,16 @@ export interface StorageAdapter {
   /** Bulk version of setEntryStorageLocation (List view's multi-select move) — same
    * per-entry semantics (box position always clears), just looped in one DB round trip. */
   bulkSetEntryStorageLocation(entryIds: number[], storageLocationId: number | null): Promise<CollectionEntry[]>
+  /** Bulk gender correction ([Dex completeness tier migration] Leg 3's "Resolve Gender
+   * Ambiguities" flow) — flips each listed entry's stored gender directly. A gender-diff
+   * form's owned entry gets written under the collapsed 'male' key regardless of the
+   * individual's real gender whenever splitByGender display is off (see
+   * buildDexSections.ts's collapsed row), so this is how a user-confirmed correction gets
+   * applied once a splitByGender tier needs to trust which physical individual is which.
+   * Not tied to the (form, gender, shiny) uniqueness dropped in the Box Arrangement
+   * milestone — each listed entry is corrected independently of any other row sharing its
+   * old key. */
+  bulkSetEntryGender(entryIds: number[], gender: Gender): Promise<CollectionEntry[]>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>
