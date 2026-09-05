@@ -264,6 +264,35 @@ describe('computeFillInPlacements', () => {
     const entries = [makeEntry({ id: 20, formId: 1, gender: 'male' }), makeEntry({ id: 10, formId: 1, gender: 'female' })]
     expect(computeFillInPlacements({ placeholders, entries, forms })).toEqual([{ entryId: 10, boxNumber: 1, boxSlot: 0 }])
   })
+
+  // Bug report: "Duplicate Storage Location" clones every entry as a fresh (higher-id) row
+  // landing unboxed in the new location — a plain lowest-id rule reaches past that brand-new
+  // local clone and raids the *original* location's own (lower-id) individual instead,
+  // stranding the local clone unboxed while the raided original lands in this location's box.
+  it('prefers a candidate already unboxed in the placeholder\'s own location over a lower id elsewhere', () => {
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1, storageLocationId: 5 })]
+    const entries = [
+      makeEntry({ id: 10, formId: 1, storageLocationId: 1 }), // lower id, but a different location
+      makeEntry({ id: 20, formId: 1, storageLocationId: 5 }) // higher id, but local to the placeholder
+    ]
+    expect(computeFillInPlacements({ placeholders, entries, forms: [] })).toEqual([{ entryId: 20, boxNumber: 1, boxSlot: 0 }])
+  })
+
+  it('falls back to the lowest id collection-wide when the placeholder\'s own location has no unboxed match', () => {
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1, storageLocationId: 5 })]
+    const entries = [makeEntry({ id: 20, formId: 1, storageLocationId: 1 }), makeEntry({ id: 10, formId: 1, storageLocationId: 2 })]
+    expect(computeFillInPlacements({ placeholders, entries, forms: [] })).toEqual([{ entryId: 10, boxNumber: 1, boxSlot: 0 }])
+  })
+
+  it('the local-first preference also applies across a male-keyed collapsed placeholder\'s two gender pools', () => {
+    const forms: Form[] = [makeForm({ id: 1, speciesId: 1, hasGenderDifference: true })]
+    const placeholders = [makePlaceholder({ id: 1, boxNumber: 1, boxSlot: 0, formId: 1, gender: 'male', storageLocationId: 5 })]
+    const entries = [
+      makeEntry({ id: 10, formId: 1, gender: 'male', storageLocationId: 1 }), // lower id, elsewhere
+      makeEntry({ id: 20, formId: 1, gender: 'female', storageLocationId: 5 }) // higher id, but local
+    ]
+    expect(computeFillInPlacements({ placeholders, entries, forms })).toEqual([{ entryId: 20, boxNumber: 1, boxSlot: 0 }])
+  })
 })
 
 describe('canonicalPlaceholderForm', () => {

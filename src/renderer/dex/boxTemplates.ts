@@ -186,16 +186,29 @@ export interface FillInPlacement {
  * Per Vanny's scoping: only an unboxed individual (`boxNumber === null`, wherever it
  * currently lives) is a candidate — one already occupying a slot in some other box is left
  * alone, so a placeholder with only already-boxed matches stays a ghost. When several
- * unboxed individuals match the same unit, the lowest `id` (insertion order) is picked and
- * the rest are left untouched, same "one representative individual, others untouched"
- * precedent as List view's bulk actions.
+ * unboxed individuals match the same unit, one is picked as follows and the rest are left
+ * untouched, same "one representative individual, others untouched" precedent as List
+ * view's bulk actions:
+ *
+ * 1. An unboxed candidate already sitting in the placeholder's OWN location wins first,
+ *    regardless of id. Added after a bug report: "Duplicate Storage Location" clones every
+ *    entry as a fresh (higher-id) row landing unboxed in the new location (see
+ *    duplicateStorageLocationTx), so a plain lowest-id-wins rule would reach straight past
+ *    that brand-new local clone and raid the *original* location's own individual instead —
+ *    stranding the local clone unboxed (looking like "it's in both the box and Unboxed" once
+ *    the raided original lands in this location's box) and draining a copy out of the
+ *    original for no reason the user asked for.
+ * 2. Only once the placeholder's own location has no unboxed match at all does this fall
+ *    back to the lowest `id` (insertion order) collection-wide — the original "somewhere in
+ *    the collection" behavior, for the case where the user owns a matching individual but
+ *    hasn't gotten around to moving it into this location yet.
  *
  * Gender: a placeholder's `gender` follows the same collapsed-representative convention
  * `requiredUnits`/`isUnitSatisfied` use — `'male'` on a gender-diff form means "either
  * gender satisfies it" (the common case: every tier except `livingForm`, plus every
  * manually-set placeholder, collapses this way), so both the male and female candidate
- * pools are checked and whichever has the lower id wins. `'female'` only ever comes from a
- * real split-by-gender tier and is matched strictly.
+ * pools are checked together under the same two-tier rule above. `'female'` only ever
+ * comes from a real split-by-gender tier and is matched strictly.
  */
 export function computeFillInPlacements(params: {
   placeholders: BoxPlaceholder[]
@@ -215,6 +228,13 @@ export function computeFillInPlacements(params: {
   }
   for (const pool of pools.values()) pool.sort((a, b) => a.id - b.id)
 
+  function removeFromPool(key: string, entryId: number): void {
+    const pool = pools.get(key)
+    if (!pool) return
+    const index = pool.findIndex((e) => e.id === entryId)
+    if (index !== -1) pool.splice(index, 1)
+  }
+
   const placements: FillInPlacement[] = []
   for (const placeholder of placeholders) {
     const form = formsById.get(placeholder.formId)
@@ -223,19 +243,25 @@ export function computeFillInPlacements(params: {
       keys.push(unitKey(placeholder.formId, 'female', placeholder.shiny))
     }
 
-    let bestKey: string | undefined
-    let bestEntry: CollectionEntry | undefined
+    // Tier 1: lowest-id candidate already local to this placeholder's own location, across
+    // whichever of `keys` has one. Each pool is sorted ascending by id, so `.find`'s first
+    // hit is that pool's own lowest-id local candidate.
+    let best: { key: string; entry: CollectionEntry } | undefined
     for (const key of keys) {
-      const candidate = pools.get(key)?.[0]
-      if (candidate && (!bestEntry || candidate.id < bestEntry.id)) {
-        bestKey = key
-        bestEntry = candidate
+      const local = pools.get(key)?.find((e) => e.storageLocationId === placeholder.storageLocationId)
+      if (local && (!best || local.id < best.entry.id)) best = { key, entry: local }
+    }
+    // Tier 2: no local match anywhere among `keys` — fall back to lowest id collection-wide.
+    if (!best) {
+      for (const key of keys) {
+        const candidate = pools.get(key)?.[0]
+        if (candidate && (!best || candidate.id < best.entry.id)) best = { key, entry: candidate }
       }
     }
-    if (!bestEntry || !bestKey) continue
+    if (!best) continue
 
-    pools.get(bestKey)!.shift()
-    placements.push({ entryId: bestEntry.id, boxNumber: placeholder.boxNumber, boxSlot: placeholder.boxSlot })
+    removeFromPool(best.key, best.entry.id)
+    placements.push({ entryId: best.entry.id, boxNumber: placeholder.boxNumber, boxSlot: placeholder.boxSlot })
   }
   return placements
 }
