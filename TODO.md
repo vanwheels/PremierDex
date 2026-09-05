@@ -6,40 +6,19 @@ Picked up 2026-09-04 from Future Milestones. Both halves (tier migration and Box
 Templates) share a "what counts as complete for tier X" definition, so scoping is bundled
 into Leg 1 before either gets built.
 
-### [Redefine Apply Template as total-based + Remove Template] — Leg 6
-Redesign surfaced 2026-09-04 investigating a "Living Form Dex totals look wrong" report:
-the totals themselves checked out fine (verified against Vanny's live DB — see
-`docs/investigations/dex-completeness-tiers.md` for the math), but it exposed that Leg 2's
-actual concept was wrong. Apply Template currently stamps `pendingRequiredUnits()` — the
-required set *minus* anything owned anywhere in the collection. Vanny's call: a template
-should stamp the *total* required set regardless of global ownership, skipping only units a
-real entry already physically occupies in *this* location (still dedupes against
-already-owned-here and already-placeholder'd-here, just drops the "owned anywhere" exclusion
-that made it pending-based). The box becomes a fixed full layout of the tier/color; Fill In
-(Leg 7, below) is what later reconciles it against what you actually own. Also folds in
-Vanny's original ask: a "Clear Placeholders" action per Storage Location that wipes every
-`box_placeholders` row there (template-stamped and manually right-click-set alike) — more
-necessary now that a template stamps its full size every time. `boxTemplates.ts`'s
-`pendingRequiredUnits`/`isUnitSatisfied` need reworking around the narrower "occupied in this
-location" check instead of `buildOwnedUnitIndex`'s global one; `DexApplyTemplateModal`'s
-preview line simplifies too, since the count it shows is now a real total for the location,
-not a global-ownership-dependent pending count.
-Last touched: 2026-09-04. Re-check count: 0.
-
 ### [Fill In from owned collection] — Leg 7
-Companion to Leg 6, per Vanny's 2026-09-04 clarification: once a location's boxes hold a
-full template layout of ghost placeholders, a "Fill In" action walks them and, for each
-placeholder with a matching owned individual somewhere in the collection, moves that entry
-into the placeholder's slot (ghost -> real entry). Scoped per Vanny's answers: prefer an
-owned individual that isn't already boxed anywhere (no existing home) over one that would
-have to be pulled out of another box; if only already-boxed copies exist, leave the
-placeholder as a ghost rather than relocating one. When multiple unboxed copies match one
-required unit (e.g. 3 shiny female Eevees), move the first and leave the rest where they
-are — same "one representative individual, others untouched" precedent already used
-elsewhere (List view's bulk actions, box arrangement). Needs its own implementation design
-(new IPC bulk-write, matching/ordering rule for "first" when several unboxed candidates
-tie) before a leg estimate — not detailed further here since Leg 6 has to land first (Fill
-In depends on templates being total-based, not pending-based).
+Companion to Leg 6 (now landed, see COMPLETED.md), per Vanny's 2026-09-04 clarification:
+once a location's boxes hold a full template layout of ghost placeholders, a "Fill In"
+action walks them and, for each placeholder with a matching owned individual somewhere in
+the collection, moves that entry into the placeholder's slot (ghost -> real entry). Scoped
+per Vanny's answers: prefer an owned individual that isn't already boxed anywhere (no
+existing home) over one that would have to be pulled out of another box; if only
+already-boxed copies exist, leave the placeholder as a ghost rather than relocating one.
+When multiple unboxed copies match one required unit (e.g. 3 shiny female Eevees), move the
+first and leave the rest where they are — same "one representative individual, others
+untouched" precedent already used elsewhere (List view's bulk actions, box arrangement).
+Needs its own implementation design (new IPC bulk-write, matching/ordering rule for "first"
+when several unboxed candidates tie) before a leg estimate.
 Last touched: 2026-09-04. Re-check count: 0.
 
 ### [Wire excludePreEvolutions into tier computation] — Leg 8

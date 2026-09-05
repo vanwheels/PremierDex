@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Redefine Apply Template as total-based + Remove Template] — Leg 6 — 2026-09-04
+Corrects Leg 2's original concept (surfaced investigating a "totals look wrong" report —
+the totals themselves were fine, see `docs/investigations/dex-completeness-tiers.md`'s
+Correction section): a template now stamps the tier's *full* required set every time,
+skipping only units a real entry already physically occupies in the target location, not
+whatever's owned anywhere in the collection. Also ships "Clear Placeholders", a
+per-Storage-Location bulk wipe of every `box_placeholders` row there (template-stamped and
+manually-set alike). See commit `69a27d4`.
+
 ## [Evolution-chain data (Pre-Evos axis)] — Leg 5 — 2026-09-04
 PokeAPI `/evolution-chain` fetch pass (`scripts/fetch-evolution-chains.ts`) writing
 `data/pokemon/species-evolution.json`, new `species.is_final_evolution_stage` schema
