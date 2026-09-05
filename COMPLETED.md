@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Duplicate Storage Location input-freeze bugfix] — 2026-09-04
+Reported by Vanny: typing (though not backspace) and opening dropdown menus stopped working
+for a stretch after clicking Duplicate on a large Storage Location. Root cause:
+`duplicateStorageLocationTx` cloned entries with one `INSERT...SELECT` statement per
+source row, run in a JS loop — at 1025+ entries that's 1025+ separate synchronous
+better-sqlite3 calls back-to-back inside one transaction, blocking the main process for a
+visible stretch, then `onLocationsChanged` (App's full `loadAll`) re-fetches every
+species/form/entry/box/placeholder list against the now-doubled entry count on top of that.
+Collapsed the loop into a single `INSERT...SELECT ... WHERE storage_location_id = @sourceId`
+that clones the whole roster in one statement. Existing duplicate tests
+(storage-location-storage.test.ts, bulk-entry-actions.test.ts) cover the resulting behavior
+unchanged. See commit `4c36bb3`.
+
 ## [Fill In raided sibling locations bugfix] — 2026-09-04
 Reported by Vanny: after Duplicate Storage Location, Fill In on the duplicate left an
 individual showing as both boxed and unboxed, surviving a reload. Root cause: Duplicate
