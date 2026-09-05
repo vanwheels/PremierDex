@@ -1,5 +1,32 @@
 # TODO
 
+## Current Milestone: Deeper Per-Game Validity & Curated Met Locations
+
+Picked up 2026-09-04 from Future Milestones, per Vanny's call: no longer just a "nice to
+have deeper" enhancement — a large chunk of her Unassigned entries show false-positive
+Invalid Combo badges, traced to the obtainability gaps this milestone covers (see Leg 1
+below for the root cause and full scope).
+
+### [Scope per-game form/gender/ball legality + curated Met Location dataset] — Leg 1
+Design-only leg, same shape as the Dex Completeness Tier Migration milestone's Leg 1: nail
+down what "deeper validity" actually covers before building any of it. Two halves,
+carried over from the Future Milestones item this replaces:
+1. Per-game form/gender/ball-combo legality, beyond the current ball-pool-only check.
+2. A curated real-locations-per-game dataset (routes/cities/areas) to replace the
+   free-text Met Location field.
+
+Root cause of the urgency (read in invalidCombo.ts): the species-availability dataset only
+encodes each game's *base* regional dex, so it misses (a) postgame unlocks that expand the
+catchable pool past the base dex, and (b) a species reachable by evolving a catchable
+pre-evolution even when the evolved form itself isn't in that game's wild encounter table
+(e.g. Ivysaur logged as Ultra Moon origin — not directly catchable there, but reachable by
+evolving a caught Bulbasaur). Both are obtainability gaps in the current data model, not
+edge cases, and are the likely biggest single driver of the false-positive badge volume —
+worth confirming whether fixing just the obtainability model (without the full form/
+gender/ball-combo legality or curated Met Location work) already clears most of them,
+since that could be a much smaller Leg 2 than the original scope implied.
+Last touched: 2026-09-04. Re-check count: 0.
+
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
@@ -123,10 +150,10 @@ COMPLETED.md; autoAssignLocation.ts) already covers the case where a specific lo
 is selected when checking a mon owned. The remaining gap is checking owned from a context
 with no location tab selected (e.g. the main Dex Table) — that still lands in Unassigned.
 Overlaps with [Bulk move/duplicate entries between storage locations] (would reduce the
-need for it) and the false-positive Invalid Combo badges under [Deeper per-game validity:
-form/gender legality + curated Met Location list] (many are on Unassigned entries). Needs
-scoping: prompt for a location at check-in time? Keep Unassigned only as a fallback when no
-locations exist yet?
+need for it) and the false-positive Invalid Combo badges the Deeper Per-Game Validity &
+Curated Met Locations milestone (above) is now scoping (many are on Unassigned entries).
+Needs scoping: prompt for a location at check-in time? Keep Unassigned only as a fallback
+when no locations exist yet?
 Last touched: 2026-09-04. Re-check count: 0.
 
 ### [Multi-select highlight verification] — unscheduled
@@ -190,26 +217,4 @@ more user-friendly, less redundant layout. Deliberately not scoped or folded int
 milestone — milestone-sized investigation on its own, not a leg. Needs its own scoping pass
 (which panels/modals, what "simpler" means concretely) before a leg sequence can be planned.
 Last touched: 2026-09-04. Re-check count: 0.
-
-### [Deeper per-game validity: form/gender legality + curated Met Location list] — future milestone
-Split out of a past milestone during its 2026-09-02 leg-planning pass: the initial
-validity dataset only covers species-availability-per-game + Legends Arceus's ball pool,
-and Met Location ships as free text — both deliberately narrowed so that milestone's legs
-stayed small. This item covers the fuller versions: per-game form/gender/ball-combo
-legality (beyond just ball pool), and a curated real-locations-per-game dataset
-(routes/cities/areas) to replace the free-text Met Location field. Needs its own scoping
-before being picked up, same as Ribbons/Dex-tier above.
-Confirmed 2026-09-03 via real usage: this is no longer just a "nice to have deeper"
-enhancement — a large chunk of Vanny's Unassigned entries are showing false-positive
-Invalid Combo badges. Root cause (read in invalidCombo.ts): the species-availability
-dataset only encodes each game's base regional dex, so it doesn't account for (a)
-postgame unlocks that expand the catchable pool past the base dex, or (b) a species being
-reachable by evolving a catchable pre-evolution even when the evolved form itself isn't in
-the wild encounter table (e.g. Ivysaur logged as Ultra Moon origin — not directly
-catchable there, but reachable by evolving a caught Bulbasaur). Both are obtainability
-gaps in the current data model, not edge cases. Vanny confirmed 2026-09-03 this stays
-queued behind the then-current milestone despite the urgency; that milestone (Box View
-Polish & Multi-Box Editing) has since shipped 2026-09-04, so nothing is queued ahead of
-this any more — worth a fresh call on whether it's picked up next given the urgency.
-Last touched: 2026-09-04. Re-check count: 1.
 </content>
