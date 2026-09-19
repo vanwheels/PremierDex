@@ -28,10 +28,16 @@ function makeEntry(overrides: Partial<CollectionEntry> = {}): CollectionEntry {
 }
 
 // Bulbasaur (1) in the Kanto dex; Colosseum deliberately mapped to no pokedexes at all,
-// mirroring the real fetch script's output for that game.
+// mirroring the real fetch script's output for that game. `kanto`/`hoenn` fixtures back
+// Platinum's Pal Park supplemental check (Leg 2).
 const AVAILABILITY: SpeciesAvailabilityData = {
-  pokedexes: { 'original-kanto': [1, 2, 3] },
-  gameToPokedexes: { red: ['original-kanto'], colosseum: [], 'legends-arceus': ['original-kanto'] }
+  pokedexes: { 'original-kanto': [1, 2, 3], kanto: [1, 2, 3], hoenn: [252], 'extended-sinnoh': [387] },
+  gameToPokedexes: {
+    red: ['original-kanto'],
+    colosseum: [],
+    'legends-arceus': ['original-kanto'],
+    platinum: ['extended-sinnoh']
+  }
 }
 
 describe('checkEntryValidity', () => {
@@ -65,6 +71,24 @@ describe('checkEntryValidity', () => {
   it('skips the species check for a game absent from gameToPokedexes entirely', () => {
     const result = checkEntryValidity(makeEntry({ originGame: 'Pokémon GO' }), 999, AVAILABILITY)
     expect(result.invalid).toBe(false)
+  })
+
+  it('is valid for a species outside Platinum\'s own dex but reachable via Pal Park\'s Kanto pool', () => {
+    // 1 (Bulbasaur) isn't in extended-sinnoh but is in the `kanto` fixture Pal Park draws from.
+    const result = checkEntryValidity(makeEntry({ originGame: 'Pokémon Platinum' }), 1, AVAILABILITY)
+    expect(result.invalid).toBe(false)
+  })
+
+  it('is valid for a species outside Platinum\'s own dex but reachable via Pal Park\'s Hoenn pool', () => {
+    // 252 (Treecko) is only in the `hoenn` fixture.
+    const result = checkEntryValidity(makeEntry({ originGame: 'Pokémon Platinum' }), 252, AVAILABILITY)
+    expect(result.invalid).toBe(false)
+  })
+
+  it('flags a species unreachable through Platinum\'s dex or its Pal Park supplemental pool', () => {
+    const result = checkEntryValidity(makeEntry({ originGame: 'Pokémon Platinum' }), 999, AVAILABILITY)
+    expect(result.invalid).toBe(true)
+    expect(result.reasons).toEqual(['Not obtainable in Pokémon Platinum'])
   })
 
   it('flags a caught ball outside Legends Arceus\'s defined pool', () => {

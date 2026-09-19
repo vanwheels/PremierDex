@@ -3,6 +3,7 @@ import type { SpeciesAvailabilityData } from '@shared/types/species-availability
 import { findOriginGame } from '@shared/data/origin-games'
 import { ballPoolForGame } from '@shared/data/poke-balls'
 import type { PokeBall } from '@shared/data/poke-balls'
+import { supplementalSpeciesForGame } from '@shared/data/supplemental-availability'
 
 export interface InvalidComboResult {
   invalid: boolean
@@ -23,6 +24,9 @@ const VALID: InvalidComboResult = { invalid: false, reasons: [] }
  *   against;
  * - a game absent from (or empty in) gameToPokedexes (Colosseum/XD/GO) has no species
  *   data, so the species check is skipped for it;
+ * - a species missing from the regional dex union but present in
+ *   supplementalSpeciesForGame's hand-curated postgame-mechanic pool (Leg 2 — see
+ *   shared/data/supplemental-availability.ts) still counts as available;
  * - ballPoolForGame already falls back to the full POKE_BALLS list for any game without
  *   Leg 5's narrow pool, so the ball check needs no separate "do we have data" branch.
  */
@@ -39,8 +43,9 @@ export function checkEntryValidity(
 
   const dexNames = availability.gameToPokedexes[game.id]
   if (dexNames && dexNames.length > 0) {
-    const available = dexNames.some((dexName) => availability.pokedexes[dexName]?.includes(speciesId))
-    if (!available) reasons.push(`Not obtainable in ${game.name}`)
+    const inRegionalDex = dexNames.some((dexName) => availability.pokedexes[dexName]?.includes(speciesId))
+    const inSupplementalPool = supplementalSpeciesForGame(game.id, availability).includes(speciesId)
+    if (!inRegionalDex && !inSupplementalPool) reasons.push(`Not obtainable in ${game.name}`)
   }
 
   if (entry.caughtBall && !ballPoolForGame(game.name).includes(entry.caughtBall as PokeBall)) {
