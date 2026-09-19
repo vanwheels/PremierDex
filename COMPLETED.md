@@ -1,5 +1,16 @@
 # COMPLETED
 
+## [Scope per-game form/gender/ball legality + curated Met Location dataset] — 2026-09-19
+Design-only leg, resolved against real data rather than just reasoning about it: read
+`premierdex.sqlite` directly (read-only) to find that all 903 current Invalid Combo false
+positives are species-availability misses (zero from the ball check), 88% concentrated in
+just two games (Platinum, Emerald), and that the milestone's own headline
+pre-evolution-reachability example (Ivysaur/Ultra Moon) doesn't actually hold up — the real
+gap is postgame encounter/gift mechanics PokeAPI's regional-dex data can't represent at
+all, not evolution-chain reachability. Full write-up and the resulting scope split (a
+narrow Leg 2, plus form/gender/ball legality and curated Met Location both pushed to Future
+Milestones, gated on demonstrated need) in `docs/investigations/deeper-per-game-validity.md`.
+
 ## [Duplicate Storage Location input-freeze bugfix] — 2026-09-04
 Reported by Vanny: typing (though not backspace) and opening dropdown menus stopped working
 for a stretch after clicking Duplicate on a large Storage Location. Root cause:

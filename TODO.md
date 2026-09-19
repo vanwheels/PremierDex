@@ -7,25 +7,25 @@ have deeper" enhancement — a large chunk of her Unassigned entries show false-
 Invalid Combo badges, traced to the obtainability gaps this milestone covers (see Leg 1
 below for the root cause and full scope).
 
-### [Scope per-game form/gender/ball legality + curated Met Location dataset] — Leg 1
-Design-only leg, same shape as the Dex Completeness Tier Migration milestone's Leg 1: nail
-down what "deeper validity" actually covers before building any of it. Two halves,
-carried over from the Future Milestones item this replaces:
-1. Per-game form/gender/ball-combo legality, beyond the current ball-pool-only check.
-2. A curated real-locations-per-game dataset (routes/cities/areas) to replace the
-   free-text Met Location field.
-
-Root cause of the urgency (read in invalidCombo.ts): the species-availability dataset only
-encodes each game's *base* regional dex, so it misses (a) postgame unlocks that expand the
-catchable pool past the base dex, and (b) a species reachable by evolving a catchable
-pre-evolution even when the evolved form itself isn't in that game's wild encounter table
-(e.g. Ivysaur logged as Ultra Moon origin — not directly catchable there, but reachable by
-evolving a caught Bulbasaur). Both are obtainability gaps in the current data model, not
-edge cases, and are the likely biggest single driver of the false-positive badge volume —
-worth confirming whether fixing just the obtainability model (without the full form/
-gender/ball-combo legality or curated Met Location work) already clears most of them,
-since that could be a much smaller Leg 2 than the original scope implied.
-Last touched: 2026-09-04. Re-check count: 0.
+### [Postgame supplemental-availability data: Platinum + Emerald + USUM] — Leg 2
+Scoped by Leg 1's investigation (`docs/investigations/deeper-per-game-validity.md`) against
+Vanny's real collection, not just reasoned about abstractly: 903 owned entries currently
+flag Invalid Combo, all 903 on the species-availability check (the ball check contributes
+zero). 88% of those (791) are just two games — Pokémon Platinum (686, almost certainly
+Great Marsh's postgame expanded-encounter list swallowing ordinary Kanto/Johto species) and
+Pokémon Emerald (105, a Mew/Lugia/Ho-oh event cluster plus a likely-similar
+expanded-encounter story that needs confirming). The milestone's own headline example
+(Ivysaur/Ultra Moon, "reachable by evolving a caught Bulbasaur") turned out not to be a
+pre-evolution-reachability case at all — Bulbasaur isn't in Ultra Moon's base dex either;
+the real path is almost certainly USUM's postgame Ultra Wormhole (explains the Tornadus/
+Thundurus/Reshiram/Zekrom/Landorus/Yveltal cluster in the USUM counts) and/or Poké Pelago's
+starter-gift minigame. Leg 2: hand-curate these three games' postgame supplemental unlock
+lists (not a PokeAPI fetch — this data isn't a regional dex, closer in shape to poke-balls.ts's
+hand-built BALL_POOLS) and union them into the species-availability check. Confirm Emerald's
+actual mechanism before curating it. Re-run Leg 1's query afterward to confirm the
+false-positive count actually drops. No other game gets curated speculatively — same
+"only Legends Arceus has a ball pool, everything else falls back to no-data" precedent.
+Last touched: 2026-09-19. Re-check count: 0.
 
 ## Unscheduled
 
@@ -207,6 +207,27 @@ badges. Size classification and capture date noted as possible additions at the 
 time, capture date flagged by Vanny as very low priority. All blocked on Ribbons being
 scoped first.
 Last touched: 2026-09-02. Re-check count: 0.
+
+### [Curated Met Location dataset] — future milestone
+Split out of the "Deeper Per-Game Validity & Curated Met Locations" milestone by Leg 1's
+investigation (`docs/investigations/deeper-per-game-validity.md`): 0 of 5,172 owned entries
+have `metLocation` set today, so there's no evidence this free-text field is actually
+wanted filled in — a 41-game, route-level curated dataset is a large undertaking (its own
+milestone, not a leg) not worth building speculatively ahead of any usage signal.
+Blocked: needs Vanny to confirm she actually intends to start using Met Location before
+this gets scoped further. If confirmed, start small (major cities/routes, or free-text with
+lightweight autocomplete) rather than committing to exhaustive per-route coverage.
+Last touched: 2026-09-19. Re-check count: 0.
+
+### [Per-game form/gender/ball-combo legality] — future milestone
+Split out of the "Deeper Per-Game Validity & Curated Met Locations" milestone by Leg 1's
+investigation: zero of the collection's current false positives trace to the ball check
+(no PLA entry has `caughtBall` set at all), and no per-game gender-anachronism or
+held-item-forme case (see `docs/investigations/held-item-form-change-gap.md`'s Zacian/
+Zamazenta/Ogerpon/Silvally catalogue) has been shown to actually misfire today.
+Blocked: needs a real false positive or wrong-game forme to actually surface before this is
+worth scoping — not built speculatively ahead of demonstrated need.
+Last touched: 2026-09-19. Re-check count: 0.
 
 ### [Full UI/UX pass on the Dex interface] — future milestone
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones
