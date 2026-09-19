@@ -134,3 +134,46 @@ Met Location) moves out of the current milestone per the two sections above.
 - **Future Milestones:** curated Met Location dataset, gated on Vanny confirming actual
   intent to use the field. Form/gender/ball-combo legality, gated on a real false positive
   or wrong-game forme actually surfacing (not scoped speculatively).
+
+## Leg 2 update (2026-09-19): Great Marsh was the wrong mechanism
+
+Before curating anything, re-checked Leg 1's Great Marsh hypothesis against real
+Bulbapedia/Serebii data (via a research subagent) and then against Vanny's actual 98
+invalid Platinum species. **The two don't overlap at all.** Great Marsh's confirmed
+species list (~33 species, mostly things like Psyduck/Tangela/Wooper/Kecleon/Croagunk)
+shares zero species with the real invalid set, which is instead dominated by ordinary
+Kanto/Johto species (Caterpie, Pidgey, Rattata, Sandshrew, Oddish, Poliwag, Cubone lines,
+etc.) — exactly Leg 1's own description of the data, which should have been the tell.
+
+**The real mechanism is Pal Park** (Route 221): Platinum can migrate any Pokémon already
+owned on a paired Gen III cartridge (Ruby/Sapphire/Emerald/FireRed/LeafGreen). Checked
+directly: unioning Platinum's availability with the Kanto and Hoenn regional dexes (data
+`fetch-species-availability.ts` already pulls for those games) resolves 87 of Platinum's
+98 invalid species (89%) on its own — no hand-typed species list needed, just a dex-name
+union, since that's literally what Pal Park draws from. Great Marsh was dropped from Leg 2
+entirely: it's a real mechanism, but curating it would be pure speculation with zero
+demonstrated effect on this collection, which is exactly what this dataset's narrow-scope
+precedent (BALL_POOLS, species-availability.json) exists to avoid.
+
+Emerald and USUM's mechanisms held up closer to the original hypothesis but needed
+correction in the details (confirmed live via research, not assumed): Emerald's
+expanded-encounter story is its own Safari Zone gaining a Johto-species pool after the
+National Dex (not a repeat of Platinum's Great Marsh pattern), plus Mew/Lugia/Ho-Oh via
+event-item encounters. USUM's Ultra Wormhole legendary pool matched the hypothesis
+closely, but "Poké Pelago starter-gift minigame" doesn't exist as a mechanic at all — the
+real source of the milestone's own Ivysaur example is Island Scan (the QR Scanner
+feature), which grants specific starter stages, not the ones actually observed.
+
+**Final measured result** (re-running Leg 1's query against the real collection with all
+of this curated and unioned in): 847 of the 903 total false positives were on these four
+games; 756 of those clear (84% of the milestone's entire false-positive count), leaving 91
+residual entries across a small, named set of species — see
+`src/shared/data/supplemental-availability.ts`'s doc comment for exactly which ones and
+why each is left un-curated rather than guessed at. Most of the residual
+(Ariados/Ledian/Flaaffy/Ampharos/Sunflora/Ambipom/Politoed/Ivysaur) turned out to be
+evolutions of a species this leg *does* now cover — a real, demonstrated need for
+evolution-chain reachability that Leg 1 found no evidence for before this data existed
+(see TODO.md's "[Evolution-chain reachability for species availability]"). A handful
+(Cyndaquil, Dunsparce, Qwilfish, Smoochum, Nuzleaf) have no confirmed in-game source in
+their recorded origin game at all under any mechanism checked — left as an open question
+rather than fabricated.

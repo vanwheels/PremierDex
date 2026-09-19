@@ -1,36 +1,26 @@
 # TODO
 
-## Current Milestone: Deeper Per-Game Validity & Curated Met Locations
-
-Picked up 2026-09-04 from Future Milestones, per Vanny's call: no longer just a "nice to
-have deeper" enhancement — a large chunk of her Unassigned entries show false-positive
-Invalid Combo badges, traced to the obtainability gaps this milestone covers (see Leg 1
-below for the root cause and full scope).
-
-### [Postgame supplemental-availability data: Platinum + Emerald + USUM] — Leg 2
-Scoped by Leg 1's investigation (`docs/investigations/deeper-per-game-validity.md`) against
-Vanny's real collection, not just reasoned about abstractly: 903 owned entries currently
-flag Invalid Combo, all 903 on the species-availability check (the ball check contributes
-zero). 88% of those (791) are just two games — Pokémon Platinum (686, almost certainly
-Great Marsh's postgame expanded-encounter list swallowing ordinary Kanto/Johto species) and
-Pokémon Emerald (105, a Mew/Lugia/Ho-oh event cluster plus a likely-similar
-expanded-encounter story that needs confirming). The milestone's own headline example
-(Ivysaur/Ultra Moon, "reachable by evolving a caught Bulbasaur") turned out not to be a
-pre-evolution-reachability case at all — Bulbasaur isn't in Ultra Moon's base dex either;
-the real path is almost certainly USUM's postgame Ultra Wormhole (explains the Tornadus/
-Thundurus/Reshiram/Zekrom/Landorus/Yveltal cluster in the USUM counts) and/or Poké Pelago's
-starter-gift minigame. Leg 2: hand-curate these three games' postgame supplemental unlock
-lists (not a PokeAPI fetch — this data isn't a regional dex, closer in shape to poke-balls.ts's
-hand-built BALL_POOLS) and union them into the species-availability check. Confirm Emerald's
-actual mechanism before curating it. Re-run Leg 1's query afterward to confirm the
-false-positive count actually drops. No other game gets curated speculatively — same
-"only Legends Arceus has a ball pool, everything else falls back to no-data" precedent.
-Last touched: 2026-09-19. Re-check count: 0.
-
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized.
+
+### [Evolution-chain reachability for species availability] — unscheduled
+Surfaced by Leg 2 of the (now-closed) Deeper Per-Game Validity milestone: re-running the
+false-positive query after curating Platinum/Emerald/USUM's postgame supplemental data
+(`src/shared/data/supplemental-availability.ts`) left a residual where most of the
+remaining invalid species — Platinum's Ariados/Politoed, Emerald's Ledian/Flaaffy/
+Ampharos/Sunflora/Ambipom, USUM's Ivysaur — are evolutions of a species the new
+supplemental data *does* cover (e.g. Ariados from a Pal-Park-available Spinarak). Leg 1 of
+that milestone found zero real cases for this exact idea (pre-evolution reachability) and
+recommended against building it — but that check was run before any supplemental-unlock
+data existed; now that Platinum/Emerald/USUM have real postgame data, the same idea (walk
+a species' evolution ancestors, treat it as available if any ancestor is) would clear
+several concretely-named real false positives. Needs `species-evolution.json` widened from
+its current `isFinalEvolutionStage`-only shape to full parent/child edges (a
+`fetch-evolution-chains.ts` change), then `checkEntryValidity` walking ancestors. Not
+folded into Leg 2 — real scope, not a quick addition.
+Last touched: 2026-09-19. Re-check count: 0.
 
 ### [Regional dex number in Box detail panel] — unscheduled
 Raised alongside the Box View Polish milestone but out of scope for it: Species currently

@@ -4,6 +4,7 @@ Index of shipped milestones. Name, date, status, and a link to the post-mortem d
 same scannable spirit as `TODO.md`, not prose. See `docs/postmortems/<milestone-slug>.md`
 for what shipped/went well/didn't per milestone.
 
+- **Deeper Per-Game Validity & Curated Met Locations** — 2026-09-19 — Shipped — [post-mortem](docs/postmortems/deeper-per-game-validity-curated-met-locations.md)
 - **Dex Completeness Tier Migration & Box Templates** — 2026-09-04 — Shipped — [post-mortem](docs/postmortems/dex-completeness-tier-migration-box-templates.md)
 - **Box View Polish & Multi-Box Editing** — 2026-09-04 — Shipped — [post-mortem](docs/postmortems/box-view-polish-multi-box-editing.md)
 - **Box Arrangement / Real Inventory Data Model** — 2026-09-03 — Shipped — [post-mortem](docs/postmortems/box-arrangement-real-inventory-data-model.md)
