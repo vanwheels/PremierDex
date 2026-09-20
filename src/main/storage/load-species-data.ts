@@ -11,10 +11,12 @@ export interface SeedSpecies {
 
 /** One row per species from `scripts/fetch-evolution-chains.ts`'s PokeAPI /evolution-chain
  * pass — see that script's doc comment and docs/investigations/dex-completeness-tiers.md
- * for what isFinalEvolutionStage means and drives (the "Pre Evos" axis). */
+ * for what isFinalEvolutionStage means and drives (the "Pre Evos" axis), and that script's
+ * doc comment for evolvesFromSpeciesId (the ancestor-reachability walk). */
 export interface SeedSpeciesEvolution {
   speciesId: number
   isFinalEvolutionStage: boolean
+  evolvesFromSpeciesId: number | null
 }
 
 export interface SeedForm {

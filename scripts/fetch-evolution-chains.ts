@@ -2,11 +2,16 @@
  * Fetches evolution-chain membership from PokeAPI's /evolution-chain endpoint and writes
  * data/pokemon/species-evolution.json (committed static data, loaded at runtime by
  * src/main/storage/load-species-data.ts). One row per species that appears in some chain,
- * recording `isFinalEvolutionStage` — whether it's the end of its evolutionary line, i.e.
- * has no `evolves_to` children. That's the "Pre Evos" axis from
- * docs/investigations/dex-completeness-tiers.md's source spreadsheet (Pre Evos = Pichu,
- * Pikachu, & Raichu all counting toward completeness, vs. just Raichu when the axis is
- * off — a species is a pre-evolution exactly when it's NOT the final stage).
+ * recording:
+ * - `isFinalEvolutionStage` — whether it's the end of its evolutionary line, i.e. has no
+ *   `evolves_to` children. That's the "Pre Evos" axis from
+ *   docs/investigations/dex-completeness-tiers.md's source spreadsheet (Pre Evos = Pichu,
+ *   Pikachu, & Raichu all counting toward completeness, vs. just Raichu when the axis is
+ *   off — a species is a pre-evolution exactly when it's NOT the final stage).
+ * - `evolvesFromSpeciesId` — the direct parent species in its chain, or null for a chain's
+ *   root (Leg 1 of the Evolution-Chain Reachability milestone). Lets a consumer walk a
+ *   species' ancestors one parent pointer at a time without needing the full tree; see
+ *   `checkEntryValidity`'s ancestor-reachability check (Leg 2 of that milestone).
  *
  * Walks every chain's full tree, not just its first branch: branching evolutions (Eevee's
  * 8 eeveelutions, Tyrogue's 3, item-based branches like Slowpoke -> Slowbro/Slowking) each
@@ -46,6 +51,7 @@ interface PokeApiEvolutionChainResponse {
 interface SpeciesEvolutionInfo {
   speciesId: number
   isFinalEvolutionStage: boolean
+  evolvesFromSpeciesId: number | null
 }
 
 const CONCURRENCY = 10
@@ -89,13 +95,15 @@ async function mapWithConcurrency<T, R>(items: T[], fn: (item: T) => Promise<R>)
 }
 
 /** Depth-first walk of one chain's tree, appending one SpeciesEvolutionInfo per node
- * (including branches) to `out`. */
-function walkChain(link: PokeApiChainLink, out: SpeciesEvolutionInfo[]): void {
+ * (including branches) to `out`. `parentSpeciesId` is null for the chain's root. */
+function walkChain(link: PokeApiChainLink, out: SpeciesEvolutionInfo[], parentSpeciesId: number | null): void {
+  const speciesId = idFromUrl(link.species.url)
   out.push({
-    speciesId: idFromUrl(link.species.url),
-    isFinalEvolutionStage: link.evolves_to.length === 0
+    speciesId,
+    isFinalEvolutionStage: link.evolves_to.length === 0,
+    evolvesFromSpeciesId: parentSpeciesId
   })
-  for (const child of link.evolves_to) walkChain(child, out)
+  for (const child of link.evolves_to) walkChain(child, out, speciesId)
 }
 
 async function main(): Promise<void> {
@@ -107,7 +115,7 @@ async function main(): Promise<void> {
   const perChain = await mapWithConcurrency(list.results, async (chain) => {
     const data = await fetchJson<PokeApiEvolutionChainResponse>(chain.url)
     const out: SpeciesEvolutionInfo[] = []
-    walkChain(data.chain, out)
+    walkChain(data.chain, out, null)
     done++
     if (done % 100 === 0) console.log(`  ${done}/${list.results.length} chains done`)
     return out

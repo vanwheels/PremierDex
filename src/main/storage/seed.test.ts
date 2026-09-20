@@ -6,7 +6,7 @@ import { applySchema } from './schema'
 // Electron's app.isPackaged — doesn't hold under plain vitest. Stub with a minimal
 // fixture, same pattern as sqlite-storage.test.ts.
 vi.mock('./load-species-data', () => ({
-  loadSpeciesEvolutionData: () => [{ speciesId: 1, isFinalEvolutionStage: false }],
+  loadSpeciesEvolutionData: () => [{ speciesId: 1, isFinalEvolutionStage: false, evolvesFromSpeciesId: null }],
   loadSpeciesData: () => [{ id: 1, name: 'bulbasaur', generation: 1 }],
   loadFormsData: () => [
     {
@@ -186,5 +186,24 @@ describe('runSeed', () => {
       is_final_evolution_stage: number
     }
     expect(row.is_final_evolution_stage).toBe(0)
+  })
+
+  it('backfills a stale evolves_from_species_id value on a species row that already existed', () => {
+    const db = makeDb()
+
+    // Same reasoning as the is_final_evolution_stage backfill test above. Self-references
+    // species 1 to itself (nonsensical in-game, but the only id this file's fixture seeds)
+    // purely so the FK constraint has a real row to point at; the fixture's evolution data
+    // says species 1 is a chain root (null parent), so the backfill should null it back out.
+    db.prepare(
+      'INSERT INTO species (id, name, generation, evolves_from_species_id) VALUES (1, ?, ?, 1)'
+    ).run('bulbasaur', 1)
+
+    runSeed(db)
+
+    const row = db.prepare('SELECT evolves_from_species_id FROM species WHERE id = 1').get() as {
+      evolves_from_species_id: number | null
+    }
+    expect(row.evolves_from_species_id).toBeNull()
   })
 })

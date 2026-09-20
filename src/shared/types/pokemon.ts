@@ -32,6 +32,11 @@ export interface Species {
    * Drives the "Pre Evos" axis (docs/investigations/dex-completeness-tiers.md's
    * excludePreEvolutions): a species is a pre-evolution exactly when this is false. */
   isFinalEvolutionStage: boolean
+  /** This species' direct evolution parent (PokeAPI /evolution-chain data, same source as
+   * isFinalEvolutionStage), or null for a chain's root. Lets a consumer walk a species'
+   * ancestors one parent pointer at a time — see checkEntryValidity's ancestor-reachability
+   * check (Leg 2 of the Evolution-Chain Reachability milestone). */
+  evolvesFromSpeciesId: number | null
 }
 
 export interface Form {

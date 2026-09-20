@@ -6,9 +6,9 @@ import type { DexOptions, DexRowData } from './types'
 const OPTIONS_DEFAULT: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
 
 const SPECIES: Species[] = [
-  { id: 25, name: 'Pikachu', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: false },
-  { id: 26, name: 'Raichu', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: true },
-  { id: 386, name: 'Deoxys', generation: 3, collapsedDisplayFormId: null, isFinalEvolutionStage: true }
+  { id: 25, name: 'Pikachu', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: false, evolvesFromSpeciesId: null },
+  { id: 26, name: 'Raichu', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: true, evolvesFromSpeciesId: null },
+  { id: 386, name: 'Deoxys', generation: 3, collapsedDisplayFormId: null, isFinalEvolutionStage: true, evolvesFromSpeciesId: null }
 ]
 
 function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId' | 'formName'>): Form {
@@ -192,7 +192,7 @@ describe('buildDexSections', () => {
 
   it('capitalizes raw lowercase species/form slugs, preserving hyphens as word separators', () => {
     const rawSpecies: Species[] = [
-      { id: 250, name: 'ho-oh', generation: 2, collapsedDisplayFormId: null, isFinalEvolutionStage: true }
+      { id: 250, name: 'ho-oh', generation: 2, collapsedDisplayFormId: null, isFinalEvolutionStage: true, evolvesFromSpeciesId: null }
     ]
     const forms: Form[] = [
       makeForm({ id: 1, speciesId: 250, formName: 'base' }),
@@ -206,7 +206,7 @@ describe('buildDexSections', () => {
 
   it('restores punctuation for species with an exception entry (Leg 29)', () => {
     const rawSpecies: Species[] = [
-      { id: 122, name: 'mr-mime', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: true }
+      { id: 122, name: 'mr-mime', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: true, evolvesFromSpeciesId: null }
     ]
     const forms: Form[] = [makeForm({ id: 1, speciesId: 122, formName: 'base' })]
     const sections = buildDexSections(rawSpecies, forms, [], OPTIONS_DEFAULT)
@@ -217,7 +217,7 @@ describe('buildDexSections', () => {
 
   it("carries a species' collapsedDisplayFormId through onto its section", () => {
     const speciesWithOverride: Species[] = [
-      { id: 25, name: 'Pikachu', generation: 1, collapsedDisplayFormId: 2, isFinalEvolutionStage: false }
+      { id: 25, name: 'Pikachu', generation: 1, collapsedDisplayFormId: 2, isFinalEvolutionStage: false, evolvesFromSpeciesId: null }
     ]
     const forms: Form[] = [makeForm({ id: 1, speciesId: 25, formName: 'base' })]
     const sections = buildDexSections(speciesWithOverride, forms, [], OPTIONS_DEFAULT)

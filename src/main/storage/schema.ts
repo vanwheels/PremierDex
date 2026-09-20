@@ -54,7 +54,15 @@ export function applySchema(db: Database.Database): void {
       -- 1 on a fresh row; runSeed's backfill (seed.ts) is what actually keeps this correct
       -- for every species, same "insert a default, then unconditionally re-sync" pattern
       -- as forms' home_boxable/shiny_locked/always_shiny above.
-      is_final_evolution_stage INTEGER NOT NULL DEFAULT 1
+      is_final_evolution_stage INTEGER NOT NULL DEFAULT 1,
+      -- Direct evolution parent (Leg 1 of the Evolution-Chain Reachability milestone), null
+      -- for a chain's root -- see scripts/fetch-evolution-chains.ts. Self-referential FK,
+      -- same forward-reference-is-fine reasoning as collapsed_display_form_id above (the FK
+      -- target is this same table, already being created). Lets checkEntryValidity walk a
+      -- species' ancestors one parent pointer at a time (Leg 2) rather than needing the
+      -- full evolution tree. Same unconditional-re-sync backfill pattern as
+      -- is_final_evolution_stage.
+      evolves_from_species_id INTEGER REFERENCES species(id)
     );
 
     CREATE TABLE IF NOT EXISTS forms (
@@ -224,6 +232,13 @@ export function applySchema(db: Database.Database): void {
   // backfill is what corrects every row to its real value right after.
   if (!speciesColumns.some((c) => c.name === 'is_final_evolution_stage')) {
     db.exec('ALTER TABLE species ADD COLUMN is_final_evolution_stage INTEGER NOT NULL DEFAULT 1')
+  }
+  // evolves_from_species_id (Leg 1 of the Evolution-Chain Reachability milestone) postdates
+  // every existing install's species table, same retrofit story as the two columns above —
+  // nullable and self-referential, so a plain ALTER TABLE is safe with nothing to rebuild;
+  // runSeed's unconditional backfill fills in every row's real value right after.
+  if (!speciesColumns.some((c) => c.name === 'evolves_from_species_id')) {
+    db.exec('ALTER TABLE species ADD COLUMN evolves_from_species_id INTEGER REFERENCES species(id)')
   }
 
   // CREATE TABLE IF NOT EXISTS above doesn't retrofit new columns onto a forms table

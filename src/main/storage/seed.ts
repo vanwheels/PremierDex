@@ -69,9 +69,9 @@ function prunePreLeg7ExcludedForms(db: Database.Database): void {
  * opposite-axis fact, hand-maintained the same way — see fetch-pokemon-forms.ts's
  * ALWAYS_SHINY set) — real per-form data, not the single 'base' placeholder Leg 1 seeded.
  *
- * Species' `is_final_evolution_stage` comes from `data/pokemon/species-evolution.json`
- * (see `scripts/fetch-evolution-chains.ts`) — a separate PokeAPI pass keyed on species
- * alone, not per-form like the fields above.
+ * Species' `is_final_evolution_stage`/`evolves_from_species_id` come from
+ * `data/pokemon/species-evolution.json` (see `scripts/fetch-evolution-chains.ts`) — a
+ * separate PokeAPI pass keyed on species alone, not per-form like the fields above.
  */
 export function runSeed(db: Database.Database): void {
   const insertSpecies = db.prepare(
@@ -86,6 +86,14 @@ export function runSeed(db: Database.Database): void {
   const backfillFinalEvolutionStage = db.prepare(`
     UPDATE species SET is_final_evolution_stage = @isFinalEvolutionStage
     WHERE id = @speciesId AND is_final_evolution_stage != @isFinalEvolutionStage
+  `)
+  // Same source file and same re-sync-unconditionally reasoning as
+  // backfillFinalEvolutionStage above (Leg 1 of the Evolution-Chain Reachability
+  // milestone) — evolves_from_species_id is nullable, so this compares with IS NOT to
+  // treat two NULLs as equal (a root species shouldn't re-write itself every startup).
+  const backfillEvolvesFrom = db.prepare(`
+    UPDATE species SET evolves_from_species_id = @evolvesFromSpeciesId
+    WHERE id = @speciesId AND evolves_from_species_id IS NOT @evolvesFromSpeciesId
   `)
   const insertForm = db.prepare(`
     INSERT OR IGNORE INTO forms
@@ -155,6 +163,10 @@ export function runSeed(db: Database.Database): void {
       backfillFinalEvolutionStage.run({
         speciesId: evolution.speciesId,
         isFinalEvolutionStage: evolution.isFinalEvolutionStage ? 1 : 0
+      })
+      backfillEvolvesFrom.run({
+        speciesId: evolution.speciesId,
+        evolvesFromSpeciesId: evolution.evolvesFromSpeciesId
       })
     }
 

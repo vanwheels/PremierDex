@@ -32,7 +32,7 @@ function makeForm(overrides: Partial<Form> & Pick<Form, 'id' | 'speciesId'>): Fo
 }
 
 function makeSpecies(overrides: Partial<Species> & Pick<Species, 'id'>): Species {
-  return { name: 'species', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: true, ...overrides }
+  return { name: 'species', generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: true, evolvesFromSpeciesId: null, ...overrides }
 }
 
 function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, 'id' | 'formId'>): CollectionEntry {

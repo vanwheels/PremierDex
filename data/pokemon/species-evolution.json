@@ -1,4102 +1,5127 @@
 [
   {
     "speciesId": 1,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 2,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 1
   },
   {
     "speciesId": 3,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 2
   },
   {
     "speciesId": 4,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 5,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 4
   },
   {
     "speciesId": 6,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 5
   },
   {
     "speciesId": 7,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 8,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 7
   },
   {
     "speciesId": 9,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 8
   },
   {
     "speciesId": 10,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 11,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 10
   },
   {
     "speciesId": 12,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 11
   },
   {
     "speciesId": 13,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 14,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 13
   },
   {
     "speciesId": 15,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 14
   },
   {
     "speciesId": 16,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 17,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 16
   },
   {
     "speciesId": 18,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 17
   },
   {
     "speciesId": 19,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 20,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 19
   },
   {
     "speciesId": 21,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 22,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 21
   },
   {
     "speciesId": 23,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 24,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 23
   },
   {
     "speciesId": 25,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 172
   },
   {
     "speciesId": 26,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 25
   },
   {
     "speciesId": 27,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 28,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 27
   },
   {
     "speciesId": 29,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 30,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 29
   },
   {
     "speciesId": 31,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 30
   },
   {
     "speciesId": 32,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 33,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 32
   },
   {
     "speciesId": 34,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 33
   },
   {
     "speciesId": 35,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 173
   },
   {
     "speciesId": 36,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 35
   },
   {
     "speciesId": 37,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 38,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 37
   },
   {
     "speciesId": 39,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 174
   },
   {
     "speciesId": 40,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 39
   },
   {
     "speciesId": 41,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 42,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 41
   },
   {
     "speciesId": 43,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 44,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 43
   },
   {
     "speciesId": 45,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 44
   },
   {
     "speciesId": 46,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 47,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 46
   },
   {
     "speciesId": 48,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 49,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 48
   },
   {
     "speciesId": 50,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 51,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 50
   },
   {
     "speciesId": 52,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 53,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 52
   },
   {
     "speciesId": 54,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 55,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 54
   },
   {
     "speciesId": 56,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 57,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 56
   },
   {
     "speciesId": 58,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 59,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 58
   },
   {
     "speciesId": 60,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 61,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 60
   },
   {
     "speciesId": 62,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 61
   },
   {
     "speciesId": 63,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 64,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 63
   },
   {
     "speciesId": 65,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 64
   },
   {
     "speciesId": 66,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 67,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 66
   },
   {
     "speciesId": 68,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 67
   },
   {
     "speciesId": 69,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 70,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 69
   },
   {
     "speciesId": 71,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 70
   },
   {
     "speciesId": 72,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 73,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 72
   },
   {
     "speciesId": 74,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 75,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 74
   },
   {
     "speciesId": 76,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 75
   },
   {
     "speciesId": 77,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 78,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 77
   },
   {
     "speciesId": 79,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 80,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 79
   },
   {
     "speciesId": 81,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 82,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 81
   },
   {
     "speciesId": 83,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 84,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 85,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 84
   },
   {
     "speciesId": 86,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 87,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 86
   },
   {
     "speciesId": 88,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 89,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 88
   },
   {
     "speciesId": 90,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 91,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 90
   },
   {
     "speciesId": 92,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 93,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 92
   },
   {
     "speciesId": 94,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 93
   },
   {
     "speciesId": 95,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 96,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 97,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 96
   },
   {
     "speciesId": 98,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 99,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 98
   },
   {
     "speciesId": 100,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 101,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 100
   },
   {
     "speciesId": 102,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 103,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 102
   },
   {
     "speciesId": 104,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 105,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 104
   },
   {
     "speciesId": 106,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 236
   },
   {
     "speciesId": 107,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 236
   },
   {
     "speciesId": 108,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 109,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 110,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 109
   },
   {
     "speciesId": 111,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 112,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 111
   },
   {
     "speciesId": 113,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 440
   },
   {
     "speciesId": 114,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 115,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 116,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 117,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 116
   },
   {
     "speciesId": 118,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 119,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 118
   },
   {
     "speciesId": 120,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 121,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 120
   },
   {
     "speciesId": 122,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 439
   },
   {
     "speciesId": 123,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 124,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 238
   },
   {
     "speciesId": 125,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 239
   },
   {
     "speciesId": 126,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 240
   },
   {
     "speciesId": 127,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 128,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 129,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 130,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 129
   },
   {
     "speciesId": 131,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 132,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 133,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 134,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 133
   },
   {
     "speciesId": 135,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 133
   },
   {
     "speciesId": 136,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 133
   },
   {
     "speciesId": 137,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 138,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 139,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 138
   },
   {
     "speciesId": 140,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 141,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 140
   },
   {
     "speciesId": 142,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 143,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 446
   },
   {
     "speciesId": 144,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 145,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 146,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 147,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 148,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 147
   },
   {
     "speciesId": 149,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 148
   },
   {
     "speciesId": 150,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 151,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 152,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 153,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 152
   },
   {
     "speciesId": 154,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 153
   },
   {
     "speciesId": 155,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 156,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 155
   },
   {
     "speciesId": 157,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 156
   },
   {
     "speciesId": 158,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 159,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 158
   },
   {
     "speciesId": 160,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 159
   },
   {
     "speciesId": 161,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 162,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 161
   },
   {
     "speciesId": 163,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 164,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 163
   },
   {
     "speciesId": 165,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 166,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 165
   },
   {
     "speciesId": 167,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 168,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 167
   },
   {
     "speciesId": 169,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 42
   },
   {
     "speciesId": 170,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 171,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 170
   },
   {
     "speciesId": 172,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 173,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 174,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 175,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 176,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 175
   },
   {
     "speciesId": 177,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 178,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 177
   },
   {
     "speciesId": 179,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 180,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 179
   },
   {
     "speciesId": 181,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 180
   },
   {
     "speciesId": 182,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 44
   },
   {
     "speciesId": 183,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 298
   },
   {
     "speciesId": 184,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 183
   },
   {
     "speciesId": 185,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 438
   },
   {
     "speciesId": 186,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 61
   },
   {
     "speciesId": 187,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 188,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 187
   },
   {
     "speciesId": 189,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 188
   },
   {
     "speciesId": 190,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 191,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 192,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 191
   },
   {
     "speciesId": 193,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 194,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 195,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 194
   },
   {
     "speciesId": 196,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 133
   },
   {
     "speciesId": 197,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 133
   },
   {
     "speciesId": 198,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 199,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 79
   },
   {
     "speciesId": 200,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 201,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 202,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 360
   },
   {
     "speciesId": 203,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 204,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 205,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 204
   },
   {
     "speciesId": 206,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 207,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 208,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 95
   },
   {
     "speciesId": 209,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 210,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 209
   },
   {
     "speciesId": 211,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 212,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 123
   },
   {
     "speciesId": 213,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 214,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 215,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 216,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 217,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 216
   },
   {
     "speciesId": 218,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 219,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 218
   },
   {
     "speciesId": 220,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 221,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 220
   },
   {
     "speciesId": 222,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 223,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 224,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 223
   },
   {
     "speciesId": 225,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 226,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 458
   },
   {
     "speciesId": 227,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 228,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 229,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 228
   },
   {
     "speciesId": 230,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 117
   },
   {
     "speciesId": 231,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 232,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 231
   },
   {
     "speciesId": 233,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 137
   },
   {
     "speciesId": 234,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 235,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 236,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 237,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 236
   },
   {
     "speciesId": 238,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 239,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 240,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 241,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 242,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 113
   },
   {
     "speciesId": 243,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 244,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 245,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 246,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 247,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 246
   },
   {
     "speciesId": 248,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 247
   },
   {
     "speciesId": 249,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 250,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 251,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 252,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 253,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 252
   },
   {
     "speciesId": 254,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 253
   },
   {
     "speciesId": 255,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 256,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 255
   },
   {
     "speciesId": 257,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 256
   },
   {
     "speciesId": 258,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 259,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 258
   },
   {
     "speciesId": 260,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 259
   },
   {
     "speciesId": 261,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 262,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 261
   },
   {
     "speciesId": 263,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 264,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 263
   },
   {
     "speciesId": 265,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 266,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 265
   },
   {
     "speciesId": 267,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 266
   },
   {
     "speciesId": 268,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 265
   },
   {
     "speciesId": 269,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 268
   },
   {
     "speciesId": 270,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 271,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 270
   },
   {
     "speciesId": 272,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 271
   },
   {
     "speciesId": 273,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 274,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 273
   },
   {
     "speciesId": 275,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 274
   },
   {
     "speciesId": 276,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 277,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 276
   },
   {
     "speciesId": 278,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 279,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 278
   },
   {
     "speciesId": 280,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 281,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 280
   },
   {
     "speciesId": 282,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 281
   },
   {
     "speciesId": 283,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 284,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 283
   },
   {
     "speciesId": 285,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 286,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 285
   },
   {
     "speciesId": 287,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 288,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 287
   },
   {
     "speciesId": 289,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 288
   },
   {
     "speciesId": 290,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 291,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 290
   },
   {
     "speciesId": 292,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 290
   },
   {
     "speciesId": 293,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 294,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 293
   },
   {
     "speciesId": 295,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 294
   },
   {
     "speciesId": 296,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 297,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 296
   },
   {
     "speciesId": 298,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 299,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 300,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 301,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 300
   },
   {
     "speciesId": 302,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 303,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 304,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 305,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 304
   },
   {
     "speciesId": 306,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 305
   },
   {
     "speciesId": 307,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 308,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 307
   },
   {
     "speciesId": 309,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 310,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 309
   },
   {
     "speciesId": 311,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 312,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 313,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 314,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 315,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 406
   },
   {
     "speciesId": 316,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 317,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 316
   },
   {
     "speciesId": 318,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 319,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 318
   },
   {
     "speciesId": 320,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 321,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 320
   },
   {
     "speciesId": 322,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 323,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 322
   },
   {
     "speciesId": 324,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 325,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 326,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 325
   },
   {
     "speciesId": 327,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 328,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 329,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 328
   },
   {
     "speciesId": 330,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 329
   },
   {
     "speciesId": 331,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 332,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 331
   },
   {
     "speciesId": 333,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 334,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 333
   },
   {
     "speciesId": 335,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 336,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 337,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 338,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 339,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 340,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 339
   },
   {
     "speciesId": 341,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 342,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 341
   },
   {
     "speciesId": 343,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 344,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 343
   },
   {
     "speciesId": 345,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 346,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 345
   },
   {
     "speciesId": 347,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 348,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 347
   },
   {
     "speciesId": 349,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 350,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 349
   },
   {
     "speciesId": 351,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 352,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 353,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 354,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 353
   },
   {
     "speciesId": 355,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 356,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 355
   },
   {
     "speciesId": 357,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 358,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 433
   },
   {
     "speciesId": 359,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 360,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 361,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 362,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 361
   },
   {
     "speciesId": 363,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 364,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 363
   },
   {
     "speciesId": 365,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 364
   },
   {
     "speciesId": 366,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 367,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 366
   },
   {
     "speciesId": 368,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 366
   },
   {
     "speciesId": 369,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 370,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 371,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 372,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 371
   },
   {
     "speciesId": 373,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 372
   },
   {
     "speciesId": 374,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 375,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 374
   },
   {
     "speciesId": 376,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 375
   },
   {
     "speciesId": 377,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 378,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 379,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 380,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 381,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 382,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 383,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 384,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 385,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 386,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 387,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 388,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 387
   },
   {
     "speciesId": 389,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 388
   },
   {
     "speciesId": 390,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 391,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 390
   },
   {
     "speciesId": 392,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 391
   },
   {
     "speciesId": 393,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 394,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 393
   },
   {
     "speciesId": 395,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 394
   },
   {
     "speciesId": 396,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 397,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 396
   },
   {
     "speciesId": 398,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 397
   },
   {
     "speciesId": 399,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 400,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 399
   },
   {
     "speciesId": 401,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 402,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 401
   },
   {
     "speciesId": 403,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 404,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 403
   },
   {
     "speciesId": 405,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 404
   },
   {
     "speciesId": 406,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 407,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 315
   },
   {
     "speciesId": 408,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 409,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 408
   },
   {
     "speciesId": 410,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 411,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 410
   },
   {
     "speciesId": 412,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 413,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 412
   },
   {
     "speciesId": 414,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 412
   },
   {
     "speciesId": 415,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 416,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 415
   },
   {
     "speciesId": 417,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 418,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 419,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 418
   },
   {
     "speciesId": 420,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 421,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 420
   },
   {
     "speciesId": 422,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 423,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 422
   },
   {
     "speciesId": 424,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 190
   },
   {
     "speciesId": 425,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 426,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 425
   },
   {
     "speciesId": 427,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 428,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 427
   },
   {
     "speciesId": 429,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 200
   },
   {
     "speciesId": 430,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 198
   },
   {
     "speciesId": 431,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 432,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 431
   },
   {
     "speciesId": 433,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 434,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 435,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 434
   },
   {
     "speciesId": 436,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 437,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 436
   },
   {
     "speciesId": 438,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 439,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 440,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 441,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 442,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 443,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 444,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 443
   },
   {
     "speciesId": 445,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 444
   },
   {
     "speciesId": 446,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 447,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 448,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 447
   },
   {
     "speciesId": 449,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 450,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 449
   },
   {
     "speciesId": 451,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 452,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 451
   },
   {
     "speciesId": 453,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 454,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 453
   },
   {
     "speciesId": 455,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 456,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 457,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 456
   },
   {
     "speciesId": 458,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 459,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 460,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 459
   },
   {
     "speciesId": 461,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 215
   },
   {
     "speciesId": 462,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 82
   },
   {
     "speciesId": 463,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 108
   },
   {
     "speciesId": 464,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 112
   },
   {
     "speciesId": 465,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 114
   },
   {
     "speciesId": 466,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 125
   },
   {
     "speciesId": 467,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 126
   },
   {
     "speciesId": 468,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 176
   },
   {
     "speciesId": 469,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 193
   },
   {
     "speciesId": 470,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 133
   },
   {
     "speciesId": 471,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 133
   },
   {
     "speciesId": 472,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 207
   },
   {
     "speciesId": 473,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 221
   },
   {
     "speciesId": 474,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 233
   },
   {
     "speciesId": 475,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 281
   },
   {
     "speciesId": 476,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 299
   },
   {
     "speciesId": 477,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 356
   },
   {
     "speciesId": 478,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 361
   },
   {
     "speciesId": 479,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 480,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 481,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 482,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 483,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 484,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 485,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 486,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 487,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 488,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 489,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 490,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 489
   },
   {
     "speciesId": 491,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 492,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 493,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 494,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 495,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 496,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 495
   },
   {
     "speciesId": 497,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 496
   },
   {
     "speciesId": 498,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 499,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 498
   },
   {
     "speciesId": 500,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 499
   },
   {
     "speciesId": 501,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 502,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 501
   },
   {
     "speciesId": 503,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 502
   },
   {
     "speciesId": 504,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 505,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 504
   },
   {
     "speciesId": 506,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 507,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 506
   },
   {
     "speciesId": 508,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 507
   },
   {
     "speciesId": 509,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 510,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 509
   },
   {
     "speciesId": 511,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 512,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 511
   },
   {
     "speciesId": 513,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 514,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 513
   },
   {
     "speciesId": 515,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 516,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 515
   },
   {
     "speciesId": 517,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 518,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 517
   },
   {
     "speciesId": 519,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 520,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 519
   },
   {
     "speciesId": 521,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 520
   },
   {
     "speciesId": 522,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 523,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 522
   },
   {
     "speciesId": 524,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 525,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 524
   },
   {
     "speciesId": 526,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 525
   },
   {
     "speciesId": 527,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 528,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 527
   },
   {
     "speciesId": 529,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 530,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 529
   },
   {
     "speciesId": 531,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 532,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 533,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 532
   },
   {
     "speciesId": 534,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 533
   },
   {
     "speciesId": 535,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 536,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 535
   },
   {
     "speciesId": 537,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 536
   },
   {
     "speciesId": 538,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 539,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 540,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 541,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 540
   },
   {
     "speciesId": 542,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 541
   },
   {
     "speciesId": 543,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 544,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 543
   },
   {
     "speciesId": 545,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 544
   },
   {
     "speciesId": 546,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 547,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 546
   },
   {
     "speciesId": 548,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 549,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 548
   },
   {
     "speciesId": 550,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 551,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 552,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 551
   },
   {
     "speciesId": 553,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 552
   },
   {
     "speciesId": 554,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 555,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 554
   },
   {
     "speciesId": 556,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 557,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 558,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 557
   },
   {
     "speciesId": 559,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 560,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 559
   },
   {
     "speciesId": 561,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 562,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 563,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 562
   },
   {
     "speciesId": 564,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 565,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 564
   },
   {
     "speciesId": 566,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 567,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 566
   },
   {
     "speciesId": 568,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 569,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 568
   },
   {
     "speciesId": 570,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 571,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 570
   },
   {
     "speciesId": 572,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 573,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 572
   },
   {
     "speciesId": 574,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 575,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 574
   },
   {
     "speciesId": 576,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 575
   },
   {
     "speciesId": 577,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 578,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 577
   },
   {
     "speciesId": 579,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 578
   },
   {
     "speciesId": 580,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 581,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 580
   },
   {
     "speciesId": 582,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 583,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 582
   },
   {
     "speciesId": 584,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 583
   },
   {
     "speciesId": 585,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 586,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 585
   },
   {
     "speciesId": 587,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 588,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 589,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 588
   },
   {
     "speciesId": 590,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 591,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 590
   },
   {
     "speciesId": 592,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 593,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 592
   },
   {
     "speciesId": 594,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 595,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 596,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 595
   },
   {
     "speciesId": 597,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 598,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 597
   },
   {
     "speciesId": 599,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 600,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 599
   },
   {
     "speciesId": 601,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 600
   },
   {
     "speciesId": 602,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 603,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 602
   },
   {
     "speciesId": 604,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 603
   },
   {
     "speciesId": 605,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 606,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 605
   },
   {
     "speciesId": 607,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 608,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 607
   },
   {
     "speciesId": 609,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 608
   },
   {
     "speciesId": 610,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 611,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 610
   },
   {
     "speciesId": 612,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 611
   },
   {
     "speciesId": 613,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 614,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 613
   },
   {
     "speciesId": 615,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 616,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 617,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 616
   },
   {
     "speciesId": 618,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 619,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 620,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 619
   },
   {
     "speciesId": 621,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 622,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 623,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 622
   },
   {
     "speciesId": 624,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 625,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 624
   },
   {
     "speciesId": 626,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 627,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 628,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 627
   },
   {
     "speciesId": 629,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 630,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 629
   },
   {
     "speciesId": 631,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 632,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 633,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 634,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 633
   },
   {
     "speciesId": 635,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 634
   },
   {
     "speciesId": 636,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 637,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 636
   },
   {
     "speciesId": 638,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 639,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 640,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 641,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 642,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 643,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 644,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 645,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 646,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 647,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 648,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 649,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 650,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 651,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 650
   },
   {
     "speciesId": 652,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 651
   },
   {
     "speciesId": 653,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 654,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 653
   },
   {
     "speciesId": 655,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 654
   },
   {
     "speciesId": 656,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 657,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 656
   },
   {
     "speciesId": 658,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 657
   },
   {
     "speciesId": 659,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 660,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 659
   },
   {
     "speciesId": 661,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 662,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 661
   },
   {
     "speciesId": 663,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 662
   },
   {
     "speciesId": 664,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 665,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 664
   },
   {
     "speciesId": 666,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 665
   },
   {
     "speciesId": 667,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 668,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 667
   },
   {
     "speciesId": 669,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 670,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 669
   },
   {
     "speciesId": 671,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 670
   },
   {
     "speciesId": 672,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 673,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 672
   },
   {
     "speciesId": 674,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 675,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 674
   },
   {
     "speciesId": 676,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 677,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 678,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 677
   },
   {
     "speciesId": 679,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 680,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 679
   },
   {
     "speciesId": 681,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 680
   },
   {
     "speciesId": 682,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 683,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 682
   },
   {
     "speciesId": 684,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 685,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 684
   },
   {
     "speciesId": 686,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 687,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 686
   },
   {
     "speciesId": 688,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 689,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 688
   },
   {
     "speciesId": 690,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 691,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 690
   },
   {
     "speciesId": 692,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 693,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 692
   },
   {
     "speciesId": 694,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 695,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 694
   },
   {
     "speciesId": 696,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 697,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 696
   },
   {
     "speciesId": 698,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 699,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 698
   },
   {
     "speciesId": 700,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 133
   },
   {
     "speciesId": 701,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 702,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 703,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 704,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 705,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 704
   },
   {
     "speciesId": 706,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 705
   },
   {
     "speciesId": 707,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 708,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 709,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 708
   },
   {
     "speciesId": 710,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 711,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 710
   },
   {
     "speciesId": 712,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 713,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 712
   },
   {
     "speciesId": 714,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 715,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 714
   },
   {
     "speciesId": 716,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 717,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 718,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 719,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 720,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 721,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 722,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 723,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 722
   },
   {
     "speciesId": 724,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 723
   },
   {
     "speciesId": 725,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 726,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 725
   },
   {
     "speciesId": 727,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 726
   },
   {
     "speciesId": 728,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 729,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 728
   },
   {
     "speciesId": 730,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 729
   },
   {
     "speciesId": 731,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 732,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 731
   },
   {
     "speciesId": 733,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 732
   },
   {
     "speciesId": 734,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 735,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 734
   },
   {
     "speciesId": 736,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 737,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 736
   },
   {
     "speciesId": 738,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 737
   },
   {
     "speciesId": 739,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 740,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 739
   },
   {
     "speciesId": 741,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 742,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 743,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 742
   },
   {
     "speciesId": 744,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 745,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 744
   },
   {
     "speciesId": 746,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 747,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 748,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 747
   },
   {
     "speciesId": 749,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 750,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 749
   },
   {
     "speciesId": 751,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 752,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 751
   },
   {
     "speciesId": 753,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 754,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 753
   },
   {
     "speciesId": 755,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 756,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 755
   },
   {
     "speciesId": 757,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 758,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 757
   },
   {
     "speciesId": 759,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 760,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 759
   },
   {
     "speciesId": 761,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 762,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 761
   },
   {
     "speciesId": 763,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 762
   },
   {
     "speciesId": 764,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 765,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 766,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 767,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 768,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 767
   },
   {
     "speciesId": 769,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 770,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 769
   },
   {
     "speciesId": 771,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 772,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 773,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 772
   },
   {
     "speciesId": 774,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 775,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 776,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 777,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 778,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 779,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 780,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 781,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 782,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 783,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 782
   },
   {
     "speciesId": 784,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 783
   },
   {
     "speciesId": 785,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 786,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 787,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 788,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 789,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 790,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 789
   },
   {
     "speciesId": 791,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 790
   },
   {
     "speciesId": 792,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 790
   },
   {
     "speciesId": 793,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 794,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 795,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 796,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 797,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 798,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 799,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 800,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 801,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 802,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 803,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 804,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 803
   },
   {
     "speciesId": 805,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 806,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 807,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 808,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 809,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 808
   },
   {
     "speciesId": 810,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 811,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 810
   },
   {
     "speciesId": 812,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 811
   },
   {
     "speciesId": 813,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 814,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 813
   },
   {
     "speciesId": 815,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 814
   },
   {
     "speciesId": 816,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 817,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 816
   },
   {
     "speciesId": 818,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 817
   },
   {
     "speciesId": 819,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 820,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 819
   },
   {
     "speciesId": 821,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 822,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 821
   },
   {
     "speciesId": 823,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 822
   },
   {
     "speciesId": 824,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 825,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 824
   },
   {
     "speciesId": 826,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 825
   },
   {
     "speciesId": 827,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 828,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 827
   },
   {
     "speciesId": 829,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 830,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 829
   },
   {
     "speciesId": 831,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 832,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 831
   },
   {
     "speciesId": 833,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 834,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 833
   },
   {
     "speciesId": 835,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 836,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 835
   },
   {
     "speciesId": 837,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 838,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 837
   },
   {
     "speciesId": 839,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 838
   },
   {
     "speciesId": 840,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 841,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 840
   },
   {
     "speciesId": 842,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 840
   },
   {
     "speciesId": 843,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 844,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 843
   },
   {
     "speciesId": 845,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 846,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 847,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 846
   },
   {
     "speciesId": 848,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 849,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 848
   },
   {
     "speciesId": 850,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 851,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 850
   },
   {
     "speciesId": 852,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 853,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 852
   },
   {
     "speciesId": 854,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 855,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 854
   },
   {
     "speciesId": 856,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 857,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 856
   },
   {
     "speciesId": 858,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 857
   },
   {
     "speciesId": 859,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 860,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 859
   },
   {
     "speciesId": 861,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 860
   },
   {
     "speciesId": 862,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 264
   },
   {
     "speciesId": 863,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 52
   },
   {
     "speciesId": 864,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 222
   },
   {
     "speciesId": 865,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 83
   },
   {
     "speciesId": 866,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 122
   },
   {
     "speciesId": 867,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 562
   },
   {
     "speciesId": 868,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 869,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 868
   },
   {
     "speciesId": 870,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 871,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 872,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 873,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 872
   },
   {
     "speciesId": 874,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 875,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 876,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 877,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 878,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 879,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 878
   },
   {
     "speciesId": 880,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 881,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 882,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 883,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 884,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 885,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 886,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 885
   },
   {
     "speciesId": 887,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 886
   },
   {
     "speciesId": 888,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 889,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 890,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 891,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 892,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 891
   },
   {
     "speciesId": 893,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 894,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 895,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 896,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 897,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 898,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 899,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 234
   },
   {
     "speciesId": 900,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 123
   },
   {
     "speciesId": 901,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 217
   },
   {
     "speciesId": 902,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 550
   },
   {
     "speciesId": 903,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 215
   },
   {
     "speciesId": 904,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 211
   },
   {
     "speciesId": 905,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 906,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 907,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 906
   },
   {
     "speciesId": 908,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 907
   },
   {
     "speciesId": 909,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 910,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 909
   },
   {
     "speciesId": 911,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 910
   },
   {
     "speciesId": 912,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 913,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 912
   },
   {
     "speciesId": 914,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 913
   },
   {
     "speciesId": 915,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 916,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 915
   },
   {
     "speciesId": 917,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 918,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 917
   },
   {
     "speciesId": 919,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 920,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 919
   },
   {
     "speciesId": 921,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 922,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 921
   },
   {
     "speciesId": 923,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 922
   },
   {
     "speciesId": 924,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 925,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 924
   },
   {
     "speciesId": 926,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 927,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 926
   },
   {
     "speciesId": 928,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 929,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 928
   },
   {
     "speciesId": 930,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 929
   },
   {
     "speciesId": 931,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 932,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 933,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 932
   },
   {
     "speciesId": 934,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 933
   },
   {
     "speciesId": 935,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 936,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 935
   },
   {
     "speciesId": 937,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 935
   },
   {
     "speciesId": 938,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 939,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 938
   },
   {
     "speciesId": 940,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 941,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 940
   },
   {
     "speciesId": 942,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 943,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 942
   },
   {
     "speciesId": 944,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 945,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 944
   },
   {
     "speciesId": 946,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 947,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 946
   },
   {
     "speciesId": 948,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 949,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 948
   },
   {
     "speciesId": 950,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 951,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 952,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 951
   },
   {
     "speciesId": 953,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 954,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 953
   },
   {
     "speciesId": 955,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 956,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 955
   },
   {
     "speciesId": 957,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 958,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 957
   },
   {
     "speciesId": 959,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 958
   },
   {
     "speciesId": 960,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 961,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 960
   },
   {
     "speciesId": 962,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 963,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 964,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 963
   },
   {
     "speciesId": 965,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 966,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 965
   },
   {
     "speciesId": 967,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 968,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 969,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 970,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 969
   },
   {
     "speciesId": 971,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 972,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 971
   },
   {
     "speciesId": 973,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 974,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 975,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 974
   },
   {
     "speciesId": 976,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 977,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 978,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 979,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 57
   },
   {
     "speciesId": 980,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 194
   },
   {
     "speciesId": 981,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 203
   },
   {
     "speciesId": 982,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 206
   },
   {
     "speciesId": 983,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 625
   },
   {
     "speciesId": 984,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 985,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 986,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 987,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 988,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 989,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 990,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 991,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 992,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 993,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 994,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 995,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 996,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 997,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 996
   },
   {
     "speciesId": 998,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 997
   },
   {
     "speciesId": 999,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1000,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 999
   },
   {
     "speciesId": 1001,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1002,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1003,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1004,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1005,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1006,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1007,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1008,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1009,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1010,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1011,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": 840
   },
   {
     "speciesId": 1012,
-    "isFinalEvolutionStage": false
+    "isFinalEvolutionStage": false,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1013,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 1012
   },
   {
     "speciesId": 1014,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1015,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1016,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1017,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1018,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 884
   },
   {
     "speciesId": 1019,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": 1011
   },
   {
     "speciesId": 1020,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1021,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1022,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1023,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1024,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   },
   {
     "speciesId": 1025,
-    "isFinalEvolutionStage": true
+    "isFinalEvolutionStage": true,
+    "evolvesFromSpeciesId": null
   }
 ]
