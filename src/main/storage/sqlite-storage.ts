@@ -227,6 +227,42 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       }
     }
   )
+  // restoreEntryBoxPositions (Leg 3 of the Box View Move & Undo Operations milestone) —
+  // undo for a batch move (fillBoxSlots/moveEntriesToLocation), writing each entry straight
+  // back to its captured pre-move (storageLocationId, boxNumber, boxSlot). Reuses
+  // fillInPlaceholderEntryStmt's single-UPDATE write like moveEntriesToLocationTx above,
+  // just with a per-snapshot storageLocationId instead of one shared destination. Vacates
+  // every listed entry first (same non-deferrable UNIQUE-index workaround as
+  // fillBoxSlotsTx/swapEntryBoxPositionsTx): unlike moveEntriesToLocationTx's forward
+  // direction (always landing at a *different* location than the source, so the UNIQUE
+  // index can never self-collide), a restore can land two snapshots back into slots that
+  // currently hold each other's rows — e.g. undoing a fillBoxSlots reshuffle that itself
+  // needed vacate-first to apply.
+  const restoreEntryBoxPositionsTx = db.transaction(
+    (
+      snapshots: Array<{ entryId: number; storageLocationId: number | null; boxNumber: number | null; boxSlot: number | null }>
+    ) => {
+      for (const s of snapshots) {
+        if (!getEntryStmt.get(s.entryId)) throw new Error('Entry not found')
+      }
+      for (const s of snapshots) {
+        setEntryBoxPositionStmt.run({ id: s.entryId, boxNumber: null, boxSlot: null })
+      }
+      for (const s of snapshots) {
+        fillInPlaceholderEntryStmt.run({
+          id: s.entryId,
+          storageLocationId: s.storageLocationId,
+          boxNumber: s.boxNumber,
+          boxSlot: s.boxSlot
+        })
+        // Same "a real entry landing here fulfills the plan" clear as every other
+        // position-writing method — see clearBoxPlaceholderStmt's own comment.
+        if (s.storageLocationId !== null && s.boxNumber !== null && s.boxSlot !== null) {
+          clearBoxPlaceholderStmt.run({ storageLocationId: s.storageLocationId, boxNumber: s.boxNumber, boxSlot: s.boxSlot })
+        }
+      }
+    }
+  )
   // Clones every entry currently in a source storage location into a target one in a
   // single statement — backs duplicateStorageLocationTx below (Storage Locations tab's
   // "Duplicate" button). Copies every field except id/storage_location_id/box_number/
@@ -559,6 +595,13 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     ): Promise<CollectionEntry[]> {
       moveEntriesToLocationTx(storageLocationId, placements)
       return placements.map((p) => toCollectionEntry(getEntryStmt.get(p.entryId) as CollectionEntryRow))
+    },
+
+    async restoreEntryBoxPositions(
+      snapshots: Array<{ entryId: number; storageLocationId: number | null; boxNumber: number | null; boxSlot: number | null }>
+    ): Promise<CollectionEntry[]> {
+      restoreEntryBoxPositionsTx(snapshots)
+      return snapshots.map((s) => toCollectionEntry(getEntryStmt.get(s.entryId) as CollectionEntryRow))
     },
 
     // exportCollection/importCollection live in collection-backup.ts (Leg 3 of the Box

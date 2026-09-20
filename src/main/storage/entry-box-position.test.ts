@@ -283,3 +283,75 @@ describe('moveEntriesToLocation', () => {
     expect(updated.boxSlot).toBe(0)
   })
 })
+
+/**
+ * restoreEntryBoxPositions (Leg 3 of the Box View Move & Undo Operations milestone) —
+ * undo for a fillBoxSlots/moveEntriesToLocation batch. See sqlite-storage.ts's own comment
+ * for why this needs the same vacate-first workaround as fillBoxSlots/swapEntryBoxPositions:
+ * unlike moveEntriesToLocation's forward direction, a restore can land two snapshots back
+ * into slots that currently hold each other's rows.
+ */
+describe('restoreEntryBoxPositions', () => {
+  it('writes each entry back to its captured (storageLocationId, boxNumber, boxSlot)', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const home = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const ranch = await storage.createStorageLocation({ locationType: 'ranch', name: 'Ranch', trainerProfileId: null })
+    const regular = await findBulbasaurEntry(storage, false)
+    const shiny = await findBulbasaurEntry(storage, true)
+    await storage.setEntryStorageLocation(regular.id, home.id)
+    await storage.setEntryStorageLocation(shiny.id, home.id)
+    // Simulate the post-move state (both now at ranch box 1) that undo needs to reverse.
+    await storage.moveEntriesToLocation(ranch.id, [
+      { entryId: regular.id, boxNumber: 1, boxSlot: 10 },
+      { entryId: shiny.id, boxNumber: 1, boxSlot: 11 }
+    ])
+
+    const [updatedRegular, updatedShiny] = await storage.restoreEntryBoxPositions([
+      { entryId: regular.id, storageLocationId: home.id, boxNumber: 2, boxSlot: 0 },
+      { entryId: shiny.id, storageLocationId: home.id, boxNumber: 2, boxSlot: 1 }
+    ])
+
+    expect(updatedRegular.storageLocationId).toBe(home.id)
+    expect(updatedRegular.boxNumber).toBe(2)
+    expect(updatedRegular.boxSlot).toBe(0)
+    expect(updatedShiny.storageLocationId).toBe(home.id)
+    expect(updatedShiny.boxNumber).toBe(2)
+    expect(updatedShiny.boxSlot).toBe(1)
+  })
+
+  it('restores an entry back to unboxed (null boxNumber/boxSlot)', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const home = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const entry = await findBulbasaurEntry(storage, false)
+    await storage.setEntryStorageLocation(entry.id, home.id)
+    await storage.setEntryBoxPosition(entry.id, 1, 0)
+
+    const [restored] = await storage.restoreEntryBoxPositions([
+      { entryId: entry.id, storageLocationId: home.id, boxNumber: null, boxSlot: null }
+    ])
+
+    expect(restored.boxNumber).toBeNull()
+    expect(restored.boxSlot).toBeNull()
+  })
+
+  it('swaps two snapshots back into each other\'s current slots without colliding', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const location = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const regular = await findBulbasaurEntry(storage, false)
+    const shiny = await findBulbasaurEntry(storage, true)
+    await storage.setEntryStorageLocation(regular.id, location.id)
+    await storage.setEntryStorageLocation(shiny.id, location.id)
+    await storage.setEntryBoxPosition(regular.id, 1, 0)
+    await storage.setEntryBoxPosition(shiny.id, 1, 1)
+
+    // Each snapshot's target slot is currently held by the *other* snapshot's own row — a
+    // naive per-entry write (no vacate-first) would collide here.
+    const [updatedRegular, updatedShiny] = await storage.restoreEntryBoxPositions([
+      { entryId: regular.id, storageLocationId: location.id, boxNumber: 1, boxSlot: 1 },
+      { entryId: shiny.id, storageLocationId: location.id, boxNumber: 1, boxSlot: 0 }
+    ])
+
+    expect(updatedRegular.boxSlot).toBe(1)
+    expect(updatedShiny.boxSlot).toBe(0)
+  })
+})

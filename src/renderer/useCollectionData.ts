@@ -25,10 +25,15 @@ interface BoxPositionSnapshot {
 
 /** 'move' inverts by replaying setEntryBoxPosition with the pre-move snapshot; 'swap' is
  * self-inverse (swapping the same two entries back undoes it), so it only needs the two
- * ids, not a snapshot of either. */
+ * ids, not a snapshot of either. 'batch' (Leg 3) inverts a multi-drag fillBoxSlots or a
+ * cross-location moveEntriesToLocation call — one snapshot per moved entry, replayed
+ * through restoreEntryBoxPositions in one atomic step rather than N individual writes (see
+ * that method's own doc comment for why: a naive per-entry replay can collide with another
+ * snapshot in the same batch that hasn't been restored yet). */
 type UndoAction =
   | { kind: 'move'; snapshot: BoxPositionSnapshot }
   | { kind: 'swap'; entryIdA: number; entryIdB: number }
+  | { kind: 'batch'; snapshots: BoxPositionSnapshot[] }
 
 export interface CollectionData {
   species: Species[]
@@ -51,8 +56,9 @@ export interface CollectionData {
   setEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   swapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
   /** Leg 2 of the Box View Move & Undo Operations milestone: reverts the most recent
-   * setEntryBoxPosition/swapEntryBoxPositions call — see the undo/canUndo doc comment
-   * above their implementation for the stack's shape. */
+   * setEntryBoxPosition/swapEntryBoxPositions call. Leg 3 extends this to also cover
+   * fillBoxSlots/moveEntriesToLocation — see the undo/canUndo doc comment above their
+   * implementation for the stack's shape. */
   undo: () => void
   /** Whether `undo` has anything to revert — drives the undo button's disabled state. */
   canUndo: boolean
@@ -258,22 +264,64 @@ export function useCollectionData(): CollectionData {
     [applySwapEntryBoxPositions]
   )
 
-  // Pops and reverts the most recent move/swap. Deliberately doesn't push a new undo entry
-  // for the reverted action — Leg 2 only scopes Ctrl+Z/undo-button, no redo.
+  // Leg 3 of the Box View Move & Undo Operations milestone — batch-move undo's apply half
+  // (mirrors applySetEntryBoxPosition/applySwapEntryBoxPositions' own apply/capture split).
+  // Local placeholder-clear mirror covers every restored slot in one pass, same convention
+  // as fillBoxSlots/moveEntriesToLocation's own forward-direction mirrors below.
+  const applyRestoreEntryBoxPositions = useCallback((snapshots: BoxPositionSnapshot[]): void => {
+    window.premierDex.restoreEntryBoxPositions(snapshots).then((updated) => {
+      const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
+      setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
+      const restoredSlots = new Set(
+        snapshots
+          .filter((s) => s.storageLocationId !== null && s.boxNumber !== null && s.boxSlot !== null)
+          .map((s) => `${s.storageLocationId}:${s.boxNumber}:${s.boxSlot}`)
+      )
+      setBoxPlaceholdersState((prev) =>
+        prev.filter((p) => !restoredSlots.has(`${p.storageLocationId}:${p.boxNumber}:${p.boxSlot}`))
+      )
+    })
+  }, [])
+
+  // Reads each listed entry's current (pre-move) position off entriesRef — same snapshot
+  // shape and same "read before the write lands" timing as setEntryBoxPosition's own
+  // capture above, generalized to N entries for fillBoxSlots/moveEntriesToLocation's undo.
+  const snapshotBoxPositions = (entryIds: number[]): BoxPositionSnapshot[] =>
+    entryIds
+      .map((entryId) => entriesRef.current.find((entry) => entry.id === entryId))
+      .filter((entry): entry is CollectionEntry => entry !== undefined)
+      .map((entry) => ({
+        entryId: entry.id,
+        storageLocationId: entry.storageLocationId,
+        boxNumber: entry.boxNumber,
+        boxSlot: entry.boxSlot
+      }))
+
+  // Pops and reverts the most recent move/swap/batch. Deliberately doesn't push a new undo
+  // entry for the reverted action — Leg 2 only scopes Ctrl+Z/undo-button, no redo.
   const undo = useCallback((): void => {
     setUndoStack((prev) => {
       if (prev.length === 0) return prev
       const action = prev[prev.length - 1]
       if (action.kind === 'move') {
         applySetEntryBoxPosition(action.snapshot.entryId, action.snapshot.boxNumber, action.snapshot.boxSlot)
-      } else {
+      } else if (action.kind === 'swap') {
         applySwapEntryBoxPositions(action.entryIdA, action.entryIdB)
+      } else {
+        applyRestoreEntryBoxPositions(action.snapshots)
       }
       return prev.slice(0, -1)
     })
-  }, [applySetEntryBoxPosition, applySwapEntryBoxPositions])
+  }, [applySetEntryBoxPosition, applySwapEntryBoxPositions, applyRestoreEntryBoxPositions])
 
+  // Leg 3: captures each dragged entry's pre-move position (via snapshotBoxPositions) as a
+  // 'batch' undo entry ahead of the write, same capture-then-apply split as
+  // setEntryBoxPosition above.
   const fillBoxSlots = useCallback((entryIds: number[], boxNumber: number, startSlot: number): void => {
+    const snapshots = snapshotBoxPositions(entryIds)
+    if (snapshots.length > 0) {
+      setUndoStack((prev) => [...prev, { kind: 'batch', snapshots }])
+    }
     window.premierDex.fillBoxSlots(entryIds, boxNumber, startSlot).then((updated) => {
       const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
       setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
@@ -329,9 +377,16 @@ export function useCollectionData(): CollectionData {
   // updatedById merge and placeholder-clear mirror as fillInPlaceholders above, just
   // unconditional (every listed placement always lands, unlike fillInPlaceholders' stale-
   // state tolerance) since the caller (DexBoxGrid) computed `placements` from its own
-  // just-read state immediately before calling.
+  // just-read state immediately before calling. Leg 3: captures a 'batch' undo entry first,
+  // same convention as fillBoxSlots above — restoreEntryBoxPositions' own per-snapshot
+  // storageLocationId is what lets its undo cross back over the same location boundary this
+  // move just crossed.
   const moveEntriesToLocation = useCallback(async (storageLocationId: number, placements: FillInPlacement[]): Promise<void> => {
     if (placements.length === 0) return
+    const snapshots = snapshotBoxPositions(placements.map((p) => p.entryId))
+    if (snapshots.length > 0) {
+      setUndoStack((prev) => [...prev, { kind: 'batch', snapshots }])
+    }
     const updated = await window.premierDex.moveEntriesToLocation(storageLocationId, placements)
     const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
     setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))

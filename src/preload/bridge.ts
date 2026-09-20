@@ -41,6 +41,10 @@ export interface AppBridge extends UpdaterBridge {
     storageLocationId: number,
     placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
   ): Promise<CollectionEntry[]>
+  /** See StorageAdapter.restoreEntryBoxPositions' own doc comment. */
+  restoreEntryBoxPositions(
+    snapshots: Array<{ entryId: number; storageLocationId: number | null; boxNumber: number | null; boxSlot: number | null }>
+  ): Promise<CollectionEntry[]>
   setCollapsedDisplayForm(speciesId: number, formId: number | null): Promise<Species>
   /** Leg 6: static per-game species-availability data, for the Living Dex's derived
    * invalid-combo badge (see renderer/dex/invalidCombo.ts). Not DB-backed — see

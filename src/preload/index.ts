@@ -48,6 +48,9 @@ const bridge: AppBridge = {
     placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
   ): Promise<CollectionEntry[]> =>
     ipcRenderer.invoke(PokemonIpcChannel.moveEntriesToLocation, storageLocationId, placements),
+  restoreEntryBoxPositions: (
+    snapshots: Array<{ entryId: number; storageLocationId: number | null; boxNumber: number | null; boxSlot: number | null }>
+  ): Promise<CollectionEntry[]> => ipcRenderer.invoke(PokemonIpcChannel.restoreEntryBoxPositions, snapshots),
   setCollapsedDisplayForm: (speciesId: number, formId: number | null): Promise<Species> =>
     ipcRenderer.invoke(PokemonIpcChannel.setCollapsedDisplayForm, speciesId, formId),
   loadSpeciesAvailability: () => ipcRenderer.invoke(PokemonIpcChannel.loadSpeciesAvailability),

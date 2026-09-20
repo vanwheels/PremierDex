@@ -100,6 +100,19 @@ export interface StorageAdapter {
     storageLocationId: number,
     placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
   ): Promise<CollectionEntry[]>
+  /** Undo for a batch move (Leg 3 of the Box View Move & Undo Operations milestone,
+   * inverting fillBoxSlots/moveEntriesToLocation) — writes each listed entry straight back
+   * to its pre-move (storageLocationId, boxNumber, boxSlot) triple, in one atomic step.
+   * Unlike moveEntriesToLocation, `storageLocationId` is per-snapshot rather than one value
+   * for the whole batch, since a snapshot is just "whatever this entry's own row looked
+   * like before," not a caller-chosen destination — and boxNumber/boxSlot may be null
+   * (restoring an entry that was unboxed, e.g. sitting in the tray, before the move). Same
+   * vacate-first workaround as fillBoxSlots/swapEntryBoxPositions: a snapshot's own
+   * destination slot may currently be occupied by another entry in the same batch that
+   * hasn't been restored yet. */
+  restoreEntryBoxPositions(
+    snapshots: Array<{ entryId: number; storageLocationId: number | null; boxNumber: number | null; boxSlot: number | null }>
+  ): Promise<CollectionEntry[]>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>
