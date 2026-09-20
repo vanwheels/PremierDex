@@ -6,9 +6,14 @@ selected-tile style had been zeroed out entirely (`border-color: transparent; ba
 none`) since a 2026-09-03 fix for an alarm-red border, back when Box view was still
 single-select-only and the detail panel doubled as feedback. Leg 4 of Box View Polish's
 multi-select never gets detail-panel feedback at all, so multi-selected tiles read as
-completely unhighlighted rather than merely faint. Restored a toned-down highlight (border/
-background via `color-mix`, same technique as the placeholder-cell border) instead of the
-original full-strength accent border. See commit `0393a76`.
+completely unhighlighted rather than merely faint. First pass (commit `0393a76`) restored a
+toned-down highlight at the sprite-tile level; Vanny caught that it still got lost against
+the full-slot-sized empty/placeholder borders around it. Follow-up (commit `9e32232`) moved
+the highlight to the full 108px cell, strengthened the color to lean into each theme's own
+--accent hue (Pearl rose-magenta, Diamond shiny-Dialga teal) instead of a washed-out blend,
+added a matching full-cell hover state (kept neutral gray, so it doesn't read as another
+selection), and gave selected slots their own deeper-tint hover so hovering an
+already-selected slot is still visibly distinct.
 
 ## [Jump directly to a Box] — 2026-09-19
 Leg 2 of the Box View Quick-Wins Sweep. Added a "Jump to box" `<select>` to DexBoxPager,
