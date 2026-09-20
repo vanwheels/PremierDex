@@ -1,5 +1,16 @@
 # COMPLETED
 
+## [Box View Move & Undo Operations Leg 1: cross-location move] — 2026-09-20
+AskUserQuestion resolved the leg's open UX decision as "both": dragging a selection onto a
+second pane pointed at a different Storage Location (new location dropdown next to "Open
+Second Box"), plus a "Move to location…" context-menu picker for when the destination
+isn't open in either pane. Added `StorageAdapter.moveEntriesToLocation` — a per-entry
+placements list (not a single startSlot like `fillBoxSlots`) reusing
+`fillInPlaceholderEntryStmt`'s single-UPDATE write, needing no vacate-first step since the
+destination location always differs from the source. The picker path finds free
+destination slots via a new `findAvailableSlots` helper (creating boxes as needed, same
+shortfall-loop shape as Apply Template). See commit `ff771c2`.
+
 ## [Box view scroller lag] — 2026-09-19
 Leg 4 of the Box View Quick-Wins Sweep (final leg — milestone shipped, see MILESTONES.md).
 AskUserQuestion narrowed the report to Prev/Next paging specifically, and confirmed it's
