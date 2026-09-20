@@ -1,5 +1,8 @@
 # COMPLETED
 
+## [Alpha + Capture Date] — 2026-09-19
+Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone. See commit `ff73ea0`.
+
 ## [Scope Ribbons/Alpha/size/capture-date tracking] — 2026-09-19
 Design-only leg: verified each of the four markers against Bulbapedia/Serebii and Vanny's
 real collection rather than the original TODO framing's assumptions. Found two of the four

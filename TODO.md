@@ -6,16 +6,6 @@ Picked up 2026-09-19 from Future Milestones, per Vanny's call (see AskUserQuesti
 2026-09-19 — chosen over the other open future-milestone candidates and over bundling the
 small standalone Box-view fixes).
 
-### [Alpha + Capture Date] — Leg 2
-Smallest leg in the sequence, per `docs/investigations/ribbons-alpha-size-capture-date.md`'s
-Leg 1 findings. `is_alpha` boolean column on `collection_entries` (applies to both Legends
-Arceus and Legends Z-A — confirmed the mechanic isn't Arceus-only, and Z-A alone is 693
-owned entries) plus a plain nullable `capture_date` DATE column (Met Date has existed since
-Gen III, no per-game gating needed, same looseness as `met_location`). Wire both into
-OriginModal plus a small Alpha badge; capture date is display-only in the info bar, no badge
-needed per Vanny's very-low-priority flag on it. No data curation, no join tables.
-Last touched: 2026-09-19. Re-check count: 0.
-
 ### [Size classification] — Leg 3
 Per the Leg 1 investigation: a bucketed `size_class` CHECK column (XXXS-XXXL, matching
 Scarlet/Violet's own in-game vocabulary — the most granular thing any game actually shows a
