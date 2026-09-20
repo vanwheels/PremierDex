@@ -1,3 +1,4 @@
+import type { Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { DexHybridTile } from './buildHybridTiles'
@@ -11,6 +12,9 @@ interface DexHybridDetailPanelProps {
   tile: DexHybridTile | null
   storageLocations: StorageLocation[]
   speciesAvailability: SpeciesAvailabilityData
+  /** Leg 2 of the Evolution-Chain Reachability milestone: lets checkEntryValidity walk a
+   * species' evolution ancestors — see invalidCombo.ts. */
+  speciesById: Map<number, Species>
   onEditOrigin: () => void
   /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
    * opens RibbonsMarksModal, same "parent owns the modal" split as onEditOrigin above. */
@@ -40,6 +44,7 @@ export function DexHybridDetailPanel({
   tile,
   storageLocations,
   speciesAvailability,
+  speciesById,
   onEditOrigin,
   onEditRibbonsMarks
 }: DexHybridDetailPanelProps): JSX.Element {
@@ -51,7 +56,7 @@ export function DexHybridDetailPanel({
 
   const { row, shiny, entry } = tile
   const storageLocationName = storageLocations.find((loc) => loc.id === entry.storageLocationId)?.name ?? '—'
-  const invalidCombo = entry.owned ? checkEntryValidity(entry, row.dexNumber, speciesAvailability) : null
+  const invalidCombo = entry.owned ? checkEntryValidity(entry, row.dexNumber, speciesAvailability, speciesById) : null
 
   return (
     <div className="dex-hybrid-detail-panel">

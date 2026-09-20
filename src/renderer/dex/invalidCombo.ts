@@ -1,4 +1,4 @@
-import type { CollectionEntry } from '@shared/types/pokemon'
+import type { CollectionEntry, Species } from '@shared/types/pokemon'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { findOriginGame } from '@shared/data/origin-games'
 import { ballPoolForGame } from '@shared/data/poke-balls'
@@ -27,13 +27,18 @@ const VALID: InvalidComboResult = { invalid: false, reasons: [] }
  * - a species missing from the regional dex union but present in
  *   supplementalSpeciesForGame's hand-curated postgame-mechanic pool (Leg 2 — see
  *   shared/data/supplemental-availability.ts) still counts as available;
+ * - a species itself absent from the regional dex/supplemental pool still counts as
+ *   available when any of its evolution ancestors is (Leg 2 of the Evolution-Chain
+ *   Reachability milestone) — walking Species.evolvesFromSpeciesId one parent pointer at a
+ *   time, e.g. Ariados via Pal-Park-available Spinarak;
  * - ballPoolForGame already falls back to the full POKE_BALLS list for any game without
  *   Leg 5's narrow pool, so the ball check needs no separate "do we have data" branch.
  */
 export function checkEntryValidity(
   entry: CollectionEntry,
   speciesId: number,
-  availability: SpeciesAvailabilityData
+  availability: SpeciesAvailabilityData,
+  speciesById: Map<number, Species>
 ): InvalidComboResult {
   if (!entry.originGame) return VALID
   const game = findOriginGame(entry.originGame)
@@ -43,9 +48,20 @@ export function checkEntryValidity(
 
   const dexNames = availability.gameToPokedexes[game.id]
   if (dexNames && dexNames.length > 0) {
-    const inRegionalDex = dexNames.some((dexName) => availability.pokedexes[dexName]?.includes(speciesId))
-    const inSupplementalPool = supplementalSpeciesForGame(game.id, availability).includes(speciesId)
-    if (!inRegionalDex && !inSupplementalPool) reasons.push(`Not obtainable in ${game.name}`)
+    const supplementalPool = supplementalSpeciesForGame(game.id, availability)
+    const isSpeciesAvailable = (id: number): boolean =>
+      dexNames.some((dexName) => availability.pokedexes[dexName]?.includes(id)) || supplementalPool.includes(id)
+
+    let reachable = false
+    let ancestorId: number | null = speciesId
+    while (ancestorId !== null) {
+      if (isSpeciesAvailable(ancestorId)) {
+        reachable = true
+        break
+      }
+      ancestorId = speciesById.get(ancestorId)?.evolvesFromSpeciesId ?? null
+    }
+    if (!reachable) reasons.push(`Not obtainable in ${game.name}`)
   }
 
   if (entry.caughtBall && !ballPoolForGame(game.name).includes(entry.caughtBall as PokeBall)) {

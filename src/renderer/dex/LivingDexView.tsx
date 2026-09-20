@@ -256,6 +256,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onSaveStorageLocation={onSaveStorageLocation}
           onBulkMove={onBulkMoveEntries}
           speciesAvailability={speciesAvailability}
+          species={species}
         />
       </div>
       {/* Same hidden-not-unmounted treatment as DexTable above, so switching back and forth
@@ -266,6 +267,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           sections={visibleSections}
           storageLocations={storageLocations}
           speciesAvailability={speciesAvailability}
+          species={species}
           onSaveOrigin={onSaveOrigin}
         />
       </div>

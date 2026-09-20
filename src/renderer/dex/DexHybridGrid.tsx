@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { CollectionEntryOriginInput } from '@shared/types/pokemon'
+import type { CollectionEntryOriginInput, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { buildHybridTiles } from './buildHybridTiles'
@@ -15,6 +15,9 @@ interface DexHybridGridProps {
   sections: DexSection[]
   storageLocations: StorageLocation[]
   speciesAvailability: SpeciesAvailabilityData
+  /** Leg 2 of the Evolution-Chain Reachability milestone: backs DexHybridDetailPanel's
+   * checkEntryValidity ancestor walk. */
+  species: Species[]
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
 }
 
@@ -30,8 +33,9 @@ interface DexHybridGridProps {
  * looking the key back up in the freshly-built `tiles` list picks up the new values
  * instead of pointing at a stale snapshot.
  */
-export function DexHybridGrid({ sections, storageLocations, speciesAvailability, onSaveOrigin }: DexHybridGridProps): JSX.Element {
+export function DexHybridGrid({ sections, storageLocations, speciesAvailability, species, onSaveOrigin }: DexHybridGridProps): JSX.Element {
   const tiles = useMemo(() => buildHybridTiles(sections), [sections])
+  const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
   const [selectedTileKey, setSelectedTileKey] = useState<string | null>(null)
   const [editingOrigin, setEditingOrigin] = useState(false)
   const [editingRibbonsMarks, setEditingRibbonsMarks] = useState(false)
@@ -68,6 +72,7 @@ export function DexHybridGrid({ sections, storageLocations, speciesAvailability,
         tile={selectedTile}
         storageLocations={storageLocations}
         speciesAvailability={speciesAvailability}
+        speciesById={speciesById}
         onEditOrigin={() => setEditingOrigin(true)}
         onEditRibbonsMarks={() => setEditingRibbonsMarks(true)}
       />

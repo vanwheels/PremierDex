@@ -20,14 +20,11 @@
  * precedent (BALL_POOLS, species-availability.json) exists to avoid.
  *
  * Residual false positives this leg doesn't clear (documented, not fabricated data):
- * Platinum's Ariados/Politoed/Dunsparce/Qwilfish/Smoochum, Emerald's Cyndaquil/Ledian/
- * Flaaffy/Ampharos/Sunflora/Ambipom, and USUM's Ivysaur/Nuzleaf. Most of these
- * (Ariados/Ledian/Flaaffy/Ampharos/Sunflora/Ambipom/Politoed/Ivysaur) are evolutions of a
- * species this file *does* cover — a real, now-demonstrated case for evolution-chain
- * reachability that Leg 1 found no evidence for before this data existed. See TODO.md's
- * "[Evolution-chain reachability for species availability]" for that follow-up. Cyndaquil,
- * Dunsparce, Qwilfish, Smoochum, and Nuzleaf have no confirmed in-game source in their
- * recorded origin game at all — left un-curated rather than guessed at.
+ * Platinum's Dunsparce/Qwilfish/Smoochum, Emerald's Cyndaquil, and USUM's Nuzleaf — none has
+ * a confirmed in-game source in its recorded origin game under any mechanism checked, so
+ * they're left un-curated rather than guessed at. (Ariados/Politoed/Ledian/Flaaffy/Ampharos/
+ * Sunflora/Ambipom/Ivysaur were also residual here, but all clear now that
+ * checkEntryValidity walks evolution ancestors — see invalidCombo.ts's doc comment.)
  */
 import type { SpeciesAvailabilityData } from '../types/species-availability'
 
@@ -68,9 +65,9 @@ const USUM_ULTRA_WORMHOLE_ULTRA_MOON_ONLY = [244, 249, 380, 382, 484, 486, 642, 
  * of pre-National-Dex starter species from other regions, unlocked by scanning QR codes.
  * Only the exact stage listed is directly encounterable this way (base Kanto starters,
  * middle-stage Hoenn/Sinnoh starters, fully-evolved Kalos starters) — the milestone's own
- * motivating example (Ivysaur/Ultra Moon) needs the evolution-chain-reachability follow-up
- * noted in this file's doc comment, not a direct list entry, since Ivysaur itself was
- * never the species Island Scan grants (Bulbasaur is).
+ * motivating example (Ivysaur/Ultra Moon) clears via checkEntryValidity's evolution-ancestor
+ * walk (Leg 2 of the Evolution-Chain Reachability milestone) rather than a direct list entry
+ * here, since Ivysaur itself was never the species Island Scan grants (Bulbasaur is).
  */
 const USUM_ISLAND_SCAN_STARTERS = [1, 4, 7, 253, 256, 259, 388, 391, 394, 652, 655, 658]
 

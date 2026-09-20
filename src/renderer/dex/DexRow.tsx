@@ -1,4 +1,4 @@
-import type { CollectionEntry, CollectionEntryOriginInput, Gender } from '@shared/types/pokemon'
+import type { CollectionEntry, CollectionEntryOriginInput, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { SpriteThumbnail } from './SpriteThumbnail'
@@ -55,6 +55,9 @@ interface DexRowProps {
   onToggleSelected: (entryId: number) => void
   /** Leg 6: backs the invalid-combo badge below — see invalidCombo.ts. */
   speciesAvailability: SpeciesAvailabilityData
+  /** Leg 2 of the Evolution-Chain Reachability milestone: lets checkEntryValidity walk a
+   * species' evolution ancestors — see invalidCombo.ts. */
+  speciesById: Map<number, Species>
   expandControl?: ExpandControl
   collapsedDisplayControl?: CollapsedDisplayControl
   indent?: boolean
@@ -95,6 +98,7 @@ export function DexRow({
   selectedEntryIds,
   onToggleSelected,
   speciesAvailability,
+  speciesById,
   expandControl,
   collapsedDisplayControl,
   indent
@@ -106,7 +110,7 @@ export function DexRow({
   // combo renders no badge at all.
   const invalidComboBadge = (entry: CollectionEntry | null): JSX.Element | null => {
     if (!entry?.owned) return null
-    const result = checkEntryValidity(entry, row.dexNumber, speciesAvailability)
+    const result = checkEntryValidity(entry, row.dexNumber, speciesAvailability, speciesById)
     if (!result.invalid) return null
     return (
       <span className="dex-invalid-combo-badge" title={result.reasons.join('; ')}>

@@ -1,5 +1,5 @@
-import { Fragment, useState } from 'react'
-import type { CollectionEntryOriginInput, Gender } from '@shared/types/pokemon'
+import { Fragment, useMemo, useState } from 'react'
+import type { CollectionEntryOriginInput, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import { DexRow } from './DexRow'
@@ -30,6 +30,9 @@ interface DexTableProps {
   onBulkMove: (entryIds: number[], storageLocationId: number | null) => void
   /** Leg 6's derived invalid-combo badge — see DexRow's doc comment. */
   speciesAvailability: SpeciesAvailabilityData
+  /** Leg 2 of the Evolution-Chain Reachability milestone: backs checkEntryValidity's
+   * ancestor walk — see DexRow's doc comment. */
+  species: Species[]
 }
 
 /** Three-state header click cycle (Leg 16): unsorted/other-column → ascending →
@@ -76,8 +79,10 @@ export function DexTable({
   storageLocations,
   onSaveStorageLocation,
   onBulkMove,
-  speciesAvailability
+  speciesAvailability,
+  species
 }: DexTableProps): JSX.Element {
+  const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
   // Which row's sprite is enlarged, if any. UI-only, same as expandedSpeciesIds above.
   const [spriteTarget, setSpriteTarget] = useState<SpriteModalTarget | null>(null)
@@ -199,6 +204,7 @@ export function DexTable({
                         selectedEntryIds={selectedEntryIds}
                         onToggleSelected={toggleSelected}
                         speciesAvailability={speciesAvailability}
+                        speciesById={speciesById}
                         expandControl={
                           isCollapseSlot
                             ? {
@@ -227,6 +233,7 @@ export function DexTable({
                         selectedEntryIds={selectedEntryIds}
                         onToggleSelected={toggleSelected}
                         speciesAvailability={speciesAvailability}
+                        speciesById={speciesById}
                         indent
                       />
                     ))}

@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from 'react'
+import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 import type { CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { StorageBox } from '@shared/types/box'
@@ -27,8 +27,9 @@ interface DexBoxPaneProps {
   initialBoxIndex: number
   storageLocations: StorageLocation[]
   speciesAvailability: SpeciesAvailabilityData
-  /** Leg 5 of the Box View Polish milestone: the full species list, threaded down purely
-   * for DexBoxPlaceholderModal's search — nothing else here needs it. */
+  /** Leg 5 of the Box View Polish milestone: the full species list, for
+   * DexBoxPlaceholderModal's search. Also backs the speciesById lookup below (Leg 2 of the
+   * Evolution-Chain Reachability milestone) for DexBoxDetailPanel's invalid-combo check. */
   species: Species[]
   /** Leg 2 of the Dex completeness tier migration: resolves a manually-picked speciesId
    * into the (formId, gender) a placeholder actually stores — see
@@ -125,6 +126,7 @@ export function DexBoxPane({
   onClearBoxPlaceholder,
   onCurrentBoxChange
 }: DexBoxPaneProps): JSX.Element {
+  const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
   const [boxIndex, setBoxIndex] = useState(initialBoxIndex)
   // Leg 4 of the Box View Polish milestone: multi-select. `selectedSlots` is ordered by
   // *selection* order, not slot order — a ctrl-click appends to the end, a shift-click
@@ -405,6 +407,7 @@ export function DexBoxPane({
           cell={detailCell}
           storageLocations={storageLocations}
           speciesAvailability={speciesAvailability}
+          speciesById={speciesById}
           onEditOrigin={() => setEditingOrigin(true)}
           onEditRibbonsMarks={() => setEditingRibbonsMarks(true)}
           onSaveOrigin={onSaveOrigin}
