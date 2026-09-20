@@ -1,5 +1,8 @@
 # COMPLETED
 
+## [Size classification] — 2026-09-19
+Leg 3 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone. See commit `8e7a04f`.
+
 ## [Alpha + Capture Date] — 2026-09-19
 Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone. See commit `ff73ea0`.
 

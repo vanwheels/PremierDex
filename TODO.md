@@ -6,19 +6,6 @@ Picked up 2026-09-19 from Future Milestones, per Vanny's call (see AskUserQuesti
 2026-09-19 — chosen over the other open future-milestone candidates and over bundling the
 small standalone Box-view fixes).
 
-### [Size classification] — Leg 3
-Per the Leg 1 investigation: a bucketed `size_class` CHECK column (XXXS-XXXL, matching
-Scarlet/Violet's own in-game vocabulary — the most granular thing any game actually shows a
-player), not a raw 0-255 scalar or per-species percentile. Applies to Let's Go Pikachu/Eevee,
-Legends Arceus, Scarlet/Violet, Legends Z-A, and Pokémon GO (~1,995 owned entries, 39% of
-the collection) — excludes Sword/Shield/BDSP, where the underlying scalar exists internally
-but is never shown to the player. Needs a short research pass first to confirm exactly how
-Legends Arceus and Legends Z-A present size in-game (PLA uses aura color +
-"Tall/Small Specimen" Pokédex-task language, not the XXXS-XXXL wording; Z-A's exact
-presentation wasn't confirmed by Leg 1) before locking whether every game maps onto one
-shared bucket set.
-Last touched: 2026-09-19. Re-check count: 0.
-
 ### [Ribbons & Marks schema] — Leg 4
 Per the Leg 1 investigation: Marks are a separate, parallel system to Ribbons (introduced
 Sword/Shield, not a Gen 9 replacement for Ribbons), not a variant of them — both need their
