@@ -2,6 +2,8 @@ import type Database from 'better-sqlite3'
 import { ORIGIN_LANGUAGES } from '@shared/data/languages'
 import { POKE_BALLS } from '@shared/data/poke-balls'
 import { SIZE_CLASSES } from '@shared/data/size-classes'
+import { RIBBONS } from '@shared/data/ribbons'
+import { MARKS } from '@shared/data/marks'
 
 // Language (Leg 14) is a genuinely closed set defined by the games themselves (unlike
 // `game`, which is open-ended enough to cover ROM hacks/future titles and so stays a
@@ -19,6 +21,13 @@ const POKE_BALL_LIST_SQL = POKE_BALLS.map((b) => `'${b}'`).join(', ')
 // same closed-set reasoning as language/caught_ball above, built from SIZE_CLASSES so
 // schema.ts and shared/data/size-classes.ts can't drift apart.
 const SIZE_CLASS_LIST_SQL = SIZE_CLASSES.map((s) => `'${s}'`).join(', ')
+
+// Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) — same
+// closed-set reasoning as above, built from shared/data/ribbons.ts and shared/data/marks.ts
+// so schema.ts can't drift from them. Both lists are placeholders (see those files' own doc
+// comments); Leg 5 widens the CHECK the same way the caught_ball Origin Ball migration did.
+const RIBBON_LIST_SQL = RIBBONS.map((r) => `'${r}'`).join(', ')
+const MARK_LIST_SQL = MARKS.map((m) => `'${m}'`).join(', ')
 
 export function applySchema(db: Database.Database): void {
   db.pragma('journal_mode = WAL')
@@ -164,6 +173,37 @@ export function applySchema(db: Database.Database): void {
       UNIQUE(storage_location_id, box_number, box_slot)
     );
     CREATE INDEX IF NOT EXISTS idx_box_placeholders_location ON box_placeholders(storage_location_id);
+
+    -- Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone, see
+    -- docs/investigations/ribbons-alpha-size-capture-date.md) — two separate, parallel
+    -- many-to-many join tables rather than a nullable column on collection_entries: a
+    -- Pokemon can hold several Ribbons at once, and while a Mark is normally single-value,
+    -- Partner/Gourmand/Itemfinder/Jumbo/Mini Marks can coexist with another Mark already
+    -- held. ribbon_name/mark_name are CHECK-constrained TEXT (same closed-set approach as
+    -- caught_ball/language/size_class) rather than a separate ribbons/marks lookup table
+    -- with its own id, keeping this consistent with how every other closed-set value in this
+    -- schema is represented. ON DELETE CASCADE (same as boxes/box_placeholders above): a
+    -- ribbon/mark row has no meaning once its entry is gone, and seed.ts's species-exclusion
+    -- DELETE FROM collection_entries should carry these away with it rather than orphaning
+    -- or blocking on them. This is the first FK anything has ever targeted
+    -- collection_entries(id) with — see the foreign_keys=OFF additions below on the three
+    -- legacy collection_entries rebuild blocks, required so a DROP TABLE collection_entries
+    -- there doesn't throw FOREIGN KEY constraint failed against these rows.
+    CREATE TABLE IF NOT EXISTS collection_entry_ribbons (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      entry_id INTEGER NOT NULL REFERENCES collection_entries(id) ON DELETE CASCADE,
+      ribbon_name TEXT NOT NULL CHECK (ribbon_name IN (${RIBBON_LIST_SQL})),
+      UNIQUE(entry_id, ribbon_name)
+    );
+    CREATE INDEX IF NOT EXISTS idx_entry_ribbons_entry ON collection_entry_ribbons(entry_id);
+
+    CREATE TABLE IF NOT EXISTS collection_entry_marks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      entry_id INTEGER NOT NULL REFERENCES collection_entries(id) ON DELETE CASCADE,
+      mark_name TEXT NOT NULL CHECK (mark_name IN (${MARK_LIST_SQL})),
+      UNIQUE(entry_id, mark_name)
+    );
+    CREATE INDEX IF NOT EXISTS idx_entry_marks_entry ON collection_entry_marks(entry_id);
   `)
 
   // Same retrofit story for species: collapsed_display_form_id postdates every existing
@@ -305,6 +345,13 @@ export function applySchema(db: Database.Database): void {
     .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entries'")
     .get() as { sql: string } | undefined
   if (entriesSql?.sql.includes('sid BETWEEN 0 AND 4294')) {
+    // foreign_keys=OFF required now that collection_entry_ribbons/collection_entry_marks
+    // (added Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) target
+    // collection_entries(id) — same DROP-TABLE-triggers-an-implicit-FK-checked-DELETE hazard
+    // the trainer_profiles rebuilds above already guard against. In practice this whole
+    // block is dead for any DB that's already run through this app's real upgrade path, but
+    // it can't assume that.
+    db.pragma('foreign_keys = OFF')
     db.exec(`
       CREATE TABLE collection_entries_new (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -328,6 +375,7 @@ export function applySchema(db: Database.Database): void {
       ALTER TABLE collection_entries_new RENAME TO collection_entries;
       CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
     `)
+    db.pragma('foreign_keys = ON')
   }
 
   // language (Leg 14) retrofit for both tables — re-read PRAGMA state here rather than
@@ -409,13 +457,16 @@ export function applySchema(db: Database.Database): void {
   // CHECK missing them. Detected via the stored CHECK text directly (PRAGMA table_info
   // doesn't expose CHECK bounds) rather than a version flag, so this is self-healing
   // however many balls get added in the future. Runs last and rebuilds with every column
-  // this function can have added by this point, copied straight across — nothing else
-  // references collection_entries(id) as an FK target, so no foreign_keys=OFF dance is
-  // needed here (unlike the trainer_profiles rebuilds above).
+  // this function can have added by this point, copied straight across. Used to need no
+  // foreign_keys=OFF dance (nothing referenced collection_entries(id) as an FK target) —
+  // now does, since collection_entry_ribbons/collection_entry_marks (Leg 4 of the
+  // Ribbons/Alpha/Size/Capture-Date Tracking milestone) both do; see the sid-4294 rebuild
+  // above for the same guard and its own comment.
   const entriesSqlForBallCheck = db
     .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entries'")
     .get() as { sql: string } | undefined
   if (entriesSqlForBallCheck?.sql.includes('caught_ball') && !entriesSqlForBallCheck.sql.includes("'Origin Ball'")) {
+    db.pragma('foreign_keys = OFF')
     db.exec(`
       CREATE TABLE collection_entries_ballcheck (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -448,6 +499,7 @@ export function applySchema(db: Database.Database): void {
       CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
       CREATE UNIQUE INDEX IF NOT EXISTS idx_entries_box_slot ON collection_entries(storage_location_id, box_number, box_slot);
     `)
+    db.pragma('foreign_keys = ON')
   }
 
   // Drop UNIQUE(form_id, gender, shiny) (Leg 2 of the Box Arrangement/Real Inventory Data
@@ -457,13 +509,15 @@ export function applySchema(db: Database.Database): void {
   // SQLite can't ALTER a table to drop a UNIQUE constraint (same limitation as the
   // CHECK-widen rebuilds above), so detect it via the stored CREATE TABLE SQL and rebuild.
   // Runs last and rebuilds with every column this function can have added by this point,
-  // copied straight across, same reasoning as the caught_ball rebuild directly above — and
-  // for the same reason, no foreign_keys=OFF dance is needed (nothing references
-  // collection_entries(id) as an FK target).
+  // copied straight across, same reasoning as the caught_ball rebuild directly above — and,
+  // same as that block, now needs foreign_keys=OFF too (collection_entry_ribbons/
+  // collection_entry_marks reference collection_entries(id); see the sid-4294 rebuild's
+  // own comment above for the full explanation).
   const entriesSqlForUniqueCheck = db
     .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entries'")
     .get() as { sql: string } | undefined
   if (entriesSqlForUniqueCheck?.sql.includes('UNIQUE(form_id, gender, shiny)')) {
+    db.pragma('foreign_keys = OFF')
     db.exec(`
       CREATE TABLE collection_entries_dropunique (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -495,6 +549,7 @@ export function applySchema(db: Database.Database): void {
       CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
       CREATE UNIQUE INDEX IF NOT EXISTS idx_entries_box_slot ON collection_entries(storage_location_id, box_number, box_slot);
     `)
+    db.pragma('foreign_keys = ON')
   }
 
   // box_placeholders species_id -> form_id/gender/shiny (Leg 2 of the Dex completeness

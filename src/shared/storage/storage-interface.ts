@@ -139,4 +139,19 @@ export interface StorageAdapter {
    * right-click-set alike — more necessary now that Apply Template stamps a full tier
    * layout every time rather than just the pending gap. */
   clearAllBoxPlaceholders(storageLocationId: number): Promise<void>
+  /** Ribbons an individual holds (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking
+   * milestone) — a many-to-many axis, so unlike the rest of CollectionEntry's fields this
+   * isn't embedded on the entry itself; fetched on demand by RibbonsMarksModal instead. See
+   * shared/data/ribbons.ts for the (placeholder, pending Leg 5) name list. */
+  listEntryRibbons(entryId: number): Promise<string[]>
+  /** Full replace-all, same convention as setEntryOrigin's snapshot write: `ribbonNames`
+   * becomes the entry's complete ribbon set, not a diff against its current one. */
+  setEntryRibbons(entryId: number, ribbonNames: string[]): Promise<string[]>
+  /** Marks an individual holds — same many-to-many, fetched-on-demand shape as
+   * listEntryRibbons above, but the separate, parallel Marks system (see
+   * docs/investigations/ribbons-alpha-size-capture-date.md for why Marks aren't a Ribbons
+   * variant). See shared/data/marks.ts for the (placeholder, pending Leg 5) name list. */
+  listEntryMarks(entryId: number): Promise<string[]>
+  /** Full replace-all, same convention as setEntryRibbons above. */
+  setEntryMarks(entryId: number, markNames: string[]): Promise<string[]>
 }

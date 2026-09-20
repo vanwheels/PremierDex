@@ -361,6 +361,31 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   // skip a slot a real entry already occupies), so this can never delete a real entry's
   // data.
   const clearAllBoxPlaceholdersStmt = db.prepare('DELETE FROM box_placeholders WHERE storage_location_id = @storageLocationId')
+  // Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
+  // full replace-all per entry (delete then reinsert), same convention as setEntryOrigin's
+  // snapshot write rather than a diff/patch. Two independent statement/transaction pairs,
+  // mirroring how the tables themselves are separate, parallel systems (see schema.ts's
+  // own comment) rather than one shared "tag" table.
+  const listEntryRibbonsStmt = db.prepare(
+    'SELECT ribbon_name FROM collection_entry_ribbons WHERE entry_id = ? ORDER BY ribbon_name'
+  )
+  const deleteEntryRibbonsStmt = db.prepare('DELETE FROM collection_entry_ribbons WHERE entry_id = ?')
+  const insertEntryRibbonStmt = db.prepare(
+    'INSERT INTO collection_entry_ribbons (entry_id, ribbon_name) VALUES (@entryId, @ribbonName)'
+  )
+  const setEntryRibbonsTx = db.transaction((entryId: number, ribbonNames: string[]) => {
+    deleteEntryRibbonsStmt.run(entryId)
+    for (const ribbonName of ribbonNames) insertEntryRibbonStmt.run({ entryId, ribbonName })
+  })
+  const listEntryMarksStmt = db.prepare('SELECT mark_name FROM collection_entry_marks WHERE entry_id = ? ORDER BY mark_name')
+  const deleteEntryMarksStmt = db.prepare('DELETE FROM collection_entry_marks WHERE entry_id = ?')
+  const insertEntryMarkStmt = db.prepare(
+    'INSERT INTO collection_entry_marks (entry_id, mark_name) VALUES (@entryId, @markName)'
+  )
+  const setEntryMarksTx = db.transaction((entryId: number, markNames: string[]) => {
+    deleteEntryMarksStmt.run(entryId)
+    for (const markName of markNames) insertEntryMarkStmt.run({ entryId, markName })
+  })
   // Leg 6: an app starts with zero storage locations, so the very first one ever created
   // (of any type — HOME is the common case, but nothing here assumes it) is where every
   // owned entry that's currently unassigned logically belongs: they were checked in before
@@ -573,6 +598,24 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
 
     async clearAllBoxPlaceholders(storageLocationId: number): Promise<void> {
       clearAllBoxPlaceholdersStmt.run({ storageLocationId })
+    },
+
+    async listEntryRibbons(entryId: number): Promise<string[]> {
+      return (listEntryRibbonsStmt.all(entryId) as Array<{ ribbon_name: string }>).map((r) => r.ribbon_name)
+    },
+
+    async setEntryRibbons(entryId: number, ribbonNames: string[]): Promise<string[]> {
+      setEntryRibbonsTx(entryId, ribbonNames)
+      return (listEntryRibbonsStmt.all(entryId) as Array<{ ribbon_name: string }>).map((r) => r.ribbon_name)
+    },
+
+    async listEntryMarks(entryId: number): Promise<string[]> {
+      return (listEntryMarksStmt.all(entryId) as Array<{ mark_name: string }>).map((r) => r.mark_name)
+    },
+
+    async setEntryMarks(entryId: number, markNames: string[]): Promise<string[]> {
+      setEntryMarksTx(entryId, markNames)
+      return (listEntryMarksStmt.all(entryId) as Array<{ mark_name: string }>).map((r) => r.mark_name)
     }
   }
 }

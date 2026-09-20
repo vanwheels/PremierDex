@@ -85,6 +85,12 @@ const bridge: AppBridge = {
     ipcRenderer.invoke(BoxPlaceholderIpcChannel.clear, storageLocationId, boxNumber, boxSlot),
   clearAllBoxPlaceholders: (storageLocationId: number): Promise<void> =>
     ipcRenderer.invoke(BoxPlaceholderIpcChannel.clearAll, storageLocationId),
+  listEntryRibbons: (entryId: number): Promise<string[]> => ipcRenderer.invoke(PokemonIpcChannel.listEntryRibbons, entryId),
+  setEntryRibbons: (entryId: number, ribbonNames: string[]): Promise<string[]> =>
+    ipcRenderer.invoke(PokemonIpcChannel.setEntryRibbons, entryId, ribbonNames),
+  listEntryMarks: (entryId: number): Promise<string[]> => ipcRenderer.invoke(PokemonIpcChannel.listEntryMarks, entryId),
+  setEntryMarks: (entryId: number, markNames: string[]): Promise<string[]> =>
+    ipcRenderer.invoke(PokemonIpcChannel.setEntryMarks, entryId, markNames),
   getAppVersion: () => ipcRenderer.invoke(UpdaterIpcChannel.getAppVersion),
   isSupported: () => ipcRenderer.invoke(UpdaterIpcChannel.isSupported),
   checkForUpdates: () => ipcRenderer.invoke(UpdaterIpcChannel.check),

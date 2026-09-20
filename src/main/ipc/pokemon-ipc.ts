@@ -50,4 +50,12 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
   )
   // Static file read, not a `storage` method — see the channel's own comment.
   ipcMain.handle(PokemonIpcChannel.loadSpeciesAvailability, () => loadSpeciesAvailabilityData())
+  ipcMain.handle(PokemonIpcChannel.listEntryRibbons, (_event, entryId: number) => storage.listEntryRibbons(entryId))
+  ipcMain.handle(PokemonIpcChannel.setEntryRibbons, (_event, entryId: number, ribbonNames: string[]) =>
+    storage.setEntryRibbons(entryId, ribbonNames)
+  )
+  ipcMain.handle(PokemonIpcChannel.listEntryMarks, (_event, entryId: number) => storage.listEntryMarks(entryId))
+  ipcMain.handle(PokemonIpcChannel.setEntryMarks, (_event, entryId: number, markNames: string[]) =>
+    storage.setEntryMarks(entryId, markNames)
+  )
 }

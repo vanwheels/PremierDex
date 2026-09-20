@@ -22,7 +22,14 @@ export const PokemonIpcChannel = {
   /** Leg 6: static per-game species-availability data (see load-species-data.ts),
    * not a StorageAdapter/DB method — there's no collection_entries-shaped row to read,
    * just the fetch-species-availability.ts-written JSON file. */
-  loadSpeciesAvailability: 'pokemon:speciesAvailability:load'
+  loadSpeciesAvailability: 'pokemon:speciesAvailability:load',
+  /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
+   * see StorageAdapter.listEntryRibbons/setEntryRibbons/listEntryMarks/setEntryMarks' own
+   * doc comments. */
+  listEntryRibbons: 'pokemon:collectionEntries:listRibbons',
+  setEntryRibbons: 'pokemon:collectionEntries:setRibbons',
+  listEntryMarks: 'pokemon:collectionEntries:listMarks',
+  setEntryMarks: 'pokemon:collectionEntries:setMarks'
 } as const
 
 /** File-dialog-backed backup flow (see main/ipc/backup-ipc.ts) — separate from

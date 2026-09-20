@@ -6,6 +6,7 @@ import { buildHybridTiles } from './buildHybridTiles'
 import { SpriteThumbnail } from './SpriteThumbnail'
 import { DexHybridDetailPanel } from './DexHybridDetailPanel'
 import { OriginModal } from './OriginModal'
+import { RibbonsMarksModal } from './RibbonsMarksModal'
 import type { DexSection } from './types'
 
 const TILE_SPRITE_SIZE = 56
@@ -33,6 +34,7 @@ export function DexHybridGrid({ sections, storageLocations, speciesAvailability,
   const tiles = useMemo(() => buildHybridTiles(sections), [sections])
   const [selectedTileKey, setSelectedTileKey] = useState<string | null>(null)
   const [editingOrigin, setEditingOrigin] = useState(false)
+  const [editingRibbonsMarks, setEditingRibbonsMarks] = useState(false)
 
   const selectedTile = tiles.find((t) => t.key === selectedTileKey) ?? null
 
@@ -67,6 +69,7 @@ export function DexHybridGrid({ sections, storageLocations, speciesAvailability,
         storageLocations={storageLocations}
         speciesAvailability={speciesAvailability}
         onEditOrigin={() => setEditingOrigin(true)}
+        onEditRibbonsMarks={() => setEditingRibbonsMarks(true)}
       />
       {editingOrigin && selectedTile?.entry.owned && (
         <OriginModal
@@ -74,6 +77,13 @@ export function DexHybridGrid({ sections, storageLocations, speciesAvailability,
           displayName={selectedTile.row.displayName}
           onClose={() => setEditingOrigin(false)}
           onSave={onSaveOrigin}
+        />
+      )}
+      {editingRibbonsMarks && selectedTile?.entry.owned && (
+        <RibbonsMarksModal
+          entryId={selectedTile.entry.id}
+          displayName={selectedTile.row.displayName}
+          onClose={() => setEditingRibbonsMarks(false)}
         />
       )}
     </div>

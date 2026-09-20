@@ -14,6 +14,9 @@ interface DexBoxDetailPanelProps {
   storageLocations: StorageLocation[]
   speciesAvailability: SpeciesAvailabilityData
   onEditOrigin: () => void
+  /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
+   * opens RibbonsMarksModal, same "parent owns the modal" split as onEditOrigin above. */
+  onEditRibbonsMarks: () => void
   /** Vanny feedback 2026-09-03: feeds the panel's own inline nickname editor, same
    * commit-on-blur pattern as DexRow's useNicknameEditor. */
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
@@ -46,6 +49,7 @@ export function DexBoxDetailPanel({
   storageLocations,
   speciesAvailability,
   onEditOrigin,
+  onEditRibbonsMarks,
   onSaveOrigin
 }: DexBoxDetailPanelProps): JSX.Element {
   // Hook order can't depend on `cell` being non-null (or being an entry at all), so this
@@ -147,6 +151,9 @@ export function DexBoxDetailPanel({
             )}
             <button type="button" onClick={onEditOrigin}>
               Edit Origin
+            </button>
+            <button type="button" onClick={onEditRibbonsMarks}>
+              Ribbons &amp; Marks
             </button>
           </>
         ) : (

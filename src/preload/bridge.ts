@@ -77,4 +77,10 @@ export interface AppBridge extends UpdaterBridge {
   clearBoxPlaceholder(storageLocationId: number, boxNumber: number, boxSlot: number): Promise<void>
   /** See StorageAdapter.clearAllBoxPlaceholders' own doc comment. */
   clearAllBoxPlaceholders(storageLocationId: number): Promise<void>
+  /** See StorageAdapter.listEntryRibbons/setEntryRibbons/listEntryMarks/setEntryMarks' own
+   * doc comments. */
+  listEntryRibbons(entryId: number): Promise<string[]>
+  setEntryRibbons(entryId: number, ribbonNames: string[]): Promise<string[]>
+  listEntryMarks(entryId: number): Promise<string[]>
+  setEntryMarks(entryId: number, markNames: string[]): Promise<string[]>
 }

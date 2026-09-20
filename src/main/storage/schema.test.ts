@@ -19,6 +19,8 @@ describe('applySchema', () => {
       'box_placeholders',
       'boxes',
       'collection_entries',
+      'collection_entry_marks',
+      'collection_entry_ribbons',
       'forms',
       'species',
       'storage_locations',
@@ -432,5 +434,173 @@ describe('applySchema', () => {
       trainer_profile_id: number
     }
     expect(loc.trainer_profile_id).toBe(1)
+  })
+
+  it('allows several ribbons on one collection_entries row (Leg 4)', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    const entry = db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
+    db.prepare('INSERT INTO collection_entry_ribbons (entry_id, ribbon_name) VALUES (?, ?)').run(
+      entry.lastInsertRowid,
+      'Champion Ribbon'
+    )
+    expect(() =>
+      db
+        .prepare('INSERT INTO collection_entry_ribbons (entry_id, ribbon_name) VALUES (?, ?)')
+        .run(entry.lastInsertRowid, 'Effort Ribbon')
+    ).not.toThrow()
+    const count = (
+      db.prepare('SELECT COUNT(*) AS n FROM collection_entry_ribbons WHERE entry_id = ?').get(entry.lastInsertRowid) as {
+        n: number
+      }
+    ).n
+    expect(count).toBe(2)
+  })
+
+  it('rejects a ribbon_name outside the fixed placeholder list via the CHECK constraint', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    const entry = db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
+    expect(() =>
+      db
+        .prepare('INSERT INTO collection_entry_ribbons (entry_id, ribbon_name) VALUES (?, ?)')
+        .run(entry.lastInsertRowid, 'Not A Real Ribbon')
+    ).toThrow()
+  })
+
+  it('rejects a duplicate (entry_id, ribbon_name) pair via the UNIQUE constraint', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    const entry = db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
+    db.prepare('INSERT INTO collection_entry_ribbons (entry_id, ribbon_name) VALUES (?, ?)').run(
+      entry.lastInsertRowid,
+      'Champion Ribbon'
+    )
+    expect(() =>
+      db
+        .prepare('INSERT INTO collection_entry_ribbons (entry_id, ribbon_name) VALUES (?, ?)')
+        .run(entry.lastInsertRowid, 'Champion Ribbon')
+    ).toThrow()
+  })
+
+  it('allows more than one Mark on one collection_entries row (e.g. Jumbo + Partner coexisting)', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    const entry = db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
+    db.prepare('INSERT INTO collection_entry_marks (entry_id, mark_name) VALUES (?, ?)').run(
+      entry.lastInsertRowid,
+      'Jumbo Mark'
+    )
+    expect(() =>
+      db
+        .prepare('INSERT INTO collection_entry_marks (entry_id, mark_name) VALUES (?, ?)')
+        .run(entry.lastInsertRowid, 'Partner Mark')
+    ).not.toThrow()
+  })
+
+  it('rejects a mark_name outside the fixed placeholder list via the CHECK constraint', () => {
+    const db = makeDb()
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    const entry = db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
+    expect(() =>
+      db
+        .prepare('INSERT INTO collection_entry_marks (entry_id, mark_name) VALUES (?, ?)')
+        .run(entry.lastInsertRowid, 'Not A Real Mark')
+    ).toThrow()
+  })
+
+  it('cascade-deletes ribbons/marks when their collection_entries row is deleted', () => {
+    const db = makeDb()
+    db.pragma('foreign_keys = ON')
+    db.prepare('INSERT INTO species (id, name, generation) VALUES (1, \'bulbasaur\', 1)').run()
+    db.prepare(
+      `INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+       VALUES (1, 'base', 'dex_distinct', 1)`
+    ).run()
+    const entry = db.prepare('INSERT INTO collection_entries (form_id, gender, shiny) VALUES (1, \'unknown\', 0)').run()
+    db.prepare('INSERT INTO collection_entry_ribbons (entry_id, ribbon_name) VALUES (?, ?)').run(
+      entry.lastInsertRowid,
+      'Champion Ribbon'
+    )
+    db.prepare('INSERT INTO collection_entry_marks (entry_id, mark_name) VALUES (?, ?)').run(
+      entry.lastInsertRowid,
+      'Jumbo Mark'
+    )
+
+    db.prepare('DELETE FROM collection_entries WHERE id = ?').run(entry.lastInsertRowid)
+
+    const ribbonCount = (
+      db.prepare('SELECT COUNT(*) AS n FROM collection_entry_ribbons').get() as { n: number }
+    ).n
+    const markCount = (db.prepare('SELECT COUNT(*) AS n FROM collection_entry_marks').get() as { n: number }).n
+    expect(ribbonCount).toBe(0)
+    expect(markCount).toBe(0)
+  })
+
+  it('rebuilds collection_entries (the legacy sid-4294 path) without violating FKs from linked ribbon/mark rows', () => {
+    const db = new Database(':memory:')
+    db.exec(`
+      CREATE TABLE species (id INTEGER PRIMARY KEY, name TEXT NOT NULL, generation INTEGER NOT NULL);
+      CREATE TABLE forms (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        species_id INTEGER NOT NULL REFERENCES species(id),
+        form_name TEXT NOT NULL,
+        form_category TEXT NOT NULL,
+        first_available_generation INTEGER NOT NULL
+      );
+      CREATE TABLE collection_entries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        form_id INTEGER NOT NULL REFERENCES forms(id),
+        gender TEXT NOT NULL DEFAULT 'unknown',
+        shiny INTEGER NOT NULL DEFAULT 0,
+        owned INTEGER NOT NULL DEFAULT 0,
+        origin_game TEXT,
+        ot_name TEXT,
+        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
+        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 4294),
+        nickname TEXT,
+        UNIQUE(form_id, gender, shiny)
+      );
+      CREATE TABLE collection_entry_ribbons (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        entry_id INTEGER NOT NULL REFERENCES collection_entries(id) ON DELETE CASCADE,
+        ribbon_name TEXT NOT NULL
+      );
+      INSERT INTO species (id, name, generation) VALUES (1, 'bulbasaur', 1);
+      INSERT INTO forms (species_id, form_name, form_category, first_available_generation)
+        VALUES (1, 'base', 'dex_distinct', 1);
+      INSERT INTO collection_entries (form_id, gender, shiny, owned) VALUES (1, 'unknown', 0, 1);
+      INSERT INTO collection_entry_ribbons (entry_id, ribbon_name) VALUES (1, 'Champion Ribbon');
+    `)
+    db.pragma('foreign_keys = ON')
+
+    expect(() => applySchema(db)).not.toThrow()
+
+    expect(db.pragma('foreign_keys', { simple: true })).toBe(1)
+    const ribbon = db.prepare('SELECT entry_id, ribbon_name FROM collection_entry_ribbons').get() as {
+      entry_id: number
+      ribbon_name: string
+    }
+    expect(ribbon).toEqual({ entry_id: 1, ribbon_name: 'Champion Ribbon' })
   })
 })

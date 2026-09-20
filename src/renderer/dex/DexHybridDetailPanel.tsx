@@ -12,6 +12,9 @@ interface DexHybridDetailPanelProps {
   storageLocations: StorageLocation[]
   speciesAvailability: SpeciesAvailabilityData
   onEditOrigin: () => void
+  /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
+   * opens RibbonsMarksModal, same "parent owns the modal" split as onEditOrigin above. */
+  onEditRibbonsMarks: () => void
 }
 
 /** One label/value pair, omitted entirely by the caller when the value is empty — same
@@ -37,7 +40,8 @@ export function DexHybridDetailPanel({
   tile,
   storageLocations,
   speciesAvailability,
-  onEditOrigin
+  onEditOrigin,
+  onEditRibbonsMarks
 }: DexHybridDetailPanelProps): JSX.Element {
   if (!tile) {
     return (
@@ -94,6 +98,9 @@ export function DexHybridDetailPanel({
             )}
             <button type="button" onClick={onEditOrigin}>
               Edit Origin
+            </button>
+            <button type="button" onClick={onEditRibbonsMarks}>
+              Ribbons &amp; Marks
             </button>
           </>
         ) : (

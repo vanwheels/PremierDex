@@ -11,6 +11,7 @@ import { DexBoxGridCell } from './DexBoxGridCell'
 import { DexBoxPlaceholderModal } from './DexBoxPlaceholderModal'
 import { DexBoxPager } from './DexBoxPager'
 import { OriginModal } from './OriginModal'
+import { RibbonsMarksModal } from './RibbonsMarksModal'
 import type { Box, BoxCell, BoxPlaceholderCell, CellTarget } from './types'
 
 interface DexBoxPaneProps {
@@ -109,6 +110,7 @@ export function DexBoxPane({
   // drag (see DexBoxGridCell's onClickPlaceholder wiring below).
   const [selectedPlaceholderSlot, setSelectedPlaceholderSlot] = useState<number | null>(null)
   const [editingOrigin, setEditingOrigin] = useState(false)
+  const [editingRibbonsMarks, setEditingRibbonsMarks] = useState(false)
   const [dragOverSlot, setDragOverSlot] = useState<number | null>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; target: CellTarget } | null>(null)
   // Leg 5 of the Box View Polish milestone: the slot a "Set placeholder…"/"Change species"
@@ -323,6 +325,7 @@ export function DexBoxPane({
           storageLocations={storageLocations}
           speciesAvailability={speciesAvailability}
           onEditOrigin={() => setEditingOrigin(true)}
+          onEditRibbonsMarks={() => setEditingRibbonsMarks(true)}
           onSaveOrigin={onSaveOrigin}
         />
       </div>
@@ -332,6 +335,13 @@ export function DexBoxPane({
           displayName={selectedEntryCell.displayName}
           onClose={() => setEditingOrigin(false)}
           onSave={onSaveOrigin}
+        />
+      )}
+      {editingRibbonsMarks && selectedEntryCell?.entry.owned && (
+        <RibbonsMarksModal
+          entryId={selectedEntryCell.entry.id}
+          displayName={selectedEntryCell.displayName}
+          onClose={() => setEditingRibbonsMarks(false)}
         />
       )}
       {contextMenu && (
