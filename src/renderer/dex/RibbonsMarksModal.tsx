@@ -18,9 +18,10 @@ interface RibbonsMarksModalProps {
  * two checklists reuse DexResolveGenderModal's scrollable-list shape rather than
  * OriginModal's field-stack, since this is a checklist, not a form.
  *
- * RIBBONS/MARKS (shared/data/ribbons.ts, shared/data/marks.ts) are a placeholder name list
- * for this leg, not the full curated set — see those files' own doc comments. Save is a
- * full replace-all (setEntryRibbons/setEntryMarks), same convention as OriginModal's save.
+ * RIBBONS/MARKS (shared/data/ribbons.ts, shared/data/marks.ts) are Leg 5's full curated
+ * name lists (117 ribbons, 53 marks) — see those files' own doc comments for sourcing and
+ * the retiredOnTransfer/canCoexist metadata this checklist doesn't surface. Save is a full
+ * replace-all (setEntryRibbons/setEntryMarks), same convention as OriginModal's save.
  */
 export function RibbonsMarksModal({ entryId, displayName, onClose }: RibbonsMarksModalProps): JSX.Element {
   const [ribbons, setRibbons] = useState<Set<string>>(new Set())

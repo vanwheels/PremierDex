@@ -22,10 +22,12 @@ const POKE_BALL_LIST_SQL = POKE_BALLS.map((b) => `'${b}'`).join(', ')
 // schema.ts and shared/data/size-classes.ts can't drift apart.
 const SIZE_CLASS_LIST_SQL = SIZE_CLASSES.map((s) => `'${s}'`).join(', ')
 
-// Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) — same
-// closed-set reasoning as above, built from shared/data/ribbons.ts and shared/data/marks.ts
-// so schema.ts can't drift from them. Both lists are placeholders (see those files' own doc
-// comments); Leg 5 widens the CHECK the same way the caught_ball Origin Ball migration did.
+// Ribbons & Marks (Leg 4 schema, Leg 5 curated data — Ribbons/Alpha/Size/Capture-Date
+// Tracking milestone) — same closed-set reasoning as above, built from
+// shared/data/ribbons.ts and shared/data/marks.ts so schema.ts can't drift from them. Leg 5
+// widened both from Leg 4's small placeholder sets to the full curated lists (117
+// ribbons/53 marks); the rebuild below (same shape as the caught_ball Origin Ball migration)
+// self-heals any install that already created these tables against the old CHECK.
 const RIBBON_LIST_SQL = RIBBONS.map((r) => `'${r}'`).join(', ')
 const MARK_LIST_SQL = MARKS.map((m) => `'${m}'`).join(', ')
 
@@ -189,6 +191,9 @@ export function applySchema(db: Database.Database): void {
     -- collection_entries(id) with — see the foreign_keys=OFF additions below on the three
     -- legacy collection_entries rebuild blocks, required so a DROP TABLE collection_entries
     -- there doesn't throw FOREIGN KEY constraint failed against these rows.
+    -- ribbon_name/mark_name's CHECK list is Leg 5's full curated set (see shared/data/
+    -- ribbons.ts/marks.ts); the rebuild block later in this function self-heals any install
+    -- that created these tables back when CHECK was still Leg 4's small placeholder list.
     CREATE TABLE IF NOT EXISTS collection_entry_ribbons (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       entry_id INTEGER NOT NULL REFERENCES collection_entries(id) ON DELETE CASCADE,
@@ -649,6 +654,56 @@ export function applySchema(db: Database.Database): void {
     db.exec(
       `ALTER TABLE collection_entries ADD COLUMN size_class TEXT CHECK (size_class IS NULL OR size_class IN (${SIZE_CLASS_LIST_SQL}))`
     )
+  }
+
+  // collection_entry_ribbons/collection_entry_marks' CHECK lists were fixed at CREATE-time
+  // to Leg 4's 20/22-name placeholder sets, and SQLite can't ALTER a CHECK constraint (same
+  // limitation as the caught_ball/sid-4294 rebuilds above) — Leg 5 replaced both placeholders
+  // with the full curated 117-ribbon/53-mark lists, so any install that already ran the
+  // CREATE TABLE IF NOT EXISTS above pre-Leg-5 has a stale CHECK missing nearly all of them.
+  // Detected via the stored CHECK text directly, same self-healing approach as the
+  // caught_ball rebuild (a sentinel name absent from Leg 4's placeholder but present in
+  // Leg 5's real list), so this doesn't need a version flag and heals however many
+  // ribbons/marks get added in the future. Neither table is referenced by any other table's
+  // FK (nothing points at collection_entry_ribbons/marks as a parent), so unlike the
+  // collection_entries rebuilds above, dropping and recreating them needs no
+  // foreign_keys=OFF dance — only their own entry_id FK into collection_entries is checked,
+  // and it's checked correctly on the INSERT...SELECT below regardless of the pragma.
+  const ribbonsSqlForCheck = db
+    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entry_ribbons'")
+    .get() as { sql: string } | undefined
+  if (ribbonsSqlForCheck?.sql && !ribbonsSqlForCheck.sql.includes("'Cool Ribbon Super'")) {
+    db.exec(`
+      CREATE TABLE collection_entry_ribbons_widened (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        entry_id INTEGER NOT NULL REFERENCES collection_entries(id) ON DELETE CASCADE,
+        ribbon_name TEXT NOT NULL CHECK (ribbon_name IN (${RIBBON_LIST_SQL})),
+        UNIQUE(entry_id, ribbon_name)
+      );
+      INSERT INTO collection_entry_ribbons_widened (id, entry_id, ribbon_name)
+        SELECT id, entry_id, ribbon_name FROM collection_entry_ribbons;
+      DROP TABLE collection_entry_ribbons;
+      ALTER TABLE collection_entry_ribbons_widened RENAME TO collection_entry_ribbons;
+      CREATE INDEX IF NOT EXISTS idx_entry_ribbons_entry ON collection_entry_ribbons(entry_id);
+    `)
+  }
+  const marksSqlForCheck = db
+    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entry_marks'")
+    .get() as { sql: string } | undefined
+  if (marksSqlForCheck?.sql && !marksSqlForCheck.sql.includes("'Curry Mark'")) {
+    db.exec(`
+      CREATE TABLE collection_entry_marks_widened (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        entry_id INTEGER NOT NULL REFERENCES collection_entries(id) ON DELETE CASCADE,
+        mark_name TEXT NOT NULL CHECK (mark_name IN (${MARK_LIST_SQL})),
+        UNIQUE(entry_id, mark_name)
+      );
+      INSERT INTO collection_entry_marks_widened (id, entry_id, mark_name)
+        SELECT id, entry_id, mark_name FROM collection_entry_marks;
+      DROP TABLE collection_entry_marks;
+      ALTER TABLE collection_entry_marks_widened RENAME TO collection_entry_marks;
+      CREATE INDEX IF NOT EXISTS idx_entry_marks_entry ON collection_entry_marks(entry_id);
+    `)
   }
 
   // Backfills `boxes` rows so every Storage Location has at least a Box 1, plus a row for
