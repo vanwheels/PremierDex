@@ -70,7 +70,8 @@ export function createBackupOperations(db: Database.Database): {
     SET owned = @owned, trainer_profile_id = @trainerProfileId, origin_game = @originGame,
       ot_name = @otName, tid = @tid, sid = @sid, language = @language, nickname = @nickname,
       caught_ball = @caughtBall, storage_location_id = @storageLocationId, met_location = @metLocation,
-      box_number = @boxNumber, box_slot = @boxSlot, gender_confirmed = @genderConfirmed
+      box_number = @boxNumber, box_slot = @boxSlot, gender_confirmed = @genderConfirmed,
+      is_alpha = @isAlpha, capture_date = @captureDate
     WHERE id = @id
   `)
 
@@ -172,6 +173,8 @@ export function createBackupOperations(db: Database.Database): {
         boxNumber: number | null
         boxSlot: number | null
         genderConfirmed: boolean
+        isAlpha: boolean
+        captureDate: string | null
       }
       const wantedByKey = new Map<string, WantedEntry>()
       const importOrdinalCounters = new Map<string, number>()
@@ -220,7 +223,11 @@ export function createBackupOperations(db: Database.Database): {
           // yet) rather than trusting CollectionExport's compile-time type, same defensive
           // stance parseCollectionExport already takes on the rest of a hand-edited or
           // stale backup's shape.
-          genderConfirmed: entry.genderConfirmed ?? false
+          genderConfirmed: entry.genderConfirmed ?? false,
+          // Same defensive guard for a pre-Leg-2 (Ribbons/Alpha/Size/Capture-Date
+          // milestone) backup file, which predates both fields.
+          isAlpha: entry.isAlpha ?? false,
+          captureDate: entry.captureDate ?? null
         })
       }
 
@@ -261,7 +268,9 @@ export function createBackupOperations(db: Database.Database): {
             metLocation: wanted?.metLocation ?? null,
             boxNumber: wanted?.boxNumber ?? null,
             boxSlot: wanted?.boxSlot ?? null,
-            genderConfirmed: wanted?.genderConfirmed ? 1 : 0
+            genderConfirmed: wanted?.genderConfirmed ? 1 : 0,
+            isAlpha: wanted?.isAlpha ? 1 : 0,
+            captureDate: wanted?.captureDate ?? null
           })
         }
 

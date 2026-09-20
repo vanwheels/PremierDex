@@ -39,7 +39,9 @@ const ORIGIN_INPUT = {
   language: 'English',
   nickname: 'Bulby',
   caughtBall: 'Great Ball',
-  metLocation: 'Route 1'
+  metLocation: 'Route 1',
+  isAlpha: true,
+  captureDate: '2020-11-15'
 }
 
 describe('collection entry origin', () => {
@@ -67,7 +69,9 @@ describe('collection entry origin', () => {
       language: null,
       nickname: null,
       caughtBall: null,
-      metLocation: null
+      metLocation: null,
+      isAlpha: false,
+      captureDate: null
     })
 
     expect(cleared.originGame).toBeNull()
@@ -78,6 +82,8 @@ describe('collection entry origin', () => {
     expect(cleared.nickname).toBeNull()
     expect(cleared.caughtBall).toBeNull()
     expect(cleared.metLocation).toBeNull()
+    expect(cleared.isAlpha).toBe(false)
+    expect(cleared.captureDate).toBeNull()
   })
 
   it('rejects a caught ball value outside the fixed Poké Ball list at the DB layer', async () => {

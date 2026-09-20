@@ -42,7 +42,9 @@ export function useNicknameEditor(
       language: entry.language,
       nickname: trimmed || null,
       caughtBall: entry.caughtBall,
-      metLocation: entry.metLocation
+      metLocation: entry.metLocation,
+      isAlpha: entry.isAlpha,
+      captureDate: entry.captureDate
     })
   }
 

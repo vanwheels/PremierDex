@@ -104,7 +104,9 @@ describe('exportCollection / importCollection', () => {
       language: 'English',
       nickname: 'Bulby',
       caughtBall: 'Great Ball',
-      metLocation: 'Route 1'
+      metLocation: 'Route 1',
+      isAlpha: true,
+      captureDate: '2020-11-15'
     })
 
     const exported = await storage.exportCollection()
@@ -115,6 +117,8 @@ describe('exportCollection / importCollection', () => {
     expect(exportedEntry.language).toBe('English')
     expect(exportedEntry.caughtBall).toBe('Great Ball')
     expect(exportedEntry.metLocation).toBe('Route 1')
+    expect(exportedEntry.isAlpha).toBe(true)
+    expect(exportedEntry.captureDate).toBe('2020-11-15')
   })
 
   it('resets local origin/nickname data on import when the backup entry has none (full replace, Leg 13)', async () => {
@@ -129,7 +133,9 @@ describe('exportCollection / importCollection', () => {
       language: 'English',
       nickname: 'Bulby',
       caughtBall: 'Great Ball',
-      metLocation: 'Route 1'
+      metLocation: 'Route 1',
+      isAlpha: false,
+      captureDate: null
     })
 
     // A backup from before this entry had a nickname/origin set — full-replace means
@@ -167,7 +173,9 @@ describe('exportCollection / importCollection', () => {
       language: profile.language,
       nickname: 'Bulby',
       caughtBall: 'Great Ball',
-      metLocation: 'Route 1'
+      metLocation: 'Route 1',
+      isAlpha: false,
+      captureDate: null
     })
     await source.setEntryStorageLocation(entry.id, location.id)
     const exported = await source.exportCollection()
@@ -224,7 +232,9 @@ describe('exportCollection / importCollection', () => {
       language: null,
       nickname: null,
       caughtBall: null,
-      metLocation: null
+      metLocation: null,
+      isAlpha: false,
+      captureDate: null
     })
     const exported = await source.exportCollection()
     // Simulate a hand-edited/corrupted backup where the profile array is missing the
@@ -289,7 +299,9 @@ describe('exportCollection / importCollection', () => {
           metLocation: null,
           boxNumber: null,
           boxSlot: null,
-          genderConfirmed: false
+          genderConfirmed: false,
+          isAlpha: false,
+          captureDate: null
         }
       ]
     }

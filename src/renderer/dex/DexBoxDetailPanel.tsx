@@ -104,6 +104,7 @@ export function DexBoxDetailPanel({
           {!cell.homeBoxable && <span className="dex-not-home-boxable-badge">Not Home-boxable</span>}
           {!entry.shiny && cell.alwaysShiny && <span className="dex-always-shiny-badge">Always shiny</span>}
           {entry.shiny && cell.shinyLocked && <span className="dex-shiny-locked-badge">Shiny-locked</span>}
+          {entry.isAlpha && <span className="dex-alpha-badge">Alpha</span>}
           {invalidCombo?.invalid && (
             <span className="dex-invalid-combo-badge" title={invalidCombo.reasons.join('; ')}>
               Invalid combo
@@ -135,6 +136,7 @@ export function DexBoxDetailPanel({
               {entry.language && <DetailField label="Language" value={entry.language} />}
               {entry.originGame && <DetailField label="Origin Game" value={entry.originGame} />}
               {entry.metLocation && <DetailField label="Met Location" value={entry.metLocation} />}
+              {entry.captureDate && <DetailField label="Capture Date" value={entry.captureDate} />}
               <DetailField label="Storage Location" value={storageLocationName} />
             </dl>
             {entry.caughtBall && (

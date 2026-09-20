@@ -562,6 +562,22 @@ export function applySchema(db: Database.Database): void {
     db.exec('ALTER TABLE collection_entries ADD COLUMN gender_confirmed INTEGER NOT NULL DEFAULT 0')
   }
 
+  // is_alpha/capture_date (Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking
+  // milestone, see docs/investigations/ribbons-alpha-size-capture-date.md) — is_alpha is
+  // a plain boolean, same shape as `shiny`; confirmed to apply to both Legends Arceus and
+  // Legends Z-A, not Arceus-only, so no per-game CHECK gates it (same trust-the-user-input
+  // precedent as caught_ball/language). capture_date is a nullable DATE column with no
+  // CHECK (dates aren't a closed set) — Met Date has existed since Gen III with no
+  // per-game gating needed, same looseness as met_location above. Both self-referential
+  // (nothing to widen later), so a plain ALTER TABLE ADD COLUMN is safe, same as
+  // gender_confirmed just above — no rebuild needed.
+  if (!entryColumnsGenderConfirmed.some((c) => c.name === 'is_alpha')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN is_alpha INTEGER NOT NULL DEFAULT 0')
+  }
+  if (!entryColumnsGenderConfirmed.some((c) => c.name === 'capture_date')) {
+    db.exec('ALTER TABLE collection_entries ADD COLUMN capture_date TEXT')
+  }
+
   // Backfills `boxes` rows so every Storage Location has at least a Box 1, plus a row for
   // any box_number collection_entries already reference — covers a pre-Leg-2 install
   // (whose entries can already sit in boxes with no row for them yet, since buildBoxes.ts

@@ -94,6 +94,11 @@ export function DexBoxGridCell({
               ✨
             </span>
           )}
+          {cell.entry.isAlpha && (
+            <span className="dex-box-cell-alpha-badge" aria-hidden="true">
+              α
+            </span>
+          )}
           {cell.entry.caughtBall && (
             <span className="dex-box-cell-ball-badge">
               <BallIcon ball={cell.entry.caughtBall} />

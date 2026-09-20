@@ -170,6 +170,8 @@ describe('applySchema', () => {
     expect(row.caught_ball).toBeNull()
     expect(row.storage_location_id).toBeNull()
     expect(row.met_location).toBeNull()
+    expect(row.is_alpha).toBe(0)
+    expect(row.capture_date).toBeNull()
   })
 
   it('rejects a collection_entries tid past the 6-digit range via the CHECK constraint', () => {

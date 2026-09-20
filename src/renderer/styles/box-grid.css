@@ -98,6 +98,21 @@
   display: block;
 }
 
+/* Alpha (Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) — bottom-right
+   corner, the one spot shiny (top-right) and caught-ball (top-left) leave free. Same
+   pointer-events: none/drop-shadow treatment as the shiny sparkle above. */
+.dex-box-cell-alpha-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+  pointer-events: none;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7));
+}
+
 /* Vanny feedback 2026-09-03: the selection border read as an alarm-red blemish rather
  * than a highlight — dropped for Box view specifically (Hybrid view's own
  * dex-hybrid-tile-selected, which this class is shared with, is untouched). */

@@ -132,13 +132,25 @@ export interface CollectionEntry {
    * per-row gender toggle) — never reset back to false, so re-confirming later is always
    * possible. */
   genderConfirmed: boolean
+  /** Alpha Pokémon (Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
+   * larger, red-eyed, guaranteed-high-IV variants from Legends Arceus and Legends Z-A.
+   * A plain per-individual flag, same shape as `shiny`; deliberately decoupled from the
+   * separate Alpha Mark a Scarlet/Violet transfer-in can carry (see
+   * docs/investigations/ribbons-alpha-size-capture-date.md) — don't try to infer one from
+   * the other. */
+  isAlpha: boolean
+  /** Met Date (Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) — a real
+   * stored field in every mainline game since Generation III, same free-text-adjacent
+   * looseness as metLocation (no per-game gating). ISO 8601 (yyyy-mm-dd) or null.
+   * Display-only in the info bar, no badge. */
+  captureDate: string | null
 }
 
 /** Field set for setEntryOrigin — everything but the assigned id, mirroring
- * TrainerProfileInput's shape. All fields nullable: a blank game/otName clears origin
- * entirely (and forces tid/sid/language/caughtBall/metLocation null), independent of
- * nickname. storageLocationId is deliberately absent here — see CollectionEntry's doc
- * comment above; it's written only via setEntryStorageLocation. */
+ * TrainerProfileInput's shape. A blank game/otName clears origin entirely (and forces
+ * tid/sid/language/caughtBall/metLocation/isAlpha/captureDate to their empty state),
+ * independent of nickname. storageLocationId is deliberately absent here — see
+ * CollectionEntry's doc comment above; it's written only via setEntryStorageLocation. */
 export interface CollectionEntryOriginInput {
   trainerProfileId: number | null
   originGame: string | null
@@ -149,4 +161,6 @@ export interface CollectionEntryOriginInput {
   nickname: string | null
   caughtBall: string | null
   metLocation: string | null
+  isAlpha: boolean
+  captureDate: string | null
 }

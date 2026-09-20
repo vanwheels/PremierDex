@@ -70,6 +70,15 @@
   color: var(--muted);
 }
 
+/* Alpha (Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) — a checkbox
+   field reads better as a row (box beside its label) than origin-modal-field's default
+   column stack, which is built for a label sitting above a text/select input. */
+.origin-modal-checkbox-field {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 /* Apply Template's color picker (Leg 2 of the Dex completeness tier migration) — same
  * label-row spirit as origin-modal-field above, just a fieldset since it's a radio group
  * rather than a single input. */

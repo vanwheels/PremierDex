@@ -63,6 +63,11 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   // independently-editable treatment as caughtBall: not tied to a Trainer Profile, and
   // not seeded by "Copy from Trainer Profile".
   const [metLocation, setMetLocation] = useState(entry.metLocation ?? '')
+  // Alpha + Capture Date (Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking
+  // milestone) — same independently-editable treatment as caughtBall/metLocation: not
+  // tied to a Trainer Profile, not seeded by "Copy from Trainer Profile".
+  const [isAlpha, setIsAlpha] = useState(entry.isAlpha)
+  const [captureDate, setCaptureDate] = useState(entry.captureDate ?? '')
 
   useEffect(() => {
     window.premierDex.listTrainerProfiles().then(setProfiles)
@@ -133,7 +138,9 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
           language: null,
           nickname: entry.nickname,
           caughtBall: null,
-          metLocation: null
+          metLocation: null,
+          isAlpha: false,
+          captureDate: null
         }
       : {
           trainerProfileId,
@@ -144,7 +151,9 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
           language: language || null,
           nickname: entry.nickname,
           caughtBall: caughtBall || null,
-          metLocation: metLocation.trim() || null
+          metLocation: metLocation.trim() || null,
+          isAlpha,
+          captureDate: captureDate || null
         }
     onSave(entry.id, input)
     onClose()
@@ -239,6 +248,14 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
             onChange={(e) => setMetLocation(e.target.value)}
             placeholder="Optional"
           />
+        </label>
+        <label className="origin-modal-field">
+          Capture Date
+          <input type="date" value={captureDate} onChange={(e) => setCaptureDate(e.target.value)} />
+        </label>
+        <label className="origin-modal-field origin-modal-checkbox-field">
+          <input type="checkbox" checked={isAlpha} onChange={(e) => setIsAlpha(e.target.checked)} />
+          Alpha
         </label>
         <div className="origin-modal-actions">
           <button type="button" onClick={handleSave} disabled={!valid}>

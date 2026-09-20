@@ -63,7 +63,7 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     UPDATE collection_entries
     SET trainer_profile_id = @trainerProfileId, origin_game = @originGame, ot_name = @otName,
       tid = @tid, sid = @sid, language = @language, nickname = @nickname, caught_ball = @caughtBall,
-      met_location = @metLocation
+      met_location = @metLocation, is_alpha = @isAlpha, capture_date = @captureDate
     WHERE id = @id
   `)
   // Separate from setEntryOriginStmt above — storage location is its own axis (Leg 3),
@@ -213,9 +213,11 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   const insertDuplicateEntriesStmt = db.prepare(`
     INSERT INTO collection_entries
       (form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
-       language, nickname, caught_ball, storage_location_id, met_location, box_number, box_slot)
+       language, nickname, caught_ball, storage_location_id, met_location, box_number, box_slot,
+       is_alpha, capture_date)
     SELECT form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
-       language, nickname, caught_ball, @newLocationId, met_location, NULL, NULL
+       language, nickname, caught_ball, @newLocationId, met_location, NULL, NULL,
+       is_alpha, capture_date
     FROM collection_entries WHERE storage_location_id = @sourceId
   `)
   const orphanEntriesByTrainerProfileStmt = db.prepare(
@@ -392,7 +394,9 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     },
 
     async setEntryOrigin(entryId: number, input: CollectionEntryOriginInput): Promise<CollectionEntry> {
-      setEntryOriginStmt.run({ id: entryId, ...input })
+      // better-sqlite3 can't bind a JS boolean directly (only numbers/strings/bigints/
+      // buffers/null) — same 1/0 conversion setOwned does above.
+      setEntryOriginStmt.run({ id: entryId, ...input, isAlpha: input.isAlpha ? 1 : 0 })
       return toCollectionEntry(getEntryStmt.get(entryId) as CollectionEntryRow)
     },
 
