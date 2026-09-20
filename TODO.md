@@ -8,15 +8,6 @@ speculative pass. Two items (Multi-select highlight verification, Box view scrol
 are investigation-first — if either turns out bigger than expected mid-leg, split the
 remainder back out to Unscheduled rather than letting the leg balloon.
 
-### [Multi-select highlight verification] — Leg 3
-Multi-selected mons in Box view should all read as highlighted. Leg 4 of Box View Polish
-already added ctrl/shift multi-select with a per-slot `isSelected` prop driving the
-`dex-hybrid-tile-selected` CSS class (DexBoxPane.tsx, DexBoxGridCell.tsx) — needs a look at
-why that isn't reading as sufficiently highlighted in practice: could be the style is too
-subtle across several selected tiles at once, or an interaction bug clearing/limiting
-selection. Raised by Vanny 2026-09-04.
-Last touched: 2026-09-19. Re-check count: 0.
-
 ### [Box view scroller lag] — Leg 4
 Noticeable lag/delay scrolling through boxes in Box view. Distinct from [Virtualize the Dex
 Table body] (that's the main Dex Table; this is the Box view/box tray). Some cost is

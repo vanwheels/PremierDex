@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Multi-select highlight verification] — 2026-09-19
+Leg 3 of the Box View Quick-Wins Sweep. Root cause wasn't "too subtle" — Box view's
+selected-tile style had been zeroed out entirely (`border-color: transparent; background:
+none`) since a 2026-09-03 fix for an alarm-red border, back when Box view was still
+single-select-only and the detail panel doubled as feedback. Leg 4 of Box View Polish's
+multi-select never gets detail-panel feedback at all, so multi-selected tiles read as
+completely unhighlighted rather than merely faint. Restored a toned-down highlight (border/
+background via `color-mix`, same technique as the placeholder-cell border) instead of the
+original full-strength accent border. See commit `0393a76`.
+
 ## [Jump directly to a Box] — 2026-09-19
 Leg 2 of the Box View Quick-Wins Sweep. Added a "Jump to box" `<select>` to DexBoxPager,
 next to Prev/Next, listing every box in the location by number/name — backed by the
