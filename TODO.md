@@ -6,19 +6,6 @@ Picked up 2026-09-19 from Future Milestones, per Vanny's call (see AskUserQuesti
 2026-09-19 — chosen over the other open future-milestone candidates and over bundling the
 small standalone Box-view fixes).
 
-### [Ribbons & Marks schema] — Leg 4
-Per the Leg 1 investigation: Marks are a separate, parallel system to Ribbons (introduced
-Sword/Shield, not a Gen 9 replacement for Ribbons), not a variant of them — both need their
-own many-to-many join table (`collection_entry_ribbons`, `collection_entry_marks`), since a
-Pokémon can hold several Ribbons at once and, despite Marks normally being single-value,
-Partner/Gourmand/Itemfinder/Jumbo/Mini Marks can coexist with another Mark already held.
-Pokémon GO has neither system — excluded from both, same "some games don't have this axis"
-shape as caught_ball. Scope is which Ribbons/Marks an individual *has*, not which one is
-currently "equipped" as a battle Title (irrelevant to a collection tracker). This leg is
-schema + a basic view/edit UI (likely a modal) only; ships against a placeholder list to
-unblock the UI, no real curated data yet.
-Last touched: 2026-09-19. Re-check count: 0.
-
 ### [Ribbons & Marks data curation] — Leg 5
 Hand-curate the ~115 named ribbons (32 Gen III, 48 Gen IV, 9 Gen V, 16 Gen VI, 4 Gen VII, 5
 Gen VIII, 3 Gen IX, per Bulbapedia) and 43 named Marks (35 from Sw/Sh, 8 added in S/V,
@@ -37,6 +24,37 @@ Last touched: 2026-09-19. Re-check count: 0.
 
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized.
+
+### [Ribbons & Marks: List/Collection view entry points] — unscheduled
+Surfaced scoping Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone: the new
+"Ribbons & Marks" modal only opens from Box view and Hybrid view (their detail panel had
+room for a second button next to "Edit Origin"). List view (`DexTable`/`DexRow`) and the old
+Collection view (`CollectionView`/`CollectionRow`) don't get an entry point yet — their
+per-row "Origin" button is already crammed into a dense cell across 1000+ rows (x2 for
+regular/shiny columns), so fitting a second control there is its own layout call, not a
+mechanical copy of the Box/Hybrid wiring. Confirmed 2026-09-19 (AskUserQuestion) as
+out-of-scope for Leg 4.
+Last touched: 2026-09-19. Re-check count: 0.
+
+### [Ribbons & Marks missing from JSON backup export/import] — unscheduled
+Same gap shape as [Box names/empty boxes/placeholders missing from JSON backup export/import]
+below, for the tables Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone added:
+`collection-backup.ts`'s `exportCollection`/`importCollection` don't touch
+`collection_entry_ribbons`/`collection_entry_marks` at all, so a restore silently drops every
+recorded ribbon/mark. Not a quick fold-in — `CollectionExport` needs a version bump (v2→v3,
+same "reject the old version outright" precedent as v1→v2), and entries are matched on
+import by natural key (form/gender/shiny + duplicate ordinal, not raw id — see
+`collection-backup.ts`'s `entryKey`), so ribbon/mark rows would need to travel with their
+owning entry through that same remap rather than a naive id-keyed dump.
+Last touched: 2026-09-19. Re-check count: 0.
+
+### [Ribbons & Marks not cloned by Storage Location "Duplicate"] — unscheduled
+Same already-accepted gap shape as Duplicate not cloning box arrangement (see
+`insertDuplicateEntriesStmt`'s own comment in `sqlite-storage.ts`): cloning a Storage
+Location's entries doesn't carry each entry's ribbons/marks onto its clone, since the single
+`INSERT...SELECT` behind Duplicate only ever touches `collection_entries` columns. Surfaced
+scoping Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone.
+Last touched: 2026-09-19. Re-check count: 0.
 
 ### [Evolution-chain reachability for species availability] — unscheduled
 Surfaced by Leg 2 of the (now-closed) Deeper Per-Game Validity milestone: re-running the

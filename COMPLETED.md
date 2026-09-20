@@ -1,5 +1,8 @@
 # COMPLETED
 
+## [Ribbons & Marks schema] — 2026-09-19
+Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone. See commit `56096fd`.
+
 ## [Size classification] — 2026-09-19
 Leg 3 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone. See commit `8e7a04f`.
 
