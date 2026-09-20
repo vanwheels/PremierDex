@@ -1,30 +1,5 @@
 # TODO
 
-## Current Milestone: Evolution-Chain Reachability for Species Availability
-
-Scoped 2026-09-20 from the Future Milestones entry of the same name. Walks a species'
-evolution ancestors in `checkEntryValidity` so an entry counts as available when any
-ancestor species is (e.g. Ariados via Pal-Park-available Spinarak) — see the original
-Future Milestones entry (now in COMPLETED.md's leg history) for the concretely-named false
-positives this clears. Split into data-acquisition vs. consumption-wiring legs, mirroring
-Leg 5/Leg 8 of the Dex completeness tier migration (`is_final_evolution_stage`'s own
-acquire-then-wire split).
-
-### [Evolution-Chain Reachability] — Leg 2
-Wire the ancestor walk into `checkEntryValidity` (`src/renderer/dex/invalidCombo.ts`):
-given a `species: Species[]` lookup, a species counts as available if it or any ancestor
-(walking `evolvesFromSpeciesId` up to a null root) passes the existing regional-dex/
-supplemental check. `checkEntryValidity` doesn't currently take a species list — thread it
-in from each call site (`DexBoxDetailPanel.tsx`, `DexHybridDetailPanel.tsx` likely already
-have it via `DexBoxPane`/`DexBoxGrid`'s existing `species: Species[]` prop; `DexRow.tsx` via
-`DexTable.tsx` does not yet and needs it added). Verify against the real collection
-(`premierdex.sqlite`, read-only queries reproducing the check, same method as Leg 2 of
-Deeper Per-Game Validity) that the named false positives — Platinum's Ariados/Politoed,
-Emerald's Ledian/Flaaffy/Ampharos/Sunflora/Ambipom, USUM's Ivysaur — actually clear, and
-that no new false positives appear. Then drop the now-resolved forward-reference in
-`supplemental-availability.ts`'s doc comment.
-Last touched: 2026-09-20. Re-check count: 0.
-
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when

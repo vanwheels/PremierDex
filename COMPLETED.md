@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Evolution-Chain Reachability Leg 2: wire the ancestor walk into checkEntryValidity] — 2026-09-20
+Final leg — milestone shipped, see MILESTONES.md. `checkEntryValidity` now takes a
+`speciesById` lookup and walks `evolvesFromSpeciesId` parent pointers so a species counts
+as available when any ancestor is, threaded down through DexTable/DexBoxPane/DexHybridGrid
+(each builds the lookup via useMemo) to DexRow/DexBoxDetailPanel/DexHybridDetailPanel.
+Verified read-only against the real collection: all 8 named false positives clear, no new
+ones introduced. See commit `a50d76a`.
+
 ## [Evolution-Chain Reachability Leg 1: record each species' evolution parent] — 2026-09-20
 Widened `species-evolution.json`/`fetch-evolution-chains.ts` to record each species'
 direct evolution parent (`evolvesFromSpeciesId`) alongside the existing
