@@ -154,6 +154,15 @@ Blocked: needs a real false positive or wrong-game forme to actually surface bef
 worth scoping — not built speculatively ahead of demonstrated need.
 Last touched: 2026-09-19. Re-check count: 0.
 
+### [Species detail popup + evolution family tree] — future milestone
+Raised by Vanny 2026-09-20: a popup for a selected species, with a button that opens its
+evolution family tree — each species in its own circular "bubble," arrows along the
+evolution edges (reusing `evolvesFromSpeciesId`, see the Evolution-Chain Reachability
+milestone), each arrow labeled with how that evolution happens. Vanny plans other features
+for this same popup beyond the family tree, not yet specified. Deliberately not scoped —
+Vanny will provide a mockup when this milestone comes up.
+Last touched: 2026-09-20. Re-check count: 0.
+
 ### [Full UI/UX pass on the Dex interface] — future milestone
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones
 — many input fields, some overlapping in function (e.g. the tier picker's shortcut checkboxes
