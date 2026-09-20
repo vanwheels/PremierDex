@@ -64,6 +64,9 @@ export interface LivingDexViewProps {
   /** Leg 7 of the Dex completeness tier migration: "Fill In"'s bulk write — see
    * StorageAdapter.fillInPlaceholders' own doc comment. */
   onFillInPlaceholders: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
+  /** Leg 1 of the Box View Move & Undo Operations milestone: cross-location move — see
+   * StorageAdapter.moveEntriesToLocation's own doc comment. */
+  onMoveEntriesToLocation: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
 }
 
 /** The Living Dex tab's own content: the per-location tab bar, completion stats, the
@@ -101,7 +104,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onClearBoxPlaceholder,
     onClearAllBoxPlaceholders,
     onBulkSetEntryGender,
-    onFillInPlaceholders
+    onFillInPlaceholders,
+    onMoveEntriesToLocation
   } = props
 
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
@@ -265,6 +269,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           storageLocations={storageLocations}
           storageBoxes={boxesForLocationTab}
           boxPlaceholders={boxPlaceholdersForLocationTab}
+          allBoxes={boxes}
+          allBoxPlaceholders={boxPlaceholders}
           speciesAvailability={speciesAvailability}
           selectedLocationTab={selectedLocationTab}
           onSaveOrigin={onSaveOrigin}
@@ -278,6 +284,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onClearBoxPlaceholder={onClearBoxPlaceholder}
           onClearAllBoxPlaceholders={onClearAllBoxPlaceholders}
           onFillInPlaceholders={onFillInPlaceholders}
+          onMoveEntriesToLocation={onMoveEntriesToLocation}
         />
       </div>
     </>

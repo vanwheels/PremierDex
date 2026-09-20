@@ -82,6 +82,24 @@ export interface StorageAdapter {
     storageLocationId: number,
     placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
   ): Promise<{ applied: CollectionEntry[]; skipped: Array<{ entryId: number; reason: string }> }>
+  /** Cross-location move (Leg 1 of the Box View Move & Undo Operations milestone) — backs
+   * both Box view's drag-a-selection-onto-a-different-location's-pane gesture and its
+   * "Move to location…" picker. Writes each listed entry's storage_location_id and box
+   * position together in one step (same fillInPlaceholderEntryStmt write
+   * fillInPlaceholders already uses) — a plain setEntryStorageLocation-then-
+   * setEntryBoxPosition two-step doesn't work here, since the first step alone leaves the
+   * entry mid-move with no box position, and the second step's own guard requires one
+   * already be assigned. `placements` gives each entry's own exact destination slot rather
+   * than a fillBoxSlots-style single startSlot, since the picker path can spread a
+   * selection across non-contiguous free slots (possibly across more than one box) that
+   * only the caller (which already computed/created room at the destination) knows about.
+   * Does not itself check the target slots are free of non-`placements` occupants — same
+   * contract fillBoxSlots carries; the caller's own placement-finding or drop-target
+   * rejection covers that first. */
+  moveEntriesToLocation(
+    storageLocationId: number,
+    placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
+  ): Promise<CollectionEntry[]>
   exportCollection(): Promise<CollectionExport>
   importCollection(data: CollectionExport): Promise<CollectionImportResult>
   listTrainerProfiles(): Promise<TrainerProfile[]>

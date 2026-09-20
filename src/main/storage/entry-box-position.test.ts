@@ -224,3 +224,62 @@ describe('fillBoxSlots', () => {
     expect((await findBulbasaurEntry(storage, false)).boxNumber).toBeNull()
   })
 })
+
+/**
+ * moveEntriesToLocation (Leg 1 of the Box View Move & Undo Operations milestone) —
+ * cross-location drag-move / "Move to location…" picker. See sqlite-storage.ts's own
+ * comment for why this reuses fillInPlaceholderEntryStmt's single-UPDATE write and needs
+ * no vacate-first step, unlike fillBoxSlots/swapEntryBoxPositions above.
+ */
+describe('moveEntriesToLocation', () => {
+  it('moves entries already boxed at a different location into the target location/box/slot', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const home = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const ranch = await storage.createStorageLocation({ locationType: 'ranch', name: 'Ranch', trainerProfileId: null })
+    const regular = await findBulbasaurEntry(storage, false)
+    const shiny = await findBulbasaurEntry(storage, true)
+    await storage.setEntryStorageLocation(regular.id, home.id)
+    await storage.setEntryStorageLocation(shiny.id, home.id)
+    await storage.setEntryBoxPosition(regular.id, 1, 0)
+    await storage.setEntryBoxPosition(shiny.id, 1, 1)
+
+    const [updatedRegular, updatedShiny] = await storage.moveEntriesToLocation(ranch.id, [
+      { entryId: regular.id, boxNumber: 1, boxSlot: 10 },
+      { entryId: shiny.id, boxNumber: 1, boxSlot: 11 }
+    ])
+
+    expect(updatedRegular.storageLocationId).toBe(ranch.id)
+    expect(updatedRegular.boxNumber).toBe(1)
+    expect(updatedRegular.boxSlot).toBe(10)
+    expect(updatedShiny.storageLocationId).toBe(ranch.id)
+    expect(updatedShiny.boxSlot).toBe(11)
+  })
+
+  it('moves a currently-unboxed entry into a box position at a new location in one step', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const home = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const entry = await findBulbasaurEntry(storage, false)
+    await storage.setEntryStorageLocation(entry.id, home.id)
+
+    const [updated] = await storage.moveEntriesToLocation(home.id, [{ entryId: entry.id, boxNumber: 2, boxSlot: 5 }])
+
+    expect(updated.storageLocationId).toBe(home.id)
+    expect(updated.boxNumber).toBe(2)
+    expect(updated.boxSlot).toBe(5)
+  })
+
+  it('reuses the same box/slot numbering at the destination without colliding with the source row', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const home = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const ranch = await storage.createStorageLocation({ locationType: 'ranch', name: 'Ranch', trainerProfileId: null })
+    const entry = await findBulbasaurEntry(storage, false)
+    await storage.setEntryStorageLocation(entry.id, home.id)
+    await storage.setEntryBoxPosition(entry.id, 1, 0)
+
+    const [updated] = await storage.moveEntriesToLocation(ranch.id, [{ entryId: entry.id, boxNumber: 1, boxSlot: 0 }])
+
+    expect(updated.storageLocationId).toBe(ranch.id)
+    expect(updated.boxNumber).toBe(1)
+    expect(updated.boxSlot).toBe(0)
+  })
+})

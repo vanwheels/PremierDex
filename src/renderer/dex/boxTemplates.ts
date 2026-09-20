@@ -170,6 +170,29 @@ export function placeUnitsIntoSlots(units: RequiredUnit[], boxNumbers: number[],
   return placements
 }
 
+export interface SlotPosition {
+  boxNumber: number
+  boxSlot: number
+}
+
+/** Finds up to `count` empty slots across `boxNumbers`, walked in the same box-number-
+ * then-slot order placeUnitsIntoSlots uses — generalized for a caller (Leg 1 of the Box
+ * View Move & Undo Operations milestone's "Move to location…" picker) that just needs raw
+ * slots to drop entries into rather than tier units to stamp. Returns fewer than `count`
+ * if `boxNumbers` doesn't have enough room; the caller decides whether that means "create
+ * another box and call again" (see DexBoxGrid's handleMoveSelectionToLocation). */
+export function findAvailableSlots(boxNumbers: number[], occupiedSlots: Set<string>, count: number): SlotPosition[] {
+  const slots: SlotPosition[] = []
+  for (const boxNumber of boxNumbers) {
+    for (let boxSlot = 0; boxSlot < BOX_SIZE; boxSlot++) {
+      if (slots.length >= count) return slots
+      if (occupiedSlots.has(slotKey(boxNumber, boxSlot))) continue
+      slots.push({ boxNumber, boxSlot })
+    }
+  }
+  return slots
+}
+
 export interface FillInPlacement {
   entryId: number
   boxNumber: number

@@ -199,6 +199,34 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
       return { applied, skipped }
     }
   )
+  // moveEntriesToLocation (Leg 1 of the Box View Move & Undo Operations milestone) —
+  // cross-location drag-move / "Move to location…" picker. Reuses
+  // fillInPlaceholderEntryStmt's single-UPDATE write (storage_location_id + box_number +
+  // box_slot together) exactly as-is rather than the setEntryStorageLocation-then-
+  // setEntryBoxPosition two-step a same-location move can get away with — that two-step
+  // would trip setEntryBoxPosition's "entry must already have a storage location" guard
+  // between the steps for an entry not yet at any location, plus rewrite the row twice.
+  // `placements` (same shape as fillInPlaceholdersTx's own) rather than a
+  // fillBoxSlots-style single startSlot: unlike a drag drop (always one contiguous run in
+  // one box), the "Move to location…" picker can spread a selection across whatever
+  // scattered slots are actually free at the destination, so the caller computes exact
+  // per-entry positions rather than this method assuming contiguity. No vacate-first step
+  // needed (unlike fillBoxSlotsTx/swapEntryBoxPositionsTx): idx_entries_box_slot's UNIQUE
+  // index is keyed on (storage_location_id, box_number, box_slot), so a dragged entry's
+  // own pre-move row — always at a *different* storage_location_id than the destination,
+  // since this only ever moves entries into a location they don't already occupy — can
+  // never collide with its own new row. Doesn't check the target slots are free of
+  // non-`placements` occupants — same "caller's own rejection/placement-finding covers
+  // that first" contract fillBoxSlots already carries.
+  const moveEntriesToLocationTx = db.transaction(
+    (storageLocationId: number, placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>) => {
+      for (const p of placements) {
+        if (!getEntryStmt.get(p.entryId)) throw new Error('Entry not found')
+        fillInPlaceholderEntryStmt.run({ id: p.entryId, storageLocationId, boxNumber: p.boxNumber, boxSlot: p.boxSlot })
+        clearBoxPlaceholderStmt.run({ storageLocationId, boxNumber: p.boxNumber, boxSlot: p.boxSlot })
+      }
+    }
+  )
   // Clones every entry currently in a source storage location into a target one in a
   // single statement — backs duplicateStorageLocationTx below (Storage Locations tab's
   // "Duplicate" button). Copies every field except id/storage_location_id/box_number/
@@ -523,6 +551,14 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
         applied: applied.map((id) => toCollectionEntry(getEntryStmt.get(id) as CollectionEntryRow)),
         skipped
       }
+    },
+
+    async moveEntriesToLocation(
+      storageLocationId: number,
+      placements: Array<{ entryId: number; boxNumber: number; boxSlot: number }>
+    ): Promise<CollectionEntry[]> {
+      moveEntriesToLocationTx(storageLocationId, placements)
+      return placements.map((p) => toCollectionEntry(getEntryStmt.get(p.entryId) as CollectionEntryRow))
     },
 
     // exportCollection/importCollection live in collection-backup.ts (Leg 3 of the Box

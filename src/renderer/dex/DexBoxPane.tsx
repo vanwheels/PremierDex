@@ -10,14 +10,19 @@ import { DexBoxContextMenu, type DexBoxContextMenuAction } from './DexBoxContext
 import { DexBoxGridCell } from './DexBoxGridCell'
 import { DexBoxPlaceholderModal } from './DexBoxPlaceholderModal'
 import { DexBoxPager } from './DexBoxPager'
+import { DexMoveToLocationModal } from './DexMoveToLocationModal'
 import { OriginModal } from './OriginModal'
 import { RibbonsMarksModal } from './RibbonsMarksModal'
 import { prefetchBoxSprites } from './spritePrefetch'
 import type { Box, BoxCell, BoxPlaceholderCell, CellTarget } from './types'
 
 interface DexBoxPaneProps {
-  /** The selected location's full box list, shared by every open pane — see buildBoxes.ts.
-   * Always non-empty by the time a pane renders (DexBoxGrid's own loading guard). */
+  /** This pane's own location's full box list — see buildBoxes.ts. Shared with the other
+   * pane only when both happen to show the same location (the common case, and the
+   * default when a second pane first opens); since Leg 1 of the Box View Move & Undo
+   * Operations milestone a second pane can pick a different location via DexBoxGrid's own
+   * location dropdown, in which case each pane gets its own `boxes`. Always non-empty by
+   * the time a pane renders (DexBoxGrid's own loading guard). */
   boxes: Box[]
   initialBoxIndex: number
   storageLocations: StorageLocation[]
@@ -32,18 +37,36 @@ interface DexBoxPaneProps {
   /** The real (non-null) location id — a pane never renders for the Unassigned tab, same
    * guard as DexBoxGrid's own selectedLocationTab === null branch. */
   storageLocationId: number
-  /** Every entry id currently occupying a box slot anywhere in this location, regardless
-   * of which pane (or neither) is currently displaying that box — Leg 3's generalization
-   * of the pre-Leg-3 "is this entry in *my own* cells" check, so that a filled cell dragged
-   * from the other open pane onto an occupied cell here is recognized as a real swap
-   * instead of being silently rejected as if it came from the tray. */
+  /** Every entry id currently occupying a box slot anywhere in *this pane's own* location,
+   * regardless of which pane (or neither) is currently displaying that box — Leg 3's
+   * generalization of the pre-Leg-3 "is this entry in *my own* cells" check, so that a
+   * filled cell dragged from the other open pane onto an occupied cell here is recognized
+   * as a real swap instead of being silently rejected as if it came from the tray. Scoped
+   * per-pane (not shared) since Leg 1 of the Box View Move & Undo Operations milestone —
+   * see `boxes`' own doc comment above. */
   boxedEntryIds: Set<number>
+  /** Leg 1 of the Box View Move & Undo Operations milestone: every entry's actual current
+   * storage location (or null), collection-wide — not just this pane's own location. Lets
+   * handleDropOnSlot tell a same-location drag (this pane's own cells, or the tray, which
+   * always belongs to the primary tab's location) apart from a cross-location one (a
+   * second pane showing a different location than this one). */
+  entryLocationMap: Map<number, number | null>
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   onSetEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   onSwapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
   /** Leg 4 of the Box View Polish milestone: dragging a multi-selection of cells — see
    * handleDropOnSlot below. */
   onFillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
+  /** Leg 1 of the Box View Move & Undo Operations milestone: a drag whose dragged entries
+   * don't belong to this pane's own location — see handleDropOnSlot's cross-location
+   * branch. Always a contiguous run starting at `startSlot`, same shape as onFillBoxSlots,
+   * since a drag-and-drop gesture always has one concrete drop point to fill from. */
+  onMoveToLocation: (entryIds: number[], storageLocationId: number, boxNumber: number, startSlot: number) => void
+  /** Leg 1: "Move to location…" context-menu action — the dedicated-picker half of
+   * cross-location move, for a destination that isn't already open in a second pane.
+   * DexBoxGrid finds (creating a box if needed) room at the destination and writes the
+   * result; this pane just gathers which entries and which location. */
+  onMoveSelectionToLocation: (entryIds: number[], destinationLocationId: number) => Promise<void>
   onAddBox: (storageLocationId: number) => Promise<StorageBox>
   onRenameBox: (boxId: number, name: string | null) => void
   /** Leg 5 of the Box View Polish milestone: right-click an empty slot ("Set
@@ -71,9 +94,14 @@ interface DexBoxPaneProps {
  * tabs remounts each pane fresh rather than carrying a stale box index or selection across
  * — replaces the single-pane version's old reset-by-useEffect.
  *
- * `boxes` is the same shared array in both panes; only each pane's own `initialBoxIndex`/
- * internal navigation differs, so dragging a cell from one pane onto the other targets a
- * different box within the same location, not a different location.
+ * `boxes` is the same shared array in both panes when they show the same location (still
+ * the default); only each pane's own `initialBoxIndex`/internal navigation differs, so
+ * dragging a cell from one pane onto the other targets a different box within that shared
+ * location. Since Leg 1 of the Box View Move & Undo Operations milestone, a second pane
+ * can instead be pointed at a different location (DexBoxGrid's location dropdown), in
+ * which case each pane gets its own `boxes`/`boxedEntryIds` and a cross-pane drag becomes
+ * a cross-location move (see handleDropOnSlot's cross-location branch, gated on
+ * `entryLocationMap`).
  */
 export function DexBoxPane({
   boxes,
@@ -84,10 +112,13 @@ export function DexBoxPane({
   forms,
   storageLocationId,
   boxedEntryIds,
+  entryLocationMap,
   onSaveOrigin,
   onSetEntryBoxPosition,
   onSwapEntryBoxPositions,
   onFillBoxSlots,
+  onMoveToLocation,
+  onMoveSelectionToLocation,
   onAddBox,
   onRenameBox,
   onSetBoxPlaceholder,
@@ -117,6 +148,11 @@ export function DexBoxPane({
   // Leg 5 of the Box View Polish milestone: the slot a "Set placeholder…"/"Change species"
   // context-menu action opened DexBoxPlaceholderModal for — null means the modal is closed.
   const [placeholderTarget, setPlaceholderTarget] = useState<CellTarget | null>(null)
+  // Leg 1 of the Box View Move & Undo Operations milestone: the entry id(s) a "Move to
+  // location…" context-menu action opened DexMoveToLocationModal for — null means the
+  // modal is closed. Captured up front (rather than re-read from selectedSlots/target at
+  // save time) since the context menu can close the selection state in between.
+  const [movingEntryIds, setMovingEntryIds] = useState<number[] | null>(null)
 
   const clampedIndex = Math.min(boxIndex, boxes.length - 1)
   const box = boxes[clampedIndex]
@@ -223,6 +259,26 @@ export function DexBoxPane({
     // clearBoxPlaceholderStmt) — only a real entry occupant is a swap/reject target below.
     const targetCell = cells[targetSlot]
     const targetEntry = targetCell?.kind === 'entry' ? targetCell : null
+
+    // Leg 1 of the Box View Move & Undo Operations milestone: the dragged batch's home
+    // location (uniform across the batch — a multi-select only ever spans one pane's own
+    // grid) differs from this pane's own location, so this is a cross-location move
+    // regardless of selection size. A same-location drop has a swap path (single) and a
+    // vacate-first reshuffle (multi, see onFillBoxSlots below) for landing on an already-
+    // occupied slot; cross-location has neither this leg — an occupied target slot is
+    // rejected outright, same as the same-location multi-drop's own occupancy rule.
+    if ((entryLocationMap.get(draggedEntryIds[0]) ?? null) !== storageLocationId) {
+      if (targetSlot + draggedEntryIds.length > cells.length) return
+      const draggedIdSet = new Set(draggedEntryIds)
+      for (let i = 0; i < draggedEntryIds.length; i++) {
+        const occupant = cells[targetSlot + i]
+        if (occupant?.kind === 'entry' && !draggedIdSet.has(occupant.entry.id)) return
+      }
+      onMoveToLocation(draggedEntryIds, storageLocationId, box.boxNumber, targetSlot)
+      clearSelection()
+      return
+    }
+
     if (draggedEntryIds.length === 1) {
       const draggedEntryId = draggedEntryIds[0]
       if (targetEntry?.entry.id === draggedEntryId) return
@@ -262,7 +318,21 @@ export function DexBoxPane({
   // CellTarget's own doc comment.
   const contextMenuActions = (target: CellTarget): DexBoxContextMenuAction[] => {
     if (target.kind === 'entry') {
+      // Right-clicking a cell that's part of a live multi-selection acts on the whole
+      // selection (Leg 1 of the Box View Move & Undo Operations milestone); right-clicking
+      // any other filled cell acts on just that one, same "unselected item" precedent
+      // handleDragStart already follows for drag.
+      const entryIds = selectedSlots.includes(target.slot)
+        ? selectedSlots.map((s) => cells[s]).filter((c): c is BoxCell => c?.kind === 'entry').map((c) => c.entry.id)
+        : [target.entryId]
       return [
+        {
+          label: entryIds.length === 1 ? 'Move to location…' : `Move ${entryIds.length} entries to location…`,
+          onClick: () => {
+            setMovingEntryIds(entryIds)
+            setContextMenu(null)
+          }
+        },
         {
           label: 'Remove from box',
           onClick: () => {
@@ -353,6 +423,19 @@ export function DexBoxPane({
           entryId={selectedEntryCell.entry.id}
           displayName={selectedEntryCell.displayName}
           onClose={() => setEditingRibbonsMarks(false)}
+        />
+      )}
+      {movingEntryIds && (
+        <DexMoveToLocationModal
+          entryCount={movingEntryIds.length}
+          storageLocations={storageLocations}
+          currentLocationId={storageLocationId}
+          onClose={() => setMovingEntryIds(null)}
+          onMove={(destinationLocationId) => {
+            onMoveSelectionToLocation(movingEntryIds, destinationLocationId)
+            setMovingEntryIds(null)
+            clearSelection()
+          }}
         />
       )}
       {contextMenu && (

@@ -38,8 +38,24 @@
  * whole view rather than living inside either pane's own pager. */
 .dex-box-toggle-row {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
+}
+
+/* Leg 1 of the Box View Move & Undo Operations milestone: the second pane's own location
+ * picker, next to "Open/Close Second Box" — plain <select>, same understated treatment as
+ * the pager's own "Jump to box" picker (dex-box-jump-select) rather than new chrome. */
+.dex-box-second-location-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.dex-box-second-location-select {
+  max-width: 12rem;
 }
 
 /* display: inline-grid keeps the grid sized to its own 6 columns instead of stretching to

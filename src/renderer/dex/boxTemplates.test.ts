@@ -9,6 +9,7 @@ import {
   computeFillInPlacements,
   countAvailableSlots,
   extraBoxesNeeded,
+  findAvailableSlots,
   pendingRequiredUnits,
   placeUnitsIntoSlots,
   requiredUnits
@@ -219,6 +220,28 @@ describe('placeUnitsIntoSlots', () => {
     const occupied = new Set(Array.from({ length: 29 }, (_, i) => `1:${i}`))
     const placements = placeUnitsIntoSlots(units, [1], occupied)
     expect(placements).toEqual([{ boxNumber: 1, boxSlot: 29, formId: 1, gender: 'unknown', shiny: false }])
+  })
+})
+
+describe('findAvailableSlots', () => {
+  it('finds empty slots in box-then-slot order, skipping occupied ones', () => {
+    const slots = findAvailableSlots([1], new Set(['1:0']), 2)
+    expect(slots).toEqual([
+      { boxNumber: 1, boxSlot: 1 },
+      { boxNumber: 1, boxSlot: 2 }
+    ])
+  })
+
+  it('overflows into a later box once an earlier one is full', () => {
+    const occupied = new Set(Array.from({ length: 30 }, (_, i) => `1:${i}`))
+    const slots = findAvailableSlots([1, 2], occupied, 1)
+    expect(slots).toEqual([{ boxNumber: 2, boxSlot: 0 }])
+  })
+
+  it('returns fewer than count when boxNumbers runs out of room', () => {
+    const occupied = new Set(Array.from({ length: 29 }, (_, i) => `1:${i}`))
+    const slots = findAvailableSlots([1], occupied, 2)
+    expect(slots).toEqual([{ boxNumber: 1, boxSlot: 29 }])
   })
 })
 

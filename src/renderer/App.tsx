@@ -101,6 +101,7 @@ export function App(): JSX.Element {
               onClearBoxPlaceholder={data.clearBoxPlaceholder}
               onClearAllBoxPlaceholders={data.clearAllBoxPlaceholders}
               onFillInPlaceholders={data.fillInPlaceholders}
+              onMoveEntriesToLocation={data.moveEntriesToLocation}
             />
           </div>
           {view === 'collection' && (

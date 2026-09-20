@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
@@ -12,6 +12,7 @@ import {
   computeFillInPlacements,
   countAvailableSlots,
   extraBoxesNeeded,
+  findAvailableSlots,
   pendingRequiredUnits,
   placeUnitsIntoSlots,
   slotKey,
@@ -41,6 +42,13 @@ interface DexBoxGridProps {
   /** Leg 5 of the Box View Polish milestone: same pre-scoped-to-the-selected-location
    * convention as storageBoxes. */
   boxPlaceholders: BoxPlaceholder[]
+  /** Leg 1 of the Box View Move & Undo Operations milestone: every box, collection-wide,
+   * unlike storageBoxes above — lets a second pane show a *different* location than the
+   * primary tab (boxesForLocation below), and lets "Move to location…" find/create room
+   * in a location that isn't open in either pane. */
+  allBoxes: StorageBox[]
+  /** Same collection-wide convention as allBoxes above. */
+  allBoxPlaceholders: BoxPlaceholder[]
   speciesAvailability: SpeciesAvailabilityData
   /** Same axis as DexLocationTabs' `selected` — needed here (unlike DexHybridGrid, which
    * only ever sees already-scoped `sections`) because Box view has to tell "the Unassigned
@@ -74,6 +82,9 @@ interface DexBoxGridProps {
   /** Leg 7 of the Dex completeness tier migration: "Fill In" — see
    * StorageAdapter.fillInPlaceholders' own doc comment. */
   onFillInPlaceholders: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
+  /** Leg 1 of the Box View Move & Undo Operations milestone: cross-location move — see
+   * StorageAdapter.moveEntriesToLocation's own doc comment. */
+  onMoveEntriesToLocation: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
 }
 
 /**
@@ -82,9 +93,12 @@ interface DexBoxGridProps {
  * time rather than Hybrid's continuous flow, matching HOME's own Box view screen (as
  * opposed to its List View, which Hybrid mirrors instead).
  *
- * Only entries within `entries` (already scoped to the selected Storage Location tab by
- * LivingDexView) can appear — a box is always a sub-unit of one real location, never
- * cross-location.
+ * The primary pane only ever shows `entries` (already scoped to the selected Storage
+ * Location tab by LivingDexView) — a box is always a sub-unit of one real location, never
+ * cross-location. Since Leg 1 of the Box View Move & Undo Operations milestone the second
+ * pane can show a *different* location's own boxes instead (see this doc comment's own Leg
+ * 1 paragraph below) — that still never mixes two locations' entries into one box, it just
+ * means the two open panes no longer have to agree on which location they're each showing.
  *
  * Leg 3 of the Box View Polish milestone split the actual pager/grid/detail-panel/
  * drag-and-drop rendering out into DexBoxPane so a second one can open side by side with
@@ -93,9 +107,19 @@ interface DexBoxGridProps {
  * primary and the tray rather than displacing the tray — the simpler of the two layouts
  * the milestone note flagged as an implementation-time decision, and it leaves the tray's
  * own layout untouched. Each pane keeps its own navigation/selection state (see
- * DexBoxPane), but they share one `boxes` array and one `boxedEntryIds` set so a cell
- * dragged from one pane onto the other follows the exact same swap/move rules as dragging
- * within a single pane.
+ * DexBoxPane); when both show the same location (still the default whenever a second pane
+ * opens) they share one `boxes` array and one `boxedEntryIds` set so a cell dragged from
+ * one pane onto the other follows the exact same swap/move rules as dragging within a
+ * single pane.
+ *
+ * Leg 1 of the Box View Move & Undo Operations milestone let the second pane instead show
+ * a different location (the location dropdown next to "Open Second Box") — each pane then
+ * gets its own boxes/boxedEntryIds, computed on demand for that location via
+ * boxesForLocation below, and a cross-pane drag routes through onMoveEntriesToLocation
+ * instead of the same-location onFillBoxSlots/onSwapEntryBoxPositions (see DexBoxPane's
+ * handleDropOnSlot). The same boxesForLocation-plus-onMoveEntriesToLocation machinery also
+ * backs "Move to location…", the picker-driven alternative for when the destination isn't
+ * open in either pane (handleMoveSelectionToLocation below).
  */
 export function DexBoxGrid({
   entries,
@@ -105,6 +129,8 @@ export function DexBoxGrid({
   storageLocations,
   storageBoxes,
   boxPlaceholders,
+  allBoxes,
+  allBoxPlaceholders,
   speciesAvailability,
   selectedLocationTab,
   onSaveOrigin,
@@ -117,7 +143,8 @@ export function DexBoxGrid({
   onSetBoxPlaceholders,
   onClearBoxPlaceholder,
   onClearAllBoxPlaceholders,
-  onFillInPlaceholders
+  onFillInPlaceholders,
+  onMoveEntriesToLocation
 }: DexBoxGridProps): JSX.Element {
   const boxes = useMemo(
     () => buildBoxes(storageBoxes, species, forms, entries, boxPlaceholders),
@@ -143,6 +170,54 @@ export function DexBoxGrid({
   const handlePrimaryBoxChange = useCallback((box: Box) => setPrimaryBox(box), [])
   // Leg 2 of the Dex completeness tier migration.
   const [templateModalOpen, setTemplateModalOpen] = useState(false)
+
+  // Leg 1 of the Box View Move & Undo Operations milestone: which location the second
+  // pane shows, overriding the primary tab — null means "mirror the primary tab" (the
+  // default the moment a second pane opens, and after a tab switch below), not literally
+  // "no location", since selectedLocationTab is guaranteed non-null past this function's
+  // own early return.
+  const [secondLocationId, setSecondLocationId] = useState<number | null>(null)
+  // A cross-location override from a previous tab shouldn't silently carry over onto a new
+  // primary tab's context — resets back to "mirror primary" on every tab switch, same
+  // remount-fresh convention DexBoxPane's own `key` already follows for tab switches.
+  useEffect(() => {
+    setSecondLocationId(null)
+  }, [selectedLocationTab])
+  const effectiveSecondLocationId = secondLocationId ?? selectedLocationTab
+
+  // Every entry's actual current storage location, collection-wide — see DexBoxPane's
+  // entryLocationMap doc comment for why handleDropOnSlot needs this rather than just
+  // this location's own boxedEntryIds.
+  const entryLocationById = useMemo(() => {
+    const map = new Map<number, number | null>()
+    for (const entry of allEntries) map.set(entry.id, entry.storageLocationId)
+    return map
+  }, [allEntries])
+
+  // Builds a Box[] for any location, not just the selected tab — used for the second
+  // pane's own boxes when it's pointed at a different location than the primary, and for
+  // "Move to location…" finding room in a location that isn't open in either pane.
+  const boxesForLocation = useCallback(
+    (locationId: number): Box[] => {
+      const locationEntries = allEntries.filter((e) => e.storageLocationId === locationId)
+      const locationBoxes = allBoxes.filter((b) => b.storageLocationId === locationId)
+      const locationPlaceholders = allBoxPlaceholders.filter((p) => p.storageLocationId === locationId)
+      return buildBoxes(locationBoxes, species, forms, locationEntries, locationPlaceholders)
+    },
+    [allEntries, allBoxes, allBoxPlaceholders, species, forms]
+  )
+  // Only actually built while the second pane is open and pointed somewhere — no sense
+  // paying buildBoxes' cost on every render otherwise.
+  const secondBoxes = useMemo(
+    () => (secondBoxOpen && effectiveSecondLocationId !== null ? boxesForLocation(effectiveSecondLocationId) : []),
+    [secondBoxOpen, effectiveSecondLocationId, boxesForLocation]
+  )
+  const secondBoxedEntryIds = useMemo(() => {
+    if (!secondBoxOpen || effectiveSecondLocationId === null) return new Set<number>()
+    return new Set(
+      allEntries.filter((e) => e.storageLocationId === effectiveSecondLocationId && e.boxNumber !== null).map((e) => e.id)
+    )
+  }, [secondBoxOpen, effectiveSecondLocationId, allEntries])
 
   if (selectedLocationTab === null) {
     return (
@@ -179,6 +254,51 @@ export function DexBoxGrid({
     const firstEmptySlot = primaryBox.cells.findIndex((c) => c === null)
     if (firstEmptySlot === -1) return
     onSetEntryBoxPosition(draggedEntryId, primaryBox.boxNumber, firstEmptySlot)
+  }
+
+  // Leg 1 of the Box View Move & Undo Operations milestone: the drag-onto-a-different-
+  // location-pane gesture — DexBoxPane already resolved a concrete contiguous run
+  // (targetSlot..targetSlot+entryIds.length-1) against its own displayed box before
+  // calling, so this just reshapes that into onMoveEntriesToLocation's per-entry
+  // placements shape.
+  const handleDragMoveToLocation = (
+    entryIds: number[],
+    storageLocationId: number,
+    boxNumber: number,
+    startSlot: number
+  ): void => {
+    const placements = entryIds.map((entryId, i) => ({ entryId, boxNumber, boxSlot: startSlot + i }))
+    onMoveEntriesToLocation(storageLocationId, placements)
+  }
+
+  // "Move to location…" (Leg 1): unlike the drag gesture above, there's no drop point to
+  // fill contiguously from — finds up to entryIds.length free slots at the destination,
+  // creating boxes there as needed, same shortfall-loop shape as handleApplyTemplate below
+  // (sequential awaits, one box at a time). Free slots are gathered fresh from allBoxes/
+  // allEntries/allBoxPlaceholders each pass through the loop rather than incrementally
+  // patched, since onAddBox's own resolved StorageBox is the only new fact each iteration
+  // actually adds.
+  const handleMoveSelectionToLocation = async (entryIds: number[], destinationLocationId: number): Promise<void> => {
+    const occupiedSlots = new Set<string>()
+    for (const entry of allEntries) {
+      if (entry.storageLocationId === destinationLocationId && entry.boxNumber !== null && entry.boxSlot !== null) {
+        occupiedSlots.add(slotKey(entry.boxNumber, entry.boxSlot))
+      }
+    }
+    for (const placeholder of allBoxPlaceholders) {
+      if (placeholder.storageLocationId === destinationLocationId) occupiedSlots.add(slotKey(placeholder.boxNumber, placeholder.boxSlot))
+    }
+    const boxNumbers = allBoxes.filter((b) => b.storageLocationId === destinationLocationId).map((b) => b.boxNumber)
+
+    let slots = findAvailableSlots(boxNumbers, occupiedSlots, entryIds.length)
+    while (slots.length < entryIds.length) {
+      const created = await onAddBox(destinationLocationId)
+      boxNumbers.push(created.boxNumber)
+      slots = findAvailableSlots(boxNumbers, occupiedSlots, entryIds.length)
+    }
+
+    const placements = entryIds.map((entryId, i) => ({ entryId, boxNumber: slots[i].boxNumber, boxSlot: slots[i].boxSlot }))
+    await onMoveEntriesToLocation(destinationLocationId, placements)
   }
 
   // Apply Template (Leg 2 of the Dex completeness tier migration, redefined total-based at
@@ -240,8 +360,13 @@ export function DexBoxGrid({
   // Opens the second pane on the box right after whatever the primary is currently
   // showing (falling back to the same box if there's only one) — the pairing most likely
   // to be useful for an immediate cross-box drag, rather than always defaulting to box 1.
+  // Only meaningful when the second pane mirrors the primary's own location (Leg 1 of the
+  // Box View Move & Undo Operations milestone) — pointed at a different location, "the box
+  // after whatever the primary shows" has no relationship to that other location's own
+  // boxes, so it just opens on box 1 there instead.
   const primaryIndex = primaryBox ? boxes.findIndex((b) => b.id === primaryBox.id) : 0
-  const secondBoxInitialIndex = Math.min(Math.max(primaryIndex, 0) + 1, boxes.length - 1)
+  const secondBoxInitialIndex =
+    effectiveSecondLocationId === selectedLocationTab ? Math.min(Math.max(primaryIndex, 0) + 1, boxes.length - 1) : 0
 
   return (
     <div className="dex-box-view">
@@ -249,6 +374,26 @@ export function DexBoxGrid({
         <button type="button" onClick={() => setSecondBoxOpen((open) => !open)}>
           {secondBoxOpen ? '✕ Close Second Box' : '⧉ Open Second Box'}
         </button>
+        {/* Leg 1 of the Box View Move & Undo Operations milestone: lets the second pane
+         * point at a different location than the primary tab, for the drag-onto-second-
+         * pane half of cross-location move (DexBoxPane's handleDropOnSlot). Only shown
+         * once the second pane is actually open — no destination to pick otherwise. */}
+        {secondBoxOpen && (
+          <label className="dex-box-second-location-label">
+            Second box:
+            <select
+              className="dex-box-second-location-select"
+              value={effectiveSecondLocationId ?? ''}
+              onChange={(e) => setSecondLocationId(Number(e.target.value))}
+            >
+              {storageLocations.map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
         <button type="button" onClick={() => setTemplateModalOpen(true)}>
           Apply Template…
         </button>
@@ -270,31 +415,40 @@ export function DexBoxGrid({
           forms={forms}
           storageLocationId={selectedLocationTab}
           boxedEntryIds={boxedEntryIds}
+          entryLocationMap={entryLocationById}
           onSaveOrigin={onSaveOrigin}
           onSetEntryBoxPosition={onSetEntryBoxPosition}
           onSwapEntryBoxPositions={onSwapEntryBoxPositions}
           onFillBoxSlots={onFillBoxSlots}
+          onMoveToLocation={handleDragMoveToLocation}
+          onMoveSelectionToLocation={handleMoveSelectionToLocation}
           onAddBox={onAddBox}
           onRenameBox={onRenameBox}
           onSetBoxPlaceholder={onSetBoxPlaceholder}
           onClearBoxPlaceholder={onClearBoxPlaceholder}
           onCurrentBoxChange={handlePrimaryBoxChange}
         />
-        {secondBoxOpen && (
+        {secondBoxOpen && effectiveSecondLocationId !== null && secondBoxes.length === 0 && (
+          <div className="dex-box-empty-state">Loading this location's boxes…</div>
+        )}
+        {secondBoxOpen && effectiveSecondLocationId !== null && secondBoxes.length > 0 && (
           <DexBoxPane
-            key={`${selectedLocationTab}-second`}
-            boxes={boxes}
+            key={`second-${effectiveSecondLocationId}`}
+            boxes={secondBoxes}
             initialBoxIndex={secondBoxInitialIndex}
             storageLocations={storageLocations}
             speciesAvailability={speciesAvailability}
             species={species}
             forms={forms}
-            storageLocationId={selectedLocationTab}
-            boxedEntryIds={boxedEntryIds}
+            storageLocationId={effectiveSecondLocationId}
+            boxedEntryIds={secondBoxedEntryIds}
+            entryLocationMap={entryLocationById}
             onSaveOrigin={onSaveOrigin}
             onSetEntryBoxPosition={onSetEntryBoxPosition}
             onSwapEntryBoxPositions={onSwapEntryBoxPositions}
             onFillBoxSlots={onFillBoxSlots}
+            onMoveToLocation={handleDragMoveToLocation}
+            onMoveSelectionToLocation={handleMoveSelectionToLocation}
             onAddBox={onAddBox}
             onSetBoxPlaceholder={onSetBoxPlaceholder}
             onClearBoxPlaceholder={onClearBoxPlaceholder}

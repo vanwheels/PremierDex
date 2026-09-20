@@ -44,6 +44,9 @@ export interface CollectionData {
   /** "Fill In" (Leg 7 of the Dex completeness tier migration) — see
    * StorageAdapter.fillInPlaceholders' own doc comment. */
   fillInPlaceholders: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
+  /** Cross-location move (Leg 1 of the Box View Move & Undo Operations milestone) — see
+   * StorageAdapter.moveEntriesToLocation's own doc comment. */
+  moveEntriesToLocation: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
   setCollapsedDisplayForm: (speciesId: number, formId: number | null) => void
   /** "Add Box" (Leg 2 of the Box View Polish milestone) — resolves with the newly created
    * box so DexBoxGrid can jump straight to it. */
@@ -235,6 +238,22 @@ export function useCollectionData(): CollectionData {
     )
   }, [])
 
+  // Cross-location move (Leg 1 of the Box View Move & Undo Operations milestone) — same
+  // updatedById merge and placeholder-clear mirror as fillInPlaceholders above, just
+  // unconditional (every listed placement always lands, unlike fillInPlaceholders' stale-
+  // state tolerance) since the caller (DexBoxGrid) computed `placements` from its own
+  // just-read state immediately before calling.
+  const moveEntriesToLocation = useCallback(async (storageLocationId: number, placements: FillInPlacement[]): Promise<void> => {
+    if (placements.length === 0) return
+    const updated = await window.premierDex.moveEntriesToLocation(storageLocationId, placements)
+    const updatedById = new Map(updated.map((entry) => [entry.id, entry]))
+    setEntries((prev) => prev.map((entry) => updatedById.get(entry.id) ?? entry))
+    const filledSlots = new Set(placements.map((p) => `${storageLocationId}:${p.boxNumber}:${p.boxSlot}`))
+    setBoxPlaceholdersState((prev) =>
+      prev.filter((p) => !filledSlots.has(`${p.storageLocationId}:${p.boxNumber}:${p.boxSlot}`))
+    )
+  }, [])
+
   const setCollapsedDisplayForm = useCallback((speciesId: number, formId: number | null): void => {
     window.premierDex.setCollapsedDisplayForm(speciesId, formId).then((updated) => {
       setSpecies((prev) => prev.map((sp) => (sp.id === updated.id ? updated : sp)))
@@ -326,6 +345,7 @@ export function useCollectionData(): CollectionData {
     bulkMoveEntries,
     bulkSetEntryGender,
     fillInPlaceholders,
+    moveEntriesToLocation,
     setCollapsedDisplayForm,
     addBox,
     renameBox,

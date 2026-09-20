@@ -18,6 +18,9 @@ export const PokemonIpcChannel = {
   /** "Fill In" (Leg 7 of the Dex completeness tier migration) — see
    * StorageAdapter.fillInPlaceholders' own doc comment. */
   fillInPlaceholders: 'pokemon:collectionEntries:fillInPlaceholders',
+  /** Cross-location move (Leg 1 of the Box View Move & Undo Operations milestone) — see
+   * StorageAdapter.moveEntriesToLocation's own doc comment. */
+  moveEntriesToLocation: 'pokemon:collectionEntries:moveToLocation',
   setCollapsedDisplayForm: 'pokemon:species:setCollapsedDisplayForm',
   /** Leg 6: static per-game species-availability data (see load-species-data.ts),
    * not a StorageAdapter/DB method — there's no collection_entries-shaped row to read,
