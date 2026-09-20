@@ -131,6 +131,7 @@ export function DexBoxGridCell({
           pokeapiId={cell.pokeapiId}
           spriteFormSuffix={cell.spriteFormSuffix}
           female={false}
+          size={CELL_SPRITE_SIZE}
           displayName={cell.displayName}
           ariaLabel={`${cell.displayName} — planned`}
           className={

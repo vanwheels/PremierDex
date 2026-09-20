@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Placeholder sprites sized to match Box sprites] — 2026-09-19
+Leg 2 of the Box View Quick-Wins Sweep. Root cause: DexBoxGridCell's placeholder-cell
+`SpriteThumbnail` call never passed `size={CELL_SPRITE_SIZE}` (96) like the real-entry call
+does, so it fell back to `SpriteThumbnail`'s own default (32, sized for DexRow's row icon).
+See commit `<pending>`.
+
 ## [Ribbons & Marks not cloned by Storage Location Duplicate] — 2026-09-19
 Leg 1 of the Box View Quick-Wins Sweep. See commit `5f9b33b`.
 

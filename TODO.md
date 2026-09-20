@@ -8,20 +8,14 @@ speculative pass. Two items (Multi-select highlight verification, Box view scrol
 are investigation-first — if either turns out bigger than expected mid-leg, split the
 remainder back out to Unscheduled rather than letting the leg balloon.
 
-### [Placeholder sprites sized to match Box sprites] — Leg 2
-Planned-placeholder sprites (added in Leg 5 of Box View Polish) render at a different size
-than regular Box view sprites. Likely a small CSS/sizing fix in DexBoxGridCell.tsx/
-SpriteThumbnail.tsx. Raised by Vanny 2026-09-04.
-Last touched: 2026-09-19. Re-check count: 0.
-
-### [Jump directly to a Box] — Leg 3
+### [Jump directly to a Box] — Leg 2
 No way to select a specific box directly today — requires paging through boxes in order via
 the box tray/scroller. Add a direct picker (box number entry, list, or grid) to jump
 straight there. Raised by Vanny 2026-09-04; looks like a self-contained addition to
 DexBoxTray/DexBoxPane.
 Last touched: 2026-09-19. Re-check count: 0.
 
-### [Multi-select highlight verification] — Leg 4
+### [Multi-select highlight verification] — Leg 3
 Multi-selected mons in Box view should all read as highlighted. Leg 4 of Box View Polish
 already added ctrl/shift multi-select with a per-slot `isSelected` prop driving the
 `dex-hybrid-tile-selected` CSS class (DexBoxPane.tsx, DexBoxGridCell.tsx) — needs a look at
@@ -30,7 +24,7 @@ subtle across several selected tiles at once, or an interaction bug clearing/lim
 selection. Raised by Vanny 2026-09-04.
 Last touched: 2026-09-19. Re-check count: 0.
 
-### [Box view scroller lag] — Leg 5
+### [Box view scroller lag] — Leg 4
 Noticeable lag/delay scrolling through boxes in Box view. Distinct from [Virtualize the Dex
 Table body] (that's the main Dex Table; this is the Box view/box tray). Some cost is
 expected given the sprite grid rendering, but worth investigating load/render strategy
