@@ -6,33 +6,54 @@ Picked up 2026-09-19 from Future Milestones, per Vanny's call (see AskUserQuesti
 2026-09-19 — chosen over the other open future-milestone candidates and over bundling the
 small standalone Box-view fixes).
 
-### [Scope Ribbons/Alpha/size/capture-date tracking] — Leg 1
-Design-only leg, same shape as the last two milestones' Leg 1s: nail down what each of the
-four markers actually needs before building any of it — they are not one uniform feature.
-Known going in, from the original Future Milestones item:
-1. **Ribbons** is the real design problem. Unlike caught_ball/language (closed sets that
-   collapsed cleanly into a single CHECK-constrained column, see schema.ts), a Pokémon can
-   hold *several* ribbons at once, and the real ribbon roster is generation-specific and
-   large (dozens of contest/battle/event ribbons through Gen 8, replaced by a different
-   "Marks" system in Gen 9 Scarlet/Violet — needs a decision on whether Marks count as
-   Ribbons for this purpose or are a separate axis). Almost certainly needs a
-   many-to-many table (a `collection_entry_ribbons` join, or similar) rather than a column,
-   plus a real per-generation ribbon list sourced the same way Leg 2 of the last milestone
-   sourced game mechanics (verified against Bulbapedia/Serebii, not from-memory).
-2. **Alpha** is the simplest of the four — a Legends Arceus-only boolean marker
-   (`is_alpha`), same shape as a plain flag column. Scoping here is mostly "confirm no
-   other game reuses the term for something else" and whether it needs any UI beyond a
-   badge.
-3. **Size classification** (PLA/Scarlet-Violet's per-individual size stat) needs a decision
-   on representation — a raw scale value, a bucketed class (e.g. XXS-XXL), or a
-   per-species relative percentile — and which games actually expose it before a column
-   shape is picked.
-4. **Capture date** was flagged by Vanny as very low priority even within this milestone;
-   scope only needs a plain nullable DATE column and can likely piggyback on whichever leg
-   adds Alpha, rather than needing its own leg.
-Output of this leg: a concrete leg sequence (likely Alpha+capture-date as one small leg,
-size classification as another, Ribbons as its own larger leg or two given the join-table
-design and per-generation data curation) added below to replace this entry.
+### [Alpha + Capture Date] — Leg 2
+Smallest leg in the sequence, per `docs/investigations/ribbons-alpha-size-capture-date.md`'s
+Leg 1 findings. `is_alpha` boolean column on `collection_entries` (applies to both Legends
+Arceus and Legends Z-A — confirmed the mechanic isn't Arceus-only, and Z-A alone is 693
+owned entries) plus a plain nullable `capture_date` DATE column (Met Date has existed since
+Gen III, no per-game gating needed, same looseness as `met_location`). Wire both into
+OriginModal plus a small Alpha badge; capture date is display-only in the info bar, no badge
+needed per Vanny's very-low-priority flag on it. No data curation, no join tables.
+Last touched: 2026-09-19. Re-check count: 0.
+
+### [Size classification] — Leg 3
+Per the Leg 1 investigation: a bucketed `size_class` CHECK column (XXXS-XXXL, matching
+Scarlet/Violet's own in-game vocabulary — the most granular thing any game actually shows a
+player), not a raw 0-255 scalar or per-species percentile. Applies to Let's Go Pikachu/Eevee,
+Legends Arceus, Scarlet/Violet, Legends Z-A, and Pokémon GO (~1,995 owned entries, 39% of
+the collection) — excludes Sword/Shield/BDSP, where the underlying scalar exists internally
+but is never shown to the player. Needs a short research pass first to confirm exactly how
+Legends Arceus and Legends Z-A present size in-game (PLA uses aura color +
+"Tall/Small Specimen" Pokédex-task language, not the XXXS-XXXL wording; Z-A's exact
+presentation wasn't confirmed by Leg 1) before locking whether every game maps onto one
+shared bucket set.
+Last touched: 2026-09-19. Re-check count: 0.
+
+### [Ribbons & Marks schema] — Leg 4
+Per the Leg 1 investigation: Marks are a separate, parallel system to Ribbons (introduced
+Sword/Shield, not a Gen 9 replacement for Ribbons), not a variant of them — both need their
+own many-to-many join table (`collection_entry_ribbons`, `collection_entry_marks`), since a
+Pokémon can hold several Ribbons at once and, despite Marks normally being single-value,
+Partner/Gourmand/Itemfinder/Jumbo/Mini Marks can coexist with another Mark already held.
+Pokémon GO has neither system — excluded from both, same "some games don't have this axis"
+shape as caught_ball. Scope is which Ribbons/Marks an individual *has*, not which one is
+currently "equipped" as a battle Title (irrelevant to a collection tracker). This leg is
+schema + a basic view/edit UI (likely a modal) only; ships against a placeholder list to
+unblock the UI, no real curated data yet.
+Last touched: 2026-09-19. Re-check count: 0.
+
+### [Ribbons & Marks data curation] — Leg 5
+Hand-curate the ~115 named ribbons (32 Gen III, 48 Gen IV, 9 Gen V, 16 Gen VI, 4 Gen VII, 5
+Gen VIII, 3 Gen IX, per Bulbapedia) and 43 named Marks (35 from Sw/Sh, 8 added in S/V,
+including Alpha/Jumbo/Mini/Titan), each with source/era metadata, verified against
+Bulbapedia/Serebii via a research subagent — same approach as
+`src/shared/data/supplemental-availability.ts`. Deliberately does not build any
+"is this ribbon still legal for this individual's current game context" cross-reference
+(many Gen III/IV ribbons are silently replaced by a Contest/Battle Memory Ribbon on transfer
+to Gen VI+, and this schema has no clean way to know an individual's current game context) —
+the curated list offers the full historical name set and trusts the user to pick correctly,
+same "don't build past demonstrated need" call `deeper-per-game-validity.md` already made for
+ball/form legality. Replaces Leg 4's placeholder list once ready.
 Last touched: 2026-09-19. Re-check count: 0.
 
 ## Unscheduled

@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Scope Ribbons/Alpha/size/capture-date tracking] — 2026-09-19
+Design-only leg: verified each of the four markers against Bulbapedia/Serebii and Vanny's
+real collection rather than the original TODO framing's assumptions. Found two of the four
+were scoped narrower than reality — Alpha isn't Legends-Arceus-only (Legends Z-A has it too,
+693 owned entries), and the size-variance scalar predates PLA/Scarlet-Violet entirely
+(introduced Let's Go Pikachu/Eevee, Gen VII, silently carried through Sword/Shield/BDSP
+without ever being shown to the player). Also resolved the Marks-vs-Ribbons question the
+TODO item posed: Marks are a separate parallel system (Sword/Shield onward, ~43 named marks)
+rather than a Gen 9 replacement for Ribbons, and both need their own many-to-many join
+table. Full write-up and the resulting 4-leg sequence (Alpha+Capture Date, Size
+classification, Ribbons & Marks schema, Ribbons & Marks data curation) in
+`docs/investigations/ribbons-alpha-size-capture-date.md`.
+
 ## [Duplicate Storage Location input-freeze bugfix] — 2026-09-04
 Reported by Vanny: typing (though not backspace) and opening dropdown menus stopped working
 for a stretch after clicking Duplicate on a large Storage Location. Root cause:
