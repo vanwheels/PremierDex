@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Evolution-Chain Reachability Leg 1: record each species' evolution parent] — 2026-09-20
+Widened `species-evolution.json`/`fetch-evolution-chains.ts` to record each species'
+direct evolution parent (`evolvesFromSpeciesId`) alongside the existing
+`isFinalEvolutionStage`, threaded through a new `evolves_from_species_id` species-table
+column, row-mappers, the shared `Species` type, and seed.ts's backfill. Data acquisition
+and schema only, no `checkEntryValidity` change — see commit `723278f`.
+
 ## [Box View Move & Undo Operations Leg 3: multi-drag/cross-location undo] — 2026-09-20
 Final leg — milestone shipped, see MILESTONES.md. `fillBoxSlots` and `moveEntriesToLocation`
 wrote directly to the DB with no undo capture, unlike Leg 2's single-move/swap undo. Added

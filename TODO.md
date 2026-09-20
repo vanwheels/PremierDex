@@ -1,7 +1,29 @@
 # TODO
 
-No milestone currently in progress — Box View Move & Undo Operations shipped 2026-09-20
-(see MILESTONES.md). Next milestone not yet picked.
+## Current Milestone: Evolution-Chain Reachability for Species Availability
+
+Scoped 2026-09-20 from the Future Milestones entry of the same name. Walks a species'
+evolution ancestors in `checkEntryValidity` so an entry counts as available when any
+ancestor species is (e.g. Ariados via Pal-Park-available Spinarak) — see the original
+Future Milestones entry (now in COMPLETED.md's leg history) for the concretely-named false
+positives this clears. Split into data-acquisition vs. consumption-wiring legs, mirroring
+Leg 5/Leg 8 of the Dex completeness tier migration (`is_final_evolution_stage`'s own
+acquire-then-wire split).
+
+### [Evolution-Chain Reachability] — Leg 2
+Wire the ancestor walk into `checkEntryValidity` (`src/renderer/dex/invalidCombo.ts`):
+given a `species: Species[]` lookup, a species counts as available if it or any ancestor
+(walking `evolvesFromSpeciesId` up to a null root) passes the existing regional-dex/
+supplemental check. `checkEntryValidity` doesn't currently take a species list — thread it
+in from each call site (`DexBoxDetailPanel.tsx`, `DexHybridDetailPanel.tsx` likely already
+have it via `DexBoxPane`/`DexBoxGrid`'s existing `species: Species[]` prop; `DexRow.tsx` via
+`DexTable.tsx` does not yet and needs it added). Verify against the real collection
+(`premierdex.sqlite`, read-only queries reproducing the check, same method as Leg 2 of
+Deeper Per-Game Validity) that the named false positives — Platinum's Ariados/Politoed,
+Emerald's Ledian/Flaaffy/Ampharos/Sunflora/Ambipom, USUM's Ivysaur — actually clear, and
+that no new false positives appear. Then drop the now-resolved forward-reference in
+`supplemental-availability.ts`'s doc comment.
+Last touched: 2026-09-20. Re-check count: 0.
 
 ## Unscheduled
 
@@ -94,22 +116,6 @@ template):
   their apply/snapshot helpers — roughly the same "one feature area" carve-out as the other
   two files above) into its own hook, composed back in by useCollectionData.
 Last touched: 2026-09-20. Re-check count: 0.
-
-### [Evolution-chain reachability for species availability] — future milestone
-Surfaced by Leg 2 of the (now-closed) Deeper Per-Game Validity milestone: re-running the
-false-positive query after curating Platinum/Emerald/USUM's postgame supplemental data
-(`src/shared/data/supplemental-availability.ts`) left a residual where most of the
-remaining invalid species — Platinum's Ariados/Politoed, Emerald's Ledian/Flaaffy/
-Ampharos/Sunflora/Ambipom, USUM's Ivysaur — are evolutions of a species the new
-supplemental data *does* cover (e.g. Ariados from a Pal-Park-available Spinarak). Leg 1 of
-that milestone found zero real cases for this exact idea (pre-evolution reachability) and
-recommended against building it — but that check was run before any supplemental-unlock
-data existed; now that Platinum/Emerald/USUM have real postgame data, the same idea (walk
-a species' evolution ancestors, treat it as available if any ancestor is) would clear
-several concretely-named real false positives. Needs `species-evolution.json` widened from
-its current `isFinalEvolutionStage`-only shape to full parent/child edges (a
-`fetch-evolution-chains.ts` change), then `checkEntryValidity` walking ancestors.
-Last touched: 2026-09-19. Re-check count: 0.
 
 ### [Apply Template: combined regular+shiny option] — future milestone
 Surfaced 2026-09-04 investigating a "Living Form Dex totals look wrong" report (see
