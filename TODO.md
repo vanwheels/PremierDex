@@ -1,5 +1,40 @@
 # TODO
 
+## Current Milestone: Ribbons/Alpha/Size/Capture-Date Tracking
+
+Picked up 2026-09-19 from Future Milestones, per Vanny's call (see AskUserQuestion
+2026-09-19 — chosen over the other open future-milestone candidates and over bundling the
+small standalone Box-view fixes).
+
+### [Scope Ribbons/Alpha/size/capture-date tracking] — Leg 1
+Design-only leg, same shape as the last two milestones' Leg 1s: nail down what each of the
+four markers actually needs before building any of it — they are not one uniform feature.
+Known going in, from the original Future Milestones item:
+1. **Ribbons** is the real design problem. Unlike caught_ball/language (closed sets that
+   collapsed cleanly into a single CHECK-constrained column, see schema.ts), a Pokémon can
+   hold *several* ribbons at once, and the real ribbon roster is generation-specific and
+   large (dozens of contest/battle/event ribbons through Gen 8, replaced by a different
+   "Marks" system in Gen 9 Scarlet/Violet — needs a decision on whether Marks count as
+   Ribbons for this purpose or are a separate axis). Almost certainly needs a
+   many-to-many table (a `collection_entry_ribbons` join, or similar) rather than a column,
+   plus a real per-generation ribbon list sourced the same way Leg 2 of the last milestone
+   sourced game mechanics (verified against Bulbapedia/Serebii, not from-memory).
+2. **Alpha** is the simplest of the four — a Legends Arceus-only boolean marker
+   (`is_alpha`), same shape as a plain flag column. Scoping here is mostly "confirm no
+   other game reuses the term for something else" and whether it needs any UI beyond a
+   badge.
+3. **Size classification** (PLA/Scarlet-Violet's per-individual size stat) needs a decision
+   on representation — a raw scale value, a bucketed class (e.g. XXS-XXL), or a
+   per-species relative percentile — and which games actually expose it before a column
+   shape is picked.
+4. **Capture date** was flagged by Vanny as very low priority even within this milestone;
+   scope only needs a plain nullable DATE column and can likely piggyback on whichever leg
+   adds Alpha, rather than needing its own leg.
+Output of this leg: a concrete leg sequence (likely Alpha+capture-date as one small leg,
+size classification as another, Ribbons as its own larger leg or two given the join-table
+design and per-generation data curation) added below to replace this entry.
+Last touched: 2026-09-19. Re-check count: 0.
+
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
@@ -190,13 +225,6 @@ Last touched: 2026-09-04. Re-check count: 0.
 
 Large items Vanny explicitly flagged as out of scope for a past milestone — logged here
 so they aren't lost, not queued into a leg yet.
-
-### [Ribbons/Alpha/size/capture-date tracking] — future milestone
-Ribbon tracking, with an Alpha marker bundled into the same pass since both are per-entry
-badges. Size classification and capture date noted as possible additions at the same
-time, capture date flagged by Vanny as very low priority. All blocked on Ribbons being
-scoped first.
-Last touched: 2026-09-02. Re-check count: 0.
 
 ### [Curated Met Location dataset] — future milestone
 Split out of the "Deeper Per-Game Validity & Curated Met Locations" milestone by Leg 1's
