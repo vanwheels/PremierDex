@@ -67,6 +67,7 @@ export function DexBoxGridCell({
           'dex-box-cell',
           !cell && 'dex-box-cell-empty',
           isPlaceholder && 'dex-box-cell-placeholder',
+          isSelected && 'dex-box-cell-selected',
           isDragOver && 'dex-box-cell-drag-over'
         ]
           .filter(Boolean)

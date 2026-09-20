@@ -129,17 +129,17 @@
   filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7));
 }
 
-/* Leg 3 of the Box View Quick-Wins Sweep: Vanny's 2026-09-03 fix for the alarm-red border
- * (below) zeroed the selected style out entirely rather than toning it down — invisible
- * for single-select (the detail panel doubled as feedback there) but a real bug once Leg 4
- * added multi-select, which the detail panel doesn't cover at all (DexBoxPane's
- * selectedSlotCell comment: shows nothing for 2+ selected). Softened via color-mix rather
- * than restored at full strength — same toned-down-accent-border technique
- * dex-box-cell-placeholder already uses above — so it reads as a highlight again without
- * the original harshness. */
-.dex-box-grid .dex-hybrid-tile-selected {
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
-  background: color-mix(in srgb, var(--accent) 12%, var(--surface-raised));
+/* Vanny feedback 2026-09-03: the selection border read as an alarm-red blemish rather
+ * than a highlight — dropped for Box view specifically (Hybrid view's own
+ * dex-hybrid-tile-selected/-hover, which these classes are shared with, are untouched).
+ * Sprite-tile-sized highlighting is neutralized here in favor of the full-cell
+ * .dex-box-cell-selected/:hover below — a box hugging just the sprite got lost against the
+ * surrounding 108px grid slot (Vanny feedback 2026-09-19), where the empty/placeholder
+ * cells around it are already full-slot-sized. */
+.dex-box-grid .dex-hybrid-tile-selected,
+.dex-box-grid .dex-hybrid-tile:hover {
+  border-color: transparent;
+  background: none;
 }
 
 .dex-box-cell-empty {
@@ -167,6 +167,43 @@
 .dex-box-cell-placeholder-tile img {
   filter: grayscale(1) brightness(0.35);
   opacity: 0.55;
+}
+
+/* Leg 3 of the Box View Quick-Wins Sweep: highlight the whole grid slot (same footprint as
+ * dex-box-cell-empty/-placeholder's borders above, and dex-box-cell-drag-over below) rather
+ * than just the sprite tile inside it, so a selection reads clearly even across several
+ * slots at once. Declared after dex-box-cell-placeholder so a selected placeholder
+ * (selectedPlaceholderSlot) shows this border, not the placeholder's own dashed one.
+ * Leans into --accent itself (mostly-pure, not blended down toward --border like
+ * dex-box-cell-placeholder above) rather than a generic highlight color — --accent is
+ * already each theme's own identity hue (Pearl's rose-magenta off Palkia, Diamond's
+ * shiny-Dialga teal-green, per tokens.css), so a selected slot reads as "this theme's
+ * color," distinct from the neutral gray hover treatment below. */
+.dex-box-cell-selected {
+  border: 1px solid color-mix(in srgb, var(--accent) 85%, var(--border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface-raised));
+}
+
+/* Vanny feedback 2026-09-19: excluding selected slots from the neutral hover rule below
+ * left no way to tell a selected slot is being hovered at all. Deepens the same accent
+ * tint rather than switching to the neutral gray hover treatment, so it stays
+ * distinguishable from an un-hovered selected slot without being confusable with a plain
+ * (non-selected) hover. */
+.dex-box-cell-selected:hover {
+  background: color-mix(in srgb, var(--accent) 34%, var(--surface-raised));
+}
+
+/* Full-cell hover, replacing the neutral (non-accent) dex-hybrid-tile:hover treatment
+ * dropped above — kept deliberately colorless so hover reads as "you can click this," not
+ * confusable with the accent-colored selected state above. Background only, no border: a
+ * placeholder cell's own dashed accent border (above) needs to survive being hovered, and
+ * this selector's higher specificity would otherwise clobber it. Excludes empty slots
+ * (nothing to select there — dex-box-cell-drag-over below is their only hover-like
+ * feedback) and already-selected slots, which get their own deeper-tint hover above. */
+.dex-box-cell:not(.dex-box-cell-empty):not(.dex-box-cell-selected):hover {
+  border-radius: 8px;
+  background: var(--surface-raised);
 }
 
 .dex-box-cell-drag-over {
