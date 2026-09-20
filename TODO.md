@@ -1,24 +1,9 @@
 # TODO
 
-## Current Milestone: Ribbons/Alpha/Size/Capture-Date Tracking
-
-Picked up 2026-09-19 from Future Milestones, per Vanny's call (see AskUserQuestion
-2026-09-19 — chosen over the other open future-milestone candidates and over bundling the
-small standalone Box-view fixes).
-
-### [Ribbons & Marks data curation] — Leg 5
-Hand-curate the ~115 named ribbons (32 Gen III, 48 Gen IV, 9 Gen V, 16 Gen VI, 4 Gen VII, 5
-Gen VIII, 3 Gen IX, per Bulbapedia) and 43 named Marks (35 from Sw/Sh, 8 added in S/V,
-including Alpha/Jumbo/Mini/Titan), each with source/era metadata, verified against
-Bulbapedia/Serebii via a research subagent — same approach as
-`src/shared/data/supplemental-availability.ts`. Deliberately does not build any
-"is this ribbon still legal for this individual's current game context" cross-reference
-(many Gen III/IV ribbons are silently replaced by a Contest/Battle Memory Ribbon on transfer
-to Gen VI+, and this schema has no clean way to know an individual's current game context) —
-the curated list offers the full historical name set and trusts the user to pick correctly,
-same "don't build past demonstrated need" call `deeper-per-game-validity.md` already made for
-ball/form legality. Replaces Leg 4's placeholder list once ready.
-Last touched: 2026-09-19. Re-check count: 0.
+No milestone currently active — the Ribbons/Alpha/Size/Capture-Date Tracking milestone
+shipped 2026-09-19 (see MILESTONES.md). Next pick is Vanny's call, same as the last
+milestone transition (AskUserQuestion 2026-09-19): from Future Milestones below (both
+currently blocked) or from Unscheduled.
 
 ## Unscheduled
 

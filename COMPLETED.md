@@ -1,27 +1,5 @@
 # COMPLETED
 
-## [Ribbons & Marks schema] — 2026-09-19
-Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone. See commit `56096fd`.
-
-## [Size classification] — 2026-09-19
-Leg 3 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone. See commit `8e7a04f`.
-
-## [Alpha + Capture Date] — 2026-09-19
-Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone. See commit `ff73ea0`.
-
-## [Scope Ribbons/Alpha/size/capture-date tracking] — 2026-09-19
-Design-only leg: verified each of the four markers against Bulbapedia/Serebii and Vanny's
-real collection rather than the original TODO framing's assumptions. Found two of the four
-were scoped narrower than reality — Alpha isn't Legends-Arceus-only (Legends Z-A has it too,
-693 owned entries), and the size-variance scalar predates PLA/Scarlet-Violet entirely
-(introduced Let's Go Pikachu/Eevee, Gen VII, silently carried through Sword/Shield/BDSP
-without ever being shown to the player). Also resolved the Marks-vs-Ribbons question the
-TODO item posed: Marks are a separate parallel system (Sword/Shield onward, ~43 named marks)
-rather than a Gen 9 replacement for Ribbons, and both need their own many-to-many join
-table. Full write-up and the resulting 4-leg sequence (Alpha+Capture Date, Size
-classification, Ribbons & Marks schema, Ribbons & Marks data curation) in
-`docs/investigations/ribbons-alpha-size-capture-date.md`.
-
 ## [Duplicate Storage Location input-freeze bugfix] — 2026-09-04
 Reported by Vanny: typing (though not backspace) and opening dropdown menus stopped working
 for a stretch after clicking Duplicate on a large Storage Location. Root cause:
@@ -79,5 +57,9 @@ this one) archived at `docs/completed-archive/project-scaffold.md` and
 `docs/completed-archive/living-dex-v1.md`. Legs 1-8 (User-Customizable Dex Layout Phase 1)
 archived at `docs/completed-archive/user-customizable-dex-layout-phase-1.md`. Legs 1-7
 (Box Arrangement / Real Inventory Data Model) archived at
-`docs/completed-archive/box-arrangement-real-inventory-data-model.md`. See `MILESTONES.md`
+`docs/completed-archive/box-arrangement-real-inventory-data-model.md`. Legs 1-2 (Deeper
+Per-Game Validity & Curated Met Locations) archived at
+`docs/completed-archive/deeper-per-game-validity-curated-met-locations.md`. Legs 1-5
+(Ribbons/Alpha/Size/Capture-Date Tracking) archived at
+`docs/completed-archive/ribbons-alpha-size-capture-date-tracking.md`. See `MILESTONES.md`
 for the shipped-milestone index.
