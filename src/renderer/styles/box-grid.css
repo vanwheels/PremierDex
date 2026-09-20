@@ -129,12 +129,17 @@
   filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7));
 }
 
-/* Vanny feedback 2026-09-03: the selection border read as an alarm-red blemish rather
- * than a highlight — dropped for Box view specifically (Hybrid view's own
- * dex-hybrid-tile-selected, which this class is shared with, is untouched). */
+/* Leg 3 of the Box View Quick-Wins Sweep: Vanny's 2026-09-03 fix for the alarm-red border
+ * (below) zeroed the selected style out entirely rather than toning it down — invisible
+ * for single-select (the detail panel doubled as feedback there) but a real bug once Leg 4
+ * added multi-select, which the detail panel doesn't cover at all (DexBoxPane's
+ * selectedSlotCell comment: shows nothing for 2+ selected). Softened via color-mix rather
+ * than restored at full strength — same toned-down-accent-border technique
+ * dex-box-cell-placeholder already uses above — so it reads as a highlight again without
+ * the original harshness. */
 .dex-box-grid .dex-hybrid-tile-selected {
-  border-color: transparent;
-  background: none;
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-raised));
 }
 
 .dex-box-cell-empty {
