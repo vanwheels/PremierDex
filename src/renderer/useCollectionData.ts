@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
@@ -10,6 +10,25 @@ import type { TrainerProfile } from '@shared/types/trainer-profile'
 // an empty availability dataset makes the Dex view's invalid-combo check a no-op rather
 // than a crash.
 const EMPTY_SPECIES_AVAILABILITY: SpeciesAvailabilityData = { pokedexes: {}, gameToPokedexes: {} }
+
+/** Leg 2 of the Box View Move & Undo Operations milestone — one entry's box position
+ * immediately before a move, captured so undo can restore it. `storageLocationId` isn't
+ * needed by setEntryBoxPosition's own undo (it never changes location) but is captured
+ * alongside boxNumber/boxSlot anyway since Leg 3 extends this same per-entry snapshot
+ * shape to multi-drag/cross-location undo (array-of-snapshots instead of one). */
+interface BoxPositionSnapshot {
+  entryId: number
+  storageLocationId: number | null
+  boxNumber: number | null
+  boxSlot: number | null
+}
+
+/** 'move' inverts by replaying setEntryBoxPosition with the pre-move snapshot; 'swap' is
+ * self-inverse (swapping the same two entries back undoes it), so it only needs the two
+ * ids, not a snapshot of either. */
+type UndoAction =
+  | { kind: 'move'; snapshot: BoxPositionSnapshot }
+  | { kind: 'swap'; entryIdA: number; entryIdB: number }
 
 export interface CollectionData {
   species: Species[]
@@ -31,6 +50,12 @@ export interface CollectionData {
   setEntryOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   setEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   swapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
+  /** Leg 2 of the Box View Move & Undo Operations milestone: reverts the most recent
+   * setEntryBoxPosition/swapEntryBoxPositions call — see the undo/canUndo doc comment
+   * above their implementation for the stack's shape. */
+  undo: () => void
+  /** Whether `undo` has anything to revert — drives the undo button's disabled state. */
+  canUndo: boolean
   /** See StorageAdapter.fillBoxSlots' own doc comment. */
   fillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
   /** List view's multi-select "Move to…" — see StorageAdapter.bulkSetEntryStorageLocation's
@@ -89,6 +114,15 @@ export function useCollectionData(): CollectionData {
   // refetch — they load their own data on mount only and have no other way to learn the DB
   // moved out from under them.
   const [importVersion, setImportVersion] = useState(0)
+
+  // Leg 2 of the Box View Move & Undo Operations milestone. Mirrors `entries` in a ref
+  // (rather than reading `entries` directly) so setEntryBoxPosition/swapEntryBoxPositions
+  // can stay zero-dependency useCallbacks, matching every other mutator in this file.
+  const [undoStack, setUndoStack] = useState<UndoAction[]>([])
+  const entriesRef = useRef<CollectionEntry[]>(entries)
+  useEffect(() => {
+    entriesRef.current = entries
+  }, [entries])
 
   // Reused after a JSON import too, since that writes owned state straight to SQLite
   // without going through setOwned — React's copy has to be reloaded from scratch.
@@ -158,23 +192,51 @@ export function useCollectionData(): CollectionData {
     })
   }, [])
 
-  const setEntryBoxPosition = useCallback((entryId: number, boxNumber: number | null, boxSlot: number | null): void => {
-    window.premierDex.setEntryBoxPosition(entryId, boxNumber, boxSlot).then((updated) => {
-      setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
-      // A real entry landing on a slot clears whatever placeholder was there server-side
-      // (see sqlite-storage.ts's clearBoxPlaceholderStmt) — mirror that locally so a stale
-      // placeholder can't reappear from this hook's own state once the entry later moves
-      // off that slot again.
-      if (boxNumber !== null && boxSlot !== null && updated.storageLocationId !== null) {
-        const { storageLocationId } = updated
-        setBoxPlaceholdersState((prev) =>
-          prev.filter((p) => !(p.storageLocationId === storageLocationId && p.boxNumber === boxNumber && p.boxSlot === boxSlot))
-        )
-      }
-    })
-  }, [])
+  // Does the actual write plus local-state merge for a box-position change — shared by
+  // setEntryBoxPosition below (which captures an undo snapshot first) and undo's own
+  // replay of a prior snapshot (which must NOT capture another undo entry, or undoing
+  // would push a redo-shaped action onto the same stack).
+  const applySetEntryBoxPosition = useCallback(
+    (entryId: number, boxNumber: number | null, boxSlot: number | null): void => {
+      window.premierDex.setEntryBoxPosition(entryId, boxNumber, boxSlot).then((updated) => {
+        setEntries((prev) => prev.map((entry) => (entry.id === updated.id ? updated : entry)))
+        // A real entry landing on a slot clears whatever placeholder was there server-side
+        // (see sqlite-storage.ts's clearBoxPlaceholderStmt) — mirror that locally so a stale
+        // placeholder can't reappear from this hook's own state once the entry later moves
+        // off that slot again.
+        if (boxNumber !== null && boxSlot !== null && updated.storageLocationId !== null) {
+          const { storageLocationId } = updated
+          setBoxPlaceholdersState((prev) =>
+            prev.filter((p) => !(p.storageLocationId === storageLocationId && p.boxNumber === boxNumber && p.boxSlot === boxSlot))
+          )
+        }
+      })
+    },
+    []
+  )
 
-  const swapEntryBoxPositions = useCallback((entryIdA: number, entryIdB: number): void => {
+  // Leg 2 of the Box View Move & Undo Operations milestone: captures the entry's box
+  // position from *before* this write (via entriesRef, not `entries` — see its own
+  // comment) as the undo stack's inverse, ahead of the window.premierDex.* call itself.
+  const setEntryBoxPosition = useCallback(
+    (entryId: number, boxNumber: number | null, boxSlot: number | null): void => {
+      const prior = entriesRef.current.find((entry) => entry.id === entryId)
+      if (prior) {
+        const snapshot: BoxPositionSnapshot = {
+          entryId,
+          storageLocationId: prior.storageLocationId,
+          boxNumber: prior.boxNumber,
+          boxSlot: prior.boxSlot
+        }
+        setUndoStack((prev) => [...prev, { kind: 'move', snapshot }])
+      }
+      applySetEntryBoxPosition(entryId, boxNumber, boxSlot)
+    },
+    [applySetEntryBoxPosition]
+  )
+
+  // Same apply/capture split as setEntryBoxPosition above.
+  const applySwapEntryBoxPositions = useCallback((entryIdA: number, entryIdB: number): void => {
     window.premierDex.swapEntryBoxPositions(entryIdA, entryIdB).then(([updatedA, updatedB]) => {
       setEntries((prev) =>
         prev.map((entry) => {
@@ -185,6 +247,31 @@ export function useCollectionData(): CollectionData {
       )
     })
   }, [])
+
+  // A swap is its own inverse — replaying it with the same two ids undoes it — so unlike
+  // setEntryBoxPosition's snapshot, undo only needs to remember which two entries swapped.
+  const swapEntryBoxPositions = useCallback(
+    (entryIdA: number, entryIdB: number): void => {
+      setUndoStack((prev) => [...prev, { kind: 'swap', entryIdA, entryIdB }])
+      applySwapEntryBoxPositions(entryIdA, entryIdB)
+    },
+    [applySwapEntryBoxPositions]
+  )
+
+  // Pops and reverts the most recent move/swap. Deliberately doesn't push a new undo entry
+  // for the reverted action — Leg 2 only scopes Ctrl+Z/undo-button, no redo.
+  const undo = useCallback((): void => {
+    setUndoStack((prev) => {
+      if (prev.length === 0) return prev
+      const action = prev[prev.length - 1]
+      if (action.kind === 'move') {
+        applySetEntryBoxPosition(action.snapshot.entryId, action.snapshot.boxNumber, action.snapshot.boxSlot)
+      } else {
+        applySwapEntryBoxPositions(action.entryIdA, action.entryIdB)
+      }
+      return prev.slice(0, -1)
+    })
+  }, [applySetEntryBoxPosition, applySwapEntryBoxPositions])
 
   const fillBoxSlots = useCallback((entryIds: number[], boxNumber: number, startSlot: number): void => {
     window.premierDex.fillBoxSlots(entryIds, boxNumber, startSlot).then((updated) => {
@@ -341,6 +428,8 @@ export function useCollectionData(): CollectionData {
     setEntryOrigin,
     setEntryBoxPosition,
     swapEntryBoxPositions,
+    undo,
+    canUndo: undoStack.length > 0,
     fillBoxSlots,
     bulkMoveEntries,
     bulkSetEntryGender,

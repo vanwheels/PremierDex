@@ -29,6 +29,12 @@ import { DEFAULT_DEX_FILTERS, DEFAULT_DEX_SORT } from './types'
 const DEFAULT_OPTIONS: DexOptions = { splitGenderRows: false, regionalMode: 'inline' }
 
 export interface LivingDexViewProps {
+  /** Whether the Living Dex tab itself is the visible top-level view (App.tsx keeps this
+   * component mounted-but-hidden on other tabs, same performance tradeoff as DexBoxGrid's
+   * own hidden-not-unmounted view modes below) — combined with `viewMode === 'box'` so
+   * Box view's Ctrl+Z undo listener (see DexBoxGrid's isActive prop) doesn't fire while
+   * a different top-level tab is what's actually showing. */
+  isActive: boolean
   species: Species[]
   forms: Form[]
   entries: CollectionEntry[]
@@ -45,6 +51,10 @@ export interface LivingDexViewProps {
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   onSetEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   onSwapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
+  /** Leg 2 of the Box View Move & Undo Operations milestone: undo for a single move/swap —
+   * see useCollectionData's own doc comment on undo/canUndo. */
+  onUndo: () => void
+  canUndo: boolean
   /** Leg 4 of the Box View Polish milestone: multi-select drag-drop — see DexBoxGrid's
    * own doc comment. */
   onFillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
@@ -81,6 +91,7 @@ export interface LivingDexViewProps {
  * Storage Locations need it too. */
 export function LivingDexView(props: LivingDexViewProps): JSX.Element {
   const {
+    isActive,
     species,
     forms,
     entries,
@@ -95,6 +106,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onSaveOrigin,
     onSetEntryBoxPosition,
     onSwapEntryBoxPositions,
+    onUndo,
+    canUndo,
     onFillBoxSlots,
     onSetCollapsedDisplayForm,
     onAddBox,
@@ -273,9 +286,12 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           allBoxPlaceholders={boxPlaceholders}
           speciesAvailability={speciesAvailability}
           selectedLocationTab={selectedLocationTab}
+          isActive={isActive && viewMode === 'box'}
           onSaveOrigin={onSaveOrigin}
           onSetEntryBoxPosition={onSetEntryBoxPosition}
           onSwapEntryBoxPositions={onSwapEntryBoxPositions}
+          onUndo={onUndo}
+          canUndo={canUndo}
           onFillBoxSlots={onFillBoxSlots}
           onAddBox={onAddBox}
           onRenameBox={onRenameBox}

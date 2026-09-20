@@ -55,12 +55,22 @@ interface DexBoxGridProps {
    * tab, which can never hold a box" apart from "a real location with zero boxed entries
    * yet," and `entries` alone can't distinguish those two empty cases. */
   selectedLocationTab: number | null
+  /** Leg 2 of the Box View Move & Undo Operations milestone: whether Box view is the
+   * actually-visible view mode right now (LivingDexView/App both keep this component
+   * mounted-but-hidden otherwise) — gates the Ctrl+Z listener below so it doesn't fire
+   * while some other tab/view mode is what's showing. */
+  isActive: boolean
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   /** Leg 7: drag-and-drop add/move/remove — see DexBoxPane's handleDropOnSlot/this file's
    * handleDropOnTray. */
   onSetEntryBoxPosition: (entryId: number, boxNumber: number | null, boxSlot: number | null) => void
   /** Leg 7: drag-a-cell-onto-another-cell — see DexBoxPane's handleDropOnSlot. */
   onSwapEntryBoxPositions: (entryIdA: number, entryIdB: number) => void
+  /** Leg 2 of the Box View Move & Undo Operations milestone: reverts the most recent
+   * onSetEntryBoxPosition/onSwapEntryBoxPositions call — see useCollectionData's own doc
+   * comment on undo/canUndo. */
+  onUndo: () => void
+  canUndo: boolean
   /** Leg 4 of the Box View Polish milestone: dragging a multi-selection of cells — see
    * DexBoxPane's handleDropOnSlot. */
   onFillBoxSlots: (entryIds: number[], boxNumber: number, startSlot: number) => void
@@ -133,9 +143,12 @@ export function DexBoxGrid({
   allBoxPlaceholders,
   speciesAvailability,
   selectedLocationTab,
+  isActive,
   onSaveOrigin,
   onSetEntryBoxPosition,
   onSwapEntryBoxPositions,
+  onUndo,
+  canUndo,
   onFillBoxSlots,
   onAddBox,
   onRenameBox,
@@ -170,6 +183,26 @@ export function DexBoxGrid({
   const handlePrimaryBoxChange = useCallback((box: Box) => setPrimaryBox(box), [])
   // Leg 2 of the Dex completeness tier migration.
   const [templateModalOpen, setTemplateModalOpen] = useState(false)
+
+  // Leg 2 of the Box View Move & Undo Operations milestone: Ctrl+Z (Cmd+Z on macOS) undoes
+  // the last move/swap, same convention as this file's other window-level keydown listeners
+  // (see DexBoxPlaceholderModal/OriginModal's own Escape handlers). Skipped while focus is
+  // on a text input/textarea/contentEditable so a rename box field, placeholder search, etc.
+  // keep the browser's own native text-undo instead of hijacking it. Gated on `isActive` so
+  // it doesn't fire while some other tab/view mode is what's actually showing (this
+  // component stays mounted-but-hidden then, same as DexBoxPane's own siblings).
+  useEffect(() => {
+    if (!isActive) return
+    const onKeyDown = (e: KeyboardEvent): void => {
+      if (e.key.toLowerCase() !== 'z' || !(e.ctrlKey || e.metaKey) || e.shiftKey) return
+      const target = e.target as HTMLElement | null
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
+      e.preventDefault()
+      onUndo()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isActive, onUndo])
 
   // Leg 1 of the Box View Move & Undo Operations milestone: which location the second
   // pane shows, overriding the primary tab — null means "mirror the primary tab" (the
@@ -402,6 +435,11 @@ export function DexBoxGrid({
         </button>
         <button type="button" onClick={handleFillIn} disabled={fillInPlacements.length === 0}>
           Fill In
+        </button>
+        {/* Leg 2 of the Box View Move & Undo Operations milestone: same action as Ctrl+Z
+         * above, for discoverability — see this file's keydown effect. */}
+        <button type="button" onClick={onUndo} disabled={!canUndo}>
+          ↶ Undo
         </button>
       </div>
       <div className="dex-box-columns">

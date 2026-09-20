@@ -7,16 +7,6 @@ cross-location moves and an undo stack — scoped 2026-09-19 from the Future Mil
 entry of the same name, using an investigation of `DexBoxPane.tsx`/`DexBoxGrid.tsx`,
 `sqlite-storage.ts`, and `useCollectionData.ts` (see leg bodies for findings).
 
-### [Box View Move & Undo Operations] — Leg 2
-Undo for single-entry moves and swaps: Ctrl+Z plus a visible undo button, covering
-`setEntryBoxPosition` and `swapEntryBoxPositions` (`useCollectionData.ts`). No undo
-infrastructure exists anywhere in the app today (confirmed by search) — needs an undo
-stack plus a prior-state snapshot (entry id, source storageLocationId/boxNumber/boxSlot)
-captured before the write, since these handlers currently fire-and-forget with no
-pre-move state capture; that capture point moves up a level, before the
-`window.premierDex.*` call. Scoped to single-move/swap only — multi-drag undo is Leg 3.
-Last touched: 2026-09-19. Re-check count: 0.
-
 ### [Box View Move & Undo Operations] — Leg 3
 Undo for multi-drag / `fillBoxSlots` moves: extends Leg 2's undo stack to cover multi-drag
 (array-of-snapshots + batch inverse, instead of Leg 2's single prior-state capture), and

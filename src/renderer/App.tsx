@@ -77,6 +77,7 @@ export function App(): JSX.Element {
            * down, between its List/Hybrid/(Box) view modes. */}
           <div hidden={view !== 'dex'}>
             <LivingDexView
+              isActive={view === 'dex'}
               species={data.species}
               forms={data.forms}
               entries={data.entries}
@@ -92,6 +93,8 @@ export function App(): JSX.Element {
               onSaveOrigin={data.setEntryOrigin}
               onSetEntryBoxPosition={data.setEntryBoxPosition}
               onSwapEntryBoxPositions={data.swapEntryBoxPositions}
+              onUndo={data.undo}
+              canUndo={data.canUndo}
               onFillBoxSlots={data.fillBoxSlots}
               onSetCollapsedDisplayForm={data.setCollapsedDisplayForm}
               onAddBox={data.addBox}
