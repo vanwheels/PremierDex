@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Box view scroller lag] — 2026-09-19
+Leg 4 of the Box View Quick-Wins Sweep (final leg — milestone shipped, see MILESTONES.md).
+AskUserQuestion narrowed the report to Prev/Next paging specifically, and confirmed it's
+first-visit-only per session (fast on repeat visits to the same box) — pointing at cold
+network fetches for each cell's remote sprite (raw.githubusercontent.com, no app-side
+caching) rather than a render/layout cost. Fix: DexBoxPane now prefetches the immediately
+adjacent (index-1/index+1) box's sprites in the background whenever the displayed box
+changes, warming Chromium's own HTTP cache ahead of an actual Prev/Next click. See commit
+`2df47b2`.
+
 ## [Multi-select highlight verification] — 2026-09-19
 Leg 3 of the Box View Quick-Wins Sweep. Root cause wasn't "too subtle" — Box view's
 selected-tile style had been zeroed out entirely (`border-color: transparent; background:

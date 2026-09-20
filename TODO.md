@@ -1,21 +1,7 @@
 # TODO
 
-## Current Milestone: Box View Quick-Wins Sweep
-
-Picked 2026-09-19 (AskUserQuestion) from Unscheduled: five small, already-scoped-or-nearly-
-scoped items pulled together into one milestone of short legs, rather than a large
-speculative pass. Two items (Multi-select highlight verification, Box view scroller lag)
-are investigation-first — if either turns out bigger than expected mid-leg, split the
-remainder back out to Unscheduled rather than letting the leg balloon.
-
-### [Box view scroller lag] — Leg 4
-Noticeable lag/delay scrolling through boxes in Box view. Distinct from [Virtualize the Dex
-Table body] (that's the main Dex Table; this is the Box view/box tray). Some cost is
-expected given the sprite grid rendering, but worth investigating load/render strategy
-(e.g. lazy-loading offscreen boxes, sprite caching) before accepting it as a hard limit.
-Included despite being investigation-first (AskUserQuestion 2026-09-19) — split back out to
-Unscheduled if it turns out larger than a leg. Raised by Vanny 2026-09-04.
-Last touched: 2026-09-19. Re-check count: 0.
+No milestone currently in progress — Box View Quick-Wins Sweep shipped 2026-09-19 (see
+MILESTONES.md). Next milestone not yet picked.
 
 ## Unscheduled
 
