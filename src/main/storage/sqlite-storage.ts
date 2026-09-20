@@ -219,7 +219,28 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     SELECT form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
        language, nickname, caught_ball, @newLocationId, met_location, NULL, NULL,
        is_alpha, capture_date, size_class
-    FROM collection_entries WHERE storage_location_id = @sourceId
+    FROM collection_entries WHERE storage_location_id = @sourceId ORDER BY id
+  `)
+  // Ordered entry-id lists for a storage location — used by duplicateStorageLocationTx below
+  // to line up insertDuplicateEntriesStmt's clones (an AUTOINCREMENT INSERT...SELECT ordered
+  // by id assigns new ids in that same ascending order) with their sources, rather than
+  // relying on RETURNING's output order, which SQLite documents as arbitrary.
+  const listEntryIdsByStorageLocationStmt = db.prepare(
+    'SELECT id FROM collection_entries WHERE storage_location_id = ? ORDER BY id'
+  )
+  // Ribbons/marks live in child tables keyed on entry_id, not a column
+  // insertDuplicateEntriesStmt's column-for-column INSERT...SELECT can carry over — joined
+  // against the source location here so duplicateStorageLocationTx can re-key each row onto
+  // its clone's new entry id.
+  const listRibbonsByStorageLocationStmt = db.prepare(`
+    SELECT r.entry_id AS entryId, r.ribbon_name AS ribbonName
+    FROM collection_entry_ribbons r JOIN collection_entries e ON e.id = r.entry_id
+    WHERE e.storage_location_id = ?
+  `)
+  const listMarksByStorageLocationStmt = db.prepare(`
+    SELECT m.entry_id AS entryId, m.mark_name AS markName
+    FROM collection_entry_marks m JOIN collection_entries e ON e.id = m.entry_id
+    WHERE e.storage_location_id = ?
   `)
   const orphanEntriesByTrainerProfileStmt = db.prepare(
     'UPDATE collection_entries SET trainer_profile_id = NULL WHERE trainer_profile_id = ?'
@@ -280,7 +301,9 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
   // appended; storage_locations carries no uniqueness constraint on name, so a repeat
   // duplicate just appends again rather than colliding) and every entry currently sitting
   // in it, each landing unassigned-within-the-new-location via insertDuplicateEntriesStmt
-  // above — same convention as a bulk move. Deliberately does not clone box arrangement
+  // above — same convention as a bulk move — along with that entry's ribbons/marks (Leg 1 of
+  // the Box View Quick-Wins Sweep; previously silently dropped, same gap shape as the
+  // box-arrangement exclusion below). Deliberately does not clone box arrangement
   // (box_number/box_slot, box_placeholders) — see TODO.md's [Clear box] follow-up, which
   // will let a freshly duplicated location's box view be wiped back to empty instead.
   const duplicateStorageLocationTx = db.transaction((sourceId: number) => {
@@ -293,7 +316,27 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     })
     const newLocationId = result.lastInsertRowid as number
     insertBoxNumberOneStmt.run({ storageLocationId: newLocationId })
+    // Snapshot ribbons/marks and the source's own id order before cloning entries — both
+    // need the *old* entry ids while they still exist.
+    const sourceRibbons = listRibbonsByStorageLocationStmt.all(sourceId) as Array<{
+      entryId: number
+      ribbonName: string
+    }>
+    const sourceMarks = listMarksByStorageLocationStmt.all(sourceId) as Array<{ entryId: number; markName: string }>
+    const sourceIds = listEntryIdsByStorageLocationStmt.all(sourceId) as Array<{ id: number }>
     insertDuplicateEntriesStmt.run({ sourceId, newLocationId })
+    if (sourceRibbons.length > 0 || sourceMarks.length > 0) {
+      // sourceIds and the new location's ids, both taken in ascending order, line up 1:1 —
+      // see listEntryIdsByStorageLocationStmt's own comment for why.
+      const newIds = listEntryIdsByStorageLocationStmt.all(newLocationId) as Array<{ id: number }>
+      const oldToNewId = new Map(sourceIds.map((row, i) => [row.id, newIds[i].id]))
+      for (const { entryId, ribbonName } of sourceRibbons) {
+        insertEntryRibbonStmt.run({ entryId: oldToNewId.get(entryId), ribbonName })
+      }
+      for (const { entryId, markName } of sourceMarks) {
+        insertEntryMarkStmt.run({ entryId: oldToNewId.get(entryId), markName })
+      }
+    }
     return newLocationId
   })
   const insertBoxStmt = db.prepare(`

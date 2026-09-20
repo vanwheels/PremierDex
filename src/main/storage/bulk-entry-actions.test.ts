@@ -292,4 +292,31 @@ describe("duplicate a storage location's entries", () => {
     expect(await bulbasaurEntries(storage)).toHaveLength(entries.length)
     expect(await storage.listStorageLocations()).toHaveLength(0)
   })
+
+  it("carries each entry's ribbons and marks over to its clone, leaving the source untouched", async () => {
+    const storage = createSqliteStorage(':memory:')
+    const source = await storage.createStorageLocation({ locationType: 'home', name: 'HOME', trainerProfileId: null })
+    const entries = await bulbasaurEntries(storage)
+    const [withTags, plain] = entries
+    for (const entry of entries) {
+      await storage.setOwned(entry.id, true)
+      await storage.setEntryStorageLocation(entry.id, source.id)
+    }
+    await storage.setEntryRibbons(withTags.id, ['Champion Ribbon'])
+    await storage.setEntryMarks(withTags.id, ['Curry Mark'])
+
+    const clonedLocation = await storage.duplicateStorageLocation(source.id)
+    const cloned = (await bulbasaurEntries(storage)).find(
+      (e) => e.storageLocationId === clonedLocation.id && e.shiny === withTags.shiny
+    )!
+    const clonedPlain = (await bulbasaurEntries(storage)).find(
+      (e) => e.storageLocationId === clonedLocation.id && e.shiny === plain.shiny
+    )!
+
+    expect(await storage.listEntryRibbons(cloned.id)).toEqual(['Champion Ribbon'])
+    expect(await storage.listEntryMarks(cloned.id)).toEqual(['Curry Mark'])
+    expect(await storage.listEntryRibbons(clonedPlain.id)).toEqual([])
+    // The source entry's own rows are untouched — a duplicate is a new individual, not a move.
+    expect(await storage.listEntryRibbons(withTags.id)).toEqual(['Champion Ribbon'])
+  })
 })
