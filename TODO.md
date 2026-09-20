@@ -1,9 +1,43 @@
 # TODO
 
-No milestone currently active — the Ribbons/Alpha/Size/Capture-Date Tracking milestone
-shipped 2026-09-19 (see MILESTONES.md). Next pick is Vanny's call, same as the last
-milestone transition (AskUserQuestion 2026-09-19): from Future Milestones below (both
-currently blocked) or from Unscheduled.
+## Current Milestone: Box View Quick-Wins Sweep
+
+Picked 2026-09-19 (AskUserQuestion) from Unscheduled: five small, already-scoped-or-nearly-
+scoped items pulled together into one milestone of short legs, rather than a large
+speculative pass. Two items (Multi-select highlight verification, Box view scroller lag)
+are investigation-first — if either turns out bigger than expected mid-leg, split the
+remainder back out to Unscheduled rather than letting the leg balloon.
+
+### [Placeholder sprites sized to match Box sprites] — Leg 2
+Planned-placeholder sprites (added in Leg 5 of Box View Polish) render at a different size
+than regular Box view sprites. Likely a small CSS/sizing fix in DexBoxGridCell.tsx/
+SpriteThumbnail.tsx. Raised by Vanny 2026-09-04.
+Last touched: 2026-09-19. Re-check count: 0.
+
+### [Jump directly to a Box] — Leg 3
+No way to select a specific box directly today — requires paging through boxes in order via
+the box tray/scroller. Add a direct picker (box number entry, list, or grid) to jump
+straight there. Raised by Vanny 2026-09-04; looks like a self-contained addition to
+DexBoxTray/DexBoxPane.
+Last touched: 2026-09-19. Re-check count: 0.
+
+### [Multi-select highlight verification] — Leg 4
+Multi-selected mons in Box view should all read as highlighted. Leg 4 of Box View Polish
+already added ctrl/shift multi-select with a per-slot `isSelected` prop driving the
+`dex-hybrid-tile-selected` CSS class (DexBoxPane.tsx, DexBoxGridCell.tsx) — needs a look at
+why that isn't reading as sufficiently highlighted in practice: could be the style is too
+subtle across several selected tiles at once, or an interaction bug clearing/limiting
+selection. Raised by Vanny 2026-09-04.
+Last touched: 2026-09-19. Re-check count: 0.
+
+### [Box view scroller lag] — Leg 5
+Noticeable lag/delay scrolling through boxes in Box view. Distinct from [Virtualize the Dex
+Table body] (that's the main Dex Table; this is the Box view/box tray). Some cost is
+expected given the sprite grid rendering, but worth investigating load/render strategy
+(e.g. lazy-loading offscreen boxes, sprite caching) before accepting it as a hard limit.
+Included despite being investigation-first (AskUserQuestion 2026-09-19) — split back out to
+Unscheduled if it turns out larger than a leg. Raised by Vanny 2026-09-04.
+Last touched: 2026-09-19. Re-check count: 0.
 
 ## Unscheduled
 
@@ -31,14 +65,6 @@ same "reject the old version outright" precedent as v1→v2), and entries are ma
 import by natural key (form/gender/shiny + duplicate ordinal, not raw id — see
 `collection-backup.ts`'s `entryKey`), so ribbon/mark rows would need to travel with their
 owning entry through that same remap rather than a naive id-keyed dump.
-Last touched: 2026-09-19. Re-check count: 0.
-
-### [Ribbons & Marks not cloned by Storage Location "Duplicate"] — unscheduled
-Same already-accepted gap shape as Duplicate not cloning box arrangement (see
-`insertDuplicateEntriesStmt`'s own comment in `sqlite-storage.ts`): cloning a Storage
-Location's entries doesn't carry each entry's ribbons/marks onto its clone, since the single
-`INSERT...SELECT` behind Duplicate only ever touches `collection_entries` columns. Surfaced
-scoping Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone.
 Last touched: 2026-09-19. Re-check count: 0.
 
 ### [Evolution-chain reachability for species availability] — unscheduled
@@ -161,13 +187,6 @@ surfaced it. Candidate split: the CollectionEntry-specific prepared statements/m
 the file) into their own module, mirroring collection-backup.ts's pattern.
 Last touched: 2026-09-04. Re-check count: 0.
 
-### [Jump directly to a Box] — unscheduled
-Raised by Vanny 2026-09-04: no way to select a specific box directly — currently requires
-paging through boxes in order via the box tray/scroller. Wants a direct picker (box
-number entry, list, or grid) to jump straight there. Not scoped, but looks like a small,
-self-contained addition to DexBoxTray/DexBoxPane — candidate quick win.
-Last touched: 2026-09-04. Re-check count: 0.
-
 ### [Remove "Unassigned" as the default check-in bucket] — unscheduled
 Raised by Vanny 2026-09-04: the Unassigned storage location is bad UX as a default landing
 spot — better to let the user add a mon directly into whichever storage/box they want at
@@ -182,27 +201,11 @@ Needs scoping: prompt for a location at check-in time? Keep Unassigned only as a
 when no locations exist yet?
 Last touched: 2026-09-04. Re-check count: 0.
 
-### [Multi-select highlight verification] — unscheduled
-Raised by Vanny 2026-09-04: multi-selected mons in Box view should all read as highlighted.
-Leg 4 of Box View Polish (see COMPLETED.md) already added ctrl/shift multi-select with a
-per-slot `isSelected` prop driving the `dex-hybrid-tile-selected` CSS class
-(DexBoxPane.tsx, DexBoxGridCell.tsx) — needs a look at why that isn't reading as
-sufficiently highlighted in practice: could be the style is too subtle across several
-selected tiles at once, or an interaction bug clearing/limiting selection.
-Last touched: 2026-09-04. Re-check count: 0.
-
 ### [Undo support for Box moves] — unscheduled
 Raised by Vanny 2026-09-04: Ctrl+Z to undo, plus a visible undo-move button, for Box view
 drag/move operations (including Leg 4's multi-drag). No undo history exists today. Real
 feature, not a quick fix — needs its own scoping (how deep a history, whether it covers
 placeholder edits/deletes too or just moves).
-Last touched: 2026-09-04. Re-check count: 0.
-
-### [Placeholder sprites sized to match Box sprites] — unscheduled
-Raised by Vanny 2026-09-04: planned-placeholder sprites (added in Leg 5 of Box View
-Polish, see COMPLETED.md) render at a different size than the regular Box view sprites.
-Likely a small CSS/sizing fix in DexBoxGridCell.tsx/SpriteThumbnail.tsx — candidate quick
-win.
 Last touched: 2026-09-04. Re-check count: 0.
 
 ### [Apply Template: combined regular+shiny option] — unscheduled
@@ -212,14 +215,6 @@ Apply Template only takes one color (Regular or Shiny) per run today, requiring 
 applies to stock a location for both. Not a small fix — doubles the placement math (each
 required unit needs a regular *and* shiny ghost, competing for the same slots) — needs its
 own scoping rather than folding into Leg 6.
-Last touched: 2026-09-04. Re-check count: 0.
-
-### [Box view scroller lag] — unscheduled
-Raised by Vanny 2026-09-04: noticeable lag/delay scrolling through boxes in Box view.
-Distinct from [Virtualize the Dex Table body] (that's the main Dex Table; this is the Box
-view/box tray). Some cost is expected given the sprite grid rendering, but worth
-investigating load/render strategy (e.g. lazy-loading offscreen boxes, sprite caching)
-before accepting it as a hard limit.
 Last touched: 2026-09-04. Re-check count: 0.
 
 ## Future Milestones (unscheduled)

@@ -1,5 +1,8 @@
 # COMPLETED
 
+## [Ribbons & Marks not cloned by Storage Location Duplicate] — 2026-09-19
+Leg 1 of the Box View Quick-Wins Sweep. See commit `5f9b33b`.
+
 ## [Duplicate Storage Location input-freeze bugfix] — 2026-09-04
 Reported by Vanny: typing (though not backspace) and opening dropdown menus stopped working
 for a stretch after clicking Duplicate on a large Storage Location. Root cause:
