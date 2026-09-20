@@ -12,6 +12,7 @@ import { DexBoxPlaceholderModal } from './DexBoxPlaceholderModal'
 import { DexBoxPager } from './DexBoxPager'
 import { OriginModal } from './OriginModal'
 import { RibbonsMarksModal } from './RibbonsMarksModal'
+import { prefetchBoxSprites } from './spritePrefetch'
 import type { Box, BoxCell, BoxPlaceholderCell, CellTarget } from './types'
 
 interface DexBoxPaneProps {
@@ -194,6 +195,15 @@ export function DexBoxPane({
   useEffect(() => {
     onCurrentBoxChange?.(box)
   }, [box, onCurrentBoxChange])
+
+  // Box view scroller lag (Leg 4 of the Box View Quick-Wins Sweep): warm the browser's
+  // sprite cache for the boxes a Prev/Next click would land on next, so a never-before-
+  // seen box's sprites are already in flight (or resolved) by the time the user actually
+  // navigates there — see spritePrefetch.ts's own doc comment.
+  useEffect(() => {
+    prefetchBoxSprites(boxes[clampedIndex - 1])
+    prefetchBoxSprites(boxes[clampedIndex + 1])
+  }, [boxes, clampedIndex])
 
   const goToBox = (index: number): void => {
     setBoxIndex(index)
