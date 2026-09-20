@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Box View Move & Undo Operations Leg 2: single-move/swap undo] — 2026-09-20
+Added an undo stack to `useCollectionData`: `setEntryBoxPosition` captures the entry's
+prior box position (via an `entriesRef` so the callback stays zero-dependency) before the
+write, `swapEntryBoxPositions` records just the two swapped ids (a swap is its own
+inverse), and `undo` replays the inverse through the same IPC calls. Wired to Ctrl+Z
+(skipped while a text field has focus) and a visible Undo button in Box view's toolbar,
+both gated on Box view actually being the visible tab/view-mode. See commit `ff561c4`.
+
 ## [Box View Move & Undo Operations Leg 1: cross-location move] — 2026-09-20
 AskUserQuestion resolved the leg's open UX decision as "both": dragging a selection onto a
 second pane pointed at a different Storage Location (new location dropdown next to "Open
