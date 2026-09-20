@@ -8,13 +8,6 @@ speculative pass. Two items (Multi-select highlight verification, Box view scrol
 are investigation-first — if either turns out bigger than expected mid-leg, split the
 remainder back out to Unscheduled rather than letting the leg balloon.
 
-### [Jump directly to a Box] — Leg 2
-No way to select a specific box directly today — requires paging through boxes in order via
-the box tray/scroller. Add a direct picker (box number entry, list, or grid) to jump
-straight there. Raised by Vanny 2026-09-04; looks like a self-contained addition to
-DexBoxTray/DexBoxPane.
-Last touched: 2026-09-19. Re-check count: 0.
-
 ### [Multi-select highlight verification] — Leg 3
 Multi-selected mons in Box view should all read as highlighted. Leg 4 of Box View Polish
 already added ctrl/shift multi-select with a per-slot `isSelected` prop driving the

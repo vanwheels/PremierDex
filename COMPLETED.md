@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Jump directly to a Box] — 2026-09-19
+Leg 2 of the Box View Quick-Wins Sweep. Added a "Jump to box" `<select>` to DexBoxPager,
+next to Prev/Next, listing every box in the location by number/name — backed by the
+`boxes` array DexBoxPane already threads through everywhere else, so no new fetch or
+state was needed. Prev/Next stay as the fast path for adjacent boxes; the dropdown is for
+jumping straight to a specific one. See commit `358c541`.
+
 ## [Placeholder sprites sized to match Box sprites] — 2026-09-19
 Leg 2 of the Box View Quick-Wins Sweep. Root cause: DexBoxGridCell's placeholder-cell
 `SpriteThumbnail` call never passed `size={CELL_SPRITE_SIZE}` (96) like the real-entry call
