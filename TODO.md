@@ -1,21 +1,7 @@
 # TODO
 
-## Current Milestone: Box View Move & Undo Operations
-
-Extends Box view's drag/multi-select move mechanics (Box View Polish's Leg 4) with
-cross-location moves and an undo stack — scoped 2026-09-19 from the Future Milestones
-entry of the same name, using an investigation of `DexBoxPane.tsx`/`DexBoxGrid.tsx`,
-`sqlite-storage.ts`, and `useCollectionData.ts` (see leg bodies for findings).
-
-### [Box View Move & Undo Operations] — Leg 3
-Undo for multi-drag / `fillBoxSlots` moves: extends Leg 2's undo stack to cover multi-drag
-(array-of-snapshots + batch inverse, instead of Leg 2's single prior-state capture), and
-should also cover Leg 1's cross-location move (now shipped — see COMPLETED.md).
-`StorageAdapter.moveEntriesToLocation(storageLocationId, placements)` is the API to invert:
-each placement's prior state is that same entry's pre-move (storageLocationId, boxNumber,
-boxSlot) triple, so a snapshot taken before the call and re-applied through the same method
-(or a plain setEntryBoxPosition/setEntryStorageLocation pair, if simpler) is the undo.
-Last touched: 2026-09-20. Re-check count: 0.
+No milestone currently in progress — Box View Move & Undo Operations shipped 2026-09-20
+(see MILESTONES.md). Next milestone not yet picked.
 
 ## Unscheduled
 
@@ -78,7 +64,7 @@ together rather than as separate milestones:
 Last touched: 2026-09-19. Re-check count: 0.
 
 ### [Codebase File-Size Cleanup] — future milestone
-Two files past the line-count caps, both candidates for the same split pattern
+Three files past the line-count caps, candidates for the same split pattern
 (collection-backup.ts's extraction from sqlite-storage.ts, Leg 3 of Box Arrangement, is the
 template):
 - **Split schema.ts**: 567 lines, 67 past the 500 hard cap — grew via the box/placeholder
@@ -99,8 +85,15 @@ template):
   completeness tier migration (`bulkSetEntryGender`). Candidate split: the
   CollectionEntry-specific prepared statements/methods (setOwned/setEntryOrigin/
   setEntryStorageLocation/box-position/bulk-* — roughly a third of the file) into their own
-  module, mirroring collection-backup.ts's pattern.
-Last touched: 2026-09-04. Re-check count: 0.
+  module, mirroring collection-backup.ts's pattern. Now 743 lines as of Leg 3 of the Box
+  View Move & Undo Operations milestone (`restoreEntryBoxPositions`), well past the cap.
+- **Split useCollectionData.ts**: 501 lines, 1 past the 500 hard cap as of Leg 3 of the Box
+  View Move & Undo Operations milestone (`restoreEntryBoxPositions`'s renderer-side undo
+  plumbing pushed it over). Candidate split: the box-position/undo-stack slice
+  (setEntryBoxPosition/swapEntryBoxPositions/fillBoxSlots/moveEntriesToLocation/undo and
+  their apply/snapshot helpers — roughly the same "one feature area" carve-out as the other
+  two files above) into its own hook, composed back in by useCollectionData.
+Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Evolution-chain reachability for species availability] — future milestone
 Surfaced by Leg 2 of the (now-closed) Deeper Per-Game Validity milestone: re-running the

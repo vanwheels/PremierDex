@@ -4,6 +4,7 @@ Index of shipped milestones. Name, date, status, and a link to the post-mortem d
 same scannable spirit as `TODO.md`, not prose. See `docs/postmortems/<milestone-slug>.md`
 for what shipped/went well/didn't per milestone.
 
+- **Box View Move & Undo Operations** — 2026-09-20 — Shipped — [post-mortem](docs/postmortems/box-view-move-undo-operations.md)
 - **Box View Quick-Wins Sweep** — 2026-09-19 — Shipped — [post-mortem](docs/postmortems/box-view-quick-wins-sweep.md)
 - **Ribbons/Alpha/Size/Capture-Date Tracking** — 2026-09-19 — Shipped — [post-mortem](docs/postmortems/ribbons-alpha-size-capture-date-tracking.md)
 - **Deeper Per-Game Validity & Curated Met Locations** — 2026-09-19 — Shipped — [post-mortem](docs/postmortems/deeper-per-game-validity-curated-met-locations.md)

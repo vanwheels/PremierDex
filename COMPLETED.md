@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Box View Move & Undo Operations Leg 3: multi-drag/cross-location undo] — 2026-09-20
+Final leg — milestone shipped, see MILESTONES.md. `fillBoxSlots` and `moveEntriesToLocation`
+wrote directly to the DB with no undo capture, unlike Leg 2's single-move/swap undo. Added
+`StorageAdapter.restoreEntryBoxPositions`, an atomic vacate-then-restore batch write (same
+non-deferrable-UNIQUE-index workaround as `fillBoxSlots`/`swapEntryBoxPositions`
+themselves), and a `'batch'` undo-stack entry (array of per-entry
+storageLocationId/boxNumber/boxSlot snapshots) that both `fillBoxSlots` and
+`moveEntriesToLocation` now push before writing. See commit `d6b5480`.
+
 ## [Box View Move & Undo Operations Leg 2: single-move/swap undo] — 2026-09-20
 Added an undo stack to `useCollectionData`: `setEntryBoxPosition` captures the entry's
 prior box position (via an `entriesRef` so the callback stays zero-dependency) before the
