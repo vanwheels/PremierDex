@@ -45,7 +45,8 @@ function ownedEntry(id: number, shiny: boolean, nickname: string | null = null):
     boxSlot: null,
     genderConfirmed: false,
     isAlpha: false,
-    captureDate: null
+    captureDate: null,
+    sizeClass: null
   }
 }
 

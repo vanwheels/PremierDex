@@ -25,6 +25,7 @@ function makeEntry(overrides: Partial<CollectionEntry> = {}): CollectionEntry {
     genderConfirmed: false,
     isAlpha: false,
     captureDate: null,
+    sizeClass: null,
     ...overrides
   }
 }

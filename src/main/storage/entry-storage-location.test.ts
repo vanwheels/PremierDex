@@ -92,7 +92,8 @@ describe('collection entry storage location', () => {
       caughtBall: 'Great Ball',
       metLocation: 'Route 1',
       isAlpha: false,
-      captureDate: null
+      captureDate: null,
+      sizeClass: null
     })
 
     const updated = await storage.setEntryStorageLocation(entry.id, location.id)

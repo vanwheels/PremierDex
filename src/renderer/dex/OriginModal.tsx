@@ -4,6 +4,7 @@ import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { findOriginGame } from '@shared/data/origin-games'
 import { ORIGIN_LANGUAGES } from '@shared/data/languages'
 import { ballPoolForGame, type PokeBall } from '@shared/data/poke-balls'
+import { SIZE_CLASSES } from '@shared/data/size-classes'
 import { OriginGameInput } from '../trainer/OriginGameInput'
 
 const TID_MAX = 999999
@@ -68,6 +69,11 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   // tied to a Trainer Profile, not seeded by "Copy from Trainer Profile".
   const [isAlpha, setIsAlpha] = useState(entry.isAlpha)
   const [captureDate, setCaptureDate] = useState(entry.captureDate ?? '')
+  // Size classification (Leg 3) — same independently-editable treatment, not tied to a
+  // Trainer Profile, not seeded by "Copy from Trainer Profile", and not filtered by game
+  // (see docs/investigations/ribbons-alpha-size-capture-date.md's Leg 3 update for why the
+  // full 9-value set stays selectable regardless of origin game).
+  const [sizeClass, setSizeClass] = useState(entry.sizeClass ?? '')
 
   useEffect(() => {
     window.premierDex.listTrainerProfiles().then(setProfiles)
@@ -140,7 +146,8 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
           caughtBall: null,
           metLocation: null,
           isAlpha: false,
-          captureDate: null
+          captureDate: null,
+          sizeClass: null
         }
       : {
           trainerProfileId,
@@ -153,7 +160,8 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
           caughtBall: caughtBall || null,
           metLocation: metLocation.trim() || null,
           isAlpha,
-          captureDate: captureDate || null
+          captureDate: captureDate || null,
+          sizeClass: sizeClass || null
         }
     onSave(entry.id, input)
     onClose()
@@ -252,6 +260,17 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
         <label className="origin-modal-field">
           Capture Date
           <input type="date" value={captureDate} onChange={(e) => setCaptureDate(e.target.value)} />
+        </label>
+        <label className="origin-modal-field">
+          Size Class
+          <select value={sizeClass} onChange={(e) => setSizeClass(e.target.value)}>
+            <option value="">—</option>
+            {SIZE_CLASSES.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="origin-modal-field origin-modal-checkbox-field">
           <input type="checkbox" checked={isAlpha} onChange={(e) => setIsAlpha(e.target.checked)} />

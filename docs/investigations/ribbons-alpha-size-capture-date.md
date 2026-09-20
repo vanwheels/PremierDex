@@ -182,3 +182,48 @@ Replaces this Leg 1 entry in TODO.md:
 - **Legs 4–5:** Ribbons & Marks — the real work of this milestone. Split schema from data
   curation rather than one large leg, matching this project's "smaller slice per leg"
   preference and the precedent set by the postgame-availability data split last milestone.
+
+## Leg 3 update (2026-09-19): confirmed per-game presentation, locked the bucket set
+
+Researched via Serebii/Bulbapedia (WebSearch/WebFetch, not from memory) exactly what each
+applicable game shows a player, since the table in the "Size classification" section above
+had two unconfirmed rows:
+
+| Game | Confirmed in-game presentation |
+|---|---|
+| Let's Go Pikachu/Eevee | Height-only, 5-tier: XS / S / (unlabeled standard) / L / XL, shown via aura color (blue=small, red=large) and tracked as tallest/shortest per species in the Pokédex. No weight indicator. |
+| Legends Arceus | Binary only: aura color (small/large) plus "Small"/"Large" research-task language — no middle categories are ever shown as text, unlike Let's Go's 5-tier or Z-A's 5-tier below. |
+| Scarlet/Violet | 9-tier: a Mesagoza NPC assigns one of 9 dialogue responses per size-check, community-shorthanded XXXS through XXXL (0/255 and 255/255 are the two named-Mark-granting extremes). |
+| **Legends Z-A (confirmed this leg)** | 5-tier, shown directly as a labeled category on the Pokémon's own summary screen (not just aura/dialogue): **XS / S / M / L / XL** — a real UI label, more directly displayed than any other game's presentation. |
+| Pokémon GO | 4-tag: XXS / XS / XL / XXL shown on the Pokémon's summary screen; anything not tagged is implicitly "normal" (no explicit M/S/L tag exists). Separate mechanic from the 0–255 scalar, as already noted above. |
+
+This confirms the games are **not** all the same granularity — Arceus is a true binary,
+Let's Go and Z-A are both real 5-tier scales (though only Z-A labels its middle tier "M"
+in-game; Let's Go leaves it unlabeled), Scarlet/Violet is the finest at 9 tiers, and GO
+only ever labels its 4 extremes. Leg 1's "probably yes" lean toward one shared column
+holds: the alternative (a per-game-shaped column) would need a different CHECK per
+origin_game, which none of this schema's other closed-set columns do, and would block the
+simple "one dropdown, one column" UI Leg 1 already committed to.
+
+**Locked bucket set: the Scarlet/Violet 9-tier vocabulary** — `XXXS, XXS, XS, S, M, L, XL,
+XXL, XXXL` — as a single nullable CHECK-constrained TEXT column, same shape as
+`caught_ball`/`language`. It's the most granular vocabulary any applicable game actually
+uses, so every other game's coarser presentation maps onto a subset of it with no
+information loss in the other direction:
+- Z-A's XS/S/M/L/XL and Let's Go's XS/S/(standard=M)/L/XL both map onto this set's middle
+  five values directly.
+- GO's XXS/XS/XL/XXL map onto four of this set's values directly (a GO entry with no
+  tag recorded should just leave `size_class` null, same as any other "didn't check"
+  case — not forced into "M").
+- Arceus's binary aura only tells the player "small" or "large" — the user records their
+  best-fit approximation (likely S/XS or L/XL) rather than the tracker inventing a fake
+  precision the game never gave them. This is the one real "coarser approximation" case
+  Leg 1's write-up flagged as possibly needed; it's accepted rather than avoided, since the
+  alternative (a second, Arceus-only column) is speculative complexity for a single game's
+  binary signal.
+
+No per-game restriction on the OriginModal dropdown (unlike `caught_ball`'s
+`ballPoolForGame` for Legends Arceus) — every value stays selectable for every game, same
+trust-the-user-input precedent `is_alpha` already established for this milestone. Building
+a per-game-filtered picker for a field whose whole premise is "some games can only
+approximate this scale anyway" would be speculative precision this leg doesn't need.

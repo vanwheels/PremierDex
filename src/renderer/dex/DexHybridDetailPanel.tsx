@@ -67,6 +67,7 @@ export function DexHybridDetailPanel({
           {!shiny && row.alwaysShiny && <span className="dex-always-shiny-badge">Always shiny</span>}
           {shiny && row.shinyLocked && <span className="dex-shiny-locked-badge">Shiny-locked</span>}
           {entry.isAlpha && <span className="dex-alpha-badge">Alpha</span>}
+          {entry.sizeClass && <span className="dex-size-class-badge">Size: {entry.sizeClass}</span>}
           {invalidCombo?.invalid && (
             <span className="dex-invalid-combo-badge" title={invalidCombo.reasons.join('; ')}>
               Invalid combo

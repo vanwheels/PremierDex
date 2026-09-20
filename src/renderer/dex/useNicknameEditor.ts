@@ -44,7 +44,8 @@ export function useNicknameEditor(
       caughtBall: entry.caughtBall,
       metLocation: entry.metLocation,
       isAlpha: entry.isAlpha,
-      captureDate: entry.captureDate
+      captureDate: entry.captureDate,
+      sizeClass: entry.sizeClass
     })
   }
 

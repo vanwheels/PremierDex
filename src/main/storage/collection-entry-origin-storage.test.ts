@@ -41,7 +41,8 @@ const ORIGIN_INPUT = {
   caughtBall: 'Great Ball',
   metLocation: 'Route 1',
   isAlpha: true,
-  captureDate: '2020-11-15'
+  captureDate: '2020-11-15',
+  sizeClass: 'XL'
 }
 
 describe('collection entry origin', () => {
@@ -71,7 +72,8 @@ describe('collection entry origin', () => {
       caughtBall: null,
       metLocation: null,
       isAlpha: false,
-      captureDate: null
+      captureDate: null,
+      sizeClass: null
     })
 
     expect(cleared.originGame).toBeNull()
@@ -84,6 +86,7 @@ describe('collection entry origin', () => {
     expect(cleared.metLocation).toBeNull()
     expect(cleared.isAlpha).toBe(false)
     expect(cleared.captureDate).toBeNull()
+    expect(cleared.sizeClass).toBeNull()
   })
 
   it('rejects a caught ball value outside the fixed Poké Ball list at the DB layer', async () => {
@@ -91,6 +94,13 @@ describe('collection entry origin', () => {
     const entry = await findBulbasaurBaseEntry(storage)
 
     await expect(storage.setEntryOrigin(entry.id, { ...ORIGIN_INPUT, caughtBall: 'Pizza Ball' })).rejects.toThrow()
+  })
+
+  it('rejects a size class value outside the fixed 9-tier list at the DB layer', async () => {
+    const storage = createSqliteStorage(':memory:')
+    const entry = await findBulbasaurBaseEntry(storage)
+
+    await expect(storage.setEntryOrigin(entry.id, { ...ORIGIN_INPUT, sizeClass: 'Gigantamax' })).rejects.toThrow()
   })
 
   it('rejects a tid past the 6-digit range at the DB layer', async () => {

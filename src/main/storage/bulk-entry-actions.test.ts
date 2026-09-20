@@ -226,7 +226,8 @@ describe("duplicate a storage location's entries", () => {
       caughtBall: 'Great Ball',
       metLocation: 'Route 1',
       isAlpha: true,
-      captureDate: '2020-11-15'
+      captureDate: '2020-11-15',
+      sizeClass: 'XL'
     })
 
     const clonedLocation = await storage.duplicateStorageLocation(source.id)
@@ -241,6 +242,7 @@ describe("duplicate a storage location's entries", () => {
     expect(duplicate.otName).toBe('Ash')
     expect(duplicate.isAlpha).toBe(true)
     expect(duplicate.captureDate).toBe('2020-11-15')
+    expect(duplicate.sizeClass).toBe('XL')
     expect(duplicate.boxNumber).toBeNull()
     expect(duplicate.boxSlot).toBeNull()
     // The source entry is untouched — a duplicate is a new individual, not a move.

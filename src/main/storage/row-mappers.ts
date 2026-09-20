@@ -55,6 +55,7 @@ export interface CollectionEntryRow {
   gender_confirmed: 0 | 1
   is_alpha: 0 | 1
   capture_date: string | null
+  size_class: string | null
 }
 
 export interface TrainerProfileRow {
@@ -141,7 +142,8 @@ export function toCollectionEntry(row: CollectionEntryRow): CollectionEntry {
     boxSlot: row.box_slot,
     genderConfirmed: row.gender_confirmed === 1,
     isAlpha: row.is_alpha === 1,
-    captureDate: row.capture_date
+    captureDate: row.capture_date,
+    sizeClass: row.size_class
   }
 }
 

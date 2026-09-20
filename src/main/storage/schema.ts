@@ -1,6 +1,7 @@
 import type Database from 'better-sqlite3'
 import { ORIGIN_LANGUAGES } from '@shared/data/languages'
 import { POKE_BALLS } from '@shared/data/poke-balls'
+import { SIZE_CLASSES } from '@shared/data/size-classes'
 
 // Language (Leg 14) is a genuinely closed set defined by the games themselves (unlike
 // `game`, which is open-ended enough to cover ROM hacks/future titles and so stays a
@@ -13,6 +14,11 @@ const LANGUAGE_LIST_SQL = ORIGIN_LANGUAGES.map((l) => `'${l}'`).join(', ')
 // POKE_BALLS so schema.ts and shared/data/poke-balls.ts can't drift apart. collection_entries
 // only: a ball is per-catch, not per-trainer, so trainer_profiles never gets this column.
 const POKE_BALL_LIST_SQL = POKE_BALLS.map((b) => `'${b}'`).join(', ')
+
+// Size classification (Leg 3 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
+// same closed-set reasoning as language/caught_ball above, built from SIZE_CLASSES so
+// schema.ts and shared/data/size-classes.ts can't drift apart.
+const SIZE_CLASS_LIST_SQL = SIZE_CLASSES.map((s) => `'${s}'`).join(', ')
 
 export function applySchema(db: Database.Database): void {
   db.pragma('journal_mode = WAL')
@@ -576,6 +582,18 @@ export function applySchema(db: Database.Database): void {
   }
   if (!entryColumnsGenderConfirmed.some((c) => c.name === 'capture_date')) {
     db.exec('ALTER TABLE collection_entries ADD COLUMN capture_date TEXT')
+  }
+
+  // size_class (Leg 3 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone, see
+  // docs/investigations/ribbons-alpha-size-capture-date.md's Leg 3 update) — a nullable
+  // CHECK-constrained TEXT column, same shape as caught_ball/language: self-referential
+  // (nothing to widen later against another column), so a plain ALTER TABLE ADD COLUMN is
+  // safe, no rebuild needed. Not game-gated at the schema level, same trust-the-user-input
+  // precedent as is_alpha/caught_ball above.
+  if (!entryColumnsGenderConfirmed.some((c) => c.name === 'size_class')) {
+    db.exec(
+      `ALTER TABLE collection_entries ADD COLUMN size_class TEXT CHECK (size_class IS NULL OR size_class IN (${SIZE_CLASS_LIST_SQL}))`
+    )
   }
 
   // Backfills `boxes` rows so every Storage Location has at least a Box 1, plus a row for

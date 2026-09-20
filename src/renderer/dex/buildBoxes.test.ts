@@ -58,6 +58,7 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
     genderConfirmed: false,
     isAlpha: false,
     captureDate: null,
+    sizeClass: null,
     ...overrides
   }
 }

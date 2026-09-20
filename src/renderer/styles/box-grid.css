@@ -113,6 +113,22 @@
   filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7));
 }
 
+/* Size classification (Leg 3 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
+   bottom-left corner, the one spot shiny (top-right), caught-ball (top-left), and Alpha
+   (bottom-right) leave free. Smaller font than the other corner marks since it renders a
+   2-4 character string (e.g. "XXXL") rather than a single glyph. */
+.dex-box-cell-size-class-badge {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--muted);
+  pointer-events: none;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7));
+}
+
 /* Vanny feedback 2026-09-03: the selection border read as an alarm-red blemish rather
  * than a highlight — dropped for Box view specifically (Hybrid view's own
  * dex-hybrid-tile-selected, which this class is shared with, is untouched). */

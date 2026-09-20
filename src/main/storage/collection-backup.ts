@@ -71,7 +71,7 @@ export function createBackupOperations(db: Database.Database): {
       ot_name = @otName, tid = @tid, sid = @sid, language = @language, nickname = @nickname,
       caught_ball = @caughtBall, storage_location_id = @storageLocationId, met_location = @metLocation,
       box_number = @boxNumber, box_slot = @boxSlot, gender_confirmed = @genderConfirmed,
-      is_alpha = @isAlpha, capture_date = @captureDate
+      is_alpha = @isAlpha, capture_date = @captureDate, size_class = @sizeClass
     WHERE id = @id
   `)
 
@@ -175,6 +175,7 @@ export function createBackupOperations(db: Database.Database): {
         genderConfirmed: boolean
         isAlpha: boolean
         captureDate: string | null
+        sizeClass: string | null
       }
       const wantedByKey = new Map<string, WantedEntry>()
       const importOrdinalCounters = new Map<string, number>()
@@ -227,7 +228,9 @@ export function createBackupOperations(db: Database.Database): {
           // Same defensive guard for a pre-Leg-2 (Ribbons/Alpha/Size/Capture-Date
           // milestone) backup file, which predates both fields.
           isAlpha: entry.isAlpha ?? false,
-          captureDate: entry.captureDate ?? null
+          captureDate: entry.captureDate ?? null,
+          // Same guard for a pre-Leg-3 backup file, which predates this field.
+          sizeClass: entry.sizeClass ?? null
         })
       }
 
@@ -270,7 +273,8 @@ export function createBackupOperations(db: Database.Database): {
             boxSlot: wanted?.boxSlot ?? null,
             genderConfirmed: wanted?.genderConfirmed ? 1 : 0,
             isAlpha: wanted?.isAlpha ? 1 : 0,
-            captureDate: wanted?.captureDate ?? null
+            captureDate: wanted?.captureDate ?? null,
+            sizeClass: wanted?.sizeClass ?? null
           })
         }
 

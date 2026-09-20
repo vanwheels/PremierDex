@@ -63,7 +63,8 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     UPDATE collection_entries
     SET trainer_profile_id = @trainerProfileId, origin_game = @originGame, ot_name = @otName,
       tid = @tid, sid = @sid, language = @language, nickname = @nickname, caught_ball = @caughtBall,
-      met_location = @metLocation, is_alpha = @isAlpha, capture_date = @captureDate
+      met_location = @metLocation, is_alpha = @isAlpha, capture_date = @captureDate,
+      size_class = @sizeClass
     WHERE id = @id
   `)
   // Separate from setEntryOriginStmt above — storage location is its own axis (Leg 3),
@@ -214,10 +215,10 @@ export function createSqliteStorage(dbPath: string): StorageAdapter {
     INSERT INTO collection_entries
       (form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
        language, nickname, caught_ball, storage_location_id, met_location, box_number, box_slot,
-       is_alpha, capture_date)
+       is_alpha, capture_date, size_class)
     SELECT form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid,
        language, nickname, caught_ball, @newLocationId, met_location, NULL, NULL,
-       is_alpha, capture_date
+       is_alpha, capture_date, size_class
     FROM collection_entries WHERE storage_location_id = @sourceId
   `)
   const orphanEntriesByTrainerProfileStmt = db.prepare(

@@ -46,6 +46,7 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
     genderConfirmed: false,
     isAlpha: false,
     captureDate: null,
+    sizeClass: null,
     ...overrides
   }
 }
@@ -274,7 +275,8 @@ function ownedEntry(id: number, shiny = false): CollectionEntry {
     boxSlot: null,
     genderConfirmed: false,
     isAlpha: false,
-    captureDate: null
+    captureDate: null,
+    sizeClass: null
   }
 }
 

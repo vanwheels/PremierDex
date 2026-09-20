@@ -91,7 +91,8 @@ tbody tr:hover {
 .dex-shiny-locked-badge,
 .dex-always-shiny-badge,
 .dex-invalid-combo-badge,
-.dex-alpha-badge {
+.dex-alpha-badge,
+.dex-size-class-badge {
   display: inline-block;
   padding: 0.05rem 0.5rem;
   border-radius: 999px;

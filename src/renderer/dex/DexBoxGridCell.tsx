@@ -99,6 +99,11 @@ export function DexBoxGridCell({
               α
             </span>
           )}
+          {cell.entry.sizeClass && (
+            <span className="dex-box-cell-size-class-badge" aria-hidden="true">
+              {cell.entry.sizeClass}
+            </span>
+          )}
           {cell.entry.caughtBall && (
             <span className="dex-box-cell-ball-badge">
               <BallIcon ball={cell.entry.caughtBall} />

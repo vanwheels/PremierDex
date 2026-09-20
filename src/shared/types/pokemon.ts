@@ -144,12 +144,20 @@ export interface CollectionEntry {
    * looseness as metLocation (no per-game gating). ISO 8601 (yyyy-mm-dd) or null.
    * Display-only in the info bar, no badge. */
   captureDate: string | null
+  /** Size classification (Leg 3 of the Ribbons/Alpha/Size/Capture-Date Tracking
+   * milestone) — one of shared/data/size-classes.ts's SIZE_CLASSES, Scarlet/Violet's own
+   * 9-tier vocabulary chosen as the shared bucket set since it's the most granular any
+   * applicable game shows a player (see docs/investigations/
+   * ribbons-alpha-size-capture-date.md's Leg 3 update for how each other applicable
+   * game's coarser presentation maps onto it). Not game-gated, same trust-the-user-input
+   * precedent as isAlpha. */
+  sizeClass: string | null
 }
 
 /** Field set for setEntryOrigin — everything but the assigned id, mirroring
  * TrainerProfileInput's shape. A blank game/otName clears origin entirely (and forces
- * tid/sid/language/caughtBall/metLocation/isAlpha/captureDate to their empty state),
- * independent of nickname. storageLocationId is deliberately absent here — see
+ * tid/sid/language/caughtBall/metLocation/isAlpha/captureDate/sizeClass to their empty
+ * state), independent of nickname. storageLocationId is deliberately absent here — see
  * CollectionEntry's doc comment above; it's written only via setEntryStorageLocation. */
 export interface CollectionEntryOriginInput {
   trainerProfileId: number | null
@@ -163,4 +171,5 @@ export interface CollectionEntryOriginInput {
   metLocation: string | null
   isAlpha: boolean
   captureDate: string | null
+  sizeClass: string | null
 }
