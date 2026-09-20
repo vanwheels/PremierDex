@@ -184,6 +184,13 @@
   gap: 0.5rem;
 }
 
+/* Leg 3 of the Box View Quick-Wins Sweep: "Jump to box" picker — plain <select>, no custom
+ * chrome, matching the pager's existing buttons rather than introducing a new control
+ * style for a single dropdown. */
+.dex-box-jump-select {
+  max-width: 12rem;
+}
+
 /* Leg 2 of the Box View Polish milestone: "Rename" sits inline in the pager label rather
  * than its own row — deliberately understated (no button chrome beyond the shared base
  * style) so it doesn't compete with the label text for attention. */

@@ -298,6 +298,7 @@ export function DexBoxPane({
           box={box}
           index={clampedIndex}
           count={boxes.length}
+          boxes={boxes}
           onGoTo={goToBox}
           onAddBox={handleAddBox}
           onRenameBox={onRenameBox}
