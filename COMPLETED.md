@@ -16,7 +16,7 @@ confirmed via Bulbapedia's Radio Tower disambiguation page rather than assumed. 
 Route 47/48 and the rebuilt Johto Safari Zone's new surrounding areas (all confirmed
 HGSS-exclusive), and excluded two new NPC-name indices (Mr. Pokémon, Primo) as gift-context
 strings rather than real places, same treatment Leg 13 gave Day-Care Couple. See commit
-`<pending>`.
+`9239f7e`.
 
 ## [Curated Met Location dataset Leg 14: curate Pokémon Platinum] — 2026-09-21
 Added `PLATINUM_SINNOH`, verified Leg 13's forward-looking summary of the grey (Platinum-only)
