@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Apply Template Combined Color Leg 3: UI wiring] — 2026-09-20
+Added the third radio option (Regular / Shiny / Both) to `DexApplyTemplateModal.tsx` and a
+combined-case preview line. No changes needed in `DexBoxGrid.tsx`/`applyTemplate.ts` —
+Leg 2's extraction already threads `DexColor` generically through to Leg 1's placement
+math. Pending Vanny's manual verification before the milestone is marked shipped (see
+TODO.md). See commit `<pending>`.
+
 ## [Apply Template Combined Color Leg 2: extract apply-template orchestration] — 2026-09-20
 `DexBoxGrid.tsx`'s `handleApplyTemplate` (box-creation math + sequential `onAddBox` awaits +
 the batched `onSetBoxPlaceholders` call) moved into a new `applyTemplate.ts` module, mirroring

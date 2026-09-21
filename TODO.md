@@ -2,28 +2,17 @@
 
 ## Current Milestone: Apply Template — Combined Regular+Shiny
 
-Scoped 2026-09-20. Today `DexApplyTemplateModal` takes a single `DexColor` ('regular' |
-'shiny') per run, threaded as one value through `requiredUnits`/`pendingRequiredUnits`/
-`placeUnitsIntoSlots` in `boxTemplates.ts` and `handleApplyTemplate` in `DexBoxGrid.tsx`.
-Adding a 'both' option means generating regular *and* shiny required-unit sets for the same
-tier and interleaving them into one placement pass instead of a 1:1 zip. Design decisions
-(confirmed with Vanny via AskUserQuestion):
-- Placement order for 'both': paired per species — regular ghost then shiny ghost for each
-  species in dex order, before moving to the next species (not a regular-block-then-
-  shiny-block pass).
-- UI: `DexColor` gains a third value 'both'; the modal keeps its existing single-select
-  radio control (Regular / Shiny / Both), not a switch to checkboxes.
-`DexBoxGrid.tsx` is already 511 lines (over the 500 hard cap) before this milestone adds
-anything, and `boxTemplates.ts` is at 315 (near the 300 soft cap) — Leg 2 extracts the
-apply-template orchestration out of `DexBoxGrid.tsx` before Leg 3 grows it further, so the
-combined-color UI wiring doesn't land in an already-over-cap file.
+Scoped 2026-09-20. Leg 3 (UI wiring) landed the third radio option and combined-preview
+text; `handleApplyTemplate`/`applyTemplate.ts` needed no changes since Leg 2 already threads
+`DexColor` generically. Code-complete — blocked only on Vanny's manual verification in the
+running app before this milestone can be marked shipped (post-mortem, MILESTONES.md entry,
+COMPLETED.md archive).
 
-### [Apply Template Combined Color: UI wiring] — Leg 3
-Add the third radio option (Regular / Shiny / Both) to `DexApplyTemplateModal.tsx`, update
-its live preview text for the combined case, and wire `onApply`'s color value through the
-Leg-2-extracted orchestration into Leg 1's combined placement math. Manual verification in
-the running app: apply 'Both' against an empty location and confirm regular/shiny ghosts
-land paired per species in dex order across however many boxes get created.
+### [Apply Template Combined Color: manual verification] — Leg 3 follow-up
+Apply 'Both' against an empty location and confirm regular/shiny ghosts land paired per
+species in dex order across however many boxes get created. Once confirmed, close out the
+milestone (post-mortem doc, MILESTONES.md entry, archive COMPLETED.md's current window).
+Blocked: needs Vanny to run the manual verification the leg spec calls for.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ## Unscheduled

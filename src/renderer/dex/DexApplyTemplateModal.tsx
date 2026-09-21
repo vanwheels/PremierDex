@@ -92,13 +92,17 @@ export function DexApplyTemplateModal({
             <input type="radio" name="template-color" checked={color === 'shiny'} onChange={() => setColor('shiny')} />
             Shiny
           </label>
+          <label>
+            <input type="radio" name="template-color" checked={color === 'both'} onChange={() => setColor('both')} />
+            Both
+          </label>
         </fieldset>
         <p className="dex-apply-template-preview">
           {preview.unitCount === 0
             ? 'Nothing left to place — every required unit already has a slot or placeholder here.'
             : `Places ${preview.unitCount} ghost${preview.unitCount === 1 ? '' : 's'}${
-                preview.extraBoxes > 0 ? ` across ${preview.extraBoxes} new box${preview.extraBoxes === 1 ? '' : 'es'}` : ''
-              }.`}
+                color === 'both' ? ' (regular + shiny, paired per species)' : ''
+              }${preview.extraBoxes > 0 ? ` across ${preview.extraBoxes} new box${preview.extraBoxes === 1 ? '' : 'es'}` : ''}.`}
         </p>
         <div className="origin-modal-actions">
           <button type="button" onClick={() => onApply(tier, color)} disabled={preview.unitCount === 0}>
