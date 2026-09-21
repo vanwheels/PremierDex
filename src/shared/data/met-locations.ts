@@ -594,6 +594,56 @@ const KANTO_GEN3: readonly string[] = [
   'Weepth Chamber'
 ]
 
+/**
+ * Orre, Pokémon Colosseum (Gen 3, no paired version) (Leg 11) — a fundamentally different
+ * shape from every prior family: Colosseum has zero wild encounters, so there's no
+ * Routes-first ordering to apply (it has no "Route N" locations at all — every area is a
+ * discrete named hub, not overland terrain) and every Pokémon (starter, Shadow Pokémon
+ * snagged, gifts/trades) is met at one of these fixed story locations instead. Alphabetical
+ * throughout. Verified against Bulbapedia's "List of locations by index number in Pokémon
+ * Colosseum and Pokémon XD" (Colosseum column of the shared GCN location-index table) plus
+ * individual location articles for anything the index table's short names left ambiguous,
+ * 2026-09-20.
+ *
+ * Deliberately excludes generic building interiors that have their own Bulbapedia articles
+ * but aren't a distinct Met Location from their parent town — Mayor's House and Pyrite Bldg
+ * (ordinary apartment/rental buildings) and Card e Room (an e-Reader peripheral feature, not
+ * a place) — same reasoning KANTO_GEN1/HOENN_GEN3_BASE already applied to Poké
+ * Marts/Pokémon Centers and non-place indices like "Secret Base"/"Inside of Truck". Kept
+ * in, despite being building interiors too, because each is a standalone plot-critical
+ * facility rather than a generic building type repeated across towns (same class as Silph
+ * Co. or Team Magma/Aqua Hideout): Cipher Lab, Prestige Precept Center, and Snagem Hideout.
+ * Relic Stone is Agate Village's shrine landmark but confirmed via its own index-table row,
+ * same treatment Olivine Lighthouse/Ruins of Alph got in JOHTO_GEN2. Under Colosseum and
+ * Deep Colosseum are confirmed distinct facilities (northern The Under vs. an unknown depth
+ * below it), not the same place under two names. Tower Colosseum is this game's own name for
+ * the Realgam Tower arena — "Realgam Colosseum" is XD's name for the same physical location,
+ * confirmed via that location's Bulbapedia article, so Colosseum's list uses "Tower
+ * Colosseum" here (XD's own list is Leg 12's concern). S.S. Libra, Kaminko's House, Citadark
+ * Isle, and Cipher Key Lair are confirmed XD-exclusive (Leg 12), not included here.
+ */
+const ORRE_COLOSSEUM: readonly string[] = [
+  'Agate Village',
+  'Cipher Lab',
+  'Deep Colosseum',
+  'Mt. Battle',
+  'Orre Colosseum',
+  'Outskirt Stand',
+  'Phenac City',
+  'Phenac Stadium',
+  'Prestige Precept Center',
+  'Pyrite Cave',
+  'Pyrite Colosseum',
+  'Pyrite Town',
+  'Relic Cave',
+  'Relic Stone',
+  'Snagem Hideout',
+  'The Under',
+  'The Under Subway',
+  'Tower Colosseum',
+  'Under Colosseum'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -605,7 +655,8 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Sapphire': HOENN_SAPPHIRE,
   'Pokémon Emerald': HOENN_EMERALD,
   'Pokémon FireRed': KANTO_GEN3,
-  'Pokémon LeafGreen': KANTO_GEN3
+  'Pokémon LeafGreen': KANTO_GEN3,
+  'Pokémon Colosseum': ORRE_COLOSSEUM
 }
 
 /**

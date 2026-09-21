@@ -227,4 +227,46 @@ describe('metLocationsForGame', () => {
     expect(metLocationsForGame('Pokémon FireRed')).toContain('Fateful Encounter')
     expect(metLocationsForGame('Pokémon LeafGreen')).toContain('Fateful Encounter')
   })
+
+  it('returns the curated Orre list for Pokémon Colosseum (Leg 11)', () => {
+    const locations = metLocationsForGame('Pokémon Colosseum')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Agate Village')
+    expect(locations).toContain('Outskirt Stand')
+    expect(locations).toContain('Phenac City')
+    expect(locations).toContain('Pyrite Town')
+    expect(locations).toContain('The Under')
+    expect(locations).toContain('Snagem Hideout')
+    expect(locations).toContain('Mt. Battle')
+    // Colosseum has no wild encounters and no overland Route locations at all.
+    expect(locations).not.toContain('Route 1')
+  })
+
+  it('distinguishes Colosseum\'s Tower Colosseum from Under Colosseum and Deep Colosseum (Leg 11)', () => {
+    const locations = metLocationsForGame('Pokémon Colosseum')
+    expect(locations).toContain('Tower Colosseum')
+    expect(locations).toContain('Under Colosseum')
+    expect(locations).toContain('Deep Colosseum')
+    // XD's name for the Realgam Tower arena, not Colosseum's own name for it.
+    expect(locations).not.toContain('Realgam Colosseum')
+  })
+
+  it('excludes XD-exclusive locations from Pokémon Colosseum\'s list (Leg 11)', () => {
+    const locations = metLocationsForGame('Pokémon Colosseum')
+    expect(locations).not.toContain('S.S. Libra')
+    expect(locations).not.toContain("Kaminko's House")
+    expect(locations).not.toContain('Citadark Isle')
+    expect(locations).not.toContain('Cipher Key Lair')
+  })
+
+  it('excludes generic building interiors that are not distinct Met Locations (Leg 11)', () => {
+    const locations = metLocationsForGame('Pokémon Colosseum')
+    expect(locations).not.toContain("Mayor's House")
+    expect(locations).not.toContain('Pyrite Bldg')
+    expect(locations).not.toContain('Card e Room')
+  })
+
+  it('appends Fateful Encounter to Pokémon Colosseum too (Leg 11)', () => {
+    expect(metLocationsForGame('Pokémon Colosseum')).toContain('Fateful Encounter')
+  })
 })
