@@ -146,4 +146,9 @@ vs. bulk vs. per-location Duplicate/Move actions). Wants a full pass over the UI
 more user-friendly, less redundant layout. Deliberately not scoped or folded into the current
 milestone — milestone-sized investigation on its own, not a leg. Needs its own scoping pass
 (which panels/modals, what "simpler" means concretely) before a leg sequence can be planned.
-Last touched: 2026-09-04. Re-check count: 0.
+Confirmed 2026-09-20 (Vanny, after using it): List view's right-click context menu for
+Ribbons & Marks/Edit Origin (Ribbons & Marks: List/Collection View Entry Points milestone,
+`DexTable`/`DexRow`) works but is unintuitive — right-clicking specifically the Origin
+button area to reach it isn't discoverable. Revisit the List view entry point mechanic as
+part of this pass rather than fixing in isolation.
+Last touched: 2026-09-20. Re-check count: 0.
