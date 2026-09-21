@@ -1,5 +1,40 @@
 # TODO
 
+## Current Milestone: Apply Template — Combined Regular+Shiny
+
+Scoped 2026-09-20. Today `DexApplyTemplateModal` takes a single `DexColor` ('regular' |
+'shiny') per run, threaded as one value through `requiredUnits`/`pendingRequiredUnits`/
+`placeUnitsIntoSlots` in `boxTemplates.ts` and `handleApplyTemplate` in `DexBoxGrid.tsx`.
+Adding a 'both' option means generating regular *and* shiny required-unit sets for the same
+tier and interleaving them into one placement pass instead of a 1:1 zip. Design decisions
+(confirmed with Vanny via AskUserQuestion):
+- Placement order for 'both': paired per species — regular ghost then shiny ghost for each
+  species in dex order, before moving to the next species (not a regular-block-then-
+  shiny-block pass).
+- UI: `DexColor` gains a third value 'both'; the modal keeps its existing single-select
+  radio control (Regular / Shiny / Both), not a switch to checkboxes.
+`DexBoxGrid.tsx` is already 511 lines (over the 500 hard cap) before this milestone adds
+anything, and `boxTemplates.ts` is at 315 (near the 300 soft cap) — Leg 2 extracts the
+apply-template orchestration out of `DexBoxGrid.tsx` before Leg 3 grows it further, so the
+combined-color UI wiring doesn't land in an already-over-cap file.
+
+### [Apply Template Combined Color: extract apply-template orchestration] — Leg 2
+`DexBoxGrid.tsx`'s `handleApplyTemplate` (box-creation math + sequential `onAddBox` awaits +
+the batched `onSetBoxPlaceholders` call) is about to grow to handle combined-color box-count
+math; extract it into its own module (mirroring `collection-backup.ts`'s extraction from
+`sqlite-storage.ts`, the established split pattern) before that growth happens, so
+`DexBoxGrid.tsx` doesn't land further over its already-over-cap 511 lines. Pure refactor —
+behavior for existing Regular/Shiny applies must be unchanged; no 'both' logic added yet.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Apply Template Combined Color: UI wiring] — Leg 3
+Add the third radio option (Regular / Shiny / Both) to `DexApplyTemplateModal.tsx`, update
+its live preview text for the combined case, and wire `onApply`'s color value through the
+Leg-2-extracted orchestration into Leg 1's combined placement math. Manual verification in
+the running app: apply 'Both' against an empty location and confirm regular/shiny ghosts
+land paired per species in dex order across however many boxes get created.
+Last touched: 2026-09-20. Re-check count: 0.
+
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
@@ -91,15 +126,6 @@ template):
   their apply/snapshot helpers — roughly the same "one feature area" carve-out as the other
   two files above) into its own hook, composed back in by useCollectionData.
 Last touched: 2026-09-20. Re-check count: 0.
-
-### [Apply Template: combined regular+shiny option] — future milestone
-Surfaced 2026-09-04 investigating a "Living Form Dex totals look wrong" report (see
-COMPLETED.md's Leg 6 writeup — the totals themselves checked out fine). Vanny's actual ask:
-Apply Template only takes one color (Regular or Shiny) per run today, requiring two separate
-applies to stock a location for both. Not a small fix — doubles the placement math (each
-required unit needs a regular *and* shiny ghost, competing for the same slots) — needs its
-own scoping rather than folding into Leg 6.
-Last touched: 2026-09-04. Re-check count: 0.
 
 ### [Ribbons & Marks: List/Collection view entry points] — future milestone
 Surfaced scoping Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone: the new
