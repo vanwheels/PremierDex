@@ -70,9 +70,11 @@ export function DexBoxDetailPanel({
 
   if (cell.kind === 'placeholder') {
     // Read-only — a "planned" ghost has no real entry behind it to edit (Leg 2 of the Dex
-    // completeness tier migration). Sprite stays the same plain rendering the grid cell
-    // uses (no gender/shiny art); the specific requirement shows as text instead, per
-    // Vanny's call.
+    // completeness tier migration). Sprite ignores gender (male/genderless art, same
+    // collapsed-representative convention requiredUnits uses) but does reflect shiny (Leg 3
+    // follow-up of the Apply Template Combined Color milestone — DexBoxGridCell's grid tile
+    // already does this; this panel had been left on the old plain-art rendering). The
+    // specific requirement still shows as text too.
     const requirement = [cell.gender === 'male' && '♂', cell.gender === 'female' && '♀', cell.shiny && 'Shiny'].filter(
       (part): part is string => Boolean(part)
     )
@@ -80,7 +82,7 @@ export function DexBoxDetailPanel({
       <div className="dex-hybrid-detail-panel">
         <img
           className="dex-hybrid-detail-sprite"
-          src={defaultSpriteUrl(cell.pokeapiId, cell.spriteFormSuffix, false, false)}
+          src={defaultSpriteUrl(cell.pokeapiId, cell.spriteFormSuffix, cell.shiny, false)}
           alt={cell.displayName}
           width={DETAIL_SPRITE_SIZE}
           height={DETAIL_SPRITE_SIZE}

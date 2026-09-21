@@ -146,11 +146,15 @@ export interface BoxCell extends EntryDisplayInfo {
 /** A "planned" placeholder slot (Leg 5 of the Box View Polish milestone) — the user's
  * intent to eventually put some form/gender/color here, set either via a right-click on an
  * empty slot (species-only picker) or by applying a Box Template (Leg 2 of the Dex
- * completeness tier migration). See shared/types/box.ts's BoxPlaceholder. `gender`/`shiny`
- * are carried through for the detail panel's read-only "what specifically goes here" text
- * (DexBoxDetailPanel) — sprite rendering deliberately ignores them and always shows the
- * plain base-form art (Vanny's call), so this doesn't extend EntryDisplayInfo the way
- * BoxCell does. pokeapiId/spriteFormSuffix/speciesId are denormalized from the
+ * completeness tier migration). See shared/types/box.ts's BoxPlaceholder. `gender` is
+ * carried through only for the detail panel's read-only "what specifically goes here" text
+ * (DexBoxDetailPanel) — sprite rendering ignores it and always shows the male/genderless
+ * art, same collapsed-representative convention `requiredUnits` uses. `shiny` DOES drive
+ * sprite rendering (DexBoxGridCell, Leg 3 follow-up of the Apply Template Combined Color
+ * milestone) so a regular and shiny ghost for the same species — now placed adjacent by a
+ * combined-color template apply — read as visually distinct rather than identical. This
+ * doesn't extend EntryDisplayInfo the way BoxCell does since it's still only a planned slot,
+ * not a real individual. pokeapiId/spriteFormSuffix/speciesId are denormalized from the
  * placeholder's own formId at build time (buildBoxes.ts), same convention BoxCell already
  * follows for its own lookups. */
 export interface BoxPlaceholderCell {

@@ -128,23 +128,31 @@ export function DexBoxGridCell({
         </>
       )}
       {isPlaceholder && (
-        <SpriteThumbnail
-          pokeapiId={cell.pokeapiId}
-          spriteFormSuffix={cell.spriteFormSuffix}
-          female={false}
-          size={CELL_SPRITE_SIZE}
-          displayName={cell.displayName}
-          ariaLabel={`${cell.displayName} — planned`}
-          className={
-            ['dex-hybrid-tile', 'dex-box-cell-placeholder-tile', isSelected && 'dex-hybrid-tile-selected']
-              .filter(Boolean)
-              .join(' ')
-          }
-          // Not draggable (see `draggable` above) — click-to-select (Leg 2 of the Dex
-          // completeness tier migration) and right-click are the only interactions a
-          // placeholder cell supports.
-          onClick={onClickPlaceholder}
-        />
+        <>
+          {cell.shiny && (
+            <span className="dex-box-cell-shiny-badge" aria-hidden="true">
+              ✨
+            </span>
+          )}
+          <SpriteThumbnail
+            pokeapiId={cell.pokeapiId}
+            spriteFormSuffix={cell.spriteFormSuffix}
+            female={false}
+            shiny={cell.shiny}
+            size={CELL_SPRITE_SIZE}
+            displayName={cell.displayName}
+            ariaLabel={`${cell.displayName} — planned`}
+            className={
+              ['dex-hybrid-tile', 'dex-box-cell-placeholder-tile', isSelected && 'dex-hybrid-tile-selected']
+                .filter(Boolean)
+                .join(' ')
+            }
+            // Not draggable (see `draggable` above) — click-to-select (Leg 2 of the Dex
+            // completeness tier migration) and right-click are the only interactions a
+            // placeholder cell supports.
+            onClick={onClickPlaceholder}
+          />
+        </>
       )}
     </div>
   )
