@@ -2279,6 +2279,133 @@ const ALOLA_ULTRA_MOON: readonly string[] = [
   'Wela Volcano Park'
 ]
 
+/**
+ * Kanto, Pokémon Let's Go, Pikachu!/Let's Go, Eevee! (Gen 7, shared base list) (Leg 22) —
+ * a third, distinct Kanto map from both KANTO_GEN1 (Red/Blue/Yellow) and KANTO_GEN3
+ * (FireRed/LeafGreen's Sevii-Islands remake): a simplified Let's Go-specific redesign, no
+ * Sevii Islands, no Routes 26-28. Verified against `Category:Let's Go, Pikachu! and Let's
+ * Go, Eevee! locations` (fetched via the MediaWiki API's categorymembers query, same
+ * category-sweep method ALOLA_SM/ALOLA_ULTRA_SUN/ALOLA_ULTRA_MOON used for Generation VII,
+ * which likewise has no Bulbapedia index-number page), 2026-09-21, cross-checked against
+ * each candidate location's own article text rather than trusted from the category tag
+ * alone.
+ *
+ * **"Kanto" route/location-name prefixes are Bulbapedia disambiguation, not in-game text**
+ * — confirmed directly via the Kanto Route 1 article, which gives the in-game name as plain
+ * "Route 1". Applied the same normalization to every "Kanto X" category entry: "Kanto Power
+ * Plant" → "Power Plant" (confirmed via that article: "Kanto" is only used for this game's
+ * location in Generations II/IV/HGSS commentary, absent from its Generation VII text
+ * entirely — matching Power Plant's existing name in every prior list in this file),
+ * "Underground Path (Kanto Routes 5–6)"/"(7–8)" → "Underground Path (Routes 5–6)"/"(7–8)"
+ * (matching KANTO_GEN1/KANTO_GEN3's own naming), and "Victory Road (Kanto)" → "Victory
+ * Road" (same disambiguation-parenthetical drop SINNOH_GEN4_BASE/JOHTO_GEN4 already applied
+ * to their own region-qualified Victory Road entries).
+ *
+ * **"Pokémon Mansion (Kanto)" is confirmed present and explorable in Let's Go** (unlike
+ * Generation II's Kanto remake, which cut it) — real in-game name is plain "Pokémon
+ * Mansion", the "(Kanto)" is a Bulbapedia disambiguation suffix only.
+ *
+ * **"Team Rocket Hideout" replaces "Rocket Hideout" as this game's name for the same
+ * physical Celadon City location** — confirmed via that article: "called Rocket Hideout in
+ * the Generation I and III games," implying Let's Go uses the fuller name instead.
+ *
+ * **Safari Zone is confirmed absent** — no article for it carries this game's category tag,
+ * consistent with Let's Go replacing Fuchsia City's Safari Zone with GO Park thematically.
+ *
+ * **Fossil-revival labs are genuine gift-Pokémon locations, kept**: Cinnabar Lab (Aerodactyl
+ * is instead revived at the Pewter Museum of Science in this game per that article — see
+ * below) and Pewter Museum of Science, where the player "can sneak into the back of the
+ * museum and acquire the Old Amber from a scientist," later reviving Aerodactyl. Kept both
+ * despite that apparent swap since Cinnabar Lab's own article separately confirms a
+ * different fossil is revived there in Generation VII ("the fossil is revived immediately");
+ * Professor Oak's Laboratory is also kept, since the player's second starter Pokémon (one of
+ * Bulbasaur/Charmander/Squirtle) is received there as a gift, distinct from the
+ * Pikachu/Eevee partner met on Route 1 itself.
+ *
+ * **GO Park is included by direct mechanical confirmation, not by name-string inference**:
+ * its own article states "When it is caught in GO Park, the Pokémon's Original Trainer is
+ * set to the player in the Let's Go game" — a genuine in-game catch event (Poké Balls are
+ * thrown, per the same article's ball-type list), the same class of transfer-then-catch
+ * mechanic SINNOH_GEN4_BASE's "Pal Park" entry already represents for a different
+ * generation. No source directly quotes the exact Met Location string GO Park writes (no
+ * Generation VII index-number page exists to check against, same limitation ALOLA_SM's
+ * comment already notes), so this is the one entry in this list resting on mechanic-level
+ * confirmation rather than a literal quoted field value.
+ *
+ * **Excluded as generic building types with no confirmed catch/gift in this game** (same
+ * class of exclusion KANTO_GEN1/ORRE_COLOSSEUM already applied to Poké Mart/Pokémon
+ * Center/Mayor's House): Celadon Condominiums (confirmed no wild encounters; Let's Go
+ * specifically removed the Eevee gift this location had in earlier games), Celadon
+ * Department Store, Celadon Game Corner (confirmed un-playable machines in this game, no
+ * Pokémon awarded), Player's house, Poké Mart, and Pokémon Center. **Excluded as
+ * non-places**: "Kanto" itself (region name, same treatment SINNOH_GEN4_BASE's own
+ * region-name indices got) and "Hometown" (confirmed to mean Pallet Town, not a separate
+ * place — redundant with the "Pallet Town" entry already on this list). **Excluded for lack
+ * of corroboration**, same discipline KANTO_GEN3's comment already applied to declining an
+ * unconfirmed Route-outbuilding Pokémon Center: Pokémon Day Care (confirmed no Eggs exist in
+ * this game, so nothing can ever be Met there), Pokémon League Reception Gate (no confirmed
+ * encounters, only a Badge checkpoint), and Sea Cottage (Bill's house; rewards an S.S.
+ * Ticket, no Pokémon).
+ */
+const KANTO_LETS_GO: readonly string[] = [
+  'Route 1',
+  'Route 2',
+  'Route 3',
+  'Route 4',
+  'Route 5',
+  'Route 6',
+  'Route 7',
+  'Route 8',
+  'Route 9',
+  'Route 10',
+  'Route 11',
+  'Route 12',
+  'Route 13',
+  'Route 14',
+  'Route 15',
+  'Route 16',
+  'Route 17',
+  'Route 18',
+  'Route 19',
+  'Route 20',
+  'Route 21',
+  'Route 22',
+  'Route 23',
+  'Route 24',
+  'Route 25',
+  'Celadon City',
+  'Cerulean Cave',
+  'Cerulean City',
+  'Cinnabar Island',
+  'Cinnabar Lab',
+  "Diglett's Cave",
+  'Fighting Dojo',
+  'Fuchsia City',
+  'GO Park',
+  'Indigo Plateau',
+  'Lavender Town',
+  'Mt. Moon',
+  'Pallet Town',
+  'Pewter City',
+  'Pewter Museum of Science',
+  'Pokémon Mansion',
+  'Pokémon Tower',
+  'Power Plant',
+  "Professor Oak's Laboratory",
+  'Rock Tunnel',
+  'Saffron City',
+  'Seafoam Islands',
+  'Silph Co.',
+  'S.S. Anne',
+  'Team Rocket Hideout',
+  'Underground Path (Routes 5–6)',
+  'Underground Path (Routes 7–8)',
+  'Vermilion City',
+  'Victory Road',
+  'Viridian City',
+  'Viridian Forest'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -2309,7 +2436,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Sun': ALOLA_SM,
   'Pokémon Moon': ALOLA_SM,
   'Pokémon Ultra Sun': ALOLA_ULTRA_SUN,
-  'Pokémon Ultra Moon': ALOLA_ULTRA_MOON
+  'Pokémon Ultra Moon': ALOLA_ULTRA_MOON,
+  "Pokémon Let's Go, Pikachu!": KANTO_LETS_GO,
+  "Pokémon Let's Go, Eevee!": KANTO_LETS_GO
 }
 
 /**

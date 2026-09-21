@@ -914,4 +914,74 @@ describe('metLocationsForGame', () => {
     expect(metLocationsForGame('Pokémon Ultra Sun')).toContain('Fateful Encounter')
     expect(metLocationsForGame('Pokémon Ultra Moon')).toContain('Fateful Encounter')
   })
+
+  it("returns the curated Kanto list for Pokémon Let's Go, Pikachu! (Leg 22)", () => {
+    const locations = metLocationsForGame("Pokémon Let's Go, Pikachu!")
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 1')
+    expect(locations).toContain('Route 25')
+    expect(locations).toContain('Pallet Town')
+    expect(locations).toContain('Victory Road')
+  })
+
+  it("shares the same Kanto list between Let's Go, Pikachu! and Let's Go, Eevee! (Leg 22)", () => {
+    const pikachu = metLocationsForGame("Pokémon Let's Go, Pikachu!")
+    const eevee = metLocationsForGame("Pokémon Let's Go, Eevee!")
+    expect(pikachu).toEqual(eevee)
+  })
+
+  it("normalizes Bulbapedia's Kanto disambiguation prefixes/suffixes to plain in-game names (Leg 22)", () => {
+    const locations = metLocationsForGame("Pokémon Let's Go, Pikachu!")
+    expect(locations).toContain('Power Plant')
+    expect(locations).toContain('Pokémon Mansion')
+    expect(locations).toContain('Victory Road')
+    expect(locations).toContain('Underground Path (Routes 5–6)')
+    expect(locations).toContain('Underground Path (Routes 7–8)')
+    expect(locations).not.toContain('Kanto Power Plant')
+    expect(locations).not.toContain('Pokémon Mansion (Kanto)')
+    expect(locations).not.toContain('Victory Road (Kanto)')
+  })
+
+  it("uses Team Rocket Hideout, this game's name for Generation I's Rocket Hideout (Leg 22)", () => {
+    const locations = metLocationsForGame("Pokémon Let's Go, Pikachu!")
+    expect(locations).toContain('Team Rocket Hideout')
+    expect(locations).not.toContain('Rocket Hideout')
+  })
+
+  it('keeps the fossil-revival labs and Professor Oak\'s Laboratory as genuine gift locations (Leg 22)', () => {
+    const locations = metLocationsForGame("Pokémon Let's Go, Pikachu!")
+    expect(locations).toContain('Cinnabar Lab')
+    expect(locations).toContain('Pewter Museum of Science')
+    expect(locations).toContain("Professor Oak's Laboratory")
+  })
+
+  it('includes GO Park as a genuine catch location for Pokémon GO transfers (Leg 22)', () => {
+    const locations = metLocationsForGame("Pokémon Let's Go, Pikachu!")
+    expect(locations).toContain('GO Park')
+  })
+
+  it('excludes the Safari Zone, replaced by GO Park in this game (Leg 22)', () => {
+    const locations = metLocationsForGame("Pokémon Let's Go, Pikachu!")
+    expect(locations).not.toContain('Safari Zone')
+  })
+
+  it('excludes generic buildings with no confirmed catch/gift and non-place category entries (Leg 22)', () => {
+    const locations = metLocationsForGame("Pokémon Let's Go, Pikachu!")
+    expect(locations).not.toContain('Celadon Condominiums')
+    expect(locations).not.toContain('Celadon Department Store')
+    expect(locations).not.toContain('Celadon Game Corner')
+    expect(locations).not.toContain("Player's house")
+    expect(locations).not.toContain('Poké Mart')
+    expect(locations).not.toContain('Pokémon Center')
+    expect(locations).not.toContain('Kanto')
+    expect(locations).not.toContain('Hometown')
+    expect(locations).not.toContain('Pokémon Day Care')
+    expect(locations).not.toContain('Pokémon League Reception Gate')
+    expect(locations).not.toContain('Sea Cottage')
+  })
+
+  it("appends Fateful Encounter to Pokémon Let's Go, Pikachu!/Let's Go, Eevee! too (Leg 22)", () => {
+    expect(metLocationsForGame("Pokémon Let's Go, Pikachu!")).toContain('Fateful Encounter')
+    expect(metLocationsForGame("Pokémon Let's Go, Eevee!")).toContain('Fateful Encounter')
+  })
 })
