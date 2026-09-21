@@ -1,5 +1,20 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 17: curate Pokémon Black 2/White 2] — 2026-09-21
+Added `UNOVA_GEN5_B2W2_BASE` plus the Black 2/White 2 split, verified against the same raw
+Generation V location-index wikitext Leg 16 cited — Leg 16's forward-looking flag of indices
+00117-00153 plus 30015 as the Black 2/White 2-exclusive range confirmed here. Built as a full
+literal list (like Leg 9/14's Emerald/Platinum) rather than a UNOVA_GEN5_BASE splice: Cold
+Storage's index renames to Pokémon World Tournament rather than duplicating (confirmed via
+the PWT article — a Cold-Storage catch traded into Black 2/White 2 displays "PWT" because they
+share codepoint 0x0024, same index-renamed-not-duplicated pattern as Leg 9's Battle
+Tower→Battle Frontier), Routes 19-23 extend the numeric sequence, and Pokémon Dream Radar
+(index 30015) is included as a transfer-context location. Surfaced a third within-pair split
+beyond Black City/White Forest and Black Gate/White Gate: Black Tower and White Treehollow are
+each natively version-exclusive despite sharing the same index shading as the rest of the new
+range — confirmed via Bulbapedia's Black Tower article rather than assumed from the shading.
+See commit `052f775`.
+
 ## [Curated Met Location dataset Leg 16: curate Pokémon Black/White] — 2026-09-21
 Added `UNOVA_GEN5_BASE` plus the Black/White split, verified against Bulbapedia's raw
 Generation V location-index wikitext (indices 00000-00116, the range the table's header note
