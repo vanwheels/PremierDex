@@ -28,7 +28,7 @@ interface PokeApiVersionGroupResponse {
 }
 
 interface PokeApiPokedexResponse {
-  pokemon_entries: Array<{ pokemon_species: { url: string } }>
+  pokemon_entries: Array<{ entry_number: number; pokemon_species: { url: string } }>
 }
 
 /**
@@ -149,9 +149,15 @@ async function main(): Promise<void> {
   const allDexNames = [...new Set([...gameToDexNames.values()].flat())].sort()
   console.log(`Fetching ${allDexNames.length} distinct pokedexes...`)
   const pokedexes: Record<string, number[]> = {}
+  const entryNumbers: Record<string, Record<number, number>> = {}
   await mapWithConcurrency(allDexNames, async (dexName) => {
     const data = await fetchJson<PokeApiPokedexResponse>(`https://pokeapi.co/api/v2/pokedex/${dexName}`)
     pokedexes[dexName] = data.pokemon_entries.map((e) => idFromUrl(e.pokemon_species.url)).sort((a, b) => a - b)
+    const numbers: Record<number, number> = {}
+    for (const entry of data.pokemon_entries) {
+      numbers[idFromUrl(entry.pokemon_species.url)] = entry.entry_number
+    }
+    entryNumbers[dexName] = numbers
   })
 
   const gameToPokedexes: Record<string, string[]> = {}
@@ -159,7 +165,7 @@ async function main(): Promise<void> {
     gameToPokedexes[gameId] = dexNames
   }
 
-  const output: SpeciesAvailabilityData = { pokedexes, gameToPokedexes }
+  const output: SpeciesAvailabilityData = { pokedexes, entryNumbers, gameToPokedexes }
 
   const scriptDir = dirname(fileURLToPath(import.meta.url))
   const outDir = join(scriptDir, '..', 'data', 'pokemon')

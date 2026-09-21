@@ -9,7 +9,7 @@ import type { TrainerProfile } from '@shared/types/trainer-profile'
 // Empty until loadAll's fetch resolves (App gates rendering behind `loading` until then) —
 // an empty availability dataset makes the Dex view's invalid-combo check a no-op rather
 // than a crash.
-const EMPTY_SPECIES_AVAILABILITY: SpeciesAvailabilityData = { pokedexes: {}, gameToPokedexes: {} }
+const EMPTY_SPECIES_AVAILABILITY: SpeciesAvailabilityData = { pokedexes: {}, entryNumbers: {}, gameToPokedexes: {} }
 
 /** Leg 2 of the Box View Move & Undo Operations milestone — one entry's box position
  * immediately before a move, captured so undo can restore it. `storageLocationId` isn't

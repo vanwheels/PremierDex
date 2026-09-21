@@ -4,6 +4,7 @@ import { supplementalSpeciesForGame } from './supplemental-availability'
 
 const AVAILABILITY: SpeciesAvailabilityData = {
   pokedexes: { kanto: [1, 4, 7], hoenn: [252, 255, 258] },
+  entryNumbers: {},
   gameToPokedexes: {}
 }
 

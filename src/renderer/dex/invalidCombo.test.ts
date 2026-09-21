@@ -38,6 +38,7 @@ function makeEntry(overrides: Partial<CollectionEntry> = {}): CollectionEntry {
 // about their real dex membership.
 const AVAILABILITY: SpeciesAvailabilityData = {
   pokedexes: { 'original-kanto': [1, 2, 3, 167, 179], kanto: [1, 2, 3], hoenn: [252], 'extended-sinnoh': [387] },
+  entryNumbers: {},
   gameToPokedexes: {
     red: ['original-kanto'],
     colosseum: [],

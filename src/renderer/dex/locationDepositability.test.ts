@@ -57,7 +57,7 @@ function location(overrides: Partial<StorageLocation>): StorageLocation {
   return { id: 1, locationType: 'home', name: '', trainerProfileId: null, ...overrides }
 }
 
-const EMPTY_AVAILABILITY: SpeciesAvailabilityData = { pokedexes: {}, gameToPokedexes: {} }
+const EMPTY_AVAILABILITY: SpeciesAvailabilityData = { pokedexes: {}, entryNumbers: {}, gameToPokedexes: {} }
 
 describe('isRowDepositableAtLocation', () => {
   it('is always depositable when no location is selected (Unassigned tab)', () => {
@@ -109,6 +109,7 @@ describe('isRowDepositableAtLocation', () => {
   describe('save_file', () => {
     const availability: SpeciesAvailabilityData = {
       pokedexes: { 'original-kanto': [1, 2, 3] },
+      entryNumbers: {},
       gameToPokedexes: { red: ['original-kanto'], colosseum: [] }
     }
     const saveFile = location({ locationType: 'save_file', trainerProfileId: 1 })

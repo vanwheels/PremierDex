@@ -1,8 +1,10 @@
 import type { CollectionEntryOriginInput, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import { findOriginGame } from '@shared/data/origin-games'
 import type { BoxCell, BoxPlaceholderCell } from './types'
 import { checkEntryValidity } from './invalidCombo'
+import { regionalDexNumbersForGame } from './regionalDexNumbers'
 import { defaultSpriteUrl } from './sprites'
 import { BallIcon } from './BallIcon'
 import { useNicknameEditor } from './useNicknameEditor'
@@ -98,6 +100,8 @@ export function DexBoxDetailPanel({
   const { entry } = cell
   const storageLocationName = storageLocations.find((loc) => loc.id === entry.storageLocationId)?.name ?? '—'
   const invalidCombo = entry.owned ? checkEntryValidity(entry, cell.dexNumber, speciesAvailability, speciesById) : null
+  const originGameId = entry.originGame ? findOriginGame(entry.originGame)?.id : undefined
+  const regionalDexNumbers = originGameId ? regionalDexNumbersForGame(originGameId, cell.dexNumber, speciesAvailability) : []
 
   return (
     <div className="dex-hybrid-detail-panel">
@@ -146,6 +150,9 @@ export function DexBoxDetailPanel({
               {entry.sid !== null && <DetailField label="SID" value={String(entry.sid)} />}
               {entry.language && <DetailField label="Language" value={entry.language} />}
               {entry.originGame && <DetailField label="Origin Game" value={entry.originGame} />}
+              {regionalDexNumbers.map((d) => (
+                <DetailField key={d.dexDisplayName} label={`${d.dexDisplayName} Dex #`} value={`#${d.entryNumber}`} />
+              ))}
               {entry.metLocation && <DetailField label="Met Location" value={entry.metLocation} />}
               {entry.captureDate && <DetailField label="Capture Date" value={entry.captureDate} />}
               <DetailField label="Storage Location" value={storageLocationName} />

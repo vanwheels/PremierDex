@@ -13,8 +13,16 @@
  * to an empty array, has no availability data (Colosseum, XD, and Pokémon GO all fall
  * into this — see the fetch script's header comment) — callers must treat that as "no
  * data for this game," never as "nothing is available there."
+ *
+ * `entryNumbers` (Per-Game Regional Dex Numbers milestone, Leg 2) mirrors `pokedexes`'
+ * keying (dex name -> species id) but stores each species' regional dex entry number
+ * instead of just membership — see docs/investigations/regional-dex-numbers.md. A species
+ * present in `pokedexes[dexName]` but absent from `entryNumbers[dexName]` shouldn't occur
+ * (both come from the same PokeAPI response), but callers should still treat a missing
+ * entry as "no number to show" rather than assuming presence.
  */
 export interface SpeciesAvailabilityData {
   pokedexes: Record<string, number[]>
+  entryNumbers: Record<string, Record<number, number>>
   gameToPokedexes: Record<string, string[]>
 }
