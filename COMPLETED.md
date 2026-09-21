@@ -10,7 +10,7 @@ argued against aliasing) to a named base-array-per-family shape, with `metLocati
 now appending "Fateful Encounter" to every curated game. Closed out Blue as the trivial
 output of that restructure (aliased to Red's `KANTO_GEN1` array). Also collapsed TODO.md's
 remaining Legs 5–43 from one-game-per-leg down to Legs 5–28, one per map family. See commit
-`<pending>`.
+`277097f`.
 
 ## [Curated Met Location dataset Leg 3: curate Pokémon Red] — 2026-09-20
 First real curated list: Routes 1-25 plus every other named Kanto city/town/landmark
