@@ -6,7 +6,7 @@ Red/Blue differences (a Route 19 house for the Pikachu-Surf minigame, a redesign
 Cave interior, a swapped Viridian Forest item/trainer roster) and confirmed each is
 sub-location content within a named place already on the list, not a new or removed named
 location. Aliased `'Pokémon Yellow'` to `KANTO_GEN1` with no layering needed. See commit
-`<pending>`.
+`9a6e445`.
 
 ## [Curated Met Location dataset Leg 4: restructure to shared lists, add Fateful Encounter, curate Blue] — 2026-09-20
 Vanny flagged three domain corrections before Leg 5 started: paired versions (Red/Blue,
