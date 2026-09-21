@@ -1,5 +1,22 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 19: curate Pokémon Omega Ruby/Alpha Sapphire] — 2026-09-21
+Added `HOENN_ORAS`, verified against the same raw Generation VI location-index wikitext Leg
+18 cited — Leg 18's forward-looking flag of indices 00170-00354 plus 60004 as the ORAS-
+exclusive range confirmed here. The wikitext's own header states ORAS's engine recognizes
+every X/Y (Kalos) index too, for trade-display on transferred Pokémon — same "recognized for
+display, not physically on this game's map" distinction Legs 14/15 established for
+Platinum/HGSS, so `HOENN_ORAS` stays just the native Hoenn range rather than layering
+`KALOS_GEN6` in. Confirmed no within-pair split (unlike original Ruby/Sapphire): both teams'
+hideouts are single, version-non-conditional rows, visitable in both games via the Delta
+Episode — but Team Magma's hideout sits at Ruby/Sapphire's original Lilycove-area location,
+not Emerald's relocated Jagged Pass one. Curated the DexNav-era Mirage Spot system (13
+locations replacing RSE's single static Mirage Island) and confirmed "Soaring in the sky" is
+a real catch context (Mega Latios/Latias overworld flight), not a placeholder, via its own
+dedicated Bulbapedia article. Flagged `met-locations.test.ts` (now 765 lines, 265 past the
+hard cap) to Codebase File-Size Cleanup's future-milestone list rather than splitting it
+unprompted mid-leg. See commit `8059a00`.
+
 ## [Curated Met Location dataset Leg 18: curate Pokémon X/Y] — 2026-09-21
 Added `KALOS_GEN6`, verified against Bulbapedia's raw Generation VI location-index wikitext
 (indices 00000-00168, "appeared in X and Y" per the table's header note; 00170-00354 plus

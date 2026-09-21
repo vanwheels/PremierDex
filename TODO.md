@@ -4,7 +4,7 @@ Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILES
 
 ## Current Milestone: Curated Met Location dataset
 
-Leg 18 (Pokémon X/Y) closed 2026-09-21 — see COMPLETED.md.
+Leg 19 (Pokémon Omega Ruby/Alpha Sapphire) closed 2026-09-21 — see COMPLETED.md.
 
 **Legs 4–28** (below): curate every "map family" in `origin-games.ts`'s `ORIGIN_GAMES`
 roster, in release-date order. Restructured at Leg 4 (2026-09-20, Vanny) from the original
@@ -42,11 +42,6 @@ Each remaining leg's procedure:
 - Extend `met-locations.test.ts` to cover the newly curated family.
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
-
-### [Curated Met Location dataset] — Leg 19
-Pokémon Omega Ruby/Alpha Sapphire (Gen 6, shared base list — Hoenn remake, distinct from
-Leg 8/9's original Ruby/Sapphire/Emerald Hoenn map). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 20
 Pokémon Sun/Moon (Gen 7, shared base list). Curate per the procedure above.
@@ -182,7 +177,14 @@ template):
   (setEntryBoxPosition/swapEntryBoxPositions/fillBoxSlots/moveEntriesToLocation/undo and
   their apply/snapshot helpers — roughly the same "one feature area" carve-out as the other
   two files above) into its own hook, composed back in by useCollectionData.
-Last touched: 2026-09-20. Re-check count: 0.
+- **Split met-locations.test.ts**: 765 lines, 265 past the 500 hard cap as of Leg 19 of the
+  Curated Met Location dataset milestone — each leg adds its own describe block's worth of
+  `it(...)` cases and there are still 10 legs left in that milestone, so this will keep
+  growing. `met-locations.ts` itself is exempt as a large static data file, but the test file
+  is ordinary code and not exempt. Candidate split: one test file per map family/generation
+  (e.g. `met-locations.kanto.test.ts`, `met-locations.hoenn.test.ts`), mirroring how
+  `met-locations.ts`'s own const groupings are already organized by family.
+Last touched: 2026-09-21. Re-check count: 0.
 
 ### [Remove "Unassigned" as the default check-in bucket] — future milestone
 Raised by Vanny 2026-09-04: the Unassigned storage location is bad UX as a default landing
