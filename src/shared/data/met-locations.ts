@@ -2585,6 +2585,147 @@ const GALAR_GEN8: readonly string[] = [
   'Wyndon'
 ]
 
+/**
+ * Sinnoh, Pokémon Brilliant Diamond/Shining Pearl (Leg 24, shared base list — Gen 8 Sinnoh
+ * remake). Verified independently against Bulbapedia's raw wikitext for "List of locations
+ * by index number in Pokémon Brilliant Diamond and Shining Pearl" (fetched directly via the
+ * MediaWiki API's action=raw, 2026-09-21) rather than assuming SINNOH_GEN4_BASE's Diamond/
+ * Pearl list carries over unchanged — it doesn't.
+ *
+ * This page's table layout differs from SINNOH_GEN4_BASE's: instead of one Location Name
+ * column with availability color-coding, each index row has separate Locative ("at/in X")
+ * and Nominative ("X") columns, each further split into "Summary" and "Overworld" sub-forms.
+ * Cross-checked against a same-index counterexample with a real in-game answer to identify
+ * which sub-form is the actual recorded Met Location: index 0x001A (a Canalave Gym encounter)
+ * has Nominative-Summary "Canalave Gym" but Nominative-Overworld "Canalave City" — since
+ * Gyms are confirmed (same as every prior Sinnoh game) to never produce a Met Location
+ * distinct from their city, Nominative-Overworld is the field this list is built from, not
+ * Nominative-Summary. The page's own "Unused" section independently confirms this choice:
+ * it lists every Diamond/Pearl building-interior name this leg removes (below) as a string
+ * "present in the game data, but not assigned to any location" — i.e. producible in no other
+ * column BDSP actually surfaces to the player, Nominative-Overworld included.
+ *
+ * **Two genuine additions over SINNOH_GEN4_BASE, both confirmed real by the same method**:
+ * **Grand Underground** — a new mechanic (unlike Diamond/Pearl's non-catching Underground,
+ * BDSP's Grand Underground has wild encounters) that gets its own index range (0x01FC
+ * onward). Its many named sub-areas (Northeastern Zone, Landmark, Plain/Tall-Grass/Watery/
+ * Dusty/Fiery/Muddy/Twinkly/Snowdrift/Frosty Cave, Still-Water/Big Bluff/Sunlit/Stargleam/
+ * Glacial/Bogsunk/Typhlo Cavern) all confirmed via the same page's "Unused"/Display-only
+ * table to never surface as a Met Location — every one of them records simply "Grand
+ * Underground," not its own zone/cave name. **Ramanas Park** — confirmed via the raw
+ * wikitext's own Japanese room-name comments (every Ramanas Park sub-room is internally
+ * tagged "パルパーク," i.e. "Pal Park") to be BDSP's direct replacement for Diamond/Pearl's
+ * Pal Park, same Ruby/Sapphire/Emerald-legendary-transfer-and-recatch mechanic under a new
+ * name — so Pal Park itself is removed below, not kept alongside it.
+ *
+ * **One rename**: "Mt. Coronet" (Diamond/Pearl's abbreviated form) is "Mount Coronet" here,
+ * confirmed via the raw wikitext's own spelled-out Nominative-Overworld text at every one of
+ * its indices, not a transcription choice.
+ *
+ * **25 Diamond/Pearl locations removed, all building interiors or lake-guardian cavern
+ * rooms that fold into their parent city/lake's own name in this game** — confirmed absent
+ * from the main table (their interiors' Nominative-Overworld is always the parent city/lake)
+ * and independently listed in the page's own "Unused" section: Acuity Cavern, Cafe, Canalave
+ * Library, Contest Hall, Cycle Shop, Flower Shop, Footstep House, Foreign Building, Game
+ * Corner, Grand Lake, GTS (BDSP's Wonder Trade counterpart, "Global Wonder Station," is
+ * itself listed Unused — Jubilife City's GTS building records no distinct Met Location
+ * either way), Jubilife TV, Mining Museum, Pal Park (see Ramanas Park above), Poffin House,
+ * Pokémon Day Care, Pokémon Mansion, Pokétch Co., Restaurant, Sunyshore Market, Trainers'
+ * School, Valor Cavern, Veilstone Store, Verity Cavern, Vista Lighthouse. **Mystery Zone**
+ * is excluded as the same internal debug-placeholder non-place SINNOH_GEN4_BASE's comment
+ * already established.
+ */
+const BDSP_SINNOH: readonly string[] = [
+  'Route 201',
+  'Route 202',
+  'Route 203',
+  'Route 204',
+  'Route 205',
+  'Route 206',
+  'Route 207',
+  'Route 208',
+  'Route 209',
+  'Route 210',
+  'Route 211',
+  'Route 212',
+  'Route 213',
+  'Route 214',
+  'Route 215',
+  'Route 216',
+  'Route 217',
+  'Route 218',
+  'Route 219',
+  'Route 220',
+  'Route 221',
+  'Route 222',
+  'Route 223',
+  'Route 224',
+  'Route 225',
+  'Route 226',
+  'Route 227',
+  'Route 228',
+  'Route 229',
+  'Route 230',
+  'Acuity Lakefront',
+  'Amity Square',
+  'Battle Park',
+  'Battle Tower',
+  'Canalave City',
+  'Celestic Town',
+  'Eterna City',
+  'Eterna Forest',
+  'Fight Area',
+  'Floaroma Meadow',
+  'Floaroma Town',
+  'Flower Paradise',
+  'Fuego Ironworks',
+  'Fullmoon Island',
+  'Galactic HQ',
+  'Grand Underground',
+  'Great Marsh',
+  'Hall of Origin',
+  'Hearthome City',
+  'Iron Island',
+  'Jubilife City',
+  'Lake Acuity',
+  'Lake Valor',
+  'Lake Verity',
+  'Maniac Tunnel',
+  'Mount Coronet',
+  'Newmoon Island',
+  'Old Chateau',
+  'Oreburgh City',
+  'Oreburgh Gate',
+  'Oreburgh Mine',
+  'Pastoria City',
+  'Pokémon League',
+  'Ramanas Park',
+  'Ravaged Path',
+  'Resort Area',
+  'Ruin Maniac Cave',
+  'Sandgem Town',
+  'Seabreak Path',
+  'Sendoff Spring',
+  'Snowpoint City',
+  'Snowpoint Temple',
+  'Solaceon Ruins',
+  'Solaceon Town',
+  'Spear Pillar',
+  'Spring Path',
+  'Stark Mountain',
+  'Sunyshore City',
+  'Survival Area',
+  'Trophy Garden',
+  'Turnback Cave',
+  'Twinleaf Town',
+  'Valley Windworks',
+  'Valor Lakefront',
+  'Veilstone City',
+  'Verity Lakefront',
+  'Victory Road',
+  'Wayward Cave'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -2619,7 +2760,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   "Pokémon Let's Go, Pikachu!": KANTO_LETS_GO,
   "Pokémon Let's Go, Eevee!": KANTO_LETS_GO,
   'Pokémon Sword': GALAR_GEN8,
-  'Pokémon Shield': GALAR_GEN8
+  'Pokémon Shield': GALAR_GEN8,
+  'Pokémon Brilliant Diamond': BDSP_SINNOH,
+  'Pokémon Shining Pearl': BDSP_SINNOH
 }
 
 /**

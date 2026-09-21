@@ -1068,4 +1068,70 @@ describe('metLocationsForGame', () => {
     expect(metLocationsForGame('Pokémon Sword')).toContain('Fateful Encounter')
     expect(metLocationsForGame('Pokémon Shield')).toContain('Fateful Encounter')
   })
+
+  it('returns the curated Sinnoh list for Pokémon Brilliant Diamond (Leg 24)', () => {
+    const locations = metLocationsForGame('Pokémon Brilliant Diamond')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 201')
+    expect(locations).toContain('Route 230')
+    expect(locations).toContain('Twinleaf Town')
+    expect(locations).toContain('Mount Coronet')
+  })
+
+  it('shares the same Sinnoh list between Brilliant Diamond and Shining Pearl (Leg 24)', () => {
+    const bd = metLocationsForGame('Pokémon Brilliant Diamond')
+    const sp = metLocationsForGame('Pokémon Shining Pearl')
+    expect(sp).toEqual(bd)
+  })
+
+  it('includes Grand Underground and Ramanas Park, BDSP-specific additions over Diamond/Pearl (Leg 24)', () => {
+    const locations = metLocationsForGame('Pokémon Brilliant Diamond')
+    expect(locations).toContain('Grand Underground')
+    expect(locations).toContain('Ramanas Park')
+    expect(locations).not.toContain('Pal Park')
+  })
+
+  it("renames Diamond/Pearl's Mt. Coronet to this game's own Mount Coronet spelling (Leg 24)", () => {
+    const locations = metLocationsForGame('Pokémon Brilliant Diamond')
+    expect(locations).toContain('Mount Coronet')
+    expect(locations).not.toContain('Mt. Coronet')
+  })
+
+  it('folds Diamond/Pearl building interiors and lake-guardian caverns into their parent city/lake (Leg 24)', () => {
+    const locations = metLocationsForGame('Pokémon Brilliant Diamond')
+    expect(locations).not.toContain('Cafe')
+    expect(locations).not.toContain('Canalave Library')
+    expect(locations).not.toContain('Contest Hall')
+    expect(locations).not.toContain('Cycle Shop')
+    expect(locations).not.toContain('Flower Shop')
+    expect(locations).not.toContain('Footstep House')
+    expect(locations).not.toContain('Foreign Building')
+    expect(locations).not.toContain('Game Corner')
+    expect(locations).not.toContain('Grand Lake')
+    expect(locations).not.toContain('GTS')
+    expect(locations).not.toContain('Jubilife TV')
+    expect(locations).not.toContain('Mining Museum')
+    expect(locations).not.toContain('Poffin House')
+    expect(locations).not.toContain('Pokémon Day Care')
+    expect(locations).not.toContain('Pokémon Mansion')
+    expect(locations).not.toContain('Pokétch Co.')
+    expect(locations).not.toContain('Restaurant')
+    expect(locations).not.toContain('Sunyshore Market')
+    expect(locations).not.toContain("Trainers' School")
+    expect(locations).not.toContain('Veilstone Store')
+    expect(locations).not.toContain('Vista Lighthouse')
+    expect(locations).not.toContain('Acuity Cavern')
+    expect(locations).not.toContain('Valor Cavern')
+    expect(locations).not.toContain('Verity Cavern')
+  })
+
+  it('excludes non-place special indices from Pokémon Brilliant Diamond\'s list (Leg 24)', () => {
+    const locations = metLocationsForGame('Pokémon Brilliant Diamond')
+    expect(locations).not.toContain('Mystery Zone')
+  })
+
+  it('appends Fateful Encounter to Pokémon Brilliant Diamond/Shining Pearl too (Leg 24)', () => {
+    expect(metLocationsForGame('Pokémon Brilliant Diamond')).toContain('Fateful Encounter')
+    expect(metLocationsForGame('Pokémon Shining Pearl')).toContain('Fateful Encounter')
+  })
 })
