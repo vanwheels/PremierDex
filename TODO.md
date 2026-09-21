@@ -25,7 +25,11 @@ Legs 3–43 one-game-per-leg plan after three domain corrections:
 - **Generation V's Black City/White Forest is the one confirmed within-pair location
   split** (Black-only vs. White-only respectively) — everything else that differs between
   paired versions is version-exclusive *encounters*, not a location-list difference, so no
-  other pair needs a comparable split.
+  other pair needs a comparable split. **Superseded at Leg 8**: Ruby/Sapphire turned up a
+  second one — index 0x42's hideout is "Team Magma Hideout" in Ruby and "Team Aqua Hideout"
+  in Sapphire (same physical base, reskinned per version). Treat this as "check each pair
+  for a split rather than assume none," not "exactly two total" — later legs may turn up
+  more.
 
 Each remaining leg's procedure:
 - Add the family's major city/route Met Location list to `shared/data/met-locations.ts`
@@ -36,10 +40,6 @@ Each remaining leg's procedure:
 - Extend `met-locations.test.ts` to cover the newly curated family.
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
-
-### [Curated Met Location dataset] — Leg 8
-Pokémon Ruby/Sapphire (Gen 3, shared base list). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 9
 Pokémon Emerald (Gen 3) — verify against Leg 8's base and layer in whatever differs

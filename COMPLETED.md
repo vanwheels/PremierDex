@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 8: curate Pokémon Ruby/Sapphire] — 2026-09-20
+Added `HOENN_GEN3_BASE` (Routes 101-134 plus every other named place), verified against
+Bulbapedia's Generation III location-index table (the 0x00-0x57 range Ruby/Sapphire
+actually recognize, distinct from Emerald/FireRed-LeafGreen's wider range) and Serebii's
+Hoenn Pokéarth pages. Excluded non-place indices in that range (opening truck cutscene,
+per-player Secret Bases, unused duplicate indices, route-tied underwater dive spots).
+Surfaced a second within-pair location-name split beyond Leg 4's assumed Black
+City/White Forest exclusivity: index 0x42's hideout is "Team Magma Hideout" in Ruby and
+"Team Aqua Hideout" in Sapphire (same physical base, reskinned per version) — layered onto
+the shared base as `HOENN_RUBY`/`HOENN_SAPPHIRE`, same splice pattern `CRYSTAL_GEN2` used.
+TODO.md's restructure note updated to stop treating BW as the only possible split. See
+commit `82f08dd`.
+
 ## [Curated Met Location dataset Leg 7: curate Pokémon Crystal] — 2026-09-20
 Verified Crystal against Leg 6's `JOHTO_GEN2` base: Bulbapedia's Crystal Version article and
 its Mt. Silver/Battle Tower (Generation II) articles confirm Crystal's only named-location
