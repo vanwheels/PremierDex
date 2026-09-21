@@ -6,8 +6,10 @@ import { BOX_SIZE } from './buildBoxes'
 /** Regular vs. shiny — the color a Box Template's required-unit set is computed against.
  * Mirrors `CompletionBucket`'s `regular`/`shiny` split (completionStats.ts), which is
  * already the same "same axis config, two independent counts" shape Leg 1's investigation
- * describes a tier riding on top of. */
-export type DexColor = 'regular' | 'shiny'
+ * describes a tier riding on top of. `'both'` (Apply Template Combined Color, Leg 1) asks
+ * `requiredUnits` for both colors' unit sets merged into one paired-per-species ordering —
+ * see that function's doc comment. */
+export type DexColor = 'regular' | 'shiny' | 'both'
 
 /** One collectible unit a dex-completeness tier requires — the same
  * `(formId, gender, shiny)` triple `CollectionEntry`/`collection_entries` key on. See
@@ -29,8 +31,9 @@ export function slotKey(boxNumber: number, boxSlot: number): string {
 }
 
 /**
- * Every unit a tier/color combo requires, transcribing Leg 1's `requiredUnits` pseudocode
- * directly (docs/investigations/dex-completeness-tiers.md) — same skip rules
+ * Every unit a single color (`shiny: false`/`true`) requires under `tierConfig` —
+ * transcribes Leg 1's `requiredUnits` pseudocode directly
+ * (docs/investigations/dex-completeness-tiers.md) — same skip rules
  * `computeCompletionStats` already applies (non_boxable forms never count; cosmetic
  * variants only count when the tier includes them; a color a form can never legitimately
  * exist in is excluded outright), plus the gender-diff collapse rule: a tier that doesn't
@@ -38,15 +41,14 @@ export function slotKey(boxNumber: number, boxSlot: number): string {
  * placeholder gender as the collapsed representative — either the male or female
  * individual satisfies it (see isUnitSatisfied below). `forms` is assumed already in dex
  * order (species_id then id ascending, per sqlite-storage.ts's listFormsStmt), which is
- * what keeps the result — and everything downstream that walks it in order — in dex order
- * too. A fresh implementation rather than refactoring computeCompletionStats to share this
- * loop (Leg 1 flagged that factoring as optional, not required): same shape, smaller diff.
+ * what keeps the result in dex order too. A fresh implementation rather than refactoring
+ * computeCompletionStats to share this loop (Leg 1 flagged that factoring as optional, not
+ * required): same shape, smaller diff.
  *
  * `species` (Leg 8) is only consulted when `tierConfig.excludePreEvolutions` is on —
  * looked up per form by `form.speciesId` for `Species.isFinalEvolutionStage`.
  */
-export function requiredUnits(tierConfig: DexTierConfig, color: DexColor, forms: Form[], species: Species[]): RequiredUnit[] {
-  const shiny = color === 'shiny'
+function unitsForColor(tierConfig: DexTierConfig, shiny: boolean, forms: Form[], species: Species[]): RequiredUnit[] {
   const speciesById = new Map(species.map((s) => [s.id, s]))
   const units: RequiredUnit[] = []
   for (const form of forms) {
@@ -64,6 +66,44 @@ export function requiredUnits(tierConfig: DexTierConfig, color: DexColor, forms:
     } else {
       units.push({ formId: form.id, gender: 'unknown', shiny })
     }
+  }
+  return units
+}
+
+/** Splits `forms` (already in dex order) into runs of consecutive same-`speciesId` forms —
+ * `requiredUnits`'s 'both' case uses this so a species' regular unit(s) and shiny unit(s)
+ * land next to each other rather than every species' regular units first. */
+function groupFormsBySpecies(forms: Form[]): Form[][] {
+  const groups: Form[][] = []
+  let current: Form[] = []
+  let currentSpeciesId: number | undefined
+  for (const form of forms) {
+    if (form.speciesId !== currentSpeciesId) {
+      if (current.length) groups.push(current)
+      current = []
+      currentSpeciesId = form.speciesId
+    }
+    current.push(form)
+  }
+  if (current.length) groups.push(current)
+  return groups
+}
+
+/**
+ * Every unit a tier/color combo requires. `color: 'regular' | 'shiny'` is a plain
+ * `unitsForColor` call. `'both'` (Apply Template Combined Color, Leg 1) walks `forms`
+ * species-by-species (via `groupFormsBySpecies`) and appends that species' regular unit(s)
+ * then its shiny unit(s) before moving to the next species — paired-per-species ordering,
+ * confirmed with Vanny over the alternative (a regular-block-then-shiny-block pass) — so
+ * `placeUnitsIntoSlots` downstream zips a species' regular and shiny ghosts into adjacent
+ * slots without needing its own interleaving logic.
+ */
+export function requiredUnits(tierConfig: DexTierConfig, color: DexColor, forms: Form[], species: Species[]): RequiredUnit[] {
+  if (color !== 'both') return unitsForColor(tierConfig, color === 'shiny', forms, species)
+  const units: RequiredUnit[] = []
+  for (const group of groupFormsBySpecies(forms)) {
+    units.push(...unitsForColor(tierConfig, false, group, species))
+    units.push(...unitsForColor(tierConfig, true, group, species))
   }
   return units
 }
@@ -148,9 +188,11 @@ export interface TemplatePlacement {
 }
 
 /**
- * Zips `units` (already in dex order) onto every empty slot across `boxNumbers`, walked in
- * box-number-then-slot order (Vanny's call on placement: fill location-wide in dex order,
- * box 1 slot 0, 1, 2… then box 2…). `boxNumbers` should already include any new boxes the
+ * Zips `units` (already in dex order — for a 'both'-color apply, already paired per species
+ * by `requiredUnits`, so this needs no interleaving logic of its own) onto every empty slot
+ * across `boxNumbers`, walked in box-number-then-slot order (Vanny's call on placement: fill
+ * location-wide in dex order, box 1 slot 0, 1, 2… then box 2…). `boxNumbers` should already
+ * include any new boxes the
  * caller created to fit the full `units` list (see countAvailableSlots) — if it doesn't,
  * this simply returns fewer placements than `units.length` rather than erroring, since a
  * template apply is always safe to run again to pick up the rest.

@@ -119,6 +119,47 @@ describe('requiredUnits', () => {
     const forms: Form[] = [makeForm({ id: 1, speciesId: 1 })]
     expect(requiredUnits(TIER_CONFIGS.finalForm, 'regular', forms, [])).toEqual([])
   })
+
+  describe('both color', () => {
+    it('pairs a single-form species\' regular unit then its shiny unit', () => {
+      const forms: Form[] = [makeForm({ id: 1, speciesId: 1 })]
+      expect(requiredUnits(TIER_CONFIGS.living, 'both', forms, [])).toEqual([
+        { formId: 1, gender: 'unknown', shiny: false },
+        { formId: 1, gender: 'unknown', shiny: true }
+      ])
+    })
+
+    it('orders species-by-species: species A regular+shiny before species B regular+shiny', () => {
+      const forms: Form[] = [makeForm({ id: 1, speciesId: 1 }), makeForm({ id: 2, speciesId: 2 })]
+      expect(requiredUnits(TIER_CONFIGS.living, 'both', forms, [])).toEqual([
+        { formId: 1, gender: 'unknown', shiny: false },
+        { formId: 1, gender: 'unknown', shiny: true },
+        { formId: 2, gender: 'unknown', shiny: false },
+        { formId: 2, gender: 'unknown', shiny: true }
+      ])
+    })
+
+    it('keeps a multi-form species\' forms together within each color pass', () => {
+      const forms: Form[] = [
+        makeForm({ id: 1, speciesId: 1 }),
+        makeForm({ id: 2, speciesId: 1 }),
+        makeForm({ id: 3, speciesId: 2 })
+      ]
+      expect(requiredUnits(TIER_CONFIGS.living, 'both', forms, [])).toEqual([
+        { formId: 1, gender: 'unknown', shiny: false },
+        { formId: 2, gender: 'unknown', shiny: false },
+        { formId: 1, gender: 'unknown', shiny: true },
+        { formId: 2, gender: 'unknown', shiny: true },
+        { formId: 3, gender: 'unknown', shiny: false },
+        { formId: 3, gender: 'unknown', shiny: true }
+      ])
+    })
+
+    it('still excludes alwaysShiny from the regular pass and shinyLocked from the shiny pass', () => {
+      const forms: Form[] = [makeForm({ id: 1, speciesId: 1, alwaysShiny: true, shinyLocked: false })]
+      expect(requiredUnits(TIER_CONFIGS.living, 'both', forms, [])).toEqual([{ formId: 1, gender: 'unknown', shiny: true }])
+    })
+  })
 })
 
 describe('pendingRequiredUnits', () => {
