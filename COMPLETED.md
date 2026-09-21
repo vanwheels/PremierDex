@@ -1,5 +1,26 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 23: curate Pokémon Sword/Shield] — 2026-09-21
+Added `GALAR_GEN8`, verified against `Category:Sword and Shield locations`/`Category:Galar
+locations` (and its Wild Area/Isle of Armor/Crown Tundra subcategories) cross-checked
+per-article, 2026-09-21. Confirmed with Vanny to include both paid DLC areas (Isle of Armor,
+Crown Tundra) in this one shared list, since there's no separate DLC origin-game entry and
+excluding them would leave those Met Locations unselectable in OriginModal's restricted
+picker — sets the precedent Leg 26 (Scarlet/Violet DLC) should follow. Found no
+location-name version split despite this generation's heavy species-level exclusivity:
+Galar Mine/Galar Mine No. 2, Split-Decision Ruins, and Tower summit (where Zacian is caught
+in Sword and Zamazenta in Shield) are each confirmed shared. Dropped Bulbapedia's "(Galar)"
+disambiguation suffix from the three Ruins and the "Galar" prefix from routes, same
+normalization Leg 22's Kanto comment already established for its own game. Caught one
+research trap worth flagging for later legs: a first-pass summarized read of Tower summit's
+own article (grouped with two genuinely no-catch locations) missed that it's the real
+Zacian/Zamazenta catch site — only caught by cross-checking each legendary's own "Location"
+field directly. Excluded nine Stadium venues, five pure-battle facilities (Battle Tower,
+Rose Tower, Energy Plant, Tower of Darkness/Waters), generic buildings (Poké Mart, Pokémon
+Center, Battle Café, Herb Shop), four region/sub-region names, and two anime-only locations
+(Ancient castle, Karna's Poké Ball factory) a first-pass category pull turned up. See commit
+`7d0063f`.
+
 ## [Curated Met Location dataset Leg 22: curate Pokémon Let's Go, Pikachu!/Let's Go, Eevee!] — 2026-09-21
 Added `KANTO_LETS_GO`, a third distinct Kanto map alongside KANTO_GEN1 and KANTO_GEN3 —
 verified against `Category:Let's Go, Pikachu! and Let's Go, Eevee! locations` (same
