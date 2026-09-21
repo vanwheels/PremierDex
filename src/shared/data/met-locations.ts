@@ -1833,6 +1833,179 @@ const HOENN_ORAS: readonly string[] = [
   'Victory Road'
 ]
 
+/**
+ * Alola, Pokémon Sun/Moon (Gen 7, shared base list) (Leg 20) — the first family with no
+ * Bulbapedia "List of locations by index number" page to verify against (confirmed via a
+ * direct MediaWiki opensearch query: Generations I-VI each have one, Generation VII has
+ * none). Generation VII's games don't expose a raw index table the way earlier generations
+ * do, so this list is instead built from two complementary Bulbapedia sources cross-checked
+ * against each other: the main [[Alola]] article's "Notable locations" Settlements/Landmarks
+ * tables (2026-09-21), and `Category:Sun and Moon locations` (fetched via the MediaWiki API's
+ * categorymembers query, 2026-09-21) — the latter is Bulbapedia's own per-location tagging of
+ * "this place is reachable in Sun/Moon specifically," which is what actually caught this
+ * leg's one real mistake (see below) and is trusted as the more authoritative signal whenever
+ * the two sources disagree.
+ *
+ * **Seafolk Village correction**: initially assumed Ultra Sun/Ultra Moon-exclusive because
+ * it's absent from the Alola article's settlements table (which only gives it a population
+ * figure tagged {{sup/7|USUM}}) and its own article's intro only mentions Mina's trial "in
+ * Pokémon Ultra Sun and Ultra Moon." Both are true but misleading — checking the article's
+ * own Pokémon/Items sections directly (not just its intro paragraph) turned up genuine
+ * Su=yes/M=yes-tagged fishing encounters, a gift Aerodactyl, and a Steenee trade, all present
+ * in Sun and Moon too. Confirmed via `Category:Sun and Moon locations` including it. Kept in
+ * this leg as a lesson for later ones: check an article's actual encounter/item data, not
+ * just its lead paragraph, before excluding something as version-exclusive.
+ *
+ * **Confirmed genuinely Ultra Sun/Ultra Moon-exclusive** (absent from `Category:Sun and Moon
+ * locations` *and* each article's own text states "only appears in {{g|Ultra Sun and Ultra
+ * Moon}}" or equivalent, checked individually rather than inferred from the category alone):
+ * Big Wave Beach, Sandy Cave, Heahea Beach, Pikachu Valley, Poni Beach, Plains Grotto, Team
+ * Rocket's Castle (the Episode RR/Rainbow Rocket postgame base), and the whole Ultra Wormhole
+ * free-roam realm set added by USUM's Ultra Warp Ride (Ultra Crater, Ultra Desert, Ultra
+ * Forest, Ultra Jungle, Ultra Plant, Ultra Ruin, Ultra Space Wilds, Ultra Megalopolis) —
+ * confirmed via each Ultra Beast's own Bulbapedia Availability template, which lists only
+ * Ultra Sun/Ultra Moon versions for Kartana, Celesteela, Guzzlord, and Poipole. **Dividing
+ * Peak Tunnel is the one edge case where the category tag and the article text disagree**:
+ * it's tagged `Category:Sun and Moon locations` (the physical passage connecting Routes 7-8
+ * exists in both versions) but its own article states it "cannot be visited as a distinct
+ * location [in Sun/Moon], only appearing as one in Ultra Sun and Ultra Moon" — the explicit
+ * text is trusted over the category tag here, so it's excluded from this leg (Leg 21's
+ * concern instead).
+ *
+ * **Sun/Moon's own Ultra Beast encounters resolve to locations already on this list, not new
+ * Ultra-space names** — confirmed via each Ultra Beast's Bulbapedia Availability template:
+ * Nihilego (Diglett's Tunnel or Wela Volcano Park), Buzzwole (Melemele Meadow, Sun only),
+ * Pheromosa (Verdant Cavern, Moon only), and Xurkitree (Lush Jungle or Memorial Hill) are all
+ * one-time story encounters at real, already-curated Alola locations. The climactic
+ * Lusamine/Nihilego confrontation location is a genuine exception, though: Bulbapedia's
+ * Ultra Deep Sea article confirms that dimension is "known as Ultra Space" specifically in
+ * Sun and Moon (USUM renames it "Ultra Deep Sea" — Leg 21's name to use instead), so "Ultra
+ * Space" is included here as SM's own name for it, not USUM's generic umbrella term for the
+ * broader interdimensional concept.
+ *
+ * **No version-exclusive split for the Sunne/Moone landmark pairs, unlike Black City/White
+ * Forest**: Altar of the Sunne/Altar of the Moone and Lake of the Sunne/Lake of the Moone are
+ * each one Sun-primary and one Moon-primary location, but Bulbapedia confirms both halves of
+ * each pair become accessible in *both* versions post-Champion via the Ultra Wormhole at the
+ * other altar — same "both exist simultaneously" pattern HOENN_EMERALD's Team Aqua/Magma
+ * Hideout comment already established, not a genuine per-version split. All four locations
+ * are on this single shared Sun/Moon base list rather than split into separate Sun/Moon
+ * arrays. **Secluded Shore is Sun/Moon's own name** for the beach USUM renames "Ula'ula
+ * Beach" (confirmed via that location's infobox: `location_name=Ula'ula Beach`,
+ * `other_info=Secluded Shore`) — Leg 21 will use the USUM name instead for the same place.
+ *
+ * **Poké Pelago is a genuine catch location, not a menu/system feature**: confirmed via its
+ * own article — a wild Pokémon that lingers on Isle Abeens can be added directly to the
+ * party or PC boxes, a real (if unusual) catch mechanic, unlike Festival Plaza (no confirmed
+ * catch mechanism found in its article, excluded here) or Secret Base/Day Care-style
+ * per-player systems excluded in earlier generations.
+ *
+ * **Excluded as generic repeated building types, not single fixed places** — same reasoning
+ * Colosseum's Mayor's House/Pyrite Bldg exclusion already established: Poké Mart, Pokémon
+ * Center, and Pokémon Center Café (identical in every town) and Aether Base (the same generic
+ * name shared by three unrelated physical buildings — Heahea City, Route 8, and Route 16).
+ * Also excluded: Faraway place (Generation VII's fallback string for an unrecognized origin,
+ * same class as Mystery Zone/Faraway Place in earlier generations), Player's house (a
+ * per-player structure), and Melemele/Akala/Ula'ula/Poni Island (Alola's four island names
+ * used as region-level groupings, not granular Met Location values — same reasoning
+ * SINNOH_GEN4_BASE's comment already applied to excluding the Kanto/Johto/Hoenn/Sinnoh
+ * region-name indices).
+ *
+ * Building-interior entries kept despite sounding generic, since each is a single,
+ * distinctly-named facility rather than a repeated template (same reasoning
+ * SINNOH_GEN4_BASE's Poffin House/Cycle Shop/GTS precedent already established): Battle
+ * Buffet, Battle Royal Dome, Battle Tree, Pokémon Nursery, Thrifty Megamart (Abandoned Site,
+ * disambiguated from the functioning store folded into Royal Avenue itself), and Tide Song
+ * Hotel.
+ */
+const ALOLA_SM: readonly string[] = [
+  'Route 1',
+  'Route 2',
+  'Route 3',
+  'Route 4',
+  'Route 5',
+  'Route 6',
+  'Route 7',
+  'Route 8',
+  'Route 9',
+  'Route 10',
+  'Route 11',
+  'Route 12',
+  'Route 13',
+  'Route 14',
+  'Route 15',
+  'Route 16',
+  'Route 17',
+  'Aether House',
+  'Aether Paradise',
+  'Akala Outskirts',
+  'Altar of the Moone',
+  'Altar of the Sunne',
+  'Ancient Poni Path',
+  'Battle Buffet',
+  'Battle Royal Dome',
+  'Battle Tree',
+  'Berry fields',
+  'Blush Mountain',
+  'Brooklet Hill',
+  "Diglett's Tunnel",
+  'Exeggutor Island',
+  'Haina Desert',
+  'Hano Beach',
+  'Hano Grand Resort',
+  "Hau'oli Cemetery",
+  "Hau'oli City",
+  'Heahea City',
+  'Hokulani Observatory',
+  'Iki Town',
+  "Kala'e Bay",
+  'Konikoni City',
+  'Lake of the Moone',
+  'Lake of the Sunne',
+  'Lush Jungle',
+  'Mahalo Trail',
+  'Malie City',
+  'Malie Garden',
+  'Melemele Meadow',
+  'Melemele Sea',
+  'Memorial Hill',
+  'Mount Hokulani',
+  'Mount Lanakila',
+  'Paniola Ranch',
+  'Paniola Town',
+  'Po Town',
+  'Poké Pelago',
+  'Pokémon League',
+  'Pokémon Nursery',
+  'Poni Breaker Coast',
+  'Poni Coast',
+  'Poni Gauntlet',
+  'Poni Grove',
+  'Poni Meadow',
+  'Poni Plains',
+  'Poni Wilds',
+  'Resolution Cave',
+  'Royal Avenue',
+  'Ruins of Abundance',
+  'Ruins of Conflict',
+  'Ruins of Hope',
+  'Ruins of Life',
+  'Seafolk Village',
+  'Seaward Cave',
+  'Secluded Shore',
+  'Shady House',
+  'Tapu Village',
+  'Ten Carat Hill',
+  'Thrifty Megamart (Abandoned Site)',
+  'Tide Song Hotel',
+  "Trainers' School",
+  "Ula'ula Meadow",
+  'Ultra Space',
+  'Vast Poni Canyon',
+  'Verdant Cavern',
+  'Wela Volcano Park'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -1859,7 +2032,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon X': KALOS_GEN6,
   'Pokémon Y': KALOS_GEN6,
   'Pokémon Omega Ruby': HOENN_ORAS,
-  'Pokémon Alpha Sapphire': HOENN_ORAS
+  'Pokémon Alpha Sapphire': HOENN_ORAS,
+  'Pokémon Sun': ALOLA_SM,
+  'Pokémon Moon': ALOLA_SM
 }
 
 /**
