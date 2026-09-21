@@ -5,7 +5,7 @@
 the batched `onSetBoxPlaceholders` call) moved into a new `applyTemplate.ts` module, mirroring
 `collection-backup.ts`'s extraction from `sqlite-storage.ts`. Pure refactor, now unit-tested
 directly (not reachable before except through the component). Brought `DexBoxGrid.tsx` from
-511 to 488 lines, back under the 500 hard cap. See commit `<pending>`.
+511 to 488 lines, back under the 500 hard cap. See commit `8f80688`.
 
 ## [Apply Template Combined Color Leg 1: placement math] — 2026-09-20
 `DexColor` gained `'both'`; `requiredUnits` walks forms species-by-species and emits each
