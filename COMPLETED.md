@@ -1,5 +1,17 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 6: curate Pokémon Gold/Silver] — 2026-09-20
+Added `JOHTO_GEN2`, the first multi-region base list (Gold/Silver's Kanto opens up after the
+8th Johto badge, so the game's actual Met Location options span both regions, not just
+Johto). Verified against Bulbapedia's Generation II location-index table (the real Town
+Map/location-header index the games use) rather than assuming KANTO_GEN1 carries over
+unchanged — cross-checked by direct search that GS's cartridge-memory-limited Kanto remake
+really does drop Cerulean Cave, Pokémon Mansion, Silph Co.'s upper floors, Rocket Hideout,
+Safari Zone, S.S. Anne, the Routes 7-8 Underground Path, and Viridian Forest as a standalone
+area, and renames Pokémon Tower to Lavender Radio Tower. Also confirmed Battle Tower (present
+in the same index table) is a Crystal-exclusive addition, left for Leg 7 to layer in rather
+than included here. See commit `<pending>`.
+
 ## [Curated Met Location dataset Leg 5: curate Pokémon Yellow] — 2026-09-20
 Verified Yellow against the Leg 3/4 `KANTO_GEN1` base: researched documented Yellow-vs-
 Red/Blue differences (a Route 19 house for the Pikachu-Surf minigame, a redesigned Cerulean

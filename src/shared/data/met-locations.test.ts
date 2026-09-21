@@ -36,4 +36,37 @@ describe('metLocationsForGame', () => {
   it('returns undefined for an unrecognized/blank game', () => {
     expect(metLocationsForGame('')).toBeUndefined()
   })
+
+  it('returns the curated Johto+Kanto list for Pokémon Gold (Leg 6)', () => {
+    const locations = metLocationsForGame('Pokémon Gold')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 1')
+    expect(locations).toContain('Route 29')
+    expect(locations).toContain('New Bark Town')
+    expect(locations).toContain('Silver Cave')
+    // Gen II's stripped-down Kanto remake drops several Gen I-only locations.
+    expect(locations).not.toContain('Cerulean Cave')
+    expect(locations).not.toContain('Pokémon Mansion')
+    expect(locations).not.toContain('Safari Zone')
+    expect(locations).not.toContain('Silph Co.')
+    expect(locations).not.toContain('Rocket Hideout')
+    expect(locations).not.toContain('S.S. Anne')
+    expect(locations).not.toContain('Viridian Forest')
+    expect(locations).not.toContain('Underground Path (Routes 7–8)')
+    // Battle Tower is a Crystal-exclusive addition, layered in at Leg 7.
+    expect(locations).not.toContain('Battle Tower')
+    // Renamed from Gen I's Pokémon Tower.
+    expect(locations).toContain('Lavender Radio Tower')
+    expect(locations).not.toContain('Pokémon Tower')
+  })
+
+  it('returns the same Johto+Kanto Gen 2 list for Pokémon Silver (paired versions share a base list)', () => {
+    const gold = metLocationsForGame('Pokémon Gold')
+    const silver = metLocationsForGame('Pokémon Silver')
+    expect(silver).toEqual(gold)
+  })
+
+  it('appends Fateful Encounter to Pokémon Gold too (Leg 6)', () => {
+    expect(metLocationsForGame('Pokémon Gold')).toContain('Fateful Encounter')
+  })
 })

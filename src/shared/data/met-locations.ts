@@ -86,10 +86,132 @@ const KANTO_GEN1: readonly string[] = [
   'Viridian Forest'
 ]
 
+/**
+ * Johto + Kanto, Generation II (Gold/Silver share this map). Gold/Silver's world includes
+ * both regions in the same cartridge (Kanto opens up after the 8th Johto badge), so this
+ * list is Routes 1-46 (Kanto's 1-25 plus the new 26-28 connectors, then Johto's 29-46)
+ * followed by every named place in both regions — not just Johto. Verified against
+ * Bulbapedia's "List of locations by index number in Generation II" (the actual Town
+ * Map/location-header index table the games use, index 0x00-0x5F), Bulbapedia's Mt. Silver
+ * and Radio Tower articles, and web search cross-checks, 2026-09-20. Several Gen I Kanto
+ * locations are deliberately NOT carried over from KANTO_GEN1 — GS's Kanto is a stripped-down
+ * remake due to cartridge memory limits, confirmed absent from the index table and by direct
+ * search: Cerulean Cave (collapsed), Pokémon Mansion (burned down with Cinnabar's volcano),
+ * Silph Co. (public restricted to the lobby, no longer a separate index entry), Rocket
+ * Hideout, Safari Zone (removed outright), S.S. Anne, Underground Path (Routes 7-8) (closed
+ * off; only 5-6 remains, renamed here without the route-pair suffix since GS has only one),
+ * and Viridian Forest (folded into Route 2, no longer a standalone area). The Lavender Town
+ * "Pokémon Tower" from Gen I is renamed "Lavender Radio Tower" in Gen II (disambiguated from
+ * Goldenrod's own "Goldenrod Radio Tower"). "Silver Cave" is this game's name for the
+ * postgame Mt. Silver area — index table confirms Gen II's Town Map header literally reads
+ * "Silver Cave", not "Mt. Silver" (that name arrives in Crystal/HGSS, Leg 7). Battle Tower
+ * and the S.S. Aqua/Fast Ship ferry both have index entries in the shared Gen II table, but
+ * Battle Tower is confirmed Crystal-exclusive (added Leg 7), while S.S. Aqua is present in
+ * Gold/Silver itself and kept here.
+ */
+const JOHTO_GEN2: readonly string[] = [
+  'Route 1',
+  'Route 2',
+  'Route 3',
+  'Route 4',
+  'Route 5',
+  'Route 6',
+  'Route 7',
+  'Route 8',
+  'Route 9',
+  'Route 10',
+  'Route 11',
+  'Route 12',
+  'Route 13',
+  'Route 14',
+  'Route 15',
+  'Route 16',
+  'Route 17',
+  'Route 18',
+  'Route 19',
+  'Route 20',
+  'Route 21',
+  'Route 22',
+  'Route 23',
+  'Route 24',
+  'Route 25',
+  'Route 26',
+  'Route 27',
+  'Route 28',
+  'Route 29',
+  'Route 30',
+  'Route 31',
+  'Route 32',
+  'Route 33',
+  'Route 34',
+  'Route 35',
+  'Route 36',
+  'Route 37',
+  'Route 38',
+  'Route 39',
+  'Route 40',
+  'Route 41',
+  'Route 42',
+  'Route 43',
+  'Route 44',
+  'Route 45',
+  'Route 46',
+  'Azalea Town',
+  'Blackthorn City',
+  'Burned Tower',
+  'Celadon City',
+  'Cerulean City',
+  'Cherrygrove City',
+  'Cianwood City',
+  'Cinnabar Island',
+  'Dark Cave',
+  "Diglett's Cave",
+  "Dragon's Den",
+  'Ecruteak City',
+  'Fuchsia City',
+  'Goldenrod City',
+  'Goldenrod Radio Tower',
+  'Ice Path',
+  'Ilex Forest',
+  'Indigo Plateau',
+  'Lake of Rage',
+  'Lavender Radio Tower',
+  'Lavender Town',
+  'Mahogany Town',
+  'Mt. Moon',
+  'Mt. Mortar',
+  'National Park',
+  'New Bark Town',
+  'Olivine City',
+  'Olivine Lighthouse',
+  'Pallet Town',
+  'Pewter City',
+  'Power Plant',
+  'Rock Tunnel',
+  'Ruins of Alph',
+  'Saffron City',
+  'Seafoam Islands',
+  'Silver Cave',
+  'Slowpoke Well',
+  'Sprout Tower',
+  'S.S. Aqua',
+  'Tin Tower',
+  'Tohjo Falls',
+  'Underground Path (Routes 5–6)',
+  'Union Cave',
+  'Vermilion City',
+  'Victory Road',
+  'Violet City',
+  'Viridian City',
+  'Whirl Islands'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
-  'Pokémon Yellow': KANTO_GEN1
+  'Pokémon Yellow': KANTO_GEN1,
+  'Pokémon Gold': JOHTO_GEN2,
+  'Pokémon Silver': JOHTO_GEN2
 }
 
 /**
