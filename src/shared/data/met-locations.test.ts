@@ -86,4 +86,43 @@ describe('metLocationsForGame', () => {
   it('appends Fateful Encounter to Pokémon Crystal too (Leg 7)', () => {
     expect(metLocationsForGame('Pokémon Crystal')).toContain('Fateful Encounter')
   })
+
+  it('returns the curated Hoenn list for Pokémon Ruby (Leg 8)', () => {
+    const locations = metLocationsForGame('Pokémon Ruby')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 101')
+    expect(locations).toContain('Route 134')
+    expect(locations).toContain('Littleroot Town')
+    expect(locations).toContain('Sky Pillar')
+    // Ruby/Sapphire's Hoenn is distinct from Kanto/Johto — no bleed-through.
+    expect(locations).not.toContain('Route 1')
+    // Emerald/ORAS-only additions shouldn't be present yet.
+    expect(locations).not.toContain('Battle Frontier')
+    expect(locations).not.toContain('Battle Resort')
+    expect(locations).not.toContain('Sea Mauville')
+    expect(locations).not.toContain('Trainer Hill')
+  })
+
+  it('gives Ruby the Team Magma Hideout and Sapphire the Team Aqua Hideout (the one within-pair split found at Leg 8, besides Black City/White Forest)', () => {
+    const ruby = metLocationsForGame('Pokémon Ruby')
+    const sapphire = metLocationsForGame('Pokémon Sapphire')
+    expect(ruby).toContain('Team Magma Hideout')
+    expect(ruby).not.toContain('Team Aqua Hideout')
+    expect(sapphire).toContain('Team Aqua Hideout')
+    expect(sapphire).not.toContain('Team Magma Hideout')
+  })
+
+  it('returns the same Hoenn Gen 3 list for Ruby and Sapphire aside from the hideout split', () => {
+    const ruby = metLocationsForGame('Pokémon Ruby') as string[]
+    const sapphire = metLocationsForGame('Pokémon Sapphire') as string[]
+    expect(ruby.length).toBe(sapphire.length)
+    const rubyWithoutHideout = ruby.filter((location) => location !== 'Team Magma Hideout')
+    const sapphireWithoutHideout = sapphire.filter((location) => location !== 'Team Aqua Hideout')
+    expect(rubyWithoutHideout).toEqual(sapphireWithoutHideout)
+  })
+
+  it('appends Fateful Encounter to Pokémon Ruby and Sapphire too (Leg 8)', () => {
+    expect(metLocationsForGame('Pokémon Ruby')).toContain('Fateful Encounter')
+    expect(metLocationsForGame('Pokémon Sapphire')).toContain('Fateful Encounter')
+  })
 })

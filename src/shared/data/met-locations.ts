@@ -226,13 +226,127 @@ const CRYSTAL_GEN2: readonly string[] = [
   ...JOHTO_GEN2.slice(JOHTO_GEN2.indexOf('Blackthorn City'))
 ]
 
+/**
+ * Hoenn, Generation III (Ruby/Sapphire) (Leg 8). Routes 101-134 followed by every other
+ * named location alphabetically. Verified against Bulbapedia's "List of locations by index
+ * number in Generation III" (indices 0x00-0x57, the range Ruby/Sapphire recognize — Emerald
+ * and FireRed/LeafGreen add indices beyond that) and Serebii's Hoenn Pokéarth pages,
+ * 2026-09-20. Excludes generic/non-map indices in that range that aren't a real named place
+ * a Pokémon could be met at: "Inside of Truck" (opening cutscene only), "Secret Base" (a
+ * per-player system, not a fixed location — same reasoning Gen I/II excluded Day Care),
+ * "Meteor Falls (unused)"/"Fiery Path (unused)"/"Jagged Pass (unused)" (unused duplicate
+ * indices), and the Route 124/126/127/128/Sootopolis underwater sub-areas (route-tied dive
+ * spots, not distinct named places — Serebii's own Hoenn location breakdown doesn't list
+ * them separately either). Index 0x57 ("Ferry") is given its proper Ruby/Sapphire name,
+ * "S.S. Tidal" (confirmed Generation III-present, not Emerald-exclusive), instead of the
+ * generic index label — same treatment Gen II's "S.S. Aqua" got.
+ *
+ * One genuine within-pair location-name split found here, which contradicts this file's
+ * earlier assumption (recorded in TODO.md before this leg) that Black City/White Forest was
+ * the *only* one: index 0x42's "Hideout" is "Team Magma Hideout" in Ruby and "Team Aqua
+ * Hideout" in Sapphire — the same physical base (northeast Lilycove City), reskinned per
+ * version, not two separate locations. Layered onto the shared base per game below, same
+ * splice pattern CRYSTAL_GEN2 uses above.
+ */
+const HOENN_GEN3_BASE: readonly string[] = [
+  'Route 101',
+  'Route 102',
+  'Route 103',
+  'Route 104',
+  'Route 105',
+  'Route 106',
+  'Route 107',
+  'Route 108',
+  'Route 109',
+  'Route 110',
+  'Route 111',
+  'Route 112',
+  'Route 113',
+  'Route 114',
+  'Route 115',
+  'Route 116',
+  'Route 117',
+  'Route 118',
+  'Route 119',
+  'Route 120',
+  'Route 121',
+  'Route 122',
+  'Route 123',
+  'Route 124',
+  'Route 125',
+  'Route 126',
+  'Route 127',
+  'Route 128',
+  'Route 129',
+  'Route 130',
+  'Route 131',
+  'Route 132',
+  'Route 133',
+  'Route 134',
+  'Abandoned Ship',
+  'Ancient Tomb',
+  'Battle Tower',
+  'Cave of Origin',
+  'Desert Ruins',
+  'Dewford Town',
+  'Ever Grande City',
+  'Fallarbor Town',
+  'Fiery Path',
+  'Fortree City',
+  'Granite Cave',
+  'Island Cave',
+  'Jagged Pass',
+  'Lavaridge Town',
+  'Lilycove City',
+  'Littleroot Town',
+  'Mauville City',
+  'Meteor Falls',
+  'Mirage Island',
+  'Mossdeep City',
+  'Mt. Chimney',
+  'Mt. Pyre',
+  'New Mauville',
+  'Oldale Town',
+  'Pacifidlog Town',
+  'Petalburg City',
+  'Petalburg Woods',
+  'Rustboro City',
+  'Rusturf Tunnel',
+  'Safari Zone',
+  'Scorched Slab',
+  'Seafloor Cavern',
+  'Sealed Chamber',
+  'Shoal Cave',
+  'Sky Pillar',
+  'Slateport City',
+  'Sootopolis City',
+  'Southern Island',
+  'S.S. Tidal',
+  'Verdanturf Town',
+  'Victory Road'
+]
+
+const HOENN_RUBY: readonly string[] = [
+  ...HOENN_GEN3_BASE.slice(0, HOENN_GEN3_BASE.indexOf('Verdanturf Town')),
+  'Team Magma Hideout',
+  ...HOENN_GEN3_BASE.slice(HOENN_GEN3_BASE.indexOf('Verdanturf Town'))
+]
+
+const HOENN_SAPPHIRE: readonly string[] = [
+  ...HOENN_GEN3_BASE.slice(0, HOENN_GEN3_BASE.indexOf('Verdanturf Town')),
+  'Team Aqua Hideout',
+  ...HOENN_GEN3_BASE.slice(HOENN_GEN3_BASE.indexOf('Verdanturf Town'))
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
   'Pokémon Yellow': KANTO_GEN1,
   'Pokémon Gold': JOHTO_GEN2,
   'Pokémon Silver': JOHTO_GEN2,
-  'Pokémon Crystal': CRYSTAL_GEN2
+  'Pokémon Crystal': CRYSTAL_GEN2,
+  'Pokémon Ruby': HOENN_RUBY,
+  'Pokémon Sapphire': HOENN_SAPPHIRE
 }
 
 /**
