@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 9: curate Pokémon Emerald] — 2026-09-20
+Added `HOENN_EMERALD`, built off Leg 8's `HOENN_GEN3_BASE` rather than either paired
+version's array since Emerald's hideout situation isn't a version-exclusive split — both
+teams' hideouts exist simultaneously. Verified against Bulbapedia's Generation III
+location-index table (index 0x3A onward, where Emerald's recognized range diverges from
+Ruby/Sapphire's) plus per-location articles for anything the index table's short names
+left ambiguous: index 0x3A is a rename (Battle Tower → Battle Frontier), not an addition;
+the Lilycove hideout stays Team Aqua Hideout (matching Sapphire) while Team Magma's
+hideout relocates to a new physical location partway through Jagged Pass; ten postgame/
+event locations added (Altering Cave, Artisan Cave, Birth Island, Desert Underpass,
+Faraway Island, Marine Cave, Mirage Tower, Navel Rock, Terra Cave, Trainer Hill). See
+commit `2720a0c`.
+
 ## [Curated Met Location dataset Leg 8: curate Pokémon Ruby/Sapphire] — 2026-09-20
 Added `HOENN_GEN3_BASE` (Routes 101-134 plus every other named place), verified against
 Bulbapedia's Generation III location-index table (the 0x00-0x57 range Ruby/Sapphire

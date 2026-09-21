@@ -41,11 +41,6 @@ Each remaining leg's procedure:
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
 
-### [Curated Met Location dataset] — Leg 9
-Pokémon Emerald (Gen 3) — verify against Leg 8's base and layer in whatever differs
-(Battle Frontier at minimum).
-Last touched: 2026-09-20. Re-check count: 0.
-
 ### [Curated Met Location dataset] — Leg 10
 Pokémon FireRed/LeafGreen (Gen 3, shared base list — Kanto remake, distinct from Leg
 3/4's original Red/Blue Kanto map; includes the Sevii Islands). Curate per the procedure
