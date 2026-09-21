@@ -41,12 +41,6 @@ Each remaining leg's procedure:
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
 
-### [Curated Met Location dataset] — Leg 10
-Pokémon FireRed/LeafGreen (Gen 3, shared base list — Kanto remake, distinct from Leg
-3/4's original Red/Blue Kanto map; includes the Sevii Islands). Curate per the procedure
-above.
-Last touched: 2026-09-20. Re-check count: 0.
-
 ### [Curated Met Location dataset] — Leg 11
 Pokémon Colosseum (Gen 3, no paired version). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.

@@ -1,5 +1,16 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 10: curate Pokémon FireRed/LeafGreen] — 2026-09-20
+Added `KANTO_GEN3`, confirming mainland Kanto is unchanged from `KANTO_GEN1` (the one
+plausible addition, a separate "Pokémon League" location, turned out via web search to be
+the same place as Indigo Plateau) and layering in the Sevii Islands — seven island
+settlements plus every named sub-area, verified against Bulbapedia's FireRed/LeafGreen
+index range and Serebii's per-island Pokéarth pages. Listed the seven Tanoby Chambers
+individually rather than under one umbrella name, per Bulbapedia's confirmation the generic
+index is never an actual Met Location. Declined to add "Route 4/10 (Pokémon Center)" as
+distinct locations — the only source for them gave inconsistent index numbers for an
+unrelated entry across two reads, with no independent corroboration. See commit `23fe04b`.
+
 ## [Curated Met Location dataset Leg 9: curate Pokémon Emerald] — 2026-09-20
 Added `HOENN_EMERALD`, built off Leg 8's `HOENN_GEN3_BASE` rather than either paired
 version's array since Emerald's hideout situation isn't a version-exclusive split — both
