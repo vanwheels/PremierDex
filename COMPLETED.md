@@ -1,5 +1,17 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 18: curate Pokémon X/Y] — 2026-09-21
+Added `KALOS_GEN6`, verified against Bulbapedia's raw Generation VI location-index wikitext
+(indices 00000-00168, "appeared in X and Y" per the table's header note; 00170-00354 plus
+60004 are Omega Ruby/Alpha Sapphire-exclusive, left for Leg 19). Surfaced a pattern new to
+this generation: every one of Kalos's 22 numbered routes has a second index for an alternate
+name (Route 1/Vaniville Pathway, Route 10/Menhir Trail, etc.) — confirmed via Bulbapedia's
+Route article and per-route articles as genuinely distinct display text, not Generation V's
+excluded same-text Entralink duplicates, so all 22 were included as their own entries per
+this file's standing "a dedicated index row is a real place" rule. Also caught and corrected
+a Bulbapedia template typo: index 00103 invokes Route 21's template but the row belongs to
+Route 22 (confirmed via Kalos Route 22's own article, "Détourner Way"). See commit `0bec4a9`.
+
 ## [Curated Met Location dataset Leg 17: curate Pokémon Black 2/White 2] — 2026-09-21
 Added `UNOVA_GEN5_B2W2_BASE` plus the Black 2/White 2 split, verified against the same raw
 Generation V location-index wikitext Leg 16 cited — Leg 16's forward-looking flag of indices
