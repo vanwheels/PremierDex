@@ -37,10 +37,6 @@ Each remaining leg's procedure:
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
 
-### [Curated Met Location dataset] — Leg 7
-Pokémon Crystal (Gen 2) — verify against Leg 6's base and layer in whatever differs.
-Last touched: 2026-09-20. Re-check count: 0.
-
 ### [Curated Met Location dataset] — Leg 8
 Pokémon Ruby/Sapphire (Gen 3, shared base list). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.

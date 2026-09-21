@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 7: curate Pokémon Crystal] — 2026-09-20
+Verified Crystal against Leg 6's `JOHTO_GEN2` base: Bulbapedia's Crystal Version article and
+its Mt. Silver/Battle Tower (Generation II) articles confirm Crystal's only named-location
+change from Gold/Silver is adding the Battle Tower (Route 40, always accessible
+internationally); Leg 6's speculation that Crystal renames Silver Cave to Mt. Silver turned
+out to be wrong — that split naming is HGSS-only (Leg 15), corrected in `JOHTO_GEN2`'s
+comment. Everything else Crystal changes (Cianwood's expansion, Dragon's Den's shrine, Mt.
+Mortar's redesign, Goldenrod's rooftop) is new content within an already-listed location.
+See commit `d475756`.
+
 ## [Curated Met Location dataset Leg 6: curate Pokémon Gold/Silver] — 2026-09-20
 Added `JOHTO_GEN2`, the first multi-region base list (Gold/Silver's Kanto opens up after the
 8th Johto badge, so the game's actual Met Location options span both regions, not just
