@@ -4,7 +4,7 @@ Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILES
 
 ## Current Milestone: Curated Met Location dataset
 
-Leg 24 (Pokémon Brilliant Diamond/Shining Pearl) closed 2026-09-21 — see COMPLETED.md.
+Leg 25 (Pokémon Legends: Arceus) closed 2026-09-21 — see COMPLETED.md.
 
 **Legs 4–28** (below): curate every "map family" in `origin-games.ts`'s `ORIGIN_GAMES`
 roster, in release-date order. Restructured at Leg 4 (2026-09-20, Vanny) from the original
@@ -42,10 +42,6 @@ Each remaining leg's procedure:
 - Extend `met-locations.test.ts` to cover the newly curated family.
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
-
-### [Curated Met Location dataset] — Leg 25
-Pokémon Legends: Arceus (Gen 8, no paired version — Hisui). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 26
 Pokémon Scarlet/Violet (Gen 9, shared base list). Curate per the procedure above.

@@ -1,5 +1,23 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 25: curate Pokémon Legends: Arceus] — 2026-09-21
+Added `HISUI_GEN8`, sourced from Bulbapedia's raw wikitext for "List of locations by index
+number in Pokémon Legends: Arceus" (action=raw fetch, 2026-09-21), cross-checked against
+Serebii's Hisui region map for spelling — Serebii's map labels two areas differently
+("Heartwood Heights"/"Aipom Hills" vs. Bulbapedia's index-table Nominative Form "The
+Heartwood"/"Aipom Hill"); the index table won since it's the actual in-game Met Location
+string, not the overworld map label. Unlike BDSP's table, this page has a single Locative/
+Nominative Form pair per index, so no Summary/Overworld ambiguity to resolve. Excluded
+Mystery Zone and Faraway place (same non-place fallback categories every prior generation's
+list already established) plus the blank index 00000 and unused index 00138. Excluded
+indices 30001-60004 entirely — cross-game transfer/event categories (region names for
+Pokémon transferred in from other games, Pokémon GO/HOME, movie/event/Link Trade
+distributions), not real Hisui locations. Kept Galaxy Hall's individually-indexed floors
+(First Floor, Second Floor, Third Floor, Basement) as their own entries rather than folding
+them into Galaxy Hall, since each has its own genuine index-table Nominative Form distinct
+from Galaxy Hall's own separate index — not the BDSP building-interior situation where only
+the parent location's string is ever actually produced. See commit `48cd80a`.
+
 ## [Curated Met Location dataset Leg 24: curate Pokémon Brilliant Diamond/Shining Pearl] — 2026-09-21
 Added `BDSP_SINNOH`, verified independently against Bulbapedia's raw wikitext for BDSP's own
 location-index page (action=raw fetch, 2026-09-21) rather than assuming Leg 13's Diamond/
