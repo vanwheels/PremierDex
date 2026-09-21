@@ -10,7 +10,7 @@ really does drop Cerulean Cave, Pokémon Mansion, Silph Co.'s upper floors, Rock
 Safari Zone, S.S. Anne, the Routes 7-8 Underground Path, and Viridian Forest as a standalone
 area, and renames Pokémon Tower to Lavender Radio Tower. Also confirmed Battle Tower (present
 in the same index table) is a Crystal-exclusive addition, left for Leg 7 to layer in rather
-than included here. See commit `<pending>`.
+than included here. See commit `9086a4b`.
 
 ## [Curated Met Location dataset Leg 5: curate Pokémon Yellow] — 2026-09-20
 Verified Yellow against the Leg 3/4 `KANTO_GEN1` base: researched documented Yellow-vs-
