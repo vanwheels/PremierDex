@@ -5,7 +5,7 @@ Added the third radio option (Regular / Shiny / Both) to `DexApplyTemplateModal.
 combined-case preview line. No changes needed in `DexBoxGrid.tsx`/`applyTemplate.ts` —
 Leg 2's extraction already threads `DexColor` generically through to Leg 1's placement
 math. Pending Vanny's manual verification before the milestone is marked shipped (see
-TODO.md). See commit `<pending>`.
+TODO.md). See commit `fd0e6ba`.
 
 ## [Apply Template Combined Color Leg 2: extract apply-template orchestration] — 2026-09-20
 `DexBoxGrid.tsx`'s `handleApplyTemplate` (box-creation math + sequential `onAddBox` awaits +
