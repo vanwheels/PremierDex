@@ -125,4 +125,51 @@ describe('metLocationsForGame', () => {
     expect(metLocationsForGame('Pokémon Ruby')).toContain('Fateful Encounter')
     expect(metLocationsForGame('Pokémon Sapphire')).toContain('Fateful Encounter')
   })
+
+  it('returns the curated Hoenn list for Pokémon Emerald (Leg 9)', () => {
+    const locations = metLocationsForGame('Pokémon Emerald')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 101')
+    expect(locations).toContain('Route 134')
+    expect(locations).toContain('Littleroot Town')
+    expect(locations).toContain('Sky Pillar')
+    // Emerald-only additions layered onto Ruby/Sapphire's Hoenn base.
+    expect(locations).toContain('Battle Frontier')
+    expect(locations).toContain('Trainer Hill')
+    expect(locations).toContain('Mirage Tower')
+    expect(locations).toContain('Desert Underpass')
+    expect(locations).toContain('Artisan Cave')
+    expect(locations).toContain('Marine Cave')
+    expect(locations).toContain('Terra Cave')
+    expect(locations).toContain('Altering Cave')
+    expect(locations).toContain('Birth Island')
+    expect(locations).toContain('Faraway Island')
+    expect(locations).toContain('Navel Rock')
+    // Index 0x3A is renamed, not duplicated: Battle Tower doesn't also appear alongside
+    // Battle Frontier.
+    expect(locations).not.toContain('Battle Tower')
+  })
+
+  it('gives Emerald both teams\' hideouts, not a version-exclusive split (Leg 9)', () => {
+    const emerald = metLocationsForGame('Pokémon Emerald')
+    expect(emerald).toContain('Team Aqua Hideout')
+    expect(emerald).toContain('Team Magma Hideout (Jagged Pass)')
+    // Distinct string from Ruby's Lilycove-area hideout — a different physical location.
+    expect(emerald).not.toContain('Team Magma Hideout')
+  })
+
+  it('returns Ruby\'s Hoenn Gen 3 base list plus Emerald\'s additions, aside from the Battle Tower/Frontier rename and hideouts (Leg 9)', () => {
+    const ruby = metLocationsForGame('Pokémon Ruby') as string[]
+    const emerald = metLocationsForGame('Pokémon Emerald') as string[]
+    const rubyBase = ruby.filter(
+      (location) => location !== 'Team Magma Hideout' && location !== 'Battle Tower' && location !== 'Fateful Encounter'
+    )
+    for (const location of rubyBase) {
+      expect(emerald).toContain(location)
+    }
+  })
+
+  it('appends Fateful Encounter to Pokémon Emerald too (Leg 9)', () => {
+    expect(metLocationsForGame('Pokémon Emerald')).toContain('Fateful Encounter')
+  })
 })
