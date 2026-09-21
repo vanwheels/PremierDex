@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 1: decide the dataset's shape] — 2026-09-20
+Doc-only scoping leg, no code. Resolved the two open questions `deeper-per-game-validity.md`
+had left unanswered by checking with Vanny directly (not data-derivable, unlike that leg's
+own questions): restricted `<select>` once a game is curated rather than free-text
+suggestions, and narrow/opt-in per game with zero games curated at ship rather than a broad
+shallow pass — same reactive posture as `BALL_POOLS`. Also worked out why `met_location`
+can't take `caught_ball`'s exact DB-CHECK shape (no flat cross-game superset to check
+against) and stays a plain unconstrained `TEXT` column, with the restriction enforced only
+in `OriginModal`'s UI. Full writeup: `docs/investigations/curated-met-location.md`.
+
 ## [Ribbons & Marks: List/Collection View Entry Points Leg 2: inline Collection view button] — 2026-09-20
 Final leg — milestone shipped, see MILESTONES.md. `CollectionRow`'s single Origin cell had
 room (unlike List view's cramped regular/shiny cells), so it got a straightforward second

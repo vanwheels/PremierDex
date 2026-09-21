@@ -1,7 +1,21 @@
 # TODO
 
 Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILESTONES.md).
-No current milestone picked yet.
+
+## Current Milestone: Curated Met Location dataset
+
+### [Curated Met Location dataset] — Leg 2
+Leg 1 (`docs/investigations/curated-met-location.md`) decided the shape: a restricted
+`<select>` once a game is curated (not suggestions on free text), narrow and opt-in per
+game with zero games curated at ship — same reactive posture as `BALL_POOLS`. This leg
+builds the mechanism only, no curated games yet:
+- `shared/data/met-locations.ts` — empty `Record<gameName, readonly string[]>` +
+  `metLocationsForGame` helper, mirroring `poke-balls.ts`'s `BALL_POOLS`/`ballPoolForGame`.
+- `OriginModal.tsx` — Met Location field switches between today's free-text `<input>` and a
+  restricted `<select>` based on whether `metLocationsForGame(selectedGame)` returns a list.
+- Tests for both. No schema.ts change — `met_location` stays an unconstrained `TEXT` column
+  (seeing why a per-game CHECK doesn't fit here is in the Leg 1 doc).
+Last touched: 2026-09-20. Re-check count: 0.
 
 ## Unscheduled
 
@@ -107,17 +121,6 @@ and the false-positive Invalid Combo badges the Deeper Per-Game Validity & Curat
 Locations milestone scoped (many are on Unassigned entries). Needs scoping: prompt for a
 location at check-in time? Keep Unassigned only as a fallback when no locations exist yet?
 Last touched: 2026-09-04. Re-check count: 0.
-
-### [Curated Met Location dataset] — future milestone
-Split out of the "Deeper Per-Game Validity & Curated Met Locations" milestone by Leg 1's
-investigation (`docs/investigations/deeper-per-game-validity.md`): 0 of 5,172 owned entries
-have `metLocation` set today, so there's no evidence this free-text field is actually
-wanted filled in — a 41-game, route-level curated dataset is a large undertaking (its own
-milestone, not a leg) not worth building speculatively ahead of any usage signal.
-Blocked: needs Vanny to confirm she actually intends to start using Met Location before
-this gets scoped further. If confirmed, start small (major cities/routes, or free-text with
-lightweight autocomplete) rather than committing to exhaustive per-route coverage.
-Last touched: 2026-09-19. Re-check count: 0.
 
 ### [Per-game form/gender/ball-combo legality] — future milestone
 Split out of the "Deeper Per-Game Validity & Curated Met Locations" milestone by Leg 1's
