@@ -41,10 +41,6 @@ Each remaining leg's procedure:
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
 
-### [Curated Met Location dataset] — Leg 11
-Pokémon Colosseum (Gen 3, no paired version). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
 ### [Curated Met Location dataset] — Leg 12
 Pokémon XD: Gale of Darkness (Gen 3, no paired version — kept separate from Leg 11's
 Colosseum list rather than assumed to share one, per Vanny 2026-09-20). Curate per the

@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 11: curate Pokémon Colosseum] — 2026-09-20
+Added `ORRE_COLOSSEUM`, the first family with a fundamentally different shape from every
+prior one: Colosseum has zero wild encounters, so there's no Routes-first ordering to
+apply — the whole list is alphabetical. Verified against Bulbapedia's GCN location-index
+table (Colosseum column) plus individual location articles to resolve ambiguous cases:
+excluded generic building interiors that aren't distinct Met Locations (Mayor's House,
+Pyrite Bldg, Card e Room) but kept standalone plot-critical facilities (Cipher Lab,
+Prestige Precept Center, Snagem Hideout); confirmed Under Colosseum and Deep Colosseum are
+two distinct facilities, not the same place twice; used "Tower Colosseum" over "Realgam
+Colosseum" since the latter is XD's name for the same arena; confirmed S.S. Libra,
+Kaminko's House, Citadark Isle, and Cipher Key Lair are XD-exclusive, left for Leg 12. See
+commit `4763753`.
+
 ## [Curated Met Location dataset Leg 10: curate Pokémon FireRed/LeafGreen] — 2026-09-20
 Added `KANTO_GEN3`, confirming mainland Kanto is unchanged from `KANTO_GEN1` (the one
 plausible addition, a separate "Pokémon League" location, turned out via web search to be
