@@ -1,22 +1,7 @@
 # TODO
 
-## Current Milestone: Per-Game Regional Dex Numbers
-
-### [Per-Game Regional Dex Numbers: manual verification] — Leg 2 follow-up
-Leg 2 is code-complete: `fetch-species-availability.ts` now captures each pokedex entry's
-`entry_number` (re-run live against PokeAPI; `data/pokemon/species-availability.json`
-committed with the refreshed data — 32 distinct dexes today), `src/shared/data/
-regional-dex-names.ts` hand-curates all 32 to a display name, and `regionalDexNumbersForGame`
-(`src/renderer/dex/regionalDexNumbers.ts`) is wired into both `DexBoxDetailPanel.tsx` and
-`DexHybridDetailPanel.tsx` below the existing Origin Game field. Checked for other sibling
-detail panels showing a per-entry dex number/Origin Game field — none; `CollectionView`'s
-"Origin Game" is a group-by label, not a detail field. Typecheck and the full test suite
-(457 tests, incl. new `regionalDexNumbers.test.ts`) pass. Blocked only on Vanny checking the
-rendering in the running app — the multi-dex cases are worth a specific look (an X/Y entry
-showing 1-3 Kalos sub-dex numbers, a Sun/Moon entry showing up to 5). Once confirmed, close
-out the milestone (post-mortem, MILESTONES.md entry, COMPLETED.md archive).
-Blocked: needs Vanny to run the manual verification in the running app.
-Last touched: 2026-09-20. Re-check count: 0.
+Per-Game Regional Dex Numbers shipped 2026-09-20 (see MILESTONES.md). No current milestone
+picked yet.
 
 ## Unscheduled
 

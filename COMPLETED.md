@@ -1,15 +1,5 @@
 # COMPLETED
 
-## [Per-Game Regional Dex Numbers Leg 1: scoping] — 2026-09-20
-Resolved the two open questions from the TODO item: numbering ties to the entry's
-`originGame`, and the 11 of 40 games mapping to multiple regional dexes (Kalos's 3
-co-equal sub-dexes; Alola/Galar/Paldea's base+sub-region/DLC dexes) show every applicable
-dex's number rather than collapsing to one (Vanny's call, AskUserQuestion). Confirmed the
-regional dex number itself needs no new fetch — PokeAPI's `/pokedex` response (already
-fetched by `fetch-species-availability.ts`) carries `entry_number` per species; the script
-just discards it today. No code changed this leg. See
-`docs/investigations/regional-dex-numbers.md`.
-
 ## [Evolution-Chain Reachability Leg 2: wire the ancestor walk into checkEntryValidity] — 2026-09-20
 Final leg — milestone shipped, see MILESTONES.md. `checkEntryValidity` now takes a
 `speciesById` lookup and walks `evolvesFromSpeciesId` parent pointers so a species counts
