@@ -69,4 +69,21 @@ describe('metLocationsForGame', () => {
   it('appends Fateful Encounter to Pokémon Gold too (Leg 6)', () => {
     expect(metLocationsForGame('Pokémon Gold')).toContain('Fateful Encounter')
   })
+
+  it('returns Gold/Silver\'s Johto+Kanto list plus Battle Tower for Pokémon Crystal (Leg 7)', () => {
+    const gold = metLocationsForGame('Pokémon Gold')
+    const crystal = metLocationsForGame('Pokémon Crystal')
+    expect(crystal).toBeDefined()
+    expect(crystal).toContain('Battle Tower')
+    // Crystal does not rename Silver Cave to Mt. Silver (that split naming is HGSS-only).
+    expect(crystal).toContain('Silver Cave')
+    expect(crystal).not.toContain('Mt. Silver')
+    // Everything else carries over unchanged from Gold/Silver.
+    expect(crystal).toEqual(expect.arrayContaining(gold as string[]))
+    expect(crystal?.length).toBe((gold?.length ?? 0) + 1)
+  })
+
+  it('appends Fateful Encounter to Pokémon Crystal too (Leg 7)', () => {
+    expect(metLocationsForGame('Pokémon Crystal')).toContain('Fateful Encounter')
+  })
 })

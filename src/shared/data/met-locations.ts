@@ -104,7 +104,7 @@ const KANTO_GEN1: readonly string[] = [
  * "Pokémon Tower" from Gen I is renamed "Lavender Radio Tower" in Gen II (disambiguated from
  * Goldenrod's own "Goldenrod Radio Tower"). "Silver Cave" is this game's name for the
  * postgame Mt. Silver area — index table confirms Gen II's Town Map header literally reads
- * "Silver Cave", not "Mt. Silver" (that name arrives in Crystal/HGSS, Leg 7). Battle Tower
+ * "Silver Cave", not "Mt. Silver". Battle Tower
  * and the S.S. Aqua/Fast Ship ferry both have index entries in the shared Gen II table, but
  * Battle Tower is confirmed Crystal-exclusive (added Leg 7), while S.S. Aqua is present in
  * Gold/Silver itself and kept here.
@@ -206,12 +206,33 @@ const JOHTO_GEN2: readonly string[] = [
   'Whirl Islands'
 ]
 
+/**
+ * Johto + Kanto, Pokémon Crystal (Leg 7) — verified against Bulbapedia's Crystal Version
+ * article and its Mt. Silver/Battle Tower (Generation II) articles, 2026-09-20. Crystal's
+ * only change to the named-location set versus Gold/Silver is the addition of the Battle
+ * Tower (Route 40, confirmed Crystal-exclusive and always accessible in the international
+ * release — the Japanese release's Mobile System GB unlock requirement doesn't apply here).
+ * Everything else Crystal changes (Cianwood's northward expansion, Dragon's Den's Dragon
+ * Shrine, Mt. Mortar's redesigned layout, Goldenrod Dept. Store's rooftop, various visual
+ * updates) is new content *within* an already-listed named location, not a new or renamed
+ * one. In particular, despite JOHTO_GEN2's note above, Crystal does NOT rename "Silver
+ * Cave" to "Mt. Silver" — Bulbapedia's Mt. Silver article confirms that split naming
+ * ("Mt. Silver" for the foot of the mountain, "Mt. Silver Cave" for the interior) is
+ * Generation IV-only (HGSS, Leg 15); Crystal keeps "Silver Cave" as Gold/Silver had it.
+ */
+const CRYSTAL_GEN2: readonly string[] = [
+  ...JOHTO_GEN2.slice(0, JOHTO_GEN2.indexOf('Blackthorn City')),
+  'Battle Tower',
+  ...JOHTO_GEN2.slice(JOHTO_GEN2.indexOf('Blackthorn City'))
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
   'Pokémon Yellow': KANTO_GEN1,
   'Pokémon Gold': JOHTO_GEN2,
-  'Pokémon Silver': JOHTO_GEN2
+  'Pokémon Silver': JOHTO_GEN2,
+  'Pokémon Crystal': CRYSTAL_GEN2
 }
 
 /**
