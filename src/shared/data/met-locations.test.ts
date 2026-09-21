@@ -643,4 +643,59 @@ describe('metLocationsForGame', () => {
     expect(metLocationsForGame('Pokémon Black 2')).toContain('Fateful Encounter')
     expect(metLocationsForGame('Pokémon White 2')).toContain('Fateful Encounter')
   })
+
+  it('returns the curated Kalos list for Pokémon X (Leg 18)', () => {
+    const locations = metLocationsForGame('Pokémon X')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 1')
+    expect(locations).toContain('Route 22')
+    expect(locations).toContain('Vaniville Town')
+    expect(locations).toContain('Lumiose City')
+    expect(locations).toContain('Victory Road')
+    // Omega Ruby/Alpha Sapphire-only additions aren't part of X/Y's own map.
+    expect(locations).not.toContain('Littleroot Town')
+    expect(locations).not.toContain('Battle Resort')
+    expect(locations).not.toContain('Team Aqua Hideout')
+  })
+
+  it('returns the same Kalos Gen 6 list for Pokémon Y (paired versions share a base list)', () => {
+    const x = metLocationsForGame('Pokémon X')
+    const y = metLocationsForGame('Pokémon Y')
+    expect(y).toEqual(x)
+  })
+
+  it('excludes non-place special indices from Pokémon X\'s list (Leg 18)', () => {
+    const locations = metLocationsForGame('Pokémon X')
+    expect(locations).not.toContain('Mystery Zone')
+    expect(locations).not.toContain('Faraway Place')
+  })
+
+  it("includes each Kalos route's alternate name as its own entry, distinct from Generation V's excluded Entralink duplicates (Leg 18)", () => {
+    const locations = metLocationsForGame('Pokémon X')
+    expect(locations).toContain('Vaniville Pathway')
+    expect(locations).toContain('Menhir Trail')
+    // Bulbapedia's index-table template call for this row is a typo (invokes Route 21's
+    // template) but the row belongs to Route 22, confirmed via Kalos Route 22's own article.
+    expect(locations).toContain('Détourner Way')
+  })
+
+  it('includes dedicated-index sub-areas and facilities for Pokémon X (Leg 18)', () => {
+    const locations = metLocationsForGame('Pokémon X')
+    expect(locations).toContain('Zubat Roost')
+    expect(locations).toContain('Lumiose Station')
+    expect(locations).toContain('Kiloude Station')
+    expect(locations).toContain('Ambrette Aquarium')
+    expect(locations).toContain('Blazing Chamber')
+    expect(locations).toContain('Flood Chamber')
+    expect(locations).toContain('Ironworks Chamber')
+    expect(locations).toContain('Dragonmark Chamber')
+    expect(locations).toContain('Radiant Chamber')
+    // A real, small postgame Mewtwo cave, not a placeholder despite the generic name.
+    expect(locations).toContain('Unknown Dungeon')
+  })
+
+  it('appends Fateful Encounter to Pokémon X and Y too (Leg 18)', () => {
+    expect(metLocationsForGame('Pokémon X')).toContain('Fateful Encounter')
+    expect(metLocationsForGame('Pokémon Y')).toContain('Fateful Encounter')
+  })
 })

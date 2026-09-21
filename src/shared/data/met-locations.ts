@@ -1526,6 +1526,166 @@ const UNOVA_WHITE_2: readonly string[] = [
   'White Treehollow'
 ]
 
+/**
+ * Kalos, Generation VI (Pokémon X/Y, shared base list) (Leg 18). Verified against
+ * Bulbapedia's raw wikitext for "List of locations by index number in Generation VI"
+ * (fetched directly via the MediaWiki API's action=raw, same sourcing method Legs 13-17
+ * used), 2026-09-21. That table's white-background rows are indices 00000-00168 ("appeared
+ * in X and Y" per the table's own header note); indices 00170-00354 plus 60004 are Omega
+ * Ruby/Alpha Sapphire-exclusive (Leg 19's concern, shaded light Hoenn-color, not included
+ * here) — same white/shaded-region split Legs 13-17's Sinnoh/Unova tables used.
+ *
+ * Excluded as non-place special indices, same reasoning as every prior generation's Mystery
+ * Zone/Faraway place exclusions: **index 00000** (a blank placeholder row, "----------"),
+ * **00002 Mystery Zone**, and **00004 Faraway Place** (the generic fallback string for an
+ * unrecognized index).
+ *
+ * **A pattern new to this generation, requiring its own judgment call**: every one of
+ * Kalos's 22 numbered routes has a second, immediately-following index for an alternate
+ * name (e.g. index 00008 "Route 1" / 00009 "Route 1, Vaniville Pathway") — confirmed via
+ * Bulbapedia's own Route article ("Kalos routes that are numbered also have names, such as
+ * Route 10 also being known as the Menhir Trail") and Kalos Route 1's article ("The route
+ * is also known as Vaniville Pathway"), not a Kalos-specific sub-area the way Generation
+ * I/II's Underground Path pairs were. Unlike Generation V's excluded Entralink-duplicate
+ * indices (UNOVA_GEN5_BASE's comment — same display text as their primary counterpart, so
+ * excluded), each Kalos alt-name index carries genuinely distinct display text from its
+ * route's numbered name, and this whole table's stated purpose is cataloguing exactly the
+ * index values usable as a Met Location — so, per this file's standing "a dedicated
+ * index-table row is a real distinct place regardless of a dedicated article" rule
+ * (established at SINNOH_GEN4_BASE/PLATINUM_SINNOH), all 22 are included here as their own
+ * list entries rather than folded into their route's numbered name. Index 00103's template
+ * call is a Bulbapedia typo (it invokes {{rt|21|...}} instead of {{rt|22|...}}) but the row
+ * sits directly after Route 22 (00102) and before Kalos's Victory Road (00104), and Kalos
+ * Route 22's own article confirms "Détourner Way" as Route 22's (not Route 21's) alternate
+ * name directly — corrected here rather than trusted verbatim.
+ *
+ * A dedicated index-table row is treated as a real distinct place regardless of whether it
+ * has its own article, same convention SINNOH_GEN4_BASE/PLATINUM_SINNOH/UNOVA_GEN5_BASE
+ * established — applies here to Zubat Roost (index 00135, a named sub-area within
+ * Connecting Cave, index 00134), Lumiose Station and Kiloude Station ({{DL}} links to
+ * sections of North Boulevard/Kiloude City rather than standalone articles, same treatment
+ * as Unova's Musical Theater), Ambrette Aquarium, and the Pokémon League's five individual
+ * Elite Four chambers (Blazing/Flood/Ironworks/Dragonmark/Radiant Chamber, {{DL}} links to
+ * Pokémon League (Kalos) sections) — the same "named facility with its own index, not a
+ * generic repeated building type" reasoning that already included Sinnoh's individual
+ * Battle Frontier facilities and Black 2/White 2's Rock Peak/Iceberg/Iron Chamber trio.
+ *
+ * Index 00168's {{kal|Unknown Dungeon}} is a real, small, postgame-only cave accessible from
+ * Pokémon Village (confirmed via Bulbapedia's dedicated "Unknown Dungeon (Kalos)" article —
+ * disambiguated from the unrelated Cerulean Cave/Nameless Cavern/Mystery Dungeon uses of the
+ * same phrase), not a placeholder despite the generic-sounding name.
+ *
+ * "Victory Road" (index 00104, {{kal|Victory Road}} <small>(Kalos)</small>) and "Pokémon
+ * League" (index 00106) drop their wiki-disambiguation-only parentheticals, same treatment
+ * SINNOH_GEN4_BASE/JOHTO_GEN4/UNOVA_GEN5_BASE already gave their own single same-region
+ * Victory Road/Pokémon League entries.
+ */
+const KALOS_GEN6: readonly string[] = [
+  'Route 1',
+  'Route 2',
+  'Route 3',
+  'Route 4',
+  'Route 5',
+  'Route 6',
+  'Route 7',
+  'Route 8',
+  'Route 9',
+  'Route 10',
+  'Route 11',
+  'Route 12',
+  'Route 13',
+  'Route 14',
+  'Route 15',
+  'Route 16',
+  'Route 17',
+  'Route 18',
+  'Route 19',
+  'Route 20',
+  'Route 21',
+  'Route 22',
+  'Ambrette Aquarium',
+  'Ambrette Gate',
+  'Ambrette Town',
+  'Anistar City',
+  'Anistar Gate',
+  'Aquacorde Town',
+  'Avance Trail',
+  'Azure Bay',
+  'Battle Chateau',
+  'Battle Maison',
+  'Blazing Chamber',
+  'Camphrier Town',
+  'Chamber of Emptiness',
+  'Connecting Cave',
+  'Coumarine City',
+  'Coumarine Gate',
+  'Couriway Gate',
+  'Couriway Town',
+  'Cyllage City',
+  'Dendemille Gate',
+  'Dendemille Town',
+  'Dernière Way',
+  'Détourner Way',
+  'Dragonmark Chamber',
+  'Flood Chamber',
+  'Fourrage Road',
+  'Friend Safari',
+  'Frost Cavern',
+  'Geosenge Town',
+  'Glittering Cave',
+  'Grande Vallée Way',
+  'Ironworks Chamber',
+  'Kalos Power Plant',
+  'Kiloude City',
+  'Kiloude Station',
+  'Laverre City',
+  'Laverre Gate',
+  'Laverre Nature Trail',
+  'Lost Hotel',
+  'Lumiose Badlands',
+  'Lumiose City',
+  'Lumiose Gate',
+  'Lumiose Station',
+  'Lysandre Labs',
+  'Mamoswine Road',
+  'Mélancolie Path',
+  'Menhir Trail',
+  'Miroir Way',
+  'Muraille Coast',
+  'Ouvert Way',
+  'Palais Lane',
+  'Parfum Palace',
+  'Parterre Way',
+  'Poké Ball Factory',
+  'Pokémon League',
+  'Pokémon League Gate',
+  'Pokémon Village',
+  'Prism Tower',
+  'Radiant Chamber',
+  'Reflection Cave',
+  'Rivière Walk',
+  'Santalune City',
+  'Santalune Forest',
+  "Sea Spirit's Den",
+  'Shabboneau Castle',
+  'Shalour City',
+  'Shalour Gate',
+  'Snowbelle City',
+  'Snowbelle Gate',
+  'Spikes Passage',
+  'Team Flare Secret HQ',
+  'Terminus Cave',
+  'Tower of Mastery',
+  'Unknown Dungeon',
+  'Vallée Étroite Way',
+  'Vaniville Pathway',
+  'Vaniville Town',
+  'Versant Road',
+  'Victory Road',
+  'Winding Woods',
+  'Zubat Roost'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -1548,7 +1708,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Black': UNOVA_BLACK,
   'Pokémon White': UNOVA_WHITE,
   'Pokémon Black 2': UNOVA_BLACK_2,
-  'Pokémon White 2': UNOVA_WHITE_2
+  'Pokémon White 2': UNOVA_WHITE_2,
+  'Pokémon X': KALOS_GEN6,
+  'Pokémon Y': KALOS_GEN6
 }
 
 /**
