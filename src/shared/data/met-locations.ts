@@ -1686,6 +1686,153 @@ const KALOS_GEN6: readonly string[] = [
   'Zubat Roost'
 ]
 
+/**
+ * Hoenn, Pokémon Omega Ruby/Alpha Sapphire (Gen 6, shared base list — Hoenn remake, distinct
+ * from Legs 8/9's original Ruby/Sapphire/Emerald Hoenn map) (Leg 19). Verified against the
+ * same raw wikitext KALOS_GEN6's comment cites (Bulbapedia's "List of locations by index
+ * number in Generation VI", action=raw), 2026-09-21. That comment's forward-looking note
+ * about indices 00170-00354 plus 60004 (shaded Hoenn-color, "exclusive to Omega Ruby and
+ * Alpha Sapphire") is confirmed here.
+ *
+ * **"Recognized" isn't "physically present," same precedent as HGSS/Platinum**: the
+ * wikitext's own header states "Pokémon Omega Ruby and Alpha Sapphire have all location
+ * headers programmed in that Pokémon X and Y do" — i.e. ORAS's engine recognizes KALOS_GEN6's
+ * indices too, so a Pokémon transferred in from X/Y displays its real Kalos Met Location
+ * rather than Faraway Place. That's the same "recognized for trade-display, not on this
+ * game's own map" distinction JOHTO_GEN4's comment already established for HGSS/Sinnoh and
+ * PLATINUM_SINNOH's comment established for Platinum/HGSS's gold rows — ORAS's own curated
+ * list here is only its native Hoenn range (00170-00354, 60004), not KALOS_GEN6 layered in,
+ * matching how PLATINUM_SINNOH never layered in JOHTO_GEN4's Johto/Kanto range either.
+ *
+ * Excluded as non-place special indices, same reasoning as every prior generation: **index
+ * 00276** ("???" / Inside of Truck, opening-cutscene-only — same exclusion HOENN_GEN3_BASE's
+ * comment already applies), **index 00354** (Secret Base, a per-player system not a fixed
+ * location, same reasoning as before), and **index 60004** ("an old hot-springs visitor," a
+ * Mythical-Egg-event catch-context string, not a real place — same class as Platinum's
+ * Day-Care Couple/HGSS's Mr. Pokémon/Primo exclusions). Index 60002's Day-Care Couple/"Day
+ * Care helpers" split (version text differs, physical row doesn't) is excluded for the same
+ * reason, and isn't in the Hoenn-shaded range at all — it's shared with X/Y's own table.
+ *
+ * **No within-pair location split, unlike original Ruby/Sapphire**: indices 00292 (Team Aqua
+ * Hideout) and 00314 (Team Magma Hideout) are each single, version-non-conditional rows —
+ * both teams' hideouts are visitable in both Omega Ruby and Alpha Sapphire (the Delta
+ * Episode's postgame content), same "both exist simultaneously" pattern HOENN_EMERALD's
+ * comment already established. Unlike Emerald, though, Team Magma Hideout here is at
+ * Ruby/Sapphire's original Lilycove-area location, not Emerald's relocated Jagged Pass one —
+ * confirmed via Bulbapedia's Magma Hideout disambiguation page, which names Omega Ruby
+ * alongside Ruby/Sapphire for the Lilycove-area "Team Magma Hideout" article specifically,
+ * keeping Emerald's distinct "Magma Hideout (Jagged Pass)" separate. Plain "Team Magma
+ * Hideout" is used here, not the "(Jagged Pass)" qualifier.
+ *
+ * New Hoenn-remake locations confirmed via their own dedicated Bulbapedia articles: Sea
+ * Mauville (a reskin/rename of the original Abandoned Ship), Battle Resort (replaces the
+ * original Battle Tower/Emerald's Battle Frontier), and the DexNav-era Mirage Spot system —
+ * Mirage Forest, Mirage Cave, Mirage Island, Mirage Mountain, Trackless Forest, Pathless
+ * Plain, Nameless Cavern, Fabled Cave, Gnarled Den, Crescent Isle, Secret Islet, Secret
+ * Shore, and Secret Meadow — a set of rotating remote areas replacing RSE's single, static
+ * "Mirage Island." "Soaring in the sky" (index 00348, the Mega Latios/Latias overworld-flight
+ * encounter context) is confirmed via its own dedicated Bulbapedia article as a real,
+ * distinct catch context rather than a placeholder, so it's included, matching lowercase
+ * "sky" per the article's own title casing.
+ *
+ * {{ho|Pokémon League}}/{{ho|Victory Road}} <small>([[Hoenn]])</small> drop their
+ * wiki-disambiguation-only parentheticals, same treatment every prior region-specific
+ * Victory Road/Pokémon League entry in this file already gets.
+ */
+const HOENN_ORAS: readonly string[] = [
+  'Route 101',
+  'Route 102',
+  'Route 103',
+  'Route 104',
+  'Route 105',
+  'Route 106',
+  'Route 107',
+  'Route 108',
+  'Route 109',
+  'Route 110',
+  'Route 111',
+  'Route 112',
+  'Route 113',
+  'Route 114',
+  'Route 115',
+  'Route 116',
+  'Route 117',
+  'Route 118',
+  'Route 119',
+  'Route 120',
+  'Route 121',
+  'Route 122',
+  'Route 123',
+  'Route 124',
+  'Route 125',
+  'Route 126',
+  'Route 127',
+  'Route 128',
+  'Route 129',
+  'Route 130',
+  'Route 131',
+  'Route 132',
+  'Route 133',
+  'Route 134',
+  'Ancient Tomb',
+  'Battle Resort',
+  'Cave of Origin',
+  'Crescent Isle',
+  'Desert Ruins',
+  'Dewford Town',
+  'Ever Grande City',
+  'Fabled Cave',
+  'Fallarbor Town',
+  'Fiery Path',
+  'Fortree City',
+  'Gnarled Den',
+  'Granite Cave',
+  'Island Cave',
+  'Jagged Pass',
+  'Lavaridge Town',
+  'Lilycove City',
+  'Littleroot Town',
+  'Mauville City',
+  'Meteor Falls',
+  'Mirage Cave',
+  'Mirage Forest',
+  'Mirage Island',
+  'Mirage Mountain',
+  'Mossdeep City',
+  'Mt. Chimney',
+  'Mt. Pyre',
+  'Nameless Cavern',
+  'New Mauville',
+  'Oldale Town',
+  'Pacifidlog Town',
+  'Pathless Plain',
+  'Petalburg City',
+  'Petalburg Woods',
+  'Pokémon League',
+  'Rustboro City',
+  'Rusturf Tunnel',
+  'Safari Zone',
+  'Scorched Slab',
+  'Sea Mauville',
+  'Seafloor Cavern',
+  'Sealed Chamber',
+  'Secret Islet',
+  'Secret Meadow',
+  'Secret Shore',
+  'Shoal Cave',
+  'Sky Pillar',
+  'Slateport City',
+  'Soaring in the sky',
+  'Sootopolis City',
+  'Southern Island',
+  'S.S. Tidal',
+  'Team Aqua Hideout',
+  'Team Magma Hideout',
+  'Trackless Forest',
+  'Verdanturf Town',
+  'Victory Road'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -1710,7 +1857,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Black 2': UNOVA_BLACK_2,
   'Pokémon White 2': UNOVA_WHITE_2,
   'Pokémon X': KALOS_GEN6,
-  'Pokémon Y': KALOS_GEN6
+  'Pokémon Y': KALOS_GEN6,
+  'Pokémon Omega Ruby': HOENN_ORAS,
+  'Pokémon Alpha Sapphire': HOENN_ORAS
 }
 
 /**
