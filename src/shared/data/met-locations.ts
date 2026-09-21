@@ -459,6 +459,141 @@ const HOENN_EMERALD: readonly string[] = [
   'Victory Road'
 ]
 
+/**
+ * Kanto + Sevii Islands, Pokémon FireRed/LeafGreen (Gen 3, shared base list) (Leg 10) — the
+ * Kanto remake, distinct from KANTO_GEN1's original Red/Blue/Yellow map despite covering the
+ * same region. Verified against Bulbapedia's "List of locations by index number in Generation
+ * III" (FireRed/LeafGreen's own index range, distinct from Ruby/Sapphire/Emerald's) and
+ * Serebii's per-island Sevii Islands Pokéarth pages (One through Seven Island, each fetched
+ * individually), 2026-09-20.
+ *
+ * Mainland Kanto carries over from KANTO_GEN1 unchanged — no named location is added,
+ * removed, or renamed versus Red/Blue/Yellow (confirmed by web search specifically for the
+ * one plausible candidate: "Pokémon League" is not a separate Met Location from "Indigo
+ * Plateau", contrary to an initial index-table read — Indigo Plateau is simply the Pokémon
+ * League's home, one location, not two. Also declined to add "Route 4 (Pokémon Center)"/
+ * "Route 10 (Pokémon Center)" as distinct locations: the index-table source that suggested
+ * these gave inconsistent index numbers for an unrelated entry (Trainer Tower) across two
+ * separate reads, and no independent source corroborates a Route-outbuilding Pokémon Center
+ * ever having its own Met Location distinct from its route — not included without
+ * corroboration).
+ *
+ * The Sevii Islands are FireRed/LeafGreen's real addition: the seven island settlements
+ * (One Island through Seven Island) plus every named sub-area confirmed via Serebii's
+ * dedicated per-island pages — One Island (Treasure Beach, Kindle Road, Mt. Ember), Two
+ * Island (Cape Brink), Three Island (Three Isle Port, Three Isle Path, Bond Bridge, Berry
+ * Forest), Four Island (Icefall Cave), Five Island (Five Isle Meadow, Memorial Pillar, Water
+ * Labyrinth, Resort Gorgeous, Rocket Warehouse, Lost Cave), Six Island (Water Path, Pattern
+ * Bush, Green Path, Outcast Island, Altering Cave — a distinct physical location from
+ * Emerald's Route 103 Altering Cave, same as HOENN_EMERALD's comment already notes — Ruin
+ * Valley, Dotted Hole), and Seven Island (Trainer Tower, Canyon Entrance, Sevault Canyon,
+ * Tanoby Ruins, Tanoby Key). Plus the two event-exclusive islands, Navel Rock and Birth
+ * Island.
+ *
+ * The seven Tanoby Chambers (confirmed via Bulbapedia's dedicated Tanoby Chambers article,
+ * including its trivia note that the generic "Tanoby Chambers" index is never actually used
+ * as a Met Location — it always defaults to the specific chamber's own name) are listed
+ * individually rather than under one umbrella name: Monean, Liptoo, Weepth, Dilford, Scufib,
+ * Rixy, and Viapois Chamber.
+ */
+const KANTO_GEN3: readonly string[] = [
+  'Route 1',
+  'Route 2',
+  'Route 3',
+  'Route 4',
+  'Route 5',
+  'Route 6',
+  'Route 7',
+  'Route 8',
+  'Route 9',
+  'Route 10',
+  'Route 11',
+  'Route 12',
+  'Route 13',
+  'Route 14',
+  'Route 15',
+  'Route 16',
+  'Route 17',
+  'Route 18',
+  'Route 19',
+  'Route 20',
+  'Route 21',
+  'Route 22',
+  'Route 23',
+  'Route 24',
+  'Route 25',
+  'Altering Cave',
+  'Berry Forest',
+  'Birth Island',
+  'Bond Bridge',
+  'Canyon Entrance',
+  'Cape Brink',
+  'Celadon City',
+  'Cerulean Cave',
+  'Cerulean City',
+  'Cinnabar Island',
+  "Diglett's Cave",
+  'Dilford Chamber',
+  'Dotted Hole',
+  'Five Island',
+  'Five Isle Meadow',
+  'Four Island',
+  'Fuchsia City',
+  'Green Path',
+  'Icefall Cave',
+  'Indigo Plateau',
+  'Kindle Road',
+  'Lavender Town',
+  'Liptoo Chamber',
+  'Lost Cave',
+  'Memorial Pillar',
+  'Monean Chamber',
+  'Mt. Ember',
+  'Mt. Moon',
+  'Navel Rock',
+  'One Island',
+  'Outcast Island',
+  'Pallet Town',
+  'Pattern Bush',
+  'Pewter City',
+  'Pokémon Mansion',
+  'Pokémon Tower',
+  'Power Plant',
+  'Resort Gorgeous',
+  'Rixy Chamber',
+  'Rock Tunnel',
+  'Rocket Hideout',
+  'Rocket Warehouse',
+  'Ruin Valley',
+  'Safari Zone',
+  'Saffron City',
+  'Scufib Chamber',
+  'Seafoam Islands',
+  'Sevault Canyon',
+  'Seven Island',
+  'Silph Co.',
+  'Six Island',
+  'S.S. Anne',
+  'Tanoby Key',
+  'Tanoby Ruins',
+  'Three Island',
+  'Three Isle Path',
+  'Three Isle Port',
+  'Trainer Tower',
+  'Treasure Beach',
+  'Two Island',
+  'Underground Path (Routes 5–6)',
+  'Underground Path (Routes 7–8)',
+  'Vermilion City',
+  'Viapois Chamber',
+  'Victory Road',
+  'Viridian City',
+  'Viridian Forest',
+  'Water Labyrinth',
+  'Water Path',
+  'Weepth Chamber'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -468,7 +603,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Crystal': CRYSTAL_GEN2,
   'Pokémon Ruby': HOENN_RUBY,
   'Pokémon Sapphire': HOENN_SAPPHIRE,
-  'Pokémon Emerald': HOENN_EMERALD
+  'Pokémon Emerald': HOENN_EMERALD,
+  'Pokémon FireRed': KANTO_GEN3,
+  'Pokémon LeafGreen': KANTO_GEN3
 }
 
 /**

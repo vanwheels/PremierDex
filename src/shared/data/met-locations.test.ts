@@ -172,4 +172,59 @@ describe('metLocationsForGame', () => {
   it('appends Fateful Encounter to Pokémon Emerald too (Leg 9)', () => {
     expect(metLocationsForGame('Pokémon Emerald')).toContain('Fateful Encounter')
   })
+
+  it('returns the curated Kanto+Sevii Islands list for Pokémon FireRed (Leg 10)', () => {
+    const locations = metLocationsForGame('Pokémon FireRed')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 1')
+    expect(locations).toContain('Route 25')
+    expect(locations).toContain('Pallet Town')
+    expect(locations).toContain('Cerulean Cave')
+    // Mainland Kanto is unchanged from Red/Blue/Yellow — no Johto connectors.
+    expect(locations).not.toContain('Route 26')
+    // "Pokémon League" is not a separate Met Location from Indigo Plateau.
+    expect(locations).not.toContain('Pokémon League')
+  })
+
+  it('includes every Sevii Islands settlement and sub-area for Pokémon FireRed (Leg 10)', () => {
+    const locations = metLocationsForGame('Pokémon FireRed')
+    expect(locations).toContain('One Island')
+    expect(locations).toContain('Two Island')
+    expect(locations).toContain('Three Island')
+    expect(locations).toContain('Four Island')
+    expect(locations).toContain('Five Island')
+    expect(locations).toContain('Six Island')
+    expect(locations).toContain('Seven Island')
+    expect(locations).toContain('Kindle Road')
+    expect(locations).toContain('Icefall Cave')
+    expect(locations).toContain('Tanoby Ruins')
+    expect(locations).toContain('Tanoby Key')
+    expect(locations).toContain('Navel Rock')
+    expect(locations).toContain('Birth Island')
+    // Six Island's Altering Cave is a distinct physical location from Emerald's.
+    expect(locations).toContain('Altering Cave')
+  })
+
+  it("lists the seven Tanoby Chambers individually rather than under one umbrella name (Leg 10)", () => {
+    const locations = metLocationsForGame('Pokémon FireRed')
+    expect(locations).toContain('Monean Chamber')
+    expect(locations).toContain('Liptoo Chamber')
+    expect(locations).toContain('Weepth Chamber')
+    expect(locations).toContain('Dilford Chamber')
+    expect(locations).toContain('Scufib Chamber')
+    expect(locations).toContain('Rixy Chamber')
+    expect(locations).toContain('Viapois Chamber')
+    expect(locations).not.toContain('Tanoby Chambers')
+  })
+
+  it('returns the same Kanto+Sevii Islands list for Pokémon LeafGreen (paired versions share a base list)', () => {
+    const fireRed = metLocationsForGame('Pokémon FireRed')
+    const leafGreen = metLocationsForGame('Pokémon LeafGreen')
+    expect(leafGreen).toEqual(fireRed)
+  })
+
+  it('appends Fateful Encounter to Pokémon FireRed and LeafGreen too (Leg 10)', () => {
+    expect(metLocationsForGame('Pokémon FireRed')).toContain('Fateful Encounter')
+    expect(metLocationsForGame('Pokémon LeafGreen')).toContain('Fateful Encounter')
+  })
 })
