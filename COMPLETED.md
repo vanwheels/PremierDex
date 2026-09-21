@@ -1,26 +1,5 @@
 # COMPLETED
 
-## [Apply Template Combined Color Leg 3: UI wiring] — 2026-09-20
-Added the third radio option (Regular / Shiny / Both) to `DexApplyTemplateModal.tsx` and a
-combined-case preview line. No changes needed in `DexBoxGrid.tsx`/`applyTemplate.ts` —
-Leg 2's extraction already threads `DexColor` generically through to Leg 1's placement
-math. Pending Vanny's manual verification before the milestone is marked shipped (see
-TODO.md). See commit `fd0e6ba`.
-
-## [Apply Template Combined Color Leg 2: extract apply-template orchestration] — 2026-09-20
-`DexBoxGrid.tsx`'s `handleApplyTemplate` (box-creation math + sequential `onAddBox` awaits +
-the batched `onSetBoxPlaceholders` call) moved into a new `applyTemplate.ts` module, mirroring
-`collection-backup.ts`'s extraction from `sqlite-storage.ts`. Pure refactor, now unit-tested
-directly (not reachable before except through the component). Brought `DexBoxGrid.tsx` from
-511 to 488 lines, back under the 500 hard cap. See commit `8f80688`.
-
-## [Apply Template Combined Color Leg 1: placement math] — 2026-09-20
-`DexColor` gained `'both'`; `requiredUnits` walks forms species-by-species and emits each
-species' regular unit(s) then its shiny unit(s) before the next species, so downstream
-placement lands them in adjacent slots with no interleaving logic needed elsewhere.
-`pendingRequiredUnits`/`placeUnitsIntoSlots`/`countAvailableSlots`/`extraBoxesNeeded`
-needed no code changes — already unit-count/list agnostic. See commit `c382c86`.
-
 ## [Evolution-Chain Reachability Leg 2: wire the ancestor walk into checkEntryValidity] — 2026-09-20
 Final leg — milestone shipped, see MILESTONES.md. `checkEntryValidity` now takes a
 `speciesById` lookup and walks `evolvesFromSpeciesId` parent pointers so a species counts

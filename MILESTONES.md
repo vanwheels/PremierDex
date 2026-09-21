@@ -4,6 +4,7 @@ Index of shipped milestones. Name, date, status, and a link to the post-mortem d
 same scannable spirit as `TODO.md`, not prose. See `docs/postmortems/<milestone-slug>.md`
 for what shipped/went well/didn't per milestone.
 
+- **Apply Template — Combined Regular+Shiny** — 2026-09-20 — Shipped — [post-mortem](docs/postmortems/apply-template-combined-color.md)
 - **Evolution-Chain Reachability for Species Availability** — 2026-09-20 — Shipped — [post-mortem](docs/postmortems/evolution-chain-reachability.md)
 - **Box View Move & Undo Operations** — 2026-09-20 — Shipped — [post-mortem](docs/postmortems/box-view-move-undo-operations.md)
 - **Box View Quick-Wins Sweep** — 2026-09-19 — Shipped — [post-mortem](docs/postmortems/box-view-quick-wins-sweep.md)

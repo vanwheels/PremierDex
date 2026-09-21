@@ -1,19 +1,7 @@
 # TODO
 
-## Current Milestone: Apply Template — Combined Regular+Shiny
-
-Scoped 2026-09-20. Leg 3 (UI wiring) landed the third radio option and combined-preview
-text; `handleApplyTemplate`/`applyTemplate.ts` needed no changes since Leg 2 already threads
-`DexColor` generically. Code-complete — blocked only on Vanny's manual verification in the
-running app before this milestone can be marked shipped (post-mortem, MILESTONES.md entry,
-COMPLETED.md archive).
-
-### [Apply Template Combined Color: manual verification] — Leg 3 follow-up
-Apply 'Both' against an empty location and confirm regular/shiny ghosts land paired per
-species in dex order across however many boxes get created. Once confirmed, close out the
-milestone (post-mortem doc, MILESTONES.md entry, archive COMPLETED.md's current window).
-Blocked: needs Vanny to run the manual verification the leg spec calls for.
-Last touched: 2026-09-20. Re-check count: 0.
+Apply Template — Combined Regular+Shiny shipped 2026-09-20 (see MILESTONES.md). No current
+milestone picked yet.
 
 ## Unscheduled
 
