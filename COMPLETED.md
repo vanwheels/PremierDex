@@ -1,5 +1,16 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 14: curate Pokémon Platinum] — 2026-09-21
+Added `PLATINUM_SINNOH`, verified Leg 13's forward-looking summary of the grey (Platinum-only)
+index range against the same raw wikitext table: Battle Frontier + its four facilities
+(replacing the plain Battle Tower, same index-renamed-not-duplicated treatment as Emerald's
+Battle Tower→Battle Frontier), Distortion World, Global Terminal (replacing GTS), Villa,
+Battleground, Rotom's Room, T.G. Eterna Bldg, and the three Regi ruins. Also caught a
+version-conditional spelling difference the wikitext flags that Leg 13 didn't need: Diamond/
+Pearl's "Cafe" becomes "Café" in Platinum (same index/place, different per-version display
+text). Built as a full literal list, not a splice off `SINNOH_GEN4_BASE`, since the change set
+mixes additions, a removal, and a rename rather than one clean insertion. See commit `1193090`.
+
 ## [Curated Met Location dataset Leg 13: curate Pokémon Diamond/Pearl] — 2026-09-21
 Added `SINNOH_GEN4_BASE`, verified via Bulbapedia's Generation IV location-index table's raw
 wikitext (not a rendered-page summary, which gave contradictory answers twice). Surfaced a
