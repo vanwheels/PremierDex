@@ -327,4 +327,72 @@ describe('metLocationsForGame', () => {
   it('appends Fateful Encounter to Pokémon XD too (Leg 12)', () => {
     expect(metLocationsForGame('Pokémon XD: Gale of Darkness')).toContain('Fateful Encounter')
   })
+
+  it('returns the curated Sinnoh list for Pokémon Diamond (Leg 13)', () => {
+    const locations = metLocationsForGame('Pokémon Diamond')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 201')
+    expect(locations).toContain('Route 230')
+    expect(locations).toContain('Twinleaf Town')
+    expect(locations).toContain('Mt. Coronet')
+    // Sinnoh is distinct from every prior region — no bleed-through.
+    expect(locations).not.toContain('Route 1')
+    expect(locations).not.toContain('Route 101')
+  })
+
+  it("includes Diamond/Pearl's Battle Zone and Stark Mountain, contrary to the assumption they're Platinum-only (Leg 13)", () => {
+    const locations = metLocationsForGame('Pokémon Diamond')
+    expect(locations).toContain('Fight Area')
+    expect(locations).toContain('Survival Area')
+    expect(locations).toContain('Resort Area')
+    expect(locations).toContain('Stark Mountain')
+    expect(locations).toContain('Battle Tower')
+    expect(locations).toContain('Hall of Origin')
+    expect(locations).toContain('Verity Cavern')
+    expect(locations).toContain('Valor Cavern')
+    expect(locations).toContain('Acuity Cavern')
+  })
+
+  it('excludes Platinum-exclusive locations from Pokémon Diamond\'s list (Leg 13)', () => {
+    const locations = metLocationsForGame('Pokémon Diamond')
+    expect(locations).not.toContain('Battle Frontier')
+    expect(locations).not.toContain('Distortion World')
+    expect(locations).not.toContain('Global Terminal')
+    expect(locations).not.toContain('Villa')
+    expect(locations).not.toContain('Battleground')
+    expect(locations).not.toContain('Iron Ruins')
+    expect(locations).not.toContain('Iceberg Ruins')
+    expect(locations).not.toContain('Rock Peak Ruins')
+  })
+
+  it('excludes non-place special indices from Pokémon Diamond\'s list (Leg 13)', () => {
+    const locations = metLocationsForGame('Pokémon Diamond')
+    expect(locations).not.toContain('Mystery Zone')
+    expect(locations).not.toContain('Day-Care Couple')
+    expect(locations).not.toContain('Sinnoh')
+    expect(locations).not.toContain('Kanto')
+    expect(locations).not.toContain('Johto')
+    expect(locations).not.toContain('Hoenn')
+  })
+
+  it("uses Diamond/Pearl's own building-interior names, resolved from the FB template's display text (Leg 13)", () => {
+    const locations = metLocationsForGame('Pokémon Diamond')
+    expect(locations).toContain('Galactic HQ')
+    expect(locations).not.toContain('Team Galactic HQ')
+    expect(locations).toContain('Cafe')
+    expect(locations).not.toContain('Café')
+    expect(locations).toContain('GTS')
+    expect(locations).toContain('Game Corner')
+  })
+
+  it('returns the same Sinnoh Gen 4 list for Pokémon Pearl (paired versions share a base list)', () => {
+    const diamond = metLocationsForGame('Pokémon Diamond')
+    const pearl = metLocationsForGame('Pokémon Pearl')
+    expect(pearl).toEqual(diamond)
+  })
+
+  it('appends Fateful Encounter to Pokémon Diamond and Pearl too (Leg 13)', () => {
+    expect(metLocationsForGame('Pokémon Diamond')).toContain('Fateful Encounter')
+    expect(metLocationsForGame('Pokémon Pearl')).toContain('Fateful Encounter')
+  })
 })

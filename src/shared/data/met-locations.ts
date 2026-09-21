@@ -694,6 +694,168 @@ const ORRE_XD: readonly string[] = [
   'Snagem Hideout'
 ]
 
+/**
+ * Sinnoh, Generation IV (Diamond/Pearl, shared base list) (Leg 13). Routes 201-230 followed
+ * by every other named location alphabetically. Verified against Bulbapedia's raw wikitext
+ * for "List of locations by index number in Generation IV" (fetched directly via the
+ * MediaWiki API's action=raw, not a rendered/summarized page — the table's per-row
+ * background-color markup is the actual DP/Platinum/HGSS availability signal and doesn't
+ * survive naive HTML-to-text summarization) and Serebii's Sinnoh Pokéarth pages, 2026-09-21.
+ * Indices 0x0000-0x006F are white ("recognized by all games," i.e. present since Diamond/
+ * Pearl); 0x0070 onward turns grey (Platinum-only) then gold (HGSS-only migrated Johto/Kanto
+ * locations, irrelevant here).
+ *
+ * Surprising result that contradicts an easy assumption: **Fight Area, Survival Area, Resort
+ * Area, Stark Mountain, Battle Tower, Seabreak Path, Hall of Origin, and the Verity/Valor/
+ * Acuity Cavern trio are all white (index 0x0050-0x0059) — already in Diamond/Pearl, not a
+ * Platinum-exclusive "Battle Zone" addition.** Diamond/Pearl's Elite-Four postgame already
+ * includes the Battle Zone and Stark Mountain's Heatran, same as Platinum. What Platinum
+ * actually adds on top (confirmed grey, index 0x0070-0x007D, excluded from this list — Leg
+ * 14's concern): the Battle Frontier and its four facilities (replacing Diamond/Pearl's plain
+ * Battle Tower), Distortion World (Platinum lets you catch Giratina there directly; Diamond/
+ * Pearl catches it in Turnback Cave itself, already on this list), a "Global Terminal"
+ * building distinct from Diamond/Pearl's own GTS (below), Villa, Battleground, ROTOM's Room,
+ * T.G. Eterna Bldg, and Iron/Iceberg/Rock Peak Ruins (Platinum lets you catch the Regis
+ * directly in Sinnoh; Diamond/Pearl only gets them via Pal Park transfer from Ruby/Sapphire/
+ * Emerald, already covered by HOENN_GEN3_BASE/HOENN_EMERALD).
+ *
+ * Building-interior entries (Galactic HQ, Jubilife TV, Pokétch Co., GTS, Trainers' School,
+ * Mining Museum, Flower Shop, Cycle Shop, Contest Hall, Poffin House, Foreign Building,
+ * Pokémon Day Care, Veilstone Store, Game Corner, Canalave Library, Vista Lighthouse,
+ * Sunyshore Market, Pokémon Mansion, Footstep House, Cafe, Grand Lake, Restaurant, Battle
+ * Park) are included despite being generic-sounding — unlike Colosseum's excluded Mayor's
+ * House/Pyrite Bldg, each of these has its own dedicated index-table row, confirmed via the
+ * raw wikitext directly, not inferred from a wiki article existing. Display names resolved
+ * from Bulbapedia's {{FB|x|y}} template semantics (links to page "x y", displays only "y") —
+ * e.g. index 0x0047 displays as "Galactic HQ", not "Team Galactic HQ". "Cafe" (not "Café") is
+ * Diamond/Pearl's spelling specifically; Platinum/HGSS use the accented "Café" per the
+ * wikitext's version-conditional markup.
+ *
+ * Excluded as not real places despite having index rows, same reasoning as Mystery Zone/
+ * "Inside of Truck"/region-name indices elsewhere in this file: **Mystery Zone** (index
+ * 0x0000, internal map-ID placeholder, inaccessible without exploiting glitches per the
+ * wikitext itself); **Day-Care Couple** (index 0x07D0, a special egg-Pokémon catch-context
+ * string analogous to FATEFUL_ENCOUNTER, not a place — no prior generation's list adds an
+ * equivalent entry either, so not started here); and the **Kanto/Johto/Hoenn/Sinnoh
+ * region-name indices** (0x07D3-0x07D6), which the wikitext explicitly states "are not
+ * directly used for Pokémon caught in their respective regions" — they exist only as
+ * Pal-Park-migration game-of-origin labels, never producible as an actual Met Location value
+ * in a Generation IV game.
+ */
+const SINNOH_GEN4_BASE: readonly string[] = [
+  'Route 201',
+  'Route 202',
+  'Route 203',
+  'Route 204',
+  'Route 205',
+  'Route 206',
+  'Route 207',
+  'Route 208',
+  'Route 209',
+  'Route 210',
+  'Route 211',
+  'Route 212',
+  'Route 213',
+  'Route 214',
+  'Route 215',
+  'Route 216',
+  'Route 217',
+  'Route 218',
+  'Route 219',
+  'Route 220',
+  'Route 221',
+  'Route 222',
+  'Route 223',
+  'Route 224',
+  'Route 225',
+  'Route 226',
+  'Route 227',
+  'Route 228',
+  'Route 229',
+  'Route 230',
+  'Acuity Cavern',
+  'Acuity Lakefront',
+  'Amity Square',
+  'Battle Park',
+  'Battle Tower',
+  'Cafe',
+  'Canalave City',
+  'Canalave Library',
+  'Celestic Town',
+  'Contest Hall',
+  'Cycle Shop',
+  'Eterna City',
+  'Eterna Forest',
+  'Fight Area',
+  'Floaroma Meadow',
+  'Floaroma Town',
+  'Flower Paradise',
+  'Flower Shop',
+  'Footstep House',
+  'Foreign Building',
+  'Fuego Ironworks',
+  'Fullmoon Island',
+  'Galactic HQ',
+  'Game Corner',
+  'Grand Lake',
+  'Great Marsh',
+  'GTS',
+  'Hall of Origin',
+  'Hearthome City',
+  'Iron Island',
+  'Jubilife City',
+  'Jubilife TV',
+  'Lake Acuity',
+  'Lake Valor',
+  'Lake Verity',
+  'Maniac Tunnel',
+  'Mining Museum',
+  'Mt. Coronet',
+  'Newmoon Island',
+  'Old Chateau',
+  'Oreburgh City',
+  'Oreburgh Gate',
+  'Oreburgh Mine',
+  'Pal Park',
+  'Pastoria City',
+  'Poffin House',
+  'Pokémon Day Care',
+  'Pokémon League',
+  'Pokémon Mansion',
+  'Pokétch Co.',
+  'Ravaged Path',
+  'Resort Area',
+  'Restaurant',
+  'Ruin Maniac Cave',
+  'Sandgem Town',
+  'Seabreak Path',
+  'Sendoff Spring',
+  'Snowpoint City',
+  'Snowpoint Temple',
+  'Solaceon Ruins',
+  'Solaceon Town',
+  'Spear Pillar',
+  'Spring Path',
+  'Stark Mountain',
+  'Sunyshore City',
+  'Sunyshore Market',
+  'Survival Area',
+  "Trainers' School",
+  'Trophy Garden',
+  'Turnback Cave',
+  'Twinleaf Town',
+  'Valley Windworks',
+  'Valor Cavern',
+  'Valor Lakefront',
+  'Veilstone City',
+  'Veilstone Store',
+  'Verity Cavern',
+  'Verity Lakefront',
+  'Victory Road',
+  'Vista Lighthouse',
+  'Wayward Cave'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -707,7 +869,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon FireRed': KANTO_GEN3,
   'Pokémon LeafGreen': KANTO_GEN3,
   'Pokémon Colosseum': ORRE_COLOSSEUM,
-  'Pokémon XD: Gale of Darkness': ORRE_XD
+  'Pokémon XD: Gale of Darkness': ORRE_XD,
+  'Pokémon Diamond': SINNOH_GEN4_BASE,
+  'Pokémon Pearl': SINNOH_GEN4_BASE
 }
 
 /**
