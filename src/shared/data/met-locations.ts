@@ -2406,6 +2406,185 @@ const KANTO_LETS_GO: readonly string[] = [
   'Viridian Forest'
 ]
 
+/**
+ * Galar, Generation VIII (Sword/Shield) (Leg 23). Routes 1-10 followed by every other named
+ * location alphabetically, same convention as every prior route-numbered region in this
+ * file. Verified against Bulbapedia's `Category:Sword and Shield locations`/`Category:Galar
+ * locations` (and its Wild Area/Isle of Armor/Crown Tundra subcategories) and Serebii's Galar
+ * Pokéarth pages, 2026-09-21. **Includes both DLC areas (Isle of Armor, Crown Tundra)
+ * alongside base Galar in this one shared list** — confirmed with Vanny 2026-09-21: since
+ * there's no separate origin-game entry for "Sword + Expansion Pass," a DLC-owning player's
+ * catches there still record origin game "Pokémon Sword"/"Pokémon Shield," and excluding
+ * them would leave those Met Locations unselectable in OriginModal's restricted picker (no
+ * free-text fallback once a game has any curated list at all). Sets the precedent Leg 26
+ * (Scarlet/Violet's Teal Mask/Indigo Disk DLC) should follow too.
+ *
+ * **No location-name version split found between Sword and Shield**, despite this
+ * generation's heavy species-level version exclusivity (Gym Leader matchups, den
+ * distributions, and the box legendaries themselves) — every physical *place* checked
+ * resolves to the same shared name in both versions. Specifically verified rather than
+ * assumed: Galar Mine/Galar Mine No. 2 are both "Sw"/"Sh" per their own encounter tables;
+ * Split-Decision Ruins (Regieleki/Regidrago) is "listed uniformly...for both Pokémon Sword
+ * and Shield"; and Zacian/Zamazenta are each caught at the same "Tower summit" location in
+ * their respective version (Sword catches Zacian there, Shield catches Zamazenta there, but
+ * neither game gets a differently-named location for it) — the closest thing to a Black
+ * City/White Forest-style split this generation has, and it isn't actually one.
+ *
+ * **The three Ruins articles drop Bulbapedia's "(Galar)" disambiguation suffix**: Rock Peak
+ * Ruins, Iceberg Ruins, and Iron Ruins each confirmed via their own infobox `location_name`
+ * field to just be that plain name in-game — "(Galar)" exists only to disambiguate from
+ * Sinnoh's own "Iceberg Ruins," same treatment KANTO_LETS_GO's comment already applied to
+ * "(Kanto)"-suffixed pages. **Routes drop Bulbapedia's "Galar" prefix** the same way
+ * KANTO_LETS_GO's comment established for that game's own routes — confirmed via Galar
+ * Route 1's infobox: the in-game name is plain "Route 1," "Galar Route 1" is only this
+ * wiki's page-title disambiguation convention.
+ *
+ * **Tower summit is a real catch location, not a no-Pokémon battle site** — worth flagging
+ * since a first-pass summarized read of its own article (grouped with Rose Tower/Energy
+ * Plant, both genuinely no-catch) missed this: it's where the story's climactic Zacian/
+ * Zamazenta battle and catch happens, confirmed directly via each legendary's own Bulbapedia
+ * "Location" field rather than trusting the location article's prose. A lesson for later
+ * legs the same way ALOLA_ULTRA_SUN's comment already flagged trusting an article's own
+ * text over a secondary source's summary.
+ *
+ * **Pokémon Nursery is a genuine place, included** — unlike Let's Go's Pokémon Day Care
+ * (excluded there since that game has no Eggs at all), Sword/Shield has ordinary breeding,
+ * and Nursery is this generation's building name for it, same class of "generic-sounding but
+ * dedicated" building SINNOH_GEN4_BASE's Pokémon Day Care and the Alola lists' own Pokémon
+ * Nursery entries already established. **Meetup Spot is a genuine gift location despite
+ * having "no grass and no wild Pokémon" of its own** — it's where Let's Go save-linked
+ * Gigantamax Pikachu/Eevee are received, same "conditional but real" treatment ALOLA_SM's
+ * Poké Pelago comment already established for an unusual gift mechanic. **Freezington and
+ * Crown Shrine are both kept as two distinct, real locations for the same Calyrex/Glastrier/
+ * Spectrier story chain** — Freezington is where the gift Cosmog (that becomes Calyrex's
+ * quest) and the carrot-growing NPC are, Crown Shrine is the separate site where the
+ * Ice/Shadow Rider battle and catch itself happens.
+ *
+ * **Max Lair is a real, distinct catch location** for the Crown Tundra's Dynamax Adventures
+ * roguelike-battle-gauntlet Pokémon, kept despite not being a traditional route/town.
+ * **Watchtower Lair is kept as its own entry separate from Watchtower Ruins** (the Wild Area
+ * zone it's nested inside) — a Bulbapedia-confirmed distinct article for the event-exclusive
+ * Dynamax Crystal encounters (Gigantamax Pikachu/Eevee/Sandaconda/etc.), not merged into its
+ * parent zone's entry.
+ *
+ * **Excluded as generic building types with no confirmed catch/gift in this game**, same
+ * class of exclusion this file's every prior region already applies to Poké Mart/Pokémon
+ * Center/Mayor's House-style entries: Player's house, Poké Mart, Pokémon Center, Battle Café
+ * (a chain repeated identically across Motostoke/Hammerlocke/Wyndon, confirmed pure battle
+ * venue), and Herb Shop (confirmed no Pokémon, purely a healing-item shop). **Excluded as
+ * pure battle facilities with a confirmed no-Pokémon article read**: Battle Tower (Galar),
+ * Rose Tower, Energy Plant, Tower of Darkness, Tower of Waters (Kubfu's two evolution
+ * trial-towers — confirmed no wild encounters or den subpages, unlike every other Isle of
+ * Armor zone), Towers of Two Fists (the umbrella name for those same two towers, not itself
+ * a separate place), and Restricted Sparring (a Master Dojo battle minigame). Every one of
+ * the nine Galar Stadiums (Ballonlea/Circhester/Hammerlocke/Hulbury/Motostoke/Stow-on-Side/
+ * Turffield/Wyndon Stadium, plus Spikemuth's gym which uses the town itself rather than a
+ * separate stadium building) is excluded the same way — pure Gym Challenge/Battle Tower
+ * venues, no catch or gift Pokémon documented at any of them.
+ *
+ * **Excluded as non-places**: "Galar," "Wild Area," "Isle of Armor," and "Crown Tundra"
+ * themselves (region/sub-region names, same treatment this file's Kanto/Johto/Hoenn/Sinnoh/
+ * Alola-island region-name exclusions already established — the real Met Location values are
+ * each area's own named zone, e.g. "Rolling Fields," not the umbrella region containing it),
+ * "Hometown" (Generation VIII's own fallback label for an unrecognized/edited origin, same
+ * class as "Faraway place" and earlier generations' Mystery Zone), "Faraway place" itself,
+ * and "Pokémon Den" (a generic mechanic-name for the Max Raid feature that appears across
+ * dozens of different zones — confirmed via its own article that the recorded Met Location
+ * would reference "the specific named area...rather than the generic term," same reasoning
+ * that already excludes "Secret Base"/"Day-Care Couple" elsewhere in this file). **Excluded
+ * as anime-only, not in the games at all** — a first-pass Sword/Shield location category
+ * pull turned these up but their own articles confirm they never appear outside the animated
+ * series: Ancient castle and Karna's Poké Ball factory.
+ */
+const GALAR_GEN8: readonly string[] = [
+  'Route 1',
+  'Route 2',
+  'Route 3',
+  'Route 4',
+  'Route 5',
+  'Route 6',
+  'Route 7',
+  'Route 8',
+  'Route 9',
+  'Route 10',
+  "Axew's Eye",
+  'Ballimere Lake',
+  'Ballonlea',
+  "Brawlers' Cave",
+  'Bridge Field',
+  'Challenge Beach',
+  'Challenge Road',
+  'Circhester',
+  'Courageous Cavern',
+  'Crown Shrine',
+  'Dappled Grove',
+  'Dusty Bowl',
+  'Dyna Tree Hill',
+  'East Lake Axewell',
+  'Fields of Honor',
+  'Forest of Focus',
+  'Freezington',
+  'Frigid Sea',
+  'Frostpoint Field',
+  'Galar Mine',
+  'Galar Mine No. 2',
+  "Giant's Bed",
+  "Giant's Cap",
+  "Giant's Foot",
+  "Giant's Mirror",
+  "Giant's Seat",
+  'Glimwood Tangle',
+  'Hammerlocke',
+  'Hammerlocke Hills',
+  'Honeycalm Island',
+  'Honeycalm Sea',
+  'Hulbury',
+  'Iceberg Ruins',
+  'Insular Sea',
+  'Iron Ruins',
+  'Lake of Outrage',
+  'Lakeside Cave',
+  'Loop Lagoon',
+  'Master Dojo',
+  'Max Lair',
+  'Meetup Spot',
+  'Motostoke',
+  'Motostoke Outskirts',
+  'Motostoke Riverbank',
+  'North Lake Miloch',
+  'Old Cemetery',
+  'Path to the Peak',
+  'Pokémon Nursery',
+  'Postwick',
+  'Potbottom Desert',
+  'Roaring-Sea Caves',
+  'Rock Peak Ruins',
+  'Rolling Fields',
+  'Route 9 Tunnel',
+  'Slippery Slope',
+  'Slumbering Weald',
+  'Snowslide Slope',
+  'Soothing Wetlands',
+  'South Lake Miloch',
+  'Spikemuth',
+  'Split-Decision Ruins',
+  'Stepping-Stone Sea',
+  'Stony Wilderness',
+  'Stow-on-Side',
+  'Three-Point Pass',
+  'Tower summit',
+  'Training Lowlands',
+  'Tunnel to the Top',
+  'Turffield',
+  'Warm-Up Tunnel',
+  'Watchtower Lair',
+  'Watchtower Ruins',
+  'Wedgehurst',
+  'West Lake Axewell',
+  'Workout Sea',
+  'Wyndon'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -2438,7 +2617,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Ultra Sun': ALOLA_ULTRA_SUN,
   'Pokémon Ultra Moon': ALOLA_ULTRA_MOON,
   "Pokémon Let's Go, Pikachu!": KANTO_LETS_GO,
-  "Pokémon Let's Go, Eevee!": KANTO_LETS_GO
+  "Pokémon Let's Go, Eevee!": KANTO_LETS_GO,
+  'Pokémon Sword': GALAR_GEN8,
+  'Pokémon Shield': GALAR_GEN8
 }
 
 /**
