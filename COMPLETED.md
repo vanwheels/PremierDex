@@ -1,5 +1,25 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 22: curate Pokémon Let's Go, Pikachu!/Let's Go, Eevee!] — 2026-09-21
+Added `KANTO_LETS_GO`, a third distinct Kanto map alongside KANTO_GEN1 and KANTO_GEN3 —
+verified against `Category:Let's Go, Pikachu! and Let's Go, Eevee! locations` (same
+category-sweep method Legs 20/21 used for Generation VII, which has no Bulbapedia
+index-number page), cross-checked per-article, 2026-09-21. Confirmed "Kanto" route/location
+prefixes and suffixes in the category listing (Kanto Route 1, Kanto Power Plant, Victory
+Road (Kanto), Pokémon Mansion (Kanto), Underground Path (Kanto Routes 5–6)/(7–8)) are
+Bulbapedia disambiguation only, not in-game text — normalized to the plain names this file's
+other Kanto lists already use. Confirmed the Safari Zone is absent (replaced thematically by
+GO Park) and that Team Rocket Hideout is this game's own name for Generation I's Rocket
+Hideout. Kept three gift/fossil locations (Cinnabar Lab, Pewter Museum of Science,
+Professor Oak's Laboratory) and included GO Park on direct mechanical confirmation (a
+genuine Poké-Ball catch event resets the Pokémon's Original Trainer, the same transfer-then-
+catch class Sinnoh's Pal Park already represents) since no source directly quotes GO Park's
+Met Location string. Excluded six generic buildings with no confirmed catch/gift (Celadon
+Condominiums — Let's Go removed its Eevee gift — Celadon Department Store, Celadon Game
+Corner, Player's house, Poké Mart, Pokémon Center) plus "Kanto" and "Hometown" as non-places
+and three locations lacking corroboration (Pokémon Day Care — no Eggs exist in this game —
+Pokémon League Reception Gate, Sea Cottage). See commit `c7552d3`.
+
 ## [Curated Met Location dataset Leg 21: curate Pokémon Ultra Sun/Ultra Moon] — 2026-09-21
 Added `ALOLA_ULTRA_SUN`/`ALOLA_ULTRA_MOON`, verified against
 `Category:Ultra Sun and Ultra Moon locations` cross-checked per-article, same discipline
