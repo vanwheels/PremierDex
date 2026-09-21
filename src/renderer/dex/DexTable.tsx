@@ -8,6 +8,8 @@ import { SpriteModal } from './SpriteModal'
 import type { SpriteModalTarget } from './SpriteModal'
 import { OriginModal } from './OriginModal'
 import type { OriginModalTarget } from './OriginModal'
+import { RibbonsMarksModal } from './RibbonsMarksModal'
+import { DexBoxContextMenu, type DexBoxContextMenuAction } from './DexBoxContextMenu'
 import { DexBulkActionsBar } from './DexBulkActionsBar'
 import { pickCollapsedRow } from './buildDexSections'
 import type { DexSection, DexSort, DexSortKey } from './types'
@@ -90,6 +92,12 @@ export function DexTable({
   // writes to SQLite (via onSaveOrigin), so this isn't purely UI state — but "which modal
   // is open" still belongs local to DexTable, same as spriteTarget.
   const [originTarget, setOriginTarget] = useState<OriginModalTarget | null>(null)
+  // Leg 1 of the Ribbons & Marks: List/Collection View Entry Points milestone — right-click
+  // menu on a regular/shiny cell, reusing DexBoxContextMenu (already generic, see its own
+  // doc comment) instead of a second inline button in an already-dense cell. Its "Edit
+  // Origin" action reuses setOriginTarget above; "Ribbons & Marks" opens ribbonsMarksTarget.
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; target: OriginModalTarget } | null>(null)
+  const [ribbonsMarksTarget, setRibbonsMarksTarget] = useState<OriginModalTarget | null>(null)
   // [Bulk move entries between storage locations]: entry ids checked via the per-entry
   // checkboxes beside each Loc. cell — see DexRow's own doc comment for why this is
   // entry-id-keyed rather than row-keyed. UI-only, same as the state above; cleared after
@@ -104,6 +112,23 @@ export function DexTable({
       return next
     })
   }
+
+  const contextMenuActions = (target: OriginModalTarget): DexBoxContextMenuAction[] => [
+    {
+      label: 'Edit Origin',
+      onClick: () => {
+        setOriginTarget(target)
+        setContextMenu(null)
+      }
+    },
+    {
+      label: 'Ribbons & Marks',
+      onClick: () => {
+        setRibbonsMarksTarget(target)
+        setContextMenu(null)
+      }
+    }
+  ]
 
   const toggleExpanded = (speciesId: number): void => {
     setExpandedSpeciesIds((prev) => {
@@ -198,6 +223,7 @@ export function DexTable({
                         onOpenSprite={setSpriteTarget}
                         onOpenOrigin={setOriginTarget}
                         onSaveOrigin={onSaveOrigin}
+                        onOpenContextMenu={(x, y, target) => setContextMenu({ x, y, target })}
                         onSetEntryGender={onSetEntryGender}
                         storageLocations={storageLocations}
                         onSaveStorageLocation={onSaveStorageLocation}
@@ -227,6 +253,7 @@ export function DexTable({
                         onOpenSprite={setSpriteTarget}
                         onOpenOrigin={setOriginTarget}
                         onSaveOrigin={onSaveOrigin}
+                        onOpenContextMenu={(x, y, target) => setContextMenu({ x, y, target })}
                         onSetEntryGender={onSetEntryGender}
                         storageLocations={storageLocations}
                         onSaveStorageLocation={onSaveStorageLocation}
@@ -250,6 +277,21 @@ export function DexTable({
           displayName={originTarget.displayName}
           onClose={() => setOriginTarget(null)}
           onSave={onSaveOrigin}
+        />
+      )}
+      {contextMenu && (
+        <DexBoxContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          actions={contextMenuActions(contextMenu.target)}
+          onClose={() => setContextMenu(null)}
+        />
+      )}
+      {ribbonsMarksTarget && (
+        <RibbonsMarksModal
+          entryId={ribbonsMarksTarget.entry.id}
+          displayName={ribbonsMarksTarget.displayName}
+          onClose={() => setRibbonsMarksTarget(null)}
         />
       )}
     </>

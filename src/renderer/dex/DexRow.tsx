@@ -33,6 +33,13 @@ interface DexRowProps {
   onOpenSprite: (target: SpriteModalTarget) => void
   onOpenOrigin: (target: OriginModalTarget) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
+  /** Leg 1 of the Ribbons & Marks: List/Collection View Entry Points milestone — right-click
+   * on an owned regular/shiny cell opens a small menu with "Edit Origin" and "Ribbons &
+   * Marks" (DexTable owns the actual DexBoxContextMenu render, same split as onOpenOrigin
+   * above). This cell is already too dense for a second inline button (checkbox + Origin
+   * button + gender select + badges, ×2 columns), so the entry point is right-click rather
+   * than a mechanical copy of the Box/Hybrid detail panel's inline button. */
+  onOpenContextMenu: (x: number, y: number, target: OriginModalTarget) => void
   /** Resolve Gender Ambiguities bugfix follow-up: a per-entry Male/Female control, shown
    * whenever row.hasGenderDifference so a mislabeled entry can be corrected any time, not
    * only from the bulk Resolve modal's one-time backlog sweep — see genderResolution.ts.
@@ -92,6 +99,7 @@ export function DexRow({
   onOpenSprite,
   onOpenOrigin,
   onSaveOrigin,
+  onOpenContextMenu,
   onSetEntryGender,
   storageLocations,
   onSaveStorageLocation,
@@ -242,7 +250,13 @@ export function DexRow({
           }
         />
       </td>
-      <td>
+      <td
+        onContextMenu={(e) => {
+          if (!row.regular?.owned) return
+          e.preventDefault()
+          onOpenContextMenu(e.clientX, e.clientY, { entry: row.regular, displayName: row.displayName })
+        }}
+      >
         <input
           type="checkbox"
           disabled={!row.regular || row.alwaysShiny}
@@ -273,7 +287,13 @@ export function DexRow({
         {row.regular?.owned && row.regular.caughtBall && <BallIcon ball={row.regular.caughtBall} />}
       </td>
       <td>{storageLocationSelect(row.regular)}</td>
-      <td>
+      <td
+        onContextMenu={(e) => {
+          if (!row.shinyEntry?.owned) return
+          e.preventDefault()
+          onOpenContextMenu(e.clientX, e.clientY, { entry: row.shinyEntry, displayName: row.displayName })
+        }}
+      >
         <input
           type="checkbox"
           disabled={!row.shinyEntry || row.shinyLocked}
