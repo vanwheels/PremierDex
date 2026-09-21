@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 13: curate Pokémon Diamond/Pearl] — 2026-09-21
+Added `SINNOH_GEN4_BASE`, verified via Bulbapedia's Generation IV location-index table's raw
+wikitext (not a rendered-page summary, which gave contradictory answers twice). Surfaced a
+genuinely surprising result: Fight Area/Survival Area/Resort Area/Stark Mountain/Battle
+Tower/Hall of Origin/the three lake Caverns are already in Diamond/Pearl, not a Platinum-only
+"Battle Zone" as commonly assumed — Platinum's real additions (Battle Frontier, Distortion
+World, Global Terminal, Villa, Battleground, ROTOM's Room, T.G. Eterna Bldg, the three Regi
+Ruins) are left for Leg 14 to layer in. See commit `ab64f5f`.
+
 ## [Curated Met Location dataset Leg 12: curate Pokémon XD: Gale of Darkness] — 2026-09-20
 Added `ORRE_XD`, kept separate from Leg 11's `ORRE_COLOSSEUM` since the two games' location-
 index tables share no entries. Verified against the same shared Bulbapedia GCN location-index
