@@ -17,10 +17,6 @@ leg's procedure is the same, per the Leg 1 doc's "Future, opportunistic" handoff
 No `OriginModal.tsx` or schema.ts changes needed after Leg 2 — the mechanism already
 switches to the restricted `<select>` for any game `metLocationsForGame` returns a list for.
 
-### [Curated Met Location dataset] — Leg 3
-Pokémon Red (Gen 1). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
 ### [Curated Met Location dataset] — Leg 4
 Pokémon Blue (Gen 1). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.

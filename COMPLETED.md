@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 3: curate Pokémon Red] — 2026-09-20
+First real curated list: Routes 1-25 plus every other named Kanto city/town/landmark
+(Cerulean Cave, the two Underground Paths, Rocket Hideout, etc.), ordered numeric routes
+first then alphabetical, matching Serebii's own Kanto map listing rather than in-game
+traversal order (lower risk of a route-connection transcription error). Verified against
+Bulbapedia (Kanto, Cerulean Cave, Underground Path, Rocket Hideout, Route 11, Route 22) and
+Serebii's Kanto map page. `met-locations.test.ts`'s "curated game" case now points at
+Pokémon Red instead of the Leg 2 placeholder. See commit `6cb68df`.
+
 ## [Curated Met Location dataset Leg 2: build the mechanism] — 2026-09-20
 `shared/data/met-locations.ts` (empty `MET_LOCATIONS` record + `metLocationsForGame`,
 mirroring `poke-balls.ts`) and `OriginModal.tsx`'s Met Location field now switch to a
