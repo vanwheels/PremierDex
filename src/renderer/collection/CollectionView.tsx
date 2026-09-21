@@ -4,6 +4,7 @@ import { SpriteModal } from '../dex/SpriteModal'
 import type { SpriteModalTarget } from '../dex/SpriteModal'
 import { OriginModal } from '../dex/OriginModal'
 import type { OriginModalTarget } from '../dex/OriginModal'
+import { RibbonsMarksModal } from '../dex/RibbonsMarksModal'
 import { buildCollectionGroups } from './buildCollectionGroups'
 import { CollectionRow } from './CollectionRow'
 import { DEFAULT_COLLECTION_GROUP_BY } from './types'
@@ -34,6 +35,9 @@ export function CollectionView({ species, forms, entries, onSaveOrigin }: Collec
   const [groupBy, setGroupBy] = useState<CollectionGroupBy>(DEFAULT_COLLECTION_GROUP_BY)
   const [spriteTarget, setSpriteTarget] = useState<SpriteModalTarget | null>(null)
   const [originTarget, setOriginTarget] = useState<OriginModalTarget | null>(null)
+  // Leg 2 of the Ribbons & Marks: List/Collection View Entry Points milestone — same
+  // "which modal is open" local-state pattern as originTarget above.
+  const [ribbonsMarksTarget, setRibbonsMarksTarget] = useState<OriginModalTarget | null>(null)
 
   const groups = useMemo(() => buildCollectionGroups(species, forms, entries, groupBy), [species, forms, entries, groupBy])
 
@@ -67,7 +71,14 @@ export function CollectionView({ species, forms, entries, onSaveOrigin }: Collec
             </thead>
             <tbody>
               {group.rows.map((row) => (
-                <CollectionRow key={row.key} row={row} onOpenSprite={setSpriteTarget} onOpenOrigin={setOriginTarget} onSaveOrigin={onSaveOrigin} />
+                <CollectionRow
+                  key={row.key}
+                  row={row}
+                  onOpenSprite={setSpriteTarget}
+                  onOpenOrigin={setOriginTarget}
+                  onSaveOrigin={onSaveOrigin}
+                  onOpenRibbonsMarks={setRibbonsMarksTarget}
+                />
               ))}
             </tbody>
           </table>
@@ -76,6 +87,13 @@ export function CollectionView({ species, forms, entries, onSaveOrigin }: Collec
       {spriteTarget && <SpriteModal target={spriteTarget} onClose={() => setSpriteTarget(null)} />}
       {originTarget && (
         <OriginModal entry={originTarget.entry} displayName={originTarget.displayName} onClose={() => setOriginTarget(null)} onSave={onSaveOrigin} />
+      )}
+      {ribbonsMarksTarget && (
+        <RibbonsMarksModal
+          entryId={ribbonsMarksTarget.entry.id}
+          displayName={ribbonsMarksTarget.displayName}
+          onClose={() => setRibbonsMarksTarget(null)}
+        />
       )}
     </div>
   )

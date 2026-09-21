@@ -12,12 +12,17 @@ interface CollectionRowProps {
   onOpenSprite: (target: SpriteModalTarget) => void
   onOpenOrigin: (target: OriginModalTarget) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
+  /** Leg 2 of the Ribbons & Marks: List/Collection View Entry Points milestone — same
+   * {entry, displayName} target shape as onOpenOrigin, since this row's single Origin cell
+   * has room for a second button (unlike DexRow's cramped regular/shiny cells, which got a
+   * right-click menu instead). */
+  onOpenRibbonsMarks: (target: OriginModalTarget) => void
 }
 
 /** One owned individual — the Collection view's row shape, as opposed to DexRow's
  * form-pairing shape. Reuses SpriteThumbnail/SpriteModal/OriginModal and the nickname/
  * origin-summary helpers exactly as DexRow does, just wired to a single entry directly. */
-export function CollectionRow({ row, onOpenSprite, onOpenOrigin, onSaveOrigin }: CollectionRowProps): JSX.Element {
+export function CollectionRow({ row, onOpenSprite, onOpenOrigin, onSaveOrigin, onOpenRibbonsMarks }: CollectionRowProps): JSX.Element {
   const { text: nicknameText, setText: setNicknameText, commit: commitNickname } = useNicknameEditor(row.entry, onSaveOrigin)
 
   return (
@@ -61,6 +66,12 @@ export function CollectionRow({ row, onOpenSprite, onOpenOrigin, onSaveOrigin }:
           onClick={() => onOpenOrigin({ entry: row.entry, displayName: row.displayName })}
         >
           Origin
+        </button>
+        <button
+          type="button"
+          onClick={() => onOpenRibbonsMarks({ entry: row.entry, displayName: row.displayName })}
+        >
+          Ribbons &amp; Marks
         </button>
         {row.entry.caughtBall && <BallIcon ball={row.entry.caughtBall} />}
       </td>
