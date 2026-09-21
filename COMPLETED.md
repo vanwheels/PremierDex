@@ -1,5 +1,17 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 4: restructure to shared lists, add Fateful Encounter, curate Blue] — 2026-09-20
+Vanny flagged three domain corrections before Leg 5 started: paired versions (Red/Blue,
+Gold/Silver, Ruby/Sapphire, etc.) share an identical map and shouldn't each get their own
+leg; Gift Pokémon/Mystery Gift record "Fateful Encounter" rather than a real location; and
+Generation V's Black City/White Forest is the one confirmed within-pair location split.
+Restructured `met-locations.ts` from Leg 3's one-array-per-game shape (which had explicitly
+argued against aliasing) to a named base-array-per-family shape, with `metLocationsForGame`
+now appending "Fateful Encounter" to every curated game. Closed out Blue as the trivial
+output of that restructure (aliased to Red's `KANTO_GEN1` array). Also collapsed TODO.md's
+remaining Legs 5–43 from one-game-per-leg down to Legs 5–28, one per map family. See commit
+`<pending>`.
+
 ## [Curated Met Location dataset Leg 3: curate Pokémon Red] — 2026-09-20
 First real curated list: Routes 1-25 plus every other named Kanto city/town/landmark
 (Cerulean Cave, the two Underground Paths, Rocket Hideout, etc.), ordered numeric routes

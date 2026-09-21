@@ -12,7 +12,18 @@ describe('metLocationsForGame', () => {
     expect(locations).not.toContain('Route 26')
   })
 
-  it('returns undefined for a game with no curated list yet (every game past Leg 3)', () => {
+  it('returns the same Kanto Gen 1 list for Pokémon Blue (Leg 4 restructure: paired versions share a base list)', () => {
+    const red = metLocationsForGame('Pokémon Red')
+    const blue = metLocationsForGame('Pokémon Blue')
+    expect(blue).toEqual(red)
+  })
+
+  it('appends Fateful Encounter to every curated game, for Gift Pokémon/Mystery Gift (Leg 4)', () => {
+    expect(metLocationsForGame('Pokémon Red')).toContain('Fateful Encounter')
+    expect(metLocationsForGame('Pokémon Blue')).toContain('Fateful Encounter')
+  })
+
+  it('returns undefined (not just a Fateful Encounter list) for a game with no curated list yet', () => {
     expect(metLocationsForGame('Pokémon Sword')).toBeUndefined()
   })
 

@@ -4,176 +4,149 @@ Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILES
 
 ## Current Milestone: Curated Met Location dataset
 
-**Legs 3–43** (below): curate every game in `origin-games.ts`'s `ORIGIN_GAMES` roster, one
-game per leg, in release-date order. This supersedes Leg 1's "zero games curated at ship,
-one game at a time, opportunistically" posture — confirmed 2026-09-20 (Vanny) to instead
-curate the full roster now rather than waiting for each game to come up individually. Each
-leg's procedure is the same, per the Leg 1 doc's "Future, opportunistic" handoff:
-- Add the game's major city/route Met Location list to `shared/data/met-locations.ts`
-  (`Record<gameName, readonly string[]>`, keyed by the game's `name` from `ORIGIN_GAMES`).
+**Legs 4–28** (below): curate every "map family" in `origin-games.ts`'s `ORIGIN_GAMES`
+roster, in release-date order. Restructured at Leg 4 (2026-09-20, Vanny) from the original
+Legs 3–43 one-game-per-leg plan after three domain corrections:
+- **Paired versions share an identical (or near-identical) location list.** Red/Blue,
+  Gold/Silver, Ruby/Sapphire, Diamond/Pearl, Black/White, Black 2/White 2, X/Y, Omega
+  Ruby/Alpha Sapphire, Sun/Moon, Ultra Sun/Ultra Moon, Sword/Shield, Scarlet/Violet,
+  FireRed/LeafGreen, HeartGold/SoulSilver, Brilliant Diamond/Shining Pearl, and Let's Go
+  Pikachu/Let's Go Eevee are each one leg curating one shared base array (both `ORIGIN_GAMES`
+  names keyed to the same array reference), not two independent legs. A generation's 3rd
+  version or later expansion (Yellow, Crystal, Emerald, Platinum, Ultra Sun/Ultra Moon) gets
+  its own leg to verify+layer in whatever it actually adds/removes — ballPoolForGame-style
+  spread off the base array (`[...BASE, ...additions]`), not assumed identical. Colosseum,
+  XD, Legends Arceus, Legends Z-A, and Pokémon GO have no paired version and stay
+  one-leg-each, same as before.
+- **Fateful Encounter (Gift Pokémon/Mystery Gift) is not a location.** Both record their Met
+  Location in-game as the fixed string "Fateful Encounter" rather than a real place. Built
+  at Leg 4: `metLocationsForGame` appends it to every curated game's list rather than it
+  living in any per-game array — applies identically regardless of game/region.
+- **Generation V's Black City/White Forest is the one confirmed within-pair location
+  split** (Black-only vs. White-only respectively) — everything else that differs between
+  paired versions is version-exclusive *encounters*, not a location-list difference, so no
+  other pair needs a comparable split.
+
+Each remaining leg's procedure:
+- Add the family's major city/route Met Location list to `shared/data/met-locations.ts`
+  (a named base `const`, e.g. `KANTO_GEN1`, with each covered game's `ORIGIN_GAMES` `name`
+  keyed to it in `MET_LOCATIONS`).
 - Verify the list against Bulbapedia/Serebii before committing — same standard
   `supplemental-availability.ts`'s mechanisms were held to.
-- Extend `met-locations.test.ts` to cover the newly curated game.
-No `OriginModal.tsx` or schema.ts changes needed after Leg 2 — the mechanism already
-switches to the restricted `<select>` for any game `metLocationsForGame` returns a list for.
-
-### [Curated Met Location dataset] — Leg 4
-Pokémon Blue (Gen 1). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
+- Extend `met-locations.test.ts` to cover the newly curated family.
+No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
+restricted `<select>` for any game `metLocationsForGame` returns a list for.
 
 ### [Curated Met Location dataset] — Leg 5
-Pokémon Yellow (Gen 1). Curate per the procedure above.
+Pokémon Yellow (Gen 1) — verify against the Leg 3/4 `KANTO_GEN1` base and layer in whatever
+Yellow-specific locations actually differ, per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 6
-Pokémon Gold (Gen 2). Curate per the procedure above.
+Pokémon Gold/Silver (Gen 2, shared base list). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 7
-Pokémon Silver (Gen 2). Curate per the procedure above.
+Pokémon Crystal (Gen 2) — verify against Leg 6's base and layer in whatever differs.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 8
-Pokémon Crystal (Gen 2). Curate per the procedure above.
+Pokémon Ruby/Sapphire (Gen 3, shared base list). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 9
-Pokémon Ruby (Gen 3). Curate per the procedure above.
+Pokémon Emerald (Gen 3) — verify against Leg 8's base and layer in whatever differs
+(Battle Frontier at minimum).
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 10
-Pokémon Sapphire (Gen 3). Curate per the procedure above.
+Pokémon FireRed/LeafGreen (Gen 3, shared base list — Kanto remake, distinct from Leg
+3/4's original Red/Blue Kanto map; includes the Sevii Islands). Curate per the procedure
+above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 11
-Pokémon FireRed (Gen 3). Curate per the procedure above.
+Pokémon Colosseum (Gen 3, no paired version). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 12
-Pokémon LeafGreen (Gen 3). Curate per the procedure above.
+Pokémon XD: Gale of Darkness (Gen 3, no paired version — kept separate from Leg 11's
+Colosseum list rather than assumed to share one, per Vanny 2026-09-20). Curate per the
+procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 13
-Pokémon Emerald (Gen 3). Curate per the procedure above.
+Pokémon Diamond/Pearl (Gen 4, shared base list). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 14
-Pokémon Colosseum (Gen 3). Curate per the procedure above.
+Pokémon Platinum (Gen 4) — verify against Leg 13's base and layer in whatever differs.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 15
-Pokémon XD: Gale of Darkness (Gen 3). Curate per the procedure above.
+Pokémon HeartGold/SoulSilver (Gen 4, shared base list — Johto+Kanto remake). Curate per
+the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 16
-Pokémon Diamond (Gen 4). Curate per the procedure above.
+Pokémon Black/White (Gen 5, shared base list) — the one confirmed within-pair location
+split: Black City is Black-only, White Forest is White-only, layered onto the shared
+Unova base per game rather than both being in both lists.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 17
-Pokémon Pearl (Gen 4). Curate per the procedure above.
+Pokémon Black 2/White 2 (Gen 5, shared base list — distinct from Leg 16's Black/White map,
+Unova changed between releases). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 18
-Pokémon Platinum (Gen 4). Curate per the procedure above.
+Pokémon X/Y (Gen 6, shared base list). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 19
-Pokémon HeartGold (Gen 4). Curate per the procedure above.
+Pokémon Omega Ruby/Alpha Sapphire (Gen 6, shared base list — Hoenn remake, distinct from
+Leg 8/9's original Ruby/Sapphire/Emerald Hoenn map). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 20
-Pokémon SoulSilver (Gen 4). Curate per the procedure above.
+Pokémon Sun/Moon (Gen 7, shared base list). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 21
-Pokémon Black (Gen 5). Curate per the procedure above.
+Pokémon Ultra Sun/Ultra Moon (Gen 7) — verify against Leg 20's base and layer in whatever
+differs (Ultra Megalopolis/Poni Gauntlet expansions at minimum).
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 22
-Pokémon White (Gen 5). Curate per the procedure above.
+Pokémon Let's Go, Pikachu!/Let's Go, Eevee! (Gen 7, shared base list — simplified Kanto,
+distinct from both Leg 3/4's Red/Blue and Leg 10's FireRed/LeafGreen Kanto maps). Curate
+per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 23
-Pokémon Black 2 (Gen 5). Curate per the procedure above.
+Pokémon Sword/Shield (Gen 8, shared base list). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 24
-Pokémon White 2 (Gen 5). Curate per the procedure above.
+Pokémon Brilliant Diamond/Shining Pearl (Gen 8, shared base list — Sinnoh remake; verify
+independently against Bulbapedia/Serebii rather than assuming Leg 13's Diamond/Pearl list
+carries over unchanged, e.g. Grand Underground/Ramanas Park).
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 25
-Pokémon X (Gen 6). Curate per the procedure above.
+Pokémon Legends: Arceus (Gen 8, no paired version — Hisui). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 26
-Pokémon Y (Gen 6). Curate per the procedure above.
+Pokémon Scarlet/Violet (Gen 9, shared base list). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 27
-Pokémon Omega Ruby (Gen 6). Curate per the procedure above.
+Pokémon Legends: Z-A (Gen 9, no paired version — Lumiose City only). Curate per the
+procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 28
-Pokémon Alpha Sapphire (Gen 6). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 29
-Pokémon Sun (Gen 7). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 30
-Pokémon Moon (Gen 7). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 31
-Pokémon Ultra Sun (Gen 7). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 32
-Pokémon Ultra Moon (Gen 7). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 33
-Pokémon Let's Go, Pikachu! (Gen 7). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 34
-Pokémon Let's Go, Eevee! (Gen 7). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 35
-Pokémon Sword (Gen 8). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 36
-Pokémon Shield (Gen 8). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 37
-Pokémon Brilliant Diamond (Gen 8). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 38
-Pokémon Shining Pearl (Gen 8). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 39
-Pokémon Legends: Arceus (Gen 8). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 40
-Pokémon Scarlet (Gen 9). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 41
-Pokémon Violet (Gen 9). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 42
-Pokémon Legends: Z-A (Gen 9). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
-### [Curated Met Location dataset] — Leg 43
 Pokémon GO. Curate per the procedure above — GO's "locations" are the real-world
 region/category conventions Serebii/Bulbapedia use for its origin-marked catches
 (regional exclusives, event locations), not a fixed map list like the mainline titles.
