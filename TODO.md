@@ -4,7 +4,7 @@ Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILES
 
 ## Current Milestone: Curated Met Location dataset
 
-Leg 15 (Pokémon HeartGold/SoulSilver) closed 2026-09-21 — see COMPLETED.md.
+Leg 16 (Pokémon Black/White) closed 2026-09-21 — see COMPLETED.md.
 
 **Legs 4–28** (below): curate every "map family" in `origin-games.ts`'s `ORIGIN_GAMES`
 roster, in release-date order. Restructured at Leg 4 (2026-09-20, Vanny) from the original
@@ -42,12 +42,6 @@ Each remaining leg's procedure:
 - Extend `met-locations.test.ts` to cover the newly curated family.
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
-
-### [Curated Met Location dataset] — Leg 16
-Pokémon Black/White (Gen 5, shared base list) — the one confirmed within-pair location
-split: Black City is Black-only, White Forest is White-only, layered onto the shared
-Unova base per game rather than both being in both lists.
-Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 17
 Pokémon Black 2/White 2 (Gen 5, shared base list — distinct from Leg 16's Black/White map,

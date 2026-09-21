@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 16: curate Pokémon Black/White] — 2026-09-21
+Added `UNOVA_GEN5_BASE` plus the Black/White split, verified against Bulbapedia's raw
+Generation V location-index wikitext (indices 00000-00116, the range the table's header note
+says "appeared in Black and White"; 00117-00153 plus 30015 are Black 2/White 2-exclusive,
+left for Leg 17). Excluded the 00076-00105 "(Entralink)" range as duplicates rather than new
+locations — each one is the same in-game display string as its already-listed primary index,
+just tagged for "met in another player's world." Surfaced a second within-pair location split
+beyond the already-known Black City/White Forest one: Black Gate and White Gate are each
+version-exclusive too, confirmed via Bulbapedia's Black Gate article directly rather than
+assumed from the index table's shading (which tracks engine recognition for trade display,
+not physical presence in-cartridge — same distinction Legs 14/15 established for Platinum/
+HGSS). See commit `ad6f0f0`.
+
 ## [Curated Met Location dataset Leg 15: curate Pokémon HeartGold/SoulSilver] — 2026-09-21
 Added `JOHTO_GEN4`, verified against the same raw Generation IV location-index wikitext prior
 legs cite — its gold-colored rows (indices 0x007E-0x00EA, "recognized by HeartGold/SoulSilver
