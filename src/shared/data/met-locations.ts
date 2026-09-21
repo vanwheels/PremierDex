@@ -2726,6 +2726,178 @@ const BDSP_SINNOH: readonly string[] = [
   'Wayward Cave'
 ]
 
+/**
+ * Hisui, Pokémon Legends: Arceus (Leg 25, no paired version). Verified against
+ * Bulbapedia's raw wikitext for "List of locations by index number in Pokémon Legends:
+ * Arceus" (fetched directly via the MediaWiki API's action=raw, 2026-09-21), cross-checked
+ * against Serebii's Hisui region map (serebii.net/pokearth/hisui) for spelling — Serebii's
+ * map labels two of these areas differently ("Heartwood Heights"/"Aipom Hills" vs.
+ * Bulbapedia's index-table Nominative Form "The Heartwood"/"Aipom Hill"); the index table
+ * wins since it's the actual in-game Met Location string, not the overworld map label.
+ *
+ * Unlike BDSP's table, this page has a single Locative/Nominative Form pair per index (no
+ * Summary/Overworld split to resolve) — the Nominative Form column is taken directly as
+ * each index's Met Location string.
+ *
+ * Excludes the same non-place categories every prior generation's list already
+ * established: **Mystery Zone** (index 00002) and **Faraway place** (index 00004 — the
+ * generic fallback string for an unrecognized index, confirmed by this page's own note that
+ * indices 00156 and up display in-game as "faraway place"). Also excludes index 00000 (a
+ * blank placeholder row) and 00138 (an explicitly unused/unnamed index, "???"). Indices
+ * 30001-60004 are cross-game/transfer categories, not real Hisui locations — region names
+ * shown for Pokémon transferred in from other games/Pokémon GO/Pokémon HOME, event/movie/
+ * Link Trade distributions — same class of exclusion as every other generation's transfer
+ * indices.
+ *
+ * Includes Galaxy Hall's individually-indexed floors (First Floor, Second Floor, Third
+ * Floor, Basement) as their own entries rather than folding them into Galaxy Hall — unlike
+ * BDSP's building interiors, each of these has its own genuine Nominative Form text in the
+ * index table, distinct from "Galaxy Hall" itself (which has its own separate index too),
+ * not a case where only one shared parent-location string is ever actually produced.
+ */
+const HISUI_GEN8: readonly string[] = [
+  'Acuity Cavern',
+  'Aipom Hill',
+  'Alabaster Icelands',
+  'Ancient Quarry',
+  'Ancient Retreat',
+  "Arena's Approach",
+  'Aspiration Hill',
+  'Avalanche Slopes',
+  "Avalugg's Legacy",
+  'Basement',
+  "Bathers' Lagoon",
+  'Beachside Camp',
+  'Bogbound Camp',
+  'Bolderoll Ravine',
+  'Bolderoll Slope',
+  'Bonechill Wastes',
+  'Brava Arena',
+  'Canala Avenue',
+  'Candy Stand',
+  'Castaway Shore',
+  'Celestica Ruins',
+  'Celestica Trail',
+  'Clamberclaw Cliffs',
+  'Clothier',
+  'Cloudcap Pass',
+  'Cloudpool Ridge',
+  'Coastlands Camp',
+  'Cobalt Coastlands',
+  'Coronet Highlands',
+  'Cottonsedge Prairie',
+  'Craftworks',
+  'Crevasse Passage',
+  'Crimson Mirelands',
+  'Crossing Slope',
+  'Deadwood Haunt',
+  'Deertrack Heights',
+  'Deertrack Path',
+  'Diamond Heath',
+  'Diamond Settlement',
+  'Droning Meadow',
+  'Fabled Spring',
+  'Farm',
+  'Fieldlands Camp',
+  'Firespit Island',
+  'First Floor',
+  'Floaro Gardens',
+  'Floaro Main Street',
+  'Folk Shrine',
+  'Front Gate',
+  'Galaxy Hall',
+  'Gapejaw Bog',
+  'General Store',
+  'Ginkgo Guild Cart',
+  'Ginkgo Landing',
+  'Glacier Terrace',
+  'Golden Lowlands',
+  'Grandtree Arena',
+  'Grueling Grove',
+  'Hairdresser',
+  "Heart's Crag",
+  'Heavenward Lookout',
+  'Heights Camp',
+  'Hibernal Cave',
+  'Hideaway Bay',
+  'Highlands Camp',
+  'Holm of Trials',
+  'Horseshoe Plains',
+  'Ice Column Chamber',
+  'Ice Rock',
+  'Icebound Falls',
+  'Icepeak Arena',
+  'Icepeak Camp',
+  'Icepeak Cavern',
+  "Iscan's Home",
+  'Islespy Shore',
+  'Jubilife Village',
+  'Lake Acuity',
+  'Lake Valor',
+  'Lake Verity',
+  'Lava Dome Sanctum',
+  'Lonely Spring',
+  "Lunker's Lair",
+  'Mirelands Camp',
+  'Molten Arena',
+  'Moonview Arena',
+  'Moss Rock',
+  'Mountain Camp',
+  "Nature's Pantry",
+  'Obsidian Falls',
+  'Obsidian Fieldlands',
+  'Oreburrow Tunnel',
+  'Pastures',
+  'Pearl Settlement',
+  'Photography Studio',
+  'Practice Field',
+  'Prelude Beach',
+  'Primeval Grotto',
+  'Ramanas Island',
+  'Sacred Plaza',
+  "Sand's Reach",
+  'Sandgem Flats',
+  'Scarlet Bog',
+  'Seagrass Haven',
+  'Seaside Gate',
+  'Seaside Hollow',
+  'Second Floor',
+  'Secret Hollow',
+  'Shrouded Ruins',
+  'Sludge Mound',
+  'Snowfall Hot Spring',
+  'Snowfields Camp',
+  'Snowpoint Temple',
+  'Solaceon Ruins',
+  'Sonorous Path',
+  'Spear Pillar',
+  'Spring Path',
+  'Stone Portal',
+  'Stonetooth Rows',
+  'Summit Camp',
+  'Temple of Sinnoh',
+  'The Heartwood',
+  'Third Floor',
+  'Tidal Passage',
+  'Tidewater Dam',
+  'Tombolo Walk',
+  'Trading Post',
+  'Training Grounds',
+  'Tranquility Cove',
+  'Turnback Cave',
+  "Ursa's Ring",
+  'Valor Cavern',
+  'Veilstone Cape',
+  'Verity Cavern',
+  'Wayward Cave',
+  'Wayward Wood',
+  'Whiteout Valley',
+  'Windbreak Stand',
+  'Windswept Run',
+  'Worn Bridge',
+  'Your Quarters'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -2762,7 +2934,8 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Sword': GALAR_GEN8,
   'Pokémon Shield': GALAR_GEN8,
   'Pokémon Brilliant Diamond': BDSP_SINNOH,
-  'Pokémon Shining Pearl': BDSP_SINNOH
+  'Pokémon Shining Pearl': BDSP_SINNOH,
+  'Pokémon Legends: Arceus': HISUI_GEN8
 }
 
 /**
