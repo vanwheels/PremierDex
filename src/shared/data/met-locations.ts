@@ -1342,6 +1342,190 @@ const UNOVA_WHITE: readonly string[] = [
   'White Gate'
 ]
 
+/**
+ * Unova, Pokémon Black 2/White 2 (Leg 17) — verified against the same raw wikitext
+ * UNOVA_GEN5_BASE's comment cites (Bulbapedia's "List of locations by index number in
+ * Generation V", action=raw), 2026-09-21. That comment's forward-looking note about indices
+ * 00117-00153 plus 30015 (shaded light blue, "Black 2/White 2-exclusive") is confirmed here.
+ * Built as a full literal base list (like HOENN_EMERALD/PLATINUM_SINNOH, not a simple
+ * UNOVA_GEN5_BASE splice) since the changes aren't a single insertion:
+ * - **Index 00036 is renamed, not duplicated**: the wikitext's own version-conditional markup
+ *   ({{sup/5|BW}}[[Cold Storage]] / {{sup/5|B2W2}}[[Pokémon World Tournament|PWT]]) puts
+ *   Black/White's Cold Storage and Black 2/White 2's Pokémon World Tournament at the same
+ *   index — confirmed independently via the Pokémon World Tournament article: "It is located
+ *   south of Driftveil City, where the Cold Storage used to be," and a Cold-Storage-caught
+ *   Pokémon traded into Black 2/White 2 displays "PWT" as its Met Location because the two
+ *   share codepoint 0x0024. Same "index renamed" treatment as HOENN_EMERALD's Battle
+ *   Tower→Battle Frontier and PLATINUM_SINNOH's Battle Tower→Battle Frontier/GTS→Global
+ *   Terminal. Cold Storage is therefore absent from this list entirely, replaced by "Pokémon
+ *   World Tournament".
+ * - **Index 00134 is a second, separate "Victory Road"** — Black/White's own Victory Road
+ *   (index 00040, already on UNOVA_GEN5_BASE) is a different physical place from Black
+ *   2/White 2's relocated Victory Road, per the wikitext's disambiguating {{OBP}} template
+ *   parenthetical, but both display the identical in-game string "Victory Road" — listed once
+ *   here, no functional difference from a single occurrence.
+ * - **Routes 19-23** (indices 00124-00128) are new, added to the numeric Route sequence
+ *   alongside 1-18 carried over from Black/White's own map.
+ * - **The rest of indices 00117-00153 (except unused index 00138) are new named places**:
+ *   Aspertia City/Gate, Virbank City/Complex/Gate, Humilau City, Pokéstar Studios, Join
+ *   Avenue, Floccesy Town/Ranch, Lentimas Town, Castelia Sewers, Reversal Mountain, Strange
+ *   House, Plasma Frigate, Relic Passage, Clay Tunnel, Seaside Cave, Cave of Being, Hidden
+ *   Grotto, Marine Tube, Nature Preserve, Medal Office, Underground Ruins, and the Rock
+ *   Peak/Iceberg/Iron Chamber trio and Pledge Grove.
+ * - **Index 30015, Pokémon Dream Radar**, is this generation's equivalent of a transfer/
+ *   distribution-context location (same class as Poké Transfer Lab/Pal Park elsewhere in this
+ *   file) — the 3DS eShop app used to catch Therian Forme Tornadus/Thundurus/Landorus for
+ *   transfer into either game, not version-locked, so kept in the shared base rather than
+ *   split per version.
+ *
+ * **A third within-pair location split, alongside Unova's already-known Black City/White
+ * Forest and Black Gate/White Gate ones**: Black Tower (index 00139) and White Treehollow
+ * (index 00140) are each natively exclusive to one version — confirmed via Bulbapedia's Black
+ * Tower article directly ("a training facility initially exclusive to Pokémon Black 2," with
+ * White Treehollow the White 2 counterpart) — despite sharing the same "new in this
+ * generation" shading as every other index in the 00117-00153 range. The Black City article
+ * confirms the existing Black/White split extends across the whole generation too: "Black
+ * City is exclusive to Pokémon Black and Pokémon Black 2." A same-game Tower
+ * Key/Treehollow-Key trade can grant cross-version access to the other side's City/Tower pair
+ * (e.g. a Black 2 Tower Key sent to a White 2 cartridge unlocks Black City and Black Tower
+ * there), but that's a cross-cartridge transfer mechanic analogous to Entralink's own
+ * cross-version visits in Black/White (already excluded as a real Met Location generator by
+ * UNOVA_GEN5_BASE's comment) — not native availability, so not folded into the other
+ * version's own array. Black City/Black Gate/Black Tower layered onto Black 2, White
+ * Forest/White Gate/White Treehollow onto White 2, same splice pattern UNOVA_BLACK/UNOVA_WHITE
+ * uses.
+ */
+const UNOVA_GEN5_B2W2_BASE: readonly string[] = [
+  'Route 1',
+  'Route 2',
+  'Route 3',
+  'Route 4',
+  'Route 5',
+  'Route 6',
+  'Route 7',
+  'Route 8',
+  'Route 9',
+  'Route 10',
+  'Route 11',
+  'Route 12',
+  'Route 13',
+  'Route 14',
+  'Route 15',
+  'Route 16',
+  'Route 17',
+  'Route 18',
+  'Route 19',
+  'Route 20',
+  'Route 21',
+  'Route 22',
+  'Route 23',
+  'Abundant Shrine',
+  'Abyssal Ruins',
+  'Accumula Gate',
+  'Accumula Town',
+  'Anville Town',
+  'Aspertia City',
+  'Aspertia Gate',
+  'Battle Subway',
+  'Bridge Gate',
+  'Castelia City',
+  'Castelia Gate',
+  'Castelia Sewers',
+  'Cave of Being',
+  'Celestial Tower',
+  "Challenger's Cave",
+  'Chargestone Cave',
+  'Clay Tunnel',
+  'Desert Resort',
+  'Dragonspiral Tower',
+  'Dreamyard',
+  'Driftveil City',
+  'Driftveil Drawbridge',
+  'Entralink',
+  'Entree Forest',
+  'Floccesy Ranch',
+  'Floccesy Town',
+  'Gear Station',
+  'Giant Chasm',
+  'Guidance Chamber',
+  'Hidden Grotto',
+  'Humilau City',
+  'Iceberg Chamber',
+  'Icirrus City',
+  'Iron Chamber',
+  'Join Avenue',
+  'Lacunosa Town',
+  'Lentimas Town',
+  'Liberty Garden',
+  'Lostlorn Forest',
+  'Marine Tube',
+  'Marvelous Bridge',
+  'Medal Office',
+  'Mistralton Cave',
+  'Mistralton City',
+  'Moor of Icirrus',
+  'Musical Theater',
+  'Nacrene City',
+  'Nacrene Gate',
+  'Nature Preserve',
+  'Nimbasa City',
+  'Nimbasa Gate',
+  "N's Castle",
+  'Nuvema Town',
+  'Opelucid City',
+  'Opelucid Gate',
+  'P2 Laboratory',
+  'Pinwheel Forest',
+  'Plasma Frigate',
+  'Pledge Grove',
+  'Poké Transfer Lab',
+  'Pokémon Dream Radar',
+  'Pokémon League',
+  'Pokémon World Tournament',
+  'Pokéstar Studios',
+  'Relic Castle',
+  'Relic Passage',
+  'Reversal Mountain',
+  'Rock Peak Chamber',
+  'Route Gate',
+  'Royal Unova',
+  'Rumination Field',
+  'Seaside Cave',
+  'Shopping Mall',
+  'Skyarrow Bridge',
+  'Strange House',
+  'Striaton City',
+  'Trial Chamber',
+  'Tubeline Bridge',
+  'Twist Mountain',
+  'Undella Bay',
+  'Undella Gate',
+  'Undella Town',
+  'Underground Ruins',
+  'Unity Tower',
+  'Victory Road',
+  'Village Bridge',
+  'Virbank City',
+  'Virbank Complex',
+  'Virbank Gate',
+  'Wellspring Cave'
+]
+
+const UNOVA_BLACK_2: readonly string[] = [
+  ...UNOVA_GEN5_B2W2_BASE.slice(0, UNOVA_GEN5_B2W2_BASE.indexOf('Bridge Gate')),
+  'Black City',
+  'Black Gate',
+  'Black Tower',
+  ...UNOVA_GEN5_B2W2_BASE.slice(UNOVA_GEN5_B2W2_BASE.indexOf('Bridge Gate'))
+]
+
+const UNOVA_WHITE_2: readonly string[] = [
+  ...UNOVA_GEN5_B2W2_BASE,
+  'White Forest',
+  'White Gate',
+  'White Treehollow'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -1362,7 +1546,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon HeartGold': JOHTO_GEN4,
   'Pokémon SoulSilver': JOHTO_GEN4,
   'Pokémon Black': UNOVA_BLACK,
-  'Pokémon White': UNOVA_WHITE
+  'Pokémon White': UNOVA_WHITE,
+  'Pokémon Black 2': UNOVA_BLACK_2,
+  'Pokémon White 2': UNOVA_WHITE_2
 }
 
 /**
