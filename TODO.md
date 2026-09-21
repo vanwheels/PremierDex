@@ -1,7 +1,20 @@
 # TODO
 
-Apply Template — Combined Regular+Shiny shipped 2026-09-20 (see MILESTONES.md). No current
-milestone picked yet.
+## Current Milestone: Per-Game Regional Dex Numbers
+
+### [Per-Game Regional Dex Numbers] — Leg 2
+Leg 1 (2026-09-20, `docs/investigations/regional-dex-numbers.md`) resolved both open
+scoping questions: numbering is tied to the entry's `originGame` (same field the existing
+Origin Game detail field keys off), and games mapping to multiple regional dexes (11 of 40
+— Kalos's 3 co-equal sub-dexes, Alola/Galar/Paldea's base+sub-region/DLC dexes) show every
+applicable dex's number rather than collapsing to one. Leg 2 is untouched: extend
+`fetch-species-availability.ts` to capture `entry_number` per pokedex entry (data PokeAPI
+already returns but the script currently discards), hand-curate a pokedex-name ->
+display-name table, and wire a species+origin-game -> dex-number-list lookup into
+`DexBoxDetailPanel.tsx` (and `DexHybridDetailPanel` at minimum — check for other siblings
+showing "National Dex #") below the existing Origin Game field. See the investigation
+doc's "Leg 2 scope" section for the full breakdown.
+Last touched: 2026-09-20. Re-check count: 0.
 
 ## Unscheduled
 
@@ -105,14 +118,6 @@ regular/shiny columns), so fitting a second control there is its own layout call
 mechanical copy of the Box/Hybrid wiring. Confirmed 2026-09-19 (AskUserQuestion) as
 out-of-scope for Leg 4.
 Last touched: 2026-09-19. Re-check count: 0.
-
-### [Regional dex number in Box detail panel] — future milestone
-Raised alongside the Box View Polish milestone but out of scope for it: Species currently
-only carries `regionalGroup` (a label), no actual per-game regional dex *number* — that
-field doesn't exist in the data model at all yet. Needs its own scoping (which
-game/region's numbering, one column vs. per-game) before it can be added to the info bar
-alongside National Dex #.
-Last touched: 2026-09-03. Re-check count: 0.
 
 ### [Remove "Unassigned" as the default check-in bucket] — future milestone
 Raised by Vanny 2026-09-04: the Unassigned storage location is bad UX as a default landing
