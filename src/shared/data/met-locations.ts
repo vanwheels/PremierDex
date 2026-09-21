@@ -644,6 +644,56 @@ const ORRE_COLOSSEUM: readonly string[] = [
   'Under Colosseum'
 ]
 
+/**
+ * Orre, Pokémon XD: Gale of Darkness (Gen 3, no paired version, kept separate from Leg 11's
+ * Colosseum list per Vanny 2026-09-20 — the two games' location-index tables have no entries
+ * in common per Bulbapedia). Same shape as Colosseum: no Routes, alphabetical throughout.
+ * Verified against the same shared "List of locations by index number in Pokémon Colosseum
+ * and Pokémon XD" table (XD column this time) plus individual location articles, 2026-09-20.
+ *
+ * Overlaps with ORRE_COLOSSEUM on the towns/facilities both games revisit — Agate Village,
+ * Cipher Lab, Mt. Battle, Orre Colosseum, Outskirt Stand, Phenac City, Pyrite Town, Relic
+ * Stone, and Snagem Hideout all have their own index-table row in the XD column too, not just
+ * Colosseum's. The Under, The Under Subway, Under Colosseum, Deep Colosseum, Pyrite Cave,
+ * Pyrite Bldg, Relic Cave, Phenac Stadium, Pyrite Colosseum, Prestige Precept Center, and
+ * Mayor's House have no XD-column row at all (confirmed via the index table directly, not
+ * inferred) — Colosseum-exclusive, not layered in here.
+ *
+ * XD's own additions: Gateon Port, Pokémon HQ Lab, Kaminko's House, Citadark Isle, Cipher Key
+ * Lair, S.S. Libra, Realgam Tower, and the three Poké Spots (Rock/Oasis/Cave) — XD's actual
+ * wild encounters, unlike Colosseum's zero. Named per the dedicated Poké Spot article rather
+ * than the index table's shortened "Rock"/"Oasis"/"Cave" link text, same reasoning
+ * ORRE_COLOSSEUM's "Relic Stone" already applies to a piped short name. Deliberately does
+ * NOT include "Realgam Colosseum" (XD's own name, confirmed via that location's Bulbapedia
+ * article, for the specific arena Colosseum calls "Tower Colosseum") as a location distinct
+ * from "Realgam Tower" — unlike Colosseum, whose index table gives that arena room its own
+ * "Tower Colosseum" index separate from the rest of the tower, XD's index table has no
+ * separate index for it at all; every room in the building, arena included, indexes as plain
+ * "Realgam Tower". Whatever the prose name is, the game's own Met Location data has no way to
+ * produce "Realgam Colosseum" as a value in XD.
+ */
+const ORRE_XD: readonly string[] = [
+  'Agate Village',
+  'Cave Poké Spot',
+  'Cipher Key Lair',
+  'Cipher Lab',
+  'Citadark Isle',
+  'Gateon Port',
+  "Kaminko's House",
+  'Mt. Battle',
+  'Oasis Poké Spot',
+  'Orre Colosseum',
+  'Outskirt Stand',
+  'Phenac City',
+  'Pokémon HQ Lab',
+  'Pyrite Town',
+  'Realgam Tower',
+  'Relic Stone',
+  'Rock Poké Spot',
+  'S.S. Libra',
+  'Snagem Hideout'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -656,7 +706,8 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Emerald': HOENN_EMERALD,
   'Pokémon FireRed': KANTO_GEN3,
   'Pokémon LeafGreen': KANTO_GEN3,
-  'Pokémon Colosseum': ORRE_COLOSSEUM
+  'Pokémon Colosseum': ORRE_COLOSSEUM,
+  'Pokémon XD: Gale of Darkness': ORRE_XD
 }
 
 /**
