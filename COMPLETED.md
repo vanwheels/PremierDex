@@ -9,7 +9,7 @@ existing tests" to extend, but no React component tests exist anywhere in this r
 (vitest is `environment: 'node'`, `include` is `*.test.ts` only, no `@testing-library/react`
 dependency) — standing up that infra for one ternary was real scope beyond this leg, so only
 `met-locations.test.ts` was added and the input/select switch was verified manually instead
-(per CLAUDE.md's default for UI changes). See commit `<hash>`.
+(per CLAUDE.md's default for UI changes). See commit `e842382`.
 
 ## [Curated Met Location dataset Leg 1: decide the dataset's shape] — 2026-09-20
 Doc-only scoping leg, no code. Resolved the two open questions `deeper-per-game-validity.md`
