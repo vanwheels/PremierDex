@@ -1013,6 +1013,191 @@ const PLATINUM_SINNOH: readonly string[] = [
   'Wayward Cave'
 ]
 
+/**
+ * Johto + Kanto, Pokémon HeartGold/SoulSilver (Gen 4, shared base list — Johto+Kanto remake)
+ * (Leg 15). Distinct from both JOHTO_GEN2 (the Gen II original, different index table
+ * entirely) and SINNOH_GEN4_BASE/PLATINUM_SINNOH (Sinnoh isn't accessible from HGSS's own
+ * map at all, despite all three sharing the Generation IV engine). Verified against
+ * Bulbapedia's raw wikitext for "List of locations by index number in Generation IV"
+ * (fetched directly via the MediaWiki API's action=raw, same source SINNOH_GEN4_BASE/
+ * PLATINUM_SINNOH cite), 2026-09-21. That table's gold-colored rows ("debuted in Pokémon
+ * HeartGold and SoulSilver, so are only recognized by those games") are indices 0x007E-0x00EA
+ * (126-234 decimal) — exactly HGSS's own Johto+Kanto map, symmetric with how
+ * PLATINUM_SINNOH used the white+grey rows for Platinum's own full Sinnoh map and included
+ * no Johto/Kanto content. The table's white rows (Sinnoh, recognized by all five Gen IV
+ * games for trade-display purposes) are deliberately NOT included here for the same reason
+ * PLATINUM_SINNOH excluded the gold rows: "recognized" (so a traded-in Pokémon displays its
+ * real origin instead of "Faraway place") is not the same as "physically present in this
+ * game's own explorable map," and Sinnoh is not part of HGSS's map at all.
+ *
+ * An initial WebFetch-summarized read of this same page fabricated a plausible-looking but
+ * internally-inconsistent row (an "Olivine Lighthouse, index 0068, white" claim that would
+ * place a Johto location inside the Sinnoh-only white range and contradicts that same
+ * response's own reported gold-row range) — caught by cross-checking against the row range
+ * rather than trusted outright. Re-fetched as raw wikitext via direct download (Bash curl)
+ * and read verbatim instead for every fact this comment cites, none of it model-summarized.
+ *
+ * Two of Diamond/Pearl/Platinum's own naming precedents recur here, applied identically:
+ * - **{{FB|x|y}} templates display only "y"**, not the linked page's full title — index
+ *   0x00C9's {{FB|Kanto|Power Plant}} is "Power Plant" here (already JOHTO_GEN2's name for
+ *   the same building, unaffected by the remake), not "Kanto Power Plant".
+ * - **ALLCAPS index-table stub text is a wiki stylization, not the real display name** —
+ *   "DIGLETT's Cave" and "SLOWPOKE Well" are given their real proper-case names, "Diglett's
+ *   Cave" and "Slowpoke Well", matching every prior leg's treatment of the same two
+ *   locations and PLATINUM_SINNOH's "ROTOM's Room" → "Rotom's Room".
+ *
+ * New resolutions specific to this leg:
+ * - **Two piped links needed their target page's title, not the shortened display text**:
+ *   index 0x00D4's [[Olivine Lighthouse|Lighthouse]] and index 0x00D0's [[Goldenrod Radio
+ *   Tower|Radio Tower]] display short text that would collide with Sinnoh's own "Vista
+ *   Lighthouse"-vs-generic-"Lighthouse" ambiguity or read as unhelpfully vague standing
+ *   alone; resolved to the full page title each links to, "Olivine Lighthouse" and
+ *   "Goldenrod Radio Tower", matching JOHTO_GEN2's own names for the same two buildings.
+ *   Confirmed via Bulbapedia's "Radio Tower" disambiguation page that Goldenrod's is the
+ *   *only* one with a Generation IV index — Lavender Town's own former Pokémon Tower (renamed
+ *   "Lavender Radio Tower" in Generation II, per JOHTO_GEN2's comment) has no index-table row
+ *   here at all, confirmed absent from the table directly rather than assumed: HGSS folds it
+ *   into a non-catchable part of Lavender Town, so it isn't a selectable Met Location in this
+ *   game the way it was in Gold/Silver/Crystal.
+ * - **"Tin Tower" (Generation II) is renamed "Bell Tower" in HGSS** — confirmed via
+ *   Bulbapedia's Bell Tower article directly; not a rename this file invented, the physical
+ *   Ecruteak tower's real in-game name changed with the remake.
+ * - **Index 0x00DD's {{ka|Victory Road}} <small>([[Kanto]])</small> uses the same
+ *   wiki-disambiguation-only parenthetical pattern SINNOH_GEN4_BASE's index 0x0036 (Sinnoh's
+ *   own Victory Road) already has** — SINNOH_GEN4_BASE dropped the "(Sinnoh)" qualifier since
+ *   it's a Bulbapedia article-disambiguation aid, not real in-game text; same treatment here,
+ *   bare "Victory Road". There is only one Victory Road index in this table for HGSS (the one
+ *   between Route 26 and Indigo Plateau) — Johto and Kanto share this single location per
+ *   Bulbapedia/Serebii, it doesn't get a second, separate Johto-side entry.
+ * - **Two new NPC-name indices, "Mr. Pokémon" (0x07DD) and "Primo" (0x07DE), are excluded**
+ *   as special gift-Pokémon catch-context strings rather than real places — the same
+ *   reasoning SINNOH_GEN4_BASE already applied to excluding "Day-Care Couple".
+ * - **Route 47 and Route 48 are genuine HGSS-exclusive new routes** (confirmed via Bulbapedia/
+ *   StrategyWiki: carved into the cliffs west of Cianwood, leading to the rebuilt Johto Safari
+ *   Zone and the Embedded Tower's legendary encounters) — included in the numeric Route
+ *   sequence alongside 1-46, not part of any prior-generation Johto list.
+ * - **The rebuilt Johto Safari Zone's own gate, "Safari Zone Gate", plus its brand-new
+ *   surrounding areas (Cliff Cave, Frontier Access, Bellchime Trail, Sinjoh Ruins, Embedded
+ *   Tower, Pokéwalker, Cliff Edge Gate) are all confirmed HGSS-only additions** via their own
+ *   index-table gold rows, none present in Generation II's Johto at all.
+ * - **"Mt. Silver" (the exterior mountain, index 0x0089) and "Mt. Silver Cave" (the interior,
+ *   index 0x00DB, piped from the same "Mt. Silver" article) are two distinct indices**,
+ *   mirroring PLATINUM_SINNOH's already-noted Generation IV split of "Mt. Silver"/"Mt. Silver
+ *   Cave" naming (referenced in SINNOH_GEN4_BASE's comment as HGSS-only, now confirmed
+ *   directly) — kept as two separate list entries rather than collapsed to one.
+ */
+const JOHTO_GEN4: readonly string[] = [
+  'Route 1',
+  'Route 2',
+  'Route 3',
+  'Route 4',
+  'Route 5',
+  'Route 6',
+  'Route 7',
+  'Route 8',
+  'Route 9',
+  'Route 10',
+  'Route 11',
+  'Route 12',
+  'Route 13',
+  'Route 14',
+  'Route 15',
+  'Route 16',
+  'Route 17',
+  'Route 18',
+  'Route 19',
+  'Route 20',
+  'Route 21',
+  'Route 22',
+  'Route 23',
+  'Route 24',
+  'Route 25',
+  'Route 26',
+  'Route 27',
+  'Route 28',
+  'Route 29',
+  'Route 30',
+  'Route 31',
+  'Route 32',
+  'Route 33',
+  'Route 34',
+  'Route 35',
+  'Route 36',
+  'Route 37',
+  'Route 38',
+  'Route 39',
+  'Route 40',
+  'Route 41',
+  'Route 42',
+  'Route 43',
+  'Route 44',
+  'Route 45',
+  'Route 46',
+  'Route 47',
+  'Route 48',
+  'Azalea Town',
+  'Bell Tower',
+  'Bellchime Trail',
+  'Blackthorn City',
+  'Burned Tower',
+  'Celadon City',
+  'Cerulean Cave',
+  'Cerulean City',
+  'Cherrygrove City',
+  'Cianwood City',
+  'Cinnabar Island',
+  'Cliff Cave',
+  'Cliff Edge Gate',
+  'Dark Cave',
+  "Diglett's Cave",
+  "Dragon's Den",
+  'Ecruteak City',
+  'Embedded Tower',
+  'Frontier Access',
+  'Fuchsia City',
+  'Goldenrod City',
+  'Goldenrod Radio Tower',
+  'Goldenrod Tunnel',
+  'Ice Path',
+  'Ilex Forest',
+  'Indigo Plateau',
+  'Lake of Rage',
+  'Lavender Town',
+  'Mahogany Town',
+  'Mt. Moon',
+  'Mt. Mortar',
+  'Mt. Silver',
+  'Mt. Silver Cave',
+  'National Park',
+  'New Bark Town',
+  'Olivine City',
+  'Olivine Lighthouse',
+  'Pallet Town',
+  'Pewter City',
+  'Pokéathlon Dome',
+  'Pokéwalker',
+  'Power Plant',
+  'Rock Tunnel',
+  'Ruins of Alph',
+  'Safari Zone',
+  'Safari Zone Gate',
+  'Saffron City',
+  'Seafoam Islands',
+  'Sinjoh Ruins',
+  'Slowpoke Well',
+  'Sprout Tower',
+  'S.S. Aqua',
+  'Team Rocket HQ',
+  'Tohjo Falls',
+  'Union Cave',
+  'Vermilion City',
+  'Victory Road',
+  'Violet City',
+  'Viridian City',
+  'Viridian Forest',
+  'Whirl Islands'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -1029,7 +1214,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon XD: Gale of Darkness': ORRE_XD,
   'Pokémon Diamond': SINNOH_GEN4_BASE,
   'Pokémon Pearl': SINNOH_GEN4_BASE,
-  'Pokémon Platinum': PLATINUM_SINNOH
+  'Pokémon Platinum': PLATINUM_SINNOH,
+  'Pokémon HeartGold': JOHTO_GEN4,
+  'Pokémon SoulSilver': JOHTO_GEN4
 }
 
 /**

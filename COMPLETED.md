@@ -1,5 +1,23 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 15: curate Pokémon HeartGold/SoulSilver] — 2026-09-21
+Added `JOHTO_GEN4`, verified against the same raw Generation IV location-index wikitext prior
+legs cite — its gold-colored rows (indices 0x007E-0x00EA, "recognized by HeartGold/SoulSilver
+only") are exactly HGSS's own Johto+Kanto map, symmetric with how Leg 14 used the white+grey
+rows for Platinum's own Sinnoh map and included nothing from Johto/Kanto. An initial
+WebFetch-summarized read fabricated an internally-inconsistent row (an "Olivine Lighthouse"
+claim placed in the Sinnoh-only white range, contradicting that same response's own reported
+gold-row bounds) — caught by cross-checking the range rather than trusted outright; re-fetched
+the page as raw wikitext via direct download and read it verbatim instead. Confirmed several
+remake-specific renames/splits: Tin Tower → Bell Tower, Silver Cave split into exterior "Mt.
+Silver" and interior "Mt. Silver Cave", and that Lavender Town's former Pokémon/Radio Tower has
+no index at all in HGSS (only Goldenrod's Radio Tower is a selectable Met Location here) —
+confirmed via Bulbapedia's Radio Tower disambiguation page rather than assumed. Also added
+Route 47/48 and the rebuilt Johto Safari Zone's new surrounding areas (all confirmed
+HGSS-exclusive), and excluded two new NPC-name indices (Mr. Pokémon, Primo) as gift-context
+strings rather than real places, same treatment Leg 13 gave Day-Care Couple. See commit
+`<pending>`.
+
 ## [Curated Met Location dataset Leg 14: curate Pokémon Platinum] — 2026-09-21
 Added `PLATINUM_SINNOH`, verified Leg 13's forward-looking summary of the grey (Platinum-only)
 index range against the same raw wikitext table: Battle Frontier + its four facilities
