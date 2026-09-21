@@ -4,7 +4,7 @@ Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILES
 
 ## Current Milestone: Curated Met Location dataset
 
-Leg 20 (Pokémon Sun/Moon) closed 2026-09-21 — see COMPLETED.md.
+Leg 21 (Pokémon Ultra Sun/Ultra Moon) closed 2026-09-21 — see COMPLETED.md.
 
 **Legs 4–28** (below): curate every "map family" in `origin-games.ts`'s `ORIGIN_GAMES`
 roster, in release-date order. Restructured at Leg 4 (2026-09-20, Vanny) from the original
@@ -42,20 +42,6 @@ Each remaining leg's procedure:
 - Extend `met-locations.test.ts` to cover the newly curated family.
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
-
-### [Curated Met Location dataset] — Leg 21
-Pokémon Ultra Sun/Ultra Moon (Gen 7) — verify against Leg 20's `ALOLA_SM` base and layer in
-whatever differs. Leg 20's research already confirmed most of what USUM adds (its own
-comment has the full sourcing): Big Wave Beach, Sandy Cave, Heahea Beach, Pikachu Valley,
-Poni Beach, Plains Grotto, Dividing Peak Tunnel, Team Rocket's Castle (Episode RR/Rainbow
-Rocket), and the Ultra Warp Ride realm set (Ultra Crater, Ultra Desert, Ultra Forest, Ultra
-Jungle, Ultra Plant, Ultra Ruin, Ultra Space Wilds, Ultra Megalopolis). Two renames to
-apply, not additions: Secluded Shore → Ula'ula Beach, and Ultra Space → Ultra Deep Sea (same
-places, different display text per version, confirmed via each location's infobox). Still
-needs its own from-scratch verification pass (Leg 20 only confirmed exclusivity while
-researching Sun/Moon, not a full USUM location sweep) — don't just copy this list in without
-checking Bulbapedia/Serebii directly per this milestone's standard procedure.
-Last touched: 2026-09-21. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 22
 Pokémon Let's Go, Pikachu!/Let's Go, Eevee! (Gen 7, shared base list — simplified Kanto,
@@ -182,9 +168,9 @@ template):
   (setEntryBoxPosition/swapEntryBoxPositions/fillBoxSlots/moveEntriesToLocation/undo and
   their apply/snapshot helpers — roughly the same "one feature area" carve-out as the other
   two files above) into its own hook, composed back in by useCollectionData.
-- **Split met-locations.test.ts**: 765 lines, 265 past the 500 hard cap as of Leg 19 of the
+- **Split met-locations.test.ts**: 917 lines, 417 past the 500 hard cap as of Leg 21 of the
   Curated Met Location dataset milestone — each leg adds its own describe block's worth of
-  `it(...)` cases and there are still 10 legs left in that milestone, so this will keep
+  `it(...)` cases and there are still 7 legs left in that milestone, so this will keep
   growing. `met-locations.ts` itself is exempt as a large static data file, but the test file
   is ordinary code and not exempt. Candidate split: one test file per map family/generation
   (e.g. `met-locations.kanto.test.ts`, `met-locations.hoenn.test.ts`), mirroring how

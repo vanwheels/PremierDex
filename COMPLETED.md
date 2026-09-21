@@ -1,5 +1,22 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 21: curate Pokémon Ultra Sun/Ultra Moon] — 2026-09-21
+Added `ALOLA_ULTRA_SUN`/`ALOLA_ULTRA_MOON`, verified against
+`Category:Ultra Sun and Ultra Moon locations` cross-checked per-article, same discipline
+ALOLA_SM's Leg 20 comment established. Confirmed every USUM-exclusive addition ALOLA_SM's
+forward-looking note flagged, plus three more the category sweep turned up on its own
+(Battle Agency, Kantonian Gym, Megalo Tower), and excluded Alola Photo Club as a generic
+repeated building (two physical instances, same class as Poké Mart). Caught a second
+category-tagging gap after Leg 20's Seafolk Village one: Poni Plains is missing from the
+USUM locations category entirely despite a full USUM encounter/item/Trainer table on its own
+article — kept, not treated as removed. The real finding: the Ultra Warp Ride realm set isn't
+fully shared between Ultra Sun and Ultra Moon — Ultra Crater/Ultra Desert are Ultra
+Moon-exclusive and Ultra Forest/Ultra Jungle are Ultra Sun-exclusive (matching each pair's own
+Ultra Beast's known version-exclusivity), so this leg needed two full literal arrays rather
+than one shared list, the milestone's third confirmed within-pair split after Black
+City/White Forest (Leg 16) and Team Aqua/Magma Hideout (Leg 8) — and the first one inside a
+3rd-version-style title's own additions rather than the base pair. See commit `d6d88be`.
+
 ## [Curated Met Location dataset Leg 20: curate Pokémon Sun/Moon] — 2026-09-21
 Added `ALOLA_SM`, the first curated family with no Bulbapedia location-index table to verify
 against — confirmed via direct opensearch that Generation VII never got one, unlike Gens
