@@ -26,7 +26,10 @@
  * 26-28 are the Johto-Kanto connectors added in Generation II, not present in Red/Blue/
  * Yellow. Verified against Bulbapedia (Kanto, Cerulean Cave, Underground Path, Rocket
  * Hideout, Route 11, Route 22) and Serebii's Kanto map page (serebii.net/pokearth/kanto),
- * 2026-09-20.
+ * 2026-09-20. Re-verified for Leg 5 (Yellow): Yellow's changes from Red/Blue (a Route 19
+ * house for the Pikachu-Surf minigame, a redesigned Cerulean Cave interior, a swapped
+ * Viridian Forest item/trainer roster) are all sub-location content within named places
+ * already on this list, not a new or removed named location — no layering needed.
  */
 const KANTO_GEN1: readonly string[] = [
   'Route 1',
@@ -85,7 +88,8 @@ const KANTO_GEN1: readonly string[] = [
 
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
-  'Pokémon Blue': KANTO_GEN1
+  'Pokémon Blue': KANTO_GEN1,
+  'Pokémon Yellow': KANTO_GEN1
 }
 
 /**

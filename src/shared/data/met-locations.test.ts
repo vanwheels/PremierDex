@@ -18,6 +18,12 @@ describe('metLocationsForGame', () => {
     expect(blue).toEqual(red)
   })
 
+  it('returns the same Kanto Gen 1 list for Pokémon Yellow (Leg 5: no map differences from Red/Blue)', () => {
+    const red = metLocationsForGame('Pokémon Red')
+    const yellow = metLocationsForGame('Pokémon Yellow')
+    expect(yellow).toEqual(red)
+  })
+
   it('appends Fateful Encounter to every curated game, for Gift Pokémon/Mystery Gift (Leg 4)', () => {
     expect(metLocationsForGame('Pokémon Red')).toContain('Fateful Encounter')
     expect(metLocationsForGame('Pokémon Blue')).toContain('Fateful Encounter')

@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 5: curate Pokémon Yellow] — 2026-09-20
+Verified Yellow against the Leg 3/4 `KANTO_GEN1` base: researched documented Yellow-vs-
+Red/Blue differences (a Route 19 house for the Pikachu-Surf minigame, a redesigned Cerulean
+Cave interior, a swapped Viridian Forest item/trainer roster) and confirmed each is
+sub-location content within a named place already on the list, not a new or removed named
+location. Aliased `'Pokémon Yellow'` to `KANTO_GEN1` with no layering needed. See commit
+`<pending>`.
+
 ## [Curated Met Location dataset Leg 4: restructure to shared lists, add Fateful Encounter, curate Blue] — 2026-09-20
 Vanny flagged three domain corrections before Leg 5 started: paired versions (Red/Blue,
 Gold/Silver, Ruby/Sapphire, etc.) share an identical map and shouldn't each get their own

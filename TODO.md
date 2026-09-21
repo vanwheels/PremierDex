@@ -37,11 +37,6 @@ Each remaining leg's procedure:
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
 
-### [Curated Met Location dataset] — Leg 5
-Pokémon Yellow (Gen 1) — verify against the Leg 3/4 `KANTO_GEN1` base and layer in whatever
-Yellow-specific locations actually differ, per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
 ### [Curated Met Location dataset] — Leg 6
 Pokémon Gold/Silver (Gen 2, shared base list). Curate per the procedure above.
 Last touched: 2026-09-20. Re-check count: 0.
