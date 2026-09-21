@@ -1,5 +1,25 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 24: curate Pokémon Brilliant Diamond/Shining Pearl] — 2026-09-21
+Added `BDSP_SINNOH`, verified independently against Bulbapedia's raw wikitext for BDSP's own
+location-index page (action=raw fetch, 2026-09-21) rather than assuming Leg 13's Diamond/
+Pearl list carries over — it doesn't. That page's table splits each index into Locative/
+Nominative × Summary/Overworld sub-columns instead of SINNOH_GEN4_BASE's single color-coded
+column; cross-checked a same-index counterexample (Canalave Gym, Nominative-Summary "Canalave
+Gym" vs Nominative-Overworld "Canalave City") against the known real behavior (Gyms never
+produce their own Met Location) to confirm Nominative-Overworld is the field this list is
+built from — then used the page's own "Unused" section (strings confirmed "present in the
+game data, but not assigned to any location") as independent confirmation for every removal.
+Added Grand Underground (new wild-encounter mechanic; all named sub-zones/caves fold into one
+flat value) and Ramanas Park (confirmed via internal Japanese room-name comments to be Pal
+Park's direct replacement). Renamed Mt. Coronet to Mount Coronet. Removed 25 Diamond/Pearl
+building interiors and lake-guardian caverns (Cafe, Canalave Library, Contest Hall, Cycle
+Shop, Flower Shop, Footstep House, Foreign Building, Game Corner, Grand Lake, GTS, Jubilife
+TV, Mining Museum, Pal Park, Poffin House, Pokémon Day Care, Pokémon Mansion, Pokétch Co.,
+Restaurant, Sunyshore Market, Trainers' School, Veilstone Store, Vista Lighthouse, Acuity/
+Valor/Verity Cavern) that fold into their parent city/lake's name in this remake. See commit
+`50fda41`.
+
 ## [Curated Met Location dataset Leg 23: curate Pokémon Sword/Shield] — 2026-09-21
 Added `GALAR_GEN8`, verified against `Category:Sword and Shield locations`/`Category:Galar
 locations` (and its Wild Area/Isle of Armor/Crown Tundra subcategories) cross-checked
