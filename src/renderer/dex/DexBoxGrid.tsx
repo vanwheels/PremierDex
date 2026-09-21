@@ -3,18 +3,12 @@ import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import { applyTemplate } from './applyTemplate'
 import { buildBoxes, buildUnboxedEntries } from './buildBoxes'
 import type { DexTier } from './completionStats'
-import { TIER_CONFIGS } from './completionStats'
 import {
-  buildOccupiedUnitIndex,
-  buildPlaceholderKeys,
   computeFillInPlacements,
-  countAvailableSlots,
-  extraBoxesNeeded,
   findAvailableSlots,
-  pendingRequiredUnits,
-  placeUnitsIntoSlots,
   slotKey,
   type DexColor,
   type FillInPlacement,
@@ -335,40 +329,23 @@ export function DexBoxGrid({
   }
 
   // Apply Template (Leg 2 of the Dex completeness tier migration, redefined total-based at
-  // Leg 6): computes the tier's still-needed units (whatever already occupies a slot or
-  // placeholder in *this* location already filtered out — no longer whatever's owned
-  // elsewhere in the collection), creates whatever new boxes are needed to fit all of them
-  // (sequential awaits — same one-box-at-a-time creation DexBoxPane.handleAddBox already
-  // does, just looped), then writes every placement in one batch call.
-  // `selectedLocationTab` is narrowed non-null here by the early return above.
+  // Leg 6) — orchestration extracted to applyTemplate.ts (Leg 2 of the Apply Template
+  // Combined Color milestone) so this component doesn't grow to hold the combined-color
+  // box-count math landing in Leg 3. `selectedLocationTab` is narrowed non-null here by the
+  // early return above.
   const handleApplyTemplate = async (tier: DexTier, color: DexColor): Promise<void> => {
-    const tierConfig = TIER_CONFIGS[tier]
-    const occupiedUnitIndex = buildOccupiedUnitIndex(entries)
-    const existingPlaceholderKeys = buildPlaceholderKeys(boxPlaceholders)
-    const units = pendingRequiredUnits({ tierConfig, color, forms, species, occupiedUnitIndex, existingPlaceholderKeys })
-    if (units.length === 0) {
-      setTemplateModalOpen(false)
-      return
-    }
-
-    const occupiedSlots = new Set<string>()
-    for (const entry of entries) {
-      if (entry.boxNumber !== null && entry.boxSlot !== null) occupiedSlots.add(slotKey(entry.boxNumber, entry.boxSlot))
-    }
-    for (const placeholder of boxPlaceholders) {
-      occupiedSlots.add(slotKey(placeholder.boxNumber, placeholder.boxSlot))
-    }
-
-    const boxNumbers = storageBoxes.map((b) => b.boxNumber)
-    const available = countAvailableSlots(boxNumbers.length, occupiedSlots.size)
-    const shortfall = extraBoxesNeeded(units.length, available)
-    for (let i = 0; i < shortfall; i++) {
-      const created = await onAddBox(selectedLocationTab)
-      boxNumbers.push(created.boxNumber)
-    }
-
-    const placements = placeUnitsIntoSlots(units, boxNumbers, occupiedSlots)
-    await onSetBoxPlaceholders(selectedLocationTab, placements)
+    await applyTemplate({
+      tier,
+      color,
+      forms,
+      species,
+      entries,
+      boxPlaceholders,
+      storageBoxes,
+      storageLocationId: selectedLocationTab,
+      onAddBox,
+      onSetBoxPlaceholders
+    })
     setTemplateModalOpen(false)
   }
 

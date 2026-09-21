@@ -18,15 +18,6 @@ anything, and `boxTemplates.ts` is at 315 (near the 300 soft cap) — Leg 2 extr
 apply-template orchestration out of `DexBoxGrid.tsx` before Leg 3 grows it further, so the
 combined-color UI wiring doesn't land in an already-over-cap file.
 
-### [Apply Template Combined Color: extract apply-template orchestration] — Leg 2
-`DexBoxGrid.tsx`'s `handleApplyTemplate` (box-creation math + sequential `onAddBox` awaits +
-the batched `onSetBoxPlaceholders` call) is about to grow to handle combined-color box-count
-math; extract it into its own module (mirroring `collection-backup.ts`'s extraction from
-`sqlite-storage.ts`, the established split pattern) before that growth happens, so
-`DexBoxGrid.tsx` doesn't land further over its already-over-cap 511 lines. Pure refactor —
-behavior for existing Regular/Shiny applies must be unchanged; no 'both' logic added yet.
-Last touched: 2026-09-20. Re-check count: 0.
-
 ### [Apply Template Combined Color: UI wiring] — Leg 3
 Add the third radio option (Regular / Shiny / Both) to `DexApplyTemplateModal.tsx`, update
 its live preview text for the combined case, and wire `onApply`'s color value through the

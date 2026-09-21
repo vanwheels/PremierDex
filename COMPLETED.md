@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Apply Template Combined Color Leg 2: extract apply-template orchestration] — 2026-09-20
+`DexBoxGrid.tsx`'s `handleApplyTemplate` (box-creation math + sequential `onAddBox` awaits +
+the batched `onSetBoxPlaceholders` call) moved into a new `applyTemplate.ts` module, mirroring
+`collection-backup.ts`'s extraction from `sqlite-storage.ts`. Pure refactor, now unit-tested
+directly (not reachable before except through the component). Brought `DexBoxGrid.tsx` from
+511 to 488 lines, back under the 500 hard cap. See commit `<pending>`.
+
 ## [Apply Template Combined Color Leg 1: placement math] — 2026-09-20
 `DexColor` gained `'both'`; `requiredUnits` walks forms species-by-species and emits each
 species' regular unit(s) then its shiny unit(s) before the next species, so downstream
