@@ -4,7 +4,7 @@ Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILES
 
 ## Current Milestone: Curated Met Location dataset
 
-Leg 19 (Pokémon Omega Ruby/Alpha Sapphire) closed 2026-09-21 — see COMPLETED.md.
+Leg 20 (Pokémon Sun/Moon) closed 2026-09-21 — see COMPLETED.md.
 
 **Legs 4–28** (below): curate every "map family" in `origin-games.ts`'s `ORIGIN_GAMES`
 roster, in release-date order. Restructured at Leg 4 (2026-09-20, Vanny) from the original
@@ -43,14 +43,19 @@ Each remaining leg's procedure:
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
 
-### [Curated Met Location dataset] — Leg 20
-Pokémon Sun/Moon (Gen 7, shared base list). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
-
 ### [Curated Met Location dataset] — Leg 21
-Pokémon Ultra Sun/Ultra Moon (Gen 7) — verify against Leg 20's base and layer in whatever
-differs (Ultra Megalopolis/Poni Gauntlet expansions at minimum).
-Last touched: 2026-09-20. Re-check count: 0.
+Pokémon Ultra Sun/Ultra Moon (Gen 7) — verify against Leg 20's `ALOLA_SM` base and layer in
+whatever differs. Leg 20's research already confirmed most of what USUM adds (its own
+comment has the full sourcing): Big Wave Beach, Sandy Cave, Heahea Beach, Pikachu Valley,
+Poni Beach, Plains Grotto, Dividing Peak Tunnel, Team Rocket's Castle (Episode RR/Rainbow
+Rocket), and the Ultra Warp Ride realm set (Ultra Crater, Ultra Desert, Ultra Forest, Ultra
+Jungle, Ultra Plant, Ultra Ruin, Ultra Space Wilds, Ultra Megalopolis). Two renames to
+apply, not additions: Secluded Shore → Ula'ula Beach, and Ultra Space → Ultra Deep Sea (same
+places, different display text per version, confirmed via each location's infobox). Still
+needs its own from-scratch verification pass (Leg 20 only confirmed exclusivity while
+researching Sun/Moon, not a full USUM location sweep) — don't just copy this list in without
+checking Bulbapedia/Serebii directly per this milestone's standard procedure.
+Last touched: 2026-09-21. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 22
 Pokémon Let's Go, Pikachu!/Let's Go, Eevee! (Gen 7, shared base list — simplified Kanto,

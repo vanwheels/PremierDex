@@ -1,5 +1,20 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 20: curate Pokémon Sun/Moon] — 2026-09-21
+Added `ALOLA_SM`, the first curated family with no Bulbapedia location-index table to verify
+against — confirmed via direct opensearch that Generation VII never got one, unlike Gens
+I-VI. Built instead from the Alola article's Settlements/Landmarks tables cross-checked
+against `Category:Sun and Moon locations` (fetched via the MediaWiki API), with individual
+article checks for anything ambiguous. That cross-check caught a real mistake mid-leg:
+Seafolk Village looked Ultra Sun/Ultra Moon-exclusive from the settlements table and its
+article's intro alone, but its own catch/item data confirmed it's in Sun/Moon too. Resolved
+Sun/Moon's own Ultra Beast encounters (Nihilego, Buzzwole, Pheromosa, Xurkitree) to
+already-curated locations rather than USUM-only Ultra-realm names, and confirmed the
+Sunne/Moone altar and lake pairs are both accessible in both versions post-Champion, not a
+Black City/White Forest-style split. Left Leg 21 (Ultra Sun/Ultra Moon) a head start with
+the full list of confirmed USUM-exclusive additions and the two SM→USUM location renames.
+See commit `f97f090`.
+
 ## [Curated Met Location dataset Leg 19: curate Pokémon Omega Ruby/Alpha Sapphire] — 2026-09-21
 Added `HOENN_ORAS`, verified against the same raw Generation VI location-index wikitext Leg
 18 cited — Leg 18's forward-looking flag of indices 00170-00354 plus 60004 as the ORAS-
