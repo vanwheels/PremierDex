@@ -1,5 +1,19 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 12: curate Pokémon XD: Gale of Darkness] — 2026-09-20
+Added `ORRE_XD`, kept separate from Leg 11's `ORRE_COLOSSEUM` since the two games' location-
+index tables share no entries. Verified against the same shared Bulbapedia GCN location-index
+table (XD column) plus individual location articles: confirmed nine locations (Agate Village,
+Cipher Lab, Mt. Battle, Orre Colosseum, Outskirt Stand, Phenac City, Pyrite Town, Relic Stone,
+Snagem Hideout) are shared with Colosseum's list via their own XD-column row, while The
+Under/Under Colosseum/Deep Colosseum/Pyrite Cave/Phenac Stadium/Pyrite Colosseum/Prestige
+Precept Center have no XD-column row at all; added XD's own locations (Gateon Port, Pokémon HQ
+Lab, Kaminko's House, Citadark Isle, Cipher Key Lair, S.S. Libra, Realgam Tower) plus its three
+Poké Spots (Rock/Oasis/Cave) — XD's only wild encounters, unlike Colosseum's zero. Declined to
+add "Realgam Colosseum" (XD's own name for the arena Colosseum calls "Tower Colosseum") since
+XD's index table gives that room no index distinct from the rest of Realgam Tower, unlike
+Colosseum's. See commit `8138e73`.
+
 ## [Curated Met Location dataset Leg 11: curate Pokémon Colosseum] — 2026-09-20
 Added `ORRE_COLOSSEUM`, the first family with a fundamentally different shape from every
 prior one: Colosseum has zero wild encounters, so there's no Routes-first ordering to

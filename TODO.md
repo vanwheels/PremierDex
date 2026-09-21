@@ -4,6 +4,8 @@ Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILES
 
 ## Current Milestone: Curated Met Location dataset
 
+Leg 12 (Pokémon XD) closed 2026-09-20 — see COMPLETED.md.
+
 **Legs 4–28** (below): curate every "map family" in `origin-games.ts`'s `ORIGIN_GAMES`
 roster, in release-date order. Restructured at Leg 4 (2026-09-20, Vanny) from the original
 Legs 3–43 one-game-per-leg plan after three domain corrections:
@@ -40,12 +42,6 @@ Each remaining leg's procedure:
 - Extend `met-locations.test.ts` to cover the newly curated family.
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
-
-### [Curated Met Location dataset] — Leg 12
-Pokémon XD: Gale of Darkness (Gen 3, no paired version — kept separate from Leg 11's
-Colosseum list rather than assumed to share one, per Vanny 2026-09-20). Curate per the
-procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 13
 Pokémon Diamond/Pearl (Gen 4, shared base list). Curate per the procedure above.
