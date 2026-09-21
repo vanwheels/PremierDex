@@ -1,5 +1,16 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 2: build the mechanism] — 2026-09-20
+`shared/data/met-locations.ts` (empty `MET_LOCATIONS` record + `metLocationsForGame`,
+mirroring `poke-balls.ts`) and `OriginModal.tsx`'s Met Location field now switch to a
+restricted `<select>` once `metLocationsForGame` returns a list, same stale-value handling
+as `ballOptions`. Deviated from the Leg 1 handoff's test plan: it assumed "OriginModal's
+existing tests" to extend, but no React component tests exist anywhere in this repo yet
+(vitest is `environment: 'node'`, `include` is `*.test.ts` only, no `@testing-library/react`
+dependency) — standing up that infra for one ternary was real scope beyond this leg, so only
+`met-locations.test.ts` was added and the input/select switch was verified manually instead
+(per CLAUDE.md's default for UI changes). See commit `<hash>`.
+
 ## [Curated Met Location dataset Leg 1: decide the dataset's shape] — 2026-09-20
 Doc-only scoping leg, no code. Resolved the two open questions `deeper-per-game-validity.md`
 had left unanswered by checking with Vanny directly (not data-derivable, unlike that leg's

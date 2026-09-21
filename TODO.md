@@ -4,17 +4,183 @@ Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILES
 
 ## Current Milestone: Curated Met Location dataset
 
-### [Curated Met Location dataset] — Leg 2
-Leg 1 (`docs/investigations/curated-met-location.md`) decided the shape: a restricted
-`<select>` once a game is curated (not suggestions on free text), narrow and opt-in per
-game with zero games curated at ship — same reactive posture as `BALL_POOLS`. This leg
-builds the mechanism only, no curated games yet:
-- `shared/data/met-locations.ts` — empty `Record<gameName, readonly string[]>` +
-  `metLocationsForGame` helper, mirroring `poke-balls.ts`'s `BALL_POOLS`/`ballPoolForGame`.
-- `OriginModal.tsx` — Met Location field switches between today's free-text `<input>` and a
-  restricted `<select>` based on whether `metLocationsForGame(selectedGame)` returns a list.
-- Tests for both. No schema.ts change — `met_location` stays an unconstrained `TEXT` column
-  (seeing why a per-game CHECK doesn't fit here is in the Leg 1 doc).
+**Legs 3–43** (below): curate every game in `origin-games.ts`'s `ORIGIN_GAMES` roster, one
+game per leg, in release-date order. This supersedes Leg 1's "zero games curated at ship,
+one game at a time, opportunistically" posture — confirmed 2026-09-20 (Vanny) to instead
+curate the full roster now rather than waiting for each game to come up individually. Each
+leg's procedure is the same, per the Leg 1 doc's "Future, opportunistic" handoff:
+- Add the game's major city/route Met Location list to `shared/data/met-locations.ts`
+  (`Record<gameName, readonly string[]>`, keyed by the game's `name` from `ORIGIN_GAMES`).
+- Verify the list against Bulbapedia/Serebii before committing — same standard
+  `supplemental-availability.ts`'s mechanisms were held to.
+- Extend `met-locations.test.ts` to cover the newly curated game.
+No `OriginModal.tsx` or schema.ts changes needed after Leg 2 — the mechanism already
+switches to the restricted `<select>` for any game `metLocationsForGame` returns a list for.
+
+### [Curated Met Location dataset] — Leg 3
+Pokémon Red (Gen 1). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 4
+Pokémon Blue (Gen 1). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 5
+Pokémon Yellow (Gen 1). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 6
+Pokémon Gold (Gen 2). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 7
+Pokémon Silver (Gen 2). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 8
+Pokémon Crystal (Gen 2). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 9
+Pokémon Ruby (Gen 3). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 10
+Pokémon Sapphire (Gen 3). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 11
+Pokémon FireRed (Gen 3). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 12
+Pokémon LeafGreen (Gen 3). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 13
+Pokémon Emerald (Gen 3). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 14
+Pokémon Colosseum (Gen 3). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 15
+Pokémon XD: Gale of Darkness (Gen 3). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 16
+Pokémon Diamond (Gen 4). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 17
+Pokémon Pearl (Gen 4). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 18
+Pokémon Platinum (Gen 4). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 19
+Pokémon HeartGold (Gen 4). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 20
+Pokémon SoulSilver (Gen 4). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 21
+Pokémon Black (Gen 5). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 22
+Pokémon White (Gen 5). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 23
+Pokémon Black 2 (Gen 5). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 24
+Pokémon White 2 (Gen 5). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 25
+Pokémon X (Gen 6). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 26
+Pokémon Y (Gen 6). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 27
+Pokémon Omega Ruby (Gen 6). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 28
+Pokémon Alpha Sapphire (Gen 6). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 29
+Pokémon Sun (Gen 7). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 30
+Pokémon Moon (Gen 7). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 31
+Pokémon Ultra Sun (Gen 7). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 32
+Pokémon Ultra Moon (Gen 7). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 33
+Pokémon Let's Go, Pikachu! (Gen 7). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 34
+Pokémon Let's Go, Eevee! (Gen 7). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 35
+Pokémon Sword (Gen 8). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 36
+Pokémon Shield (Gen 8). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 37
+Pokémon Brilliant Diamond (Gen 8). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 38
+Pokémon Shining Pearl (Gen 8). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 39
+Pokémon Legends: Arceus (Gen 8). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 40
+Pokémon Scarlet (Gen 9). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 41
+Pokémon Violet (Gen 9). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 42
+Pokémon Legends: Z-A (Gen 9). Curate per the procedure above.
+Last touched: 2026-09-20. Re-check count: 0.
+
+### [Curated Met Location dataset] — Leg 43
+Pokémon GO. Curate per the procedure above — GO's "locations" are the real-world
+region/category conventions Serebii/Bulbapedia use for its origin-marked catches
+(regional exclusives, event locations), not a fixed map list like the mainline titles.
 Last touched: 2026-09-20. Re-check count: 0.
 
 ## Unscheduled

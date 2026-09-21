@@ -4,6 +4,7 @@ import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { findOriginGame } from '@shared/data/origin-games'
 import { ORIGIN_LANGUAGES } from '@shared/data/languages'
 import { ballPoolForGame, type PokeBall } from '@shared/data/poke-balls'
+import { metLocationsForGame } from '@shared/data/met-locations'
 import { SIZE_CLASSES } from '@shared/data/size-classes'
 import { OriginGameInput } from '../trainer/OriginGameInput'
 
@@ -106,6 +107,19 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
   const gameBallPool = ballPoolForGame(game)
   const ballOptions: readonly string[] =
     caughtBall === '' || gameBallPool.includes(caughtBall as PokeBall) ? gameBallPool : [...gameBallPool, caughtBall]
+  // Curated Met Location list for the selected game (Leg 2 of the Curated Met Location
+  // dataset milestone), or undefined if this game isn't curated yet — undefined keeps
+  // Met Location a free-text input below, same fallback posture as an uncurated game's
+  // ball pool. A previously-saved value that's since fallen outside the curated list
+  // (e.g. Game changed after Met Location was already set) stays selectable rather than
+  // disappearing, same treatment as ballOptions above.
+  const gameMetLocations = metLocationsForGame(game)
+  const metLocationOptions: readonly string[] | undefined =
+    gameMetLocations === undefined
+      ? undefined
+      : metLocation === '' || gameMetLocations.includes(metLocation)
+        ? gameMetLocations
+        : [...gameMetLocations, metLocation]
 
   const handleProfileSelect = (value: string): void => {
     if (value === NO_PROFILE) {
@@ -251,11 +265,18 @@ export function OriginModal({ entry, displayName, onClose, onSave }: OriginModal
         </label>
         <label className="origin-modal-field">
           Met Location
-          <input
-            value={metLocation}
-            onChange={(e) => setMetLocation(e.target.value)}
-            placeholder="Optional"
-          />
+          {metLocationOptions ? (
+            <select value={metLocation} onChange={(e) => setMetLocation(e.target.value)}>
+              <option value="">—</option>
+              {metLocationOptions.map((loc) => (
+                <option key={loc} value={loc}>
+                  {loc}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input value={metLocation} onChange={(e) => setMetLocation(e.target.value)} placeholder="Optional" />
+          )}
         </label>
         <label className="origin-modal-field">
           Capture Date
