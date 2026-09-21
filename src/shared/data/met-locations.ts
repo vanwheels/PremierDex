@@ -856,6 +856,163 @@ const SINNOH_GEN4_BASE: readonly string[] = [
   'Wayward Cave'
 ]
 
+/**
+ * Sinnoh, Pokémon Platinum (Leg 14) — verified against the same raw wikitext SINNOH_GEN4_BASE's
+ * comment cites (Bulbapedia's "List of locations by index number in Generation IV",
+ * fetched via action=raw, 2026-09-21), confirming that comment's forward-looking summary of
+ * indices 0x0070-0x007D (grey, "debuted in Platinum, recognized by Platinum/HGSS only"):
+ * Battle Frontier and its four facilities (Battle Arcade, Battle Castle, Battle Factory,
+ * Battle Hall — replacing Diamond/Pearl's plain Battle Tower, same "index renamed, not
+ * duplicated" treatment HOENN_EMERALD's Battle Tower→Battle Frontier got), Distortion World,
+ * Global Terminal, Villa, Battleground, Rotom's Room, T.G. Eterna Bldg, and Iron/Iceberg/Rock
+ * Peak Ruins. Built as a full literal list rather than a splice off SINNOH_GEN4_BASE (like
+ * HOENN_EMERALD, not HOENN_RUBY/SAPPHIRE) since the changes aren't a single insertion:
+ * - **Battle Tower removed, not kept alongside Battle Frontier** — same reasoning as Emerald's
+ *   Battle Tower→Battle Frontier: the wikitext's index-renamed-not-duplicated pattern means a
+ *   Platinum-native catch can never produce "Battle Tower" as a Met Location value, since the
+ *   place itself doesn't exist in Platinum's map.
+ * - **GTS removed, replaced with Global Terminal** — confirmed via Bulbapedia's Global
+ *   Terminal article: physically the same Jubilife City building as Diamond/Pearl's GTS, but
+ *   Platinum's engine renames the index itself, so a Platinum-native GTS-trade Pokémon's Met
+ *   Location reads "Global Terminal", never "GTS".
+ * - **"Cafe" (Diamond/Pearl) becomes "Café" (Platinum)** — confirmed via the wikitext's
+ *   version-conditional {{sup/4|DP}}/{{sup/4|PtHGSS}} markup on that row: same index/place
+ *   (Café Cabin), different display spelling per version, not a separate location.
+ * - **"ROTOM's Room" index displays as "Rotom's Room"** — the wikitext's row label is stylized
+ *   in caps, but Bulbapedia's own dedicated article for the location (and every in-game/guide
+ *   reference) titles it "Rotom's Room"; used here rather than the wikitext's raw caps, same
+ *   as KANTO_GEN1/HOENN_GEN3_BASE resolving other locations' real display names over a source
+ *   table's shorthand.
+ * - **Turnback Cave (already white/all-games on SINNOH_GEN4_BASE) is kept, not replaced** —
+ *   Distortion World is Platinum's new *separate* index for catching Giratina directly;
+ *   Turnback Cave itself remains a real, distinct, accessible place in Platinum too.
+ */
+const PLATINUM_SINNOH: readonly string[] = [
+  'Route 201',
+  'Route 202',
+  'Route 203',
+  'Route 204',
+  'Route 205',
+  'Route 206',
+  'Route 207',
+  'Route 208',
+  'Route 209',
+  'Route 210',
+  'Route 211',
+  'Route 212',
+  'Route 213',
+  'Route 214',
+  'Route 215',
+  'Route 216',
+  'Route 217',
+  'Route 218',
+  'Route 219',
+  'Route 220',
+  'Route 221',
+  'Route 222',
+  'Route 223',
+  'Route 224',
+  'Route 225',
+  'Route 226',
+  'Route 227',
+  'Route 228',
+  'Route 229',
+  'Route 230',
+  'Acuity Cavern',
+  'Acuity Lakefront',
+  'Amity Square',
+  'Battle Arcade',
+  'Battle Castle',
+  'Battle Factory',
+  'Battle Frontier',
+  'Battle Hall',
+  'Battle Park',
+  'Battleground',
+  'Café',
+  'Canalave City',
+  'Canalave Library',
+  'Celestic Town',
+  'Contest Hall',
+  'Cycle Shop',
+  'Distortion World',
+  'Eterna City',
+  'Eterna Forest',
+  'Fight Area',
+  'Floaroma Meadow',
+  'Floaroma Town',
+  'Flower Paradise',
+  'Flower Shop',
+  'Footstep House',
+  'Foreign Building',
+  'Fuego Ironworks',
+  'Fullmoon Island',
+  'Galactic HQ',
+  'Game Corner',
+  'Global Terminal',
+  'Grand Lake',
+  'Great Marsh',
+  'Hall of Origin',
+  'Hearthome City',
+  'Iceberg Ruins',
+  'Iron Island',
+  'Iron Ruins',
+  'Jubilife City',
+  'Jubilife TV',
+  'Lake Acuity',
+  'Lake Valor',
+  'Lake Verity',
+  'Maniac Tunnel',
+  'Mining Museum',
+  'Mt. Coronet',
+  'Newmoon Island',
+  'Old Chateau',
+  'Oreburgh City',
+  'Oreburgh Gate',
+  'Oreburgh Mine',
+  'Pal Park',
+  'Pastoria City',
+  'Poffin House',
+  'Pokémon Day Care',
+  'Pokémon League',
+  'Pokémon Mansion',
+  'Pokétch Co.',
+  'Ravaged Path',
+  'Resort Area',
+  'Restaurant',
+  'Rock Peak Ruins',
+  "Rotom's Room",
+  'Ruin Maniac Cave',
+  'Sandgem Town',
+  'Seabreak Path',
+  'Sendoff Spring',
+  'Snowpoint City',
+  'Snowpoint Temple',
+  'Solaceon Ruins',
+  'Solaceon Town',
+  'Spear Pillar',
+  'Spring Path',
+  'Stark Mountain',
+  'Sunyshore City',
+  'Sunyshore Market',
+  'Survival Area',
+  'T.G. Eterna Bldg',
+  "Trainers' School",
+  'Trophy Garden',
+  'Turnback Cave',
+  'Twinleaf Town',
+  'Valley Windworks',
+  'Valor Cavern',
+  'Valor Lakefront',
+  'Veilstone City',
+  'Veilstone Store',
+  'Verity Cavern',
+  'Verity Lakefront',
+  'Victory Road',
+  'Villa',
+  'Vista Lighthouse',
+  'Wayward Cave'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -871,7 +1028,8 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Colosseum': ORRE_COLOSSEUM,
   'Pokémon XD: Gale of Darkness': ORRE_XD,
   'Pokémon Diamond': SINNOH_GEN4_BASE,
-  'Pokémon Pearl': SINNOH_GEN4_BASE
+  'Pokémon Pearl': SINNOH_GEN4_BASE,
+  'Pokémon Platinum': PLATINUM_SINNOH
 }
 
 /**

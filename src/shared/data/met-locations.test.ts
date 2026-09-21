@@ -395,4 +395,55 @@ describe('metLocationsForGame', () => {
     expect(metLocationsForGame('Pokémon Diamond')).toContain('Fateful Encounter')
     expect(metLocationsForGame('Pokémon Pearl')).toContain('Fateful Encounter')
   })
+
+  it('returns the curated Sinnoh list for Pokémon Platinum (Leg 14)', () => {
+    const locations = metLocationsForGame('Pokémon Platinum')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 201')
+    expect(locations).toContain('Route 230')
+    expect(locations).toContain('Twinleaf Town')
+    expect(locations).toContain('Mt. Coronet')
+    expect(locations).not.toContain('Route 1')
+    expect(locations).not.toContain('Route 101')
+  })
+
+  it('includes Platinum-exclusive Battle Frontier facilities and other grey-index additions (Leg 14)', () => {
+    const locations = metLocationsForGame('Pokémon Platinum')
+    expect(locations).toContain('Battle Frontier')
+    expect(locations).toContain('Battle Arcade')
+    expect(locations).toContain('Battle Castle')
+    expect(locations).toContain('Battle Factory')
+    expect(locations).toContain('Battle Hall')
+    expect(locations).toContain('Distortion World')
+    expect(locations).toContain('Global Terminal')
+    expect(locations).toContain('Villa')
+    expect(locations).toContain('Battleground')
+    expect(locations).toContain("Rotom's Room")
+    expect(locations).toContain('T.G. Eterna Bldg')
+    expect(locations).toContain('Iron Ruins')
+    expect(locations).toContain('Iceberg Ruins')
+    expect(locations).toContain('Rock Peak Ruins')
+  })
+
+  it('replaces Diamond/Pearl-only names with their Platinum equivalents (Leg 14)', () => {
+    const locations = metLocationsForGame('Pokémon Platinum')
+    expect(locations).not.toContain('Battle Tower')
+    expect(locations).not.toContain('GTS')
+    expect(locations).not.toContain('Cafe')
+    expect(locations).toContain('Café')
+  })
+
+  it('keeps Diamond/Pearl-shared locations that Platinum does not replace (Leg 14)', () => {
+    const locations = metLocationsForGame('Pokémon Platinum')
+    expect(locations).toContain('Turnback Cave')
+    expect(locations).toContain('Fight Area')
+    expect(locations).toContain('Survival Area')
+    expect(locations).toContain('Resort Area')
+    expect(locations).toContain('Stark Mountain')
+    expect(locations).toContain('Hall of Origin')
+  })
+
+  it('appends Fateful Encounter to Pokémon Platinum too (Leg 14)', () => {
+    expect(metLocationsForGame('Pokémon Platinum')).toContain('Fateful Encounter')
+  })
 })
