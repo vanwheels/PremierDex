@@ -506,4 +506,71 @@ describe('metLocationsForGame', () => {
     expect(metLocationsForGame('Pokémon HeartGold')).toContain('Fateful Encounter')
     expect(metLocationsForGame('Pokémon SoulSilver')).toContain('Fateful Encounter')
   })
+
+  it('returns the curated Unova list for Pokémon Black (Leg 16)', () => {
+    const locations = metLocationsForGame('Pokémon Black')
+    expect(locations).toBeDefined()
+    expect(locations).toContain('Route 1')
+    expect(locations).toContain('Route 18')
+    expect(locations).toContain('Nuvema Town')
+    expect(locations).toContain('N\'s Castle')
+    expect(locations).toContain('Victory Road')
+    // Black 2/White 2-exclusive routes/locations aren't part of the original pair.
+    expect(locations).not.toContain('Route 19')
+    expect(locations).not.toContain('Aspertia City')
+    expect(locations).not.toContain('Pokémon World Tournament')
+  })
+
+  it('gives Black the Black City/Black Gate pair and White the White Forest/White Gate pair (Leg 16 within-pair split)', () => {
+    const black = metLocationsForGame('Pokémon Black')
+    const white = metLocationsForGame('Pokémon White')
+    expect(black).toContain('Black City')
+    expect(black).toContain('Black Gate')
+    expect(black).not.toContain('White Forest')
+    expect(black).not.toContain('White Gate')
+    expect(white).toContain('White Forest')
+    expect(white).toContain('White Gate')
+    expect(white).not.toContain('Black City')
+    expect(white).not.toContain('Black Gate')
+  })
+
+  it('returns the same Unova Gen 5 list for Black and White aside from the City/Gate split (Leg 16)', () => {
+    const black = metLocationsForGame('Pokémon Black') as string[]
+    const white = metLocationsForGame('Pokémon White') as string[]
+    expect(black.length).toBe(white.length)
+    const blackWithoutSplit = black.filter((location) => location !== 'Black City' && location !== 'Black Gate')
+    const whiteWithoutSplit = white.filter((location) => location !== 'White Forest' && location !== 'White Gate')
+    expect(blackWithoutSplit).toEqual(whiteWithoutSplit)
+  })
+
+  it('excludes Entralink-duplicate and non-place indices from Pokémon Black\'s list (Leg 16)', () => {
+    const locations = metLocationsForGame('Pokémon Black')
+    expect(locations).not.toContain('Mystery Zone')
+    expect(locations).not.toContain('Faraway place')
+    expect(locations).not.toContain('Kanto')
+    expect(locations).not.toContain('Johto')
+    expect(locations).not.toContain('Hoenn')
+    expect(locations).not.toContain('Sinnoh')
+    expect(locations).not.toContain('Day-Care Couple')
+  })
+
+  it('includes dedicated-index buildings and gates for Pokémon Black (Leg 16)', () => {
+    const locations = metLocationsForGame('Pokémon Black')
+    expect(locations).toContain('Musical Theater')
+    expect(locations).toContain('Gear Station')
+    expect(locations).toContain('Unity Tower')
+    expect(locations).toContain('Accumula Gate')
+    expect(locations).toContain('Undella Gate')
+    expect(locations).toContain('Nacrene Gate')
+    expect(locations).toContain('Castelia Gate')
+    expect(locations).toContain('Nimbasa Gate')
+    expect(locations).toContain('Opelucid Gate')
+    expect(locations).toContain('Bridge Gate')
+    expect(locations).toContain('Route Gate')
+  })
+
+  it('appends Fateful Encounter to Pokémon Black and White too (Leg 16)', () => {
+    expect(metLocationsForGame('Pokémon Black')).toContain('Fateful Encounter')
+    expect(metLocationsForGame('Pokémon White')).toContain('Fateful Encounter')
+  })
 })

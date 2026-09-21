@@ -1198,6 +1198,150 @@ const JOHTO_GEN4: readonly string[] = [
   'Whirl Islands'
 ]
 
+/**
+ * Unova, Generation V (Black/White, shared base list) (Leg 16). Verified against
+ * Bulbapedia's raw wikitext for "List of locations by index number in Generation V"
+ * (fetched directly via the MediaWiki API's action=raw, same sourcing method Legs 13-15
+ * used), 2026-09-21. That table's white-background rows are indices 00000-00116 ("appeared
+ * in Black and White" per the table's own header note); indices 00117-00153 plus 30015 are
+ * Black 2/White 2-exclusive (Leg 17's concern, not included here) and are shaded light blue
+ * in the table for that reason.
+ *
+ * Excluded as non-place special indices, same reasoning as prior generations' Mystery
+ * Zone/Faraway place/region-name exclusions: **index 00000** (a blank placeholder row),
+ * **00001 Mystery Zone**, **00002 Faraway place** (the generic fallback string shown for an
+ * unrecognized index, not a real location), and **00003** ("<name>'s <location>", a
+ * templated placeholder for visiting another player's Entralink world, not a fixed string).
+ *
+ * **Indices 00076-00105 are excluded as duplicates, not new locations**: the table shades
+ * them light blue and labels each "(Entralink)", but every one of them is the exact same
+ * named place already listed under its own primary index (e.g. 00076 is "Nimbasa City
+ * (Entralink)", the same in-game display text "Nimbasa City" as index 00009) — the
+ * "(Entralink)" suffix is the wiki table's own annotation for "recorded when met in another
+ * player's world," not part of the actual Met Location string the game displays. Confirmed
+ * by the table itself giving no distinct display text for these rows versus their
+ * already-listed counterparts.
+ *
+ * A dedicated index-table row is treated as a real distinct place regardless of whether it
+ * has its own dedicated Bulbapedia article, same convention SINNOH_GEN4_BASE/PLATINUM_SINNOH
+ * established — applies here to Musical Theater (index 00049, a {{DL}} template link to a
+ * section of the Pokémon Musical article rather than a standalone page), Gear Station,
+ * Unity Tower, and the ten named Gate buildings (Accumula/Undella/Nacrene/Castelia/Nimbasa/
+ * Opelucid/Black/White/Bridge/Route Gate).
+ *
+ * **A second within-pair location split, alongside the already-known Black City/White
+ * Forest one**: Black Gate (index 00112) and White Gate (index 00113) are each
+ * version-exclusive too, not both-games locations despite sharing the same white-background
+ * shading as every other BW-range index — confirmed via Bulbapedia's Black Gate article
+ * directly ("This gate is only present in Black and Black 2" for its Route 14/Route 15
+ * connections to Black City, contrasted with White Gate being "only present in White and
+ * White 2," connecting to White Forest instead). Makes sense given Black Gate physically
+ * leads to Black-exclusive Black City and White Gate to White-exclusive White Forest — the
+ * index table's per-index shading tracks "engine recognizes this index" (both games
+ * recognize both indices for trade-display purposes, matching the file's earlier Platinum/
+ * HGSS precedent that "recognized" isn't "physically present in this game's own map"), not
+ * "physically reachable in this cartridge." Both splits layered onto the shared base per
+ * game below, same splice pattern HOENN_RUBY/HOENN_SAPPHIRE uses.
+ *
+ * {{OBP|Victory Road|Black and White}} <small>(Black and White)</small> uses the same
+ * wiki-disambiguation-only parenthetical pattern SINNOH_GEN4_BASE/JOHTO_GEN4 already
+ * dropped — bare "Victory Road" here, there is only one in this game.
+ */
+const UNOVA_GEN5_BASE: readonly string[] = [
+  'Route 1',
+  'Route 2',
+  'Route 3',
+  'Route 4',
+  'Route 5',
+  'Route 6',
+  'Route 7',
+  'Route 8',
+  'Route 9',
+  'Route 10',
+  'Route 11',
+  'Route 12',
+  'Route 13',
+  'Route 14',
+  'Route 15',
+  'Route 16',
+  'Route 17',
+  'Route 18',
+  'Abundant Shrine',
+  'Abyssal Ruins',
+  'Accumula Gate',
+  'Accumula Town',
+  'Anville Town',
+  'Battle Subway',
+  'Bridge Gate',
+  'Castelia City',
+  'Castelia Gate',
+  'Celestial Tower',
+  "Challenger's Cave",
+  'Chargestone Cave',
+  'Cold Storage',
+  'Desert Resort',
+  'Dragonspiral Tower',
+  'Dreamyard',
+  'Driftveil City',
+  'Driftveil Drawbridge',
+  'Entralink',
+  'Entree Forest',
+  'Gear Station',
+  'Giant Chasm',
+  'Guidance Chamber',
+  'Icirrus City',
+  'Lacunosa Town',
+  'Liberty Garden',
+  'Lostlorn Forest',
+  'Marvelous Bridge',
+  'Mistralton Cave',
+  'Mistralton City',
+  'Moor of Icirrus',
+  'Musical Theater',
+  'Nacrene City',
+  'Nacrene Gate',
+  'Nimbasa City',
+  'Nimbasa Gate',
+  "N's Castle",
+  'Nuvema Town',
+  'Opelucid City',
+  'Opelucid Gate',
+  'P2 Laboratory',
+  'Pinwheel Forest',
+  'Poké Transfer Lab',
+  'Pokémon League',
+  'Relic Castle',
+  'Route Gate',
+  'Royal Unova',
+  'Rumination Field',
+  'Shopping Mall',
+  'Skyarrow Bridge',
+  'Striaton City',
+  'Trial Chamber',
+  'Tubeline Bridge',
+  'Twist Mountain',
+  'Undella Bay',
+  'Undella Gate',
+  'Undella Town',
+  'Unity Tower',
+  'Victory Road',
+  'Village Bridge',
+  'Wellspring Cave'
+]
+
+const UNOVA_BLACK: readonly string[] = [
+  ...UNOVA_GEN5_BASE.slice(0, UNOVA_GEN5_BASE.indexOf('Bridge Gate')),
+  'Black City',
+  'Black Gate',
+  ...UNOVA_GEN5_BASE.slice(UNOVA_GEN5_BASE.indexOf('Bridge Gate'))
+]
+
+const UNOVA_WHITE: readonly string[] = [
+  ...UNOVA_GEN5_BASE,
+  'White Forest',
+  'White Gate'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -1216,7 +1360,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Pearl': SINNOH_GEN4_BASE,
   'Pokémon Platinum': PLATINUM_SINNOH,
   'Pokémon HeartGold': JOHTO_GEN4,
-  'Pokémon SoulSilver': JOHTO_GEN4
+  'Pokémon SoulSilver': JOHTO_GEN4,
+  'Pokémon Black': UNOVA_BLACK,
+  'Pokémon White': UNOVA_WHITE
 }
 
 /**
