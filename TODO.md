@@ -1,7 +1,7 @@
 # TODO
 
-Per-Game Regional Dex Numbers shipped 2026-09-20 (see MILESTONES.md). No current milestone
-picked yet.
+Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILESTONES.md).
+No current milestone picked yet.
 
 ## Unscheduled
 
@@ -94,17 +94,6 @@ template):
   their apply/snapshot helpers — roughly the same "one feature area" carve-out as the other
   two files above) into its own hook, composed back in by useCollectionData.
 Last touched: 2026-09-20. Re-check count: 0.
-
-### [Ribbons & Marks: List/Collection view entry points] — future milestone
-Surfaced scoping Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone: the new
-"Ribbons & Marks" modal only opens from Box view and Hybrid view (their detail panel had
-room for a second button next to "Edit Origin"). List view (`DexTable`/`DexRow`) and the old
-Collection view (`CollectionView`/`CollectionRow`) don't get an entry point yet — their
-per-row "Origin" button is already crammed into a dense cell across 1000+ rows (x2 for
-regular/shiny columns), so fitting a second control there is its own layout call, not a
-mechanical copy of the Box/Hybrid wiring. Confirmed 2026-09-19 (AskUserQuestion) as
-out-of-scope for Leg 4.
-Last touched: 2026-09-19. Re-check count: 0.
 
 ### [Remove "Unassigned" as the default check-in bucket] — future milestone
 Raised by Vanny 2026-09-04: the Unassigned storage location is bad UX as a default landing

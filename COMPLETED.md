@@ -1,5 +1,20 @@
 # COMPLETED
 
+## [Ribbons & Marks: List/Collection View Entry Points Leg 2: inline Collection view button] — 2026-09-20
+Final leg — milestone shipped, see MILESTONES.md. `CollectionRow`'s single Origin cell had
+room (unlike List view's cramped regular/shiny cells), so it got a straightforward second
+button next to "Origin", mechanically matching the existing Box/Hybrid detail panel
+pattern. `CollectionView` added a `ribbonsMarksTarget` state parallel to its existing
+`originTarget`. See commit `2854951`.
+
+## [Ribbons & Marks: List/Collection View Entry Points Leg 1: List view context menu] — 2026-09-20
+DexRow's regular/shiny cells had no room for a second inline button (checkbox + Origin
+button + gender select + badges, x2 columns) — resolved via AskUserQuestion in favor of a
+right-click menu, reusing the existing generic `DexBoxContextMenu` component rather than a
+mechanical copy of Box/Hybrid's inline-button wiring. `DexTable` now owns a `contextMenu`
+target alongside its existing `originTarget`, with "Edit Origin" and "Ribbons & Marks" as
+the two menu actions. See commit `d29fa77`.
+
 ## [Evolution-Chain Reachability Leg 2: wire the ancestor walk into checkEntryValidity] — 2026-09-20
 Final leg — milestone shipped, see MILESTONES.md. `checkEntryValidity` now takes a
 `speciesById` lookup and walks `evolvesFromSpeciesId` parent pointers so a species counts
