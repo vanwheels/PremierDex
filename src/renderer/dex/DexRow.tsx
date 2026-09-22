@@ -4,6 +4,7 @@ import type { SpeciesAvailabilityData } from '@shared/types/species-availability
 import { SpriteThumbnail } from './SpriteThumbnail'
 import type { SpriteModalTarget } from './SpriteModal'
 import type { OriginModalTarget } from './OriginModal'
+import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import { originTitle } from './originSummary'
 import { useNicknameEditor } from './useNicknameEditor'
 import { checkEntryValidity } from './invalidCombo'
@@ -31,6 +32,10 @@ interface DexRowProps {
   row: DexRowData
   onToggleEntry: (entryId: number, owned: boolean) => void
   onOpenSprite: (target: SpriteModalTarget) => void
+  /** Leg 3 of the Species detail popup + evolution family tree milestone — dedicated info
+   * button beside the sprite, always available regardless of ownership (unlike
+   * onOpenContextMenu below, which is gated to owned cells). */
+  onOpenSpeciesDetail: (target: SpeciesDetailTarget) => void
   onOpenOrigin: (target: OriginModalTarget) => void
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
   /** Leg 1 of the Ribbons & Marks: List/Collection View Entry Points milestone — right-click
@@ -97,6 +102,7 @@ export function DexRow({
   row,
   onToggleEntry,
   onOpenSprite,
+  onOpenSpeciesDetail,
   onOpenOrigin,
   onSaveOrigin,
   onOpenContextMenu,
@@ -225,6 +231,15 @@ export function DexRow({
           </select>
         )}
         {row.displayName}
+        <button
+          type="button"
+          className="dex-species-info-button"
+          onClick={() => onOpenSpeciesDetail({ speciesId: row.speciesId, formName: row.formName })}
+          aria-label={`View ${row.displayName} species details`}
+          title="Species details"
+        >
+          ⓘ
+        </button>
         {!row.homeBoxable && (
           <span className="dex-not-home-boxable-badge" title="Not yet accepted by Pokemon Home">
             Not Home-boxable

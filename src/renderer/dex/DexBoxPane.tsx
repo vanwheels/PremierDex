@@ -3,6 +3,7 @@ import type { CollectionEntryOriginInput, Form, Gender, Species } from '@shared/
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import type { EvolutionEdge } from '@shared/types/evolution'
 import { BOX_COLS } from './buildBoxes'
 import { canonicalPlaceholderForm } from './boxTemplates'
 import { DexBoxDetailPanel } from './DexBoxDetailPanel'
@@ -13,6 +14,8 @@ import { DexBoxPager } from './DexBoxPager'
 import { DexMoveToLocationModal } from './DexMoveToLocationModal'
 import { OriginModal } from './OriginModal'
 import { RibbonsMarksModal } from './RibbonsMarksModal'
+import { SpeciesDetailPopup } from './SpeciesDetailPopup'
+import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import { prefetchBoxSprites } from './spritePrefetch'
 import type { Box, BoxCell, BoxPlaceholderCell, CellTarget } from './types'
 
@@ -35,6 +38,9 @@ interface DexBoxPaneProps {
    * into the (formId, gender) a placeholder actually stores — see
    * boxTemplates.ts's canonicalPlaceholderForm. */
   forms: Form[]
+  /** Leg 3 of the Species detail popup + evolution family tree milestone — feeds
+   * SpeciesDetailPopup's EvolutionTree. */
+  evolutionEdges: EvolutionEdge[]
   /** The real (non-null) location id — a pane never renders for the Unassigned tab, same
    * guard as DexBoxGrid's own selectedLocationTab === null branch. */
   storageLocationId: number
@@ -111,6 +117,7 @@ export function DexBoxPane({
   speciesAvailability,
   species,
   forms,
+  evolutionEdges,
   storageLocationId,
   boxedEntryIds,
   entryLocationMap,
@@ -145,6 +152,12 @@ export function DexBoxPane({
   const [selectedPlaceholderSlot, setSelectedPlaceholderSlot] = useState<number | null>(null)
   const [editingOrigin, setEditingOrigin] = useState(false)
   const [editingRibbonsMarks, setEditingRibbonsMarks] = useState(false)
+  // Leg 3 of the Species detail popup + evolution family tree milestone — same "parent
+  // owns the modal" convention as editingOrigin/editingRibbonsMarks above, but its own
+  // target rather than a boolean since it isn't scoped to the current detailCell (Escape/
+  // close should still work after navigating within the tree to a different family
+  // member — see SpeciesDetailPopup's own doc comment).
+  const [speciesDetailTarget, setSpeciesDetailTarget] = useState<SpeciesDetailTarget | null>(null)
   const [dragOverSlot, setDragOverSlot] = useState<number | null>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; target: CellTarget } | null>(null)
   // Leg 5 of the Box View Polish milestone: the slot a "Set placeholder…"/"Change species"
@@ -410,6 +423,7 @@ export function DexBoxPane({
           speciesById={speciesById}
           onEditOrigin={() => setEditingOrigin(true)}
           onEditRibbonsMarks={() => setEditingRibbonsMarks(true)}
+          onOpenSpeciesDetail={setSpeciesDetailTarget}
           onSaveOrigin={onSaveOrigin}
         />
       </div>
@@ -426,6 +440,15 @@ export function DexBoxPane({
           entryId={selectedEntryCell.entry.id}
           displayName={selectedEntryCell.displayName}
           onClose={() => setEditingRibbonsMarks(false)}
+        />
+      )}
+      {speciesDetailTarget && (
+        <SpeciesDetailPopup
+          target={speciesDetailTarget}
+          species={species}
+          forms={forms}
+          evolutionEdges={evolutionEdges}
+          onClose={() => setSpeciesDetailTarget(null)}
         />
       )}
       {movingEntryIds && (

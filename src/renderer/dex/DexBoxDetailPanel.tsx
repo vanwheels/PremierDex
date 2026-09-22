@@ -8,6 +8,7 @@ import { regionalDexNumbersForGame } from './regionalDexNumbers'
 import { defaultSpriteUrl } from './sprites'
 import { BallIcon } from './BallIcon'
 import { useNicknameEditor } from './useNicknameEditor'
+import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 
 const DETAIL_SPRITE_SIZE = 64
 
@@ -22,6 +23,11 @@ interface DexBoxDetailPanelProps {
   /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
    * opens RibbonsMarksModal, same "parent owns the modal" split as onEditOrigin above. */
   onEditRibbonsMarks: () => void
+  /** Leg 3 of the Species detail popup + evolution family tree milestone — same
+   * "parent owns the modal" split, but shown for both an owned/unowned entry and a
+   * placeholder (unlike Edit Origin/Ribbons & Marks, which only apply to an owned real
+   * individual). */
+  onOpenSpeciesDetail: (target: SpeciesDetailTarget) => void
   /** Vanny feedback 2026-09-03: feeds the panel's own inline nickname editor, same
    * commit-on-blur pattern as DexRow's useNicknameEditor. */
   onSaveOrigin: (entryId: number, input: CollectionEntryOriginInput) => void
@@ -56,6 +62,7 @@ export function DexBoxDetailPanel({
   speciesById,
   onEditOrigin,
   onEditRibbonsMarks,
+  onOpenSpeciesDetail,
   onSaveOrigin
 }: DexBoxDetailPanelProps): JSX.Element {
   // Hook order can't depend on `cell` being non-null (or being an entry at all), so this
@@ -90,7 +97,18 @@ export function DexBoxDetailPanel({
           height={DETAIL_SPRITE_SIZE}
         />
         <div className="dex-hybrid-detail-body">
-          <h3>{cell.displayName}</h3>
+          <h3>
+            {cell.displayName}
+            <button
+              type="button"
+              className="dex-species-info-button"
+              onClick={() => onOpenSpeciesDetail({ speciesId: cell.speciesId, formName: cell.formName })}
+              aria-label={`View ${cell.displayName} species details`}
+              title="Species details"
+            >
+              ⓘ
+            </button>
+          </h3>
           <p className="dex-hybrid-detail-unowned">Planned{requirement.length > 0 ? `: ${requirement.join(' · ')}` : ''}</p>
         </div>
       </div>
@@ -113,7 +131,18 @@ export function DexBoxDetailPanel({
         height={DETAIL_SPRITE_SIZE}
       />
       <div className="dex-hybrid-detail-body">
-        <h3>{cell.displayName}</h3>
+        <h3>
+          {cell.displayName}
+          <button
+            type="button"
+            className="dex-species-info-button"
+            onClick={() => onOpenSpeciesDetail({ speciesId: cell.dexNumber, formName: cell.formName })}
+            aria-label={`View ${cell.displayName} species details`}
+            title="Species details"
+          >
+            ⓘ
+          </button>
+        </h3>
         <div className="dex-hybrid-detail-badges">
           {!cell.homeBoxable && <span className="dex-not-home-boxable-badge">Not Home-boxable</span>}
           {!entry.shiny && cell.alwaysShiny && <span className="dex-always-shiny-badge">Always shiny</span>}

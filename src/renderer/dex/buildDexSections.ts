@@ -73,6 +73,8 @@ function buildRows(
       key: `${form.id}-${gender}`,
       formId: form.id,
       dexNumber,
+      speciesId: form.speciesId,
+      formName: form.formName,
       displayName: suffix ? `${baseName} ${suffix}` : baseName,
       regular: slot?.regular ?? null,
       shinyEntry: slot?.shiny ?? null,

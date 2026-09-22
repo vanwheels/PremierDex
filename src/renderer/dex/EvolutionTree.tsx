@@ -3,7 +3,7 @@ import type { Form, Species } from '@shared/types/pokemon'
 import type { EvolutionEdge } from '@shared/types/evolution'
 import { SpriteThumbnail } from './SpriteThumbnail'
 import { formDisplayName, speciesDisplayName } from './formNames'
-import { buildEvolutionFamilyTree, type EvolutionTreeNode } from './evolutionTree'
+import { buildEvolutionFamilyTree, type EvolutionTreeNode } from './evolutionFamilyTree'
 
 interface EvolutionTreeProps {
   /** Any species in the family — the tree always renders the whole family (root to every

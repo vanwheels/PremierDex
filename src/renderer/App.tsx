@@ -80,6 +80,7 @@ export function App(): JSX.Element {
               isActive={view === 'dex'}
               species={data.species}
               forms={data.forms}
+              evolutionEdges={data.evolutionEdges}
               entries={data.entries}
               storageLocations={data.storageLocations}
               boxes={data.boxes}

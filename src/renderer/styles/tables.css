@@ -169,6 +169,24 @@ tbody tr:hover {
   cursor: default;
 }
 
+/* Leg 3 of the Species detail popup + evolution family tree milestone: sits right after
+ * the Name cell's text, same inline-icon treatment as the Origin button beside it — always
+ * enabled (unowned rows have species info too), unlike Origin. */
+.dex-species-info-button {
+  margin-left: 0.3rem;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+.dex-species-info-button:hover {
+  color: var(--accent);
+}
+
 /* Resolve Gender Ambiguities bugfix follow-up: sits right after the Origin button, same
  * compact treatment as dex-storage-location-select — only rendered at all on a gender-diff
  * form's row (see DexRow's onSetEntryGender doc comment). */

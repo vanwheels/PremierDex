@@ -5,6 +5,13 @@ export interface DexRowData {
   key: string
   formId: number
   dexNumber: number
+  /** Leg 3 of the Species detail popup + evolution family tree milestone — denormalized
+   * alongside dexNumber/formId so the popup's entry point can target a species/form
+   * without a separate forms lookup. Equal to dexNumber (Species.id doubles as the
+   * National Dex number in this app), but kept as its own named field since the two are
+   * conceptually distinct elsewhere (see DexSection.speciesId). */
+  speciesId: number
+  formName: string
   displayName: string
   regular: CollectionEntry | null // shiny = false
   shinyEntry: CollectionEntry | null // shiny = true
@@ -122,6 +129,9 @@ export const DEFAULT_DEX_SORT: DexSort | null = null
 export interface EntryDisplayInfo {
   entry: CollectionEntry
   dexNumber: number
+  /** Leg 3 of the Species detail popup + evolution family tree milestone — same
+   * denormalization rationale as DexRowData.formName. */
+  formName: string
   /** Species + form name, already carrying the entry's own gender symbol and shiny
    * marker, same as CollectionRowData.displayName — a box cell shows one specific
    * individual, not a form pairing. */
@@ -162,6 +172,9 @@ export interface BoxPlaceholderCell {
   boxNumber: number
   slot: number
   speciesId: number
+  /** Leg 3 of the Species detail popup + evolution family tree milestone — same
+   * denormalization rationale as DexRowData.formName. */
+  formName: string
   gender: Gender
   shiny: boolean
   displayName: string

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { Species } from '@shared/types/pokemon'
 import type { EvolutionEdge } from '@shared/types/evolution'
-import { buildEvolutionFamilyTree, findEvolutionFamilyRootSpeciesId } from './evolutionTree'
+import { buildEvolutionFamilyTree, findEvolutionFamilyRootSpeciesId } from './evolutionFamilyTree'
 
 function makeSpecies(id: number, evolvesFromSpeciesId: number | null): Species {
   return { id, name: `species-${id}`, generation: 1, collapsedDisplayFormId: null, isFinalEvolutionStage: false, evolvesFromSpeciesId }

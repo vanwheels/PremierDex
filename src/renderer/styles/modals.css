@@ -1,5 +1,6 @@
 .origin-modal-backdrop,
-.sprite-modal-backdrop {
+.sprite-modal-backdrop,
+.species-detail-modal-backdrop {
   position: fixed;
   inset: 0;
   background: color-mix(in srgb, var(--bg) 70%, black 30%);
@@ -14,7 +15,8 @@
    doc comment — sized up (bigger blur, no inset highlight needed since a centered modal
    already reads as floating above everything else). */
 .origin-modal,
-.sprite-modal {
+.sprite-modal,
+.species-detail-modal {
   position: relative;
   background-color: var(--surface-raised);
   background-image: linear-gradient(
@@ -43,8 +45,37 @@
   text-align: center;
 }
 
+/* Leg 3 of the Species detail popup + evolution family tree milestone — wider than
+   .sprite-modal since the tree view (EvolutionTree, Leg 2) needs room for a wrapping row
+   of sibling evolutions rather than a single centered image. */
+.species-detail-modal {
+  min-width: 20rem;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.species-detail-sprite {
+  image-rendering: pixelated;
+  margin: 0.5rem auto 0;
+  display: block;
+}
+
+.species-detail-back {
+  float: left;
+  border: none;
+  background: none;
+  box-shadow: none;
+  color: var(--muted);
+  padding: 0.1rem 0.4rem;
+}
+
+.species-detail-back:hover {
+  color: var(--text);
+}
+
 .origin-modal-close,
-.sprite-modal-close {
+.sprite-modal-close,
+.species-detail-modal-close {
   position: absolute;
   top: 0.6rem;
   right: 0.75rem;
@@ -57,7 +88,8 @@
 }
 
 .origin-modal-close:hover,
-.sprite-modal-close:hover {
+.sprite-modal-close:hover,
+.species-detail-modal-close:hover {
   color: var(--text);
 }
 

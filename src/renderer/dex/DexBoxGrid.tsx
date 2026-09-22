@@ -3,6 +3,7 @@ import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import type { EvolutionEdge } from '@shared/types/evolution'
 import { applyTemplate } from './applyTemplate'
 import { buildBoxes, buildUnboxedEntries } from './buildBoxes'
 import type { DexTier } from './completionStats'
@@ -28,6 +29,9 @@ interface DexBoxGridProps {
   allEntries: CollectionEntry[]
   species: Species[]
   forms: Form[]
+  /** Leg 3 of the Species detail popup + evolution family tree milestone: threaded through
+   * to both DexBoxPane instances' SpeciesDetailPopup. */
+  evolutionEdges: EvolutionEdge[]
   storageLocations: StorageLocation[]
   /** Already scoped to `selectedLocationTab` by LivingDexView, same convention as
    * `entries` — see buildBoxes.ts's doc comment (Leg 2 of the Box View Polish
@@ -130,6 +134,7 @@ export function DexBoxGrid({
   allEntries,
   species,
   forms,
+  evolutionEdges,
   storageLocations,
   storageBoxes,
   boxPlaceholders,
@@ -428,6 +433,7 @@ export function DexBoxGrid({
           speciesAvailability={speciesAvailability}
           species={species}
           forms={forms}
+          evolutionEdges={evolutionEdges}
           storageLocationId={selectedLocationTab}
           boxedEntryIds={boxedEntryIds}
           entryLocationMap={entryLocationById}
@@ -455,6 +461,7 @@ export function DexBoxGrid({
             speciesAvailability={speciesAvailability}
             species={species}
             forms={forms}
+            evolutionEdges={evolutionEdges}
             storageLocationId={effectiveSecondLocationId}
             boxedEntryIds={secondBoxedEntryIds}
             entryLocationMap={entryLocationById}

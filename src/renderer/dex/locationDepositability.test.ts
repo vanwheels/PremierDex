@@ -34,6 +34,8 @@ function makeEntry(overrides: Partial<CollectionEntry> & Pick<CollectionEntry, '
 function makeRow(overrides: Partial<DexRowData> & Pick<DexRowData, 'key' | 'dexNumber' | 'displayName'>): DexRowData {
   return {
     formId: 1,
+    speciesId: 1,
+    formName: 'base',
     regular: null,
     shinyEntry: null,
     pokeapiId: 1,

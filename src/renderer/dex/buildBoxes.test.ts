@@ -165,6 +165,7 @@ describe('buildBoxes', () => {
       boxNumber: 1,
       slot: 3,
       speciesId: 25,
+      formName: 'base',
       gender: 'unknown',
       shiny: false,
       displayName: 'Pikachu',

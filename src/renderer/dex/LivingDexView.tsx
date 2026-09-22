@@ -3,6 +3,7 @@ import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import type { EvolutionEdge } from '@shared/types/evolution'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { buildDexSections } from './buildDexSections'
 import { filterDexSections } from './filterDexSections'
@@ -37,6 +38,9 @@ export interface LivingDexViewProps {
   isActive: boolean
   species: Species[]
   forms: Form[]
+  /** Leg 3 of the Species detail popup + evolution family tree milestone: threaded down
+   * to DexTable/DexBoxGrid's SpeciesDetailPopup. */
+  evolutionEdges: EvolutionEdge[]
   entries: CollectionEntry[]
   storageLocations: StorageLocation[]
   boxes: StorageBox[]
@@ -94,6 +98,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     isActive,
     species,
     forms,
+    evolutionEdges,
     entries,
     storageLocations,
     boxes,
@@ -257,6 +262,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onBulkMove={onBulkMoveEntries}
           speciesAvailability={speciesAvailability}
           species={species}
+          forms={forms}
+          evolutionEdges={evolutionEdges}
         />
       </div>
       {/* Same hidden-not-unmounted treatment as DexTable above, so switching back and forth
@@ -281,6 +288,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           allEntries={entries}
           species={species}
           forms={forms}
+          evolutionEdges={evolutionEdges}
           storageLocations={storageLocations}
           storageBoxes={boxesForLocationTab}
           boxPlaceholders={boxPlaceholdersForLocationTab}

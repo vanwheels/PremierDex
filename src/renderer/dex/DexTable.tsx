@@ -1,7 +1,8 @@
 import { Fragment, useMemo, useState } from 'react'
-import type { CollectionEntryOriginInput, Gender, Species } from '@shared/types/pokemon'
+import type { CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import type { EvolutionEdge } from '@shared/types/evolution'
 import { DexRow } from './DexRow'
 import type { CollapsedDisplayControl } from './DexRow'
 import { SpriteModal } from './SpriteModal'
@@ -9,6 +10,8 @@ import type { SpriteModalTarget } from './SpriteModal'
 import { OriginModal } from './OriginModal'
 import type { OriginModalTarget } from './OriginModal'
 import { RibbonsMarksModal } from './RibbonsMarksModal'
+import { SpeciesDetailPopup } from './SpeciesDetailPopup'
+import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import { DexBoxContextMenu, type DexBoxContextMenuAction } from './DexBoxContextMenu'
 import { DexBulkActionsBar } from './DexBulkActionsBar'
 import { pickCollapsedRow } from './buildDexSections'
@@ -35,6 +38,10 @@ interface DexTableProps {
   /** Leg 2 of the Evolution-Chain Reachability milestone: backs checkEntryValidity's
    * ancestor walk — see DexRow's doc comment. */
   species: Species[]
+  /** Leg 3 of the Species detail popup + evolution family tree milestone: feeds
+   * SpeciesDetailPopup's sprite/name lookup and its EvolutionTree. */
+  forms: Form[]
+  evolutionEdges: EvolutionEdge[]
 }
 
 /** Three-state header click cycle (Leg 16): unsorted/other-column → ascending →
@@ -82,12 +89,17 @@ export function DexTable({
   onSaveStorageLocation,
   onBulkMove,
   speciesAvailability,
-  species
+  species,
+  forms,
+  evolutionEdges
 }: DexTableProps): JSX.Element {
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
   // Which row's sprite is enlarged, if any. UI-only, same as expandedSpeciesIds above.
   const [spriteTarget, setSpriteTarget] = useState<SpriteModalTarget | null>(null)
+  // Leg 3 of the Species detail popup + evolution family tree milestone — same UI-only
+  // "which modal is open" convention as spriteTarget above.
+  const [speciesDetailTarget, setSpeciesDetailTarget] = useState<SpeciesDetailTarget | null>(null)
   // Which entry's origin editor is open, if any. Unlike spriteTarget, saving from here
   // writes to SQLite (via onSaveOrigin), so this isn't purely UI state — but "which modal
   // is open" still belongs local to DexTable, same as spriteTarget.
@@ -221,6 +233,7 @@ export function DexTable({
                         row={displayRow}
                         onToggleEntry={onToggleEntry}
                         onOpenSprite={setSpriteTarget}
+                        onOpenSpeciesDetail={setSpeciesDetailTarget}
                         onOpenOrigin={setOriginTarget}
                         onSaveOrigin={onSaveOrigin}
                         onOpenContextMenu={(x, y, target) => setContextMenu({ x, y, target })}
@@ -251,6 +264,7 @@ export function DexTable({
                         row={row}
                         onToggleEntry={onToggleEntry}
                         onOpenSprite={setSpriteTarget}
+                        onOpenSpeciesDetail={setSpeciesDetailTarget}
                         onOpenOrigin={setOriginTarget}
                         onSaveOrigin={onSaveOrigin}
                         onOpenContextMenu={(x, y, target) => setContextMenu({ x, y, target })}
@@ -271,6 +285,15 @@ export function DexTable({
         </table>
       </div>
       {spriteTarget && <SpriteModal target={spriteTarget} onClose={() => setSpriteTarget(null)} />}
+      {speciesDetailTarget && (
+        <SpeciesDetailPopup
+          target={speciesDetailTarget}
+          species={species}
+          forms={forms}
+          evolutionEdges={evolutionEdges}
+          onClose={() => setSpeciesDetailTarget(null)}
+        />
+      )}
       {originTarget && (
         <OriginModal
           entry={originTarget.entry}

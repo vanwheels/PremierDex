@@ -13,11 +13,16 @@ needs to show them as separate bubbles anyway.
 
 ### [Species detail popup + evolution family tree] — Leg 3
 Species detail popup shell + entry point. The popup itself (species name/sprite plus a
-button that opens the Leg 2 tree) and wiring its entry point from Dex Table/Box View (exact
-trigger TBD). Vanny plans other features for this same popup beyond the family tree, not yet
-specified. Leg 2 shipped `EvolutionTree.tsx` as a standalone component (props: speciesId,
-formName, species, forms, evolutionEdges, onSelectSpecies) with no render path in the running
-app yet — this leg is also the first point it becomes visually checkable.
+button that opens the Leg 2 tree) and wiring its entry point from Dex Table/Box View. Trigger
+mechanism (was TBD): Vanny chose a dedicated info button (ⓘ), always visible regardless of
+ownership — added next to the Name cell in DexTable/DexRow (List view) and next to the
+species name in DexBoxDetailPanel (Box view). Popup toggles between an info view (sprite +
+name + "View Evolution Family" button) and the tree view (Leg 2's `EvolutionTree.tsx`, with a
+Back button); clicking a tree bubble re-centers the popup on that family member without
+leaving the tree view. Vanny plans other features for this same popup beyond the family tree,
+not yet specified.
+Implementation done: typecheck/tests/lint all pass (613 tests). Not moved to COMPLETED —
+Vanny asked to verify Leg 3 in the running app before the milestone closes out.
 Last touched: 2026-09-22. Re-check count: 0.
 
 ## Unscheduled
@@ -25,6 +30,14 @@ Last touched: 2026-09-22. Re-check count: 0.
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
+
+### [Species detail popup entry point on Hybrid view] — unscheduled
+Leg 3 of the Species detail popup + evolution family tree milestone wired the info-button
+entry point into DexTable/DexRow (List view) and DexBoxDetailPanel (Box view) per Vanny's
+explicit scope (Dex Table/Box View only) — DexHybridGrid/DexHybridDetailPanel (Hybrid view)
+don't have it yet, even though they share the same `dex-hybrid-detail-*` CSS classes as
+DexBoxDetailPanel. Small addition if/when wanted — same pattern, just a third wiring site.
+Last touched: 2026-09-22. Re-check count: 0.
 
 ### [App icon] — unscheduled
 No custom icon exists yet (`build/icon.png` per electron-builder convention, matching

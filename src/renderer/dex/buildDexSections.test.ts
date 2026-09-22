@@ -239,6 +239,8 @@ function makeRow(overrides: Partial<DexRowData> & Pick<DexRowData, 'key' | 'disp
   return {
     formId: 1,
     dexNumber: 201,
+    speciesId: 201,
+    formName: 'base',
     regular: null,
     shinyEntry: null,
     pokeapiId: 201,

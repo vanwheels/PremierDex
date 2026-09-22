@@ -8,6 +8,8 @@ function makeRow(overrides: Partial<DexRowData>): DexRowData {
     key: 'a',
     formId: 1,
     dexNumber: 1,
+    speciesId: 1,
+    formName: 'base',
     displayName: 'Test',
     regular: null,
     shinyEntry: null,

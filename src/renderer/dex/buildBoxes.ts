@@ -22,6 +22,7 @@ function buildEntryDisplayInfo(entry: CollectionEntry, species: Species, form: F
   return {
     entry,
     dexNumber: species.id,
+    formName: form.formName,
     displayName: `${baseName}${genderSuffix(entry.gender)}${entry.shiny ? ' ✨' : ''}`,
     pokeapiId: form.pokeapiId,
     spriteFormSuffix: form.spriteFormSuffix,
@@ -42,6 +43,7 @@ function buildPlaceholderCell(placeholder: BoxPlaceholder, species: Species, for
     boxNumber: placeholder.boxNumber,
     slot: placeholder.boxSlot,
     speciesId: species.id,
+    formName: form.formName,
     gender: placeholder.gender,
     shiny: placeholder.shiny,
     // Rendering deliberately stays plain regardless of gender/shiny (Vanny's call, Leg 2 of
