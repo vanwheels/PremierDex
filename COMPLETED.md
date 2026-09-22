@@ -1,5 +1,23 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 27: curate Pokémon Legends: Z-A] — 2026-09-21
+Added `LUMIOSE_GEN9` (230 entries), sourced from Bulbapedia's raw wikitext for "List of
+locations by index number in Pokémon Legends: Z-A" (action=raw fetch via curl, 2026-09-21 —
+WebFetch's own summarized read of the same page fabricated a plausible-looking but wrong
+"Mega Dimension DLC" range breakdown, so the raw wikitext was pulled directly instead of
+trusting the summarized tool result). Unlike Paldea (Leg 26), this game has an index-number
+page, so generic-sounding shop/café names were NOT excluded as a category heuristic — the
+table directly confirms dozens of individually-indexed named businesses (Café Cyclone,
+Sushi High Roller, five explicitly generic fallback strings) as genuine Met Location values,
+the same standard HISUI_GEN8 already applied to its own shops. Sector N (per-district) and
+Wild Zone N sequences sort numerically rather than by raw string order, same treatment
+Route N sequences have always gotten, to avoid interleaving "Sector 10" between "Sector 1"
+and "Sector 2". Folded the Mega Dimension DLC's Hyperspace locations into the same shared
+list, per the Leg 26 Kitakami/Blueberry Academy DLC precedent. Excluded the same non-place
+categories (Mystery Zone, Faraway place, blank/unused indices, cross-game transfer/event
+range 30001-60005) every prior generation's list already established. See commit
+`d32aca1`.
+
 ## [Curated Met Location dataset Leg 26: curate Pokémon Scarlet/Violet] — 2026-09-21
 Added `PALDEA_BASE`/`PALDEA_SCARLET`/`PALDEA_VIOLET`. Paldea has no numbered routes at all
 (confirmed via Bulbapedia's own article) and Generation IX has no location-index wiki page to
