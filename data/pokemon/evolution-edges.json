@@ -1,0 +1,3789 @@
+[
+  {
+    "fromSpeciesId": 1,
+    "fromFormName": "base",
+    "toSpeciesId": 2,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 2,
+    "fromFormName": "base",
+    "toSpeciesId": 3,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 4,
+    "fromFormName": "base",
+    "toSpeciesId": 5,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 5,
+    "fromFormName": "base",
+    "toSpeciesId": 6,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 7,
+    "fromFormName": "base",
+    "toSpeciesId": 8,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 8,
+    "fromFormName": "base",
+    "toSpeciesId": 9,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 10,
+    "fromFormName": "base",
+    "toSpeciesId": 11,
+    "toFormName": "base",
+    "method": "Level 7"
+  },
+  {
+    "fromSpeciesId": 11,
+    "fromFormName": "base",
+    "toSpeciesId": 12,
+    "toFormName": "base",
+    "method": "Level 10"
+  },
+  {
+    "fromSpeciesId": 13,
+    "fromFormName": "base",
+    "toSpeciesId": 14,
+    "toFormName": "base",
+    "method": "Level 7"
+  },
+  {
+    "fromSpeciesId": 14,
+    "fromFormName": "base",
+    "toSpeciesId": 15,
+    "toFormName": "base",
+    "method": "Level 10"
+  },
+  {
+    "fromSpeciesId": 16,
+    "fromFormName": "base",
+    "toSpeciesId": 17,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 17,
+    "fromFormName": "base",
+    "toSpeciesId": 18,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 19,
+    "fromFormName": "base",
+    "toSpeciesId": 20,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 19,
+    "fromFormName": "alola",
+    "toSpeciesId": 20,
+    "toFormName": "alola",
+    "method": "Level 20 + at night"
+  },
+  {
+    "fromSpeciesId": 21,
+    "fromFormName": "base",
+    "toSpeciesId": 22,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 23,
+    "fromFormName": "base",
+    "toSpeciesId": 24,
+    "toFormName": "base",
+    "method": "Level 22"
+  },
+  {
+    "fromSpeciesId": 25,
+    "fromFormName": "base",
+    "toSpeciesId": 26,
+    "toFormName": "base",
+    "method": "Thunder Stone"
+  },
+  {
+    "fromSpeciesId": 25,
+    "fromFormName": "base",
+    "toSpeciesId": 26,
+    "toFormName": "alola",
+    "method": "Thunder Stone"
+  },
+  {
+    "fromSpeciesId": 27,
+    "fromFormName": "base",
+    "toSpeciesId": 28,
+    "toFormName": "base",
+    "method": "Level 22"
+  },
+  {
+    "fromSpeciesId": 27,
+    "fromFormName": "alola",
+    "toSpeciesId": 28,
+    "toFormName": "alola",
+    "method": "Ice Stone"
+  },
+  {
+    "fromSpeciesId": 29,
+    "fromFormName": "base",
+    "toSpeciesId": 30,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 30,
+    "fromFormName": "base",
+    "toSpeciesId": 31,
+    "toFormName": "base",
+    "method": "Moon Stone"
+  },
+  {
+    "fromSpeciesId": 32,
+    "fromFormName": "base",
+    "toSpeciesId": 33,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 33,
+    "fromFormName": "base",
+    "toSpeciesId": 34,
+    "toFormName": "base",
+    "method": "Moon Stone"
+  },
+  {
+    "fromSpeciesId": 35,
+    "fromFormName": "base",
+    "toSpeciesId": 36,
+    "toFormName": "base",
+    "method": "Moon Stone"
+  },
+  {
+    "fromSpeciesId": 37,
+    "fromFormName": "base",
+    "toSpeciesId": 38,
+    "toFormName": "base",
+    "method": "Fire Stone"
+  },
+  {
+    "fromSpeciesId": 37,
+    "fromFormName": "alola",
+    "toSpeciesId": 38,
+    "toFormName": "alola",
+    "method": "Ice Stone"
+  },
+  {
+    "fromSpeciesId": 39,
+    "fromFormName": "base",
+    "toSpeciesId": 40,
+    "toFormName": "base",
+    "method": "Moon Stone"
+  },
+  {
+    "fromSpeciesId": 41,
+    "fromFormName": "base",
+    "toSpeciesId": 42,
+    "toFormName": "base",
+    "method": "Level 22"
+  },
+  {
+    "fromSpeciesId": 42,
+    "fromFormName": "base",
+    "toSpeciesId": 169,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 43,
+    "fromFormName": "base",
+    "toSpeciesId": 44,
+    "toFormName": "base",
+    "method": "Level 21"
+  },
+  {
+    "fromSpeciesId": 44,
+    "fromFormName": "base",
+    "toSpeciesId": 45,
+    "toFormName": "base",
+    "method": "Leaf Stone"
+  },
+  {
+    "fromSpeciesId": 44,
+    "fromFormName": "base",
+    "toSpeciesId": 182,
+    "toFormName": "base",
+    "method": "Sun Stone"
+  },
+  {
+    "fromSpeciesId": 46,
+    "fromFormName": "base",
+    "toSpeciesId": 47,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 48,
+    "fromFormName": "base",
+    "toSpeciesId": 49,
+    "toFormName": "base",
+    "method": "Level 31"
+  },
+  {
+    "fromSpeciesId": 50,
+    "fromFormName": "base",
+    "toSpeciesId": 51,
+    "toFormName": "base",
+    "method": "Level 26"
+  },
+  {
+    "fromSpeciesId": 50,
+    "fromFormName": "alola",
+    "toSpeciesId": 51,
+    "toFormName": "alola",
+    "method": "Level 26"
+  },
+  {
+    "fromSpeciesId": 52,
+    "fromFormName": "base",
+    "toSpeciesId": 53,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 52,
+    "fromFormName": "alola",
+    "toSpeciesId": 53,
+    "toFormName": "alola",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 52,
+    "fromFormName": "galar",
+    "toSpeciesId": 863,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 54,
+    "fromFormName": "base",
+    "toSpeciesId": 55,
+    "toFormName": "base",
+    "method": "Level 33"
+  },
+  {
+    "fromSpeciesId": 56,
+    "fromFormName": "base",
+    "toSpeciesId": 57,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 57,
+    "fromFormName": "base",
+    "toSpeciesId": 979,
+    "toFormName": "base",
+    "method": "Use Rage Fist 20 times"
+  },
+  {
+    "fromSpeciesId": 58,
+    "fromFormName": "base",
+    "toSpeciesId": 59,
+    "toFormName": "base",
+    "method": "Fire Stone"
+  },
+  {
+    "fromSpeciesId": 58,
+    "fromFormName": "hisui",
+    "toSpeciesId": 59,
+    "toFormName": "hisui",
+    "method": "Fire Stone"
+  },
+  {
+    "fromSpeciesId": 60,
+    "fromFormName": "base",
+    "toSpeciesId": 61,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 61,
+    "fromFormName": "base",
+    "toSpeciesId": 62,
+    "toFormName": "base",
+    "method": "Water Stone"
+  },
+  {
+    "fromSpeciesId": 61,
+    "fromFormName": "base",
+    "toSpeciesId": 186,
+    "toFormName": "base",
+    "method": "Trade + holding King's Rock"
+  },
+  {
+    "fromSpeciesId": 63,
+    "fromFormName": "base",
+    "toSpeciesId": 64,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 64,
+    "fromFormName": "base",
+    "toSpeciesId": 65,
+    "toFormName": "base",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 66,
+    "fromFormName": "base",
+    "toSpeciesId": 67,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 67,
+    "fromFormName": "base",
+    "toSpeciesId": 68,
+    "toFormName": "base",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 69,
+    "fromFormName": "base",
+    "toSpeciesId": 70,
+    "toFormName": "base",
+    "method": "Level 21"
+  },
+  {
+    "fromSpeciesId": 70,
+    "fromFormName": "base",
+    "toSpeciesId": 71,
+    "toFormName": "base",
+    "method": "Leaf Stone"
+  },
+  {
+    "fromSpeciesId": 72,
+    "fromFormName": "base",
+    "toSpeciesId": 73,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 74,
+    "fromFormName": "base",
+    "toSpeciesId": 75,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 74,
+    "fromFormName": "alola",
+    "toSpeciesId": 75,
+    "toFormName": "alola",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 75,
+    "fromFormName": "base",
+    "toSpeciesId": 76,
+    "toFormName": "base",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 75,
+    "fromFormName": "alola",
+    "toSpeciesId": 76,
+    "toFormName": "alola",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 77,
+    "fromFormName": "base",
+    "toSpeciesId": 78,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 77,
+    "fromFormName": "galar",
+    "toSpeciesId": 78,
+    "toFormName": "galar",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 79,
+    "fromFormName": "base",
+    "toSpeciesId": 80,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 79,
+    "fromFormName": "galar",
+    "toSpeciesId": 80,
+    "toFormName": "galar",
+    "method": "Galarica Cuff"
+  },
+  {
+    "fromSpeciesId": 79,
+    "fromFormName": "base",
+    "toSpeciesId": 199,
+    "toFormName": "base",
+    "method": "Trade + holding King's Rock"
+  },
+  {
+    "fromSpeciesId": 79,
+    "fromFormName": "galar",
+    "toSpeciesId": 199,
+    "toFormName": "galar",
+    "method": "Galarica Wreath"
+  },
+  {
+    "fromSpeciesId": 81,
+    "fromFormName": "base",
+    "toSpeciesId": 82,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 82,
+    "fromFormName": "base",
+    "toSpeciesId": 462,
+    "toFormName": "base",
+    "method": "at Mt Coronet + level up or at Chargestone Cave + level up or at Kalos Route 13 + level up or at Blush Mountain + level up or at Vast Poni Canyon + level up or Thunder Stone or at New Mauville + level up"
+  },
+  {
+    "fromSpeciesId": 83,
+    "fromFormName": "galar",
+    "toSpeciesId": 865,
+    "toFormName": "base",
+    "method": "Land 3 critical hits in one battle"
+  },
+  {
+    "fromSpeciesId": 84,
+    "fromFormName": "base",
+    "toSpeciesId": 85,
+    "toFormName": "base",
+    "method": "Level 31"
+  },
+  {
+    "fromSpeciesId": 86,
+    "fromFormName": "base",
+    "toSpeciesId": 87,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 88,
+    "fromFormName": "base",
+    "toSpeciesId": 89,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 88,
+    "fromFormName": "alola",
+    "toSpeciesId": 89,
+    "toFormName": "alola",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 90,
+    "fromFormName": "base",
+    "toSpeciesId": 91,
+    "toFormName": "base",
+    "method": "Water Stone"
+  },
+  {
+    "fromSpeciesId": 92,
+    "fromFormName": "base",
+    "toSpeciesId": 93,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 93,
+    "fromFormName": "base",
+    "toSpeciesId": 94,
+    "toFormName": "base",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 95,
+    "fromFormName": "base",
+    "toSpeciesId": 208,
+    "toFormName": "base",
+    "method": "Trade + holding Metal Coat"
+  },
+  {
+    "fromSpeciesId": 96,
+    "fromFormName": "base",
+    "toSpeciesId": 97,
+    "toFormName": "base",
+    "method": "Level 26"
+  },
+  {
+    "fromSpeciesId": 98,
+    "fromFormName": "base",
+    "toSpeciesId": 99,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 100,
+    "fromFormName": "base",
+    "toSpeciesId": 101,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 100,
+    "fromFormName": "hisui",
+    "toSpeciesId": 101,
+    "toFormName": "hisui",
+    "method": "Leaf Stone"
+  },
+  {
+    "fromSpeciesId": 102,
+    "fromFormName": "base",
+    "toSpeciesId": 103,
+    "toFormName": "base",
+    "method": "Leaf Stone"
+  },
+  {
+    "fromSpeciesId": 102,
+    "fromFormName": "base",
+    "toSpeciesId": 103,
+    "toFormName": "alola",
+    "method": "Leaf Stone"
+  },
+  {
+    "fromSpeciesId": 104,
+    "fromFormName": "base",
+    "toSpeciesId": 105,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 104,
+    "fromFormName": "base",
+    "toSpeciesId": 105,
+    "toFormName": "alola",
+    "method": "Level 28 + at night"
+  },
+  {
+    "fromSpeciesId": 108,
+    "fromFormName": "base",
+    "toSpeciesId": 463,
+    "toFormName": "base",
+    "method": "knows Rollout + level up"
+  },
+  {
+    "fromSpeciesId": 109,
+    "fromFormName": "base",
+    "toSpeciesId": 110,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 109,
+    "fromFormName": "base",
+    "toSpeciesId": 110,
+    "toFormName": "galar",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 111,
+    "fromFormName": "base",
+    "toSpeciesId": 112,
+    "toFormName": "base",
+    "method": "Level 42"
+  },
+  {
+    "fromSpeciesId": 112,
+    "fromFormName": "base",
+    "toSpeciesId": 464,
+    "toFormName": "base",
+    "method": "Trade + holding Protector"
+  },
+  {
+    "fromSpeciesId": 113,
+    "fromFormName": "base",
+    "toSpeciesId": 242,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 114,
+    "fromFormName": "base",
+    "toSpeciesId": 465,
+    "toFormName": "base",
+    "method": "knows Ancient Power + level up"
+  },
+  {
+    "fromSpeciesId": 116,
+    "fromFormName": "base",
+    "toSpeciesId": 117,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 117,
+    "fromFormName": "base",
+    "toSpeciesId": 230,
+    "toFormName": "base",
+    "method": "Trade + holding Dragon Scale"
+  },
+  {
+    "fromSpeciesId": 118,
+    "fromFormName": "base",
+    "toSpeciesId": 119,
+    "toFormName": "base",
+    "method": "Level 33"
+  },
+  {
+    "fromSpeciesId": 120,
+    "fromFormName": "base",
+    "toSpeciesId": 121,
+    "toFormName": "base",
+    "method": "Water Stone"
+  },
+  {
+    "fromSpeciesId": 122,
+    "fromFormName": "galar",
+    "toSpeciesId": 866,
+    "toFormName": "base",
+    "method": "Level 42"
+  },
+  {
+    "fromSpeciesId": 123,
+    "fromFormName": "base",
+    "toSpeciesId": 212,
+    "toFormName": "base",
+    "method": "Trade + holding Metal Coat"
+  },
+  {
+    "fromSpeciesId": 123,
+    "fromFormName": "base",
+    "toSpeciesId": 900,
+    "toFormName": "base",
+    "method": "Black Augurite"
+  },
+  {
+    "fromSpeciesId": 125,
+    "fromFormName": "base",
+    "toSpeciesId": 466,
+    "toFormName": "base",
+    "method": "Trade + holding Electirizer"
+  },
+  {
+    "fromSpeciesId": 126,
+    "fromFormName": "base",
+    "toSpeciesId": 467,
+    "toFormName": "base",
+    "method": "Trade + holding Magmarizer"
+  },
+  {
+    "fromSpeciesId": 129,
+    "fromFormName": "base",
+    "toSpeciesId": 130,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 133,
+    "fromFormName": "base",
+    "toSpeciesId": 134,
+    "toFormName": "base",
+    "method": "Water Stone"
+  },
+  {
+    "fromSpeciesId": 133,
+    "fromFormName": "base",
+    "toSpeciesId": 135,
+    "toFormName": "base",
+    "method": "Thunder Stone"
+  },
+  {
+    "fromSpeciesId": 133,
+    "fromFormName": "base",
+    "toSpeciesId": 136,
+    "toFormName": "base",
+    "method": "Fire Stone"
+  },
+  {
+    "fromSpeciesId": 133,
+    "fromFormName": "base",
+    "toSpeciesId": 196,
+    "toFormName": "base",
+    "method": "160 friendship + during the day + level up"
+  },
+  {
+    "fromSpeciesId": 133,
+    "fromFormName": "base",
+    "toSpeciesId": 197,
+    "toFormName": "base",
+    "method": "160 friendship + at night + level up"
+  },
+  {
+    "fromSpeciesId": 133,
+    "fromFormName": "base",
+    "toSpeciesId": 470,
+    "toFormName": "base",
+    "method": "at Eterna Forest + near a special rock + level up or at Pinwheel Forest + near a special rock + level up or at Kalos Route 20 + near a special rock + level up or Leaf Stone or at Petalburg Woods + near a special rock + level up or at Lush Jungle + near a special rock + level up"
+  },
+  {
+    "fromSpeciesId": 133,
+    "fromFormName": "base",
+    "toSpeciesId": 471,
+    "toFormName": "base",
+    "method": "at Sinnoh Route 217 + near a special rock + level up or at Twist Mountain + near a special rock + level up or at Frost Cavern + near a special rock + level up or Ice Stone or at Shoal Cave + near a special rock + level up or at Mount Lanakila + near a special rock + level up"
+  },
+  {
+    "fromSpeciesId": 133,
+    "fromFormName": "base",
+    "toSpeciesId": 700,
+    "toFormName": "base",
+    "method": "2 affection + knows a Fairy move + level up or 160 friendship + knows a Fairy move + level up"
+  },
+  {
+    "fromSpeciesId": 137,
+    "fromFormName": "base",
+    "toSpeciesId": 233,
+    "toFormName": "base",
+    "method": "Trade + holding Up-Grade"
+  },
+  {
+    "fromSpeciesId": 138,
+    "fromFormName": "base",
+    "toSpeciesId": 139,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 140,
+    "fromFormName": "base",
+    "toSpeciesId": 141,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 147,
+    "fromFormName": "base",
+    "toSpeciesId": 148,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 148,
+    "fromFormName": "base",
+    "toSpeciesId": 149,
+    "toFormName": "base",
+    "method": "Level 55"
+  },
+  {
+    "fromSpeciesId": 152,
+    "fromFormName": "base",
+    "toSpeciesId": 153,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 153,
+    "fromFormName": "base",
+    "toSpeciesId": 154,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 155,
+    "fromFormName": "base",
+    "toSpeciesId": 156,
+    "toFormName": "base",
+    "method": "Level 14 or Level 17"
+  },
+  {
+    "fromSpeciesId": 156,
+    "fromFormName": "base",
+    "toSpeciesId": 157,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 156,
+    "fromFormName": "base",
+    "toSpeciesId": 157,
+    "toFormName": "hisui",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 158,
+    "fromFormName": "base",
+    "toSpeciesId": 159,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 159,
+    "fromFormName": "base",
+    "toSpeciesId": 160,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 161,
+    "fromFormName": "base",
+    "toSpeciesId": 162,
+    "toFormName": "base",
+    "method": "Level 15"
+  },
+  {
+    "fromSpeciesId": 163,
+    "fromFormName": "base",
+    "toSpeciesId": 164,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 165,
+    "fromFormName": "base",
+    "toSpeciesId": 166,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 167,
+    "fromFormName": "base",
+    "toSpeciesId": 168,
+    "toFormName": "base",
+    "method": "Level 22"
+  },
+  {
+    "fromSpeciesId": 170,
+    "fromFormName": "base",
+    "toSpeciesId": 171,
+    "toFormName": "base",
+    "method": "Level 27"
+  },
+  {
+    "fromSpeciesId": 172,
+    "fromFormName": "base",
+    "toSpeciesId": 25,
+    "toFormName": "base",
+    "method": "220 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 173,
+    "fromFormName": "base",
+    "toSpeciesId": 35,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 174,
+    "fromFormName": "base",
+    "toSpeciesId": 39,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 175,
+    "fromFormName": "base",
+    "toSpeciesId": 176,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 176,
+    "fromFormName": "base",
+    "toSpeciesId": 468,
+    "toFormName": "base",
+    "method": "Shiny Stone"
+  },
+  {
+    "fromSpeciesId": 177,
+    "fromFormName": "base",
+    "toSpeciesId": 178,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 179,
+    "fromFormName": "base",
+    "toSpeciesId": 180,
+    "toFormName": "base",
+    "method": "Level 15"
+  },
+  {
+    "fromSpeciesId": 180,
+    "fromFormName": "base",
+    "toSpeciesId": 181,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 183,
+    "fromFormName": "base",
+    "toSpeciesId": 184,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 187,
+    "fromFormName": "base",
+    "toSpeciesId": 188,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 188,
+    "fromFormName": "base",
+    "toSpeciesId": 189,
+    "toFormName": "base",
+    "method": "Level 27"
+  },
+  {
+    "fromSpeciesId": 190,
+    "fromFormName": "base",
+    "toSpeciesId": 424,
+    "toFormName": "base",
+    "method": "knows Double Hit + level up"
+  },
+  {
+    "fromSpeciesId": 191,
+    "fromFormName": "base",
+    "toSpeciesId": 192,
+    "toFormName": "base",
+    "method": "Sun Stone"
+  },
+  {
+    "fromSpeciesId": 193,
+    "fromFormName": "base",
+    "toSpeciesId": 469,
+    "toFormName": "base",
+    "method": "knows Ancient Power + level up"
+  },
+  {
+    "fromSpeciesId": 194,
+    "fromFormName": "base",
+    "toSpeciesId": 195,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 194,
+    "fromFormName": "paldea",
+    "toSpeciesId": 980,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 198,
+    "fromFormName": "base",
+    "toSpeciesId": 430,
+    "toFormName": "base",
+    "method": "Dusk Stone"
+  },
+  {
+    "fromSpeciesId": 200,
+    "fromFormName": "base",
+    "toSpeciesId": 429,
+    "toFormName": "base",
+    "method": "Dusk Stone"
+  },
+  {
+    "fromSpeciesId": 203,
+    "fromFormName": "base",
+    "toSpeciesId": 981,
+    "toFormName": "base",
+    "method": "knows Twin Beam + level up"
+  },
+  {
+    "fromSpeciesId": 204,
+    "fromFormName": "base",
+    "toSpeciesId": 205,
+    "toFormName": "base",
+    "method": "Level 31"
+  },
+  {
+    "fromSpeciesId": 206,
+    "fromFormName": "base",
+    "toSpeciesId": 982,
+    "toFormName": "base",
+    "method": "knows Hyper Drill + 99% chance + level up"
+  },
+  {
+    "fromSpeciesId": 206,
+    "fromFormName": "base",
+    "toSpeciesId": 982,
+    "toFormName": "three-segment",
+    "method": "knows Hyper Drill + 1% chance + level up"
+  },
+  {
+    "fromSpeciesId": 207,
+    "fromFormName": "base",
+    "toSpeciesId": 472,
+    "toFormName": "base",
+    "method": "at night + holding Razor Fang + level up"
+  },
+  {
+    "fromSpeciesId": 209,
+    "fromFormName": "base",
+    "toSpeciesId": 210,
+    "toFormName": "base",
+    "method": "Level 23"
+  },
+  {
+    "fromSpeciesId": 211,
+    "fromFormName": "hisui",
+    "toSpeciesId": 904,
+    "toFormName": "base",
+    "method": "Use Barb Barrage as a Strong Style move 20 times or knows Barb Barrage + level up or Use Barb Barrage 20 times"
+  },
+  {
+    "fromSpeciesId": 215,
+    "fromFormName": "base",
+    "toSpeciesId": 461,
+    "toFormName": "base",
+    "method": "at night + holding Razor Claw + level up"
+  },
+  {
+    "fromSpeciesId": 215,
+    "fromFormName": "hisui",
+    "toSpeciesId": 903,
+    "toFormName": "base",
+    "method": "during the day + holding Razor Claw + level up"
+  },
+  {
+    "fromSpeciesId": 216,
+    "fromFormName": "base",
+    "toSpeciesId": 217,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 217,
+    "fromFormName": "base",
+    "toSpeciesId": 901,
+    "toFormName": "base",
+    "method": "Peat Block + during a full moon"
+  },
+  {
+    "fromSpeciesId": 218,
+    "fromFormName": "base",
+    "toSpeciesId": 219,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 220,
+    "fromFormName": "base",
+    "toSpeciesId": 221,
+    "toFormName": "base",
+    "method": "Level 33"
+  },
+  {
+    "fromSpeciesId": 221,
+    "fromFormName": "base",
+    "toSpeciesId": 473,
+    "toFormName": "base",
+    "method": "knows Ancient Power + level up"
+  },
+  {
+    "fromSpeciesId": 222,
+    "fromFormName": "galar",
+    "toSpeciesId": 864,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 223,
+    "fromFormName": "base",
+    "toSpeciesId": 224,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 228,
+    "fromFormName": "base",
+    "toSpeciesId": 229,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 231,
+    "fromFormName": "base",
+    "toSpeciesId": 232,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 233,
+    "fromFormName": "base",
+    "toSpeciesId": 474,
+    "toFormName": "base",
+    "method": "Trade + holding Dubious Disc"
+  },
+  {
+    "fromSpeciesId": 234,
+    "fromFormName": "base",
+    "toSpeciesId": 899,
+    "toFormName": "base",
+    "method": "Use Psyshield Bash as an Agile Style move 20 times"
+  },
+  {
+    "fromSpeciesId": 236,
+    "fromFormName": "base",
+    "toSpeciesId": 106,
+    "toFormName": "base",
+    "method": "Level 20 + Attack > Defense"
+  },
+  {
+    "fromSpeciesId": 236,
+    "fromFormName": "base",
+    "toSpeciesId": 107,
+    "toFormName": "base",
+    "method": "Level 20 + Attack < Defense"
+  },
+  {
+    "fromSpeciesId": 236,
+    "fromFormName": "base",
+    "toSpeciesId": 237,
+    "toFormName": "base",
+    "method": "Level 20 + Attack = Defense"
+  },
+  {
+    "fromSpeciesId": 238,
+    "fromFormName": "base",
+    "toSpeciesId": 124,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 239,
+    "fromFormName": "base",
+    "toSpeciesId": 125,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 240,
+    "fromFormName": "base",
+    "toSpeciesId": 126,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 246,
+    "fromFormName": "base",
+    "toSpeciesId": 247,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 247,
+    "fromFormName": "base",
+    "toSpeciesId": 248,
+    "toFormName": "base",
+    "method": "Level 55"
+  },
+  {
+    "fromSpeciesId": 252,
+    "fromFormName": "base",
+    "toSpeciesId": 253,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 253,
+    "fromFormName": "base",
+    "toSpeciesId": 254,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 255,
+    "fromFormName": "base",
+    "toSpeciesId": 256,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 256,
+    "fromFormName": "base",
+    "toSpeciesId": 257,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 258,
+    "fromFormName": "base",
+    "toSpeciesId": 259,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 259,
+    "fromFormName": "base",
+    "toSpeciesId": 260,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 261,
+    "fromFormName": "base",
+    "toSpeciesId": 262,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 263,
+    "fromFormName": "base",
+    "toSpeciesId": 264,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 263,
+    "fromFormName": "galar",
+    "toSpeciesId": 264,
+    "toFormName": "galar",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 264,
+    "fromFormName": "galar",
+    "toSpeciesId": 862,
+    "toFormName": "base",
+    "method": "Level 35 + at night"
+  },
+  {
+    "fromSpeciesId": 265,
+    "fromFormName": "base",
+    "toSpeciesId": 266,
+    "toFormName": "base",
+    "method": "Level 7 + 50% chance"
+  },
+  {
+    "fromSpeciesId": 265,
+    "fromFormName": "base",
+    "toSpeciesId": 268,
+    "toFormName": "base",
+    "method": "Level 7 + 50% chance"
+  },
+  {
+    "fromSpeciesId": 266,
+    "fromFormName": "base",
+    "toSpeciesId": 267,
+    "toFormName": "base",
+    "method": "Level 10"
+  },
+  {
+    "fromSpeciesId": 268,
+    "fromFormName": "base",
+    "toSpeciesId": 269,
+    "toFormName": "base",
+    "method": "Level 10"
+  },
+  {
+    "fromSpeciesId": 270,
+    "fromFormName": "base",
+    "toSpeciesId": 271,
+    "toFormName": "base",
+    "method": "Level 14"
+  },
+  {
+    "fromSpeciesId": 271,
+    "fromFormName": "base",
+    "toSpeciesId": 272,
+    "toFormName": "base",
+    "method": "Water Stone"
+  },
+  {
+    "fromSpeciesId": 273,
+    "fromFormName": "base",
+    "toSpeciesId": 274,
+    "toFormName": "base",
+    "method": "Level 14"
+  },
+  {
+    "fromSpeciesId": 274,
+    "fromFormName": "base",
+    "toSpeciesId": 275,
+    "toFormName": "base",
+    "method": "Leaf Stone"
+  },
+  {
+    "fromSpeciesId": 276,
+    "fromFormName": "base",
+    "toSpeciesId": 277,
+    "toFormName": "base",
+    "method": "Level 22"
+  },
+  {
+    "fromSpeciesId": 278,
+    "fromFormName": "base",
+    "toSpeciesId": 279,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 280,
+    "fromFormName": "base",
+    "toSpeciesId": 281,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 281,
+    "fromFormName": "base",
+    "toSpeciesId": 282,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 281,
+    "fromFormName": "base",
+    "toSpeciesId": 475,
+    "toFormName": "base",
+    "method": "Dawn Stone (male)"
+  },
+  {
+    "fromSpeciesId": 283,
+    "fromFormName": "base",
+    "toSpeciesId": 284,
+    "toFormName": "base",
+    "method": "Level 22"
+  },
+  {
+    "fromSpeciesId": 285,
+    "fromFormName": "base",
+    "toSpeciesId": 286,
+    "toFormName": "base",
+    "method": "Level 23"
+  },
+  {
+    "fromSpeciesId": 287,
+    "fromFormName": "base",
+    "toSpeciesId": 288,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 288,
+    "fromFormName": "base",
+    "toSpeciesId": 289,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 290,
+    "fromFormName": "base",
+    "toSpeciesId": 291,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 290,
+    "fromFormName": "base",
+    "toSpeciesId": 292,
+    "toFormName": "base",
+    "method": "Empty party slot + spare Poké Ball"
+  },
+  {
+    "fromSpeciesId": 293,
+    "fromFormName": "base",
+    "toSpeciesId": 294,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 294,
+    "fromFormName": "base",
+    "toSpeciesId": 295,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 296,
+    "fromFormName": "base",
+    "toSpeciesId": 297,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 298,
+    "fromFormName": "base",
+    "toSpeciesId": 183,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 299,
+    "fromFormName": "base",
+    "toSpeciesId": 476,
+    "toFormName": "base",
+    "method": "at Mt Coronet + level up or at Chargestone Cave + level up or at Kalos Route 13 + level up or at Blush Mountain + level up or at Vast Poni Canyon + level up or Thunder Stone or at New Mauville + level up"
+  },
+  {
+    "fromSpeciesId": 300,
+    "fromFormName": "base",
+    "toSpeciesId": 301,
+    "toFormName": "base",
+    "method": "Moon Stone"
+  },
+  {
+    "fromSpeciesId": 304,
+    "fromFormName": "base",
+    "toSpeciesId": 305,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 305,
+    "fromFormName": "base",
+    "toSpeciesId": 306,
+    "toFormName": "base",
+    "method": "Level 42"
+  },
+  {
+    "fromSpeciesId": 307,
+    "fromFormName": "base",
+    "toSpeciesId": 308,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 309,
+    "fromFormName": "base",
+    "toSpeciesId": 310,
+    "toFormName": "base",
+    "method": "Level 26"
+  },
+  {
+    "fromSpeciesId": 315,
+    "fromFormName": "base",
+    "toSpeciesId": 407,
+    "toFormName": "base",
+    "method": "Shiny Stone"
+  },
+  {
+    "fromSpeciesId": 316,
+    "fromFormName": "base",
+    "toSpeciesId": 317,
+    "toFormName": "base",
+    "method": "Level 26"
+  },
+  {
+    "fromSpeciesId": 318,
+    "fromFormName": "base",
+    "toSpeciesId": 319,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 320,
+    "fromFormName": "base",
+    "toSpeciesId": 321,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 322,
+    "fromFormName": "base",
+    "toSpeciesId": 323,
+    "toFormName": "base",
+    "method": "Level 33"
+  },
+  {
+    "fromSpeciesId": 325,
+    "fromFormName": "base",
+    "toSpeciesId": 326,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 328,
+    "fromFormName": "base",
+    "toSpeciesId": 329,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 329,
+    "fromFormName": "base",
+    "toSpeciesId": 330,
+    "toFormName": "base",
+    "method": "Level 45"
+  },
+  {
+    "fromSpeciesId": 331,
+    "fromFormName": "base",
+    "toSpeciesId": 332,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 333,
+    "fromFormName": "base",
+    "toSpeciesId": 334,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 339,
+    "fromFormName": "base",
+    "toSpeciesId": 340,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 341,
+    "fromFormName": "base",
+    "toSpeciesId": 342,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 343,
+    "fromFormName": "base",
+    "toSpeciesId": 344,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 345,
+    "fromFormName": "base",
+    "toSpeciesId": 346,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 347,
+    "fromFormName": "base",
+    "toSpeciesId": 348,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 349,
+    "fromFormName": "base",
+    "toSpeciesId": 350,
+    "toFormName": "base",
+    "method": "170 beauty + level up or Trade + holding Prism Scale"
+  },
+  {
+    "fromSpeciesId": 353,
+    "fromFormName": "base",
+    "toSpeciesId": 354,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 355,
+    "fromFormName": "base",
+    "toSpeciesId": 356,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 356,
+    "fromFormName": "base",
+    "toSpeciesId": 477,
+    "toFormName": "base",
+    "method": "Trade + holding Reaper Cloth"
+  },
+  {
+    "fromSpeciesId": 360,
+    "fromFormName": "base",
+    "toSpeciesId": 202,
+    "toFormName": "base",
+    "method": "Level 15"
+  },
+  {
+    "fromSpeciesId": 361,
+    "fromFormName": "base",
+    "toSpeciesId": 362,
+    "toFormName": "base",
+    "method": "Level 42"
+  },
+  {
+    "fromSpeciesId": 361,
+    "fromFormName": "base",
+    "toSpeciesId": 478,
+    "toFormName": "base",
+    "method": "Dawn Stone (female)"
+  },
+  {
+    "fromSpeciesId": 363,
+    "fromFormName": "base",
+    "toSpeciesId": 364,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 364,
+    "fromFormName": "base",
+    "toSpeciesId": 365,
+    "toFormName": "base",
+    "method": "Level 44"
+  },
+  {
+    "fromSpeciesId": 366,
+    "fromFormName": "base",
+    "toSpeciesId": 367,
+    "toFormName": "base",
+    "method": "Trade + holding Deep Sea Tooth"
+  },
+  {
+    "fromSpeciesId": 366,
+    "fromFormName": "base",
+    "toSpeciesId": 368,
+    "toFormName": "base",
+    "method": "Trade + holding Deep Sea Scale"
+  },
+  {
+    "fromSpeciesId": 371,
+    "fromFormName": "base",
+    "toSpeciesId": 372,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 372,
+    "fromFormName": "base",
+    "toSpeciesId": 373,
+    "toFormName": "base",
+    "method": "Level 50"
+  },
+  {
+    "fromSpeciesId": 374,
+    "fromFormName": "base",
+    "toSpeciesId": 375,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 375,
+    "fromFormName": "base",
+    "toSpeciesId": 376,
+    "toFormName": "base",
+    "method": "Level 45"
+  },
+  {
+    "fromSpeciesId": 387,
+    "fromFormName": "base",
+    "toSpeciesId": 388,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 388,
+    "fromFormName": "base",
+    "toSpeciesId": 389,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 390,
+    "fromFormName": "base",
+    "toSpeciesId": 391,
+    "toFormName": "base",
+    "method": "Level 14"
+  },
+  {
+    "fromSpeciesId": 391,
+    "fromFormName": "base",
+    "toSpeciesId": 392,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 393,
+    "fromFormName": "base",
+    "toSpeciesId": 394,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 394,
+    "fromFormName": "base",
+    "toSpeciesId": 395,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 396,
+    "fromFormName": "base",
+    "toSpeciesId": 397,
+    "toFormName": "base",
+    "method": "Level 14"
+  },
+  {
+    "fromSpeciesId": 397,
+    "fromFormName": "base",
+    "toSpeciesId": 398,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 399,
+    "fromFormName": "base",
+    "toSpeciesId": 400,
+    "toFormName": "base",
+    "method": "Level 15"
+  },
+  {
+    "fromSpeciesId": 401,
+    "fromFormName": "base",
+    "toSpeciesId": 402,
+    "toFormName": "base",
+    "method": "Level 10"
+  },
+  {
+    "fromSpeciesId": 403,
+    "fromFormName": "base",
+    "toSpeciesId": 404,
+    "toFormName": "base",
+    "method": "Level 15"
+  },
+  {
+    "fromSpeciesId": 404,
+    "fromFormName": "base",
+    "toSpeciesId": 405,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 406,
+    "fromFormName": "base",
+    "toSpeciesId": 315,
+    "toFormName": "base",
+    "method": "160 friendship + during the day + level up"
+  },
+  {
+    "fromSpeciesId": 408,
+    "fromFormName": "base",
+    "toSpeciesId": 409,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 410,
+    "fromFormName": "base",
+    "toSpeciesId": 411,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 412,
+    "fromFormName": "base",
+    "toSpeciesId": 413,
+    "toFormName": "base",
+    "method": "Level 20 (female)"
+  },
+  {
+    "fromSpeciesId": 412,
+    "fromFormName": "sandy",
+    "toSpeciesId": 413,
+    "toFormName": "sandy",
+    "method": "Level 20 (female)"
+  },
+  {
+    "fromSpeciesId": 412,
+    "fromFormName": "trash",
+    "toSpeciesId": 413,
+    "toFormName": "trash",
+    "method": "Level 20 (female)"
+  },
+  {
+    "fromSpeciesId": 412,
+    "fromFormName": "base",
+    "toSpeciesId": 414,
+    "toFormName": "base",
+    "method": "Level 20 (male)"
+  },
+  {
+    "fromSpeciesId": 415,
+    "fromFormName": "base",
+    "toSpeciesId": 416,
+    "toFormName": "base",
+    "method": "Level 21 (female)"
+  },
+  {
+    "fromSpeciesId": 418,
+    "fromFormName": "base",
+    "toSpeciesId": 419,
+    "toFormName": "base",
+    "method": "Level 26"
+  },
+  {
+    "fromSpeciesId": 420,
+    "fromFormName": "base",
+    "toSpeciesId": 421,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 422,
+    "fromFormName": "base",
+    "toSpeciesId": 423,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 422,
+    "fromFormName": "east",
+    "toSpeciesId": 423,
+    "toFormName": "east",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 425,
+    "fromFormName": "base",
+    "toSpeciesId": 426,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 427,
+    "fromFormName": "base",
+    "toSpeciesId": 428,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 431,
+    "fromFormName": "base",
+    "toSpeciesId": 432,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 433,
+    "fromFormName": "base",
+    "toSpeciesId": 358,
+    "toFormName": "base",
+    "method": "220 friendship + at night + level up"
+  },
+  {
+    "fromSpeciesId": 434,
+    "fromFormName": "base",
+    "toSpeciesId": 435,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 436,
+    "fromFormName": "base",
+    "toSpeciesId": 437,
+    "toFormName": "base",
+    "method": "Level 33"
+  },
+  {
+    "fromSpeciesId": 438,
+    "fromFormName": "base",
+    "toSpeciesId": 185,
+    "toFormName": "base",
+    "method": "knows Mimic + level up"
+  },
+  {
+    "fromSpeciesId": 439,
+    "fromFormName": "base",
+    "toSpeciesId": 122,
+    "toFormName": "base",
+    "method": "knows Mimic + level up"
+  },
+  {
+    "fromSpeciesId": 439,
+    "fromFormName": "base",
+    "toSpeciesId": 122,
+    "toFormName": "galar",
+    "method": "knows Mimic + level up"
+  },
+  {
+    "fromSpeciesId": 440,
+    "fromFormName": "base",
+    "toSpeciesId": 113,
+    "toFormName": "base",
+    "method": "during the day + holding Oval Stone + level up"
+  },
+  {
+    "fromSpeciesId": 443,
+    "fromFormName": "base",
+    "toSpeciesId": 444,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 444,
+    "fromFormName": "base",
+    "toSpeciesId": 445,
+    "toFormName": "base",
+    "method": "Level 48"
+  },
+  {
+    "fromSpeciesId": 446,
+    "fromFormName": "base",
+    "toSpeciesId": 143,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 447,
+    "fromFormName": "base",
+    "toSpeciesId": 448,
+    "toFormName": "base",
+    "method": "160 friendship + during the day + level up"
+  },
+  {
+    "fromSpeciesId": 449,
+    "fromFormName": "base",
+    "toSpeciesId": 450,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 451,
+    "fromFormName": "base",
+    "toSpeciesId": 452,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 453,
+    "fromFormName": "base",
+    "toSpeciesId": 454,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 456,
+    "fromFormName": "base",
+    "toSpeciesId": 457,
+    "toFormName": "base",
+    "method": "Level 31"
+  },
+  {
+    "fromSpeciesId": 458,
+    "fromFormName": "base",
+    "toSpeciesId": 226,
+    "toFormName": "base",
+    "method": "with Remoraid in the party + level up"
+  },
+  {
+    "fromSpeciesId": 459,
+    "fromFormName": "base",
+    "toSpeciesId": 460,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 495,
+    "fromFormName": "base",
+    "toSpeciesId": 496,
+    "toFormName": "base",
+    "method": "Level 17"
+  },
+  {
+    "fromSpeciesId": 496,
+    "fromFormName": "base",
+    "toSpeciesId": 497,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 498,
+    "fromFormName": "base",
+    "toSpeciesId": 499,
+    "toFormName": "base",
+    "method": "Level 17"
+  },
+  {
+    "fromSpeciesId": 499,
+    "fromFormName": "base",
+    "toSpeciesId": 500,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 501,
+    "fromFormName": "base",
+    "toSpeciesId": 502,
+    "toFormName": "base",
+    "method": "Level 17"
+  },
+  {
+    "fromSpeciesId": 502,
+    "fromFormName": "base",
+    "toSpeciesId": 503,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 502,
+    "fromFormName": "base",
+    "toSpeciesId": 503,
+    "toFormName": "hisui",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 504,
+    "fromFormName": "base",
+    "toSpeciesId": 505,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 506,
+    "fromFormName": "base",
+    "toSpeciesId": 507,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 507,
+    "fromFormName": "base",
+    "toSpeciesId": 508,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 509,
+    "fromFormName": "base",
+    "toSpeciesId": 510,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 511,
+    "fromFormName": "base",
+    "toSpeciesId": 512,
+    "toFormName": "base",
+    "method": "Leaf Stone"
+  },
+  {
+    "fromSpeciesId": 513,
+    "fromFormName": "base",
+    "toSpeciesId": 514,
+    "toFormName": "base",
+    "method": "Fire Stone"
+  },
+  {
+    "fromSpeciesId": 515,
+    "fromFormName": "base",
+    "toSpeciesId": 516,
+    "toFormName": "base",
+    "method": "Water Stone"
+  },
+  {
+    "fromSpeciesId": 517,
+    "fromFormName": "base",
+    "toSpeciesId": 518,
+    "toFormName": "base",
+    "method": "Moon Stone"
+  },
+  {
+    "fromSpeciesId": 519,
+    "fromFormName": "base",
+    "toSpeciesId": 520,
+    "toFormName": "base",
+    "method": "Level 21"
+  },
+  {
+    "fromSpeciesId": 520,
+    "fromFormName": "base",
+    "toSpeciesId": 521,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 522,
+    "fromFormName": "base",
+    "toSpeciesId": 523,
+    "toFormName": "base",
+    "method": "Level 27"
+  },
+  {
+    "fromSpeciesId": 524,
+    "fromFormName": "base",
+    "toSpeciesId": 525,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 525,
+    "fromFormName": "base",
+    "toSpeciesId": 526,
+    "toFormName": "base",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 527,
+    "fromFormName": "base",
+    "toSpeciesId": 528,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 529,
+    "fromFormName": "base",
+    "toSpeciesId": 530,
+    "toFormName": "base",
+    "method": "Level 31"
+  },
+  {
+    "fromSpeciesId": 532,
+    "fromFormName": "base",
+    "toSpeciesId": 533,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 533,
+    "fromFormName": "base",
+    "toSpeciesId": 534,
+    "toFormName": "base",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 535,
+    "fromFormName": "base",
+    "toSpeciesId": 536,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 536,
+    "fromFormName": "base",
+    "toSpeciesId": 537,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 540,
+    "fromFormName": "base",
+    "toSpeciesId": 541,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 541,
+    "fromFormName": "base",
+    "toSpeciesId": 542,
+    "toFormName": "base",
+    "method": "220 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 543,
+    "fromFormName": "base",
+    "toSpeciesId": 544,
+    "toFormName": "base",
+    "method": "Level 22"
+  },
+  {
+    "fromSpeciesId": 544,
+    "fromFormName": "base",
+    "toSpeciesId": 545,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 546,
+    "fromFormName": "base",
+    "toSpeciesId": 547,
+    "toFormName": "base",
+    "method": "Sun Stone"
+  },
+  {
+    "fromSpeciesId": 548,
+    "fromFormName": "base",
+    "toSpeciesId": 549,
+    "toFormName": "base",
+    "method": "Sun Stone"
+  },
+  {
+    "fromSpeciesId": 548,
+    "fromFormName": "base",
+    "toSpeciesId": 549,
+    "toFormName": "hisui",
+    "method": "Sun Stone"
+  },
+  {
+    "fromSpeciesId": 550,
+    "fromFormName": "white-striped",
+    "toSpeciesId": 902,
+    "toFormName": "base",
+    "method": "Take 294 recoil damage (male)"
+  },
+  {
+    "fromSpeciesId": 550,
+    "fromFormName": "white-striped",
+    "toSpeciesId": 902,
+    "toFormName": "female",
+    "method": "Take 294 recoil damage (female)"
+  },
+  {
+    "fromSpeciesId": 551,
+    "fromFormName": "base",
+    "toSpeciesId": 552,
+    "toFormName": "base",
+    "method": "Level 29"
+  },
+  {
+    "fromSpeciesId": 552,
+    "fromFormName": "base",
+    "toSpeciesId": 553,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 554,
+    "fromFormName": "base",
+    "toSpeciesId": 555,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 554,
+    "fromFormName": "galar",
+    "toSpeciesId": 555,
+    "toFormName": "galar-standard",
+    "method": "Ice Stone"
+  },
+  {
+    "fromSpeciesId": 557,
+    "fromFormName": "base",
+    "toSpeciesId": 558,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 559,
+    "fromFormName": "base",
+    "toSpeciesId": 560,
+    "toFormName": "base",
+    "method": "Level 39"
+  },
+  {
+    "fromSpeciesId": 562,
+    "fromFormName": "base",
+    "toSpeciesId": 563,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 562,
+    "fromFormName": "galar",
+    "toSpeciesId": 867,
+    "toFormName": "base",
+    "method": "Take 49 damage + at Dusty Bowl"
+  },
+  {
+    "fromSpeciesId": 564,
+    "fromFormName": "base",
+    "toSpeciesId": 565,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 566,
+    "fromFormName": "base",
+    "toSpeciesId": 567,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 568,
+    "fromFormName": "base",
+    "toSpeciesId": 569,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 570,
+    "fromFormName": "base",
+    "toSpeciesId": 571,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 570,
+    "fromFormName": "hisui",
+    "toSpeciesId": 571,
+    "toFormName": "hisui",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 572,
+    "fromFormName": "base",
+    "toSpeciesId": 573,
+    "toFormName": "base",
+    "method": "Shiny Stone"
+  },
+  {
+    "fromSpeciesId": 574,
+    "fromFormName": "base",
+    "toSpeciesId": 575,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 575,
+    "fromFormName": "base",
+    "toSpeciesId": 576,
+    "toFormName": "base",
+    "method": "Level 41"
+  },
+  {
+    "fromSpeciesId": 577,
+    "fromFormName": "base",
+    "toSpeciesId": 578,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 578,
+    "fromFormName": "base",
+    "toSpeciesId": 579,
+    "toFormName": "base",
+    "method": "Level 41"
+  },
+  {
+    "fromSpeciesId": 580,
+    "fromFormName": "base",
+    "toSpeciesId": 581,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 582,
+    "fromFormName": "base",
+    "toSpeciesId": 583,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 583,
+    "fromFormName": "base",
+    "toSpeciesId": 584,
+    "toFormName": "base",
+    "method": "Level 47"
+  },
+  {
+    "fromSpeciesId": 585,
+    "fromFormName": "base",
+    "toSpeciesId": 586,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 585,
+    "fromFormName": "summer",
+    "toSpeciesId": 586,
+    "toFormName": "summer",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 585,
+    "fromFormName": "autumn",
+    "toSpeciesId": 586,
+    "toFormName": "autumn",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 585,
+    "fromFormName": "winter",
+    "toSpeciesId": 586,
+    "toFormName": "winter",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 588,
+    "fromFormName": "base",
+    "toSpeciesId": 589,
+    "toFormName": "base",
+    "method": "Trade + for Shelmet"
+  },
+  {
+    "fromSpeciesId": 590,
+    "fromFormName": "base",
+    "toSpeciesId": 591,
+    "toFormName": "base",
+    "method": "Level 39"
+  },
+  {
+    "fromSpeciesId": 592,
+    "fromFormName": "base",
+    "toSpeciesId": 593,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 595,
+    "fromFormName": "base",
+    "toSpeciesId": 596,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 597,
+    "fromFormName": "base",
+    "toSpeciesId": 598,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 599,
+    "fromFormName": "base",
+    "toSpeciesId": 600,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 600,
+    "fromFormName": "base",
+    "toSpeciesId": 601,
+    "toFormName": "base",
+    "method": "Level 49"
+  },
+  {
+    "fromSpeciesId": 602,
+    "fromFormName": "base",
+    "toSpeciesId": 603,
+    "toFormName": "base",
+    "method": "Level 39"
+  },
+  {
+    "fromSpeciesId": 603,
+    "fromFormName": "base",
+    "toSpeciesId": 604,
+    "toFormName": "base",
+    "method": "Thunder Stone"
+  },
+  {
+    "fromSpeciesId": 605,
+    "fromFormName": "base",
+    "toSpeciesId": 606,
+    "toFormName": "base",
+    "method": "Level 42"
+  },
+  {
+    "fromSpeciesId": 607,
+    "fromFormName": "base",
+    "toSpeciesId": 608,
+    "toFormName": "base",
+    "method": "Level 41"
+  },
+  {
+    "fromSpeciesId": 608,
+    "fromFormName": "base",
+    "toSpeciesId": 609,
+    "toFormName": "base",
+    "method": "Dusk Stone"
+  },
+  {
+    "fromSpeciesId": 610,
+    "fromFormName": "base",
+    "toSpeciesId": 611,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 611,
+    "fromFormName": "base",
+    "toSpeciesId": 612,
+    "toFormName": "base",
+    "method": "Level 48"
+  },
+  {
+    "fromSpeciesId": 613,
+    "fromFormName": "base",
+    "toSpeciesId": 614,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 616,
+    "fromFormName": "base",
+    "toSpeciesId": 617,
+    "toFormName": "base",
+    "method": "Trade + for Karrablast"
+  },
+  {
+    "fromSpeciesId": 619,
+    "fromFormName": "base",
+    "toSpeciesId": 620,
+    "toFormName": "base",
+    "method": "Level 50"
+  },
+  {
+    "fromSpeciesId": 622,
+    "fromFormName": "base",
+    "toSpeciesId": 623,
+    "toFormName": "base",
+    "method": "Level 43"
+  },
+  {
+    "fromSpeciesId": 624,
+    "fromFormName": "base",
+    "toSpeciesId": 625,
+    "toFormName": "base",
+    "method": "Level 52"
+  },
+  {
+    "fromSpeciesId": 625,
+    "fromFormName": "base",
+    "toSpeciesId": 983,
+    "toFormName": "base",
+    "method": "Defeat 3 Bisharp holding Leader's Crest"
+  },
+  {
+    "fromSpeciesId": 627,
+    "fromFormName": "base",
+    "toSpeciesId": 628,
+    "toFormName": "base",
+    "method": "Level 54"
+  },
+  {
+    "fromSpeciesId": 627,
+    "fromFormName": "base",
+    "toSpeciesId": 628,
+    "toFormName": "hisui",
+    "method": "Level 54"
+  },
+  {
+    "fromSpeciesId": 629,
+    "fromFormName": "base",
+    "toSpeciesId": 630,
+    "toFormName": "base",
+    "method": "Level 54"
+  },
+  {
+    "fromSpeciesId": 633,
+    "fromFormName": "base",
+    "toSpeciesId": 634,
+    "toFormName": "base",
+    "method": "Level 50"
+  },
+  {
+    "fromSpeciesId": 634,
+    "fromFormName": "base",
+    "toSpeciesId": 635,
+    "toFormName": "base",
+    "method": "Level 64"
+  },
+  {
+    "fromSpeciesId": 636,
+    "fromFormName": "base",
+    "toSpeciesId": 637,
+    "toFormName": "base",
+    "method": "Level 59"
+  },
+  {
+    "fromSpeciesId": 650,
+    "fromFormName": "base",
+    "toSpeciesId": 651,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 651,
+    "fromFormName": "base",
+    "toSpeciesId": 652,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 653,
+    "fromFormName": "base",
+    "toSpeciesId": 654,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 654,
+    "fromFormName": "base",
+    "toSpeciesId": 655,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 656,
+    "fromFormName": "base",
+    "toSpeciesId": 657,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 657,
+    "fromFormName": "base",
+    "toSpeciesId": 658,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 659,
+    "fromFormName": "base",
+    "toSpeciesId": 660,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 661,
+    "fromFormName": "base",
+    "toSpeciesId": 662,
+    "toFormName": "base",
+    "method": "Level 17"
+  },
+  {
+    "fromSpeciesId": 662,
+    "fromFormName": "base",
+    "toSpeciesId": 663,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "base",
+    "toSpeciesId": 665,
+    "toFormName": "base",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "base",
+    "toSpeciesId": 666,
+    "toFormName": "base",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 667,
+    "fromFormName": "base",
+    "toSpeciesId": 668,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 669,
+    "fromFormName": "base",
+    "toSpeciesId": 670,
+    "toFormName": "base",
+    "method": "Level 19"
+  },
+  {
+    "fromSpeciesId": 669,
+    "fromFormName": "yellow",
+    "toSpeciesId": 670,
+    "toFormName": "yellow",
+    "method": "Level 19"
+  },
+  {
+    "fromSpeciesId": 669,
+    "fromFormName": "orange",
+    "toSpeciesId": 670,
+    "toFormName": "orange",
+    "method": "Level 19"
+  },
+  {
+    "fromSpeciesId": 669,
+    "fromFormName": "blue",
+    "toSpeciesId": 670,
+    "toFormName": "blue",
+    "method": "Level 19"
+  },
+  {
+    "fromSpeciesId": 669,
+    "fromFormName": "white",
+    "toSpeciesId": 670,
+    "toFormName": "white",
+    "method": "Level 19"
+  },
+  {
+    "fromSpeciesId": 670,
+    "fromFormName": "base",
+    "toSpeciesId": 671,
+    "toFormName": "base",
+    "method": "Shiny Stone"
+  },
+  {
+    "fromSpeciesId": 670,
+    "fromFormName": "yellow",
+    "toSpeciesId": 671,
+    "toFormName": "yellow",
+    "method": "Shiny Stone"
+  },
+  {
+    "fromSpeciesId": 670,
+    "fromFormName": "orange",
+    "toSpeciesId": 671,
+    "toFormName": "orange",
+    "method": "Shiny Stone"
+  },
+  {
+    "fromSpeciesId": 670,
+    "fromFormName": "blue",
+    "toSpeciesId": 671,
+    "toFormName": "blue",
+    "method": "Shiny Stone"
+  },
+  {
+    "fromSpeciesId": 670,
+    "fromFormName": "white",
+    "toSpeciesId": 671,
+    "toFormName": "white",
+    "method": "Shiny Stone"
+  },
+  {
+    "fromSpeciesId": 672,
+    "fromFormName": "base",
+    "toSpeciesId": 673,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 674,
+    "fromFormName": "base",
+    "toSpeciesId": 675,
+    "toFormName": "base",
+    "method": "Level 32 + with a Dark-type Pokémon in the party"
+  },
+  {
+    "fromSpeciesId": 677,
+    "fromFormName": "base",
+    "toSpeciesId": 678,
+    "toFormName": "base",
+    "method": "Level 25 (male)"
+  },
+  {
+    "fromSpeciesId": 677,
+    "fromFormName": "base",
+    "toSpeciesId": 678,
+    "toFormName": "female",
+    "method": "Level 25 (female)"
+  },
+  {
+    "fromSpeciesId": 679,
+    "fromFormName": "base",
+    "toSpeciesId": 680,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 680,
+    "fromFormName": "base",
+    "toSpeciesId": 681,
+    "toFormName": "base",
+    "method": "Dusk Stone"
+  },
+  {
+    "fromSpeciesId": 682,
+    "fromFormName": "base",
+    "toSpeciesId": 683,
+    "toFormName": "base",
+    "method": "Trade + holding Sachet"
+  },
+  {
+    "fromSpeciesId": 684,
+    "fromFormName": "base",
+    "toSpeciesId": 685,
+    "toFormName": "base",
+    "method": "Trade + holding Whipped Dream"
+  },
+  {
+    "fromSpeciesId": 686,
+    "fromFormName": "base",
+    "toSpeciesId": 687,
+    "toFormName": "base",
+    "method": "Level 30 + with the console turned upside down"
+  },
+  {
+    "fromSpeciesId": 688,
+    "fromFormName": "base",
+    "toSpeciesId": 689,
+    "toFormName": "base",
+    "method": "Level 39"
+  },
+  {
+    "fromSpeciesId": 690,
+    "fromFormName": "base",
+    "toSpeciesId": 691,
+    "toFormName": "base",
+    "method": "Level 48"
+  },
+  {
+    "fromSpeciesId": 692,
+    "fromFormName": "base",
+    "toSpeciesId": 693,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 694,
+    "fromFormName": "base",
+    "toSpeciesId": 695,
+    "toFormName": "base",
+    "method": "Sun Stone"
+  },
+  {
+    "fromSpeciesId": 696,
+    "fromFormName": "base",
+    "toSpeciesId": 697,
+    "toFormName": "base",
+    "method": "Level 39 + during the day"
+  },
+  {
+    "fromSpeciesId": 698,
+    "fromFormName": "base",
+    "toSpeciesId": 699,
+    "toFormName": "base",
+    "method": "Level 39 + at night"
+  },
+  {
+    "fromSpeciesId": 704,
+    "fromFormName": "base",
+    "toSpeciesId": 705,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 704,
+    "fromFormName": "base",
+    "toSpeciesId": 705,
+    "toFormName": "hisui",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 705,
+    "fromFormName": "base",
+    "toSpeciesId": 706,
+    "toFormName": "base",
+    "method": "Level 50 + while raining"
+  },
+  {
+    "fromSpeciesId": 705,
+    "fromFormName": "hisui",
+    "toSpeciesId": 706,
+    "toFormName": "hisui",
+    "method": "Level 50 + while raining"
+  },
+  {
+    "fromSpeciesId": 708,
+    "fromFormName": "base",
+    "toSpeciesId": 709,
+    "toFormName": "base",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 710,
+    "fromFormName": "base",
+    "toSpeciesId": 711,
+    "toFormName": "base",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 710,
+    "fromFormName": "small",
+    "toSpeciesId": 711,
+    "toFormName": "small",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 710,
+    "fromFormName": "large",
+    "toSpeciesId": 711,
+    "toFormName": "large",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 710,
+    "fromFormName": "super",
+    "toSpeciesId": 711,
+    "toFormName": "super",
+    "method": "Trade"
+  },
+  {
+    "fromSpeciesId": 712,
+    "fromFormName": "base",
+    "toSpeciesId": 713,
+    "toFormName": "base",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 712,
+    "fromFormName": "base",
+    "toSpeciesId": 713,
+    "toFormName": "hisui",
+    "method": "Level 37"
+  },
+  {
+    "fromSpeciesId": 714,
+    "fromFormName": "base",
+    "toSpeciesId": 715,
+    "toFormName": "base",
+    "method": "Level 48"
+  },
+  {
+    "fromSpeciesId": 722,
+    "fromFormName": "base",
+    "toSpeciesId": 723,
+    "toFormName": "base",
+    "method": "Level 17"
+  },
+  {
+    "fromSpeciesId": 723,
+    "fromFormName": "base",
+    "toSpeciesId": 724,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 723,
+    "fromFormName": "base",
+    "toSpeciesId": 724,
+    "toFormName": "hisui",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 725,
+    "fromFormName": "base",
+    "toSpeciesId": 726,
+    "toFormName": "base",
+    "method": "Level 17"
+  },
+  {
+    "fromSpeciesId": 726,
+    "fromFormName": "base",
+    "toSpeciesId": 727,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 728,
+    "fromFormName": "base",
+    "toSpeciesId": 729,
+    "toFormName": "base",
+    "method": "Level 17"
+  },
+  {
+    "fromSpeciesId": 729,
+    "fromFormName": "base",
+    "toSpeciesId": 730,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 731,
+    "fromFormName": "base",
+    "toSpeciesId": 732,
+    "toFormName": "base",
+    "method": "Level 14"
+  },
+  {
+    "fromSpeciesId": 732,
+    "fromFormName": "base",
+    "toSpeciesId": 733,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 734,
+    "fromFormName": "base",
+    "toSpeciesId": 735,
+    "toFormName": "base",
+    "method": "Level 20 + during the day"
+  },
+  {
+    "fromSpeciesId": 736,
+    "fromFormName": "base",
+    "toSpeciesId": 737,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 737,
+    "fromFormName": "base",
+    "toSpeciesId": 738,
+    "toFormName": "base",
+    "method": "at Vast Poni Canyon + level up or at Blush Mountain + level up or Thunder Stone"
+  },
+  {
+    "fromSpeciesId": 739,
+    "fromFormName": "base",
+    "toSpeciesId": 740,
+    "toFormName": "base",
+    "method": "at Mount Lanakila + level up or Ice Stone"
+  },
+  {
+    "fromSpeciesId": 742,
+    "fromFormName": "base",
+    "toSpeciesId": 743,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 744,
+    "fromFormName": "base",
+    "toSpeciesId": 745,
+    "toFormName": "base",
+    "method": "Level 25 + during the day"
+  },
+  {
+    "fromSpeciesId": 744,
+    "fromFormName": "base",
+    "toSpeciesId": 745,
+    "toFormName": "midnight",
+    "method": "Level 25 + at night"
+  },
+  {
+    "fromSpeciesId": 744,
+    "fromFormName": "own-tempo",
+    "toSpeciesId": 745,
+    "toFormName": "dusk",
+    "method": "Level 25 + at dusk"
+  },
+  {
+    "fromSpeciesId": 747,
+    "fromFormName": "base",
+    "toSpeciesId": 748,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 749,
+    "fromFormName": "base",
+    "toSpeciesId": 750,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 751,
+    "fromFormName": "base",
+    "toSpeciesId": 752,
+    "toFormName": "base",
+    "method": "Level 22"
+  },
+  {
+    "fromSpeciesId": 753,
+    "fromFormName": "base",
+    "toSpeciesId": 754,
+    "toFormName": "base",
+    "method": "Level 34 + during the day"
+  },
+  {
+    "fromSpeciesId": 755,
+    "fromFormName": "base",
+    "toSpeciesId": 756,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 757,
+    "fromFormName": "base",
+    "toSpeciesId": 758,
+    "toFormName": "base",
+    "method": "Level 33 (female)"
+  },
+  {
+    "fromSpeciesId": 759,
+    "fromFormName": "base",
+    "toSpeciesId": 760,
+    "toFormName": "base",
+    "method": "Level 27"
+  },
+  {
+    "fromSpeciesId": 761,
+    "fromFormName": "base",
+    "toSpeciesId": 762,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 762,
+    "fromFormName": "base",
+    "toSpeciesId": 763,
+    "toFormName": "base",
+    "method": "knows Stomp + level up"
+  },
+  {
+    "fromSpeciesId": 767,
+    "fromFormName": "base",
+    "toSpeciesId": 768,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 769,
+    "fromFormName": "base",
+    "toSpeciesId": 770,
+    "toFormName": "base",
+    "method": "Level 42"
+  },
+  {
+    "fromSpeciesId": 772,
+    "fromFormName": "base",
+    "toSpeciesId": 773,
+    "toFormName": "base",
+    "method": "160 friendship + level up"
+  },
+  {
+    "fromSpeciesId": 782,
+    "fromFormName": "base",
+    "toSpeciesId": 783,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 783,
+    "fromFormName": "base",
+    "toSpeciesId": 784,
+    "toFormName": "base",
+    "method": "Level 45"
+  },
+  {
+    "fromSpeciesId": 789,
+    "fromFormName": "base",
+    "toSpeciesId": 790,
+    "toFormName": "base",
+    "method": "Level 43"
+  },
+  {
+    "fromSpeciesId": 790,
+    "fromFormName": "base",
+    "toSpeciesId": 791,
+    "toFormName": "base",
+    "method": "Level 53"
+  },
+  {
+    "fromSpeciesId": 790,
+    "fromFormName": "base",
+    "toSpeciesId": 792,
+    "toFormName": "base",
+    "method": "Level 53"
+  },
+  {
+    "fromSpeciesId": 803,
+    "fromFormName": "base",
+    "toSpeciesId": 804,
+    "toFormName": "base",
+    "method": "knows Dragon Pulse + level up"
+  },
+  {
+    "fromSpeciesId": 808,
+    "fromFormName": "base",
+    "toSpeciesId": 809,
+    "toFormName": "base",
+    "method": "Feed 400 Meltan Candy"
+  },
+  {
+    "fromSpeciesId": 810,
+    "fromFormName": "base",
+    "toSpeciesId": 811,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 811,
+    "fromFormName": "base",
+    "toSpeciesId": 812,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 813,
+    "fromFormName": "base",
+    "toSpeciesId": 814,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 814,
+    "fromFormName": "base",
+    "toSpeciesId": 815,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 816,
+    "fromFormName": "base",
+    "toSpeciesId": 817,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 817,
+    "fromFormName": "base",
+    "toSpeciesId": 818,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 819,
+    "fromFormName": "base",
+    "toSpeciesId": 820,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 821,
+    "fromFormName": "base",
+    "toSpeciesId": 822,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 822,
+    "fromFormName": "base",
+    "toSpeciesId": 823,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 824,
+    "fromFormName": "base",
+    "toSpeciesId": 825,
+    "toFormName": "base",
+    "method": "Level 10"
+  },
+  {
+    "fromSpeciesId": 825,
+    "fromFormName": "base",
+    "toSpeciesId": 826,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 827,
+    "fromFormName": "base",
+    "toSpeciesId": 828,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 829,
+    "fromFormName": "base",
+    "toSpeciesId": 830,
+    "toFormName": "base",
+    "method": "Level 20"
+  },
+  {
+    "fromSpeciesId": 831,
+    "fromFormName": "base",
+    "toSpeciesId": 832,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 833,
+    "fromFormName": "base",
+    "toSpeciesId": 834,
+    "toFormName": "base",
+    "method": "Level 22"
+  },
+  {
+    "fromSpeciesId": 835,
+    "fromFormName": "base",
+    "toSpeciesId": 836,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 837,
+    "fromFormName": "base",
+    "toSpeciesId": 838,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 838,
+    "fromFormName": "base",
+    "toSpeciesId": 839,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 840,
+    "fromFormName": "base",
+    "toSpeciesId": 841,
+    "toFormName": "base",
+    "method": "Tart Apple"
+  },
+  {
+    "fromSpeciesId": 840,
+    "fromFormName": "base",
+    "toSpeciesId": 842,
+    "toFormName": "base",
+    "method": "Sweet Apple"
+  },
+  {
+    "fromSpeciesId": 840,
+    "fromFormName": "base",
+    "toSpeciesId": 1011,
+    "toFormName": "base",
+    "method": "Syrupy Apple"
+  },
+  {
+    "fromSpeciesId": 843,
+    "fromFormName": "base",
+    "toSpeciesId": 844,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 846,
+    "fromFormName": "base",
+    "toSpeciesId": 847,
+    "toFormName": "base",
+    "method": "Level 26"
+  },
+  {
+    "fromSpeciesId": 848,
+    "fromFormName": "base",
+    "toSpeciesId": 849,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 848,
+    "fromFormName": "base",
+    "toSpeciesId": 849,
+    "toFormName": "low-key",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 850,
+    "fromFormName": "base",
+    "toSpeciesId": 851,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 852,
+    "fromFormName": "base",
+    "toSpeciesId": 853,
+    "toFormName": "base",
+    "method": "knows Taunt + level up"
+  },
+  {
+    "fromSpeciesId": 854,
+    "fromFormName": "base",
+    "toSpeciesId": 855,
+    "toFormName": "base",
+    "method": "Cracked Pot"
+  },
+  {
+    "fromSpeciesId": 854,
+    "fromFormName": "antique",
+    "toSpeciesId": 855,
+    "toFormName": "antique",
+    "method": "Chipped Pot"
+  },
+  {
+    "fromSpeciesId": 856,
+    "fromFormName": "base",
+    "toSpeciesId": 857,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 857,
+    "fromFormName": "base",
+    "toSpeciesId": 858,
+    "toFormName": "base",
+    "method": "Level 42"
+  },
+  {
+    "fromSpeciesId": 859,
+    "fromFormName": "base",
+    "toSpeciesId": 860,
+    "toFormName": "base",
+    "method": "Level 32"
+  },
+  {
+    "fromSpeciesId": 860,
+    "fromFormName": "base",
+    "toSpeciesId": 861,
+    "toFormName": "base",
+    "method": "Level 42"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "base",
+    "method": "Spin while holding a Sweet"
+  },
+  {
+    "fromSpeciesId": 872,
+    "fromFormName": "base",
+    "toSpeciesId": 873,
+    "toFormName": "base",
+    "method": "160 friendship + at night + level up"
+  },
+  {
+    "fromSpeciesId": 878,
+    "fromFormName": "base",
+    "toSpeciesId": 879,
+    "toFormName": "base",
+    "method": "Level 34"
+  },
+  {
+    "fromSpeciesId": 884,
+    "fromFormName": "base",
+    "toSpeciesId": 1018,
+    "toFormName": "base",
+    "method": "Metal Alloy"
+  },
+  {
+    "fromSpeciesId": 885,
+    "fromFormName": "base",
+    "toSpeciesId": 886,
+    "toFormName": "base",
+    "method": "Level 50"
+  },
+  {
+    "fromSpeciesId": 886,
+    "fromFormName": "base",
+    "toSpeciesId": 887,
+    "toFormName": "base",
+    "method": "Level 60"
+  },
+  {
+    "fromSpeciesId": 891,
+    "fromFormName": "base",
+    "toSpeciesId": 892,
+    "toFormName": "base",
+    "method": "Tower of Darkness (Sword only) or Scroll of Darkness"
+  },
+  {
+    "fromSpeciesId": 891,
+    "fromFormName": "base",
+    "toSpeciesId": 892,
+    "toFormName": "rapid-strike",
+    "method": "Tower of Waters (Shield only) or Scroll of Waters"
+  },
+  {
+    "fromSpeciesId": 906,
+    "fromFormName": "base",
+    "toSpeciesId": 907,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 907,
+    "fromFormName": "base",
+    "toSpeciesId": 908,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 909,
+    "fromFormName": "base",
+    "toSpeciesId": 910,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 910,
+    "fromFormName": "base",
+    "toSpeciesId": 911,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 912,
+    "fromFormName": "base",
+    "toSpeciesId": 913,
+    "toFormName": "base",
+    "method": "Level 16"
+  },
+  {
+    "fromSpeciesId": 913,
+    "fromFormName": "base",
+    "toSpeciesId": 914,
+    "toFormName": "base",
+    "method": "Level 36"
+  },
+  {
+    "fromSpeciesId": 915,
+    "fromFormName": "base",
+    "toSpeciesId": 916,
+    "toFormName": "base",
+    "method": "Level 18 (male)"
+  },
+  {
+    "fromSpeciesId": 915,
+    "fromFormName": "base",
+    "toSpeciesId": 916,
+    "toFormName": "female",
+    "method": "Level 18 (female)"
+  },
+  {
+    "fromSpeciesId": 917,
+    "fromFormName": "base",
+    "toSpeciesId": 918,
+    "toFormName": "base",
+    "method": "Level 15"
+  },
+  {
+    "fromSpeciesId": 919,
+    "fromFormName": "base",
+    "toSpeciesId": 920,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 921,
+    "fromFormName": "base",
+    "toSpeciesId": 922,
+    "toFormName": "base",
+    "method": "Level 18"
+  },
+  {
+    "fromSpeciesId": 922,
+    "fromFormName": "base",
+    "toSpeciesId": 923,
+    "toFormName": "base",
+    "method": "1000 steps walked + level up"
+  },
+  {
+    "fromSpeciesId": 924,
+    "fromFormName": "base",
+    "toSpeciesId": 925,
+    "toFormName": "base",
+    "method": "Level 25 + 99% chance"
+  },
+  {
+    "fromSpeciesId": 924,
+    "fromFormName": "base",
+    "toSpeciesId": 925,
+    "toFormName": "family-of-three",
+    "method": "Level 25 + 1% chance"
+  },
+  {
+    "fromSpeciesId": 926,
+    "fromFormName": "base",
+    "toSpeciesId": 927,
+    "toFormName": "base",
+    "method": "Level 26"
+  },
+  {
+    "fromSpeciesId": 928,
+    "fromFormName": "base",
+    "toSpeciesId": 929,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 929,
+    "fromFormName": "base",
+    "toSpeciesId": 930,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 932,
+    "fromFormName": "base",
+    "toSpeciesId": 933,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 933,
+    "fromFormName": "base",
+    "toSpeciesId": 934,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 935,
+    "fromFormName": "base",
+    "toSpeciesId": 936,
+    "toFormName": "base",
+    "method": "Auspicious Armor"
+  },
+  {
+    "fromSpeciesId": 935,
+    "fromFormName": "base",
+    "toSpeciesId": 937,
+    "toFormName": "base",
+    "method": "Malicious Armor"
+  },
+  {
+    "fromSpeciesId": 938,
+    "fromFormName": "base",
+    "toSpeciesId": 939,
+    "toFormName": "base",
+    "method": "Thunder Stone"
+  },
+  {
+    "fromSpeciesId": 940,
+    "fromFormName": "base",
+    "toSpeciesId": 941,
+    "toFormName": "base",
+    "method": "Level 25"
+  },
+  {
+    "fromSpeciesId": 942,
+    "fromFormName": "base",
+    "toSpeciesId": 943,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 944,
+    "fromFormName": "base",
+    "toSpeciesId": 945,
+    "toFormName": "base",
+    "method": "Level 28"
+  },
+  {
+    "fromSpeciesId": 946,
+    "fromFormName": "base",
+    "toSpeciesId": 947,
+    "toFormName": "base",
+    "method": "1000 steps walked + level up"
+  },
+  {
+    "fromSpeciesId": 948,
+    "fromFormName": "base",
+    "toSpeciesId": 949,
+    "toFormName": "base",
+    "method": "Level 30"
+  },
+  {
+    "fromSpeciesId": 951,
+    "fromFormName": "base",
+    "toSpeciesId": 952,
+    "toFormName": "base",
+    "method": "Fire Stone"
+  },
+  {
+    "fromSpeciesId": 953,
+    "fromFormName": "base",
+    "toSpeciesId": 954,
+    "toFormName": "base",
+    "method": "1000 steps walked + level up"
+  },
+  {
+    "fromSpeciesId": 955,
+    "fromFormName": "base",
+    "toSpeciesId": 956,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 957,
+    "fromFormName": "base",
+    "toSpeciesId": 958,
+    "toFormName": "base",
+    "method": "Level 24"
+  },
+  {
+    "fromSpeciesId": 958,
+    "fromFormName": "base",
+    "toSpeciesId": 959,
+    "toFormName": "base",
+    "method": "Level 38"
+  },
+  {
+    "fromSpeciesId": 960,
+    "fromFormName": "base",
+    "toSpeciesId": 961,
+    "toFormName": "base",
+    "method": "Level 26"
+  },
+  {
+    "fromSpeciesId": 963,
+    "fromFormName": "base",
+    "toSpeciesId": 964,
+    "toFormName": "base",
+    "method": "Level 38 + in multiplayer"
+  },
+  {
+    "fromSpeciesId": 965,
+    "fromFormName": "base",
+    "toSpeciesId": 966,
+    "toFormName": "base",
+    "method": "Level 40"
+  },
+  {
+    "fromSpeciesId": 969,
+    "fromFormName": "base",
+    "toSpeciesId": 970,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 971,
+    "fromFormName": "base",
+    "toSpeciesId": 972,
+    "toFormName": "base",
+    "method": "Level 30 + at night"
+  },
+  {
+    "fromSpeciesId": 974,
+    "fromFormName": "base",
+    "toSpeciesId": 975,
+    "toFormName": "base",
+    "method": "Ice Stone"
+  },
+  {
+    "fromSpeciesId": 996,
+    "fromFormName": "base",
+    "toSpeciesId": 997,
+    "toFormName": "base",
+    "method": "Level 35"
+  },
+  {
+    "fromSpeciesId": 997,
+    "fromFormName": "base",
+    "toSpeciesId": 998,
+    "toFormName": "base",
+    "method": "Level 54"
+  },
+  {
+    "fromSpeciesId": 999,
+    "fromFormName": "base",
+    "toSpeciesId": 1000,
+    "toFormName": "base",
+    "method": "Collect 999 Gimmighoul Coins"
+  },
+  {
+    "fromSpeciesId": 1011,
+    "fromFormName": "base",
+    "toSpeciesId": 1019,
+    "toFormName": "base",
+    "method": "knows Dragon Cheer + level up"
+  },
+  {
+    "fromSpeciesId": 1012,
+    "fromFormName": "base",
+    "toSpeciesId": 1013,
+    "toFormName": "base",
+    "method": "Unremarkable Teacup"
+  },
+  {
+    "fromSpeciesId": 1012,
+    "fromFormName": "artisan",
+    "toSpeciesId": 1013,
+    "toFormName": "masterpiece",
+    "method": "Masterpiece Teacup"
+  }
+]
