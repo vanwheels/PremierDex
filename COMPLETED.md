@@ -1,5 +1,17 @@
 # COMPLETED
 
+## [Codebase File-Size Cleanup Leg 1: health check + sweep] — 2026-09-21
+Confirmed Legs 2-5's recorded line counts all still match current state (no drift since
+scoping). Swept `src`/`scripts`/`data` for untracked hard-cap (500+) violators and found two:
+`schema.test.ts` (606 lines, folded into Leg 2 — its flat `it()` list groups naturally along
+the same CHECK-widen-rebuild/retrofit-ALTER boundary Leg 2 is already splitting on) and
+`scripts/fetch-pokemon-forms.ts` (656 lines, new Leg 6 — despite its docstring framing it as
+data-adjacent, it's `.ts` logic, not data, so it doesn't qualify for the static-data
+exemption `met-locations.ts`/`forms.json` get). Also found 11 files in the 300-499
+"soft cap" band; per Vanny (2026-09-21), this milestone stays scoped to hard-cap violators
+only, matching every file already tracked in Legs 2-5 — soft-cap files aren't split
+candidates for now. Pure investigation/decision leg, no code diff.
+
 ## [Ribbons & Marks: List/Collection View Entry Points Leg 2: inline Collection view button] — 2026-09-20
 Final leg — milestone shipped, see MILESTONES.md. `CollectionRow`'s single Origin cell had
 room (unlike List view's cramped regular/shiny cells), so it got a straightforward second

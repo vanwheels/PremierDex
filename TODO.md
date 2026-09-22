@@ -1,8 +1,69 @@
 # TODO
 
-No milestone currently active — the Curated Met Location dataset milestone shipped
-2026-09-21 (see MILESTONES.md). Next pick is Vanny's call: from Future Milestones below
-(most candidates not fully blocked) or from Unscheduled.
+Curated Met Location dataset shipped 2026-09-21 (see MILESTONES.md).
+
+## Current Milestone: Codebase File-Size Cleanup
+
+### [Codebase File-Size Cleanup] — Leg 2
+Split `schema.ts` (745 lines past the 500 hard cap) — grew via the box/placeholder tables,
+the Dex completeness tier migration, and `is_final_evolution_stage`'s retrofit. Each
+closed-set CHECK column (language, caught_ball, sid) has picked up its own "ALTER-time CHECK
+can't be widened later" rebuild block over time, and that pattern will likely repeat.
+Investigating the split (during Leg 2 of the tier migration) surfaced a real ordering
+hazard: several CHECK-widen rebuilds (the two sid 4294→999999 ones, at minimum) must run
+*before* later ADD COLUMN retrofits (language, caught_ball, storage_location_id,
+box_number/box_slot) because their rebuilt table's column list doesn't include those
+not-yet-added columns. Naively extracting "the rebuild blocks" into one function called once
+would silently drop that data on any install still carrying the old sid CHECK — a correct
+split needs to preserve that interleaving or thread the dependency explicitly. Candidate
+split: pull the CHECK-widen rebuild blocks into their own module alongside the retrofit
+ALTERs, with the ordering hazard designed around explicitly. Fold in a matching
+`schema.test.ts` split (606 lines, also over cap, confirmed by Leg 1 — a single flat
+`it()` list under one `describe('applySchema')`, with the CHECK-widen rebuild tests
+(trainer_profiles/collection_entries sid widen, the two rebuild-preserves-existing-rows
+cases, the FK-safety rebuild cases) already grouping naturally along the same module
+boundary as the rebuild-block/retrofit-ALTER split above).
+Last touched: 2026-09-21. Re-check count: 0.
+
+### [Codebase File-Size Cleanup] — Leg 3
+Split `sqlite-storage.ts` (743 lines, well past the 500 hard cap — grew from 498 as of the
+Dex completeness tier migration to 743 via Leg 3 of Box View Move & Undo Operations'
+`restoreEntryBoxPositions`). Candidate split: the CollectionEntry-specific prepared
+statements/methods (setOwned/setEntryOrigin/setEntryStorageLocation/box-position/bulk-* —
+roughly a third of the file) into their own module, mirroring collection-backup.ts's
+extraction pattern (Leg 3 of Box Arrangement).
+Last touched: 2026-09-21. Re-check count: 0.
+
+### [Codebase File-Size Cleanup] — Leg 4
+Split `useCollectionData.ts` (501 lines, 1 past the 500 hard cap as of Leg 3 of Box View
+Move & Undo Operations — `restoreEntryBoxPositions`'s renderer-side undo plumbing pushed it
+over). Candidate split: the box-position/undo-stack slice
+(setEntryBoxPosition/swapEntryBoxPositions/fillBoxSlots/moveEntriesToLocation/undo and their
+apply/snapshot helpers) into its own hook, composed back in by useCollectionData.
+Last touched: 2026-09-21. Re-check count: 0.
+
+### [Codebase File-Size Cleanup] — Leg 5
+Split `met-locations.test.ts` (1330 lines, 830 past the 500 hard cap) — each leg of the
+now-shipped Curated Met Location dataset milestone added its own describe block's worth of
+`it(...)` cases. `met-locations.ts` itself is exempt as a large static data file, but the
+test file is ordinary code and not exempt. Candidate split: one test file per map
+family/generation (e.g. `met-locations.kanto.test.ts`, `met-locations.hoenn.test.ts`),
+mirroring how `met-locations.ts`'s own const groupings are already organized by family.
+Last touched: 2026-09-21. Re-check count: 0.
+
+### [Codebase File-Size Cleanup] — Leg 6
+Split `scripts/fetch-pokemon-forms.ts` (656 lines past the 500 hard cap). Resolved by Leg 1
+(2026-09-21): despite the header docstring framing it as a one-off script in the same spirit
+as the committed static JSON it writes, the file itself is `.ts` source code with real
+logic (fetch/classification functions, concurrency handling), not data — it doesn't qualify
+for the static-data-file exemption and is in scope like any other code file. Candidate
+split: the file is really a small core of fetch/classification logic wrapped around a large
+block of hand-maintained data tables — `OVERRIDES`, `SHINY_LOCKED`, `ALWAYS_SHINY`,
+`VERSION_GROUP_GENERATION`, `REGIONAL_GROUPS`, and the ride-mode/starter/spurious-multi-form/
+gender-pair-multi-form species lists (roughly lines 163-386, ~220 lines). Pulling those into
+a sibling data/constants module (mirroring the OVERRIDES-style tables already isolated in
+other scripts) leaves the fetch/classification logic under the hard cap on its own.
+Last touched: 2026-09-21. Re-check count: 0.
 
 ## Unscheduled
 
@@ -64,46 +125,6 @@ together rather than as separate milestones:
   exact same gap.
 Last touched: 2026-09-19. Re-check count: 0.
 
-### [Codebase File-Size Cleanup] — future milestone
-Three files past the line-count caps, candidates for the same split pattern
-(collection-backup.ts's extraction from sqlite-storage.ts, Leg 3 of Box Arrangement, is the
-template):
-- **Split schema.ts**: 567 lines, 67 past the 500 hard cap — grew via the box/placeholder
-  tables, the Dex completeness tier migration, and `is_final_evolution_stage`'s retrofit.
-  Each closed-set CHECK column (language, caught_ball, sid) has picked up its own
-  "ALTER-time CHECK can't be widened later" rebuild block over time, and that pattern will
-  likely repeat. Investigating the split (during Leg 2 of the tier migration) surfaced a
-  real ordering hazard: several CHECK-widen rebuilds (the two sid 4294→999999 ones, at
-  minimum) must run *before* later ADD COLUMN retrofits (language, caught_ball,
-  storage_location_id, box_number/box_slot) because their rebuilt table's column list
-  doesn't include those not-yet-added columns. Naively extracting "the rebuild blocks"
-  into one function called once would silently drop that data on any install still
-  carrying the old sid CHECK — a correct split needs to preserve that interleaving or
-  thread the dependency explicitly. Candidate split: pull the CHECK-widen rebuild blocks
-  into their own module alongside the retrofit ALTERs, with the ordering hazard designed
-  around explicitly.
-- **Split sqlite-storage.ts**: 498 lines, 1 under the hard cap as of Leg 3 of the Dex
-  completeness tier migration (`bulkSetEntryGender`). Candidate split: the
-  CollectionEntry-specific prepared statements/methods (setOwned/setEntryOrigin/
-  setEntryStorageLocation/box-position/bulk-* — roughly a third of the file) into their own
-  module, mirroring collection-backup.ts's pattern. Now 743 lines as of Leg 3 of the Box
-  View Move & Undo Operations milestone (`restoreEntryBoxPositions`), well past the cap.
-- **Split useCollectionData.ts**: 501 lines, 1 past the 500 hard cap as of Leg 3 of the Box
-  View Move & Undo Operations milestone (`restoreEntryBoxPositions`'s renderer-side undo
-  plumbing pushed it over). Candidate split: the box-position/undo-stack slice
-  (setEntryBoxPosition/swapEntryBoxPositions/fillBoxSlots/moveEntriesToLocation/undo and
-  their apply/snapshot helpers — roughly the same "one feature area" carve-out as the other
-  two files above) into its own hook, composed back in by useCollectionData.
-- **Split met-locations.test.ts**: 1330 lines, 830 past the 500 hard cap as of Leg 28
-  (final leg) of the now-shipped Curated Met Location dataset milestone — each leg added
-  its own describe block's worth of `it(...)` cases, and the milestone shipping means this
-  file is done growing from that source, but it's now overdue for the split rather than
-  still-growing. `met-locations.ts` itself is exempt as a large static data file, but the
-  test file is ordinary code and not exempt. Candidate split: one test file per map
-  family/generation (e.g. `met-locations.kanto.test.ts`, `met-locations.hoenn.test.ts`),
-  mirroring how `met-locations.ts`'s own const groupings are already organized by family.
-Last touched: 2026-09-21. Re-check count: 0.
-
 ### [Remove "Unassigned" as the default check-in bucket] — future milestone
 Raised by Vanny 2026-09-04: the Unassigned storage location is bad UX as a default landing
 spot — better to let the user add a mon directly into whichever storage/box they want at
@@ -135,6 +156,37 @@ milestone), each arrow labeled with how that evolution happens. Vanny plans othe
 for this same popup beyond the family tree, not yet specified. Deliberately not scoped —
 Vanny will provide a mockup when this milestone comes up.
 Last touched: 2026-09-20. Re-check count: 0.
+
+### [Encounter tables + location/game search UI] — future milestone
+Raised by Vanny 2026-09-21, after the Curated Met Location dataset milestone shipped: once
+full encounter tables exist for every curated Met Location across all games, the app needs a
+new UI system for searching Pokémon and viewing where they're encountered — linked to the
+Dex/storage feature. Needs to support browsing encounters by location or by game, which
+implies somewhat interactable maps per game. Confirmed 2026-09-21: OK to split into as many
+milestones as makes sense once this is picked up (e.g. data build vs. UI as separate
+milestones) — written down now just to capture the idea, not to lock in a single scope.
+Data sourcing unresolved: no known dataset/API confirmed to have full per-game encounter
+data yet. PokeAPI (already used for ChoiceBuds) is the only known candidate — needs
+investigating whether its coverage is complete enough, or whether this needs hand-curation
+like the Met Location lists were. Map convention: gens 1-7 and (mostly) Sword/Shield use a
+map that distinctly breaks up each route/city and highlights the selected area — usable as
+design inspiration. Scarlet/Violet largely breaks that convention, and Legends Arceus/Z-A
+break it entirely (open world), so map treatment likely needs per-era variants rather than
+one universal system. Pokémon GO gets no map — real-world location data, not a fixed map.
+Blocked: needs the encounter-table data itself built first (not yet started/scoped) before
+this UI work can be scoped for real.
+Last touched: 2026-09-21. Re-check count: 0.
+
+### [Catch rate + capture probability calculator] — future milestone
+Raised by Vanny 2026-09-21, split out from the Encounter tables + location/game search UI
+idea above rather than bundled into it. Eventually clicking a Pokémon (in the planned
+species detail popup, see the Species detail popup + evolution family tree entry below)
+should show its base catch rate; later, a capture probability calculator on top of that,
+since capture probability depends on base catch rate, current HP, status condition, and
+Poké Ball type. Vanny suggested checking for an existing open-source calculator/formula to
+adapt rather than building the formula from scratch. Deliberately not scoped — written down
+to capture the idea only.
+Last touched: 2026-09-21. Re-check count: 0.
 
 ### [Full UI/UX pass on the Dex interface] — future milestone
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones
