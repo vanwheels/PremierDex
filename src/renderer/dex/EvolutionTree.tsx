@@ -47,8 +47,8 @@ export function EvolutionTree({
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
   const formByKey = useMemo(() => new Map(forms.map((f) => [`${f.speciesId}:${f.formName}`, f])), [forms])
   const tree = useMemo(
-    () => buildEvolutionFamilyTree(speciesId, species, evolutionEdges),
-    [speciesId, species, evolutionEdges]
+    () => buildEvolutionFamilyTree(speciesId, formName, species, forms, evolutionEdges),
+    [speciesId, formName, species, forms, evolutionEdges]
   )
 
   return (

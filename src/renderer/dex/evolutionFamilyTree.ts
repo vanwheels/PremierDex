@@ -1,4 +1,4 @@
-import type { Species } from '@shared/types/pokemon'
+import type { Form, Species } from '@shared/types/pokemon'
 import type { EvolutionEdge } from '@shared/types/evolution'
 
 /** One (species+form) node in an evolution family tree, plus the edges leading to each of
@@ -29,16 +29,32 @@ export function findEvolutionFamilyRootSpeciesId(speciesId: number, species: Spe
   return current.id
 }
 
-/** Builds the full evolution family tree containing `speciesId`, rooted at the chain's
- * base-form ancestor. Branches (regional forms, multi-evolution species like Eevee) come
- * straight from `evolutionEdges` — see its own doc comment for why this can't be done from
- * Species.evolvesFromSpeciesId alone. Guards against a cyclic edge set (shouldn't occur in
- * real PokeAPI data) by never re-visiting a (speciesId, formName) pair. */
+/** Builds the full evolution family tree containing `speciesId`/`formName`, rooted at the
+ * chain's base-form ancestor. Branches (regional forms, multi-evolution species like Eevee)
+ * come straight from `evolutionEdges` — see its own doc comment for why this can't be done
+ * from Species.evolvesFromSpeciesId alone. Guards against a cyclic edge set (shouldn't occur
+ * in real PokeAPI data) by never re-visiting a (speciesId, formName) pair.
+ *
+ * `formName`'s current form is checked against `forms` first: a `cosmetic_variant` or
+ * `non_boxable` form (Pikachu's Cosplay/cap variants, any species' Mega/Gmax) is a pure
+ * reskin or battle-only form that can't evolve or be evolved into, even though the species
+ * it belongs to might otherwise have a family — PokeAPI's evolution-chain data (what
+ * `evolutionEdges` is built from) is species-level and doesn't know about formName at all,
+ * so without this check the root walk below would silently substitute the base form's
+ * family. Bug found by Vanny (Leg 6 of the Species detail popup + evolution family tree
+ * milestone): cosmetic-variant Pikachu forms were showing the base Pikachu -> Raichu chain. */
 export function buildEvolutionFamilyTree(
   speciesId: number,
+  formName: string,
   species: Species[],
+  forms: Form[],
   evolutionEdges: EvolutionEdge[]
 ): EvolutionTreeNode {
+  const currentForm = forms.find((f) => f.speciesId === speciesId && f.formName === formName)
+  if (currentForm && currentForm.formCategory !== 'dex_distinct') {
+    return { speciesId, formName, children: [] }
+  }
+
   const edgesByParent = new Map<string, EvolutionEdge[]>()
   for (const edge of evolutionEdges) {
     const key = `${edge.fromSpeciesId}:${edge.fromFormName}`
