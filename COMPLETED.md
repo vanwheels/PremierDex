@@ -11,7 +11,7 @@ the fixed-width arrow column. Separately, a branch above a new `WIDE_BRANCH_THRE
 only Eevee's 8-evolution branch crosses it today) now renders its children as a two-column
 CSS grid (`evolution-tree-children-wide`, `grid-auto-flow: column`) instead of a single
 vertical column, roughly halving that branch's height so it fits without triggering
-`.evolution-tree`'s `max-height: 70vh` scroll. See commit `<pending>`.
+`.evolution-tree`'s `max-height: 70vh` scroll. See commit `bc6d6d0`.
 
 ## [Species detail popup + evolution family tree Leg 8: wire forme-switch groups into the popup] — 2026-09-22
 UI half of Leg 7: species detail popup's info view gets a second "View Alternate Formes"
