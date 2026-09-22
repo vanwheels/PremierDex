@@ -90,15 +90,28 @@
 }
 
 /* Leg 9: a branch above EvolutionTree.tsx's WIDE_BRANCH_THRESHOLD (Eevee's 8 evolutions,
-   the only family in the dataset that wide) switches from a single tall column to a
-   two-column grid instead — grid-auto-flow: column fills the first column top-to-bottom
-   before starting the second, so it still reads as a stacked list, just half as tall.
-   grid-template-rows is set inline per-node (row count depends on child count). */
+   the only family in the dataset that wide) splits into two independently-stacked columns
+   instead of one tall one. A single CSS grid was tried first and reverted — with both
+   columns' rows sharing grid tracks, column 1's bubble sat directly beside column 2's arrow
+   on the same row (e.g. Vaporeon beside the arrow into Umbreon), reading as if one evolved
+   into the other. Two plain flex columns plus a border on the second (below) don't share
+   row tracks and are visibly boxed apart, so no row reads as a single connected sequence. */
 .evolution-tree-children-wide {
-  display: grid;
-  grid-auto-flow: column;
-  column-gap: 1.5rem;
-  row-gap: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.evolution-tree-children-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.evolution-tree-children-col-divided {
+  border-left: 1px solid var(--border);
+  padding-left: 2rem;
 }
 
 .evolution-tree-branch {

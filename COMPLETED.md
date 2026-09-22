@@ -7,11 +7,17 @@ multi-alternative `" or "`-joined method string (Leafeon/Glaceon's per-game loca
 alternatives, the longest strings in the dataset) to a short "N Methods" label with the full
 string moved to a native `title` tooltip — same pattern as `DexRow`'s
 `dex-invalid-combo-badge` — instead of letting the run-on sentence wrap across many lines in
-the fixed-width arrow column. Separately, a branch above a new `WIDE_BRANCH_THRESHOLD` (4;
-only Eevee's 8-evolution branch crosses it today) now renders its children as a two-column
-CSS grid (`evolution-tree-children-wide`, `grid-auto-flow: column`) instead of a single
-vertical column, roughly halving that branch's height so it fits without triggering
-`.evolution-tree`'s `max-height: 70vh` scroll. See commit `bc6d6d0`.
+the fixed-width arrow column. Confirmed fine as-is by Vanny; full rework deferred to the
+future "Full UI/UX pass" milestone. Separately, a branch above a new `WIDE_BRANCH_THRESHOLD`
+(4; only Eevee's 8-evolution branch crosses it today) now splits its children into two
+columns instead of one tall one, roughly halving that branch's height so it fits without
+triggering `.evolution-tree`'s `max-height: 70vh` scroll. First attempt shared a CSS grid
+across both columns, which Vanny caught live: with both columns' rows on shared grid tracks,
+column 1's bubble sat right beside column 2's arrow on the same row (e.g. Vaporeon beside the
+arrow into Umbreon), reading as if one evolved into the other. Reworked to two independent
+flex columns with a border on the second — see `evolution-tree.css`'s own comment. Vanny
+scoped the two-column fix to Eevee only for now; wants to see it live before deciding whether
+it's worth applying to every branching family. See commit `<pending>`.
 
 ## [Species detail popup + evolution family tree Leg 8: wire forme-switch groups into the popup] — 2026-09-22
 UI half of Leg 7: species detail popup's info view gets a second "View Alternate Formes"
