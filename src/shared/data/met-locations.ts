@@ -2898,6 +2898,184 @@ const HISUI_GEN8: readonly string[] = [
   'Your Quarters'
 ]
 
+/**
+ * Paldea, Pokémon Scarlet/Violet (Gen 9, shared base list) (Leg 26). Alphabetical
+ * throughout — Bulbapedia's own Paldea article states outright that "this is the only
+ * region not to have any traditionally numbered routes," so unlike every prior
+ * route-numbered family in this file there's no numeric-first section to build.
+ *
+ * No Bulbapedia "list of locations by index number" page exists for Generation IX (unlike
+ * Generations II-IV) — confirmed by search, not assumed absent. Followed GALAR_GEN8's Leg 23
+ * precedent instead: built from `Category:Scarlet and Violet locations` (plus the DLC-only
+ * `Category:Kitakami locations`/`Category:Blueberry Academy locations`), cross-checked
+ * against the Paldea/Kitakami/Terarium articles' own "Notable locations"/geography prose,
+ * fetched via the MediaWiki API's action=raw, 2026-09-21.
+ *
+ * **Inclusion test used throughout**: a bullet in the region page's own "Notable locations"
+ * list is only a real, distinct Met Location if Bulbapedia gives it its own wikilink (and
+ * therefore its own dedicated article, confirmed present in the category listing) — an
+ * unlinked bullet is Bulbapedia's own signal that the name is a plain-text point of interest
+ * folded into its already-listed parent area, not a separate place. Concretely: Paldea's
+ * "Ten Sights of Paldea" and Kitakami's "Six Wonders of Kitakami" are themselves umbrella
+ * checklist names (confirmed via their own pages — a set of scenic photo-op landmarks, not
+ * places), and most of their individual members (Grand Olive Orchard, Secluded Beach,
+ * Leaking Tower of Paldea, Million Volt Skyline, Glaseado's Grasp, Paldea's Highest Peak,
+ * Casseroya Falls, Gracia Stones, Fury Falls, Fallen Horn, Gracious Stones, Wisteria Pond)
+ * are unlinked plain text in the region page's own bullet list and have no dedicated
+ * article — folded into their parent Area/landmark rather than listed separately. The two
+ * exceptions that DO get their own entry despite being "Ten Sights" members: Colonnade
+ * Hollow and every Shrine (Grasswither/Icerend/Firescourge/Groundblight), each confirmed via
+ * its own wikilink, own article, and own category-membership row.
+ *
+ * **DLC areas (Kitakami/Teal Mask, Blueberry Academy+Terarium/Indigo Disk) are included in
+ * this one shared list**, same precedent GALAR_GEN8's Isle of Armor/Crown Tundra comment
+ * already set and flagged forward to this leg: there's no separate origin-game entry for
+ * "Scarlet + DLC," so a DLC-owning player's catches there need a selectable Met Location too.
+ *
+ * **Team Star's five squad bases (Segin/Schedar/Navi/Ruchbah/Caph) are excluded** — read
+ * Segin Squad's Base's own article directly rather than assuming a real building always has
+ * catchable Pokémon: its "Star Barrage" sends out `InactivePoké`-template battle Pokémon
+ * (`link=no`) that the player defeats via Let's Go auto-battle, not wild Pokémon that can be
+ * caught. No wild-encounter or gift-Pokémon section exists on any of the five bases' own
+ * pages. Same reasoning GALAR_GEN8 already applied to its Gym Stadiums/Battle Tower.
+ *
+ * **Blueberry Academy and Terarium are themselves excluded as region-name containers**, same
+ * treatment this file's "Galar"/"Wild Area" (GALAR_GEN8) and "Kanto"/"Johto"/"Hoenn" region
+ * exclusions already established — the real Met Location values are the Terarium's four
+ * named Biomes and five named Plazas (each confirmed via its own dedicated article and, for
+ * the Biomes, an explicit "different climates, ecosystems, and wild Pokémon" statement on
+ * the Terarium's own page) plus its two sub-cavern dungeons, Chargestone Cavern and Torchlit
+ * Labyrinth (each confirmed via its own wild-Pokémon catch table). **League Club Room and
+ * Blueberry Academy Cafeteria are excluded** as confirmed non-catch social/trade/shop rooms —
+ * the Cafeteria is a `Category:Restaurants` member selling Meal Power dishes, not Pokémon,
+ * and the Club Room's article documents only battles, trades, and cosmetic club services, no
+ * wild encounters. **Tengu Mountain is excluded as anime-only** — its own infobox is an
+ * `AnimeLocationInfobox`, confirmed absent from the games entirely, same treatment
+ * GALAR_GEN8 already gave Ancient castle/Karna's Poké Ball factory.
+ *
+ * **Every named shop/restaurant/clothing-chain location turned up by the category pull is
+ * excluded** as a generic repeated business type, same class of exclusion this file's every
+ * prior region already applies to Poké Mart/Pokémon Center: Aquiesta Supermarket, Artisan
+ * Bakery, Bagin's, Barato's, Chansey Supply, Chic Kebab, Deli Cioso, Delibird Presents, Every
+ * Wich Way, Gastronomie en Famille, Go-For-Broke Grill, Jade Palace Garden, Kanto Crepes,
+ * Kofu Lounge, Picnic-Knacks, Rough & Tough, Salon Renacer, Seabreeze Café, Seafood Fresco,
+ * Seguro Style, Smoochurro, Sock Quarter, Spec Shack, Sugar-N-Ice, Sure Cans, Sushi High
+ * Roller (Paldea), Veracidad, and Zapaldea Footwear.
+ *
+ * **Pokémon League drops Bulbapedia's "(Paldea)" disambiguation suffix** — confirmed via its
+ * own infobox `location_name` field to just be that plain name in-game, "(Paldea)" exists
+ * only to disambiguate from other regions' own "Pokémon League" pages on this wiki, same
+ * treatment KANTO_LETS_GO/GALAR_GEN8 already gave other disambiguation-suffixed names.
+ * Confirmed a genuine catch location despite being a battle-facility building (unlike Team
+ * Star's bases): its own article documents a static Solgaleo encounter and states it "uses
+ * the South Province wild Pokémon theme during wild encounters."
+ *
+ * **One genuine within-pair location-name split, the same class HOENN_RUBY/HOENN_SAPPHIRE's
+ * comment already flagged as a recurring possibility worth checking per pair rather than
+ * assuming Gen V's Black City/White Forest was the only one ever**: Mesagoza's academy,
+ * where every player receives their first partner Pokémon, is "Naranja Academy" in Scarlet
+ * and "Uva Academy" in Violet per the Paldea article's own `{{sup/9|S}}`/`{{sup/9|V}}`
+ * version-conditional markup — the same physical building, reskinned per version. Layered
+ * onto the shared base per game below, same splice pattern CRYSTAL_GEN2/HOENN_RUBY/
+ * HOENN_SAPPHIRE use — except unlike those pairs, "Naranja Academy" and "Uva Academy" don't
+ * share one alphabetical insertion point (N vs. U), so each version splices its own name in
+ * at its own position off the same PALDEA_BASE rather than sharing a single splice index.
+ */
+const PALDEA_BASE: readonly string[] = [
+  'Alfornada',
+  'Alfornada Cavern',
+  'Apple Hills',
+  'Area Zero',
+  'Area Zero Underdepths',
+  'Artazon',
+  'Asado Desert',
+  'Cabo Poco',
+  'Canyon Biome',
+  'Canyon Plaza',
+  'Cascarrafa',
+  'Casseroya Lake',
+  'Central Plaza',
+  'Chargestone Cavern',
+  'Chilling Waterhead',
+  'Coastal Biome',
+  'Coastal Plaza',
+  'Colonnade Hollow',
+  'Cortondo',
+  'Crystal Pool',
+  'Dalizapa Passage',
+  'Dreaded Den',
+  'East Paldean Sea',
+  'East Province (Area One)',
+  'East Province (Area Three)',
+  'East Province (Area Two)',
+  'Fellhorn Gorge',
+  'Firescourge Shrine',
+  'Glaseado Mountain',
+  'Grasswither Shrine',
+  'Great Crater of Paldea',
+  'Groundblight Shrine',
+  'Icerend Shrine',
+  'Infernal Pass',
+  'Inlet Grotto',
+  'Kitakami Hall',
+  'Kitakami Road',
+  'Kitakami Wilds',
+  'Levincia',
+  'Los Platos',
+  'Loyalty Plaza',
+  'Medali',
+  'Mesagoza',
+  'Montenevera',
+  'Mossfell Confluence',
+  'Mossui Town',
+  'North Paldean Sea',
+  'North Province (Area One)',
+  'North Province (Area Three)',
+  'North Province (Area Two)',
+  'Oni Mountain',
+  "Oni's Maw",
+  'Paradise Barrens',
+  'Poco Path',
+  'Pokémon League',
+  'Polar Biome',
+  'Polar Plaza',
+  'Porto Marinada',
+  "Reveler's Road",
+  'Savanna Biome',
+  'Savanna Plaza',
+  'Socarrat Trail',
+  'South Paldean Sea',
+  'South Province (Area Five)',
+  'South Province (Area Four)',
+  'South Province (Area One)',
+  'South Province (Area Six)',
+  'South Province (Area Three)',
+  'South Province (Area Two)',
+  'Tagtree Thicket',
+  'Timeless Woods',
+  'Torchlit Labyrinth',
+  'West Paldean Sea',
+  'West Province (Area One)',
+  'West Province (Area Three)',
+  'West Province (Area Two)',
+  'Wistful Fields',
+  'Zapapico',
+  'Zero Gate',
+  'Zero Lab'
+]
+
+const PALDEA_SCARLET: readonly string[] = [
+  ...PALDEA_BASE.slice(0, PALDEA_BASE.indexOf('North Paldean Sea')),
+  'Naranja Academy',
+  ...PALDEA_BASE.slice(PALDEA_BASE.indexOf('North Paldean Sea'))
+]
+
+const PALDEA_VIOLET: readonly string[] = [
+  ...PALDEA_BASE.slice(0, PALDEA_BASE.indexOf('West Paldean Sea')),
+  'Uva Academy',
+  ...PALDEA_BASE.slice(PALDEA_BASE.indexOf('West Paldean Sea'))
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -2935,7 +3113,9 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Shield': GALAR_GEN8,
   'Pokémon Brilliant Diamond': BDSP_SINNOH,
   'Pokémon Shining Pearl': BDSP_SINNOH,
-  'Pokémon Legends: Arceus': HISUI_GEN8
+  'Pokémon Legends: Arceus': HISUI_GEN8,
+  'Pokémon Scarlet': PALDEA_SCARLET,
+  'Pokémon Violet': PALDEA_VIOLET
 }
 
 /**
