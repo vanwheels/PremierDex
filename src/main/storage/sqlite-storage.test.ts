@@ -6,7 +6,10 @@ import { describe, expect, it, vi } from 'vitest'
 // instead of the real ~1500-species dataset — isolates these tests from that path
 // resolution entirely and keeps them fast.
 vi.mock('./load-species-data', () => ({
-  loadSpeciesEvolutionData: () => [],
+  loadSpeciesEvolutionData: () => [
+    { speciesId: 1, isFinalEvolutionStage: false, evolvesFromSpeciesId: null },
+    { speciesId: 2, isFinalEvolutionStage: true, evolvesFromSpeciesId: 1 }
+  ],
   loadSpeciesData: () => [
     { id: 1, name: 'bulbasaur', generation: 1 },
     { id: 2, name: 'ivysaur', generation: 1 }
@@ -42,6 +45,26 @@ vi.mock('./load-species-data', () => ({
 }))
 
 const { createSqliteStorage } = await import('./sqlite-storage')
+
+// Regression test for Leg 4 of the Species detail popup + evolution family tree
+// milestone: listSpeciesStmt/getSpeciesStmt used to omit evolves_from_species_id from
+// their SELECT, so toSpecies() silently mapped every species to `evolvesFromSpeciesId:
+// undefined` — passing the type check via the `as SpeciesRow` cast but breaking
+// findEvolutionFamilyRootSpeciesId's `!== null` root-walk on its very first step.
+describe('listSpecies / setCollapsedDisplayForm', () => {
+  it('surfaces evolvesFromSpeciesId from the DB, not just is_final_evolution_stage', async () => {
+    const storage = createSqliteStorage(':memory:')
+
+    const list = await storage.listSpecies()
+    expect(list.find((s) => s.id === 1)?.evolvesFromSpeciesId).toBeNull()
+    expect(list.find((s) => s.id === 2)?.evolvesFromSpeciesId).toBe(1)
+
+    // setCollapsedDisplayForm re-reads the row via the same getSpeciesStmt used by
+    // toSpecies() elsewhere — covers that query too, not just listSpeciesStmt.
+    const updated = await storage.setCollapsedDisplayForm(2, null)
+    expect(updated.evolvesFromSpeciesId).toBe(1)
+  })
+})
 
 async function findBulbasaurBaseEntry(storage: ReturnType<typeof createSqliteStorage>, shiny: boolean) {
   const forms = await storage.listForms()
