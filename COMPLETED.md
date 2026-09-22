@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Codebase File-Size Cleanup Leg 3: split sqlite-storage.ts] — 2026-09-21
+Split along the boundary scoped in TODO.md: `collection-entry-storage.ts` now owns the
+CollectionEntry-specific writers (setOwned/setEntryOrigin/setEntryStorageLocation/
+box-position/bulk-*), mirroring collection-backup.ts's own extraction — its own prepared
+statements against the same `db` handle, including a re-prepared `clearBoxPlaceholderStmt`
+(also still needed by sqlite-storage.ts's own box-placeholder CRUD, which stays behind).
+`sqlite-storage.ts` delegates to it the same thin way it already delegates to
+`collection-backup.ts`. 743 lines -> 458 (sqlite-storage.ts) + 354 (collection-entry-storage.ts).
+See commit `4d2c425`.
+
 ## [Codebase File-Size Cleanup Leg 2: split schema.ts/schema.test.ts] — 2026-09-21
 Split along the CHECK-widen-rebuild/retrofit-ALTER boundary scoped in TODO.md:
 `schema-rebuilds.ts` (table rebuilds), `schema-retrofits.ts` (plain ADD COLUMN retrofits),

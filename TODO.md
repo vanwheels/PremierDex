@@ -4,15 +4,6 @@ Curated Met Location dataset shipped 2026-09-21 (see MILESTONES.md).
 
 ## Current Milestone: Codebase File-Size Cleanup
 
-### [Codebase File-Size Cleanup] — Leg 3
-Split `sqlite-storage.ts` (743 lines, well past the 500 hard cap — grew from 498 as of the
-Dex completeness tier migration to 743 via Leg 3 of Box View Move & Undo Operations'
-`restoreEntryBoxPositions`). Candidate split: the CollectionEntry-specific prepared
-statements/methods (setOwned/setEntryOrigin/setEntryStorageLocation/box-position/bulk-* —
-roughly a third of the file) into their own module, mirroring collection-backup.ts's
-extraction pattern (Leg 3 of Box Arrangement).
-Last touched: 2026-09-21. Re-check count: 0.
-
 ### [Codebase File-Size Cleanup] — Leg 4
 Split `useCollectionData.ts` (501 lines, 1 past the 500 hard cap as of Leg 3 of Box View
 Move & Undo Operations — `restoreEntryBoxPositions`'s renderer-side undo plumbing pushed it
