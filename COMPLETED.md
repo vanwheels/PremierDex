@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 2: evolution family tree component] — 2026-09-22
+Built `EvolutionTree.tsx` (generation-stacked, flex-wrap layout so wide branches like
+Eevee's 8 evolutions wrap onto multiple rows) plus the pure `evolutionTree.ts` tree-assembly
+logic (walks `Species.evolvesFromSpeciesId` to the chain root, then `evolution-edges.json`
+forward per (speciesId, formName) node so regional-form branches render as separate bubbles).
+Piped `evolution-edges.json` from main to renderer the same way `species-availability.json`
+already was (new `loadEvolutionEdges` IPC channel/bridge method, `useCollectionData`
+exposes `evolutionEdges`). Standalone component only — no render path in the app yet, see
+Leg 3. See commit `<pending>`.
+
 ## [Species detail popup + evolution family tree Leg 1: evolution data pipeline] — 2026-09-22
 Extended `fetch-evolution-chains.ts` to also write `data/pokemon/evolution-edges.json`
 (human-readable method per edge, regional/variety branches like Raichu vs. Raichu-Alola

@@ -1,0 +1,99 @@
+/**
+ * Species detail popup's evolution family tree (Leg 2 of the Species detail popup +
+ * evolution family tree milestone) — see EvolutionTree.tsx's own doc comment for the
+ * generation-stacked, wrapping-row layout this implements with nothing but nested flexbox.
+ */
+
+.evolution-tree {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.evolution-tree-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.evolution-tree-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  width: 6rem;
+}
+
+/* Overrides .sprite-thumbnail's fixed 2.1rem row-icon sizing (tables.css) — this is a
+   dedicated family-tree bubble, not an inline row icon, so it gets its own larger circular
+   treatment. Load order (global.css) puts this after tables.css so it wins. */
+.evolution-tree-sprite {
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+}
+
+.evolution-tree-sprite:hover {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-raised));
+}
+
+/* Ring anchored to the circle's own edge (not a floating highlight patch) — see
+   memory/unanchored-highlight-reads-as-blemish.md. */
+.evolution-tree-sprite-current {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.evolution-tree-sprite-missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.evolution-tree-name {
+  font-size: 0.8rem;
+  text-align: center;
+  line-height: 1.15;
+}
+
+/* Wraps onto multiple rows once siblings overflow the available width (Eevee's 8
+   evolutions, Tyrogue's 3) instead of forcing a single ever-widening row. */
+.evolution-tree-children {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.evolution-tree-branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.evolution-tree-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  max-width: 8rem;
+}
+
+.evolution-tree-arrow-glyph {
+  color: var(--accent2);
+  line-height: 1;
+}
+
+.evolution-tree-arrow-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-align: center;
+  white-space: normal;
+}

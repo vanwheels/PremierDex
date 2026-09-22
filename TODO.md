@@ -11,19 +11,13 @@ Raichu-Alola) aren't represented in the species-evolution chain data at all (Pok
 them as varieties of one species, not separate chain nodes) — but Vanny confirmed the tree
 needs to show them as separate bubbles anyway.
 
-### [Species detail popup + evolution family tree] — Leg 2
-Evolution family tree component. Build the bubble/arrow tree UI against Leg 1's data:
-same-size bubbles using real sprite art (reuse `SpriteThumbnail`), species/form name
-underneath each bubble, evolution method labeled underneath each arrow, horizontal wrap for
-branches too wide for one row (Eevee's 8, Tyrogue's 3), the current species' bubble visually
-highlighted, and bubbles clickable to re-center/navigate the tree to that species.
-Last touched: 2026-09-22. Re-check count: 0.
-
 ### [Species detail popup + evolution family tree] — Leg 3
 Species detail popup shell + entry point. The popup itself (species name/sprite plus a
 button that opens the Leg 2 tree) and wiring its entry point from Dex Table/Box View (exact
 trigger TBD). Vanny plans other features for this same popup beyond the family tree, not yet
-specified.
+specified. Leg 2 shipped `EvolutionTree.tsx` as a standalone component (props: speciesId,
+formName, species, forms, evolutionEdges, onSelectSpecies) with no render path in the running
+app yet — this leg is also the first point it becomes visually checkable.
 Last touched: 2026-09-22. Re-check count: 0.
 
 ## Unscheduled

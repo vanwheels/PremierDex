@@ -4,6 +4,7 @@ import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { FillInPlacement, TemplatePlacement } from './dex/boxTemplates'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import type { EvolutionEdge } from '@shared/types/evolution'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { useBoxPositionUndo } from './useBoxPositionUndo'
 
@@ -21,6 +22,9 @@ export interface CollectionData {
   boxPlaceholders: BoxPlaceholder[]
   trainerProfiles: TrainerProfile[]
   speciesAvailability: SpeciesAvailabilityData
+  /** Leg 2 of the Species detail popup + evolution family tree milestone — per-edge
+   * evolution-method/regional-branch data, feeding renderer/dex/evolutionTree.ts. */
+  evolutionEdges: EvolutionEdge[]
   loading: boolean
   importVersion: number
   loadAll: () => Promise<void>
@@ -92,6 +96,7 @@ export function useCollectionData(): CollectionData {
   const [boxPlaceholders, setBoxPlaceholdersState] = useState<BoxPlaceholder[]>([])
   const [trainerProfiles, setTrainerProfiles] = useState<TrainerProfile[]>([])
   const [speciesAvailability, setSpeciesAvailability] = useState<SpeciesAvailabilityData>(EMPTY_SPECIES_AVAILABILITY)
+  const [evolutionEdges, setEvolutionEdges] = useState<EvolutionEdge[]>([])
   const [loading, setLoading] = useState(true)
   // Bumped after a JSON import so TrainerProfilesPanel/StorageLocationsPanel remount and
   // refetch — they load their own data on mount only and have no other way to learn the DB
@@ -117,9 +122,20 @@ export function useCollectionData(): CollectionData {
       window.premierDex.listBoxes(),
       window.premierDex.listBoxPlaceholders(),
       window.premierDex.loadSpeciesAvailability(),
+      window.premierDex.loadEvolutionEdges(),
       window.premierDex.listTrainerProfiles()
     ]).then(
-      ([speciesList, formList, entryList, storageLocationList, boxList, placeholderList, availability, trainerProfileList]) => {
+      ([
+        speciesList,
+        formList,
+        entryList,
+        storageLocationList,
+        boxList,
+        placeholderList,
+        availability,
+        edges,
+        trainerProfileList
+      ]) => {
         setSpecies(speciesList)
         setForms(formList)
         setEntries(entryList)
@@ -127,6 +143,7 @@ export function useCollectionData(): CollectionData {
         setBoxes(boxList)
         setBoxPlaceholdersState(placeholderList)
         setSpeciesAvailability(availability)
+        setEvolutionEdges(edges)
         setTrainerProfiles(trainerProfileList)
       }
     )
@@ -299,6 +316,7 @@ export function useCollectionData(): CollectionData {
     boxPlaceholders,
     trainerProfiles,
     speciesAvailability,
+    evolutionEdges,
     loading,
     importVersion,
     loadAll,

@@ -3,6 +3,7 @@ import type { TrainerProfile, TrainerProfileInput } from '@shared/types/trainer-
 import type { StorageLocation, StorageLocationInput } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import type { EvolutionEdge } from '@shared/types/evolution'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
 import type { UpdaterBridge } from '@shared/updater/updater-provider'
 
@@ -50,6 +51,11 @@ export interface AppBridge extends UpdaterBridge {
    * invalid-combo badge (see renderer/dex/invalidCombo.ts). Not DB-backed — see
    * PokemonIpcChannel.loadSpeciesAvailability's own comment. */
   loadSpeciesAvailability(): Promise<SpeciesAvailabilityData>
+  /** Leg 2 of the Species detail popup + evolution family tree milestone: static per-edge
+   * evolution-method/regional-branch data, for the tree component (see
+   * renderer/dex/evolutionTree.ts). Not DB-backed — see
+   * PokemonIpcChannel.loadEvolutionEdges' own comment. */
+  loadEvolutionEdges(): Promise<EvolutionEdge[]>
   /** Opens a save dialog, writes the full collection to the chosen file. Null if the
    * user canceled the dialog. */
   exportCollectionToFile(): Promise<string | null>

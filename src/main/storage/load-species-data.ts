@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { app } from 'electron'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import type { EvolutionEdge } from '@shared/types/evolution'
 
 export interface SeedSpecies {
   id: number
@@ -66,4 +67,14 @@ export function loadSpeciesAvailabilityData(): SpeciesAvailabilityData {
 export function loadSpeciesEvolutionData(): SeedSpeciesEvolution[] {
   const filePath = join(DATA_DIR, 'species-evolution.json')
   return JSON.parse(readFileSync(filePath, 'utf-8')) as SeedSpeciesEvolution[]
+}
+
+/** Loads the static per-edge evolution-method/regional-branch data (Leg 1 of the Species
+ * detail popup + evolution family tree milestone) written by the same
+ * `npm run fetch-evolution-chains` pass — see EvolutionEdge's own doc comment. Not
+ * DB-backed, same as loadSpeciesAvailabilityData: there's no collection_entries-shaped row
+ * to read, just the static file. */
+export function loadEvolutionEdgesData(): EvolutionEdge[] {
+  const filePath = join(DATA_DIR, 'evolution-edges.json')
+  return JSON.parse(readFileSync(filePath, 'utf-8')) as EvolutionEdge[]
 }

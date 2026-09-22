@@ -29,6 +29,10 @@ export const PokemonIpcChannel = {
    * not a StorageAdapter/DB method — there's no collection_entries-shaped row to read,
    * just the fetch-species-availability.ts-written JSON file. */
   loadSpeciesAvailability: 'pokemon:speciesAvailability:load',
+  /** Leg 2 of the Species detail popup + evolution family tree milestone: static per-edge
+   * evolution-method/regional-branch data (see load-species-data.ts), same
+   * not-a-StorageAdapter-method shape as loadSpeciesAvailability above. */
+  loadEvolutionEdges: 'pokemon:evolutionEdges:load',
   /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
    * see StorageAdapter.listEntryRibbons/setEntryRibbons/listEntryMarks/setEntryMarks' own
    * doc comments. */
