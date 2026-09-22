@@ -3076,6 +3076,299 @@ const PALDEA_VIOLET: readonly string[] = [
   ...PALDEA_BASE.slice(PALDEA_BASE.indexOf('West Paldean Sea'))
 ]
 
+/**
+ * Lumiose City, Pokémon Legends: Z-A (Gen 9, no paired version — the whole game takes
+ * place within one city). Built from Bulbapedia's raw wikitext for "List of locations by
+ * index number in Pokémon Legends: Z-A" (fetched via the MediaWiki API's action=raw,
+ * 2026-09-21) — the same index-table-as-ground-truth source HISUI_GEN8/BDSP_SINNOH used,
+ * and the Nominative Form column is taken directly as each index's Met Location string,
+ * same as those two.
+ *
+ * **Unlike PALDEA_BASE, generic-sounding shop/café/restaurant names are NOT excluded
+ * here.** Paldea's list had no index-number page to work from, so it was built from
+ * Bulbapedia's location category instead and excluded generic repeated business types
+ * (Poké Mart, Pokémon Center, Sushi High Roller) as a heuristic for "not a real distinct
+ * location." Z-A's index table makes that heuristic unnecessary — it directly enumerates
+ * dozens of individually-indexed named businesses (Café Cyclone, Restaurant Le Nah,
+ * Glammor Girli, etc.) as their own genuine Met Location strings, the same class of
+ * evidence HISUI_GEN8 already trusted for its own shops (Clothier, Craftworks, General
+ * Store, Hairdresser). Sushi High Roller reappears here for the same reason: Paldea
+ * excluded it for lack of index confirmation, Z-A's own table confirms it directly (index
+ * 00186/00228), so it's included as this game's non-transitive value. The table also
+ * includes five explicitly generic fallback strings with their own index numbers (00240-
+ * 00244: Pokémon Center, Restaurant, Café, Shopping Arcade, Major Street) alongside their
+ * named counterparts — both are genuine possible values the game can display, so both are
+ * kept.
+ *
+ * **Sequential numbered groups (Sector N within each district, Wild Zone N) are sorted
+ * numerically rather than by raw string order**, the same treatment this file's Route
+ * N sequences have always gotten — plain alphabetical sort would otherwise interleave
+ * "Sector 10"/"Sector 11"/"Sector 12" and "Wild Zone 10"-"Wild Zone 19" between "Sector 1"
+ * and "Sector 2"/"Wild Zone 1" and "Wild Zone 2". Every other entry is plain alphabetical,
+ * case-insensitively (BRAVELY/NIGHTSIDE/SUBATOMIC sort by their letters, not their case),
+ * matching PALDEA_BASE/HISUI_GEN8's "alphabetical throughout" precedent.
+ *
+ * **Mega Dimension DLC's Hyperspace locations are included in this one list**, same
+ * precedent PALDEA_BASE already set for Scarlet/Violet's Kitakami/Blueberry Academy DLC —
+ * no separate origin-game entry exists for "with Mega Dimension," so a DLC-owning player's
+ * catches there need a selectable Met Location too. Index 00272 is excluded despite being
+ * in the DLC range: its Nominative Form displays as "???", the same unused/unnamed-index
+ * signal HISUI_GEN8's index 00138 already established as an exclusion, not a real name.
+ *
+ * **Excludes the same non-place categories every prior generation's list already
+ * established**: Mystery Zone (00002), Faraway place (00004), and the blank placeholder
+ * row (00000). Indices 30001-60005 are cross-game/transfer categories (region names for
+ * transferred-in Pokémon, Link Trade, Pokémon HOME/GO, movie/event/WCS distributions) —
+ * same exclusion HISUI_GEN8's comment already established for its own 30001-60004 range.
+ * The handful of real-location duplicates inside that range (30026 Lumiose City, 30028
+ * Wild Zone 11, 30029 Lumiose Museum, 30030 Académie Étoile, 30031 Magenta Sector 2, 30032
+ * North Boulevard, 30033 Rouge Sector 1, 30035 Quasartico Inc., 60005 Lumiose City) add no
+ * new names beyond what's already curated below from the base-game indices, so excluding
+ * the whole range loses nothing.
+ *
+ * Three entries have no Bulbapedia wikilink (no dedicated article exists) but do have
+ * genuine literal Nominative Form text in the table, so are included as-is per the same
+ * "take the column directly" rule: Empty Room (Abandoned Building) (00135), Sewer Entrance
+ * (00136), and Back (00264, immediately preceding the Nouveau Café truck entries). The
+ * floor/room labels 1F/2F/3F/B1F/B2F/B3F/Entrance/Office/Event Hall (each reused across two
+ * different buildings' index ranges under {{kal|page|display}} or piped-link templates)
+ * are likewise generic building-interior strings the game actually displays, not
+ * per-building unique names — included the same way Hisui's own generic "First
+ * Floor"/"Basement" labels were.
+ */
+const LUMIOSE_GEN9: readonly string[] = [
+  '1F',
+  '2F',
+  '3F',
+  'Académie Étoile',
+  'Atelier Heads',
+  'Autumnal Avenue',
+  'Aymlis Park',
+  'B1F',
+  'B2F',
+  'B3F',
+  'Back',
+  'Battle zone',
+  'Bleu District',
+  'Bleu Plaza',
+  'Bleu Pokémon Center',
+  'Bleu Sector 1',
+  'Bleu Sector 2',
+  'Bleu Sector 3',
+  'Bleu Sector 4',
+  'Bleu Sector 5',
+  'Bleu Sector 6',
+  'Bleu Sector 7',
+  'Bleu Sector 8',
+  'Bleu Sector 9',
+  'Bleu Sector 10',
+  'Bleu Street',
+  'Boutique Couture',
+  'BRAVELY',
+  'Bundle Up',
+  'Café',
+  'Café Action!',
+  'Café Bataille',
+  'Café Classe',
+  'Café Cyclone',
+  'Café Gallant',
+  'Café Introversion',
+  'Café Kizuna',
+  'Café Pokémon-Amie',
+  'Café Rouleau',
+  'Café Soleil',
+  'Café Triste',
+  'Café Ultimo',
+  'Café Woof',
+  'Centrico Plaza',
+  'Centrico Pokémon Center',
+  'Changing Gears',
+  'Coiffure Clips',
+  'Coulant Waterway',
+  'DEFOG Eyewear',
+  'DENSOKU Lumiose',
+  'Dessert du Moment',
+  'Dormez Bien Cemetery',
+  'Electrical Substation',
+  'Empty Room (Abandoned Building)',
+  'Énergie',
+  'Entrance',
+  'Équipement',
+  'Espace Vide',
+  'Estival Avenue',
+  'Event Hall',
+  'FILMFAN',
+  'Fresh Fits',
+  'Galerie de la Lune',
+  'Gare de Lumiose',
+  'Glammor Cuti',
+  'Glammor Girli',
+  'Glammor Pretti',
+  'Glammor Sporti',
+  'Hair Salon',
+  'Hibernal Avenue',
+  'Hibernal Pokémon Center',
+  'Hotel Richissime',
+  'Hotel Z',
+  'Hyperspace Desolate Land',
+  'Hyperspace Disaster Arena',
+  'Hyperspace Entry Point',
+  'Hyperspace Hunting Grounds',
+  'Hyperspace Infernal Arena',
+  'Hyperspace Lumiose',
+  'Hyperspace Newmoon Nightmare',
+  'Hyperspace Primordial Sea',
+  'Hyperspace Second-Sight Arena',
+  'Hyperspace Sky Pillar',
+  'Hyperspace Sushi Paradise',
+  'In the Zone',
+  'Jaune District',
+  'Jaune Plaza',
+  'Jaune Pokémon Center',
+  'Jaune Sector 1',
+  'Jaune Sector 2',
+  'Jaune Sector 3',
+  'Jaune Sector 4',
+  'Jaune Sector 5',
+  'Jaune Sector 6',
+  'Jaune Sector 7',
+  'Jaune Sector 8',
+  'Jaune Sector 9',
+  'Jaune Sector 10',
+  'Jaune Sector 11',
+  'Jaune Sector 12',
+  'Jaune Street',
+  'Justice Dojo',
+  'Kickspin',
+  'Kikonashi',
+  'La Tornade',
+  'Le Passe-temps',
+  'Le Pays des Pieds',
+  'Le Pays des Vêtements',
+  'Les Chaussures',
+  'Looker Bureau',
+  'Lumiose Museum',
+  'Lumiose Sewers',
+  'Lumiose Sewers Entrance',
+  'Lysandre Café',
+  'Lysandre Labs',
+  'Lysandre Labs Entrance',
+  'Magenta District',
+  'Magenta Plaza',
+  'Magenta Plaza Pokémon Center',
+  'Magenta Pokémon Center',
+  'Magenta Sector 1',
+  'Magenta Sector 2',
+  'Magenta Sector 3',
+  'Magenta Sector 4',
+  'Magenta Sector 5',
+  'Magenta Sector 6',
+  'Magenta Sector 7',
+  'Magenta Sector 8',
+  'Magenta Sector 9',
+  'Magenta Street',
+  'Major Street',
+  'Marché Bleu',
+  'Marquage',
+  'Masterpiece',
+  'Midnight Rite',
+  'Mode Magnifique',
+  'Mode Mature',
+  'Naptime',
+  'NIGHTSIDE',
+  'North Boulevard',
+  'Nouveau Café',
+  'Nouveau Café (Truck No. 2)',
+  'Nouveau Café (Truck No. 3)',
+  'Office',
+  'Old Building',
+  'Passage de la Félicité',
+  'Passage du Palais',
+  'Passage Ombragé',
+  'Pinceau',
+  'Poké Ball Boutique',
+  'Pokémon Center',
+  'Pokémon Research Lab',
+  'Porte-Chance',
+  'Prism Tower',
+  'Promenade du Vent',
+  'Quasartico Inc.',
+  'Racine Construction',
+  'Restaurant',
+  'Restaurant Le Nah',
+  'Restaurant Le Wow',
+  'Restaurant Le Yeah',
+  'Room 201',
+  'Room 202',
+  'Room 203',
+  'Room 204',
+  'Rouge District',
+  'Rouge Plaza',
+  'Rouge Pokémon Center',
+  'Rouge Sector 1',
+  'Rouge Sector 2',
+  'Rouge Sector 3',
+  'Rouge Sector 4',
+  'Rouge Sector 5',
+  'Rouge Sector 6',
+  'Rouge Sector 7',
+  'Rouge Sector 8',
+  'Rouge Street',
+  'Rust Syndicate Office',
+  'Saison Canal',
+  'Saison Canalside',
+  'Sewer Entrance',
+  'Shopping Arcade',
+  'Shutterbug Café',
+  'Soil and Sneaks',
+  'South Boulevard',
+  'Station Front',
+  'Stone Emporium',
+  'SUBATOMIC',
+  'SUBATOMIC 4',
+  'Sushi High Roller',
+  'The Sewers',
+  'The Usual',
+  'Triathlon Bleu',
+  'Triathlon Rouge',
+  'Vernal Avenue',
+  'Vernal Pokémon Center',
+  'Vert District',
+  'Vert Plaza',
+  'Vert Pokémon Center',
+  'Vert Sector 1',
+  'Vert Sector 2',
+  'Vert Sector 3',
+  'Vert Sector 4',
+  'Vert Sector 5',
+  'Vert Sector 6',
+  'Vert Sector 7',
+  'Vert Sector 8',
+  'Vert Sector 9',
+  'Vert Street',
+  'Wild Zone 1',
+  'Wild Zone 2',
+  'Wild Zone 3',
+  'Wild Zone 4',
+  'Wild Zone 5',
+  'Wild Zone 6',
+  'Wild Zone 7',
+  'Wild Zone 8',
+  'Wild Zone 9',
+  'Wild Zone 10',
+  'Wild Zone 11',
+  'Wild Zone 12',
+  'Wild Zone 13',
+  'Wild Zone 14',
+  'Wild Zone 15',
+  'Wild Zone 16',
+  'Wild Zone 17',
+  'Wild Zone 18',
+  'Wild Zone 19',
+  'Wild Zone 20',
+  'Wisp'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -3115,7 +3408,8 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Shining Pearl': BDSP_SINNOH,
   'Pokémon Legends: Arceus': HISUI_GEN8,
   'Pokémon Scarlet': PALDEA_SCARLET,
-  'Pokémon Violet': PALDEA_VIOLET
+  'Pokémon Violet': PALDEA_VIOLET,
+  'Pokémon Legends: Z-A': LUMIOSE_GEN9
 }
 
 /**
