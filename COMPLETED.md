@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 1: evolution data pipeline] — 2026-09-22
+Extended `fetch-evolution-chains.ts` to also write `data/pokemon/evolution-edges.json`
+(human-readable method per edge, regional/variety branches like Raichu vs. Raichu-Alola
+recovered from PokeAPI's `evolution_details`), verified against `forms.json`'s formName
+convention until 0 of 541 edges mismatched. `species-evolution.json` stays byte-identical.
+See commit `87e694d`.
+
 ## [Codebase File-Size Cleanup Leg 6: split fetch-pokemon-forms.ts] — 2026-09-22
 Final leg — milestone shipped, see MILESTONES.md. Split along the boundary scoped in
 TODO.md: pulled OVERRIDES, SHINY_LOCKED, ALWAYS_SHINY, VERSION_GROUP_GENERATION,

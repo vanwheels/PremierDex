@@ -1,6 +1,30 @@
 # TODO
 
-Codebase File-Size Cleanup shipped 2026-09-22 (see MILESTONES.md).
+## Current Milestone: Species detail popup + evolution family tree
+
+Raised by Vanny 2026-09-20, started as current milestone 2026-09-22. Mockup received
+2026-09-22: same-size circular sprite bubbles with the species/form name underneath, arrows
+along evolution edges labeled with the evolution method underneath each arrow. Scoped into
+three legs below after the mockup review surfaced two real data gaps: no evolution-method
+text exists anywhere in the data yet, and regional-form branches (e.g. Raichu vs.
+Raichu-Alola) aren't represented in the species-evolution chain data at all (PokeAPI treats
+them as varieties of one species, not separate chain nodes) — but Vanny confirmed the tree
+needs to show them as separate bubbles anyway.
+
+### [Species detail popup + evolution family tree] — Leg 2
+Evolution family tree component. Build the bubble/arrow tree UI against Leg 1's data:
+same-size bubbles using real sprite art (reuse `SpriteThumbnail`), species/form name
+underneath each bubble, evolution method labeled underneath each arrow, horizontal wrap for
+branches too wide for one row (Eevee's 8, Tyrogue's 3), the current species' bubble visually
+highlighted, and bubbles clickable to re-center/navigate the tree to that species.
+Last touched: 2026-09-22. Re-check count: 0.
+
+### [Species detail popup + evolution family tree] — Leg 3
+Species detail popup shell + entry point. The popup itself (species name/sprite plus a
+button that opens the Leg 2 tree) and wiring its entry point from Dex Table/Box View (exact
+trigger TBD). Vanny plans other features for this same popup beyond the family tree, not yet
+specified.
+Last touched: 2026-09-22. Re-check count: 0.
 
 ## Unscheduled
 
@@ -84,15 +108,6 @@ Zamazenta/Ogerpon/Silvally catalogue) has been shown to actually misfire today.
 Blocked: needs a real false positive or wrong-game forme to actually surface before this is
 worth scoping — not built speculatively ahead of demonstrated need.
 Last touched: 2026-09-19. Re-check count: 0.
-
-### [Species detail popup + evolution family tree] — future milestone
-Raised by Vanny 2026-09-20: a popup for a selected species, with a button that opens its
-evolution family tree — each species in its own circular "bubble," arrows along the
-evolution edges (reusing `evolvesFromSpeciesId`, see the Evolution-Chain Reachability
-milestone), each arrow labeled with how that evolution happens. Vanny plans other features
-for this same popup beyond the family tree, not yet specified. Deliberately not scoped —
-Vanny will provide a mockup when this milestone comes up.
-Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Encounter tables + location/game search UI] — future milestone
 Raised by Vanny 2026-09-21, after the Curated Met Location dataset milestone shipped: once
