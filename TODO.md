@@ -6,13 +6,30 @@ Raised by Vanny 2026-09-20, shipped Legs 1-4 2026-09-22, reopened same day: Vann
 the tree in the running app and came back with layout feedback, a form-category bug, and a
 new feature request. Scoped into four more legs below.
 
-### [Species detail popup + evolution family tree] — Leg 10
-Scoping/discussion leg, requested by Vanny 2026-09-22: after using Legs 1-9 in the running app,
-there's more Vanny wants changed or added on top of this feature. Purpose of this leg is to
-talk through what's still wrong or missing, then decide per-item whether it's a fix within
-this milestone (gets its own leg appended below) or big/separate enough to become its own
-future milestone entry. No implementation yet — nothing to scope until this conversation
-happens.
+### [Species detail popup + evolution family tree] — Leg 11
+Add back-sprite URL support to `sprites.ts`: PokeAPI's CDN mirrors the existing front-sprite
+folder structure under `pokemon/back/` (plain, `back/shiny/`, `back/female/`,
+`back/shiny/female/`), but nothing in this codebase builds those paths today — every existing
+builder (`defaultSpriteUrl`, `generationSpriteUrl`, `animatedSpriteUrl`) is front-only. Needs
+the same live-CDN verification diligence the module's existing doc comment shows for
+shiny/female coverage (which generations actually have a `back/` set, and whether the
+`GENERATIONS_WITHOUT_SHINY` exceptions apply the same way to back sprites) before adding the
+builder function(s). Self-contained — no UI wiring, just `sprites.ts` + `sprites.test.ts`.
+Prerequisite for Leg 12.
+Last touched: 2026-09-22. Re-check count: 0.
+
+### [Species detail popup + evolution family tree] — Leg 12
+Reuse the existing `SpriteModal` (generation stepper + shiny/animated toggles, already used
+everywhere else via the `SpriteThumbnail` click pattern) instead of the species detail popup's
+current plain `<img>`. Two additions to `SpriteModal` itself, benefiting every other caller,
+not just the popup: for a form with `Form.hasGenderDifference`, show male and female sprites
+side by side (Serebii-style, confirmed with Vanny 2026-09-22 — not a toggle) rather than the
+single image every other form gets; and a back-sprite toggle (using Leg 11's new builders,
+applying to whichever sprite(s) are currently shown). Then wire `SpeciesDetailPopup`'s info
+view to open `SpriteModal` on sprite click instead of rendering a static image. Covers Vanny's
+shiny-toggle and per-generation-tabs asks for free once wired in — shiny is already a
+checkbox affecting whatever's on screen, and the tabs already exist as SpriteModal's
+generation stepper.
 Last touched: 2026-09-22. Re-check count: 0.
 
 ## Unscheduled
@@ -136,16 +153,40 @@ Blocked: needs the encounter-table data itself built first (not yet started/scop
 this UI work can be scoped for real.
 Last touched: 2026-09-21. Re-check count: 0.
 
-### [Catch rate + capture probability calculator] — future milestone
-Raised by Vanny 2026-09-21, split out from the Encounter tables + location/game search UI
-idea above rather than bundled into it. Eventually clicking a Pokémon (in the planned
-species detail popup, see the Species detail popup + evolution family tree entry below)
-should show its base catch rate; later, a capture probability calculator on top of that,
-since capture probability depends on base catch rate, current HP, status condition, and
-Poké Ball type. Vanny suggested checking for an existing open-source calculator/formula to
-adapt rather than building the formula from scratch. Deliberately not scoped — written down
-to capture the idea only.
-Last touched: 2026-09-21. Re-check count: 0.
+### [Species database: full per-species pages] — future milestone
+Raised by Vanny 2026-09-22 during Leg 10 scoping: wants the app to grow beyond storage into a
+curated mainline-games-only database — not Bulbapedia/Serebii scope, and deliberately
+avoiding their clutter — with each species eventually getting its own full page covering
+what's already tracked plus movesets, base stats, catch rate, and (later) breeding/egg
+groups. PokeAPI is the presumptive data source (already used for ChoiceBuds); coverage risk
+is concentrated in movesets, which are versioned per game/learn-method with a deeper schema
+than the stats/catch-rate/egg-group data PokeAPI handles cleanly.
+
+Reviewed a Serebii species-page screenshot as layout reference (2026-09-22) and triaged its
+sections with Vanny:
+- Wanted: ability + description, base happiness, experience growth, EVs earned, gender
+  ratio, safari zone flee rate (only for species actually in the Safari Zone).
+- Skip for now, reevaluate later: classification, height, weight.
+- Not wanted: type effectiveness/damage-taken chart, colour.
+- Location per game is not new scope here — it's the existing curated Met Location data /
+  the "Encounter tables + location/game search UI" future milestone above, not something to
+  duplicate on this page.
+- Serebii's Normal Sprite/Shiny Sprite side-by-side layout is worth borrowing — see Legs
+  11-12 of the Species detail popup + evolution family tree milestone, which build the
+  shiny/female-side-by-side/back sprite-toggle infra this page would reuse.
+
+Decided: the existing species detail popup (current milestone) stays a lightweight
+summary/entry point rather than growing in place — it gets a "View full page" link into this
+new page once it exists. Absorbs the former "Catch rate + capture probability calculator"
+entry: base catch rate and a probability calculator on top of it (depends on catch rate,
+current HP, status condition, Poké Ball type — check for an existing open-source
+formula/calculator to adapt rather than building from scratch) are now in this page's scope
+rather than a separate milestone.
+
+Deliberately not scoped further — written down to capture the idea and field triage, not to
+lock in MVP field ordering, data-fetch/caching strategy, or page layout. Needs a dedicated
+scoping pass before a leg sequence can be planned.
+Last touched: 2026-09-22. Re-check count: 0.
 
 ### [Full UI/UX pass on the Dex interface] — future milestone
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones

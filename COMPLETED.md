@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 10: scoping discussion] — 2026-09-22
+Pure discussion leg, no code changes. Vanny raised wanting the app to eventually grow into a
+curated mainline-games species database (movesets, base stats, catch rate, breeding/egg
+groups) on top of the storage functionality — scoped as its own future milestone ("Species
+database: full per-species pages" in TODO.md) rather than folded into this one, with the
+existing species detail popup staying a lightweight entry point that will link out to it
+rather than growing in place. That new entry absorbs the former "Catch rate + capture
+probability calculator" future-milestone entry. Also discussed near-term sprite display gaps
+(shiny toggle, per-generation tabs, male+female side-by-side, front/back) — found these
+mostly map onto reusing the app's existing `SpriteModal` component rather than needing new
+popup-specific work, so scoped as two small legs appended to this milestone (11 and 12) rather
+than deferred to the future database milestone. See TODO.md for both.
+
 ## [Species detail popup + evolution family tree Leg 9: fix Eevee's 8-way branch layout and long method text] — 2026-09-22
 Two fixes to `EvolutionTree.tsx`/`evolution-tree.css`, both scoped to display only (no data
 model change). New `evolutionMethodLabel.ts`'s `condenseMethodLabel` collapses a
