@@ -17,7 +17,7 @@ column 1's bubble sat right beside column 2's arrow on the same row (e.g. Vapore
 arrow into Umbreon), reading as if one evolved into the other. Reworked to two independent
 flex columns with a border on the second — see `evolution-tree.css`'s own comment. Vanny
 scoped the two-column fix to Eevee only for now; wants to see it live before deciding whether
-it's worth applying to every branching family. See commit `<pending>`.
+it's worth applying to every branching family. See commits `bc6d6d0`, `cb41181`.
 
 ## [Species detail popup + evolution family tree Leg 8: wire forme-switch groups into the popup] — 2026-09-22
 UI half of Leg 7: species detail popup's info view gets a second "View Alternate Formes"
