@@ -46,8 +46,9 @@
 }
 
 /* Leg 3 of the Species detail popup + evolution family tree milestone — wider than
-   .sprite-modal since the tree view (EvolutionTree, Leg 2) needs room for a wrapping row
-   of sibling evolutions rather than a single centered image. */
+   .sprite-modal since the tree view (EvolutionTree, Leg 2/5) needs room for a left-to-right
+   family tree rather than a single centered image; evolution-tree.css's own overflow
+   handles a tree too wide/tall to fit even at max-width. */
 .species-detail-modal {
   min-width: 20rem;
   max-width: 90vw;

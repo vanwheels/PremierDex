@@ -95,7 +95,7 @@
     "fromFormName": "alola",
     "toSpeciesId": 20,
     "toFormName": "alola",
-    "method": "Level 20 + at night"
+    "method": "Level 20 + At Night"
   },
   {
     "fromSpeciesId": 21,
@@ -207,7 +207,7 @@
     "fromFormName": "base",
     "toSpeciesId": 169,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 43,
@@ -270,7 +270,7 @@
     "fromFormName": "alola",
     "toSpeciesId": 53,
     "toFormName": "alola",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 52,
@@ -298,7 +298,7 @@
     "fromFormName": "base",
     "toSpeciesId": 979,
     "toFormName": "base",
-    "method": "Use Rage Fist 20 times"
+    "method": "Use Rage Fist 20 Times"
   },
   {
     "fromSpeciesId": 58,
@@ -333,7 +333,7 @@
     "fromFormName": "base",
     "toSpeciesId": 186,
     "toFormName": "base",
-    "method": "Trade + holding King's Rock"
+    "method": "Trade + Holding King's Rock"
   },
   {
     "fromSpeciesId": 63,
@@ -445,7 +445,7 @@
     "fromFormName": "base",
     "toSpeciesId": 199,
     "toFormName": "base",
-    "method": "Trade + holding King's Rock"
+    "method": "Trade + Holding King's Rock"
   },
   {
     "fromSpeciesId": 79,
@@ -466,14 +466,14 @@
     "fromFormName": "base",
     "toSpeciesId": 462,
     "toFormName": "base",
-    "method": "at Mt Coronet + level up or at Chargestone Cave + level up or at Kalos Route 13 + level up or at Blush Mountain + level up or at Vast Poni Canyon + level up or Thunder Stone or at New Mauville + level up"
+    "method": "At Mt Coronet + Level Up or At Chargestone Cave + Level Up or At Kalos Route 13 + Level Up or At Blush Mountain + Level Up or At Vast Poni Canyon + Level Up or Thunder Stone or At New Mauville + Level Up"
   },
   {
     "fromSpeciesId": 83,
     "fromFormName": "galar",
     "toSpeciesId": 865,
     "toFormName": "base",
-    "method": "Land 3 critical hits in one battle"
+    "method": "Land 3 Critical Hits in One Battle"
   },
   {
     "fromSpeciesId": 84,
@@ -529,7 +529,7 @@
     "fromFormName": "base",
     "toSpeciesId": 208,
     "toFormName": "base",
-    "method": "Trade + holding Metal Coat"
+    "method": "Trade + Holding Metal Coat"
   },
   {
     "fromSpeciesId": 96,
@@ -585,14 +585,14 @@
     "fromFormName": "base",
     "toSpeciesId": 105,
     "toFormName": "alola",
-    "method": "Level 28 + at night"
+    "method": "Level 28 + At Night"
   },
   {
     "fromSpeciesId": 108,
     "fromFormName": "base",
     "toSpeciesId": 463,
     "toFormName": "base",
-    "method": "knows Rollout + level up"
+    "method": "Knows Rollout + Level Up"
   },
   {
     "fromSpeciesId": 109,
@@ -620,21 +620,21 @@
     "fromFormName": "base",
     "toSpeciesId": 464,
     "toFormName": "base",
-    "method": "Trade + holding Protector"
+    "method": "Trade + Holding Protector"
   },
   {
     "fromSpeciesId": 113,
     "fromFormName": "base",
     "toSpeciesId": 242,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 114,
     "fromFormName": "base",
     "toSpeciesId": 465,
     "toFormName": "base",
-    "method": "knows Ancient Power + level up"
+    "method": "Knows Ancient Power + Level Up"
   },
   {
     "fromSpeciesId": 116,
@@ -648,7 +648,7 @@
     "fromFormName": "base",
     "toSpeciesId": 230,
     "toFormName": "base",
-    "method": "Trade + holding Dragon Scale"
+    "method": "Trade + Holding Dragon Scale"
   },
   {
     "fromSpeciesId": 118,
@@ -676,7 +676,7 @@
     "fromFormName": "base",
     "toSpeciesId": 212,
     "toFormName": "base",
-    "method": "Trade + holding Metal Coat"
+    "method": "Trade + Holding Metal Coat"
   },
   {
     "fromSpeciesId": 123,
@@ -690,14 +690,14 @@
     "fromFormName": "base",
     "toSpeciesId": 466,
     "toFormName": "base",
-    "method": "Trade + holding Electirizer"
+    "method": "Trade + Holding Electirizer"
   },
   {
     "fromSpeciesId": 126,
     "fromFormName": "base",
     "toSpeciesId": 467,
     "toFormName": "base",
-    "method": "Trade + holding Magmarizer"
+    "method": "Trade + Holding Magmarizer"
   },
   {
     "fromSpeciesId": 129,
@@ -732,42 +732,42 @@
     "fromFormName": "base",
     "toSpeciesId": 196,
     "toFormName": "base",
-    "method": "160 friendship + during the day + level up"
+    "method": "160 Friendship + During the Day + Level Up"
   },
   {
     "fromSpeciesId": 133,
     "fromFormName": "base",
     "toSpeciesId": 197,
     "toFormName": "base",
-    "method": "160 friendship + at night + level up"
+    "method": "160 Friendship + At Night + Level Up"
   },
   {
     "fromSpeciesId": 133,
     "fromFormName": "base",
     "toSpeciesId": 470,
     "toFormName": "base",
-    "method": "at Eterna Forest + near a special rock + level up or at Pinwheel Forest + near a special rock + level up or at Kalos Route 20 + near a special rock + level up or Leaf Stone or at Petalburg Woods + near a special rock + level up or at Lush Jungle + near a special rock + level up"
+    "method": "At Eterna Forest + Near a Special Rock + Level Up or At Pinwheel Forest + Near a Special Rock + Level Up or At Kalos Route 20 + Near a Special Rock + Level Up or Leaf Stone or At Petalburg Woods + Near a Special Rock + Level Up or At Lush Jungle + Near a Special Rock + Level Up"
   },
   {
     "fromSpeciesId": 133,
     "fromFormName": "base",
     "toSpeciesId": 471,
     "toFormName": "base",
-    "method": "at Sinnoh Route 217 + near a special rock + level up or at Twist Mountain + near a special rock + level up or at Frost Cavern + near a special rock + level up or Ice Stone or at Shoal Cave + near a special rock + level up or at Mount Lanakila + near a special rock + level up"
+    "method": "At Sinnoh Route 217 + Near a Special Rock + Level Up or At Twist Mountain + Near a Special Rock + Level Up or At Frost Cavern + Near a Special Rock + Level Up or Ice Stone or At Shoal Cave + Near a Special Rock + Level Up or At Mount Lanakila + Near a Special Rock + Level Up"
   },
   {
     "fromSpeciesId": 133,
     "fromFormName": "base",
     "toSpeciesId": 700,
     "toFormName": "base",
-    "method": "2 affection + knows a Fairy move + level up or 160 friendship + knows a Fairy move + level up"
+    "method": "2 Affection + Knows a Fairy Move + Level Up or 160 Friendship + Knows a Fairy Move + Level Up"
   },
   {
     "fromSpeciesId": 137,
     "fromFormName": "base",
     "toSpeciesId": 233,
     "toFormName": "base",
-    "method": "Trade + holding Up-Grade"
+    "method": "Trade + Holding Up-Grade"
   },
   {
     "fromSpeciesId": 138,
@@ -886,28 +886,28 @@
     "fromFormName": "base",
     "toSpeciesId": 25,
     "toFormName": "base",
-    "method": "220 friendship + level up"
+    "method": "220 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 173,
     "fromFormName": "base",
     "toSpeciesId": 35,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 174,
     "fromFormName": "base",
     "toSpeciesId": 39,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 175,
     "fromFormName": "base",
     "toSpeciesId": 176,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 176,
@@ -963,7 +963,7 @@
     "fromFormName": "base",
     "toSpeciesId": 424,
     "toFormName": "base",
-    "method": "knows Double Hit + level up"
+    "method": "Knows Double Hit + Level Up"
   },
   {
     "fromSpeciesId": 191,
@@ -977,7 +977,7 @@
     "fromFormName": "base",
     "toSpeciesId": 469,
     "toFormName": "base",
-    "method": "knows Ancient Power + level up"
+    "method": "Knows Ancient Power + Level Up"
   },
   {
     "fromSpeciesId": 194,
@@ -1012,7 +1012,7 @@
     "fromFormName": "base",
     "toSpeciesId": 981,
     "toFormName": "base",
-    "method": "knows Twin Beam + level up"
+    "method": "Knows Twin Beam + Level Up"
   },
   {
     "fromSpeciesId": 204,
@@ -1026,21 +1026,21 @@
     "fromFormName": "base",
     "toSpeciesId": 982,
     "toFormName": "base",
-    "method": "knows Hyper Drill + 99% chance + level up"
+    "method": "Knows Hyper Drill + 99% Chance + Level Up"
   },
   {
     "fromSpeciesId": 206,
     "fromFormName": "base",
     "toSpeciesId": 982,
     "toFormName": "three-segment",
-    "method": "knows Hyper Drill + 1% chance + level up"
+    "method": "Knows Hyper Drill + 1% Chance + Level Up"
   },
   {
     "fromSpeciesId": 207,
     "fromFormName": "base",
     "toSpeciesId": 472,
     "toFormName": "base",
-    "method": "at night + holding Razor Fang + level up"
+    "method": "At Night + Holding Razor Fang + Level Up"
   },
   {
     "fromSpeciesId": 209,
@@ -1054,21 +1054,21 @@
     "fromFormName": "hisui",
     "toSpeciesId": 904,
     "toFormName": "base",
-    "method": "Use Barb Barrage as a Strong Style move 20 times or knows Barb Barrage + level up or Use Barb Barrage 20 times"
+    "method": "Use Barb Barrage as a Strong Style Move 20 Times or Knows Barb Barrage + Level Up or Use Barb Barrage 20 Times"
   },
   {
     "fromSpeciesId": 215,
     "fromFormName": "base",
     "toSpeciesId": 461,
     "toFormName": "base",
-    "method": "at night + holding Razor Claw + level up"
+    "method": "At Night + Holding Razor Claw + Level Up"
   },
   {
     "fromSpeciesId": 215,
     "fromFormName": "hisui",
     "toSpeciesId": 903,
     "toFormName": "base",
-    "method": "during the day + holding Razor Claw + level up"
+    "method": "During the Day + Holding Razor Claw + Level Up"
   },
   {
     "fromSpeciesId": 216,
@@ -1082,7 +1082,7 @@
     "fromFormName": "base",
     "toSpeciesId": 901,
     "toFormName": "base",
-    "method": "Peat Block + during a full moon"
+    "method": "Peat Block + During a Full Moon"
   },
   {
     "fromSpeciesId": 218,
@@ -1103,7 +1103,7 @@
     "fromFormName": "base",
     "toSpeciesId": 473,
     "toFormName": "base",
-    "method": "knows Ancient Power + level up"
+    "method": "Knows Ancient Power + Level Up"
   },
   {
     "fromSpeciesId": 222,
@@ -1138,14 +1138,14 @@
     "fromFormName": "base",
     "toSpeciesId": 474,
     "toFormName": "base",
-    "method": "Trade + holding Dubious Disc"
+    "method": "Trade + Holding Dubious Disc"
   },
   {
     "fromSpeciesId": 234,
     "fromFormName": "base",
     "toSpeciesId": 899,
     "toFormName": "base",
-    "method": "Use Psyshield Bash as an Agile Style move 20 times"
+    "method": "Use Psyshield Bash as an Agile Style Move 20 Times"
   },
   {
     "fromSpeciesId": 236,
@@ -1271,21 +1271,21 @@
     "fromFormName": "galar",
     "toSpeciesId": 862,
     "toFormName": "base",
-    "method": "Level 35 + at night"
+    "method": "Level 35 + At Night"
   },
   {
     "fromSpeciesId": 265,
     "fromFormName": "base",
     "toSpeciesId": 266,
     "toFormName": "base",
-    "method": "Level 7 + 50% chance"
+    "method": "Level 7 + 50% Chance"
   },
   {
     "fromSpeciesId": 265,
     "fromFormName": "base",
     "toSpeciesId": 268,
     "toFormName": "base",
-    "method": "Level 7 + 50% chance"
+    "method": "Level 7 + 50% Chance"
   },
   {
     "fromSpeciesId": 266,
@@ -1362,7 +1362,7 @@
     "fromFormName": "base",
     "toSpeciesId": 475,
     "toFormName": "base",
-    "method": "Dawn Stone (male)"
+    "method": "Dawn Stone (Male)"
   },
   {
     "fromSpeciesId": 283,
@@ -1404,7 +1404,7 @@
     "fromFormName": "base",
     "toSpeciesId": 292,
     "toFormName": "base",
-    "method": "Empty party slot + spare Poké Ball"
+    "method": "Empty Party Slot + Spare Poké Ball"
   },
   {
     "fromSpeciesId": 293,
@@ -1432,14 +1432,14 @@
     "fromFormName": "base",
     "toSpeciesId": 183,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 299,
     "fromFormName": "base",
     "toSpeciesId": 476,
     "toFormName": "base",
-    "method": "at Mt Coronet + level up or at Chargestone Cave + level up or at Kalos Route 13 + level up or at Blush Mountain + level up or at Vast Poni Canyon + level up or Thunder Stone or at New Mauville + level up"
+    "method": "At Mt Coronet + Level Up or At Chargestone Cave + Level Up or At Kalos Route 13 + Level Up or At Blush Mountain + Level Up or At Vast Poni Canyon + Level Up or Thunder Stone or At New Mauville + Level Up"
   },
   {
     "fromSpeciesId": 300,
@@ -1586,7 +1586,7 @@
     "fromFormName": "base",
     "toSpeciesId": 350,
     "toFormName": "base",
-    "method": "170 beauty + level up or Trade + holding Prism Scale"
+    "method": "170 Beauty + Level Up or Trade + Holding Prism Scale"
   },
   {
     "fromSpeciesId": 353,
@@ -1607,7 +1607,7 @@
     "fromFormName": "base",
     "toSpeciesId": 477,
     "toFormName": "base",
-    "method": "Trade + holding Reaper Cloth"
+    "method": "Trade + Holding Reaper Cloth"
   },
   {
     "fromSpeciesId": 360,
@@ -1628,7 +1628,7 @@
     "fromFormName": "base",
     "toSpeciesId": 478,
     "toFormName": "base",
-    "method": "Dawn Stone (female)"
+    "method": "Dawn Stone (Female)"
   },
   {
     "fromSpeciesId": 363,
@@ -1649,14 +1649,14 @@
     "fromFormName": "base",
     "toSpeciesId": 367,
     "toFormName": "base",
-    "method": "Trade + holding Deep Sea Tooth"
+    "method": "Trade + Holding Deep Sea Tooth"
   },
   {
     "fromSpeciesId": 366,
     "fromFormName": "base",
     "toSpeciesId": 368,
     "toFormName": "base",
-    "method": "Trade + holding Deep Sea Scale"
+    "method": "Trade + Holding Deep Sea Scale"
   },
   {
     "fromSpeciesId": 371,
@@ -1775,7 +1775,7 @@
     "fromFormName": "base",
     "toSpeciesId": 315,
     "toFormName": "base",
-    "method": "160 friendship + during the day + level up"
+    "method": "160 Friendship + During the Day + Level Up"
   },
   {
     "fromSpeciesId": 408,
@@ -1796,35 +1796,35 @@
     "fromFormName": "base",
     "toSpeciesId": 413,
     "toFormName": "base",
-    "method": "Level 20 (female)"
+    "method": "Level 20 (Female)"
   },
   {
     "fromSpeciesId": 412,
     "fromFormName": "sandy",
     "toSpeciesId": 413,
     "toFormName": "sandy",
-    "method": "Level 20 (female)"
+    "method": "Level 20 (Female)"
   },
   {
     "fromSpeciesId": 412,
     "fromFormName": "trash",
     "toSpeciesId": 413,
     "toFormName": "trash",
-    "method": "Level 20 (female)"
+    "method": "Level 20 (Female)"
   },
   {
     "fromSpeciesId": 412,
     "fromFormName": "base",
     "toSpeciesId": 414,
     "toFormName": "base",
-    "method": "Level 20 (male)"
+    "method": "Level 20 (Male)"
   },
   {
     "fromSpeciesId": 415,
     "fromFormName": "base",
     "toSpeciesId": 416,
     "toFormName": "base",
-    "method": "Level 21 (female)"
+    "method": "Level 21 (Female)"
   },
   {
     "fromSpeciesId": 418,
@@ -1866,7 +1866,7 @@
     "fromFormName": "base",
     "toSpeciesId": 428,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 431,
@@ -1880,7 +1880,7 @@
     "fromFormName": "base",
     "toSpeciesId": 358,
     "toFormName": "base",
-    "method": "220 friendship + at night + level up"
+    "method": "220 Friendship + At Night + Level Up"
   },
   {
     "fromSpeciesId": 434,
@@ -1901,28 +1901,28 @@
     "fromFormName": "base",
     "toSpeciesId": 185,
     "toFormName": "base",
-    "method": "knows Mimic + level up"
+    "method": "Knows Mimic + Level Up"
   },
   {
     "fromSpeciesId": 439,
     "fromFormName": "base",
     "toSpeciesId": 122,
     "toFormName": "base",
-    "method": "knows Mimic + level up"
+    "method": "Knows Mimic + Level Up"
   },
   {
     "fromSpeciesId": 439,
     "fromFormName": "base",
     "toSpeciesId": 122,
     "toFormName": "galar",
-    "method": "knows Mimic + level up"
+    "method": "Knows Mimic + Level Up"
   },
   {
     "fromSpeciesId": 440,
     "fromFormName": "base",
     "toSpeciesId": 113,
     "toFormName": "base",
-    "method": "during the day + holding Oval Stone + level up"
+    "method": "During the Day + Holding Oval Stone + Level Up"
   },
   {
     "fromSpeciesId": 443,
@@ -1943,14 +1943,14 @@
     "fromFormName": "base",
     "toSpeciesId": 143,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 447,
     "fromFormName": "base",
     "toSpeciesId": 448,
     "toFormName": "base",
-    "method": "160 friendship + during the day + level up"
+    "method": "160 Friendship + During the Day + Level Up"
   },
   {
     "fromSpeciesId": 449,
@@ -1985,7 +1985,7 @@
     "fromFormName": "base",
     "toSpeciesId": 226,
     "toFormName": "base",
-    "method": "with Remoraid in the party + level up"
+    "method": "With Remoraid in the Party + Level Up"
   },
   {
     "fromSpeciesId": 459,
@@ -2139,7 +2139,7 @@
     "fromFormName": "base",
     "toSpeciesId": 528,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 529,
@@ -2188,7 +2188,7 @@
     "fromFormName": "base",
     "toSpeciesId": 542,
     "toFormName": "base",
-    "method": "220 friendship + level up"
+    "method": "220 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 543,
@@ -2230,14 +2230,14 @@
     "fromFormName": "white-striped",
     "toSpeciesId": 902,
     "toFormName": "base",
-    "method": "Take 294 recoil damage (male)"
+    "method": "Take 294 Recoil Damage (Male)"
   },
   {
     "fromSpeciesId": 550,
     "fromFormName": "white-striped",
     "toSpeciesId": 902,
     "toFormName": "female",
-    "method": "Take 294 recoil damage (female)"
+    "method": "Take 294 Recoil Damage (Female)"
   },
   {
     "fromSpeciesId": 551,
@@ -2293,7 +2293,7 @@
     "fromFormName": "galar",
     "toSpeciesId": 867,
     "toFormName": "base",
-    "method": "Take 49 damage + at Dusty Bowl"
+    "method": "Take 49 Damage + At Dusty Bowl"
   },
   {
     "fromSpeciesId": 564,
@@ -2419,7 +2419,7 @@
     "fromFormName": "base",
     "toSpeciesId": 589,
     "toFormName": "base",
-    "method": "Trade + for Shelmet"
+    "method": "Trade + For Shelmet"
   },
   {
     "fromSpeciesId": 590,
@@ -2524,7 +2524,7 @@
     "fromFormName": "base",
     "toSpeciesId": 617,
     "toFormName": "base",
-    "method": "Trade + for Karrablast"
+    "method": "Trade + For Karrablast"
   },
   {
     "fromSpeciesId": 619,
@@ -2552,7 +2552,7 @@
     "fromFormName": "base",
     "toSpeciesId": 983,
     "toFormName": "base",
-    "method": "Defeat 3 Bisharp holding Leader's Crest"
+    "method": "Defeat 3 Bisharp Holding Leader's Crest"
   },
   {
     "fromSpeciesId": 627,
@@ -2762,21 +2762,21 @@
     "fromFormName": "base",
     "toSpeciesId": 675,
     "toFormName": "base",
-    "method": "Level 32 + with a Dark-type Pokémon in the party"
+    "method": "Level 32 + With a Dark-Type Pokémon in the Party"
   },
   {
     "fromSpeciesId": 677,
     "fromFormName": "base",
     "toSpeciesId": 678,
     "toFormName": "base",
-    "method": "Level 25 (male)"
+    "method": "Level 25 (Male)"
   },
   {
     "fromSpeciesId": 677,
     "fromFormName": "base",
     "toSpeciesId": 678,
     "toFormName": "female",
-    "method": "Level 25 (female)"
+    "method": "Level 25 (Female)"
   },
   {
     "fromSpeciesId": 679,
@@ -2797,21 +2797,21 @@
     "fromFormName": "base",
     "toSpeciesId": 683,
     "toFormName": "base",
-    "method": "Trade + holding Sachet"
+    "method": "Trade + Holding Sachet"
   },
   {
     "fromSpeciesId": 684,
     "fromFormName": "base",
     "toSpeciesId": 685,
     "toFormName": "base",
-    "method": "Trade + holding Whipped Dream"
+    "method": "Trade + Holding Whipped Dream"
   },
   {
     "fromSpeciesId": 686,
     "fromFormName": "base",
     "toSpeciesId": 687,
     "toFormName": "base",
-    "method": "Level 30 + with the console turned upside down"
+    "method": "Level 30 + With the Console Turned Upside Down"
   },
   {
     "fromSpeciesId": 688,
@@ -2846,14 +2846,14 @@
     "fromFormName": "base",
     "toSpeciesId": 697,
     "toFormName": "base",
-    "method": "Level 39 + during the day"
+    "method": "Level 39 + During the Day"
   },
   {
     "fromSpeciesId": 698,
     "fromFormName": "base",
     "toSpeciesId": 699,
     "toFormName": "base",
-    "method": "Level 39 + at night"
+    "method": "Level 39 + At Night"
   },
   {
     "fromSpeciesId": 704,
@@ -2874,14 +2874,14 @@
     "fromFormName": "base",
     "toSpeciesId": 706,
     "toFormName": "base",
-    "method": "Level 50 + while raining"
+    "method": "Level 50 + While Raining"
   },
   {
     "fromSpeciesId": 705,
     "fromFormName": "hisui",
     "toSpeciesId": 706,
     "toFormName": "hisui",
-    "method": "Level 50 + while raining"
+    "method": "Level 50 + While Raining"
   },
   {
     "fromSpeciesId": 708,
@@ -3007,7 +3007,7 @@
     "fromFormName": "base",
     "toSpeciesId": 735,
     "toFormName": "base",
-    "method": "Level 20 + during the day"
+    "method": "Level 20 + During the Day"
   },
   {
     "fromSpeciesId": 736,
@@ -3021,14 +3021,14 @@
     "fromFormName": "base",
     "toSpeciesId": 738,
     "toFormName": "base",
-    "method": "at Vast Poni Canyon + level up or at Blush Mountain + level up or Thunder Stone"
+    "method": "At Vast Poni Canyon + Level Up or At Blush Mountain + Level Up or Thunder Stone"
   },
   {
     "fromSpeciesId": 739,
     "fromFormName": "base",
     "toSpeciesId": 740,
     "toFormName": "base",
-    "method": "at Mount Lanakila + level up or Ice Stone"
+    "method": "At Mount Lanakila + Level Up or Ice Stone"
   },
   {
     "fromSpeciesId": 742,
@@ -3042,21 +3042,21 @@
     "fromFormName": "base",
     "toSpeciesId": 745,
     "toFormName": "base",
-    "method": "Level 25 + during the day"
+    "method": "Level 25 + During the Day"
   },
   {
     "fromSpeciesId": 744,
     "fromFormName": "base",
     "toSpeciesId": 745,
     "toFormName": "midnight",
-    "method": "Level 25 + at night"
+    "method": "Level 25 + At Night"
   },
   {
     "fromSpeciesId": 744,
     "fromFormName": "own-tempo",
     "toSpeciesId": 745,
     "toFormName": "dusk",
-    "method": "Level 25 + at dusk"
+    "method": "Level 25 + At Dusk"
   },
   {
     "fromSpeciesId": 747,
@@ -3084,7 +3084,7 @@
     "fromFormName": "base",
     "toSpeciesId": 754,
     "toFormName": "base",
-    "method": "Level 34 + during the day"
+    "method": "Level 34 + During the Day"
   },
   {
     "fromSpeciesId": 755,
@@ -3098,7 +3098,7 @@
     "fromFormName": "base",
     "toSpeciesId": 758,
     "toFormName": "base",
-    "method": "Level 33 (female)"
+    "method": "Level 33 (Female)"
   },
   {
     "fromSpeciesId": 759,
@@ -3119,7 +3119,7 @@
     "fromFormName": "base",
     "toSpeciesId": 763,
     "toFormName": "base",
-    "method": "knows Stomp + level up"
+    "method": "Knows Stomp + Level Up"
   },
   {
     "fromSpeciesId": 767,
@@ -3140,7 +3140,7 @@
     "fromFormName": "base",
     "toSpeciesId": 773,
     "toFormName": "base",
-    "method": "160 friendship + level up"
+    "method": "160 Friendship + Level Up"
   },
   {
     "fromSpeciesId": 782,
@@ -3182,7 +3182,7 @@
     "fromFormName": "base",
     "toSpeciesId": 804,
     "toFormName": "base",
-    "method": "knows Dragon Pulse + level up"
+    "method": "Knows Dragon Pulse + Level Up"
   },
   {
     "fromSpeciesId": 808,
@@ -3378,7 +3378,7 @@
     "fromFormName": "base",
     "toSpeciesId": 853,
     "toFormName": "base",
-    "method": "knows Taunt + level up"
+    "method": "Knows Taunt + Level Up"
   },
   {
     "fromSpeciesId": 854,
@@ -3427,14 +3427,14 @@
     "fromFormName": "base",
     "toSpeciesId": 869,
     "toFormName": "base",
-    "method": "Spin while holding a Sweet"
+    "method": "Spin While Holding a Sweet"
   },
   {
     "fromSpeciesId": 872,
     "fromFormName": "base",
     "toSpeciesId": 873,
     "toFormName": "base",
-    "method": "160 friendship + at night + level up"
+    "method": "160 Friendship + At Night + Level Up"
   },
   {
     "fromSpeciesId": 878,
@@ -3469,14 +3469,14 @@
     "fromFormName": "base",
     "toSpeciesId": 892,
     "toFormName": "base",
-    "method": "Tower of Darkness (Sword only) or Scroll of Darkness"
+    "method": "Tower of Darkness (Sword Only) or Scroll of Darkness"
   },
   {
     "fromSpeciesId": 891,
     "fromFormName": "base",
     "toSpeciesId": 892,
     "toFormName": "rapid-strike",
-    "method": "Tower of Waters (Shield only) or Scroll of Waters"
+    "method": "Tower of Waters (Shield Only) or Scroll of Waters"
   },
   {
     "fromSpeciesId": 906,
@@ -3525,14 +3525,14 @@
     "fromFormName": "base",
     "toSpeciesId": 916,
     "toFormName": "base",
-    "method": "Level 18 (male)"
+    "method": "Level 18 (Male)"
   },
   {
     "fromSpeciesId": 915,
     "fromFormName": "base",
     "toSpeciesId": 916,
     "toFormName": "female",
-    "method": "Level 18 (female)"
+    "method": "Level 18 (Female)"
   },
   {
     "fromSpeciesId": 917,
@@ -3560,21 +3560,21 @@
     "fromFormName": "base",
     "toSpeciesId": 923,
     "toFormName": "base",
-    "method": "1000 steps walked + level up"
+    "method": "1000 Steps Walked + Level Up"
   },
   {
     "fromSpeciesId": 924,
     "fromFormName": "base",
     "toSpeciesId": 925,
     "toFormName": "base",
-    "method": "Level 25 + 99% chance"
+    "method": "Level 25 + 99% Chance"
   },
   {
     "fromSpeciesId": 924,
     "fromFormName": "base",
     "toSpeciesId": 925,
     "toFormName": "family-of-three",
-    "method": "Level 25 + 1% chance"
+    "method": "Level 25 + 1% Chance"
   },
   {
     "fromSpeciesId": 926,
@@ -3658,7 +3658,7 @@
     "fromFormName": "base",
     "toSpeciesId": 947,
     "toFormName": "base",
-    "method": "1000 steps walked + level up"
+    "method": "1000 Steps Walked + Level Up"
   },
   {
     "fromSpeciesId": 948,
@@ -3679,7 +3679,7 @@
     "fromFormName": "base",
     "toSpeciesId": 954,
     "toFormName": "base",
-    "method": "1000 steps walked + level up"
+    "method": "1000 Steps Walked + Level Up"
   },
   {
     "fromSpeciesId": 955,
@@ -3714,7 +3714,7 @@
     "fromFormName": "base",
     "toSpeciesId": 964,
     "toFormName": "base",
-    "method": "Level 38 + in multiplayer"
+    "method": "Level 38 + In Multiplayer"
   },
   {
     "fromSpeciesId": 965,
@@ -3735,7 +3735,7 @@
     "fromFormName": "base",
     "toSpeciesId": 972,
     "toFormName": "base",
-    "method": "Level 30 + at night"
+    "method": "Level 30 + At Night"
   },
   {
     "fromSpeciesId": 974,
@@ -3770,7 +3770,7 @@
     "fromFormName": "base",
     "toSpeciesId": 1019,
     "toFormName": "base",
-    "method": "knows Dragon Cheer + level up"
+    "method": "Knows Dragon Cheer + Level Up"
   },
   {
     "fromSpeciesId": 1012,

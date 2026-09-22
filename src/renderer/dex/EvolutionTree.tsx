@@ -19,14 +19,18 @@ interface EvolutionTreeProps {
   onSelectSpecies: (speciesId: number, formName: string) => void
 }
 
-const BUBBLE_SIZE = 56
+const BUBBLE_SIZE = 84
 
 /**
- * Species detail popup's evolution family tree (Leg 2). Renders the full chain containing
- * `speciesId` as generations stacked top-down: each node's children lay out in a wrapping
- * horizontal row below it (CSS flex-wrap — see evolution-tree.css), so a wide branch like
- * Eevee's 8 evolutions wraps onto multiple rows instead of overflowing, while a normal
- * linear chain (Bulbasaur -> Ivysaur -> Venusaur) just stacks straight down.
+ * Species detail popup's evolution family tree (Leg 2, reworked to a horizontal
+ * left-to-right layout in Leg 5 per Vanny's feedback — "reads better" than the original
+ * top-down stack). Each node lays out as a row: its own bubble, then a column of its
+ * children to the right (evolution-tree.css's flex-direction: row/column split, not a
+ * JSX structural change from Leg 2 — the node/children/branch nesting already matched a
+ * sideways genealogy-chart shape once the CSS main axis flipped). A branching family
+ * (Eevee's 8 evolutions, Pikachu's 2 Raichu branches) stacks its siblings vertically in
+ * that column rather than wrapping into a grid, while a normal linear chain (Bulbasaur ->
+ * Ivysaur -> Venusaur) just reads straight across.
  *
  * Regional-form branches (Raichu vs. Raichu-Alola) render as separate bubbles per
  * evolutionTree.ts's (speciesId, formName) node identity, matching Leg 1's evolution-edges
@@ -112,7 +116,7 @@ function EvolutionTreeNodeView({
             <div className="evolution-tree-branch" key={`${childNode.speciesId}:${childNode.formName}`}>
               <div className="evolution-tree-arrow">
                 <span className="evolution-tree-arrow-glyph" aria-hidden="true">
-                  ↓
+                  →
                 </span>
                 <span className="evolution-tree-arrow-label">{method}</span>
               </div>

@@ -1,6 +1,6 @@
 /**
  * Turns one PokeAPI evolution_details entry into a short human-readable method string (e.g.
- * "Level 16", "Thunder Stone", "220 friendship + level up") for fetch-evolution-chains.ts's
+ * "Level 16", "Thunder Stone", "220 Friendship + Level Up") for fetch-evolution-chains.ts's
  * evolution-edges.json output.
  *
  * Built against every (trigger, condition-fields) combination actually seen across all 540
@@ -12,11 +12,13 @@
  *     use-item, `Trade` for trade, etc.), and every other condition field present
  *     (friendship, held item, location, known move, time of day, ...) becomes a `+`-joined
  *     clause appended after it. A level-up evolution with no min_level (pure-friendship
- *     evolutions like Golbat -> Crobat) has no headline, so the trailing literal `level up`
- *     clause takes its place instead — "220 friendship + level up".
+ *     evolutions like Golbat -> Crobat) has no headline, so the trailing literal `Level Up`
+ *     clause takes its place instead — "220 Friendship + Level Up".
  *   - `gender` is the one condition that reads as a qualifier rather than a requirement
- *     clause, so it's appended as a trailing "(male)"/"(female)" instead of another `+`
- *     clause (e.g. "Dawn Stone (male)" for Kirlia -> Gallade, not "Dawn Stone + male").
+ *     clause, so it's appended as a trailing "(Male)"/"(Female)" instead of another `+`
+ *     clause (e.g. "Dawn Stone (Male)" for Kirlia -> Gallade, not "Dawn Stone + Male").
+ * Every clause is Title Cased, with minor words (a/an/the/of/in/with/as/...) lowercase except
+ * at the start of their own `+`-joined clause — e.g. "Knows a Water-Type Move".
  * A field this project's live chains never populate (e.g. `min_move_count` without
  * `used_move`) isn't handled — this isn't meant to cover PokeAPI's full schema, only what's
  * actually reachable from /evolution-chain today.
@@ -73,10 +75,10 @@ function formatName(slug: string): string {
 }
 
 const TIME_OF_DAY_PHRASE: Record<string, string> = {
-  day: 'during the day',
-  night: 'at night',
-  dusk: 'at dusk',
-  'full-moon': 'during a full moon'
+  day: 'During the Day',
+  night: 'At Night',
+  dusk: 'At Dusk',
+  'full-moon': 'During a Full Moon'
 }
 
 const RELATIVE_STATS_PHRASE: Record<string, string> = {
@@ -85,18 +87,18 @@ const RELATIVE_STATS_PHRASE: Record<string, string> = {
   '-1': 'Attack < Defense'
 }
 
-const GENDER_SUFFIX: Record<string, string> = { '1': 'female', '2': 'male' }
+const GENDER_SUFFIX: Record<string, string> = { '1': 'Female', '2': 'Male' }
 
 /** Trigger names with a fixed, species-specific mechanic that no combination of the generic
  * condition fields captures — PokeAPI doesn't model these any further, so the phrase is
  * hand-written per trigger rather than derived. */
 const CANNED_TRIGGER_PHRASE: Record<string, string> = {
-  shed: 'Empty party slot + spare Poké Ball',
-  spin: 'Spin while holding a Sweet',
-  'tower-of-darkness': 'Tower of Darkness (Sword only)',
-  'tower-of-waters': 'Tower of Waters (Shield only)',
-  'three-critical-hits': 'Land 3 critical hits in one battle',
-  'three-defeated-bisharp': "Defeat 3 Bisharp holding Leader's Crest",
+  shed: 'Empty Party Slot + Spare Poké Ball',
+  spin: 'Spin While Holding a Sweet',
+  'tower-of-darkness': 'Tower of Darkness (Sword Only)',
+  'tower-of-waters': 'Tower of Waters (Shield Only)',
+  'three-critical-hits': 'Land 3 Critical Hits in One Battle',
+  'three-defeated-bisharp': "Defeat 3 Bisharp Holding Leader's Crest",
   'meltan-candies': 'Feed 400 Meltan Candy',
   'gimmighoul-coins': 'Collect 999 Gimmighoul Coins'
 }
@@ -107,26 +109,26 @@ const CANNED_TRIGGER_PHRASE: Record<string, string> = {
  * bucketing) — in the order they read best joined with " + ". */
 function genericConditions(d: PokeApiEvolutionDetail): string[] {
   const parts: string[] = []
-  if (d.min_happiness != null) parts.push(`${d.min_happiness} friendship`)
-  if (d.min_affection != null) parts.push(`${d.min_affection} affection`)
-  if (d.min_beauty != null) parts.push(`${d.min_beauty} beauty`)
+  if (d.min_happiness != null) parts.push(`${d.min_happiness} Friendship`)
+  if (d.min_affection != null) parts.push(`${d.min_affection} Affection`)
+  if (d.min_beauty != null) parts.push(`${d.min_beauty} Beauty`)
   if (d.time_of_day) parts.push(TIME_OF_DAY_PHRASE[d.time_of_day] ?? d.time_of_day)
-  if (d.known_move) parts.push(`knows ${formatName(d.known_move.name)}`)
-  if (d.known_move_type) parts.push(`knows a ${formatName(d.known_move_type.name)} move`)
-  if (d.location) parts.push(`at ${formatName(d.location.name)}`)
-  if (d.held_item) parts.push(`holding ${formatName(d.held_item.name)}`)
-  if (d.trade_species) parts.push(`for ${formatName(d.trade_species.name)}`)
+  if (d.known_move) parts.push(`Knows ${formatName(d.known_move.name)}`)
+  if (d.known_move_type) parts.push(`Knows a ${formatName(d.known_move_type.name)} Move`)
+  if (d.location) parts.push(`At ${formatName(d.location.name)}`)
+  if (d.held_item) parts.push(`Holding ${formatName(d.held_item.name)}`)
+  if (d.trade_species) parts.push(`For ${formatName(d.trade_species.name)}`)
   if (d.relative_physical_stats != null) {
-    parts.push(RELATIVE_STATS_PHRASE[String(d.relative_physical_stats)] ?? `stat ratio ${d.relative_physical_stats}`)
+    parts.push(RELATIVE_STATS_PHRASE[String(d.relative_physical_stats)] ?? `Stat Ratio ${d.relative_physical_stats}`)
   }
-  if (d.party_species) parts.push(`with ${formatName(d.party_species.name)} in the party`)
-  if (d.party_type) parts.push(`with a ${formatName(d.party_type.name)}-type Pokémon in the party`)
-  if (d.near_special_rock) parts.push('near a special rock')
-  if (d.needs_overworld_rain) parts.push('while raining')
-  if (d.turn_upside_down) parts.push('with the console turned upside down')
-  if (d.needs_multiplayer) parts.push('in multiplayer')
-  if (d.min_steps != null) parts.push(`${d.min_steps} steps walked`)
-  if (d.condition_expression) parts.push(`${d.condition_expression.percentage_chance}% chance`)
+  if (d.party_species) parts.push(`With ${formatName(d.party_species.name)} in the Party`)
+  if (d.party_type) parts.push(`With a ${formatName(d.party_type.name)}-Type Pokémon in the Party`)
+  if (d.near_special_rock) parts.push('Near a Special Rock')
+  if (d.needs_overworld_rain) parts.push('While Raining')
+  if (d.turn_upside_down) parts.push('With the Console Turned Upside Down')
+  if (d.needs_multiplayer) parts.push('In Multiplayer')
+  if (d.min_steps != null) parts.push(`${d.min_steps} Steps Walked`)
+  if (d.condition_expression) parts.push(`${d.condition_expression.percentage_chance}% Chance`)
   return parts
 }
 
@@ -140,22 +142,22 @@ function formatBody(d: PokeApiEvolutionDetail): string {
     case 'level-up':
     case 'in-battle-level-up':
       if (d.min_level != null) return [`Level ${d.min_level}`, ...conditions].join(' + ')
-      if (conditions.length > 0) return [...conditions, 'level up'].join(' + ')
-      return 'Level up'
+      if (conditions.length > 0) return [...conditions, 'Level Up'].join(' + ')
+      return 'Level Up'
     case 'use-item':
       return [formatName(d.item?.name ?? 'item'), ...conditions].join(' + ')
     case 'trade':
       return ['Trade', ...conditions].join(' + ')
     case 'take-damage':
-      return [`Take ${d.min_damage_taken ?? '?'} damage`, ...conditions].join(' + ')
+      return [`Take ${d.min_damage_taken ?? '?'} Damage`, ...conditions].join(' + ')
     case 'recoil-damage':
-      return [`Take ${d.min_damage_taken ?? '?'} recoil damage`, ...conditions].join(' + ')
+      return [`Take ${d.min_damage_taken ?? '?'} Recoil Damage`, ...conditions].join(' + ')
     case 'use-move':
     case 'agile-style-move':
     case 'strong-style-move': {
       const move = formatName(d.used_move?.name ?? 'move')
-      const style = trigger === 'agile-style-move' ? ' as an Agile Style move' : trigger === 'strong-style-move' ? ' as a Strong Style move' : ''
-      return [`Use ${move}${style} ${d.min_move_count ?? '?'} times`, ...conditions].join(' + ')
+      const style = trigger === 'agile-style-move' ? ' as an Agile Style Move' : trigger === 'strong-style-move' ? ' as a Strong Style Move' : ''
+      return [`Use ${move}${style} ${d.min_move_count ?? '?'} Times`, ...conditions].join(' + ')
     }
     default:
       if (CANNED_TRIGGER_PHRASE[trigger]) return [CANNED_TRIGGER_PHRASE[trigger], ...conditions].join(' + ')
@@ -164,7 +166,7 @@ function formatBody(d: PokeApiEvolutionDetail): string {
 }
 
 /** Formats one evolution_details entry into its full display string, including the trailing
- * gender qualifier (`Dawn Stone (male)`) when the entry is gender-gated. */
+ * gender qualifier (`Dawn Stone (Male)`) when the entry is gender-gated. */
 export function formatEvolutionMethod(d: PokeApiEvolutionDetail): string {
   const body = formatBody(d)
   const genderSuffix = d.gender != null ? GENDER_SUFFIX[String(d.gender)] : null
