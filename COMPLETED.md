@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Codebase File-Size Cleanup Leg 4: split useCollectionData.ts] — 2026-09-21
+Split along the boundary scoped in TODO.md: the box-position/undo-stack slice
+(setEntryBoxPosition/swapEntryBoxPositions/fillBoxSlots/moveEntriesToLocation/undo, their
+apply/snapshot helpers, and the undo-stack state itself) moved into a new
+`useBoxPositionUndo` hook, taking the shared `entriesRef`/`setEntries`/
+`setBoxPlaceholdersState` as arguments and composed back in by `useCollectionData`.
+501 lines -> 328 (useCollectionData.ts) + 241 (useBoxPositionUndo.ts). See commit
+`0844735`.
+
 ## [Codebase File-Size Cleanup Leg 3: split sqlite-storage.ts] — 2026-09-21
 Split along the boundary scoped in TODO.md: `collection-entry-storage.ts` now owns the
 CollectionEntry-specific writers (setOwned/setEntryOrigin/setEntryStorageLocation/

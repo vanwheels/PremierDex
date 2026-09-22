@@ -4,14 +4,6 @@ Curated Met Location dataset shipped 2026-09-21 (see MILESTONES.md).
 
 ## Current Milestone: Codebase File-Size Cleanup
 
-### [Codebase File-Size Cleanup] — Leg 4
-Split `useCollectionData.ts` (501 lines, 1 past the 500 hard cap as of Leg 3 of Box View
-Move & Undo Operations — `restoreEntryBoxPositions`'s renderer-side undo plumbing pushed it
-over). Candidate split: the box-position/undo-stack slice
-(setEntryBoxPosition/swapEntryBoxPositions/fillBoxSlots/moveEntriesToLocation/undo and their
-apply/snapshot helpers) into its own hook, composed back in by useCollectionData.
-Last touched: 2026-09-21. Re-check count: 0.
-
 ### [Codebase File-Size Cleanup] — Leg 5
 Split `met-locations.test.ts` (1330 lines, 830 past the 500 hard cap) — each leg of the
 now-shipped Curated Met Location dataset milestone added its own describe block's worth of
