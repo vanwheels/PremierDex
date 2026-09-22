@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 5: horizontal layout, name centering, method casing] — 2026-09-22
+Reworked `EvolutionTree.tsx`/`evolution-tree.css` to a left-to-right layout (pure CSS
+row/column axis flip — the existing node/children/branch JSX nesting already matched a
+sideways genealogy-chart shape), fixed `.evolution-tree-name` not actually centering
+(needed `width: 100%` to have something to wrap/center against inside its flex column),
+Title Cased every evolution-method clause at the source in `evolution-method-format.ts`
+and regenerated `data/pokemon/evolution-edges.json` from PokeAPI, and bumped bubble/sprite/
+text sizing and spacing. See commit `210700f`.
+
 ## [Species detail popup + evolution family tree Leg 4: fix evolution family tree only showing descendants] — 2026-09-22
 Root cause wasn't the root-walk logic or the evolution data (both confirmed correct against
 the real ~1025-species dataset before touching any code) — `sqlite-storage.ts`'s

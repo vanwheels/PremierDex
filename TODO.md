@@ -6,28 +6,6 @@ Raised by Vanny 2026-09-20, shipped Legs 1-4 2026-09-22, reopened same day: Vann
 the tree in the running app and came back with layout feedback, a form-category bug, and a
 new feature request. Scoped into four more legs below.
 
-### [Species detail popup + evolution family tree] — Leg 5
-Visual/layout rework of `EvolutionTree.tsx`/`evolution-tree.css`, per Vanny's screenshots
-(Wartortle's linear chain, Pikachu's branching Raichu chain) 2026-09-22:
-- **Horizontal orientation** — generations currently stack top-down; Vanny wants
-  left-to-right instead ("reads better"). Branching families (Eevee's 8 evolutions,
-  Pikachu's 2 Raichu branches) will need siblings stacked vertically to the right of their
-  parent (sideways genealogy-chart layout) rather than the current wrap-into-rows-below.
-- **Name centering** — the species/form name under each sprite circle isn't centered; reads
-  as left-aligned starting near the circle's center. `.evolution-tree-name` has
-  `text-align: center` with no explicit width inside a shrink-wrapped flex column, which
-  should already center it — needs a look at why it isn't in practice (`.evolution-tree-bubble`
-  in evolution-tree.css), not just re-asserting the same rule.
-- **Capitalization** — evolution-method text ("220 friendship + level up") isn't Title
-  Cased; should read "220 Friendship + Level Up". Fix at the source
-  (`scripts/fetch-evolution-chains.ts`'s method-string generation), not display-side, so
-  `data/pokemon/evolution-edges.json` itself carries the correct casing.
-- **Spacing** — more room needed between bubbles/text to stop collisions; horizontal
-  orientation should help but verify once built.
-- **Size** — bubbles/sprites and text are too small (sprite detail is lost); increase
-  `.evolution-tree-sprite`/`.evolution-tree-bubble` dimensions and font sizes.
-Last touched: 2026-09-22. Re-check count: 0.
-
 ### [Species detail popup + evolution family tree] — Leg 6
 Bug found by Vanny 2026-09-22: cosmetic-variant Pikachu forms (Rock Star/Belle/Pop
 Star/PhD/Libre/Cosplay/the cap variants/World Cap — all `formCategory: 'cosmetic_variant'`
