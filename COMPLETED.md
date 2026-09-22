@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Codebase File-Size Cleanup Leg 6: split fetch-pokemon-forms.ts] — 2026-09-22
+Final leg — milestone shipped, see MILESTONES.md. Split along the boundary scoped in
+TODO.md: pulled OVERRIDES, SHINY_LOCKED, ALWAYS_SHINY, VERSION_GROUP_GENERATION,
+REGIONAL_GROUPS, and the ride-mode/starter/spurious-multi-form/gender-pair-multi-form
+species lists into a sibling `scripts/pokemon-forms-data.ts`, leaving the fetch/
+classification logic (`fetchSpeciesForms`, `fetchDefaultVarietySubForms`,
+`resolveRegionalGroup`, `isExcludedVariety`, etc.) behind. 656 lines -> 458
+(fetch-pokemon-forms.ts) + 223 (pokemon-forms-data.ts). See commit `af9ea1d`.
+
 ## [Codebase File-Size Cleanup Leg 5: split met-locations.test.ts] — 2026-09-22
 Split along the region/family boundary scoped in TODO.md: one test file per map family
 (kanto/johto/hoenn/orre/sinnoh/unova/kalos/alola/galar/hisui/paldea/go), mirroring

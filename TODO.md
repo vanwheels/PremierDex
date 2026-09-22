@@ -1,22 +1,6 @@
 # TODO
 
-Curated Met Location dataset shipped 2026-09-21 (see MILESTONES.md).
-
-## Current Milestone: Codebase File-Size Cleanup
-
-### [Codebase File-Size Cleanup] — Leg 6
-Split `scripts/fetch-pokemon-forms.ts` (656 lines past the 500 hard cap). Resolved by Leg 1
-(2026-09-21): despite the header docstring framing it as a one-off script in the same spirit
-as the committed static JSON it writes, the file itself is `.ts` source code with real
-logic (fetch/classification functions, concurrency handling), not data — it doesn't qualify
-for the static-data-file exemption and is in scope like any other code file. Candidate
-split: the file is really a small core of fetch/classification logic wrapped around a large
-block of hand-maintained data tables — `OVERRIDES`, `SHINY_LOCKED`, `ALWAYS_SHINY`,
-`VERSION_GROUP_GENERATION`, `REGIONAL_GROUPS`, and the ride-mode/starter/spurious-multi-form/
-gender-pair-multi-form species lists (roughly lines 163-386, ~220 lines). Pulling those into
-a sibling data/constants module (mirroring the OVERRIDES-style tables already isolated in
-other scripts) leaves the fetch/classification logic under the hard cap on its own.
-Last touched: 2026-09-21. Re-check count: 0.
+Codebase File-Size Cleanup shipped 2026-09-22 (see MILESTONES.md).
 
 ## Unscheduled
 
