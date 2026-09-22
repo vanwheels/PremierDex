@@ -8,7 +8,7 @@ forward per (speciesId, formName) node so regional-form branches render as separ
 Piped `evolution-edges.json` from main to renderer the same way `species-availability.json`
 already was (new `loadEvolutionEdges` IPC channel/bridge method, `useCollectionData`
 exposes `evolutionEdges`). Standalone component only — no render path in the app yet, see
-Leg 3. See commit `<pending>`.
+Leg 3. See commit `d55ea59`.
 
 ## [Species detail popup + evolution family tree Leg 1: evolution data pipeline] — 2026-09-22
 Extended `fetch-evolution-chains.ts` to also write `data/pokemon/evolution-edges.json`
