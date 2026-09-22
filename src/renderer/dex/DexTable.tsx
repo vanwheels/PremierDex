@@ -3,6 +3,7 @@ import type { CollectionEntryOriginInput, Form, Gender, Species } from '@shared/
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { EvolutionEdge } from '@shared/types/evolution'
+import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import { DexRow } from './DexRow'
 import type { CollapsedDisplayControl } from './DexRow'
 import { SpriteModal } from './SpriteModal'
@@ -42,6 +43,7 @@ interface DexTableProps {
    * SpeciesDetailPopup's sprite/name lookup and its EvolutionTree. */
   forms: Form[]
   evolutionEdges: EvolutionEdge[]
+  formeSwitchGroups: FormeSwitchGroup[]
 }
 
 /** Three-state header click cycle (Leg 16): unsorted/other-column → ascending →
@@ -91,7 +93,8 @@ export function DexTable({
   speciesAvailability,
   species,
   forms,
-  evolutionEdges
+  evolutionEdges,
+  formeSwitchGroups
 }: DexTableProps): JSX.Element {
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
@@ -291,6 +294,7 @@ export function DexTable({
           species={species}
           forms={forms}
           evolutionEdges={evolutionEdges}
+          formeSwitchGroups={formeSwitchGroups}
           onClose={() => setSpeciesDetailTarget(null)}
         />
       )}

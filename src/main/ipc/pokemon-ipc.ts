@@ -2,7 +2,11 @@ import { ipcMain } from 'electron'
 import type { StorageAdapter } from '@shared/storage/storage-interface'
 import type { CollectionEntryOriginInput, Gender } from '@shared/types/pokemon'
 import { PokemonIpcChannel } from '@shared/storage/ipc-channels'
-import { loadEvolutionEdgesData, loadSpeciesAvailabilityData } from '../storage/load-species-data'
+import {
+  loadEvolutionEdgesData,
+  loadFormeSwitchGroupsData,
+  loadSpeciesAvailabilityData
+} from '../storage/load-species-data'
 
 export function registerPokemonIpc(storage: StorageAdapter): void {
   ipcMain.handle(PokemonIpcChannel.listSpecies, () => storage.listSpecies())
@@ -63,6 +67,7 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
   // Static file read, not a `storage` method — see the channel's own comment.
   ipcMain.handle(PokemonIpcChannel.loadSpeciesAvailability, () => loadSpeciesAvailabilityData())
   ipcMain.handle(PokemonIpcChannel.loadEvolutionEdges, () => loadEvolutionEdgesData())
+  ipcMain.handle(PokemonIpcChannel.loadFormeSwitchGroups, () => loadFormeSwitchGroupsData())
   ipcMain.handle(PokemonIpcChannel.listEntryRibbons, (_event, entryId: number) => storage.listEntryRibbons(entryId))
   ipcMain.handle(PokemonIpcChannel.setEntryRibbons, (_event, entryId: number, ribbonNames: string[]) =>
     storage.setEntryRibbons(entryId, ribbonNames)

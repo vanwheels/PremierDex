@@ -1,0 +1,89 @@
+/**
+ * Species detail popup's alternate-formes view (Leg 8 of the Species detail popup +
+ * evolution family tree milestone). A flat row of equally-ranked bubbles — unlike
+ * evolution-tree.css there's no parent/child direction between members, so this doesn't
+ * reuse that layout beyond the bubble treatment itself.
+ */
+
+.forme-switch-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  max-width: 100%;
+}
+
+.forme-switch-group-tag {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.forme-switch-group-members {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.forme-switch-group-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 8rem;
+}
+
+/* Same override rationale as evolution-tree.css's .evolution-tree-sprite — bigger than
+   .sprite-thumbnail's default row-icon sizing. */
+.forme-switch-group-sprite {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+}
+
+.forme-switch-group-sprite:hover {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-raised));
+}
+
+/* Ring anchored to the circle's own edge — see memory/unanchored-highlight-reads-as-blemish.md. */
+.forme-switch-group-sprite-current {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.forme-switch-group-sprite-missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.forme-switch-group-member-name {
+  width: 100%;
+  font-size: 0.95rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.forme-switch-group-method {
+  margin: 0;
+  max-width: 32rem;
+  text-align: center;
+}
+
+.forme-switch-group-note {
+  margin: 0;
+  max-width: 32rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}

@@ -81,6 +81,7 @@ export function App(): JSX.Element {
               species={data.species}
               forms={data.forms}
               evolutionEdges={data.evolutionEdges}
+              formeSwitchGroups={data.formeSwitchGroups}
               entries={data.entries}
               storageLocations={data.storageLocations}
               boxes={data.boxes}

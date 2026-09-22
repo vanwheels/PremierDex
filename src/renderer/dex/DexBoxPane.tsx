@@ -4,6 +4,7 @@ import type { StorageLocation } from '@shared/types/storage-location'
 import type { StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { EvolutionEdge } from '@shared/types/evolution'
+import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import { BOX_COLS } from './buildBoxes'
 import { canonicalPlaceholderForm } from './boxTemplates'
 import { DexBoxDetailPanel } from './DexBoxDetailPanel'
@@ -41,6 +42,7 @@ interface DexBoxPaneProps {
   /** Leg 3 of the Species detail popup + evolution family tree milestone — feeds
    * SpeciesDetailPopup's EvolutionTree. */
   evolutionEdges: EvolutionEdge[]
+  formeSwitchGroups: FormeSwitchGroup[]
   /** The real (non-null) location id — a pane never renders for the Unassigned tab, same
    * guard as DexBoxGrid's own selectedLocationTab === null branch. */
   storageLocationId: number
@@ -118,6 +120,7 @@ export function DexBoxPane({
   species,
   forms,
   evolutionEdges,
+  formeSwitchGroups,
   storageLocationId,
   boxedEntryIds,
   entryLocationMap,
@@ -448,6 +451,7 @@ export function DexBoxPane({
           species={species}
           forms={forms}
           evolutionEdges={evolutionEdges}
+          formeSwitchGroups={formeSwitchGroups}
           onClose={() => setSpeciesDetailTarget(null)}
         />
       )}

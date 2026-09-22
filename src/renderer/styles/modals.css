@@ -61,6 +61,16 @@
   display: block;
 }
 
+/* Leg 8 — holds "View Evolution Family" plus the conditional "View Alternate Formes"
+   button side by side; plain adjacent <button>s have no default margin (buttons.css) so
+   without this they'd sit flush against each other. */
+.species-detail-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .species-detail-back {
   float: left;
   border: none;

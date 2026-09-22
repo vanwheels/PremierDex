@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { app } from 'electron'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { EvolutionEdge } from '@shared/types/evolution'
+import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 
 export interface SeedSpecies {
   id: number
@@ -77,4 +78,12 @@ export function loadSpeciesEvolutionData(): SeedSpeciesEvolution[] {
 export function loadEvolutionEdgesData(): EvolutionEdge[] {
   const filePath = join(DATA_DIR, 'evolution-edges.json')
   return JSON.parse(readFileSync(filePath, 'utf-8')) as EvolutionEdge[]
+}
+
+/** Loads the static non-evolutionary forme-switch group data (Leg 7 of the Species detail
+ * popup + evolution family tree milestone) written by `npm run build-forme-switch-groups`.
+ * Same not-DB-backed shape as loadEvolutionEdgesData. */
+export function loadFormeSwitchGroupsData(): FormeSwitchGroup[] {
+  const filePath = join(DATA_DIR, 'forme-switch-groups.json')
+  return JSON.parse(readFileSync(filePath, 'utf-8')) as FormeSwitchGroup[]
 }
