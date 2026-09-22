@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 9: fix Eevee's 8-way branch layout and long method text] — 2026-09-22
+Two fixes to `EvolutionTree.tsx`/`evolution-tree.css`, both scoped to display only (no data
+model change). New `evolutionMethodLabel.ts`'s `condenseMethodLabel` collapses a
+multi-alternative `" or "`-joined method string (Leafeon/Glaceon's per-game location
+alternatives, the longest strings in the dataset) to a short "N Methods" label with the full
+string moved to a native `title` tooltip — same pattern as `DexRow`'s
+`dex-invalid-combo-badge` — instead of letting the run-on sentence wrap across many lines in
+the fixed-width arrow column. Separately, a branch above a new `WIDE_BRANCH_THRESHOLD` (4;
+only Eevee's 8-evolution branch crosses it today) now renders its children as a two-column
+CSS grid (`evolution-tree-children-wide`, `grid-auto-flow: column`) instead of a single
+vertical column, roughly halving that branch's height so it fits without triggering
+`.evolution-tree`'s `max-height: 70vh` scroll. See commit `<pending>`.
+
 ## [Species detail popup + evolution family tree Leg 8: wire forme-switch groups into the popup] — 2026-09-22
 UI half of Leg 7: species detail popup's info view gets a second "View Alternate Formes"
 button (next to "View Evolution Family"), shown only for the 14 species with a

@@ -78,14 +78,27 @@
 }
 
 /* Siblings stack vertically in a column to the right of their parent (sideways
-   genealogy-chart shape, Leg 5) instead of wrapping into a grid below it — a wide branch
-   like Eevee's 8 evolutions reads as one tall column, not several wrapped rows. */
+   genealogy-chart shape, Leg 5) instead of wrapping into a grid below it. Applies below
+   EvolutionTree.tsx's WIDE_BRANCH_THRESHOLD; above it, .evolution-tree-children-wide (Leg 9)
+   takes over instead. */
 .evolution-tree-children {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 1rem;
   margin-left: 1rem;
+}
+
+/* Leg 9: a branch above EvolutionTree.tsx's WIDE_BRANCH_THRESHOLD (Eevee's 8 evolutions,
+   the only family in the dataset that wide) switches from a single tall column to a
+   two-column grid instead — grid-auto-flow: column fills the first column top-to-bottom
+   before starting the second, so it still reads as a stacked list, just half as tall.
+   grid-template-rows is set inline per-node (row count depends on child count). */
+.evolution-tree-children-wide {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 1.5rem;
+  row-gap: 1rem;
 }
 
 .evolution-tree-branch {

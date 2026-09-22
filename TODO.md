@@ -6,15 +6,13 @@ Raised by Vanny 2026-09-20, shipped Legs 1-4 2026-09-22, reopened same day: Vann
 the tree in the running app and came back with layout feedback, a form-category bug, and a
 new feature request. Scoped into four more legs below.
 
-### [Species detail popup + evolution family tree] — Leg 9
-Follow-up from Leg 5's horizontal rework, raised by Vanny 2026-09-22 after checking it live:
-Eevee's 8-way branch (the widest case in the whole dataset) still needs work on two fronts —
-the long method text for Leafeon ("Knows a Grass Move + Level Up at Special Location...") and
-Glaceon's evolutions collides/wraps awkwardly in the narrow `.evolution-tree-arrow` column,
-and the tall single-column stack of 8 siblings forces the popup into scroll (`.evolution-tree`'s
-`max-height: 70vh`/`overflow: auto` from Leg 5) rather than fitting on screen. Needs its own
-design pass rather than another size/spacing tweak — e.g. a narrower/differently-wrapped
-arrow label, or reconsidering whether every branching family must be a single vertical column.
+### [Species detail popup + evolution family tree] — Leg 10
+Scoping/discussion leg, requested by Vanny 2026-09-22: after using Legs 1-9 in the running app,
+there's more Vanny wants changed or added on top of this feature. Purpose of this leg is to
+talk through what's still wrong or missing, then decide per-item whether it's a fix within
+this milestone (gets its own leg appended below) or big/separate enough to become its own
+future milestone entry. No implementation yet — nothing to scope until this conversation
+happens.
 Last touched: 2026-09-22. Re-check count: 0.
 
 ## Unscheduled

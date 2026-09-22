@@ -4,6 +4,7 @@ import type { EvolutionEdge } from '@shared/types/evolution'
 import { SpriteThumbnail } from './SpriteThumbnail'
 import { formDisplayName, speciesDisplayName } from './formNames'
 import { buildEvolutionFamilyTree, type EvolutionTreeNode } from './evolutionFamilyTree'
+import { condenseMethodLabel } from './evolutionMethodLabel'
 
 interface EvolutionTreeProps {
   /** Any species in the family — the tree always renders the whole family (root to every
@@ -21,6 +22,13 @@ interface EvolutionTreeProps {
 
 const BUBBLE_SIZE = 84
 
+/** Above this many siblings, a branch's children switch from a single vertical column to a
+ * two-column grid (Leg 9) — Eevee's 8-way branch is the only family in the dataset wide
+ * enough to trigger this today. A single column of 8 sibling bubbles forced the whole tree
+ * into vertical scroll (`.evolution-tree`'s max-height: 70vh); halving the column count
+ * roughly halves that height. */
+const WIDE_BRANCH_THRESHOLD = 4
+
 /**
  * Species detail popup's evolution family tree (Leg 2, reworked to a horizontal
  * left-to-right layout in Leg 5 per Vanny's feedback — "reads better" than the original
@@ -28,9 +36,14 @@ const BUBBLE_SIZE = 84
  * children to the right (evolution-tree.css's flex-direction: row/column split, not a
  * JSX structural change from Leg 2 — the node/children/branch nesting already matched a
  * sideways genealogy-chart shape once the CSS main axis flipped). A branching family
- * (Eevee's 8 evolutions, Pikachu's 2 Raichu branches) stacks its siblings vertically in
- * that column rather than wrapping into a grid, while a normal linear chain (Bulbasaur ->
- * Ivysaur -> Venusaur) just reads straight across.
+ * (Pikachu's 2 Raichu branches, Tyrogue's 3) stacks its siblings vertically in that column,
+ * while a normal linear chain (Bulbasaur -> Ivysaur -> Venusaur) just reads straight across.
+ * A branch wide enough to cross WIDE_BRANCH_THRESHOLD (Eevee's 8 evolutions) wraps into a
+ * two-column grid instead (Leg 9) rather than staying a single tall column — see that
+ * constant's own comment. Each branch's arrow label is condensed via evolutionMethodLabel.ts
+ * when the underlying method has multiple game-specific alternatives (also Leg 9), since the
+ * full run-on sentence badly outgrew its sibling branches' height at the arrow column's fixed
+ * width.
  *
  * Regional-form branches (Raichu vs. Raichu-Alola) render as separate bubbles per
  * evolutionTree.ts's (speciesId, formName) node identity, matching Leg 1's evolution-edges
@@ -111,25 +124,41 @@ function EvolutionTreeNodeView({
         <span className="evolution-tree-name">{displayName}</span>
       </div>
       {node.children.length > 0 && (
-        <div className="evolution-tree-children">
-          {node.children.map(({ method, node: childNode }) => (
-            <div className="evolution-tree-branch" key={`${childNode.speciesId}:${childNode.formName}`}>
-              <div className="evolution-tree-arrow">
-                <span className="evolution-tree-arrow-glyph" aria-hidden="true">
-                  →
-                </span>
-                <span className="evolution-tree-arrow-label">{method}</span>
+        <div
+          className={
+            node.children.length > WIDE_BRANCH_THRESHOLD
+              ? 'evolution-tree-children evolution-tree-children-wide'
+              : 'evolution-tree-children'
+          }
+          style={
+            node.children.length > WIDE_BRANCH_THRESHOLD
+              ? { gridTemplateRows: `repeat(${Math.ceil(node.children.length / 2)}, auto)` }
+              : undefined
+          }
+        >
+          {node.children.map(({ method, node: childNode }) => {
+            const methodLabel = condenseMethodLabel(method)
+            return (
+              <div className="evolution-tree-branch" key={`${childNode.speciesId}:${childNode.formName}`}>
+                <div className="evolution-tree-arrow">
+                  <span className="evolution-tree-arrow-glyph" aria-hidden="true">
+                    →
+                  </span>
+                  <span className="evolution-tree-arrow-label" title={methodLabel.full ?? undefined}>
+                    {methodLabel.label}
+                  </span>
+                </div>
+                <EvolutionTreeNodeView
+                  node={childNode}
+                  speciesById={speciesById}
+                  formByKey={formByKey}
+                  currentSpeciesId={currentSpeciesId}
+                  currentFormName={currentFormName}
+                  onSelectSpecies={onSelectSpecies}
+                />
               </div>
-              <EvolutionTreeNodeView
-                node={childNode}
-                speciesById={speciesById}
-                formByKey={formByKey}
-                currentSpeciesId={currentSpeciesId}
-                currentFormName={currentFormName}
-                onSelectSpecies={onSelectSpecies}
-              />
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>
