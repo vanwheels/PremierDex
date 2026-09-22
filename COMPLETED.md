@@ -1,5 +1,19 @@
 # COMPLETED
 
+## [Curated Met Location dataset Leg 26: curate Pokémon Scarlet/Violet] — 2026-09-21
+Added `PALDEA_BASE`/`PALDEA_SCARLET`/`PALDEA_VIOLET`. Paldea has no numbered routes at all
+(confirmed via Bulbapedia's own article) and Generation IX has no location-index wiki page to
+verify against, so this leg built from Bulbapedia's Scarlet/Violet/Kitakami/Blueberry Academy
+location categories instead, using "does this region-page bullet get its own wikilink" as the
+inclusion test in place of an index-table row — an unlinked bullet (most of Ten Sights of
+Paldea/Six Wonders of Kitakami's own members) folds into its parent area rather than getting
+its own entry. Verified Team Star's five squad bases have no catchable Pokémon (their "Star
+Barrage" is a scripted non-catch battle) by reading each base's own article directly rather
+than assuming a named building always has one. Mesagoza's academy is a genuine within-pair
+location-name split (Naranja Academy/Uva Academy, same building) where every player receives
+their first partner Pokémon there. Folded the Teal Mask/Indigo Disk DLC areas into this same
+shared list, per the precedent Leg 23 set for Sword/Shield's own DLC. See commit `4c17a5b`.
+
 ## [Curated Met Location dataset Leg 25: curate Pokémon Legends: Arceus] — 2026-09-21
 Added `HISUI_GEN8`, sourced from Bulbapedia's raw wikitext for "List of locations by index
 number in Pokémon Legends: Arceus" (action=raw fetch, 2026-09-21), cross-checked against

@@ -4,7 +4,7 @@ Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILES
 
 ## Current Milestone: Curated Met Location dataset
 
-Leg 25 (Pokémon Legends: Arceus) closed 2026-09-21 — see COMPLETED.md.
+Leg 26 (Pokémon Scarlet/Violet) closed 2026-09-21 — see COMPLETED.md.
 
 **Legs 4–28** (below): curate every "map family" in `origin-games.ts`'s `ORIGIN_GAMES`
 roster, in release-date order. Restructured at Leg 4 (2026-09-20, Vanny) from the original
@@ -42,10 +42,6 @@ Each remaining leg's procedure:
 - Extend `met-locations.test.ts` to cover the newly curated family.
 No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
 restricted `<select>` for any game `metLocationsForGame` returns a list for.
-
-### [Curated Met Location dataset] — Leg 26
-Pokémon Scarlet/Violet (Gen 9, shared base list). Curate per the procedure above.
-Last touched: 2026-09-20. Re-check count: 0.
 
 ### [Curated Met Location dataset] — Leg 27
 Pokémon Legends: Z-A (Gen 9, no paired version — Lumiose City only). Curate per the
@@ -148,9 +144,9 @@ template):
   (setEntryBoxPosition/swapEntryBoxPositions/fillBoxSlots/moveEntriesToLocation/undo and
   their apply/snapshot helpers — roughly the same "one feature area" carve-out as the other
   two files above) into its own hook, composed back in by useCollectionData.
-- **Split met-locations.test.ts**: 1137 lines, 637 past the 500 hard cap as of Leg 24 of the
+- **Split met-locations.test.ts**: 1249 lines, 749 past the 500 hard cap as of Leg 26 of the
   Curated Met Location dataset milestone — each leg adds its own describe block's worth of
-  `it(...)` cases and there are still 4 legs left in that milestone, so this will keep
+  `it(...)` cases and there are still 2 legs left in that milestone, so this will keep
   growing. `met-locations.ts` itself is exempt as a large static data file, but the test file
   is ordinary code and not exempt. Candidate split: one test file per map family/generation
   (e.g. `met-locations.kanto.test.ts`, `met-locations.hoenn.test.ts`), mirroring how
