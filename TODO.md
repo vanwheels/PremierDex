@@ -1,5 +1,70 @@
 # TODO
 
+## Current Milestone: Species detail popup + evolution family tree
+
+Raised by Vanny 2026-09-20, shipped Legs 1-4 2026-09-22, reopened same day: Vanny reviewed
+the tree in the running app and came back with layout feedback, a form-category bug, and a
+new feature request. Scoped into four more legs below.
+
+### [Species detail popup + evolution family tree] — Leg 5
+Visual/layout rework of `EvolutionTree.tsx`/`evolution-tree.css`, per Vanny's screenshots
+(Wartortle's linear chain, Pikachu's branching Raichu chain) 2026-09-22:
+- **Horizontal orientation** — generations currently stack top-down; Vanny wants
+  left-to-right instead ("reads better"). Branching families (Eevee's 8 evolutions,
+  Pikachu's 2 Raichu branches) will need siblings stacked vertically to the right of their
+  parent (sideways genealogy-chart layout) rather than the current wrap-into-rows-below.
+- **Name centering** — the species/form name under each sprite circle isn't centered; reads
+  as left-aligned starting near the circle's center. `.evolution-tree-name` has
+  `text-align: center` with no explicit width inside a shrink-wrapped flex column, which
+  should already center it — needs a look at why it isn't in practice (`.evolution-tree-bubble`
+  in evolution-tree.css), not just re-asserting the same rule.
+- **Capitalization** — evolution-method text ("220 friendship + level up") isn't Title
+  Cased; should read "220 Friendship + Level Up". Fix at the source
+  (`scripts/fetch-evolution-chains.ts`'s method-string generation), not display-side, so
+  `data/pokemon/evolution-edges.json` itself carries the correct casing.
+- **Spacing** — more room needed between bubbles/text to stop collisions; horizontal
+  orientation should help but verify once built.
+- **Size** — bubbles/sprites and text are too small (sprite detail is lost); increase
+  `.evolution-tree-sprite`/`.evolution-tree-bubble` dimensions and font sizes.
+Last touched: 2026-09-22. Re-check count: 0.
+
+### [Species detail popup + evolution family tree] — Leg 6
+Bug found by Vanny 2026-09-22: cosmetic-variant Pikachu forms (Rock Star/Belle/Pop
+Star/PhD/Libre/Cosplay/the cap variants/World Cap — all `formCategory: 'cosmetic_variant'`
+in forms.json) show the base Pikachu evolution family (Pichu -> Pikachu ->
+Raichu/Raichu-Alola) when opened, even though these forms can't evolve or be evolved into —
+they're pure reskins of the base form. `buildEvolutionFamilyTree`'s root walk operates at
+the species level and ignores formName entirely, so it needs a formCategory check before
+walking: a `cosmetic_variant`/`non_boxable` current form should render as a standalone node
+with no family (or an explicit "doesn't evolve" state) rather than the base form's chain.
+Needs `forms` threaded into `findEvolutionFamilyRootSpeciesId`/`buildEvolutionFamilyTree`
+(currently only takes `species`), or an early check in `EvolutionTree.tsx` before calling
+into it.
+Last touched: 2026-09-22. Re-check count: 0.
+
+### [Species detail popup + evolution family tree] — Leg 7
+New feature raised by Vanny 2026-09-22, data half: alternate forms that are form *changes*
+rather than evolutions (Deoxys' Normal/Attack/Defense/Speed via Meteorite, trigger varies by
+game; Rotom's appliance forms; Giratina's Origin Forme via Griseous Orb; Shaymin's Sky Forme
+via Gracidea; Kyurem's Black/White fusion via DNA Splicers; Necrozma's Dusk Mane/Dawn
+Wings/Ultra fusion; Calyrex's Ice/Shadow Rider via Reins of Unity; etc.) should be viewable
+side by side in the popup, noted as not being evolutions. No existing data models this at
+all — PokeAPI's evolution-chain endpoint (what `fetch-evolution-chains.ts` already pulls)
+doesn't include forme-switch items since it doesn't consider these evolutions. Comparable in
+size to Leg 1's evolution-edges.json pipeline: needs its own pass to identify every species
+with a non-evolutionary forme-switch group, the switch method/item, and any per-game
+variation (Deoxys' trigger differs by game version). Data acquisition only — no UI in this
+leg, see Leg 8.
+Last touched: 2026-09-22. Re-check count: 0.
+
+### [Species detail popup + evolution family tree] — Leg 8
+UI half of Leg 7: wires the forme-group data into the species detail popup as a side-by-side
+view of a species' alternate formes, distinct from the evolution family tree, labeled with
+the switch method and noted as not an evolution. Needs its own scoping pass once Leg 7's
+data shape is known — e.g. whether this lives in the existing popup as a second section next
+to "View Evolution Family," or a separate tab/toggle.
+Last touched: 2026-09-22. Re-check count: 0.
+
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when

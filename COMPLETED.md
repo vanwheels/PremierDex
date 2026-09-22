@@ -1,9 +1,9 @@
 # COMPLETED
 
 ## [Species detail popup + evolution family tree Leg 4: fix evolution family tree only showing descendants] — 2026-09-22
-Milestone shipped, see MILESTONES.md. Root cause wasn't the root-walk logic or the evolution
-data (both confirmed correct against the real ~1025-species dataset before touching any
-code) — `sqlite-storage.ts`'s `listSpeciesStmt`/`getSpeciesStmt` never selected
+Root cause wasn't the root-walk logic or the evolution data (both confirmed correct against
+the real ~1025-species dataset before touching any code) — `sqlite-storage.ts`'s
+`listSpeciesStmt`/`getSpeciesStmt` never selected
 `evolves_from_species_id`, so every `Species` reaching the renderer had
 `evolvesFromSpeciesId: undefined`, which `findEvolutionFamilyRootSpeciesId`'s `!== null`
 check treated as "has a parent," failed to resolve, and broke out of immediately — always
