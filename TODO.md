@@ -1,27 +1,5 @@
 # TODO
 
-## Current Milestone: Species detail popup + evolution family tree
-
-Raised by Vanny 2026-09-20, started as current milestone 2026-09-22. Mockup received
-2026-09-22: same-size circular sprite bubbles with the species/form name underneath, arrows
-along evolution edges labeled with the evolution method underneath each arrow. Scoped into
-three legs below after the mockup review surfaced two real data gaps: no evolution-method
-text exists anywhere in the data yet, and regional-form branches (e.g. Raichu vs.
-Raichu-Alola) aren't represented in the species-evolution chain data at all (PokeAPI treats
-them as varieties of one species, not separate chain nodes) — but Vanny confirmed the tree
-needs to show them as separate bubbles anyway.
-
-### [Species detail popup + evolution family tree] — Leg 4
-Bug found by Vanny 2026-09-22 while checking Leg 3 in the running app: "View Evolution
-Family" only shows evolutions (descendants) from whichever species/form the popup is
-currently on, not the whole family tree root-to-leaf regardless of which stage you're
-viewing. Per EvolutionTree.tsx's own doc comment this was meant to always render the full
-family (buildEvolutionFamilyTree in evolutionFamilyTree.ts walks back to the chain root via
-Species.evolvesFromSpeciesId before building down) — needs investigation into whether the
-bug is in that root-walk, in the evolvesFromSpeciesId data itself, or in how the popup
-invokes it. Explicitly deferred — not fixed as part of Leg 3.
-Last touched: 2026-09-22. Re-check count: 0.
-
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
