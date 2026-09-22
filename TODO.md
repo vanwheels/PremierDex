@@ -43,6 +43,17 @@ data shape is known — e.g. whether this lives in the existing popup as a secon
 to "View Evolution Family," or a separate tab/toggle.
 Last touched: 2026-09-22. Re-check count: 0.
 
+### [Species detail popup + evolution family tree] — Leg 9
+Follow-up from Leg 5's horizontal rework, raised by Vanny 2026-09-22 after checking it live:
+Eevee's 8-way branch (the widest case in the whole dataset) still needs work on two fronts —
+the long method text for Leafeon ("Knows a Grass Move + Level Up at Special Location...") and
+Glaceon's evolutions collides/wraps awkwardly in the narrow `.evolution-tree-arrow` column,
+and the tall single-column stack of 8 siblings forces the popup into scroll (`.evolution-tree`'s
+`max-height: 70vh`/`overflow: auto` from Leg 5) rather than fitting on screen. Needs its own
+design pass rather than another size/spacing tweak — e.g. a narrower/differently-wrapped
+arrow label, or reconsidering whether every branching family must be a single vertical column.
+Last touched: 2026-09-22. Re-check count: 0.
+
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
