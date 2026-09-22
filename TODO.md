@@ -4,27 +4,6 @@ Curated Met Location dataset shipped 2026-09-21 (see MILESTONES.md).
 
 ## Current Milestone: Codebase File-Size Cleanup
 
-### [Codebase File-Size Cleanup] — Leg 2
-Split `schema.ts` (745 lines past the 500 hard cap) — grew via the box/placeholder tables,
-the Dex completeness tier migration, and `is_final_evolution_stage`'s retrofit. Each
-closed-set CHECK column (language, caught_ball, sid) has picked up its own "ALTER-time CHECK
-can't be widened later" rebuild block over time, and that pattern will likely repeat.
-Investigating the split (during Leg 2 of the tier migration) surfaced a real ordering
-hazard: several CHECK-widen rebuilds (the two sid 4294→999999 ones, at minimum) must run
-*before* later ADD COLUMN retrofits (language, caught_ball, storage_location_id,
-box_number/box_slot) because their rebuilt table's column list doesn't include those
-not-yet-added columns. Naively extracting "the rebuild blocks" into one function called once
-would silently drop that data on any install still carrying the old sid CHECK — a correct
-split needs to preserve that interleaving or thread the dependency explicitly. Candidate
-split: pull the CHECK-widen rebuild blocks into their own module alongside the retrofit
-ALTERs, with the ordering hazard designed around explicitly. Fold in a matching
-`schema.test.ts` split (606 lines, also over cap, confirmed by Leg 1 — a single flat
-`it()` list under one `describe('applySchema')`, with the CHECK-widen rebuild tests
-(trainer_profiles/collection_entries sid widen, the two rebuild-preserves-existing-rows
-cases, the FK-safety rebuild cases) already grouping naturally along the same module
-boundary as the rebuild-block/retrofit-ALTER split above).
-Last touched: 2026-09-21. Re-check count: 0.
-
 ### [Codebase File-Size Cleanup] — Leg 3
 Split `sqlite-storage.ts` (743 lines, well past the 500 hard cap — grew from 498 as of the
 Dex completeness tier migration to 743 via Leg 3 of Box View Move & Undo Operations'

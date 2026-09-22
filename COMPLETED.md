@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Codebase File-Size Cleanup Leg 2: split schema.ts/schema.test.ts] — 2026-09-21
+Split along the CHECK-widen-rebuild/retrofit-ALTER boundary scoped in TODO.md:
+`schema-rebuilds.ts` (table rebuilds), `schema-retrofits.ts` (plain ADD COLUMN retrofits),
+and `schema-constants.ts` (shared closed-set SQL lists), with `schema.ts` orchestrating them
+in the original call order so the sid-widen-before-later-retrofits ordering hazard is
+preserved (now spelled out in comments instead of implicit in block sequencing).
+`schema.test.ts`'s CHECK-widen rebuild tests moved to `schema-rebuilds.test.ts` along the
+same boundary. See commit `7c9426f`.
+
 ## [Codebase File-Size Cleanup Leg 1: health check + sweep] — 2026-09-21
 Confirmed Legs 2-5's recorded line counts all still match current state (no drift since
 scoping). Swept `src`/`scripts`/`data` for untracked hard-cap (500+) violators and found two:
