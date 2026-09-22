@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 8: wire forme-switch groups into the popup] — 2026-09-22
+UI half of Leg 7: species detail popup's info view gets a second "View Alternate Formes"
+button (next to "View Evolution Family"), shown only for the 14 species with a
+`forme-switch-groups.json` entry. New `FormeSwitchGroupView.tsx` renders the group's formes
+as a flat, equally-ranked row (not a tree — there's no parent/child direction between e.g.
+Deoxys's Attack/Defense/Speed formes) labeled "Not an evolution — alternate forme," plus the
+switch method and any per-game note; clicking a forme's sprite re-centers the popup on it the
+same way EvolutionTree's bubbles do. `formeSwitchGroups` threaded from main
+(`loadFormeSwitchGroupsData`) through IPC/preload/`useCollectionData` down to
+`SpeciesDetailPopup`, mirroring `evolutionEdges`' existing plumbing exactly. Flagged, not
+fixed: this pushed `DexBoxGrid.tsx`/`DexBoxPane.tsx` to/over the file-size cap — see
+Unscheduled in TODO.md. See commit `12e2dac`.
+
 ## [Species detail popup + evolution family tree Leg 7: non-evolutionary forme-switch data] — 2026-09-22
 No PokeAPI endpoint models forme changes like Deoxys/Rotom/Giratina/Shaymin/Kyurem/Necrozma/
 Calyrex at all (its evolution-chain data only covers evolutions), so unlike every other

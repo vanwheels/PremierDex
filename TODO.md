@@ -6,14 +6,6 @@ Raised by Vanny 2026-09-20, shipped Legs 1-4 2026-09-22, reopened same day: Vann
 the tree in the running app and came back with layout feedback, a form-category bug, and a
 new feature request. Scoped into four more legs below.
 
-### [Species detail popup + evolution family tree] — Leg 8
-UI half of Leg 7: wires the forme-group data into the species detail popup as a side-by-side
-view of a species' alternate formes, distinct from the evolution family tree, labeled with
-the switch method and noted as not an evolution. Needs its own scoping pass once Leg 7's
-data shape is known — e.g. whether this lives in the existing popup as a second section next
-to "View Evolution Family," or a separate tab/toggle.
-Last touched: 2026-09-22. Re-check count: 0.
-
 ### [Species detail popup + evolution family tree] — Leg 9
 Follow-up from Leg 5's horizontal rework, raised by Vanny 2026-09-22 after checking it live:
 Eevee's 8-way branch (the widest case in the whole dataset) still needs work on two fronts —
@@ -30,6 +22,16 @@ Last touched: 2026-09-22. Re-check count: 0.
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
+
+### [DexBoxGrid.tsx / DexBoxPane.tsx over the file-size cap] — unscheduled
+Surfaced by Leg 8 of the Species detail popup + evolution family tree milestone: threading
+`formeSwitchGroups` through both files' props (same mechanical pattern `evolutionEdges` already
+used) pushed `DexBoxGrid.tsx` to exactly 500 lines (the hard cap) and `DexBoxPane.tsx` to 506 —
+`DexBoxPane.tsx` was already over the 500-line hard cap (502) before this leg. Small, purely
+additive prop-threading isn't the moment to stop and split either file, so left for a dedicated
+Codebase File-Size Cleanup-style pass — same treatment past legs of that milestone gave
+fetch-pokemon-forms.ts/met-locations.test.ts (see COMPLETED.md).
+Last touched: 2026-09-22. Re-check count: 0.
 
 ### [Species detail popup entry point on Hybrid view] — unscheduled
 Leg 3 of the Species detail popup + evolution family tree milestone wired the info-button
