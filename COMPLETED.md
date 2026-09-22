@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 3: popup shell + entry point] — 2026-09-22
+Built the species detail popup (sprite + name + "View Evolution Family" button, toggling to
+Leg 2's `EvolutionTree.tsx` with a Back button; clicking a tree bubble re-centers the popup
+on that family member without leaving the tree view) and wired its entry point: a dedicated
+ⓘ info button, always visible regardless of ownership, next to the Name cell in
+DexTable/DexRow (List view) and next to the species name in DexBoxDetailPanel (Box view).
+Verified by Vanny in the running app. See commit `bca697c`.
+
 ## [Species detail popup + evolution family tree Leg 2: evolution family tree component] — 2026-09-22
 Built `EvolutionTree.tsx` (generation-stacked, flex-wrap layout so wide branches like
 Eevee's 8 evolutions wrap onto multiple rows) plus the pure `evolutionTree.ts` tree-assembly

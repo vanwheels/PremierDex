@@ -11,20 +11,6 @@ Raichu-Alola) aren't represented in the species-evolution chain data at all (Pok
 them as varieties of one species, not separate chain nodes) — but Vanny confirmed the tree
 needs to show them as separate bubbles anyway.
 
-### [Species detail popup + evolution family tree] — Leg 3
-Species detail popup shell + entry point. The popup itself (species name/sprite plus a
-button that opens the Leg 2 tree) and wiring its entry point from Dex Table/Box View. Trigger
-mechanism (was TBD): Vanny chose a dedicated info button (ⓘ), always visible regardless of
-ownership — added next to the Name cell in DexTable/DexRow (List view) and next to the
-species name in DexBoxDetailPanel (Box view). Popup toggles between an info view (sprite +
-name + "View Evolution Family" button) and the tree view (Leg 2's `EvolutionTree.tsx`, with a
-Back button); clicking a tree bubble re-centers the popup on that family member without
-leaving the tree view. Vanny plans other features for this same popup beyond the family tree,
-not yet specified.
-Implementation done: typecheck/tests/lint all pass (613 tests). Not moved to COMPLETED —
-Vanny asked to verify Leg 3 in the running app before the milestone closes out.
-Last touched: 2026-09-22. Re-check count: 0.
-
 ### [Species detail popup + evolution family tree] — Leg 4
 Bug found by Vanny 2026-09-22 while checking Leg 3 in the running app: "View Evolution
 Family" only shows evolutions (descendants) from whichever species/form the popup is
