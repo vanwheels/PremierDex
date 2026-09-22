@@ -1,35 +1,22 @@
 import type Database from 'better-sqlite3'
-import { ORIGIN_LANGUAGES } from '@shared/data/languages'
-import { POKE_BALLS } from '@shared/data/poke-balls'
-import { SIZE_CLASSES } from '@shared/data/size-classes'
-import { RIBBONS } from '@shared/data/ribbons'
-import { MARKS } from '@shared/data/marks'
-
-// Language (Leg 14) is a genuinely closed set defined by the games themselves (unlike
-// `game`, which is open-ended enough to cover ROM hacks/future titles and so stays a
-// plain unconstrained TEXT column) — safe to enforce with a CHECK, same as `gender`'s
-// enum above. Built from ORIGIN_LANGUAGES rather than hardcoded so schema.ts and
-// shared/data/languages.ts can't drift apart.
-const LANGUAGE_LIST_SQL = ORIGIN_LANGUAGES.map((l) => `'${l}'`).join(', ')
-
-// Caught-in Poké Ball (Leg 28) — same closed-set reasoning as language above, built from
-// POKE_BALLS so schema.ts and shared/data/poke-balls.ts can't drift apart. collection_entries
-// only: a ball is per-catch, not per-trainer, so trainer_profiles never gets this column.
-const POKE_BALL_LIST_SQL = POKE_BALLS.map((b) => `'${b}'`).join(', ')
-
-// Size classification (Leg 3 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
-// same closed-set reasoning as language/caught_ball above, built from SIZE_CLASSES so
-// schema.ts and shared/data/size-classes.ts can't drift apart.
-const SIZE_CLASS_LIST_SQL = SIZE_CLASSES.map((s) => `'${s}'`).join(', ')
-
-// Ribbons & Marks (Leg 4 schema, Leg 5 curated data — Ribbons/Alpha/Size/Capture-Date
-// Tracking milestone) — same closed-set reasoning as above, built from
-// shared/data/ribbons.ts and shared/data/marks.ts so schema.ts can't drift from them. Leg 5
-// widened both from Leg 4's small placeholder sets to the full curated lists (117
-// ribbons/53 marks); the rebuild below (same shape as the caught_ball Origin Ball migration)
-// self-heals any install that already created these tables against the old CHECK.
-const RIBBON_LIST_SQL = RIBBONS.map((r) => `'${r}'`).join(', ')
-const MARK_LIST_SQL = MARKS.map((m) => `'${m}'`).join(', ')
+import { LANGUAGE_LIST_SQL, RIBBON_LIST_SQL, MARK_LIST_SQL } from './schema-constants'
+import {
+  retrofitSpeciesColumns,
+  retrofitFormsColumns,
+  retrofitCollectionEntriesOriginColumns,
+  retrofitColumnsAfterSidWiden,
+  retrofitLateCollectionEntryColumns
+} from './schema-retrofits'
+import {
+  rebuildTrainerProfilesNotNullTid,
+  rebuildTrainerProfilesSidWiden,
+  rebuildCollectionEntriesSidWiden,
+  rebuildCollectionEntriesCaughtBallCheck,
+  rebuildCollectionEntriesDropUnique,
+  rebuildBoxPlaceholdersFormId,
+  rebuildCollectionEntryRibbonsCheck,
+  rebuildCollectionEntryMarksCheck
+} from './schema-rebuilds'
 
 export function applySchema(db: Database.Database): void {
   db.pragma('journal_mode = WAL')
@@ -86,9 +73,9 @@ export function applySchema(db: Database.Database): void {
     -- milestone, see TODO.md/COMPLETED.md): duplicate owned copies of the same species/
     -- form/gender/shiny combo are real tracked individuals, not a visual trick, so more
     -- than one row can legitimately share that triple. A pre-Leg-2 database that already
-    -- has the constraint gets it dropped by the rebuild block at the bottom of this
-    -- function instead — SQLite can't ALTER a table to remove a UNIQUE constraint, same
-    -- limitation as the CHECK-widen rebuilds elsewhere in this file.
+    -- has the constraint gets it dropped by schema-rebuilds.ts's
+    -- rebuildCollectionEntriesDropUnique instead — SQLite can't ALTER a table to remove a
+    -- UNIQUE constraint, same limitation as the CHECK-widen rebuilds there.
     CREATE TABLE IF NOT EXISTS collection_entries (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       form_id INTEGER NOT NULL REFERENCES forms(id),
@@ -196,11 +183,12 @@ export function applySchema(db: Database.Database): void {
     -- ribbon/mark row has no meaning once its entry is gone, and seed.ts's species-exclusion
     -- DELETE FROM collection_entries should carry these away with it rather than orphaning
     -- or blocking on them. This is the first FK anything has ever targeted
-    -- collection_entries(id) with — see the foreign_keys=OFF additions below on the three
-    -- legacy collection_entries rebuild blocks, required so a DROP TABLE collection_entries
-    -- there doesn't throw FOREIGN KEY constraint failed against these rows.
+    -- collection_entries(id) with — see the foreign_keys=OFF additions in
+    -- schema-rebuilds.ts's legacy collection_entries rebuilds, required so a DROP TABLE
+    -- collection_entries there doesn't throw FOREIGN KEY constraint failed against these
+    -- rows.
     -- ribbon_name/mark_name's CHECK list is Leg 5's full curated set (see shared/data/
-    -- ribbons.ts/marks.ts); the rebuild block later in this function self-heals any install
+    -- ribbons.ts/marks.ts); schema-rebuilds.ts's rebuild block self-heals any install
     -- that created these tables back when CHECK was still Leg 4's small placeholder list.
     CREATE TABLE IF NOT EXISTS collection_entry_ribbons (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -219,507 +207,27 @@ export function applySchema(db: Database.Database): void {
     CREATE INDEX IF NOT EXISTS idx_entry_marks_entry ON collection_entry_marks(entry_id);
   `)
 
-  // Same retrofit story for species: collapsed_display_form_id postdates every existing
-  // install's species table.
-  const speciesColumns = db.prepare('PRAGMA table_info(species)').all() as Array<{ name: string }>
-  if (!speciesColumns.some((c) => c.name === 'collapsed_display_form_id')) {
-    db.exec('ALTER TABLE species ADD COLUMN collapsed_display_form_id INTEGER REFERENCES forms(id)')
-  }
-  // is_final_evolution_stage (Leg 5 of the Dex completeness tier migration) postdates
-  // every existing install's species table, same retrofit story as
-  // collapsed_display_form_id above. The CHECK-free NOT NULL DEFAULT 1 is safe to add via
-  // a plain ALTER TABLE (self-referential, nothing to rebuild); runSeed's unconditional
-  // backfill is what corrects every row to its real value right after.
-  if (!speciesColumns.some((c) => c.name === 'is_final_evolution_stage')) {
-    db.exec('ALTER TABLE species ADD COLUMN is_final_evolution_stage INTEGER NOT NULL DEFAULT 1')
-  }
-  // evolves_from_species_id (Leg 1 of the Evolution-Chain Reachability milestone) postdates
-  // every existing install's species table, same retrofit story as the two columns above —
-  // nullable and self-referential, so a plain ALTER TABLE is safe with nothing to rebuild;
-  // runSeed's unconditional backfill fills in every row's real value right after.
-  if (!speciesColumns.some((c) => c.name === 'evolves_from_species_id')) {
-    db.exec('ALTER TABLE species ADD COLUMN evolves_from_species_id INTEGER REFERENCES species(id)')
-  }
-
-  // CREATE TABLE IF NOT EXISTS above doesn't retrofit new columns onto a forms table
-  // that already existed pre-Leg-4. SQLite has no ADD COLUMN IF NOT EXISTS, so check first.
-  const formColumns = db.prepare('PRAGMA table_info(forms)').all() as Array<{ name: string }>
-  if (!formColumns.some((c) => c.name === 'pokeapi_id')) {
-    db.exec('ALTER TABLE forms ADD COLUMN pokeapi_id INTEGER')
-  }
-  if (!formColumns.some((c) => c.name === 'sprite_form_suffix')) {
-    db.exec('ALTER TABLE forms ADD COLUMN sprite_form_suffix TEXT')
-  }
-  if (!formColumns.some((c) => c.name === 'shiny_locked')) {
-    db.exec('ALTER TABLE forms ADD COLUMN shiny_locked INTEGER NOT NULL DEFAULT 0')
-  }
-  if (!formColumns.some((c) => c.name === 'always_shiny')) {
-    db.exec('ALTER TABLE forms ADD COLUMN always_shiny INTEGER NOT NULL DEFAULT 0')
-  }
-
-  // Same retrofit story for collection_entries: origin/nickname (Leg 4) postdate this
-  // table's original CREATE. trainer_profile_id is a live link (Leg 31 — reverses Leg 4's
-  // original "provenance only, never auto-update" design, see COMPLETED.md): while set,
-  // origin_game/ot_name/tid/sid/language mirror that trainer_profiles row and are
-  // rewritten whenever it's saved (see sqlite-storage.ts's updateTrainerProfile). nickname
-  // and caught_ball are per-entry and never touched by that sync. No ON DELETE clause:
-  // SQLite's default FK action is NO ACTION, which would block deleting a
-  // still-referenced profile, so orphaning trainer_profile_id to NULL on profile delete
-  // (freezing the columns at their last-synced values) is handled explicitly in
-  // sqlite-storage.ts's deleteTrainerProfile instead of here.
-  const entryColumns = db.prepare('PRAGMA table_info(collection_entries)').all() as Array<{ name: string }>
-  if (!entryColumns.some((c) => c.name === 'trainer_profile_id')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN trainer_profile_id INTEGER REFERENCES trainer_profiles(id)')
-  }
-  if (!entryColumns.some((c) => c.name === 'origin_game')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN origin_game TEXT')
-  }
-  if (!entryColumns.some((c) => c.name === 'ot_name')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN ot_name TEXT')
-  }
-  if (!entryColumns.some((c) => c.name === 'tid')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999)')
-  }
-  if (!entryColumns.some((c) => c.name === 'sid')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999)')
-  }
-  if (!entryColumns.some((c) => c.name === 'nickname')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN nickname TEXT')
-  }
-
-  // trainer_profiles briefly shipped with tid/sid as NOT NULL 0-65535 before the
-  // Bulbapedia-sourced widen (6-digit TID/4-digit SID from Gen VII, both nullable for
-  // Pokémon GO and pre-Gen-VII's invisible SID — see the CREATE TABLE comment above).
-  // SQLite can't ALTER a CHECK constraint, so detect the old NOT NULL tid column and
-  // rebuild the table. collection_entries/storage_locations hold FK references into
-  // trainer_profiles, so with foreign_keys=ON (set at the top of this function) a bare
-  // DROP TABLE here performs an implicit DELETE that SQLite checks against those FKs —
-  // it throws FOREIGN KEY constraint failed the moment any install actually has linked
-  // rows, despite this block's original assumption that none would. Follow SQLite's
-  // documented procedure for schema changes on FK-referenced tables: disable
-  // enforcement and wrap the rebuild in its own transaction.
-  const trainerProfileColumns = db.prepare('PRAGMA table_info(trainer_profiles)').all() as Array<{
-    name: string
-    notnull: 0 | 1
-  }>
-  if (trainerProfileColumns.some((c) => c.name === 'tid' && c.notnull === 1)) {
-    db.pragma('foreign_keys = OFF')
-    db.exec(`
-      BEGIN;
-      DROP TABLE trainer_profiles;
-      CREATE TABLE trainer_profiles (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        game TEXT NOT NULL,
-        ot_name TEXT NOT NULL,
-        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
-        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
-        label TEXT
-      );
-      COMMIT;
-    `)
-    db.pragma('foreign_keys = ON')
-  }
-
-  // Widened sid's upper bound again, from 4294 (Gen VII+'s derived cap,
-  // floor(32-bit ID / 1_000_000)) to 999999: pre-Gen-VII games never display a Secret
-  // ID in-game, but it exists internally and can run up to 6 digits once read out with
-  // a tool like PKHex — see the CREATE TABLE comment above. Unlike the tid NOT NULL
-  // rebuild above, this table now sees real use (Legs 1-4 shipped the same day), so
-  // this rebuild copies existing rows across instead of dropping them. Detected via the
-  // stored CHECK text directly, since PRAGMA table_info doesn't expose CHECK bounds.
-  //
-  // Same FK hazard as the tid rebuild above: collection_entries/storage_locations
-  // reference trainer_profiles(id), so the DROP TABLE below needs foreign_keys=OFF or
-  // it fails FOREIGN KEY constraint failed against real linked data (confirmed against
-  // this project's own dev DB — 23 trainer_profiles rows, thousands of collection_entries
-  // rows referencing them). Wrapped in a transaction so a failure can't leave a
-  // half-renamed table sitting around; the leading DROP TABLE IF EXISTS makes this
-  // self-healing if a prior unguarded run already left exactly that (trainer_profiles_new
-  // created and populated, then the old DROP TABLE threw and aborted before the rename).
-  const trainerProfilesSql = db
-    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'trainer_profiles'")
-    .get() as { sql: string } | undefined
-  if (trainerProfilesSql?.sql.includes('sid BETWEEN 0 AND 4294')) {
-    db.pragma('foreign_keys = OFF')
-    db.exec('DROP TABLE IF EXISTS trainer_profiles_new')
-    db.exec(`
-      BEGIN;
-      CREATE TABLE trainer_profiles_new (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        game TEXT NOT NULL,
-        ot_name TEXT NOT NULL,
-        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
-        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
-        label TEXT
-      );
-      INSERT INTO trainer_profiles_new (id, game, ot_name, tid, sid, label)
-        SELECT id, game, ot_name, tid, sid, label FROM trainer_profiles;
-      DROP TABLE trainer_profiles;
-      ALTER TABLE trainer_profiles_new RENAME TO trainer_profiles;
-      COMMIT;
-    `)
-    db.pragma('foreign_keys = ON')
-  }
-
-  const entriesSql = db
-    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entries'")
-    .get() as { sql: string } | undefined
-  if (entriesSql?.sql.includes('sid BETWEEN 0 AND 4294')) {
-    // foreign_keys=OFF required now that collection_entry_ribbons/collection_entry_marks
-    // (added Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) target
-    // collection_entries(id) — same DROP-TABLE-triggers-an-implicit-FK-checked-DELETE hazard
-    // the trainer_profiles rebuilds above already guard against. In practice this whole
-    // block is dead for any DB that's already run through this app's real upgrade path, but
-    // it can't assume that.
-    db.pragma('foreign_keys = OFF')
-    db.exec(`
-      CREATE TABLE collection_entries_new (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        form_id INTEGER NOT NULL REFERENCES forms(id),
-        gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
-        shiny INTEGER NOT NULL DEFAULT 0,
-        owned INTEGER NOT NULL DEFAULT 0,
-        trainer_profile_id INTEGER REFERENCES trainer_profiles(id),
-        origin_game TEXT,
-        ot_name TEXT,
-        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
-        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
-        nickname TEXT,
-        UNIQUE(form_id, gender, shiny)
-      );
-      INSERT INTO collection_entries_new
-        (id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname)
-        SELECT id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname
-        FROM collection_entries;
-      DROP TABLE collection_entries;
-      ALTER TABLE collection_entries_new RENAME TO collection_entries;
-      CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
-    `)
-    db.pragma('foreign_keys = ON')
-  }
-
-  // language (Leg 14) retrofit for both tables — re-read PRAGMA state here rather than
-  // reusing trainerProfileColumns/entryColumns above, since the sid-4294 rebuilds just
-  // above can recreate either table without this leg's column; querying fresh keeps
-  // this correct whether or not a rebuild fired on this run.
-  const trainerProfileColumnsFinal = db.prepare('PRAGMA table_info(trainer_profiles)').all() as Array<{ name: string }>
-  if (!trainerProfileColumnsFinal.some((c) => c.name === 'language')) {
-    db.exec(
-      `ALTER TABLE trainer_profiles ADD COLUMN language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL}))`
-    )
-  }
-  const entryColumnsFinal = db.prepare('PRAGMA table_info(collection_entries)').all() as Array<{ name: string }>
-  if (!entryColumnsFinal.some((c) => c.name === 'language')) {
-    db.exec(
-      `ALTER TABLE collection_entries ADD COLUMN language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL}))`
-    )
-  }
-
-  // caught_ball (Leg 28) retrofit — same "query fresh, run unconditionally at the end"
-  // approach as language above.
-  if (!entryColumnsFinal.some((c) => c.name === 'caught_ball')) {
-    db.exec(
-      `ALTER TABLE collection_entries ADD COLUMN caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN (${POKE_BALL_LIST_SQL}))`
-    )
-  }
-
-  // storage_location_id + met_location (Leg 3 of the nav-restructuring milestone) —
-  // same retrofit approach as caught_ball above. storage_location_id is a nullable FK
-  // onto storage_locations(id), deliberately separate from the trainer_profile_id/
-  // origin_game/... origin fields above: current location and original origin are
-  // different axes (see storage-location.ts's doc comment), so this is written by its
-  // own setEntryStorageLocation setter, never by setEntryOrigin. storage_locations is
-  // already created earlier in this function, so the forward reference resolves fine.
-  // met_location is free text this milestone (a curated per-game location list is
-  // deferred — see TODO.md), so it's a plain TEXT column with no CHECK, and lives
-  // alongside the other origin fields since it's edited through OriginModal.
-  if (!entryColumnsFinal.some((c) => c.name === 'storage_location_id')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN storage_location_id INTEGER REFERENCES storage_locations(id)')
-  }
-  if (!entryColumnsFinal.some((c) => c.name === 'met_location')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN met_location TEXT')
-  }
-
-  // box_number/box_slot (Leg 3 of the Box Arrangement/Real Inventory Data Model
-  // milestone) — a box is a numbered sub-unit of a Storage Location (e.g. "HOME Box 3"),
-  // per Vanny's call in TODO.md's milestone intro, with real per-entry slot positions
-  // rather than a separate planning concept. box_slot is 0-29 (30 cells: a HOME-style
-  // 5-row x 6-column grid, decided ahead of Leg 6's Box view UI). Both CHECKs
-  // are self-referential (only constrain the new column against itself), so — same as
-  // caught_ball/tid/sid above — a plain ALTER TABLE ADD COLUMN can carry them; no rebuild
-  // needed. The "box requires a location, box_number/box_slot travel together" invariant
-  // is deliberately NOT a CHECK here (would need to reference storage_location_id, which
-  // ALTER TABLE ADD COLUMN can't do without a rebuild) — enforced in sqlite-storage.ts's
-  // setEntryBoxPosition instead, same app-level-invariant pattern as the FK orphaning
-  // elsewhere in this file.
-  if (!entryColumnsFinal.some((c) => c.name === 'box_number')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN box_number INTEGER CHECK (box_number IS NULL OR box_number >= 1)')
-  }
-  if (!entryColumnsFinal.some((c) => c.name === 'box_slot')) {
-    db.exec(
-      'ALTER TABLE collection_entries ADD COLUMN box_slot INTEGER CHECK (box_slot IS NULL OR box_slot BETWEEN 0 AND 29)'
-    )
-  }
-  // One individual per box slot. A plain (non-partial) UNIQUE index is enough: SQLite
-  // treats every NULL as distinct for uniqueness purposes, so the many rows with
-  // box_number/box_slot NULL (unboxed, or a fresh install where every column just
-  // defaulted to NULL) never collide with each other — only two rows that both name the
-  // same real (location, box, slot) triple do. Safe to create unconditionally on every
-  // startup regardless of existing data for exactly that reason.
-  db.exec(
-    'CREATE UNIQUE INDEX IF NOT EXISTS idx_entries_box_slot ON collection_entries(storage_location_id, box_number, box_slot)'
-  )
-
-  // caught_ball's CHECK list was fixed at ALTER-time above and SQLite can't ALTER a CHECK
-  // constraint (same limitation as the sid-4294 rebuilds earlier in this function) — Leg 5
-  // added Legends Arceus's Feather/Wing/Jet/Leaden/Gigaton/Origin Ball names to
-  // POKE_BALLS, so any install that already ran the retrofit above pre-Leg-5 has a stale
-  // CHECK missing them. Detected via the stored CHECK text directly (PRAGMA table_info
-  // doesn't expose CHECK bounds) rather than a version flag, so this is self-healing
-  // however many balls get added in the future. Runs last and rebuilds with every column
-  // this function can have added by this point, copied straight across. Used to need no
-  // foreign_keys=OFF dance (nothing referenced collection_entries(id) as an FK target) —
-  // now does, since collection_entry_ribbons/collection_entry_marks (Leg 4 of the
-  // Ribbons/Alpha/Size/Capture-Date Tracking milestone) both do; see the sid-4294 rebuild
-  // above for the same guard and its own comment.
-  const entriesSqlForBallCheck = db
-    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entries'")
-    .get() as { sql: string } | undefined
-  if (entriesSqlForBallCheck?.sql.includes('caught_ball') && !entriesSqlForBallCheck.sql.includes("'Origin Ball'")) {
-    db.pragma('foreign_keys = OFF')
-    db.exec(`
-      CREATE TABLE collection_entries_ballcheck (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        form_id INTEGER NOT NULL REFERENCES forms(id),
-        gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
-        shiny INTEGER NOT NULL DEFAULT 0,
-        owned INTEGER NOT NULL DEFAULT 0,
-        trainer_profile_id INTEGER REFERENCES trainer_profiles(id),
-        origin_game TEXT,
-        ot_name TEXT,
-        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
-        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
-        nickname TEXT,
-        language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL})),
-        caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN (${POKE_BALL_LIST_SQL})),
-        storage_location_id INTEGER REFERENCES storage_locations(id),
-        met_location TEXT,
-        box_number INTEGER CHECK (box_number IS NULL OR box_number >= 1),
-        box_slot INTEGER CHECK (box_slot IS NULL OR box_slot BETWEEN 0 AND 29),
-        UNIQUE(form_id, gender, shiny)
-      );
-      INSERT INTO collection_entries_ballcheck
-        (id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
-         language, caught_ball, storage_location_id, met_location, box_number, box_slot)
-        SELECT id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
-               language, caught_ball, storage_location_id, met_location, box_number, box_slot
-        FROM collection_entries;
-      DROP TABLE collection_entries;
-      ALTER TABLE collection_entries_ballcheck RENAME TO collection_entries;
-      CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
-      CREATE UNIQUE INDEX IF NOT EXISTS idx_entries_box_slot ON collection_entries(storage_location_id, box_number, box_slot);
-    `)
-    db.pragma('foreign_keys = ON')
-  }
-
-  // Drop UNIQUE(form_id, gender, shiny) (Leg 2 of the Box Arrangement/Real Inventory Data
-  // Model milestone — see TODO.md/COMPLETED.md): a real box can hold several regular and
-  // shiny copies of one species mixed together, so duplicate owned copies are real tracked
-  // individuals, not a visual trick the old one-row-per-combo model could represent.
-  // SQLite can't ALTER a table to drop a UNIQUE constraint (same limitation as the
-  // CHECK-widen rebuilds above), so detect it via the stored CREATE TABLE SQL and rebuild.
-  // Runs last and rebuilds with every column this function can have added by this point,
-  // copied straight across, same reasoning as the caught_ball rebuild directly above — and,
-  // same as that block, now needs foreign_keys=OFF too (collection_entry_ribbons/
-  // collection_entry_marks reference collection_entries(id); see the sid-4294 rebuild's
-  // own comment above for the full explanation).
-  const entriesSqlForUniqueCheck = db
-    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entries'")
-    .get() as { sql: string } | undefined
-  if (entriesSqlForUniqueCheck?.sql.includes('UNIQUE(form_id, gender, shiny)')) {
-    db.pragma('foreign_keys = OFF')
-    db.exec(`
-      CREATE TABLE collection_entries_dropunique (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        form_id INTEGER NOT NULL REFERENCES forms(id),
-        gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
-        shiny INTEGER NOT NULL DEFAULT 0,
-        owned INTEGER NOT NULL DEFAULT 0,
-        trainer_profile_id INTEGER REFERENCES trainer_profiles(id),
-        origin_game TEXT,
-        ot_name TEXT,
-        tid INTEGER CHECK (tid IS NULL OR tid BETWEEN 0 AND 999999),
-        sid INTEGER CHECK (sid IS NULL OR sid BETWEEN 0 AND 999999),
-        nickname TEXT,
-        language TEXT CHECK (language IS NULL OR language IN (${LANGUAGE_LIST_SQL})),
-        caught_ball TEXT CHECK (caught_ball IS NULL OR caught_ball IN (${POKE_BALL_LIST_SQL})),
-        storage_location_id INTEGER REFERENCES storage_locations(id),
-        met_location TEXT,
-        box_number INTEGER CHECK (box_number IS NULL OR box_number >= 1),
-        box_slot INTEGER CHECK (box_slot IS NULL OR box_slot BETWEEN 0 AND 29)
-      );
-      INSERT INTO collection_entries_dropunique
-        (id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
-         language, caught_ball, storage_location_id, met_location, box_number, box_slot)
-        SELECT id, form_id, gender, shiny, owned, trainer_profile_id, origin_game, ot_name, tid, sid, nickname,
-               language, caught_ball, storage_location_id, met_location, box_number, box_slot
-        FROM collection_entries;
-      DROP TABLE collection_entries;
-      ALTER TABLE collection_entries_dropunique RENAME TO collection_entries;
-      CREATE INDEX IF NOT EXISTS idx_entries_form ON collection_entries(form_id);
-      CREATE UNIQUE INDEX IF NOT EXISTS idx_entries_box_slot ON collection_entries(storage_location_id, box_number, box_slot);
-    `)
-    db.pragma('foreign_keys = ON')
-  }
-
-  // box_placeholders species_id -> form_id/gender/shiny (Leg 2 of the Dex completeness
-  // tier migration) — CREATE TABLE IF NOT EXISTS above doesn't retrofit a pre-existing
-  // install's box_placeholders table, which this same milestone created just days ago
-  // (Leg 5 of Box View Polish) with the old species_id-only shape. Detected via
-  // PRAGMA table_info directly (a version flag would be overkill for a table this new and
-  // this small) and rebuilt in place, same "copy rows across" approach as the
-  // collection_entries CHECK-widen rebuilds above — nothing references box_placeholders(id)
-  // as an FK target, so no foreign_keys=OFF dance is needed. form_id is backed into each
-  // row via the same "species' first boxable form, else its first form at all" pick
-  // buildBoxes.ts's pickPlaceholderForm/boxTemplates.ts's canonicalPlaceholderForm use at
-  // runtime; gender backfills to 'male' when that resolved form has a gender difference
-  // (the same collapsed-representative convention requiredUnits() uses), else 'unknown';
-  // shiny backfills to 0 (regular) — the old shape had no way to record either, so this is
-  // the closest faithful default, not a guess at real prior intent.
-  const boxPlaceholderColumns = db.prepare('PRAGMA table_info(box_placeholders)').all() as Array<{ name: string }>
-  if (boxPlaceholderColumns.some((c) => c.name === 'species_id')) {
-    db.exec(`
-      CREATE TABLE box_placeholders_formid (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        storage_location_id INTEGER NOT NULL REFERENCES storage_locations(id) ON DELETE CASCADE,
-        box_number INTEGER NOT NULL CHECK (box_number >= 1),
-        box_slot INTEGER NOT NULL CHECK (box_slot BETWEEN 0 AND 29),
-        form_id INTEGER NOT NULL REFERENCES forms(id),
-        gender TEXT NOT NULL DEFAULT 'unknown' CHECK (gender IN ('male', 'female', 'unknown')),
-        shiny INTEGER NOT NULL DEFAULT 0,
-        UNIQUE(storage_location_id, box_number, box_slot)
-      );
-      INSERT INTO box_placeholders_formid (id, storage_location_id, box_number, box_slot, form_id, gender, shiny)
-      SELECT
-        bp.id,
-        bp.storage_location_id,
-        bp.box_number,
-        bp.box_slot,
-        COALESCE(
-          (SELECT f.id FROM forms f WHERE f.species_id = bp.species_id AND f.form_category != 'non_boxable' ORDER BY f.id LIMIT 1),
-          (SELECT f.id FROM forms f WHERE f.species_id = bp.species_id ORDER BY f.id LIMIT 1)
-        ),
-        CASE WHEN (
-          SELECT f2.has_gender_difference FROM forms f2
-          WHERE f2.id = COALESCE(
-            (SELECT f.id FROM forms f WHERE f.species_id = bp.species_id AND f.form_category != 'non_boxable' ORDER BY f.id LIMIT 1),
-            (SELECT f.id FROM forms f WHERE f.species_id = bp.species_id ORDER BY f.id LIMIT 1)
-          )
-        ) = 1 THEN 'male' ELSE 'unknown' END,
-        0
-      FROM box_placeholders bp;
-      DROP TABLE box_placeholders;
-      ALTER TABLE box_placeholders_formid RENAME TO box_placeholders;
-      CREATE INDEX IF NOT EXISTS idx_box_placeholders_location ON box_placeholders(storage_location_id);
-    `)
-  }
-
-  // gender_confirmed (Resolve Gender Ambiguities bugfix, see TODO.md/COMPLETED.md) —
-  // `gender` alone can't distinguish "reviewed, actually Male" from "never reviewed,
-  // defaulted Male" on a gender-diff form's collapsed entry (buildDexSections.ts's
-  // collapsed row always writes 'male' regardless of the individual's real gender), so
-  // findAmbiguousGenderEntries (genderResolution.ts) kept re-flagging every entry the
-  // Resolve modal's Save left on Male forever — there was nowhere to persist "yes, this
-  // one really is Male." This column is that persisted confirmation, set independently of
-  // which gender value ends up stored. Defaults to 0 (unconfirmed) for every existing row,
-  // which is correct: a female-gender row is never flagged as ambiguous regardless of this
-  // flag (see genderResolution.ts), and a male-gender row that predates this column
-  // genuinely hasn't been reviewed yet. Runs after the caught_ball/UNIQUE rebuilds above so
-  // it's never present at the current point those trigger.
-  const entryColumnsGenderConfirmed = db.prepare('PRAGMA table_info(collection_entries)').all() as Array<{
-    name: string
-  }>
-  if (!entryColumnsGenderConfirmed.some((c) => c.name === 'gender_confirmed')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN gender_confirmed INTEGER NOT NULL DEFAULT 0')
-  }
-
-  // is_alpha/capture_date (Leg 2 of the Ribbons/Alpha/Size/Capture-Date Tracking
-  // milestone, see docs/investigations/ribbons-alpha-size-capture-date.md) — is_alpha is
-  // a plain boolean, same shape as `shiny`; confirmed to apply to both Legends Arceus and
-  // Legends Z-A, not Arceus-only, so no per-game CHECK gates it (same trust-the-user-input
-  // precedent as caught_ball/language). capture_date is a nullable DATE column with no
-  // CHECK (dates aren't a closed set) — Met Date has existed since Gen III with no
-  // per-game gating needed, same looseness as met_location above. Both self-referential
-  // (nothing to widen later), so a plain ALTER TABLE ADD COLUMN is safe, same as
-  // gender_confirmed just above — no rebuild needed.
-  if (!entryColumnsGenderConfirmed.some((c) => c.name === 'is_alpha')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN is_alpha INTEGER NOT NULL DEFAULT 0')
-  }
-  if (!entryColumnsGenderConfirmed.some((c) => c.name === 'capture_date')) {
-    db.exec('ALTER TABLE collection_entries ADD COLUMN capture_date TEXT')
-  }
-
-  // size_class (Leg 3 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone, see
-  // docs/investigations/ribbons-alpha-size-capture-date.md's Leg 3 update) — a nullable
-  // CHECK-constrained TEXT column, same shape as caught_ball/language: self-referential
-  // (nothing to widen later against another column), so a plain ALTER TABLE ADD COLUMN is
-  // safe, no rebuild needed. Not game-gated at the schema level, same trust-the-user-input
-  // precedent as is_alpha/caught_ball above.
-  if (!entryColumnsGenderConfirmed.some((c) => c.name === 'size_class')) {
-    db.exec(
-      `ALTER TABLE collection_entries ADD COLUMN size_class TEXT CHECK (size_class IS NULL OR size_class IN (${SIZE_CLASS_LIST_SQL}))`
-    )
-  }
-
-  // collection_entry_ribbons/collection_entry_marks' CHECK lists were fixed at CREATE-time
-  // to Leg 4's 20/22-name placeholder sets, and SQLite can't ALTER a CHECK constraint (same
-  // limitation as the caught_ball/sid-4294 rebuilds above) — Leg 5 replaced both placeholders
-  // with the full curated 117-ribbon/53-mark lists, so any install that already ran the
-  // CREATE TABLE IF NOT EXISTS above pre-Leg-5 has a stale CHECK missing nearly all of them.
-  // Detected via the stored CHECK text directly, same self-healing approach as the
-  // caught_ball rebuild (a sentinel name absent from Leg 4's placeholder but present in
-  // Leg 5's real list), so this doesn't need a version flag and heals however many
-  // ribbons/marks get added in the future. Neither table is referenced by any other table's
-  // FK (nothing points at collection_entry_ribbons/marks as a parent), so unlike the
-  // collection_entries rebuilds above, dropping and recreating them needs no
-  // foreign_keys=OFF dance — only their own entry_id FK into collection_entries is checked,
-  // and it's checked correctly on the INSERT...SELECT below regardless of the pragma.
-  const ribbonsSqlForCheck = db
-    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entry_ribbons'")
-    .get() as { sql: string } | undefined
-  if (ribbonsSqlForCheck?.sql && !ribbonsSqlForCheck.sql.includes("'Cool Ribbon Super'")) {
-    db.exec(`
-      CREATE TABLE collection_entry_ribbons_widened (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        entry_id INTEGER NOT NULL REFERENCES collection_entries(id) ON DELETE CASCADE,
-        ribbon_name TEXT NOT NULL CHECK (ribbon_name IN (${RIBBON_LIST_SQL})),
-        UNIQUE(entry_id, ribbon_name)
-      );
-      INSERT INTO collection_entry_ribbons_widened (id, entry_id, ribbon_name)
-        SELECT id, entry_id, ribbon_name FROM collection_entry_ribbons;
-      DROP TABLE collection_entry_ribbons;
-      ALTER TABLE collection_entry_ribbons_widened RENAME TO collection_entry_ribbons;
-      CREATE INDEX IF NOT EXISTS idx_entry_ribbons_entry ON collection_entry_ribbons(entry_id);
-    `)
-  }
-  const marksSqlForCheck = db
-    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'collection_entry_marks'")
-    .get() as { sql: string } | undefined
-  if (marksSqlForCheck?.sql && !marksSqlForCheck.sql.includes("'Curry Mark'")) {
-    db.exec(`
-      CREATE TABLE collection_entry_marks_widened (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        entry_id INTEGER NOT NULL REFERENCES collection_entries(id) ON DELETE CASCADE,
-        mark_name TEXT NOT NULL CHECK (mark_name IN (${MARK_LIST_SQL})),
-        UNIQUE(entry_id, mark_name)
-      );
-      INSERT INTO collection_entry_marks_widened (id, entry_id, mark_name)
-        SELECT id, entry_id, mark_name FROM collection_entry_marks;
-      DROP TABLE collection_entry_marks;
-      ALTER TABLE collection_entry_marks_widened RENAME TO collection_entry_marks;
-      CREATE INDEX IF NOT EXISTS idx_entry_marks_entry ON collection_entry_marks(entry_id);
-    `)
-  }
+  // Column retrofits (schema-retrofits.ts) and table rebuilds (schema-rebuilds.ts) run
+  // interleaved in a specific order below, not grouped by module — see
+  // schema-rebuilds.ts's file-level comment for the ordering hazard this preserves:
+  // rebuildTrainerProfilesSidWiden/rebuildCollectionEntriesSidWiden rebuild their table
+  // from a column list that predates language/caught_ball/storage_location_id/
+  // box_number/box_slot, so they must run before retrofitColumnsAfterSidWiden adds those
+  // columns. Reordering this silently drops that data on any install still carrying the
+  // old sid CHECK.
+  retrofitSpeciesColumns(db)
+  retrofitFormsColumns(db)
+  retrofitCollectionEntriesOriginColumns(db)
+  rebuildTrainerProfilesNotNullTid(db)
+  rebuildTrainerProfilesSidWiden(db)
+  rebuildCollectionEntriesSidWiden(db)
+  retrofitColumnsAfterSidWiden(db)
+  rebuildCollectionEntriesCaughtBallCheck(db)
+  rebuildCollectionEntriesDropUnique(db)
+  rebuildBoxPlaceholdersFormId(db)
+  retrofitLateCollectionEntryColumns(db)
+  rebuildCollectionEntryRibbonsCheck(db)
+  rebuildCollectionEntryMarksCheck(db)
 
   // Backfills `boxes` rows so every Storage Location has at least a Box 1, plus a row for
   // any box_number collection_entries already reference — covers a pre-Leg-2 install
