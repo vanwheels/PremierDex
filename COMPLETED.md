@@ -1,5 +1,20 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 7: non-evolutionary forme-switch data] — 2026-09-22
+No PokeAPI endpoint models forme changes like Deoxys/Rotom/Giratina/Shaymin/Kyurem/Necrozma/
+Calyrex at all (its evolution-chain data only covers evolutions), so unlike every other
+data/pokemon/*.json file this is hand-curated rather than fetched, the same treatment
+pokemon-forms-data.ts already gives OVERRIDES/SHINY_LOCKED. New
+`scripts/forme-switch-groups-data.ts` (source array, sourced against Bulbapedia/official
+mechanics) + `scripts/build-forme-switch-groups.ts` (validates every speciesId+formName pair
+against forms.json, writes `data/pokemon/forme-switch-groups.json`) cover 14 species: the 7
+Vanny named plus Hoopa, the Forces of Nature trio + Enamorus, Ogerpon, and Keldeo — all
+switchable via the same pattern (item-driven, boxable, reversible). Zygarde and every
+battle-only/auto-reverting alternate state (Mega/Gmax, Ultra Necrozma, Zacian/Zamazenta
+Crowned, Arceus's plates, etc.) were investigated and deliberately excluded — see the data
+file's module doc comment for the reasoning. Data acquisition only, no runtime wiring — see
+Leg 8. See commit `c9e9826`.
+
 ## [Species detail popup + evolution family tree Leg 6: fix cosmetic-variant forms showing the base form's family] — 2026-09-22
 `buildEvolutionFamilyTree`'s root walk operated at the species level and ignored formName
 entirely, so a cosmetic-variant Pikachu form (Cosplay, cap variants, etc.) inherited the base

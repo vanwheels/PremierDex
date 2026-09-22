@@ -6,21 +6,6 @@ Raised by Vanny 2026-09-20, shipped Legs 1-4 2026-09-22, reopened same day: Vann
 the tree in the running app and came back with layout feedback, a form-category bug, and a
 new feature request. Scoped into four more legs below.
 
-### [Species detail popup + evolution family tree] — Leg 7
-New feature raised by Vanny 2026-09-22, data half: alternate forms that are form *changes*
-rather than evolutions (Deoxys' Normal/Attack/Defense/Speed via Meteorite, trigger varies by
-game; Rotom's appliance forms; Giratina's Origin Forme via Griseous Orb; Shaymin's Sky Forme
-via Gracidea; Kyurem's Black/White fusion via DNA Splicers; Necrozma's Dusk Mane/Dawn
-Wings/Ultra fusion; Calyrex's Ice/Shadow Rider via Reins of Unity; etc.) should be viewable
-side by side in the popup, noted as not being evolutions. No existing data models this at
-all — PokeAPI's evolution-chain endpoint (what `fetch-evolution-chains.ts` already pulls)
-doesn't include forme-switch items since it doesn't consider these evolutions. Comparable in
-size to Leg 1's evolution-edges.json pipeline: needs its own pass to identify every species
-with a non-evolutionary forme-switch group, the switch method/item, and any per-game
-variation (Deoxys' trigger differs by game version). Data acquisition only — no UI in this
-leg, see Leg 8.
-Last touched: 2026-09-22. Re-check count: 0.
-
 ### [Species detail popup + evolution family tree] — Leg 8
 UI half of Leg 7: wires the forme-group data into the species detail popup as a side-by-side
 view of a species' alternate formes, distinct from the evolution family tree, labeled with
