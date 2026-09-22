@@ -4,15 +4,6 @@ Curated Met Location dataset shipped 2026-09-21 (see MILESTONES.md).
 
 ## Current Milestone: Codebase File-Size Cleanup
 
-### [Codebase File-Size Cleanup] — Leg 5
-Split `met-locations.test.ts` (1330 lines, 830 past the 500 hard cap) — each leg of the
-now-shipped Curated Met Location dataset milestone added its own describe block's worth of
-`it(...)` cases. `met-locations.ts` itself is exempt as a large static data file, but the
-test file is ordinary code and not exempt. Candidate split: one test file per map
-family/generation (e.g. `met-locations.kanto.test.ts`, `met-locations.hoenn.test.ts`),
-mirroring how `met-locations.ts`'s own const groupings are already organized by family.
-Last touched: 2026-09-21. Re-check count: 0.
-
 ### [Codebase File-Size Cleanup] — Leg 6
 Split `scripts/fetch-pokemon-forms.ts` (656 lines past the 500 hard cap). Resolved by Leg 1
 (2026-09-21): despite the header docstring framing it as a one-off script in the same spirit
