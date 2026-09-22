@@ -3369,6 +3369,25 @@ const LUMIOSE_GEN9: readonly string[] = [
   'Wisp'
 ]
 
+/**
+ * Pokémon GO has no in-game location-index data structure like the mainline titles — it's
+ * GPS-based, and Bulbapedia/Serebii's regional-exclusive documentation for it uses free-text,
+ * inconsistent geographic descriptions per species (lat/long bands, "Iberian Peninsula",
+ * "Eastern Hemisphere", specific event cities like "New York City") rather than a fixed list of
+ * named places the way every other curated game above has. Per Vanny's 2026-09-21 direction,
+ * normalized here to a standard six-continent set instead of importing that free text verbatim
+ * — every real-world catch location falls under exactly one of these regardless of how a given
+ * species' exclusivity boundary happens to be worded upstream.
+ */
+const GO_REGIONS: readonly string[] = [
+  'Africa',
+  'Asia',
+  'Europe',
+  'North America',
+  'Oceania',
+  'South America'
+]
+
 const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Red': KANTO_GEN1,
   'Pokémon Blue': KANTO_GEN1,
@@ -3409,7 +3428,8 @@ const MET_LOCATIONS: Record<string, readonly string[]> = {
   'Pokémon Legends: Arceus': HISUI_GEN8,
   'Pokémon Scarlet': PALDEA_SCARLET,
   'Pokémon Violet': PALDEA_VIOLET,
-  'Pokémon Legends: Z-A': LUMIOSE_GEN9
+  'Pokémon Legends: Z-A': LUMIOSE_GEN9,
+  'Pokémon GO': GO_REGIONS
 }
 
 /**
