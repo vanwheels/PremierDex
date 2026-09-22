@@ -4,6 +4,7 @@ Index of shipped milestones. Name, date, status, and a link to the post-mortem d
 same scannable spirit as `TODO.md`, not prose. See `docs/postmortems/<milestone-slug>.md`
 for what shipped/went well/didn't per milestone.
 
+- **Curated Met Location dataset** — 2026-09-21 — Shipped — [post-mortem](docs/postmortems/curated-met-location-dataset.md)
 - **Ribbons & Marks: List/Collection View Entry Points** — 2026-09-20 — Shipped — [post-mortem](docs/postmortems/ribbons-marks-list-collection-entry-points.md)
 - **Per-Game Regional Dex Numbers** — 2026-09-20 — Shipped — [post-mortem](docs/postmortems/per-game-regional-dex-numbers.md)
 - **Apply Template — Combined Regular+Shiny** — 2026-09-20 — Shipped — [post-mortem](docs/postmortems/apply-template-combined-color.md)

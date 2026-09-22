@@ -1,53 +1,8 @@
 # TODO
 
-Ribbons & Marks: List/Collection View Entry Points shipped 2026-09-20 (see MILESTONES.md).
-
-## Current Milestone: Curated Met Location dataset
-
-Leg 27 (Pokémon Legends: Z-A) closed 2026-09-21 — see COMPLETED.md.
-
-**Legs 4–28** (below): curate every "map family" in `origin-games.ts`'s `ORIGIN_GAMES`
-roster, in release-date order. Restructured at Leg 4 (2026-09-20, Vanny) from the original
-Legs 3–43 one-game-per-leg plan after three domain corrections:
-- **Paired versions share an identical (or near-identical) location list.** Red/Blue,
-  Gold/Silver, Ruby/Sapphire, Diamond/Pearl, Black/White, Black 2/White 2, X/Y, Omega
-  Ruby/Alpha Sapphire, Sun/Moon, Ultra Sun/Ultra Moon, Sword/Shield, Scarlet/Violet,
-  FireRed/LeafGreen, HeartGold/SoulSilver, Brilliant Diamond/Shining Pearl, and Let's Go
-  Pikachu/Let's Go Eevee are each one leg curating one shared base array (both `ORIGIN_GAMES`
-  names keyed to the same array reference), not two independent legs. A generation's 3rd
-  version or later expansion (Yellow, Crystal, Emerald, Platinum, Ultra Sun/Ultra Moon) gets
-  its own leg to verify+layer in whatever it actually adds/removes — ballPoolForGame-style
-  spread off the base array (`[...BASE, ...additions]`), not assumed identical. Colosseum,
-  XD, Legends Arceus, Legends Z-A, and Pokémon GO have no paired version and stay
-  one-leg-each, same as before.
-- **Fateful Encounter (Gift Pokémon/Mystery Gift) is not a location.** Both record their Met
-  Location in-game as the fixed string "Fateful Encounter" rather than a real place. Built
-  at Leg 4: `metLocationsForGame` appends it to every curated game's list rather than it
-  living in any per-game array — applies identically regardless of game/region.
-- **Generation V's Black City/White Forest is the one confirmed within-pair location
-  split** (Black-only vs. White-only respectively) — everything else that differs between
-  paired versions is version-exclusive *encounters*, not a location-list difference, so no
-  other pair needs a comparable split. **Superseded at Leg 8**: Ruby/Sapphire turned up a
-  second one — index 0x42's hideout is "Team Magma Hideout" in Ruby and "Team Aqua Hideout"
-  in Sapphire (same physical base, reskinned per version). Treat this as "check each pair
-  for a split rather than assume none," not "exactly two total" — later legs may turn up
-  more.
-
-Each remaining leg's procedure:
-- Add the family's major city/route Met Location list to `shared/data/met-locations.ts`
-  (a named base `const`, e.g. `KANTO_GEN1`, with each covered game's `ORIGIN_GAMES` `name`
-  keyed to it in `MET_LOCATIONS`).
-- Verify the list against Bulbapedia/Serebii before committing — same standard
-  `supplemental-availability.ts`'s mechanisms were held to.
-- Extend `met-locations.test.ts` to cover the newly curated family.
-No `OriginModal.tsx` or schema.ts changes needed — the mechanism already switches to the
-restricted `<select>` for any game `metLocationsForGame` returns a list for.
-
-### [Curated Met Location dataset] — Leg 28
-Pokémon GO. Curate per the procedure above — GO's "locations" are the real-world
-region/category conventions Serebii/Bulbapedia use for its origin-marked catches
-(regional exclusives, event locations), not a fixed map list like the mainline titles.
-Last touched: 2026-09-20. Re-check count: 0.
+No milestone currently active — the Curated Met Location dataset milestone shipped
+2026-09-21 (see MILESTONES.md). Next pick is Vanny's call: from Future Milestones below
+(most candidates not fully blocked) or from Unscheduled.
 
 ## Unscheduled
 
@@ -139,13 +94,14 @@ template):
   (setEntryBoxPosition/swapEntryBoxPositions/fillBoxSlots/moveEntriesToLocation/undo and
   their apply/snapshot helpers — roughly the same "one feature area" carve-out as the other
   two files above) into its own hook, composed back in by useCollectionData.
-- **Split met-locations.test.ts**: 1307 lines, 807 past the 500 hard cap as of Leg 27 of the
-  Curated Met Location dataset milestone — each leg adds its own describe block's worth of
-  `it(...)` cases and there's still 1 leg left in that milestone, so this will keep growing.
-  `met-locations.ts` itself is exempt as a large static data file, but the test file
-  is ordinary code and not exempt. Candidate split: one test file per map family/generation
-  (e.g. `met-locations.kanto.test.ts`, `met-locations.hoenn.test.ts`), mirroring how
-  `met-locations.ts`'s own const groupings are already organized by family.
+- **Split met-locations.test.ts**: 1330 lines, 830 past the 500 hard cap as of Leg 28
+  (final leg) of the now-shipped Curated Met Location dataset milestone — each leg added
+  its own describe block's worth of `it(...)` cases, and the milestone shipping means this
+  file is done growing from that source, but it's now overdue for the split rather than
+  still-growing. `met-locations.ts` itself is exempt as a large static data file, but the
+  test file is ordinary code and not exempt. Candidate split: one test file per map
+  family/generation (e.g. `met-locations.kanto.test.ts`, `met-locations.hoenn.test.ts`),
+  mirroring how `met-locations.ts`'s own const groupings are already organized by family.
 Last touched: 2026-09-21. Re-check count: 0.
 
 ### [Remove "Unassigned" as the default check-in bucket] — future milestone
