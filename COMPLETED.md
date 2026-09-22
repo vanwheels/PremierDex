@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 6: fix cosmetic-variant forms showing the base form's family] — 2026-09-22
+`buildEvolutionFamilyTree`'s root walk operated at the species level and ignored formName
+entirely, so a cosmetic-variant Pikachu form (Cosplay, cap variants, etc.) inherited the base
+Pikachu -> Raichu family instead of rendering as standalone. Threaded `formName`/`forms` into
+`buildEvolutionFamilyTree`, which now short-circuits to a childless standalone node when the
+current form's `formCategory` isn't `dex_distinct` (covers both `cosmetic_variant` and
+`non_boxable`, e.g. Mega/Gmax) before doing the species-level root walk. See commit `5992a0d`.
+
 ## [Species detail popup + evolution family tree Leg 5: horizontal layout, name centering, method casing] — 2026-09-22
 Reworked `EvolutionTree.tsx`/`evolution-tree.css` to a left-to-right layout (pure CSS
 row/column axis flip — the existing node/children/branch JSX nesting already matched a

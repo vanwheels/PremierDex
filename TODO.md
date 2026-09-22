@@ -6,20 +6,6 @@ Raised by Vanny 2026-09-20, shipped Legs 1-4 2026-09-22, reopened same day: Vann
 the tree in the running app and came back with layout feedback, a form-category bug, and a
 new feature request. Scoped into four more legs below.
 
-### [Species detail popup + evolution family tree] — Leg 6
-Bug found by Vanny 2026-09-22: cosmetic-variant Pikachu forms (Rock Star/Belle/Pop
-Star/PhD/Libre/Cosplay/the cap variants/World Cap — all `formCategory: 'cosmetic_variant'`
-in forms.json) show the base Pikachu evolution family (Pichu -> Pikachu ->
-Raichu/Raichu-Alola) when opened, even though these forms can't evolve or be evolved into —
-they're pure reskins of the base form. `buildEvolutionFamilyTree`'s root walk operates at
-the species level and ignores formName entirely, so it needs a formCategory check before
-walking: a `cosmetic_variant`/`non_boxable` current form should render as a standalone node
-with no family (or an explicit "doesn't evolve" state) rather than the base form's chain.
-Needs `forms` threaded into `findEvolutionFamilyRootSpeciesId`/`buildEvolutionFamilyTree`
-(currently only takes `species`), or an early check in `EvolutionTree.tsx` before calling
-into it.
-Last touched: 2026-09-22. Re-check count: 0.
-
 ### [Species detail popup + evolution family tree] — Leg 7
 New feature raised by Vanny 2026-09-22, data half: alternate forms that are form *changes*
 rather than evolutions (Deoxys' Normal/Attack/Defense/Speed via Meteorite, trigger varies by
