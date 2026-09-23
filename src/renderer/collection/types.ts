@@ -23,6 +23,9 @@ export interface CollectionRowData {
   /** True when the entry's own gender is female — see dex/types.ts's DexRowData.femaleSprite
    * of the same purpose. */
   femaleSprite: boolean
+  /** Mirrors Form.hasGenderDifference — see dex/types.ts's DexRowData field of the same
+   * name; SpriteModal's target uses this to decide the male/female side-by-side layout. */
+  hasGenderDifference: boolean
   firstAvailableGeneration: number
 }
 

@@ -194,7 +194,7 @@ export function DexRow({
             onOpenSprite({
               pokeapiId: row.pokeapiId,
               spriteFormSuffix: row.spriteFormSuffix,
-              female: row.femaleSprite,
+              hasGenderDifference: row.hasGenderDifference,
               displayName: row.displayName,
               firstAvailableGeneration: row.firstAvailableGeneration
             })

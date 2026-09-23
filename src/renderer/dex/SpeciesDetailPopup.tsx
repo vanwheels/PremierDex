@@ -6,6 +6,7 @@ import { EvolutionTree } from './EvolutionTree'
 import { FormeSwitchGroupView } from './FormeSwitchGroupView'
 import { formDisplayName, speciesDisplayName } from './formNames'
 import { defaultSpriteUrl } from './sprites'
+import { SpriteModal } from './SpriteModal'
 
 export interface SpeciesDetailTarget {
   speciesId: number
@@ -36,6 +37,11 @@ const SPRITE_SIZE = 96
  * from the info view, its own Back button), but deliberately not merged into the tree: a
  * forme switch isn't an evolution, and only 14 species have a group at all, so the button
  * only renders when `formeSwitchGroups` has an entry for the current species.
+ *
+ * Leg 12: the info view's sprite is clickable, opening the same SpriteModal every other
+ * sprite in the app uses (generation stepper, shiny/animated toggles, back-sprite
+ * toggle, and — for a gender-diff form — the male/female side-by-side layout) instead of
+ * the plain static image this view rendered before.
  */
 export function SpeciesDetailPopup({
   target,
@@ -47,6 +53,7 @@ export function SpeciesDetailPopup({
 }: SpeciesDetailPopupProps): JSX.Element {
   const [current, setCurrent] = useState(target)
   const [view, setView] = useState<'info' | 'tree' | 'formes'>('info')
+  const [spriteModalOpen, setSpriteModalOpen] = useState(false)
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -101,13 +108,20 @@ export function SpeciesDetailPopup({
         {view === 'info' && (
           <>
             {form ? (
-              <img
-                className="species-detail-sprite"
-                src={defaultSpriteUrl(form.pokeapiId, form.spriteFormSuffix, false, false)}
-                alt={displayName}
-                width={SPRITE_SIZE}
-                height={SPRITE_SIZE}
-              />
+              <button
+                type="button"
+                className="species-detail-sprite-button"
+                onClick={() => setSpriteModalOpen(true)}
+                aria-label={`Enlarge ${displayName} sprite`}
+              >
+                <img
+                  className="species-detail-sprite"
+                  src={defaultSpriteUrl(form.pokeapiId, form.spriteFormSuffix, false, false)}
+                  alt={displayName}
+                  width={SPRITE_SIZE}
+                  height={SPRITE_SIZE}
+                />
+              </button>
             ) : (
               <div className="species-detail-sprite-missing" style={{ width: SPRITE_SIZE, height: SPRITE_SIZE }} />
             )}
@@ -125,6 +139,18 @@ export function SpeciesDetailPopup({
           </>
         )}
       </div>
+      {spriteModalOpen && form && (
+        <SpriteModal
+          target={{
+            pokeapiId: form.pokeapiId,
+            spriteFormSuffix: form.spriteFormSuffix,
+            hasGenderDifference: form.hasGenderDifference,
+            displayName,
+            firstAvailableGeneration: form.firstAvailableGeneration
+          }}
+          onClose={() => setSpriteModalOpen(false)}
+        />
+      )}
     </div>
   )
 }

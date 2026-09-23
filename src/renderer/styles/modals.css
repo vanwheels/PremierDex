@@ -57,8 +57,20 @@
 
 .species-detail-sprite {
   image-rendering: pixelated;
-  margin: 0.5rem auto 0;
   display: block;
+}
+
+/* Leg 12 — wraps .species-detail-sprite so it opens SpriteModal on click, same pattern
+   SpriteThumbnail uses for every other sprite in the app. Resets button chrome so it
+   reads as the bare sprite it replaced, not a button. */
+.species-detail-sprite-button {
+  display: block;
+  margin: 0.5rem auto 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 /* Leg 8 — holds "View Evolution Family" plus the conditional "View Alternate Formes"
@@ -231,13 +243,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 200px;
+  gap: 1rem;
   margin: 0.5rem auto;
 }
 
-.sprite-modal-image img {
+/* Leg 12 — one sprite (SpriteModal.tsx's SpriteSlot); two side by side, Serebii-style,
+   for a gender-diff form. Fixed width/min-height so the "unavailable" text fallback
+   occupies the same footprint as the image it replaces, single or paired. */
+.sprite-modal-image-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  min-height: 200px;
+}
+
+.sprite-modal-image-slot img {
   image-rendering: pixelated;
+}
+
+.sprite-modal-image-slot-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
 }
 
 .sprite-modal-controls {

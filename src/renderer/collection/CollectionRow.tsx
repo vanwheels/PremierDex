@@ -37,7 +37,7 @@ export function CollectionRow({ row, onOpenSprite, onOpenOrigin, onSaveOrigin, o
             onOpenSprite({
               pokeapiId: row.pokeapiId,
               spriteFormSuffix: row.spriteFormSuffix,
-              female: row.femaleSprite,
+              hasGenderDifference: row.hasGenderDifference,
               displayName: row.displayName,
               firstAvailableGeneration: row.firstAvailableGeneration
             })

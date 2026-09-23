@@ -24,6 +24,7 @@ function buildRow(entry: CollectionEntry, species: Species, form: Form): Collect
     pokeapiId: form.pokeapiId,
     spriteFormSuffix: form.spriteFormSuffix,
     femaleSprite: entry.gender === 'female',
+    hasGenderDifference: form.hasGenderDifference,
     firstAvailableGeneration: form.firstAvailableGeneration
   }
 }
