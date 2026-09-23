@@ -6,18 +6,6 @@ Raised by Vanny 2026-09-20, shipped Legs 1-4 2026-09-22, reopened same day: Vann
 the tree in the running app and came back with layout feedback, a form-category bug, and a
 new feature request. Scoped into four more legs below.
 
-### [Species detail popup + evolution family tree] — Leg 11
-Add back-sprite URL support to `sprites.ts`: PokeAPI's CDN mirrors the existing front-sprite
-folder structure under `pokemon/back/` (plain, `back/shiny/`, `back/female/`,
-`back/shiny/female/`), but nothing in this codebase builds those paths today — every existing
-builder (`defaultSpriteUrl`, `generationSpriteUrl`, `animatedSpriteUrl`) is front-only. Needs
-the same live-CDN verification diligence the module's existing doc comment shows for
-shiny/female coverage (which generations actually have a `back/` set, and whether the
-`GENERATIONS_WITHOUT_SHINY` exceptions apply the same way to back sprites) before adding the
-builder function(s). Self-contained — no UI wiring, just `sprites.ts` + `sprites.test.ts`.
-Prerequisite for Leg 12.
-Last touched: 2026-09-22. Re-check count: 0.
-
 ### [Species detail popup + evolution family tree] — Leg 12
 Reuse the existing `SpriteModal` (generation stepper + shiny/animated toggles, already used
 everywhere else via the `SpriteThumbnail` click pattern) instead of the species detail popup's
@@ -37,6 +25,18 @@ Last touched: 2026-09-22. Re-check count: 0.
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
+
+### [Generation-vii sprite URLs use the wrong extension] — unscheduled
+Surfaced by Leg 11's live-CDN verification for back-sprite support: `generationSpriteUrl` in
+`sprites.ts` builds every generation's URL with a `.png` extension, but the CDN's
+`generation-vii/ultra-sun-ultra-moon` folder (both its flat front sprites and its `back/`
+subfolder) serves `.gif` instead — confirmed live, e.g.
+`.../generation-vii/ultra-sun-ultra-moon/25.png` 404s while `.../25.gif` returns 200. This is
+pre-existing (predates Leg 11, affects the front sprite too, not something back-sprite support
+introduced) and was never caught because nothing in the app currently exercises generation 7
+specifically in a way that surfaced the broken image. Needs a per-generation extension map (or
+a gen-7-specific override) alongside `GENERATION_GAME`/`ROMAN_NUMERALS`.
+Last touched: 2026-09-22. Re-check count: 0.
 
 ### [DexBoxGrid.tsx / DexBoxPane.tsx over the file-size cap] — unscheduled
 Surfaced by Leg 8 of the Species detail popup + evolution family tree milestone: threading

@@ -55,6 +55,18 @@ describe('defaultSpriteUrl', () => {
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/female/593.png'
     )
   })
+
+  it('builds the back variant under /back/', () => {
+    expect(defaultSpriteUrl(25, null, false, false, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png'
+    )
+  })
+
+  it('nests back shiny female as /back/shiny/female/', () => {
+    expect(defaultSpriteUrl(593, null, true, true, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/female/593.png'
+    )
+  })
 })
 
 describe('generationSpriteUrl', () => {
@@ -112,6 +124,39 @@ describe('generationSpriteUrl', () => {
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/female/593.png'
     )
   })
+
+  it('builds the back variant nested under /back/ before shiny/female', () => {
+    expect(generationSpriteUrl(593, null, 5, true, true, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/back/shiny/female/593.png'
+    )
+  })
+
+  it('falls back to the evergreen shiny back sprite for generation 1 — back/ exists but inherits the shiny gap', () => {
+    expect(generationSpriteUrl(25, null, 1, true, false, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/25.png'
+    )
+  })
+
+  it.each([8, 9])(
+    'falls back to the evergreen back sprite for generation %i — the CDN has no back/ subfolder there',
+    (generation) => {
+      expect(generationSpriteUrl(25, null, generation, false, false, true)).toBe(
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png'
+      )
+    }
+  )
+
+  it('falls back to the evergreen shiny back sprite for generation 8 or 9', () => {
+    expect(generationSpriteUrl(25, null, 9, true, false, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/25.png'
+    )
+  })
+
+  it('does not fall back for a non-shiny back request in generation 1, which does have back/', () => {
+    expect(generationSpriteUrl(25, null, 1, false, false, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/back/25.png'
+    )
+  })
 })
 
 describe('hasBlackWhiteAnimatedSprites', () => {
@@ -165,6 +210,18 @@ describe('animatedSpriteUrl', () => {
   it('builds the Showdown shiny-female variant nested as /shiny/female/', () => {
     expect(animatedSpriteUrl(593, null, true, 'showdown', true)).toBe(
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/shiny/female/593.gif'
+    )
+  })
+
+  it('builds the black-white back variant under /back/', () => {
+    expect(animatedSpriteUrl(25, null, false, 'black-white', false, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/back/25.gif'
+    )
+  })
+
+  it('builds the Showdown back shiny-female variant nested as /back/shiny/female/', () => {
+    expect(animatedSpriteUrl(593, null, true, 'showdown', true, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/shiny/female/593.gif'
     )
   })
 })

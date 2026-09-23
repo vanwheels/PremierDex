@@ -30,6 +30,23 @@
  * existing since gen 1) simply 404s and falls back to the same "sprite unavailable"
  * handling SpriteThumbnail/SpriteModal already use for any other missing file — no
  * special-cased fallback set needed here, unlike GENERATIONS_WITHOUT_SHINY below.
+ *
+ * `back` (Leg 11) selects the back-of-battle-sprite art PokeAPI's CDN mirrors under a
+ * "back/" subfolder — confirmed live at every layer this module builds, nested the same
+ * "back/shiny/female/" order as the front-sprite genderShinyFolder path (never
+ * "female/back/" or "shiny/back/"): evergreen, per-generation, and both animated
+ * sources. Two more live-verified exceptions layer on top of the existing
+ * GENERATIONS_WITHOUT_SHINY ones: generation-viii (brilliant-diamond-shining-pearl) and
+ * generation-ix (scarlet-violet) have no back/ subfolder at all (3D-model games, same
+ * root cause as their missing shiny/ folders) — generationSpriteUrl falls back to
+ * defaultSpriteUrl's evergreen back art for those, same pattern as the shiny fallback.
+ * generation-i (red-blue) does have a back/ folder, but — like its front sprites — no
+ * shiny/ subfolder underneath it, so GENERATIONS_WITHOUT_SHINY's existing fallback
+ * already covers it once `back` is threaded through that fallback call. Separately
+ * (pre-existing, not fixed here): generation-vii (ultra-sun-ultra-moon) serves both its
+ * front *and* back sprites as .gif rather than the .png every other generation folder
+ * uses, which generationSpriteUrl doesn't account for regardless of `back` — see
+ * TODO.md.
  */
 
 export const CURRENT_MAX_GENERATION = 9
@@ -83,15 +100,23 @@ function genderShinyFolder(shiny: boolean, female: boolean): string {
   return parts.length ? `/${parts.join('/')}` : ''
 }
 
+/** The back/ subfolder prefix shared by every sprite variant below, nested *before*
+ * genderShinyFolder's path (confirmed live — "back/shiny/female", never
+ * "shiny/back" or "female/back"). */
+function backFolder(back: boolean): string {
+  return back ? '/back' : ''
+}
+
 /** The row-thumbnail sprite: PokeAPI's evergreen "current" default artwork. */
 export function defaultSpriteUrl(
   pokeapiId: number,
   spriteFormSuffix: string | null,
   shiny: boolean,
-  female: boolean
+  female: boolean,
+  back = false
 ): string {
   const id = spriteFileId(pokeapiId, spriteFormSuffix)
-  return `${SPRITE_BASE}${genderShinyFolder(shiny, female)}/${id}.png`
+  return `${SPRITE_BASE}${backFolder(back)}${genderShinyFolder(shiny, female)}/${id}.png`
 }
 
 /** Generations with no shiny/ subfolder at all on the CDN (verified live — see the
@@ -99,22 +124,32 @@ export function defaultSpriteUrl(
  * evergreen shiny art for these rather than building a URL that can never resolve. */
 const GENERATIONS_WITHOUT_SHINY = new Set([1, 8, 9])
 
+/** Generations with no back/ subfolder at all on the CDN (verified live — see the
+ * module comment above; generation-i does have back/, it just inherits the shiny gap
+ * above). generationSpriteUrl falls back to defaultSpriteUrl's evergreen back art for
+ * these rather than building a URL that can never resolve. */
+const GENERATIONS_WITHOUT_BACK = new Set([8, 9])
+
 /** The modal's generation-stepped sprite, per GENERATION_GAME's representative game. */
 export function generationSpriteUrl(
   pokeapiId: number,
   spriteFormSuffix: string | null,
   generation: number,
   shiny: boolean,
-  female: boolean
+  female: boolean,
+  back = false
 ): string {
   const game = GENERATION_GAME[generation]
   const roman = ROMAN_NUMERALS[generation]
   if (!game || !roman) throw new Error(`No sprite mapping for generation ${generation}`)
   if (shiny && GENERATIONS_WITHOUT_SHINY.has(generation)) {
-    return defaultSpriteUrl(pokeapiId, spriteFormSuffix, true, female)
+    return defaultSpriteUrl(pokeapiId, spriteFormSuffix, true, female, back)
+  }
+  if (back && GENERATIONS_WITHOUT_BACK.has(generation)) {
+    return defaultSpriteUrl(pokeapiId, spriteFormSuffix, shiny, female, true)
   }
   const id = spriteFileId(pokeapiId, spriteFormSuffix)
-  return `${SPRITE_BASE}/versions/generation-${roman}/${game}${genderShinyFolder(shiny, female)}/${id}.png`
+  return `${SPRITE_BASE}/versions/generation-${roman}/${game}${backFolder(back)}${genderShinyFolder(shiny, female)}/${id}.png`
 }
 
 /**
@@ -152,9 +187,10 @@ export function animatedSpriteUrl(
   spriteFormSuffix: string | null,
   shiny: boolean,
   source: AnimatedSource,
-  female: boolean
+  female: boolean,
+  back = false
 ): string {
   const id = spriteFileId(pokeapiId, spriteFormSuffix)
   const folder = source === 'showdown' ? `${SPRITE_BASE}/other/showdown` : `${SPRITE_BASE}/versions/generation-v/black-white/animated`
-  return `${folder}${genderShinyFolder(shiny, female)}/${id}.gif`
+  return `${folder}${backFolder(back)}${genderShinyFolder(shiny, female)}/${id}.gif`
 }
