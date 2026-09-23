@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [PokeAPI species-detail dataset fetch] — 2026-09-23
+Leg 1 of the Species database: full per-species pages milestone. Wrote
+`scripts/fetch-species-details.ts`, `src/shared/types/species-details.ts`, and
+`loadSpeciesDetailsData()`, then ran the fetch live against PokeAPI (1025 species, 1329
+distinct forms, 6 growth rates, 313 abilities). See commit `be981f8`.
+
 ## [Codebase File-Size Cleanup Leg 6: split fetch-pokemon-forms.ts] — 2026-09-22
 Final leg — milestone shipped, see MILESTONES.md. Split along the boundary scoped in
 TODO.md: pulled OVERRIDES, SHINY_LOCKED, ALWAYS_SHINY, VERSION_GROUP_GENERATION,

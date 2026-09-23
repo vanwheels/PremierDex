@@ -1,7 +1,43 @@
 # TODO
 
-No milestone currently in progress — Species detail popup + evolution family tree shipped
-2026-09-22 (see MILESTONES.md). Next milestone not yet picked from Future Milestones below.
+## Current Milestone: Species database: full per-species pages
+
+Scoped 2026-09-23 out of the Future Milestones entry of the same name (see git history for
+the original field-triage notes, carried into each leg below). Movesets and breeding/egg
+groups are deliberately out of this leg sequence — later-phase, deeper-schema items to be
+scoped as follow-on legs once Legs 1-5 ship.
+
+### [Wire species-detail dataset through IPC + renderer] — Leg 2
+Add the IPC channel, preload bridge method, and `useCollectionData` slot for Leg 1's
+dataset, following the existing one-line-per-file pattern (`ipc-channels.ts`,
+`pokemon-ipc.ts`, `preload/bridge.ts`, `preload/index.ts`, `useCollectionData.ts` — ~10-15
+lines total, no new plumbing files). No UI yet — verified by confirming the data is
+reachable in the renderer, not a rendered page. Depends on Leg 1.
+Last touched: 2026-09-23. Re-check count: 0.
+
+### [Full species page shell + core wanted fields] — Leg 3
+New page reached via a "View full page" link added to `SpeciesDetailPopup`'s info view (the
+popup stays a lightweight summary per the original 2026-09-22 decision). Wired as a sibling
+of `TrainerProfilesPanel`/`StorageLocationsPanel` in `App.tsx`'s `AppView` enum — the
+closest existing "real page" precedent, no router exists in this app and no new modal
+machinery is needed. Renders ability + description, base happiness, experience growth, EVs
+earned, gender ratio, and base catch rate (the fields Vanny confirmed wanted in the
+2026-09-22 triage), reusing `SpriteModal`'s normal/shiny side-by-side sprite infra. No
+calculator yet. Depends on Leg 2.
+Last touched: 2026-09-23. Re-check count: 0.
+
+### [Catch-probability calculator] — Leg 4
+Research an existing open-source Gen 3+ catch-rate formula to adapt (per the milestone
+note — not built from scratch), then add current-HP/status-condition/Poké-Ball-type inputs
+on top of Leg 3's base catch rate display. Depends on Leg 3.
+Last touched: 2026-09-23. Re-check count: 0.
+
+### [Safari Zone flee rate (curated, opt-in)] — Leg 5
+PokeAPI has no flee-rate field anywhere (confirmed live 2026-09-23) — this needs a small
+hand-curated table for species actually present in a Safari-Zone-style encounter, same
+reactive, opt-in-per-species posture as `BALL_POOLS`/curated Met Location. Lowest-priority
+wanted field; last in the sequence. Depends on Leg 3 (page must exist to show it in).
+Last touched: 2026-09-23. Re-check count: 0.
 
 ## Unscheduled
 
@@ -124,52 +160,24 @@ Dex/storage feature. Needs to support browsing encounters by location or by game
 implies somewhat interactable maps per game. Confirmed 2026-09-21: OK to split into as many
 milestones as makes sense once this is picked up (e.g. data build vs. UI as separate
 milestones) — written down now just to capture the idea, not to lock in a single scope.
-Data sourcing unresolved: no known dataset/API confirmed to have full per-game encounter
-data yet. PokeAPI (already used for ChoiceBuds) is the only known candidate — needs
-investigating whether its coverage is complete enough, or whether this needs hand-curation
-like the Met Location lists were. Map convention: gens 1-7 and (mostly) Sword/Shield use a
-map that distinctly breaks up each route/city and highlights the selected area — usable as
-design inspiration. Scarlet/Violet largely breaks that convention, and Legends Arceus/Z-A
-break it entirely (open world), so map treatment likely needs per-era variants rather than
-one universal system. Pokémon GO gets no map — real-world location data, not a fixed map.
-Blocked: needs the encounter-table data itself built first (not yet started/scoped) before
-this UI work can be scoped for real.
-Last touched: 2026-09-21. Re-check count: 0.
-
-### [Species database: full per-species pages] — future milestone
-Raised by Vanny 2026-09-22 during Leg 10 scoping: wants the app to grow beyond storage into a
-curated mainline-games-only database — not Bulbapedia/Serebii scope, and deliberately
-avoiding their clutter — with each species eventually getting its own full page covering
-what's already tracked plus movesets, base stats, catch rate, and (later) breeding/egg
-groups. PokeAPI is the presumptive data source (already used for ChoiceBuds); coverage risk
-is concentrated in movesets, which are versioned per game/learn-method with a deeper schema
-than the stats/catch-rate/egg-group data PokeAPI handles cleanly.
-
-Reviewed a Serebii species-page screenshot as layout reference (2026-09-22) and triaged its
-sections with Vanny:
-- Wanted: ability + description, base happiness, experience growth, EVs earned, gender
-  ratio, safari zone flee rate (only for species actually in the Safari Zone).
-- Skip for now, reevaluate later: classification, height, weight.
-- Not wanted: type effectiveness/damage-taken chart, colour.
-- Location per game is not new scope here — it's the existing curated Met Location data /
-  the "Encounter tables + location/game search UI" future milestone above, not something to
-  duplicate on this page.
-- Serebii's Normal Sprite/Shiny Sprite side-by-side layout is worth borrowing — see Legs
-  11-12 of the Species detail popup + evolution family tree milestone, which build the
-  shiny/female-side-by-side/back sprite-toggle infra this page would reuse.
-
-Decided: the existing species detail popup (current milestone) stays a lightweight
-summary/entry point rather than growing in place — it gets a "View full page" link into this
-new page once it exists. Absorbs the former "Catch rate + capture probability calculator"
-entry: base catch rate and a probability calculator on top of it (depends on catch rate,
-current HP, status condition, Poké Ball type — check for an existing open-source
-formula/calculator to adapt rather than building from scratch) are now in this page's scope
-rather than a separate milestone.
-
-Deliberately not scoped further — written down to capture the idea and field triage, not to
-lock in MVP field ordering, data-fetch/caching strategy, or page layout. Needs a dedicated
-scoping pass before a leg sequence can be planned.
-Last touched: 2026-09-22. Re-check count: 0.
+Data sourcing investigated 2026-09-23 (see
+`docs/investigations/pokeapi-encounter-coverage.md`): PokeAPI fully covers Gen 1-7, Let's Go,
+Sword/Shield (+DLC), and Orre's snag mechanic, but has zero encounter data — empty stubs or
+no resource at all — for Brilliant Diamond/Shining Pearl, Legends Arceus, Scarlet/Violet
+(+DLC), and almost certainly Legends Z-A. Map convention: gens 1-7 and (mostly) Sword/Shield
+use a map that distinctly breaks up each route/city and highlights the selected area —
+usable as design inspiration. Scarlet/Violet largely breaks that convention, and Legends
+Arceus/Z-A break it entirely (open world), so map treatment needs per-era variants rather
+than one universal system anyway. Pokémon GO gets no map — real-world location data, not a
+fixed map.
+Decided 2026-09-23: ship the PokeAPI-covered games first (Gen 1-7, Let's Go, Sword/Shield,
+Orre) as the initial scope — both a proof of concept for the feature and a natural
+boundary, since the newest four games (BDSP/Legends Arceus/Scarlet-Violet/Z-A) already
+needed different map treatment regardless of data-source concerns. Hand-curating those four
+(same reactive, opt-in-per-game posture as `BALL_POOLS`/Met Location) is deferred to a later
+pass, not blocking this milestone's start. Still needs a scoping pass (data-build vs. UI
+split, per Vanny's 2026-09-21 note above) before a leg sequence can be planned.
+Last touched: 2026-09-23. Re-check count: 0.
 
 ### [Full UI/UX pass on the Dex interface] — future milestone
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones
