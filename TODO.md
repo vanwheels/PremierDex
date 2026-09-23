@@ -1,18 +1,9 @@
 # TODO
 
-## Current Milestone: Species database: full per-species pages
-
-Scoped 2026-09-23 out of the Future Milestones entry of the same name (see git history for
-the original field-triage notes, carried into each leg below). Movesets and breeding/egg
-groups are deliberately out of this leg sequence — later-phase, deeper-schema items to be
-scoped as follow-on legs once Legs 1-5 ship.
-
-### [Safari Zone flee rate (curated, opt-in)] — Leg 5
-PokeAPI has no flee-rate field anywhere (confirmed live 2026-09-23) — this needs a small
-hand-curated table for species actually present in a Safari-Zone-style encounter, same
-reactive, opt-in-per-species posture as `BALL_POOLS`/curated Met Location. Lowest-priority
-wanted field; last in the sequence. Depends on Leg 3 (page must exist to show it in).
-Last touched: 2026-09-23. Re-check count: 0.
+No current milestone — Species database: full per-species pages shipped 2026-09-23 (Legs
+1-5, see COMPLETED.md/MILESTONES.md). Movesets and breeding/egg groups were deliberately
+left out of that leg sequence; candidates for a follow-on milestone if wanted, not yet
+scoped.
 
 ## Unscheduled
 
