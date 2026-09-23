@@ -1,24 +1,7 @@
 # TODO
 
-## Current Milestone: Species detail popup + evolution family tree
-
-Raised by Vanny 2026-09-20, shipped Legs 1-4 2026-09-22, reopened same day: Vanny reviewed
-the tree in the running app and came back with layout feedback, a form-category bug, and a
-new feature request. Scoped into four more legs below.
-
-### [Species detail popup + evolution family tree] — Leg 12
-Reuse the existing `SpriteModal` (generation stepper + shiny/animated toggles, already used
-everywhere else via the `SpriteThumbnail` click pattern) instead of the species detail popup's
-current plain `<img>`. Two additions to `SpriteModal` itself, benefiting every other caller,
-not just the popup: for a form with `Form.hasGenderDifference`, show male and female sprites
-side by side (Serebii-style, confirmed with Vanny 2026-09-22 — not a toggle) rather than the
-single image every other form gets; and a back-sprite toggle (using Leg 11's new builders,
-applying to whichever sprite(s) are currently shown). Then wire `SpeciesDetailPopup`'s info
-view to open `SpriteModal` on sprite click instead of rendering a static image. Covers Vanny's
-shiny-toggle and per-generation-tabs asks for free once wired in — shiny is already a
-checkbox affecting whatever's on screen, and the tabs already exist as SpriteModal's
-generation stepper.
-Last touched: 2026-09-22. Re-check count: 0.
+No milestone currently in progress — Species detail popup + evolution family tree shipped
+2026-09-22 (see MILESTONES.md). Next milestone not yet picked from Future Milestones below.
 
 ## Unscheduled
 
