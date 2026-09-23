@@ -7,17 +7,6 @@ the original field-triage notes, carried into each leg below). Movesets and bree
 groups are deliberately out of this leg sequence — later-phase, deeper-schema items to be
 scoped as follow-on legs once Legs 1-5 ship.
 
-### [Full species page shell + core wanted fields] — Leg 3
-New page reached via a "View full page" link added to `SpeciesDetailPopup`'s info view (the
-popup stays a lightweight summary per the original 2026-09-22 decision). Wired as a sibling
-of `TrainerProfilesPanel`/`StorageLocationsPanel` in `App.tsx`'s `AppView` enum — the
-closest existing "real page" precedent, no router exists in this app and no new modal
-machinery is needed. Renders ability + description, base happiness, experience growth, EVs
-earned, gender ratio, and base catch rate (the fields Vanny confirmed wanted in the
-2026-09-22 triage), reusing `SpriteModal`'s normal/shiny side-by-side sprite infra. No
-calculator yet. Depends on Leg 2.
-Last touched: 2026-09-23. Re-check count: 0.
-
 ### [Catch-probability calculator] — Leg 4
 Research an existing open-source Gen 3+ catch-rate formula to adapt (per the milestone
 note — not built from scratch), then add current-HP/status-condition/Poké-Ball-type inputs

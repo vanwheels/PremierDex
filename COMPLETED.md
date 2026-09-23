@@ -1,5 +1,15 @@
 # COMPLETED
 
+## [Full species page shell + core wanted fields] — 2026-09-23
+Leg 3 of the Species database: full per-species pages milestone. New `SpeciesPage`
+component, reached via a "View Full Page" button on `SpeciesDetailPopup`'s info view and
+rendered as a new `species` sibling of `App.tsx`'s `AppView` enum (the same "real page"
+precedent Trainer Profiles/Storage Locations already used). Shows normal/shiny sprite
+thumbnails (SpriteModal's new `initialShiny` prop) plus abilities + descriptions, base
+happiness, experience growth, EVs earned, gender ratio, and base catch rate off Leg 2's
+`speciesDetails` dataset, formatted by new unit-tested helpers in `speciesPageFormat.ts`. No
+calculator yet (Leg 4). See commit `60dcade`.
+
 ## [Wire species-detail dataset through IPC + renderer] — 2026-09-23
 Leg 2 of the Species database: full per-species pages milestone. Added
 `PokemonIpcChannel.loadSpeciesDetails`, its `pokemon-ipc.ts` handler, the preload
