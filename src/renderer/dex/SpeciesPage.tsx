@@ -2,8 +2,17 @@ import { useEffect, useState } from 'react'
 import type { Form, Species } from '@shared/types/pokemon'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
+import {
+  CATCH_CALC_BALLS,
+  CATCH_CALC_BALL_LABELS,
+  CATCH_CALC_STATUSES,
+  CATCH_CALC_STATUS_LABELS,
+  calculateCatchProbability,
+  type CatchCalcBall,
+  type CatchCalcStatus
+} from './catchProbability'
 import { formDisplayName, speciesDisplayName } from './formNames'
-import { formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
+import { formatCatchProbability, formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
 import { defaultSpriteUrl } from './sprites'
 import { SpriteModal } from './SpriteModal'
 import type { SpriteModalTarget } from './SpriteModal'
@@ -23,8 +32,9 @@ const SPRITE_SIZE = 120
  * (App.tsx), reached via SpeciesDetailPopup's "View Full Page" button, not a modal.
  * Renders the fields Vanny confirmed wanted in the 2026-09-22 triage (ability +
  * description, base happiness, experience growth, EVs earned, gender ratio, base catch
- * rate) off the SpeciesDetailsData dataset Leg 1/2 fetched and wired through IPC. No
- * calculator yet (Leg 4).
+ * rate) off the SpeciesDetailsData dataset Leg 1/2 fetched and wired through IPC, plus
+ * Leg 4's catch-probability calculator on top of the base catch rate (see
+ * catchProbability.ts).
  *
  * The normal/shiny thumbnails reuse SpriteModal for the enlarge-and-browse-generations
  * behavior (same click-to-open pattern as SpeciesDetailPopup's own sprite), passing
@@ -33,6 +43,9 @@ const SPRITE_SIZE = 120
  */
 export function SpeciesPage({ target, species, forms, speciesDetails, onClose }: SpeciesPageProps): JSX.Element {
   const [spriteModalShiny, setSpriteModalShiny] = useState<boolean | null>(null)
+  const [calcHpPercent, setCalcHpPercent] = useState(100)
+  const [calcStatus, setCalcStatus] = useState<CatchCalcStatus>('none')
+  const [calcBall, setCalcBall] = useState<CatchCalcBall>('poke')
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -140,6 +153,54 @@ export function SpeciesPage({ target, species, forms, speciesDetails, onClose }:
             <dd>{speciesDetail.captureRate}</dd>
           </div>
         </dl>
+      )}
+      {speciesDetail && (
+        <fieldset className="species-page-calc">
+          <legend>Catch Probability Calculator</legend>
+          <label className="origin-modal-field">
+            Current HP (%)
+            <input
+              type="number"
+              min={0}
+              max={100}
+              value={calcHpPercent}
+              onChange={(e) => setCalcHpPercent(Number(e.target.value))}
+            />
+          </label>
+          <label className="origin-modal-field">
+            Status Condition
+            <select value={calcStatus} onChange={(e) => setCalcStatus(e.target.value as CatchCalcStatus)}>
+              {CATCH_CALC_STATUSES.map((status) => (
+                <option key={status} value={status}>
+                  {CATCH_CALC_STATUS_LABELS[status]}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="origin-modal-field">
+            Poké Ball
+            <select value={calcBall} onChange={(e) => setCalcBall(e.target.value as CatchCalcBall)}>
+              {CATCH_CALC_BALLS.map((ball) => (
+                <option key={ball} value={ball}>
+                  {CATCH_CALC_BALL_LABELS[ball]}
+                </option>
+              ))}
+            </select>
+          </label>
+          <p className="species-page-calc-result">
+            Catch Probability:{' '}
+            <strong>
+              {formatCatchProbability(
+                calculateCatchProbability({
+                  captureRate: speciesDetail.captureRate,
+                  hpPercent: calcHpPercent,
+                  ball: calcBall,
+                  status: calcStatus
+                })
+              )}
+            </strong>
+          </p>
+        </fieldset>
       )}
       {spriteModalShiny !== null && spriteModalTarget && (
         <SpriteModal target={spriteModalTarget} initialShiny={spriteModalShiny} onClose={() => setSpriteModalShiny(null)} />

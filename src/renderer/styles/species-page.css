@@ -89,3 +89,22 @@
   margin: 0.15rem 0 0;
   color: var(--muted);
 }
+
+/* Leg 4's catch-probability calculator (catchProbability.ts) — reuses origin-modal-field
+ * for its label/input rows (see modals.css) rather than duplicating that layout. */
+.species-page-calc {
+  margin: 1.5rem 0 0;
+  padding: 0.8rem 1rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+}
+
+.species-page-calc legend {
+  padding: 0 0.4rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.species-page-calc-result {
+  margin: 0.8rem 0 0;
+}

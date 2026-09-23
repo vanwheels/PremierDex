@@ -44,3 +44,9 @@ export function formatGenderRatio(genderRate: number): string {
 export function slugDisplayName(slug: string): string {
   return capitalizeWords(slug.replace(/-/g, ' '))
 }
+
+/** Renders a catchProbability.ts probability (0-1) as a percentage string for the catch
+ * calculator's result — one decimal place, e.g. "42.3%". */
+export function formatCatchProbability(probability: number): string {
+  return `${(probability * 100).toFixed(1)}%`
+}

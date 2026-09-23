@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
+import { formatCatchProbability, formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
 
 describe('formatEvYield', () => {
   it('restores conventional stat order and labels non-zero entries', () => {
@@ -43,5 +43,13 @@ describe('slugDisplayName', () => {
     expect(slugDisplayName('medium-fast')).toBe('Medium Fast')
     expect(slugDisplayName('static')).toBe('Static')
     expect(slugDisplayName('swift-swim')).toBe('Swift Swim')
+  })
+})
+
+describe('formatCatchProbability', () => {
+  it('renders a 0-1 probability as a one-decimal percentage', () => {
+    expect(formatCatchProbability(1)).toBe('100.0%')
+    expect(formatCatchProbability(0)).toBe('0.0%')
+    expect(formatCatchProbability(0.4234)).toBe('42.3%')
   })
 })
