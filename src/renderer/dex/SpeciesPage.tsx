@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { safariFleeRatesForSpecies } from '@shared/data/safari-flee-rates'
 import type { Form, Species } from '@shared/types/pokemon'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
@@ -61,6 +62,7 @@ export function SpeciesPage({ target, species, forms, speciesDetails, onClose }:
 
   const speciesDetail = speciesDetails.species[target.speciesId]
   const formDetail = form ? speciesDetails.forms[form.pokeapiId] : undefined
+  const safariFleeRates = safariFleeRatesForSpecies(target.speciesId)
 
   const spriteModalTarget: SpriteModalTarget | null = form
     ? {
@@ -152,6 +154,20 @@ export function SpeciesPage({ target, species, forms, speciesDetails, onClose }:
             <dt>Base Catch Rate</dt>
             <dd>{speciesDetail.captureRate}</dd>
           </div>
+          {safariFleeRates.length > 0 && (
+            <div className="species-page-field">
+              <dt>Safari Zone Flee Rate</dt>
+              <dd>
+                <ul className="species-page-flee-rates">
+                  {safariFleeRates.map((entry) => (
+                    <li key={entry.location}>
+                      {entry.location} ({entry.gamesLabel}): {entry.fleeRate}
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
         </dl>
       )}
       {speciesDetail && (

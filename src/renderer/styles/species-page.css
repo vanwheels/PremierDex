@@ -90,6 +90,14 @@
   color: var(--muted);
 }
 
+/* Leg 5's curated Safari Zone flee rate field — same bare-list layout as
+ * .species-page-abilities, no per-entry description line. */
+.species-page-flee-rates {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 /* Leg 4's catch-probability calculator (catchProbability.ts) — reuses origin-modal-field
  * for its label/input rows (see modals.css) rather than duplicating that layout. */
 .species-page-calc {
