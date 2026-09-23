@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Catch-probability calculator] — 2026-09-23
+Leg 4 of the Species database: full per-species pages milestone. Added
+`catchProbability.ts` (Gen III-VII shake-check formula, scoped to the five fixed-bonus
+balls — Poké/Great/Ultra/Safari/Master) and wired current-HP%/status-condition/Poké-Ball
+inputs into `SpeciesPage` on top of Leg 3's static base catch rate. Situational balls
+(Quick, Timer, Net, etc.) deferred — see TODO.md's Unscheduled section. See commit
+`010ead0`.
+
 ## [Full species page shell + core wanted fields] — 2026-09-23
 Leg 3 of the Species database: full per-species pages milestone. New `SpeciesPage`
 component, reached via a "View Full Page" button on `SpeciesDetailPopup`'s info view and

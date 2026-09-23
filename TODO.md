@@ -7,12 +7,6 @@ the original field-triage notes, carried into each leg below). Movesets and bree
 groups are deliberately out of this leg sequence — later-phase, deeper-schema items to be
 scoped as follow-on legs once Legs 1-5 ship.
 
-### [Catch-probability calculator] — Leg 4
-Research an existing open-source Gen 3+ catch-rate formula to adapt (per the milestone
-note — not built from scratch), then add current-HP/status-condition/Poké-Ball-type inputs
-on top of Leg 3's base catch rate display. Depends on Leg 3.
-Last touched: 2026-09-23. Re-check count: 0.
-
 ### [Safari Zone flee rate (curated, opt-in)] — Leg 5
 PokeAPI has no flee-rate field anywhere (confirmed live 2026-09-23) — this needs a small
 hand-curated table for species actually present in a Safari-Zone-style encounter, same
@@ -25,6 +19,16 @@ Last touched: 2026-09-23. Re-check count: 0.
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
+
+### [Situational Poké Balls in the catch-probability calculator] — unscheduled
+Leg 4 of the Species database milestone scoped the catch calculator (`catchProbability.ts`)
+to the five balls with a fixed catch-rate bonus under the Gen III+ shake-check formula
+(Poké/Great/Ultra/Safari/Master). The rest of `poke-balls.ts`'s "Caught In" list — Net,
+Nest, Dive, Repeat, Timer, Quick, Dusk, Fast, Level, Lure, Heavy, Love, Friend, Moon, Sport
+— all have conditional bonuses (turn count, location, target level/weight/species, time of
+day) the calculator doesn't collect inputs for yet. Pick up only if Vanny wants those balls
+supported; would need one extra input per conditional ball, not a formula change.
+Last touched: 2026-09-23. Re-check count: 0.
 
 ### [Generation-vii sprite URLs use the wrong extension] — unscheduled
 Surfaced by Leg 11's live-CDN verification for back-sprite support: `generationSpriteUrl` in
