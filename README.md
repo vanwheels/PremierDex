@@ -15,6 +15,12 @@ Structured after [GW2-Squaded](../GW2-Squaded)'s electron-vite scaffold.
   `data/pokemon/species.json`, which is committed and loaded at runtime.
 - Serebii and Bulbapedia — used manually for supplemental data later, never scraped;
   credited here once that data lands.
+- [pret](https://github.com/pret)'s Pokémon decompilation projects
+  ([pokeruby](https://github.com/pret/pokeruby),
+  [pokeemerald](https://github.com/pret/pokeemerald),
+  [pokefirered](https://github.com/pret/pokefirered)) — source of the curated Safari Zone
+  flee rate data in `src/shared/data/safari-flee-rates.ts` (each game's own
+  `safariZoneFleeRate` field, unavailable from PokeAPI or any wiki).
 
 ## Development
 
