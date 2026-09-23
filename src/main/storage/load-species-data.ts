@@ -4,6 +4,7 @@ import { app } from 'electron'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { EvolutionEdge } from '@shared/types/evolution'
 import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
+import type { SpeciesDetailsData } from '@shared/types/species-details'
 
 export interface SeedSpecies {
   id: number
@@ -86,4 +87,12 @@ export function loadEvolutionEdgesData(): EvolutionEdge[] {
 export function loadFormeSwitchGroupsData(): FormeSwitchGroup[] {
   const filePath = join(DATA_DIR, 'forme-switch-groups.json')
   return JSON.parse(readFileSync(filePath, 'utf-8')) as FormeSwitchGroup[]
+}
+
+/** Loads the static per-species/per-form detail data (Leg 1 of the Species database: full
+ * per-species pages milestone) written by `npm run fetch-species-details`. Same not-DB-backed
+ * shape as loadSpeciesAvailabilityData. */
+export function loadSpeciesDetailsData(): SpeciesDetailsData {
+  const filePath = join(DATA_DIR, 'species-details.json')
+  return JSON.parse(readFileSync(filePath, 'utf-8')) as SpeciesDetailsData
 }

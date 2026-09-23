@@ -20,6 +20,7 @@
     "fetch-species-availability": "tsx scripts/fetch-species-availability.ts",
     "fetch-evolution-chains": "tsx scripts/fetch-evolution-chains.ts",
     "build-forme-switch-groups": "tsx scripts/build-forme-switch-groups.ts",
+    "fetch-species-details": "tsx scripts/fetch-species-details.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
