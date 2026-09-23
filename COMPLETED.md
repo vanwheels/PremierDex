@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Wire species-detail dataset through IPC + renderer] — 2026-09-23
+Leg 2 of the Species database: full per-species pages milestone. Added
+`PokemonIpcChannel.loadSpeciesDetails`, its `pokemon-ipc.ts` handler, the preload
+bridge/index methods, and a `speciesDetails` slot in `useCollectionData` — same
+one-line-per-file pattern as `loadEvolutionEdges`/`loadFormeSwitchGroups`. No UI; verified
+via a clean `npm run typecheck` and confirming `data/pokemon/species-details.json` (Leg 1's
+live fetch output) is in place to be read.
+
 ## [PokeAPI species-detail dataset fetch] — 2026-09-23
 Leg 1 of the Species database: full per-species pages milestone. Wrote
 `scripts/fetch-species-details.ts`, `src/shared/types/species-details.ts`, and

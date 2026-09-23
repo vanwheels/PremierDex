@@ -7,14 +7,6 @@ the original field-triage notes, carried into each leg below). Movesets and bree
 groups are deliberately out of this leg sequence — later-phase, deeper-schema items to be
 scoped as follow-on legs once Legs 1-5 ship.
 
-### [Wire species-detail dataset through IPC + renderer] — Leg 2
-Add the IPC channel, preload bridge method, and `useCollectionData` slot for Leg 1's
-dataset, following the existing one-line-per-file pattern (`ipc-channels.ts`,
-`pokemon-ipc.ts`, `preload/bridge.ts`, `preload/index.ts`, `useCollectionData.ts` — ~10-15
-lines total, no new plumbing files). No UI yet — verified by confirming the data is
-reachable in the renderer, not a rendered page. Depends on Leg 1.
-Last touched: 2026-09-23. Re-check count: 0.
-
 ### [Full species page shell + core wanted fields] — Leg 3
 New page reached via a "View full page" link added to `SpeciesDetailPopup`'s info view (the
 popup stays a lightweight summary per the original 2026-09-22 decision). Wired as a sibling

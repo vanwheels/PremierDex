@@ -37,6 +37,10 @@ export const PokemonIpcChannel = {
    * non-evolutionary forme-switch group data (see load-species-data.ts), same
    * not-a-StorageAdapter-method shape as loadEvolutionEdges above. */
   loadFormeSwitchGroups: 'pokemon:formeSwitchGroups:load',
+  /** Leg 2 of the Species database: full per-species pages milestone: static per-species/
+   * per-form detail data (see load-species-data.ts), same not-a-StorageAdapter-method shape
+   * as loadFormeSwitchGroups above. */
+  loadSpeciesDetails: 'pokemon:speciesDetails:load',
   /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
    * see StorageAdapter.listEntryRibbons/setEntryRibbons/listEntryMarks/setEntryMarks' own
    * doc comments. */

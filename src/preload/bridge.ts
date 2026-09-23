@@ -5,6 +5,7 @@ import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { EvolutionEdge } from '@shared/types/evolution'
 import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
+import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
 import type { UpdaterBridge } from '@shared/updater/updater-provider'
 
@@ -62,6 +63,11 @@ export interface AppBridge extends UpdaterBridge {
    * renderer/dex/FormeSwitchGroupView.tsx). Not DB-backed — see
    * PokemonIpcChannel.loadFormeSwitchGroups' own comment. */
   loadFormeSwitchGroups(): Promise<FormeSwitchGroup[]>
+  /** Leg 2 of the Species database: full per-species pages milestone: static per-species/
+   * per-form detail data (ability descriptions, base happiness, EV yield, etc.), for the
+   * full species page (Leg 3). Not DB-backed — see PokemonIpcChannel.loadSpeciesDetails'
+   * own comment. */
+  loadSpeciesDetails(): Promise<SpeciesDetailsData>
   /** Opens a save dialog, writes the full collection to the chosen file. Null if the
    * user canceled the dialog. */
   exportCollectionToFile(): Promise<string | null>

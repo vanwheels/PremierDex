@@ -56,6 +56,7 @@ const bridge: AppBridge = {
   loadSpeciesAvailability: () => ipcRenderer.invoke(PokemonIpcChannel.loadSpeciesAvailability),
   loadEvolutionEdges: () => ipcRenderer.invoke(PokemonIpcChannel.loadEvolutionEdges),
   loadFormeSwitchGroups: () => ipcRenderer.invoke(PokemonIpcChannel.loadFormeSwitchGroups),
+  loadSpeciesDetails: () => ipcRenderer.invoke(PokemonIpcChannel.loadSpeciesDetails),
   exportCollectionToFile: (): Promise<string | null> => ipcRenderer.invoke(BackupIpcChannel.exportToFile),
   importCollectionFromFile: (): Promise<CollectionImportResult | null> =>
     ipcRenderer.invoke(BackupIpcChannel.importFromFile),

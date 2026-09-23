@@ -5,7 +5,8 @@ import { PokemonIpcChannel } from '@shared/storage/ipc-channels'
 import {
   loadEvolutionEdgesData,
   loadFormeSwitchGroupsData,
-  loadSpeciesAvailabilityData
+  loadSpeciesAvailabilityData,
+  loadSpeciesDetailsData
 } from '../storage/load-species-data'
 
 export function registerPokemonIpc(storage: StorageAdapter): void {
@@ -68,6 +69,7 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
   ipcMain.handle(PokemonIpcChannel.loadSpeciesAvailability, () => loadSpeciesAvailabilityData())
   ipcMain.handle(PokemonIpcChannel.loadEvolutionEdges, () => loadEvolutionEdgesData())
   ipcMain.handle(PokemonIpcChannel.loadFormeSwitchGroups, () => loadFormeSwitchGroupsData())
+  ipcMain.handle(PokemonIpcChannel.loadSpeciesDetails, () => loadSpeciesDetailsData())
   ipcMain.handle(PokemonIpcChannel.listEntryRibbons, (_event, entryId: number) => storage.listEntryRibbons(entryId))
   ipcMain.handle(PokemonIpcChannel.setEntryRibbons, (_event, entryId: number, ribbonNames: string[]) =>
     storage.setEntryRibbons(entryId, ribbonNames)
