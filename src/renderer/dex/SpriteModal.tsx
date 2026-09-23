@@ -23,6 +23,9 @@ export interface SpriteModalTarget {
 interface SpriteModalProps {
   target: SpriteModalTarget
   onClose: () => void
+  /** Leg 3 of the Species database milestone: lets SpeciesPage's shiny thumbnail open
+   * straight into the shiny view instead of always defaulting non-shiny. */
+  initialShiny?: boolean
 }
 
 const MODAL_SIZE = 200
@@ -64,10 +67,10 @@ function SpriteSlot({ src, alt, label }: { src: string; alt: string; label?: str
  * drawn until generation IV). A Back checkbox (Leg 11's back-sprite builders) applies to
  * whichever sprite(s) are currently shown, static or animated.
  */
-export function SpriteModal({ target, onClose }: SpriteModalProps): JSX.Element {
+export function SpriteModal({ target, onClose, initialShiny = false }: SpriteModalProps): JSX.Element {
   const generations = availableGenerations(target.firstAvailableGeneration)
   const [generation, setGeneration] = useState(generations[generations.length - 1])
-  const [shiny, setShiny] = useState(false)
+  const [shiny, setShiny] = useState(initialShiny)
   const [animated, setAnimated] = useState(false)
   const [back, setBack] = useState(false)
   const [preferredSource, setPreferredSource] = useState<AnimatedSource>('black-white')

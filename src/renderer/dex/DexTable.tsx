@@ -44,6 +44,9 @@ interface DexTableProps {
   forms: Form[]
   evolutionEdges: EvolutionEdge[]
   formeSwitchGroups: FormeSwitchGroup[]
+  /** Leg 3 of the Species database milestone: SpeciesDetailPopup's "View Full Page" —
+   * threaded up to App.tsx, which owns the full page's own AppView/target state. */
+  onOpenFullPage: (target: SpeciesDetailTarget) => void
 }
 
 /** Three-state header click cycle (Leg 16): unsorted/other-column → ascending →
@@ -94,7 +97,8 @@ export function DexTable({
   species,
   forms,
   evolutionEdges,
-  formeSwitchGroups
+  formeSwitchGroups,
+  onOpenFullPage
 }: DexTableProps): JSX.Element {
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
   const [expandedSpeciesIds, setExpandedSpeciesIds] = useState<Set<number>>(new Set())
@@ -296,6 +300,7 @@ export function DexTable({
           evolutionEdges={evolutionEdges}
           formeSwitchGroups={formeSwitchGroups}
           onClose={() => setSpeciesDetailTarget(null)}
+          onOpenFullPage={onOpenFullPage}
         />
       )}
       {originTarget && (

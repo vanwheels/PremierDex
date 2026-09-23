@@ -19,6 +19,7 @@ import {
 import { DexApplyTemplateModal } from './DexApplyTemplateModal'
 import { DexBoxPane } from './DexBoxPane'
 import { DexBoxTray } from './DexBoxTray'
+import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import type { Box } from './types'
 
 interface DexBoxGridProps {
@@ -95,6 +96,10 @@ interface DexBoxGridProps {
   /** Leg 1 of the Box View Move & Undo Operations milestone: cross-location move — see
    * StorageAdapter.moveEntriesToLocation's own doc comment. */
   onMoveEntriesToLocation: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
+  /** Leg 3 of the Species database milestone: threaded through to both DexBoxPane
+   * instances' SpeciesDetailPopup, same convention as evolutionEdges/formeSwitchGroups
+   * above. */
+  onOpenFullPage: (target: SpeciesDetailTarget) => void
 }
 
 /**
@@ -159,7 +164,8 @@ export function DexBoxGrid({
   onClearBoxPlaceholder,
   onClearAllBoxPlaceholders,
   onFillInPlaceholders,
-  onMoveEntriesToLocation
+  onMoveEntriesToLocation,
+  onOpenFullPage
 }: DexBoxGridProps): JSX.Element {
   const boxes = useMemo(
     () => buildBoxes(storageBoxes, species, forms, entries, boxPlaceholders),
@@ -452,6 +458,7 @@ export function DexBoxGrid({
           onSetBoxPlaceholder={onSetBoxPlaceholder}
           onClearBoxPlaceholder={onClearBoxPlaceholder}
           onCurrentBoxChange={handlePrimaryBoxChange}
+          onOpenFullPage={onOpenFullPage}
         />
         {secondBoxOpen && effectiveSecondLocationId !== null && secondBoxes.length === 0 && (
           <div className="dex-box-empty-state">Loading this location's boxes…</div>
@@ -480,6 +487,7 @@ export function DexBoxGrid({
             onSetBoxPlaceholder={onSetBoxPlaceholder}
             onClearBoxPlaceholder={onClearBoxPlaceholder}
             onRenameBox={onRenameBox}
+            onOpenFullPage={onOpenFullPage}
           />
         )}
         <DexBoxTray entries={unboxedEntries} onDropEntry={handleDropOnTray} onClickEntry={handleClickUnboxedEntry} />

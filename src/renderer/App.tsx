@@ -8,12 +8,16 @@ import { useCollectionData } from './useCollectionData'
 import { TrainerProfilesPanel } from './trainer/TrainerProfilesPanel'
 import { StorageLocationsPanel } from './storage-location/StorageLocationsPanel'
 import { CollectionView } from './collection/CollectionView'
+import { SpeciesPage } from './dex/SpeciesPage'
+import type { SpeciesDetailTarget } from './dex/SpeciesDetailPopup'
 
 /** Which top-level lens the collection is browsed through — the species-first Living Dex
- * grid, the owned-entries-grouped-by-origin/OT/shiny Collection view (Leg 18), or the
+ * grid, the owned-entries-grouped-by-origin/OT/shiny Collection view (Leg 18), the
  * Trainer Profiles/Storage Locations management tabs (Leg 1 of the nav-restructuring
- * milestone — previously always-mounted stacked panels above the Dex/Collection tabs). */
-type AppView = 'dex' | 'collection' | 'trainers' | 'storage-locations'
+ * milestone — previously always-mounted stacked panels above the Dex/Collection tabs), or
+ * the full species page (Leg 3 of the Species database milestone — reached only via
+ * SpeciesDetailPopup's "View Full Page" button, not a persistent nav tab). */
+type AppView = 'dex' | 'collection' | 'trainers' | 'storage-locations' | 'species'
 
 /** The v1 spreadsheet-style Living Dex grid. See docs/completed-archive/living-dex-v1.md's
  * [Spreadsheet-style Living Dex UI] item (Leg 3).
@@ -25,10 +29,19 @@ type AppView = 'dex' | 'collection' | 'trainers' | 'storage-locations'
  * of that view's third view-mode branch (Box, Leg 6). */
 export function App(): JSX.Element {
   const [view, setView] = useState<AppView>('dex')
+  // Leg 3 of the Species database milestone: the full page's own target, carried
+  // alongside `view` since AppView alone has no payload — set together with
+  // setView('species') by openFullPage below.
+  const [speciesPageTarget, setSpeciesPageTarget] = useState<SpeciesDetailTarget | null>(null)
   const data = useCollectionData()
 
   if (data.loading) {
     return <p>Loading…</p>
+  }
+
+  const openFullPage = (target: SpeciesDetailTarget): void => {
+    setSpeciesPageTarget(target)
+    setView('species')
   }
 
   return (
@@ -107,6 +120,7 @@ export function App(): JSX.Element {
               onClearAllBoxPlaceholders={data.clearAllBoxPlaceholders}
               onFillInPlaceholders={data.fillInPlaceholders}
               onMoveEntriesToLocation={data.moveEntriesToLocation}
+              onOpenFullPage={openFullPage}
             />
           </div>
           {view === 'collection' && (
@@ -115,6 +129,15 @@ export function App(): JSX.Element {
           {view === 'trainers' && <TrainerProfilesPanel key={data.importVersion} onEntriesChanged={data.refetchEntries} />}
           {view === 'storage-locations' && (
             <StorageLocationsPanel key={data.importVersion} onLocationsChanged={data.loadAll} />
+          )}
+          {view === 'species' && speciesPageTarget && (
+            <SpeciesPage
+              target={speciesPageTarget}
+              species={data.species}
+              forms={data.forms}
+              speciesDetails={data.speciesDetails}
+              onClose={() => setView('dex')}
+            />
           )}
         </main>
       </div>

@@ -20,6 +20,11 @@ interface SpeciesDetailPopupProps {
   evolutionEdges: EvolutionEdge[]
   formeSwitchGroups: FormeSwitchGroup[]
   onClose: () => void
+  /** Leg 3 of the Species database milestone: "View Full Page" in the info view — opens
+   * the new full species page (App.tsx's 'species' AppView) on the currently-viewed
+   * species/form (`current` below, not the original `target` prop, so browsing the
+   * evolution tree/forme switcher before clicking through lands on the right one). */
+  onOpenFullPage: (target: SpeciesDetailTarget) => void
 }
 
 const SPRITE_SIZE = 96
@@ -49,7 +54,8 @@ export function SpeciesDetailPopup({
   forms,
   evolutionEdges,
   formeSwitchGroups,
-  onClose
+  onClose,
+  onOpenFullPage
 }: SpeciesDetailPopupProps): JSX.Element {
   const [current, setCurrent] = useState(target)
   const [view, setView] = useState<'info' | 'tree' | 'formes'>('info')
@@ -135,6 +141,9 @@ export function SpeciesDetailPopup({
                   View Alternate Formes
                 </button>
               )}
+              <button type="button" onClick={() => onOpenFullPage(current)}>
+                View Full Page
+              </button>
             </div>
           </>
         )}

@@ -1,0 +1,91 @@
+/**
+ * Leg 3 of the Species database milestone: the full species page shell (App.tsx's
+ * 'species' AppView) — panel chrome comes from layout.css's shared `.species-page`
+ * selector; this file is just the page's own internal layout.
+ */
+
+.species-page {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.species-page-back {
+  border: none;
+  background: none;
+  box-shadow: none;
+  color: var(--muted);
+  padding: 0.1rem 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.species-page-back:hover {
+  color: var(--text);
+}
+
+.species-page-title {
+  text-align: center;
+  margin-top: 0;
+}
+
+.species-page-sprites {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.species-page-sprite-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.species-page-sprite-button img {
+  image-rendering: pixelated;
+  display: block;
+}
+
+.species-page-sprite-missing {
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+}
+
+.species-page-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin: 0;
+}
+
+.species-page-field dt {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.species-page-field dd {
+  margin: 0.15rem 0 0;
+}
+
+.species-page-abilities {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.species-page-abilities p {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+}

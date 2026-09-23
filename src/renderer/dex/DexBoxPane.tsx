@@ -92,6 +92,9 @@ interface DexBoxPaneProps {
    * this through too since the component doesn't know which one it is, but DexBoxGrid
    * simply doesn't wire it up there. */
   onCurrentBoxChange?: (box: Box) => void
+  /** Leg 3 of the Species database milestone: SpeciesDetailPopup's "View Full Page" —
+   * threaded up to App.tsx, which owns the full page's own AppView/target state. */
+  onOpenFullPage: (target: SpeciesDetailTarget) => void
 }
 
 /**
@@ -134,7 +137,8 @@ export function DexBoxPane({
   onRenameBox,
   onSetBoxPlaceholder,
   onClearBoxPlaceholder,
-  onCurrentBoxChange
+  onCurrentBoxChange,
+  onOpenFullPage
 }: DexBoxPaneProps): JSX.Element {
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
   const [boxIndex, setBoxIndex] = useState(initialBoxIndex)
@@ -453,6 +457,7 @@ export function DexBoxPane({
           evolutionEdges={evolutionEdges}
           formeSwitchGroups={formeSwitchGroups}
           onClose={() => setSpeciesDetailTarget(null)}
+          onOpenFullPage={onOpenFullPage}
         />
       )}
       {movingEntryIds && (

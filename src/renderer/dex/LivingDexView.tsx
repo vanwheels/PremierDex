@@ -16,6 +16,7 @@ import { autoAssignedLocationOnCheckIn } from './autoAssignLocation'
 import { DexTable } from './DexTable'
 import { DexHybridGrid } from './DexHybridGrid'
 import { DexBoxGrid } from './DexBoxGrid'
+import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import type { FillInPlacement, TemplatePlacement } from './boxTemplates'
 import { DexLocationTabs } from './DexLocationTabs'
 import { DexToolbar } from './DexToolbar'
@@ -85,6 +86,9 @@ export interface LivingDexViewProps {
   /** Leg 1 of the Box View Move & Undo Operations milestone: cross-location move — see
    * StorageAdapter.moveEntriesToLocation's own doc comment. */
   onMoveEntriesToLocation: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
+  /** Leg 3 of the Species database milestone: threaded down to DexTable/DexBoxGrid's
+   * SpeciesDetailPopup — opens App.tsx's full species page. */
+  onOpenFullPage: (target: SpeciesDetailTarget) => void
 }
 
 /** The Living Dex tab's own content: the per-location tab bar, completion stats, the
@@ -128,7 +132,8 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onClearAllBoxPlaceholders,
     onBulkSetEntryGender,
     onFillInPlaceholders,
-    onMoveEntriesToLocation
+    onMoveEntriesToLocation,
+    onOpenFullPage
   } = props
 
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
@@ -270,6 +275,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           forms={forms}
           evolutionEdges={evolutionEdges}
           formeSwitchGroups={formeSwitchGroups}
+          onOpenFullPage={onOpenFullPage}
         />
       </div>
       {/* Same hidden-not-unmounted treatment as DexTable above, so switching back and forth
@@ -318,6 +324,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           onClearAllBoxPlaceholders={onClearAllBoxPlaceholders}
           onFillInPlaceholders={onFillInPlaceholders}
           onMoveEntriesToLocation={onMoveEntriesToLocation}
+          onOpenFullPage={onOpenFullPage}
         />
       </div>
     </>
