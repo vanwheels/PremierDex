@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Species detail popup + evolution family tree Leg 11: back-sprite URL support] — 2026-09-22
+Added a `back` param to `sprites.ts`'s three builders, verified live against the CDN before
+writing any code (nesting order, which generations lack a `back/` folder entirely vs. just
+inherit the existing shiny gap). Also surfaced a pre-existing, unrelated bug — generation-vii
+serves `.gif` not `.png` — logged to TODO.md rather than fixed in this leg. See commit
+`f3fc150`.
+
 ## [Species detail popup + evolution family tree Leg 10: scoping discussion] — 2026-09-22
 Pure discussion leg, no code changes. Vanny raised wanting the app to eventually grow into a
 curated mainline-games species database (movesets, base stats, catch rate, breeding/egg
