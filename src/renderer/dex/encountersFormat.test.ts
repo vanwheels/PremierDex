@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { EncounterData } from '@shared/types/encounters'
-import { encounterLocationsForForm } from './encountersFormat'
+import type { EncounterData, EncounterDetail } from '@shared/types/encounters'
+import { encounterSectionsForForm } from './encountersFormat'
 
 const BASE_DATA: EncounterData = {
   encounters: {},
@@ -9,184 +9,84 @@ const BASE_DATA: EncounterData = {
   versions: ['red', 'blue', 'sword', 'the-isle-of-armor-sword']
 }
 
-describe('encounterLocationsForForm', () => {
+const detail = (over: Partial<EncounterDetail> = {}): EncounterDetail => ({
+  minLevel: 3,
+  maxLevel: 3,
+  chance: 100,
+  methodIndex: 0,
+  conditionValues: [],
+  ...over
+})
+
+/** One species (pokeapiId 1) with the given [locationAreaIndex, versionIndex, details] rows. */
+function dataWith(rows: Array<[number, number, EncounterDetail[]]>): EncounterData {
+  return {
+    ...BASE_DATA,
+    encounters: {
+      1: rows.map(([locationAreaIndex, versionIndex, encounterDetails]) => ({
+        locationAreaIndex,
+        versionDetails: [{ versionIndex, maxChance: 100, encounterDetails }]
+      }))
+    }
+  }
+}
+
+describe('encounterSectionsForForm', () => {
   it('returns no data for a pokeapiId absent from the dataset', () => {
-    expect(encounterLocationsForForm(BASE_DATA, 999)).toEqual([])
+    expect(encounterSectionsForForm(BASE_DATA, 999)).toEqual([])
   })
 
   it('strips the -area suffix and formats a bare location/method/level/chance row', () => {
-    const data: EncounterData = {
-      ...BASE_DATA,
-      encounters: {
-        1: [
-          {
-            locationAreaIndex: 0,
-            versionDetails: [
-              {
-                versionIndex: 0,
-                maxChance: 100,
-                encounterDetails: [{ minLevel: 3, maxLevel: 3, chance: 100, methodIndex: 0, conditionValues: [] }]
-              }
-            ]
-          }
-        ]
-      }
-    }
-    expect(encounterLocationsForForm(data, 1)).toEqual([
+    expect(encounterSectionsForForm(dataWith([[0, 0, [detail()]]]), 1)).toEqual([
       {
-        location: 'Kanto Route 1',
-        details: [{ gamesLabel: 'Red', method: 'Walk', levelRange: 'Lv. 3', chance: '100%', conditions: null }]
+        gameId: 'red',
+        label: 'Red',
+        locations: [
+          { location: 'Kanto Route 1', rows: [{ method: 'Walk', levelRange: 'Lv. 3', chance: '100%', conditions: null }] }
+        ]
       }
     ])
   })
 
   it('renders a level range and a formatted condition list', () => {
-    const data: EncounterData = {
-      ...BASE_DATA,
-      encounters: {
-        1: [
-          {
-            locationAreaIndex: 0,
-            versionDetails: [
-              {
-                versionIndex: 0,
-                maxChance: 40,
-                encounterDetails: [
-                  { minLevel: 3, maxLevel: 5, chance: 40, methodIndex: 0, conditionValues: ['time-day'] }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    }
-    expect(encounterLocationsForForm(data, 1)).toEqual([
-      {
-        location: 'Kanto Route 1',
-        details: [{ gamesLabel: 'Red', method: 'Walk', levelRange: 'Lv. 3-5', chance: '40%', conditions: 'Time Day' }]
-      }
+    const data = dataWith([[0, 0, [detail({ minLevel: 3, maxLevel: 5, chance: 40, conditionValues: ['time-day'] })]]])
+    expect(encounterSectionsForForm(data, 1)[0].locations[0].rows).toEqual([
+      { method: 'Walk', levelRange: 'Lv. 3-5', chance: '40%', conditions: 'Time Day' }
     ])
   })
 
-  it('merges versions sharing an identical method/level/chance/condition combination into one games label', () => {
-    const data: EncounterData = {
-      ...BASE_DATA,
-      encounters: {
-        1: [
-          {
-            locationAreaIndex: 0,
-            versionDetails: [
-              {
-                versionIndex: 0,
-                maxChance: 100,
-                encounterDetails: [{ minLevel: 3, maxLevel: 3, chance: 100, methodIndex: 0, conditionValues: [] }]
-              },
-              {
-                versionIndex: 1,
-                maxChance: 100,
-                encounterDetails: [{ minLevel: 3, maxLevel: 3, chance: 100, methodIndex: 0, conditionValues: [] }]
-              }
-            ]
-          }
-        ]
-      }
-    }
-    expect(encounterLocationsForForm(data, 1)).toEqual([
-      {
-        location: 'Kanto Route 1',
-        details: [{ gamesLabel: 'Red/Blue', method: 'Walk', levelRange: 'Lv. 3', chance: '100%', conditions: null }]
-      }
+  it('gives each game its own section, in release order, even when the data lists them out of order', () => {
+    const data = dataWith([
+      [0, 1, [detail()]],
+      [0, 0, [detail()]]
+    ])
+    expect(encounterSectionsForForm(data, 1).map((s) => s.label)).toEqual(['Red', 'Blue'])
+  })
+
+  it('sorts a location\'s rows by chance descending', () => {
+    const data = dataWith([[0, 0, [detail({ chance: 30 }), detail({ chance: 70, methodIndex: 1 })]]])
+    expect(encounterSectionsForForm(data, 1)[0].locations[0].rows.map((r) => [r.method, r.chance])).toEqual([
+      ['Old Rod', '70%'],
+      ['Walk', '30%']
     ])
   })
 
-  it('keeps distinct method/level/chance combinations as separate rows, sorted by chance descending', () => {
-    const data: EncounterData = {
-      ...BASE_DATA,
-      encounters: {
-        1: [
-          {
-            locationAreaIndex: 0,
-            versionDetails: [
-              {
-                versionIndex: 0,
-                maxChance: 100,
-                encounterDetails: [
-                  { minLevel: 3, maxLevel: 3, chance: 30, methodIndex: 0, conditionValues: [] },
-                  { minLevel: 5, maxLevel: 5, chance: 70, methodIndex: 1, conditionValues: [] }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    }
-    expect(encounterLocationsForForm(data, 1)).toEqual([
-      {
-        location: 'Kanto Route 1',
-        details: [
-          { gamesLabel: 'Red', method: 'Old Rod', levelRange: 'Lv. 5', chance: '70%', conditions: null },
-          { gamesLabel: 'Red', method: 'Walk', levelRange: 'Lv. 3', chance: '30%', conditions: null }
-        ]
-      }
+  it('sorts a game\'s locations alphabetically by display name', () => {
+    const data = dataWith([
+      [1, 0, [detail()]],
+      [0, 0, [detail()]]
     ])
+    expect(encounterSectionsForForm(data, 1)[0].locations.map((l) => l.location)).toEqual(['Kanto Route 1', 'Kanto Route 2'])
   })
 
-  it('labels Isle of Armor/Crown Tundra DLC encounters with a suffix distinct from the base game', () => {
-    const data: EncounterData = {
-      ...BASE_DATA,
-      encounters: {
-        1: [
-          {
-            locationAreaIndex: 0,
-            versionDetails: [
-              {
-                versionIndex: 3, // the-isle-of-armor-sword
-                maxChance: 50,
-                encounterDetails: [{ minLevel: 10, maxLevel: 10, chance: 50, methodIndex: 0, conditionValues: [] }]
-              }
-            ]
-          }
-        ]
-      }
-    }
-    expect(encounterLocationsForForm(data, 1)).toEqual([
-      {
-        location: 'Kanto Route 1',
-        details: [
-          { gamesLabel: 'Sword (Isle of Armor)', method: 'Walk', levelRange: 'Lv. 10', chance: '50%', conditions: null }
-        ]
-      }
+  it('puts Isle of Armor/Crown Tundra DLC encounters in their own suffixed section, coloured as the base game', () => {
+    const data = dataWith([
+      [0, 3, [detail({ chance: 50 })]],
+      [0, 2, [detail()]]
     ])
-  })
-
-  it('sorts location areas alphabetically by display name', () => {
-    const data: EncounterData = {
-      ...BASE_DATA,
-      encounters: {
-        1: [
-          {
-            locationAreaIndex: 1,
-            versionDetails: [
-              {
-                versionIndex: 0,
-                maxChance: 100,
-                encounterDetails: [{ minLevel: 3, maxLevel: 3, chance: 100, methodIndex: 0, conditionValues: [] }]
-              }
-            ]
-          },
-          {
-            locationAreaIndex: 0,
-            versionDetails: [
-              {
-                versionIndex: 0,
-                maxChance: 100,
-                encounterDetails: [{ minLevel: 3, maxLevel: 3, chance: 100, methodIndex: 0, conditionValues: [] }]
-              }
-            ]
-          }
-        ]
-      }
-    }
-    expect(encounterLocationsForForm(data, 1).map((l) => l.location)).toEqual(['Kanto Route 1', 'Kanto Route 2'])
+    expect(encounterSectionsForForm(data, 1).map((s) => [s.label, s.gameId])).toEqual([
+      ['Sword', 'sword'],
+      ['Sword (Isle of Armor)', 'sword']
+    ])
   })
 })

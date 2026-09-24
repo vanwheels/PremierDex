@@ -6,7 +6,8 @@ import type { SpeciesAvailabilityData } from '@shared/types/species-availability
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import { CatchProbabilityCalculator } from './CatchProbabilityCalculator'
-import { encounterLocationsForForm } from './encountersFormat'
+import { encounterSectionsForForm } from './encountersFormat'
+import { gameColor } from './gameColors'
 import { formDisplayName, formShortLabel, speciesDisplayName } from './formNames'
 import { regionalDexNumbersForGeneration } from './regionalDexNumbers'
 import { formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
@@ -76,7 +77,7 @@ export function SpeciesPage({
   const speciesDetail = speciesDetails.species[target.speciesId]
   const formDetail = form ? speciesDetails.forms[form.pokeapiId] : undefined
   const safariFleeRates = safariFleeRatesForSpecies(target.speciesId)
-  const whereToFind = form ? encounterLocationsForForm(encounterData, form.pokeapiId) : []
+  const whereToFind = form ? encounterSectionsForForm(encounterData, form.pokeapiId) : []
   // Cosmetic variants share their base form's data, so only real forms get a toggle.
   const speciesForms = forms.filter((f) => f.speciesId === target.speciesId && f.formCategory !== 'cosmetic_variant')
   const regionalDexes = regionalDexNumbersForGeneration(target.speciesId, generation, speciesAvailability)
@@ -200,21 +201,40 @@ export function SpeciesPage({
           )}
           {whereToFind.length > 0 && (
             <Box title="Where to Find" className="species-page-box-wide">
-              <ul className="species-page-where-to-find">
-                {whereToFind.map((loc) => (
-                  <li key={loc.location}>
-                    <strong>{loc.location}</strong>
-                    <ul className="species-page-where-to-find-details">
-                      {loc.details.map((detail, i) => (
-                        <li key={i}>
-                          {detail.gamesLabel}: {detail.method}, {detail.levelRange} ({detail.chance})
-                          {detail.conditions && ` — ${detail.conditions}`}
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ))}
-              </ul>
+              {whereToFind.map((game) => {
+                const { bg, fg } = gameColor(game.gameId)
+                return (
+                  <section key={game.label} className="species-page-encounter-game">
+                    <h4 className="species-page-encounter-game-header" style={{ backgroundColor: bg, color: fg }}>
+                      {game.label}
+                    </h4>
+                    <table className="species-page-encounter-table">
+                      <thead>
+                        <tr>
+                          <th>Location</th>
+                          <th>Method</th>
+                          <th>Level</th>
+                          <th>Chance</th>
+                          <th>Conditions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {game.locations.flatMap((loc) =>
+                          loc.rows.map((row, i) => (
+                            <tr key={`${loc.location}-${i}`}>
+                              <td>{i === 0 ? loc.location : ''}</td>
+                              <td>{row.method}</td>
+                              <td>{row.levelRange}</td>
+                              <td>{row.chance}</td>
+                              <td>{row.conditions ?? ''}</td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </section>
+                )
+              })}
             </Box>
           )}
         </div>
