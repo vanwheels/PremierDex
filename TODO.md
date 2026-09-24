@@ -14,7 +14,10 @@ All 4 legs shipped 2026-09-24 (see COMPLETED.md). Milestone deliberately left op
 is giving feedback on the Leg 3 Species page reflow, tied in with Leg 4's Dex tab, before it
 closes out (MILESTONES.md entry + post-mortem not yet written). Types/base-stat columns, the
 Dex tab's Moves/Search sub-tabs are deferred — see the Species/Dex reference data layer
-item below; the sprite-grid view mode is its own Unscheduled item.
+item below; the sprite-grid view mode is its own Unscheduled item. Vanny's feedback pass also
+spun off the Sprite system overhaul (Future Milestones). Open question for Vanny: the Dex
+tab's Locations sub-tab still lists regional/alternate forms as separate entries — fold to
+one per species like the Pokémon list?
 
 ## Unscheduled
 
@@ -160,6 +163,19 @@ Zamazenta/Ogerpon/Silvally catalogue) has been shown to actually misfire today.
 Blocked: needs a real false positive or wrong-game forme to actually surface before this is
 worth scoping — not built speculatively ahead of demonstrated need.
 Last touched: 2026-09-19. Re-check count: 0.
+
+### [Sprite system overhaul] — future milestone
+Raised in Vanny's 2026-09-24 feedback pass on the Species page; scoped as its own milestone,
+needs a design/discussion pass before legs can be planned. Current sprites come from PokeAPI's
+per-generation folders only, which leaves gaps: Gen 1 has no shiny art (don't show a shiny slot
+there), Gen 2 sprites aren't transparent PNGs, Gen 7 shows nothing (see the Generation-vii
+extension item under Unscheduled — subsumed by this), and Gen 8/9 fall back to boxed BDSP/SV
+art with no shiny variants. Wanted: official 3D models for Gen 7+ (animated as a bonus), and
+per-version sprite sets where a generation's games differ — D/P/Pt vs HG/SS, R/S vs FR/LG vs
+Emerald — shown side by side like the reference Serebii-style Images section. Open questions:
+sprite source per generation (PokeAPI's `other/home` renders / Showdown animated sets / other),
+whether to bundle or fetch, and how the per-version toggle fits the Gen I-IX strip.
+Last touched: 2026-09-24. Re-check count: 0.
 
 ### [Species/Dex reference data layer] — future milestone
 Split out 2026-09-24 during Full UI/UX pass scoping: base stats, movesets, egg groups, Base

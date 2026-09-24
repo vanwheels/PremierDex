@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Full UI/UX pass on the Dex interface, feedback pass on Legs 3-4] — 2026-09-24
+Dex list is now one row per species with a sprite beside the name and italics-only hidden
+abilities; forms moved to a toggle strip on the species page, and its Regional Dex box follows
+the selected generation. Sprite complaints became the Sprite system overhaul milestone (see
+TODO.md). Milestone still open. See commit `7d51e67`.
+
 ## [Full UI/UX pass on the Dex interface, Leg 4] — 2026-09-24
 Dex tab now has a Pokémon sub-tab (search/sort by Name, Dex #, Abilities, with Generation
 headers in Dex order) and a Locations sub-tab (location list -> species/games, inverted from
