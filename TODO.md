@@ -1,14 +1,9 @@
 # TODO
 
-## Current Milestone: Sprite system overhaul
+## Current Milestone: none scoped
 
-Started 2026-09-24. Design pass done — decisions and per-generation sources are in
-`docs/investigations/sprite-sources.md`. Stays fetch-from-CDN (bundling is a separate future
-discussion); Gen 8/9 use HOME renders, Gen 7 keeps the USUM gifs, Gen 2 uses `transparent/`.
-
-All four legs are built. Remaining: Vanny's manual check of the running app (version chips,
-per-generation persistence, modal opening on the chosen game), then close out the milestone
-(post-mortem, `MILESTONES.md`, archive legs).
+Sprite system overhaul shipped 2026-09-24 (see MILESTONES.md). Next milestone is picked from
+Unscheduled / Future Milestones below.
 
 ## Unscheduled
 
