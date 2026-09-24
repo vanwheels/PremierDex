@@ -6,12 +6,13 @@ import { ThemeModeToggle } from './theme/ThemeModeToggle'
 import { LivingDexView } from './dex/LivingDexView'
 import { useCollectionData } from './useCollectionData'
 import { SpeciesPage } from './dex/SpeciesPage'
+import { DexTab } from './dex/DexTab'
 import type { SpeciesDetailTarget } from './dex/SpeciesDetailPopup'
 
 /** Which top-level view is showing. 'collection' is what used to be the Living Dex tab
  * (Leg 1 of the Full UI/UX pass — it now also hosts the Storage Locations/Trainer Profiles
  * popups, and the old group-by Collection tab is gone); 'dex' is the new species reference
- * browser (placeholder until Leg 4); 'species' is the full species page (Leg 3 of the
+ * browser (Leg 4 — Pokémon list + Locations sub-tabs); 'species' is the full species page (Leg 3 of the
  * Species database milestone — reached only via SpeciesDetailPopup's "View Full Page"
  * button, not a persistent nav tab). */
 type AppView = 'collection' | 'dex' | 'species'
@@ -30,6 +31,8 @@ export function App(): JSX.Element {
   // alongside `view` since AppView alone has no payload — set together with
   // setView('species') by openFullPage below.
   const [speciesPageTarget, setSpeciesPageTarget] = useState<SpeciesDetailTarget | null>(null)
+  // Which top-level tab the species page's Back button returns to — see openFullPage.
+  const [speciesReturnView, setSpeciesReturnView] = useState<'collection' | 'dex'>('collection')
   const data = useCollectionData()
 
   if (data.loading) {
@@ -37,6 +40,10 @@ export function App(): JSX.Element {
   }
 
   const openFullPage = (target: SpeciesDetailTarget): void => {
+    // Both the Collection tab's popup and the Dex tab's list open the page; Back returns
+    // to whichever was showing. Guarded so opening from within the species page itself
+    // (none does today) couldn't overwrite the return tab with 'species'.
+    if (view !== 'species') setSpeciesReturnView(view)
     setSpeciesPageTarget(target)
     setView('species')
   }
@@ -108,7 +115,17 @@ export function App(): JSX.Element {
               onEntriesChanged={data.refetchEntries}
             />
           </div>
-          {view === 'dex' && <p>Dex — coming soon.</p>}
+          {/* Kept mounted like the Collection view above, so the Dex tab's search/sort/
+           * selected-location state survives a round trip through a species page. */}
+          <div hidden={view !== 'dex'}>
+            <DexTab
+              species={data.species}
+              forms={data.forms}
+              speciesDetails={data.speciesDetails}
+              encounterData={data.encounterData}
+              onOpenSpecies={openFullPage}
+            />
+          </div>
           {view === 'species' && speciesPageTarget && (
             <SpeciesPage
               target={speciesPageTarget}
@@ -117,7 +134,7 @@ export function App(): JSX.Element {
               speciesDetails={data.speciesDetails}
               encounterData={data.encounterData}
               speciesAvailability={data.speciesAvailability}
-              onClose={() => setView('collection')}
+              onClose={() => setView(speciesReturnView)}
             />
           )}
         </main>

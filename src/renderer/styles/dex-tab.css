@@ -1,0 +1,173 @@
+/**
+ * Full UI/UX pass Leg 4: the Dex tab (DexTab.tsx) — sub-tab strip, Pokémon list, Locations
+ * browser. Link-style name buttons strip the global button chrome (same treatment as
+ * species-page.css's .species-page-back) so a row reads as a list line, not a toolbar.
+ */
+
+.dex-tab {
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+.dex-tab-subtabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dex-tab-subtab {
+  border: none;
+  border-radius: 6px 6px 0 0;
+  background: none;
+  box-shadow: none;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 0.4rem 1rem;
+}
+
+.dex-tab-subtab.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.dex-tab-search {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0.6rem;
+}
+
+.dex-tab-empty {
+  color: var(--muted);
+}
+
+.dex-list-header,
+.dex-list-row {
+  display: grid;
+  grid-template-columns: 4rem 1fr 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0.6rem;
+}
+
+.dex-list-header {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.dex-list-sort {
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0.15rem 0;
+  color: var(--muted);
+  font-weight: 600;
+  text-align: left;
+}
+
+.dex-list-sort:hover {
+  color: var(--text);
+}
+
+.dex-list-generation {
+  margin: 0.9rem 0 0.2rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.9rem;
+  background: var(--surface);
+  border-radius: 6px;
+}
+
+.dex-list-row:hover {
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+}
+
+.dex-list-number {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.dex-list-name {
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  color: var(--text);
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.dex-list-name:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.dex-list-abilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.9rem;
+}
+
+.dex-list-ability-hidden {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.dex-locations {
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.dex-locations ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dex-locations-list ul {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.dex-locations-item {
+  display: block;
+  width: 100%;
+  border: none;
+  background: none;
+  box-shadow: none;
+  text-align: left;
+  color: var(--muted);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.dex-locations-item:hover {
+  color: var(--text);
+}
+
+.dex-locations-item.active {
+  color: var(--text);
+  background: var(--surface);
+  font-weight: 600;
+}
+
+.dex-locations-detail h3 {
+  margin-top: 0;
+}
+
+.dex-locations-species {
+  display: grid;
+  grid-template-columns: 4rem 1fr 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0.6rem;
+}
+
+.dex-locations-games {
+  color: var(--muted);
+  font-size: 0.85rem;
+}

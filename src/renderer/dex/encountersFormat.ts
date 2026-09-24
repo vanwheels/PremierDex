@@ -40,7 +40,7 @@ export interface EncounterLocationSummary {
   details: EncounterDetailSummary[]
 }
 
-interface GameRef {
+export interface GameRef {
   /** Zero-padded ORIGIN_GAMES index (as a string, so it sorts with unmapped version names
    * below it) — originGameOrder() can't be reused directly, since it looks up by display
    * name and DLC-suffixed labels aren't in ORIGIN_GAMES. */
@@ -48,7 +48,7 @@ interface GameRef {
   label: string
 }
 
-function gameRefForVersion(versionName: string): GameRef {
+export function gameRefForVersion(versionName: string): GameRef {
   const dlc = DLC_VERSIONS[versionName]
   const gameId = dlc?.gameId ?? versionName
   const gameIndex = ORIGIN_GAMES.findIndex((g) => g.id === gameId)
@@ -57,6 +57,11 @@ function gameRefForVersion(versionName: string): GameRef {
     sortKey: gameIndex === -1 ? versionName : String(gameIndex).padStart(3, '0'),
     label: dlc ? `${baseName} (${dlc.dlcLabel})` : baseName
   }
+}
+
+/** Display label for a PokeAPI location-area slug ("kanto-route-1-area" -> "Kanto Route 1"). */
+export function locationAreaLabel(areaSlug: string): string {
+  return slugDisplayName(areaSlug.replace(/-area$/, ''))
 }
 
 function levelRangeLabel(minLevel: number, maxLevel: number): string {
@@ -122,7 +127,7 @@ export function encounterLocationsForForm(encounterData: EncounterData, pokeapiI
       }))
 
     return {
-      location: slugDisplayName(encounterData.locationAreas[locationEntry.locationAreaIndex].replace(/-area$/, '')),
+      location: locationAreaLabel(encounterData.locationAreas[locationEntry.locationAreaIndex]),
       details
     }
   })
