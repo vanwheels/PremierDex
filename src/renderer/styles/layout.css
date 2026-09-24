@@ -99,18 +99,36 @@
   align-items: center;
 }
 
-/* ThemeModeToggle (app-header-controls) — plain buttons in a row, "active" reusing the
-   same border-color/color: var(--accent) treatment .app-view-tab.active already uses
-   rather than a bespoke segmented-control look. Same pattern as GW2-Squaded's own
-   theme-mode-row. */
-.theme-mode-row {
+/* ThemeModeToggle (app-header-controls) — the two icon buttons sit inside one bordered box
+   (per the UI/UX pass sketch); the buttons themselves drop their own chrome, and "active"
+   is an accent outline on the icon's cell. Neither active = 'system' mode. */
+.theme-toggle {
   display: flex;
-  gap: 0.35rem;
+  gap: 0.15rem;
+  padding: 0.15rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
 }
 
-.theme-mode-option.active {
+.theme-toggle-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid transparent;
+  background: none;
+  box-shadow: none;
+  color: var(--text);
+}
+
+.theme-toggle-option:hover:not(:disabled) {
+  border-color: var(--border);
+}
+
+.theme-toggle-option.active {
   border-color: var(--accent);
-  color: var(--accent);
+  background: var(--surface-raised);
 }
 
 .backup-status {
@@ -191,8 +209,8 @@
   margin-bottom: 0;
 }
 
-/* Same plain-buttons-as-radio-group treatment as theme-mode-row/theme-mode-option —
-   kept as its own class rather than reusing those directly. */
+/* Plain-buttons-as-radio-group treatment (same "active" look as .app-view-tab.active) —
+   kept as its own class rather than reusing the theme toggle's. */
 .dex-view-mode-row {
   display: flex;
   gap: 0.35rem;
