@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Full UI/UX pass on the Dex interface, Leg 4] — 2026-09-24
+Dex tab now has a Pokémon sub-tab (search/sort by Name, Dex #, Abilities, with Generation
+headers in Dex order) and a Locations sub-tab (location list -> species/games, inverted from
+`encounters.json`). SpeciesPage's Back now returns to the tab it was opened from. Types/base
+stats, Moves, and the sprite-grid mode deferred. Milestone left open pending Vanny's Leg 3
+feedback. See commit `095a940`.
+
 ## [Full UI/UX pass on the Dex interface, Leg 3] — 2026-09-24
 Species page reflowed into sketch-2's box layout with an inline Gen I-IX sprite strip (sprites
 only; SpriteModal kept for Animated/Back/gender pair). Types and base stats not placed — no

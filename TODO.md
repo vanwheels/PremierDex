@@ -4,30 +4,29 @@
 
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones —
 many input fields, some overlapping in function. Scoped 2026-09-24 from Vanny's hand-drawn
-sketches into 4 legs (Legs 1-3 shipped 2026-09-24, see COMPLETED.md), covering everything buildable without new species/move/stat
+sketches into 4 legs (all shipped 2026-09-24, see COMPLETED.md), covering everything buildable without new species/move/stat
 data. List view's right-click context menu for Ribbons & Marks/Edit Origin (confirmed
 unintuitive by Vanny 2026-09-20) gets revisited as part of Leg 1's nav rework rather than
 fixed in isolation. Sketches and the decisions behind them: `docs/design/ui-ux-pass/`
 (read its README first — a clean session has no other copy of the screenshots).
 
-### [Full UI/UX pass on the Dex interface] — Leg 4
-New Dex tab: Showdown/Serebii-inspired species reference list (Name/Dex #/Abilities columns,
-searchable/sortable), plus a Locations sub-tab (species-per-location browse, built off the
-already-shipped `encounters.json` per-game data). Types and base-stat columns, the Moves
-sub-tab, and search-by-move/egg-group are deferred to a follow-up leg once the Species/Dex
-reference data layer milestone ships that data — ships as a thin v1 per Vanny's 2026-09-24
-call, not held for a complete column set. The sprite-grid view mode (Hybrid-view style)
-mentioned in discussion is explicitly out of scope for this leg.
-SpeciesPage's Back button currently always returns to the Collection tab (Leg 1 had only
-one entry point); once the Dex tab opens species pages too, it needs to remember which
-tab it came from.
-Last touched: 2026-09-24. Re-check count: 0.
+All 4 legs shipped 2026-09-24 (see COMPLETED.md). Milestone deliberately left open: Vanny
+is giving feedback on the Leg 3 Species page reflow, tied in with Leg 4's Dex tab, before it
+closes out (MILESTONES.md entry + post-mortem not yet written). Types/base-stat columns, the
+Dex tab's Moves/Search sub-tabs are deferred — see the Species/Dex reference data layer
+item below; the sprite-grid view mode is its own Unscheduled item.
 
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
+
+### [Dex tab sprite-grid view mode] — unscheduled
+Hybrid-view-style sprite grid as an alternative to the Dex tab's Pokémon list (Leg 4 shipped
+the list only). Raised in the milestone scoping discussion and explicitly held out of Leg 4;
+no sketch exists yet, so it needs one before it can be scoped.
+Last touched: 2026-09-24. Re-check count: 0.
 
 ### [Situational Poké Balls in the catch-probability calculator] — unscheduled
 Leg 4 of the Species database milestone scoped the catch calculator (`catchProbability.ts`)
