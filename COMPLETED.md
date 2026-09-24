@@ -59,7 +59,7 @@ Split along the region/family boundary scoped in TODO.md: one test file per map 
 met-locations.ts's own const groupings and matching how a region can span multiple
 generations (e.g. `met-locations.kanto.test.ts` covers Gen 1, FireRed/LeafGreen, and
 Let's Go alike). All 147 test cases carried over unchanged; largest resulting file is 189
-lines. 1330 lines -> 12 files, none over 190 lines. See commits `6d5237b` and `5bc6184`, `bd71b30`.
+lines. 1330 lines -> 12 files, none over 190 lines. See commits `6d5237b`, `bd71b30`.
 
 ## [Codebase File-Size Cleanup Leg 4: split useCollectionData.ts] — 2026-09-21
 Split along the boundary scoped in TODO.md: the box-position/undo-stack slice
