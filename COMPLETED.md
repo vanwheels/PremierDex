@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Encounter data storage/IPC wiring, Leg 2] — 2026-09-23
+Wired `data/pokemon/encounters.json` into the renderer end-to-end, following the
+`loadSpeciesDetails` pattern exactly: `loadEncounterData()` in `load-species-data.ts`, a
+`loadEncounters` channel in `ipc-channels.ts`, the `pokemon-ipc.ts` handler, the
+`AppBridge.loadEncounters` preload binding, and `useCollectionData`'s `encounterData` state
+(loaded alongside the rest of `loadAll`). No consumer yet — Leg 3 wires it into SpeciesPage.
+See commit `af1072f`.
+
 ## [Encounter data fetch script + types, Leg 1] — 2026-09-23
 Added `EncounterData` (`src/shared/types/encounters.ts`), mirroring PokeAPI's
 `/pokemon/{id}/encounters` shape and keyed by pokeapiId like `FormDetailEntry`, with dedup

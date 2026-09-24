@@ -18,12 +18,6 @@ Arceus, Scarlet/Violet (+DLC), and Legends Z-A have zero PokeAPI encounter data 
 deferred to a later hand-curation pass (same reactive, opt-in-per-game posture as
 `BALL_POOLS`/Met Location), not blocking this milestone.
 
-### [Encounter data storage/IPC wiring] — Leg 2
-Extend `load-species-data.ts` and `pokemon-ipc.ts` to load `data/pokemon/encounters.json` and
-expose it to the renderer, following the existing `loadSpeciesDetails` channel pattern exactly.
-Depends on Leg 1's output shape.
-Last touched: 2026-09-23. Re-check count: 0.
-
 ### [Where to Find section on SpeciesPage] — Leg 3
 Add a per-game/location/method encounter list to `SpeciesPage.tsx`, grouped and formatted the
 same way the existing Safari Zone Flee Rate field is. This is the milestone's proof of
