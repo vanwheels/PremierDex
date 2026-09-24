@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { applyConditionSelection, type ConditionSelection } from './encounterConditions'
+import { splitByMethodCategory } from './encounterMethods'
 import { groupEncounterDetails } from './encountersFormat'
 import type { DexLocation } from './dexLocationIndex'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
@@ -27,6 +28,7 @@ export function DexLocationDetail({ location, methods, onOpenSpecies }: DexLocat
         .filter((s) => s.rows.length > 0),
     [location, methods, selection]
   )
+  const tables = useMemo(() => splitByMethodCategory(entries), [entries])
 
   const choose = (key: string, value: string | null): void => {
     setSelection((prev) => {
@@ -59,47 +61,52 @@ export function DexLocationDetail({ location, methods, onOpenSpecies }: DexLocat
           })}
         </div>
       ))}
-      <table className="dex-locations-table">
-        <colgroup>
-          <col className="dex-locations-col-name" />
-          <col className="dex-locations-col-method" />
-          <col className="dex-locations-col-levels" />
-          <col className="dex-locations-col-conditions" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th>Pokémon</th>
-            <th>Method</th>
-            <th>Levels</th>
-            <th>Conditions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {entries.flatMap((s) =>
-            s.rows.map((row, i) => (
-              <tr key={`${s.speciesId}-${s.formName}-${i}`}>
-                <td>
-                  {i === 0 && (
-                    <>
-                      <span className="dex-list-number">#{String(s.speciesId).padStart(3, '0')}</span>
-                      <button
-                        type="button"
-                        className="dex-list-name"
-                        onClick={() => onOpenSpecies({ speciesId: s.speciesId, formName: s.formName })}
-                      >
-                        {s.displayName}
-                      </button>
-                    </>
-                  )}
-                </td>
-                <td>{row.method}</td>
-                <td>{row.levels}</td>
-                <td>{row.conditions ?? ''}</td>
+      {tables.map(({ category, entries: inCategory }) => (
+        <section key={category.key} className="dex-locations-method">
+          <h4>{category.label}</h4>
+          <table className="dex-locations-table">
+            <colgroup>
+              <col className="dex-locations-col-name" />
+              <col className="dex-locations-col-method" />
+              <col className="dex-locations-col-levels" />
+              <col className="dex-locations-col-conditions" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Pokémon</th>
+                <th>Method</th>
+                <th>Levels</th>
+                <th>Conditions</th>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {inCategory.flatMap((s) =>
+                s.rows.map((row, i) => (
+                  <tr key={`${s.speciesId}-${s.formName}-${i}`}>
+                    <td>
+                      {i === 0 && (
+                        <>
+                          <span className="dex-list-number">#{String(s.speciesId).padStart(3, '0')}</span>
+                          <button
+                            type="button"
+                            className="dex-list-name"
+                            onClick={() => onOpenSpecies({ speciesId: s.speciesId, formName: s.formName })}
+                          >
+                            {s.displayName}
+                          </button>
+                        </>
+                      )}
+                    </td>
+                    <td>{row.method}</td>
+                    <td>{row.levels}</td>
+                    <td>{row.conditions ?? ''}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </section>
+      ))}
       {entries.length === 0 && <p className="dex-tab-empty">No encounters match this selection.</p>}
     </>
   )

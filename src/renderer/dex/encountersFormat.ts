@@ -1,5 +1,6 @@
 import { ORIGIN_GAMES } from '@shared/data/origin-games'
 import type { EncounterData, EncounterDetail } from '@shared/types/encounters'
+import { methodCategory } from './encounterMethods'
 import { slugDisplayName } from './speciesPageFormat'
 
 /**
@@ -68,6 +69,8 @@ const ANY_TIME = 'any'
 
 export interface EncounterRow {
   method: string
+  /** Method category key (encounterMethods.ts), for the Dex Locations pane's per-category tables. */
+  category: string
   /** Inline level breakdown, e.g. "Lv. 20 (30%), 21 (30%)" — same-level slots already summed. */
   levels: string
   /** Time-of-day and other conditions, or null when the row applies unconditionally. */
@@ -82,6 +85,7 @@ interface LevelSlot {
 
 interface DetailGroup {
   method: string
+  category: string
   otherConditions: string[]
   byTime: Map<string, Map<string, LevelSlot>>
 }
@@ -103,7 +107,12 @@ export function groupEncounterDetails(details: EncounterDetail[], methods: strin
     const key = `${d.methodIndex}|${others.join(',')}`
     let group = groups.get(key)
     if (!group) {
-      group = { method: slugDisplayName(methods[d.methodIndex]), otherConditions: others, byTime: new Map() }
+      group = {
+        method: slugDisplayName(methods[d.methodIndex]),
+        category: methodCategory(methods[d.methodIndex]).key,
+        otherConditions: others,
+        byTime: new Map()
+      }
       groups.set(key, group)
     }
     for (const time of times.length > 0 ? times : [ANY_TIME]) {
@@ -138,6 +147,7 @@ export function groupEncounterDetails(details: EncounterDetail[], methods: strin
       const conditions = [...timeLabel, ...group.otherConditions.map(slugDisplayName)].join(', ')
       rows.push({
         method: group.method,
+        category: group.category,
         levels,
         conditions: conditions === '' ? null : conditions,
         total: slots.reduce((sum, s) => sum + s.chance, 0)

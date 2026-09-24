@@ -24,6 +24,13 @@ Standalone items not part of the current milestone — pick up opportunistically
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
 
+### [Species page Where to Find method tables] — unscheduled
+The Dex Locations pane now splits encounters into Wild/Surfing/Fishing/Headbutt/Rock Smash/
+Special tables (`encounterMethods.ts`, added in a Leg 3 follow-up at Vanny's request). The
+Species page Where to Find still shows one mixed table per game; apply the same split there
+only if Vanny wants it — `EncounterRow.category` is already populated.
+Last touched: 2026-09-24. Re-check count: 0.
+
 ### [Dex tab sprite-grid view mode] — unscheduled
 Hybrid-view-style sprite grid as an alternative to the Dex tab's Pokémon list (Leg 4 shipped
 the list only). Raised in the milestone scoping discussion and explicitly held out of Leg 4;

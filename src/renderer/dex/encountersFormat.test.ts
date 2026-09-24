@@ -48,7 +48,7 @@ describe('encounterSectionsForForm', () => {
         label: 'Red',
         generation: 1,
         locations: [
-          { location: 'Kanto Route 1', rows: [{ method: 'Walk', levels: 'Lv. 3 (100%)', conditions: null }] }
+          { location: 'Kanto Route 1', rows: [{ method: 'Walk', category: 'wild', levels: 'Lv. 3 (100%)', conditions: null }] }
         ]
       }
     ])
@@ -57,7 +57,7 @@ describe('encounterSectionsForForm', () => {
   it('renders a level range and a formatted condition list', () => {
     const data = dataWith([[0, 0, [detail({ minLevel: 3, maxLevel: 5, chance: 40, conditionValues: ['time-day'] })]]])
     expect(encounterSectionsForForm(data, 1)[0].locations[0].rows).toEqual([
-      { method: 'Walk', levels: 'Lv. 3-5 (40%)', conditions: 'Day' }
+      { method: 'Walk', category: 'wild', levels: 'Lv. 3-5 (40%)', conditions: 'Day' }
     ])
   })
 
@@ -120,7 +120,7 @@ describe('encounterSectionsForForm', () => {
 
   it('merges same-level slots of one method by summing their chance', () => {
     const rows = rowsFor([detail({ minLevel: 20, maxLevel: 20, chance: 30 }), detail({ minLevel: 20, maxLevel: 20, chance: 10 })])
-    expect(rows).toEqual([{ method: 'Walk', levels: 'Lv. 20 (40%)', conditions: null }])
+    expect(rows).toEqual([{ method: 'Walk', category: 'wild', levels: 'Lv. 20 (40%)', conditions: null }])
   })
 
   it('lists different levels inline in ascending order', () => {
@@ -139,14 +139,14 @@ describe('encounterSectionsForForm', () => {
       detail({ chance: 20, minLevel: 4, maxLevel: 4, conditionValues: ['time-morning'] })
     ])
     expect(rows).toEqual([
-      { method: 'Walk', levels: 'Lv. 3 (50%)', conditions: 'Day, Night' },
-      { method: 'Walk', levels: 'Lv. 4 (20%)', conditions: 'Morning' }
+      { method: 'Walk', category: 'wild', levels: 'Lv. 3 (50%)', conditions: 'Day, Night' },
+      { method: 'Walk', category: 'wild', levels: 'Lv. 4 (20%)', conditions: 'Morning' }
     ])
   })
 
   it('drops the time label when morning, day and night all match', () => {
     const rows = rowsFor(['time-morning', 'time-day', 'time-night'].map((t) => detail({ conditionValues: [t] })))
-    expect(rows).toEqual([{ method: 'Walk', levels: 'Lv. 3 (100%)', conditions: null }])
+    expect(rows).toEqual([{ method: 'Walk', category: 'wild', levels: 'Lv. 3 (100%)', conditions: null }])
   })
 
   it('keeps non-time conditions as their own groups', () => {

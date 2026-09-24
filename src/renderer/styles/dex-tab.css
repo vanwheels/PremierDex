@@ -5,7 +5,7 @@
  */
 
 .dex-tab {
-  max-width: 52rem;
+  max-width: 66rem;
   margin: 0 auto;
 }
 
@@ -189,6 +189,14 @@
   font-size: 0.75rem;
 }
 
+.dex-locations-method h4 {
+  margin: 1rem 0 0.3rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .dex-locations-detail h3 {
   margin-top: 0;
 }
@@ -227,15 +235,15 @@
 }
 
 .dex-locations-col-name {
-  width: 27%;
+  width: 24%;
 }
 
 .dex-locations-col-method {
-  width: 17%;
+  width: 16%;
 }
 
 .dex-locations-col-levels {
-  width: 34%;
+  width: 38%;
 }
 
 .dex-locations-col-conditions {
