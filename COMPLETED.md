@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Full UI/UX pass on the Dex interface, Where to Find reformat] — 2026-09-24
+Species page's Where to Find is now Serebii-style: one colour-coded header section per game
+(release order, DLC sections separate) with a location/method/level/chance/conditions table
+under it, replacing per-location rows with joined game labels. Milestone still open. See commit
+`5ae6c72`.
+
 ## [Full UI/UX pass on the Dex interface, feedback pass on Legs 3-4] — 2026-09-24
 Dex list is now one row per species with a sprite beside the name and italics-only hidden
 abilities; forms moved to a toggle strip on the species page, and its Regional Dex box follows
