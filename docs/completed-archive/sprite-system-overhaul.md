@@ -1,4 +1,7 @@
-# Sprite system overhaul — completed legs
+# Completed: Sprite system overhaul
+
+Archived from `COMPLETED.md` at the milestone boundary — see
+`docs/postmortems/sprite-system-overhaul.md` and `MILESTONES.md`.
 
 ## [Sprite system overhaul, Leg 4] — 2026-09-24
 Version chip row under the Gen I-IX strip for Gen 1-4 and 6, driven by Leg 2's source table
