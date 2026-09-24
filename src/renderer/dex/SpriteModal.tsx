@@ -13,7 +13,7 @@ export interface SpriteModalTarget {
   /** Mirrors Form.hasGenderDifference — drives the male/female side-by-side layout
    * below. Supersedes the old single-gender `female` target field: since side-by-side
    * always shows both sprites for a gender-diff form regardless of which split row
-   * (DexRow/CollectionRow's male or female row) was clicked, there's no longer a
+   * (DexRow's male or female row) was clicked, there's no longer a
    * per-target gender to pick. */
   hasGenderDifference: boolean
   displayName: string

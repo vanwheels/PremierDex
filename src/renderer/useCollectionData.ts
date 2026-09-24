@@ -45,7 +45,6 @@ export interface CollectionData {
    * encounter data, for the species page's Where to Find section (Leg 3). */
   encounterData: EncounterData
   loading: boolean
-  importVersion: number
   loadAll: () => Promise<void>
   handleImported: () => void
   refetchTrainerProfiles: () => void
@@ -120,10 +119,6 @@ export function useCollectionData(): CollectionData {
   const [speciesDetails, setSpeciesDetails] = useState<SpeciesDetailsData>(EMPTY_SPECIES_DETAILS)
   const [encounterData, setEncounterData] = useState<EncounterData>(EMPTY_ENCOUNTER_DATA)
   const [loading, setLoading] = useState(true)
-  // Bumped after a JSON import so TrainerProfilesPanel/StorageLocationsPanel remount and
-  // refetch — they load their own data on mount only and have no other way to learn the DB
-  // moved out from under them.
-  const [importVersion, setImportVersion] = useState(0)
 
   // Leg 2 of the Box View Move & Undo Operations milestone. Mirrors `entries` in a ref
   // (rather than reading `entries` directly) so setEntryBoxPosition/swapEntryBoxPositions
@@ -181,7 +176,6 @@ export function useCollectionData(): CollectionData {
   }, [])
 
   const handleImported = useCallback((): void => {
-    setImportVersion((v) => v + 1)
     loadAll()
   }, [loadAll])
 
@@ -352,7 +346,6 @@ export function useCollectionData(): CollectionData {
     speciesDetails,
     encounterData,
     loading,
-    importVersion,
     loadAll,
     handleImported,
     refetchTrainerProfiles,

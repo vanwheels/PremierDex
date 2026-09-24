@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { CollectionEntry, CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { BoxPlaceholder, StorageBox } from '@shared/types/box'
@@ -18,7 +18,7 @@ import { DexHybridGrid } from './DexHybridGrid'
 import { DexBoxGrid } from './DexBoxGrid'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import type { FillInPlacement, TemplatePlacement } from './boxTemplates'
-import { DexLocationTabs } from './DexLocationTabs'
+import { CollectionHeaderBar } from './CollectionHeaderBar'
 import { DexToolbar } from './DexToolbar'
 import { DexFilterBar } from './DexFilterBar'
 import { DexViewModeSwitcher } from './DexViewModeSwitcher'
@@ -89,6 +89,10 @@ export interface LivingDexViewProps {
   /** Leg 3 of the Species database milestone: threaded down to DexTable/DexBoxGrid's
    * SpeciesDetailPopup — opens App.tsx's full species page. */
   onOpenFullPage: (target: SpeciesDetailTarget) => void
+  /** Leg 1 of the Full UI/UX pass: forwarded to CollectionHeaderBar's Storage Locations/
+   * Trainer Profiles popups — see useCollectionData's loadAll/refetchEntries. */
+  onLocationsChanged: () => void
+  onEntriesChanged: () => void
 }
 
 /** The Living Dex tab's own content: the per-location tab bar, completion stats, the
@@ -133,7 +137,9 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
     onBulkSetEntryGender,
     onFillInPlaceholders,
     onMoveEntriesToLocation,
-    onOpenFullPage
+    onOpenFullPage,
+    onLocationsChanged,
+    onEntriesChanged
   } = props
 
   const [options, setOptions] = useState<DexOptions>(DEFAULT_OPTIONS)
@@ -144,8 +150,16 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
   )
   // Defaults to the Unassigned tab (null) rather than the first real location — it needs no
   // data to resolve on first render, and it's where every entry starts out anyway (see
-  // DexLocationTabs' doc comment).
+  // CollectionHeaderBar's doc comment).
   const [selectedLocationTab, setSelectedLocationTab] = useState<number | null>(null)
+  // The Storage Locations popup can now delete the location this tab is scoped to while the
+  // view stays mounted underneath it — fall back to Unassigned rather than scoping to a
+  // location that no longer exists.
+  useEffect(() => {
+    if (selectedLocationTab !== null && !storageLocations.some((location) => location.id === selectedLocationTab)) {
+      setSelectedLocationTab(null)
+    }
+  }, [storageLocations, selectedLocationTab])
   // Persisted Living Dex layout choice — see useDexViewMode's doc comment.
   const [viewMode, setViewMode] = useDexViewMode()
   // Resolve Gender Ambiguities modal (Leg 3 of the Dex completeness tier migration) — see
@@ -155,7 +169,7 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
   // Both the table and the stats panel scope to the selected location tab via this filter,
   // applied once here rather than in each consumer. An entry that's unowned everywhere sits
   // at storageLocationId: null, same as an owned-but-unassigned one — so it only ever
-  // appears (checkable) under the Unassigned tab; see DexLocationTabs' doc comment.
+  // appears (checkable) under Unassigned; see CollectionHeaderBar's doc comment.
   // handleToggleEntry below is what gets a freshly-checked entry off that tab in the common
   // case.
   const entriesForLocationTab = useMemo(
@@ -226,7 +240,13 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
 
   return (
     <>
-      <DexLocationTabs storageLocations={storageLocations} selected={selectedLocationTab} onSelect={setSelectedLocationTab} />
+      <CollectionHeaderBar
+        storageLocations={storageLocations}
+        selected={selectedLocationTab}
+        onSelect={setSelectedLocationTab}
+        onLocationsChanged={onLocationsChanged}
+        onEntriesChanged={onEntriesChanged}
+      />
       <CompletionStatsPanel
         stats={completionStats}
         options={completionStatsOptions}

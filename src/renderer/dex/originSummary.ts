@@ -3,8 +3,7 @@ import type { CollectionEntry } from '@shared/types/pokemon'
 /** Origin summary shown as the Origin button's tooltip once set — OT/TID/SID/language/
  * game/caughtBall/metLocation, the same fields OriginModal itself edits. Omits whichever
  * of TID/SID/language/caughtBall/metLocation is null (unshown by that origin game, or
- * just never set) rather than printing "TID: —". Shared by DexRow and CollectionRow
- * (Leg 18). */
+ * just never set) rather than printing "TID: —". */
 export function originTitle(entry: CollectionEntry | null): string | undefined {
   if (!entry || !entry.otName) return undefined
   const parts = [`OT: ${entry.otName}`]

@@ -113,8 +113,7 @@ export function speciesDisplayName(name: string): string {
   return SPECIES_NAME_EXCEPTIONS[name] ?? capitalizeWords(name)
 }
 
-/** Shared by buildDexSections.ts (per-form rows) and collection/buildCollectionGroups.ts
- * (Leg 18, per-entry rows) — both need the exact same species+form display formatting. */
+/** Species+form display formatting shared by buildDexSections.ts and the species pages. */
 export function formDisplayName(speciesName: string, form: Form): string {
   const formName = form.formName === 'base' ? BASE_FORM_NAMES[form.speciesId] : form.formName
   if (!formName) return speciesName

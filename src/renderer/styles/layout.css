@@ -118,35 +118,30 @@
   font-size: 0.8rem;
 }
 
-/* Living Dex per-Storage-Location tab bar (Leg 8) — a second-tier tab strip, distinct
-   from .app-view-tabs' persistent chrome above: this one only scopes the Living Dex
-   view's own content (CompletionStatsPanel + DexTable), so it's a smaller pill row
-   living inline in .app-content rather than the header. */
-.dex-location-tabs {
+/* Collection tab's top row (CollectionHeaderBar, Leg 1 of the Full UI/UX pass): the
+   current-Storage-Location picker + its edit pencil on the left, the Trainer Profiles
+   popup button on the right. Replaced the old .dex-location-tabs pill row. */
+.collection-header-bar {
   display: flex;
-  gap: 0.4rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
 
-.dex-location-tab {
-  padding: 0.35rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
+.collection-location-picker {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.collection-location-picker label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
   color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.dex-location-tab:hover:not(.active) {
-  color: var(--text);
-}
-
-.dex-location-tab.active {
-  color: var(--text);
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
-  font-weight: 600;
 }
 
 .panel-toolbar,
@@ -197,8 +192,7 @@
 }
 
 /* Same plain-buttons-as-radio-group treatment as theme-mode-row/theme-mode-option —
-   kept as its own class rather than reusing those directly, matching how
-   dex-location-tab stays separate from app-view-tab despite the similar look. */
+   kept as its own class rather than reusing those directly. */
 .dex-view-mode-row {
   display: flex;
   gap: 0.35rem;
@@ -232,7 +226,6 @@
 .storage-locations,
 .species-page,
 .completion-stats-block,
-.collection-group,
 .dex-table-panel,
 .dex-bulk-actions-bar {
   background-color: var(--surface);
@@ -278,24 +271,28 @@
   color: var(--text);
 }
 
+/* Sketch layout (docs/design/ui-ux-pass/sketch-1): Overall top-left, By Regional Variant
+   below it, By Generation as a tall block on the right. */
 .completion-stats-tables {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  grid-template-areas:
+    'overall generation'
+    'regional generation';
+  align-items: start;
   gap: 1rem;
 }
 
-.completion-stats-tables .completion-stats-block {
-  flex: 1 1 auto;
+.completion-stats-block-overall {
+  grid-area: overall;
 }
 
-.collection-view label {
-  display: block;
-  margin-bottom: 1rem;
+.completion-stats-block-generation {
+  grid-area: generation;
 }
 
-.collection-group {
-  margin-bottom: 1.75rem;
+.completion-stats-block-regional {
+  grid-area: regional;
 }
 
 /* .dex-table-panel shares the card background/border/shadow rule above; it only differs
@@ -317,14 +314,4 @@
   gap: 0.75rem;
   padding: 0.6rem 1rem;
   margin-bottom: 0.75rem;
-}
-
-.collection-group h2 {
-  font-size: 1.05rem;
-  margin: 0 0 0.5rem;
-}
-
-.collection-group-count {
-  font-weight: normal;
-  color: var(--muted);
 }

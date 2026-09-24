@@ -5,19 +5,16 @@ import { ThemeProvider } from './theme/theme-store'
 import { ThemeModeToggle } from './theme/ThemeModeToggle'
 import { LivingDexView } from './dex/LivingDexView'
 import { useCollectionData } from './useCollectionData'
-import { TrainerProfilesPanel } from './trainer/TrainerProfilesPanel'
-import { StorageLocationsPanel } from './storage-location/StorageLocationsPanel'
-import { CollectionView } from './collection/CollectionView'
 import { SpeciesPage } from './dex/SpeciesPage'
 import type { SpeciesDetailTarget } from './dex/SpeciesDetailPopup'
 
-/** Which top-level lens the collection is browsed through — the species-first Living Dex
- * grid, the owned-entries-grouped-by-origin/OT/shiny Collection view (Leg 18), the
- * Trainer Profiles/Storage Locations management tabs (Leg 1 of the nav-restructuring
- * milestone — previously always-mounted stacked panels above the Dex/Collection tabs), or
- * the full species page (Leg 3 of the Species database milestone — reached only via
- * SpeciesDetailPopup's "View Full Page" button, not a persistent nav tab). */
-type AppView = 'dex' | 'collection' | 'trainers' | 'storage-locations' | 'species'
+/** Which top-level view is showing. 'collection' is what used to be the Living Dex tab
+ * (Leg 1 of the Full UI/UX pass — it now also hosts the Storage Locations/Trainer Profiles
+ * popups, and the old group-by Collection tab is gone); 'dex' is the new species reference
+ * browser (placeholder until Leg 4); 'species' is the full species page (Leg 3 of the
+ * Species database milestone — reached only via SpeciesDetailPopup's "View Full Page"
+ * button, not a persistent nav tab). */
+type AppView = 'collection' | 'dex' | 'species'
 
 /** The v1 spreadsheet-style Living Dex grid. See docs/completed-archive/living-dex-v1.md's
  * [Spreadsheet-style Living Dex UI] item (Leg 3).
@@ -28,7 +25,7 @@ type AppView = 'dex' | 'collection' | 'trainers' | 'storage-locations' | 'specie
  * LivingDexView. Split apart in this shape (Leg 1 of the Box Arrangement milestone) ahead
  * of that view's third view-mode branch (Box, Leg 6). */
 export function App(): JSX.Element {
-  const [view, setView] = useState<AppView>('dex')
+  const [view, setView] = useState<AppView>('collection')
   // Leg 3 of the Species database milestone: the full page's own target, carried
   // alongside `view` since AppView alone has no payload — set together with
   // setView('species') by openFullPage below.
@@ -56,9 +53,6 @@ export function App(): JSX.Element {
           </div>
         </header>
         <nav className="app-view-tabs">
-          <button type="button" className={view === 'dex' ? 'app-view-tab active' : 'app-view-tab'} onClick={() => setView('dex')}>
-            Living Dex
-          </button>
           <button
             type="button"
             className={view === 'collection' ? 'app-view-tab active' : 'app-view-tab'}
@@ -66,19 +60,8 @@ export function App(): JSX.Element {
           >
             Collection
           </button>
-          <button
-            type="button"
-            className={view === 'trainers' ? 'app-view-tab active' : 'app-view-tab'}
-            onClick={() => setView('trainers')}
-          >
-            Trainer Profiles
-          </button>
-          <button
-            type="button"
-            className={view === 'storage-locations' ? 'app-view-tab active' : 'app-view-tab'}
-            onClick={() => setView('storage-locations')}
-          >
-            Storage Locations
+          <button type="button" className={view === 'dex' ? 'app-view-tab active' : 'app-view-tab'} onClick={() => setView('dex')}>
+            Dex
           </button>
         </nav>
         <main className="app-content">
@@ -88,9 +71,9 @@ export function App(): JSX.Element {
            * unmount/remount on every switch into this tab the dominant cost — see
            * LivingDexView's own hidden-toggle comments for the same treatment one level
            * down, between its List/Hybrid/(Box) view modes. */}
-          <div hidden={view !== 'dex'}>
+          <div hidden={view !== 'collection'}>
             <LivingDexView
-              isActive={view === 'dex'}
+              isActive={view === 'collection'}
               species={data.species}
               forms={data.forms}
               evolutionEdges={data.evolutionEdges}
@@ -121,15 +104,11 @@ export function App(): JSX.Element {
               onFillInPlaceholders={data.fillInPlaceholders}
               onMoveEntriesToLocation={data.moveEntriesToLocation}
               onOpenFullPage={openFullPage}
+              onLocationsChanged={data.loadAll}
+              onEntriesChanged={data.refetchEntries}
             />
           </div>
-          {view === 'collection' && (
-            <CollectionView species={data.species} forms={data.forms} entries={data.entries} onSaveOrigin={data.setEntryOrigin} />
-          )}
-          {view === 'trainers' && <TrainerProfilesPanel key={data.importVersion} onEntriesChanged={data.refetchEntries} />}
-          {view === 'storage-locations' && (
-            <StorageLocationsPanel key={data.importVersion} onLocationsChanged={data.loadAll} />
-          )}
+          {view === 'dex' && <p>Dex — coming soon.</p>}
           {view === 'species' && speciesPageTarget && (
             <SpeciesPage
               target={speciesPageTarget}
@@ -137,7 +116,7 @@ export function App(): JSX.Element {
               forms={data.forms}
               speciesDetails={data.speciesDetails}
               encounterData={data.encounterData}
-              onClose={() => setView('dex')}
+              onClose={() => setView('collection')}
             />
           )}
         </main>

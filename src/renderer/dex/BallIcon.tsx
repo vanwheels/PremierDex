@@ -9,7 +9,7 @@ interface BallIconProps {
 const ICON_SIZE = 20
 
 /**
- * Read-only caught-in-ball icon (Leg 28) — CollectionRow only, next to the Origin
+ * Read-only caught-in-ball icon (Leg 28) — shown next to the Origin
  * button. Renders nothing when there's no ball recorded, rather than a placeholder slot
  * like SpriteThumbnail's '?': most entries won't have this set for a long while, and an
  * empty icon column on every row would be noisier than just omitting it. Falls back to

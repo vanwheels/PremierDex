@@ -10,10 +10,10 @@ export interface NicknameEditor {
 /**
  * Local nickname-input state for one CollectionEntry, shared by DexRow (which resolves
  * `entry` via activeNicknameEntry, since a Dex row pairs a regular + shiny slot) and
- * CollectionRow (Leg 18, which passes its one entry directly). Re-syncs when the edited
+ * DexBoxDetailPanel (which passes its one entry directly). Re-syncs when the edited
  * entry — or its stored nickname — changes out from under it: a toggle to/from owned
  * swaps which entry is active in DexRow, and an external update (another window, or
- * switching CollectionView's group-by) can change the stored value directly.
+ * an edit from a different view) can change the stored value directly.
  *
  * commit() writes a full origin snapshot (see CollectionEntryOriginInput), carrying the
  * entry's other origin fields through unchanged so a nickname-only edit never blanks

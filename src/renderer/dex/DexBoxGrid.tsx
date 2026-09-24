@@ -51,7 +51,7 @@ interface DexBoxGridProps {
   /** Same collection-wide convention as allBoxes above. */
   allBoxPlaceholders: BoxPlaceholder[]
   speciesAvailability: SpeciesAvailabilityData
-  /** Same axis as DexLocationTabs' `selected` — needed here (unlike DexHybridGrid, which
+  /** Same axis as CollectionHeaderBar's `selected` — needed here (unlike DexHybridGrid, which
    * only ever sees already-scoped `sections`) because Box view has to tell "the Unassigned
    * tab, which can never hold a box" apart from "a real location with zero boxed entries
    * yet," and `entries` alone can't distinguish those two empty cases. */

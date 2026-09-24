@@ -122,7 +122,7 @@ export const DEFAULT_DEX_SORT: DexSort | null = null
 /** Display info for one real individual, resolved from its CollectionEntry + Species/Form
  * (Leg 6 of the Box Arrangement milestone) — always backed by a real CollectionEntry,
  * owned or not (an unowned placeholder can occupy a box slot too, see CollectionEntry's
- * doc comment). Denormalizes the same display fields DexRowData/CollectionRowData already
+ * doc comment). Denormalizes the same display fields DexRowData already
  * carry rather than joining Species/Form at render time, same convention both of those
  * follow. Shared base for BoxCell (a placed individual) and UnboxedEntry (Leg 7: one not
  * yet placed in any box) — see buildBoxes.ts's buildEntryDisplayInfo. */
@@ -133,7 +133,7 @@ export interface EntryDisplayInfo {
    * denormalization rationale as DexRowData.formName. */
   formName: string
   /** Species + form name, already carrying the entry's own gender symbol and shiny
-   * marker, same as CollectionRowData.displayName — a box cell shows one specific
+   * marker — a box cell shows one specific
    * individual, not a form pairing. */
   displayName: string
   pokeapiId: number

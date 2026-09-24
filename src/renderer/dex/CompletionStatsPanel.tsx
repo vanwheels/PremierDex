@@ -22,9 +22,9 @@ function StatsRow({ bucket }: { bucket: CompletionBucket }): JSX.Element {
   )
 }
 
-function StatsTable({ title, rows }: { title: string; rows: CompletionBucket[] }): JSX.Element {
+function StatsTable({ title, rows, area }: { title: string; rows: CompletionBucket[]; area: string }): JSX.Element {
   return (
-    <div className="completion-stats-block">
+    <div className={`completion-stats-block completion-stats-block-${area}`}>
       <h3>{title}</h3>
       <table className="completion-stats-table">
         <thead>
@@ -143,9 +143,11 @@ export function CompletionStatsPanel({
         </label>
       </div>
       <div className="completion-stats-tables">
-        <StatsTable title="Overall" rows={[stats.overall]} />
-        <StatsTable title="By Generation" rows={stats.byGeneration} />
-        {stats.byRegionalGroup.length > 0 && <StatsTable title="By Regional Group" rows={stats.byRegionalGroup} />}
+        <StatsTable title="Overall" rows={[stats.overall]} area="overall" />
+        <StatsTable title="By Generation" rows={stats.byGeneration} area="generation" />
+        {stats.byRegionalGroup.length > 0 && (
+          <StatsTable title="By Regional Variant" rows={stats.byRegionalGroup} area="regional" />
+        )}
       </div>
     </section>
   )
