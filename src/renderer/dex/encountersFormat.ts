@@ -35,6 +35,9 @@ export interface GameRef {
    * gameColors.ts. Falls back to the raw version name for a version with no ORIGIN_GAMES
    * entry. */
   gameId: string
+  /** The base game's generation (a DLC version uses its base game's); null for a version with
+   * no ORIGIN_GAMES entry. */
+  generation: number | null
 }
 
 export function gameRefForVersion(versionName: string): GameRef {
@@ -45,7 +48,8 @@ export function gameRefForVersion(versionName: string): GameRef {
   return {
     sortKey: gameIndex === -1 ? versionName : String(gameIndex).padStart(3, '0'),
     label: dlc ? `${baseName} (${dlc.dlcLabel})` : baseName,
-    gameId
+    gameId,
+    generation: gameIndex === -1 ? null : ORIGIN_GAMES[gameIndex].generation
   }
 }
 
@@ -155,7 +159,21 @@ export interface GameEncounterSection {
   gameId: string
   /** Display label — includes the DLC suffix for an Isle of Armor/Crown Tundra section. */
   label: string
+  /** Base game's generation, for the Gen I-IX toggle filter; null when unknown. */
+  generation: number | null
   locations: EncounterLocationRows[]
+}
+
+/** Sections belonging to the Gen I-IX toggle's generation. A section whose game has no
+ * ORIGIN_GAMES entry (unknown generation) is kept rather than silently dropped. */
+export function filterSectionsByGeneration(sections: GameEncounterSection[], generation: number): GameEncounterSection[] {
+  return sections.filter((s) => s.generation === null || s.generation === generation)
+}
+
+/** One-line collapsed-header summary, e.g. "Gold — 41 locations". */
+export function sectionSummary(section: GameEncounterSection): string {
+  const n = section.locations.length
+  return `${section.label} — ${n} ${n === 1 ? 'location' : 'locations'}`
 }
 
 /** Encounter sections for one form's pokeapiId, one per game/DLC in release order; `[]` if
@@ -192,6 +210,7 @@ export function encounterSectionsForForm(encounterData: EncounterData, pokeapiId
     .map(({ ref, locations }) => ({
       gameId: ref.gameId,
       label: ref.label,
+      generation: ref.generation,
       locations: locations.sort((a, b) => a.location.localeCompare(b.location))
     }))
 }

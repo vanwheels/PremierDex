@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import type { EncounterData, EncounterDetail } from '@shared/types/encounters'
-import { encounterSectionsForForm } from './encountersFormat'
+import {
+  encounterSectionsForForm,
+  filterSectionsByGeneration,
+  sectionSummary,
+  type GameEncounterSection
+} from './encountersFormat'
 
 const BASE_DATA: EncounterData = {
   encounters: {},
@@ -41,6 +46,7 @@ describe('encounterSectionsForForm', () => {
       {
         gameId: 'red',
         label: 'Red',
+        generation: 1,
         locations: [
           { location: 'Kanto Route 1', rows: [{ method: 'Walk', levels: 'Lv. 3 (100%)', conditions: null }] }
         ]
@@ -88,6 +94,26 @@ describe('encounterSectionsForForm', () => {
       ['Sword', 'sword'],
       ['Sword (Isle of Armor)', 'sword']
     ])
+    expect(encounterSectionsForForm(data, 1).map((s) => s.generation)).toEqual([8, 8])
+  })
+
+  describe('generation filter and summary', () => {
+    const section = (generation: number | null, locationCount: number): GameEncounterSection => ({
+      gameId: 'x',
+      label: 'X',
+      generation,
+      locations: Array.from({ length: locationCount }, (_, i) => ({ location: `L${i}`, rows: [] }))
+    })
+
+    it('keeps only sections from the selected generation, plus any with an unknown generation', () => {
+      const sections = [section(1, 1), section(2, 1), section(null, 1)]
+      expect(filterSectionsByGeneration(sections, 2).map((s) => s.generation)).toEqual([2, null])
+    })
+
+    it('summarises a section as a pluralised location count', () => {
+      expect(sectionSummary({ ...section(1, 41), label: 'Gold' })).toBe('Gold — 41 locations')
+      expect(sectionSummary({ ...section(1, 1), label: 'Red' })).toBe('Red — 1 location')
+    })
   })
 
   const rowsFor = (details: EncounterDetail[]) => encounterSectionsForForm(dataWith([[0, 0, details]]), 1)[0].locations[0].rows

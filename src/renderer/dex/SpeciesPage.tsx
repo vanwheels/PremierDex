@@ -7,7 +7,7 @@ import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import { CatchProbabilityCalculator } from './CatchProbabilityCalculator'
 import { encounterSectionsForForm } from './encountersFormat'
-import { gameColor } from './gameColors'
+import { WhereToFindBox } from './WhereToFindBox'
 import { formDisplayName, formShortLabel, speciesDisplayName } from './formNames'
 import { regionalDexNumbersForGeneration } from './regionalDexNumbers'
 import { formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
@@ -201,38 +201,7 @@ export function SpeciesPage({
           )}
           {whereToFind.length > 0 && (
             <Box title="Where to Find" className="species-page-box-wide">
-              {whereToFind.map((game) => {
-                const { bg, fg } = gameColor(game.gameId)
-                return (
-                  <section key={game.label} className="species-page-encounter-game">
-                    <h4 className="species-page-encounter-game-header" style={{ backgroundColor: bg, color: fg }}>
-                      {game.label}
-                    </h4>
-                    <table className="species-page-encounter-table">
-                      <thead>
-                        <tr>
-                          <th>Location</th>
-                          <th>Method</th>
-                          <th>Levels</th>
-                          <th>Conditions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {game.locations.flatMap((loc) =>
-                          loc.rows.map((row, i) => (
-                            <tr key={`${loc.location}-${i}`}>
-                              <td>{i === 0 ? loc.location : ''}</td>
-                              <td>{row.method}</td>
-                              <td>{row.levels}</td>
-                              <td>{row.conditions ?? ''}</td>
-                            </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </table>
-                  </section>
-                )
-              })}
+              <WhereToFindBox sections={whereToFind} generation={generation} />
             </Box>
           )}
         </div>

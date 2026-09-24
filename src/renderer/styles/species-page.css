@@ -170,9 +170,11 @@
 /* Where to Find (Serebii-style, Vanny's 2026-09-24 feedback pass): one colour-coded header
  * section per game (background/text set inline from gameColors.ts), a table of that game's
  * locations under it. A location's later rows leave its name cell blank rather than
- * repeating it. */
+ * repeating it. Encounter Display rework Leg 2: each game is a <details> collapsed by default
+ * (its <summary> is the coloured header), and the tables use a fixed layout with shared
+ * <col> widths + tabular numerals so columns align across games. */
 .species-page-encounter-game {
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.5rem;
 }
 
 .species-page-encounter-game-header {
@@ -180,12 +182,32 @@
   padding: 0.3rem 0.7rem;
   border-radius: 6px;
   font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .species-page-encounter-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.species-page-encounter-col-location {
+  width: 26%;
+}
+
+.species-page-encounter-col-method {
+  width: 16%;
+}
+
+.species-page-encounter-col-levels {
+  width: 40%;
+}
+
+.species-page-encounter-col-conditions {
+  width: 18%;
 }
 
 .species-page-encounter-table th {
