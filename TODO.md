@@ -4,22 +4,11 @@
 
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones —
 many input fields, some overlapping in function. Scoped 2026-09-24 from Vanny's hand-drawn
-sketches into the 4 legs below, covering everything buildable without new species/move/stat
+sketches into 4 legs (Leg 1 shipped 2026-09-24, see COMPLETED.md), covering everything buildable without new species/move/stat
 data. List view's right-click context menu for Ribbons & Marks/Edit Origin (confirmed
 unintuitive by Vanny 2026-09-20) gets revisited as part of Leg 1's nav rework rather than
 fixed in isolation. Sketches and the decisions behind them: `docs/design/ui-ux-pass/`
 (read its README first — a clean session has no other copy of the screenshots).
-
-### [Full UI/UX pass on the Dex interface] — Leg 1
-Collapse the 4 top-level tabs (Living Dex, Collection, Trainer Profiles, Storage Locations)
-into 2 (Collection, Dex). Collection becomes today's Living Dex, with a Storage Location
-dropdown + edit-pencil popup wrapping today's `StorageLocationsPanel`, a Trainer Profiles
-button opening a popup wrapping today's `TrainerProfilesPanel`, and the completion overview
-(Overall/By Generation/By Regional Variant, already in Living Dex) rearranged per sketch.
-Today's standalone Collection tab (group owned entries by Origin Game/OT/Shiny/Dex Number,
-`CollectionView.tsx`) is shelved and removed outright — Vanny confirmed its functionality
-isn't being ported forward. Dex tab itself stays empty/placeholder until Leg 4.
-Last touched: 2026-09-24. Re-check count: 0.
 
 ### [Full UI/UX pass on the Dex interface] — Leg 2
 Restyle the existing System/Diamond/Pearl `ThemeModeToggle` from its 3-button row into the
@@ -46,6 +35,9 @@ sub-tab, and search-by-move/egg-group are deferred to a follow-up leg once the S
 reference data layer milestone ships that data — ships as a thin v1 per Vanny's 2026-09-24
 call, not held for a complete column set. The sprite-grid view mode (Hybrid-view style)
 mentioned in discussion is explicitly out of scope for this leg.
+SpeciesPage's Back button currently always returns to the Collection tab (Leg 1 had only
+one entry point); once the Dex tab opens species pages too, it needs to remember which
+tab it came from.
 Last touched: 2026-09-24. Re-check count: 0.
 
 ## Unscheduled

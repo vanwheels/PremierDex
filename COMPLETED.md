@@ -1,5 +1,12 @@
 # COMPLETED
 
+## [Full UI/UX pass on the Dex interface, Leg 1] — 2026-09-24
+Top-level nav is now Collection (the old Living Dex) and Dex (placeholder until Leg 4); the
+Storage Location tabs became a dropdown + edit pencil, Trainer Profiles/Storage Locations
+open as popups, completion stats follow the sketched layout, and the group-by Collection view
+was removed. Sketches saved to `docs/design/ui-ux-pass/` after a clean session couldn't start
+the leg without them. See commit `fa2b6fc`.
+
 ## [Where to Find section on SpeciesPage, Leg 3] — 2026-09-23
 Final leg — milestone shipped, see MILESTONES.md. Added `encounterLocationsForForm`
 (`encountersFormat.ts`), grouping `encounters.json`'s raw per-location/version/method rows
