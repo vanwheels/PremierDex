@@ -1,5 +1,8 @@
 # COMPLETED
 
+## [Encounter display rework] — Leg 1 — 2026-09-24
+Added `groupEncounterDetails` (`encountersFormat.ts`) and switched the Species page Where to Find to a single inline Levels column. Not yet checked against real Rattata data (prototype predicted 490 rows). See commit `98a92e5`.
+
 ## [Where to Find section on SpeciesPage, Leg 3] — 2026-09-23
 Final leg — milestone shipped, see MILESTONES.md. Added `encounterLocationsForForm`
 (`encountersFormat.ts`), grouping `encounters.json`'s raw per-location/version/method rows

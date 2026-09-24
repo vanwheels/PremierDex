@@ -11,13 +11,6 @@ aren't in the data and stay out of scope (RNG-only). Sequenced in 3 legs; Vanny 
 open design questions when the milestone opens: is the inline `Lv. 20 (30%), 21 (30%)` format
 clear enough (vs. tags), and should Where to Find follow the Gen I-IX toggle (currently no).
 
-### [Encounter display rework] — Leg 1
-Shared grouping function replacing `encounterSectionsForForm`'s per-row output: group by
-location/game/method/non-time conditions, merge same-level slots by summing chance, merge
-identical time-of-day breakdowns. Species page rows show the inline level breakdown; covers
-both views' data needs.
-Last touched: 2026-09-24. Re-check count: 0.
-
 ### [Encounter display rework] — Leg 2
 Species page Where to Find: each game section collapsed by default with a one-line summary
 (e.g. "Gold — 41 locations").
