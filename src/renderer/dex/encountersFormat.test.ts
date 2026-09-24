@@ -42,7 +42,7 @@ describe('encounterSectionsForForm', () => {
         gameId: 'red',
         label: 'Red',
         locations: [
-          { location: 'Kanto Route 1', rows: [{ method: 'Walk', levelRange: 'Lv. 3', chance: '100%', conditions: null }] }
+          { location: 'Kanto Route 1', rows: [{ method: 'Walk', levels: 'Lv. 3 (100%)', conditions: null }] }
         ]
       }
     ])
@@ -51,7 +51,7 @@ describe('encounterSectionsForForm', () => {
   it('renders a level range and a formatted condition list', () => {
     const data = dataWith([[0, 0, [detail({ minLevel: 3, maxLevel: 5, chance: 40, conditionValues: ['time-day'] })]]])
     expect(encounterSectionsForForm(data, 1)[0].locations[0].rows).toEqual([
-      { method: 'Walk', levelRange: 'Lv. 3-5', chance: '40%', conditions: 'Time Day' }
+      { method: 'Walk', levels: 'Lv. 3-5 (40%)', conditions: 'Day' }
     ])
   })
 
@@ -65,9 +65,9 @@ describe('encounterSectionsForForm', () => {
 
   it('sorts a location\'s rows by chance descending', () => {
     const data = dataWith([[0, 0, [detail({ chance: 30 }), detail({ chance: 70, methodIndex: 1 })]]])
-    expect(encounterSectionsForForm(data, 1)[0].locations[0].rows.map((r) => [r.method, r.chance])).toEqual([
-      ['Old Rod', '70%'],
-      ['Walk', '30%']
+    expect(encounterSectionsForForm(data, 1)[0].locations[0].rows.map((r) => [r.method, r.levels])).toEqual([
+      ['Old Rod', 'Lv. 3 (70%)'],
+      ['Walk', 'Lv. 3 (30%)']
     ])
   })
 
@@ -88,5 +88,43 @@ describe('encounterSectionsForForm', () => {
       ['Sword', 'sword'],
       ['Sword (Isle of Armor)', 'sword']
     ])
+  })
+
+  const rowsFor = (details: EncounterDetail[]) => encounterSectionsForForm(dataWith([[0, 0, details]]), 1)[0].locations[0].rows
+
+  it('merges same-level slots of one method by summing their chance', () => {
+    const rows = rowsFor([detail({ minLevel: 20, maxLevel: 20, chance: 30 }), detail({ minLevel: 20, maxLevel: 20, chance: 10 })])
+    expect(rows).toEqual([{ method: 'Walk', levels: 'Lv. 20 (40%)', conditions: null }])
+  })
+
+  it('lists different levels inline in ascending order', () => {
+    const rows = rowsFor([detail({ minLevel: 21, maxLevel: 21, chance: 30 }), detail({ minLevel: 20, maxLevel: 20, chance: 30 })])
+    expect(rows[0].levels).toBe('Lv. 20 (30%), 21 (30%)')
+  })
+
+  it('keeps different methods as separate rows', () => {
+    expect(rowsFor([detail(), detail({ methodIndex: 1 })]).map((r) => r.method)).toEqual(['Old Rod', 'Walk'])
+  })
+
+  it('merges time-of-day rows whose breakdowns match, labelling the subset', () => {
+    const rows = rowsFor([
+      detail({ chance: 50, conditionValues: ['time-day'] }),
+      detail({ chance: 50, conditionValues: ['time-night'] }),
+      detail({ chance: 20, minLevel: 4, maxLevel: 4, conditionValues: ['time-morning'] })
+    ])
+    expect(rows).toEqual([
+      { method: 'Walk', levels: 'Lv. 3 (50%)', conditions: 'Day, Night' },
+      { method: 'Walk', levels: 'Lv. 4 (20%)', conditions: 'Morning' }
+    ])
+  })
+
+  it('drops the time label when morning, day and night all match', () => {
+    const rows = rowsFor(['time-morning', 'time-day', 'time-night'].map((t) => detail({ conditionValues: [t] })))
+    expect(rows).toEqual([{ method: 'Walk', levels: 'Lv. 3 (100%)', conditions: null }])
+  })
+
+  it('keeps non-time conditions as their own groups', () => {
+    const rows = rowsFor([detail({ chance: 60 }), detail({ chance: 40, conditionValues: ['radar-on'] })])
+    expect(rows.map((r) => r.conditions)).toEqual([null, 'Radar On'])
   })
 })

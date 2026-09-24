@@ -1,5 +1,5 @@
 import { ORIGIN_GAMES } from '@shared/data/origin-games'
-import type { EncounterData } from '@shared/types/encounters'
+import type { EncounterData, EncounterDetail } from '@shared/types/encounters'
 import { slugDisplayName } from './speciesPageFormat'
 
 /**
@@ -54,19 +54,95 @@ export function locationAreaLabel(areaSlug: string): string {
   return slugDisplayName(areaSlug.replace(/-area$/, ''))
 }
 
-function levelRangeLabel(minLevel: number, maxLevel: number): string {
-  return minLevel === maxLevel ? `Lv. ${minLevel}` : `Lv. ${minLevel}-${maxLevel}`
+function levelLabel(minLevel: number, maxLevel: number): string {
+  return minLevel === maxLevel ? `${minLevel}` : `${minLevel}-${maxLevel}`
 }
 
-function conditionsLabel(conditionValues: string[]): string | null {
-  return conditionValues.length === 0 ? null : conditionValues.map(slugDisplayName).join(', ')
-}
+const TIME_ORDER = ['time-morning', 'time-day', 'time-night']
+/** Sentinel time key for details with no time-of-day condition. */
+const ANY_TIME = 'any'
 
 export interface EncounterRow {
   method: string
-  levelRange: string
-  chance: string
+  /** Inline level breakdown, e.g. "Lv. 20 (30%), 21 (30%)" — same-level slots already summed. */
+  levels: string
+  /** Time-of-day and other conditions, or null when the row applies unconditionally. */
   conditions: string | null
+}
+
+interface LevelSlot {
+  minLevel: number
+  maxLevel: number
+  chance: number
+}
+
+interface DetailGroup {
+  method: string
+  otherConditions: string[]
+  byTime: Map<string, Map<string, LevelSlot>>
+}
+
+function levelsLabel(slots: LevelSlot[]): string {
+  const parts = slots.map((s) => `${levelLabel(s.minLevel, s.maxLevel)} (${s.chance}%)`)
+  return `Lv. ${parts.join(', ')}`
+}
+
+/** Collapses PokeAPI's one-row-per-slot-per-time-of-day detail list: same method + non-time
+ * conditions form one group, same-level slots sum their chance, and time-of-day values whose
+ * level breakdowns match merge into one row (all three merging means time doesn't matter, so
+ * the time label is dropped). Exported for the Dex Locations sub-tab's grouping needs. */
+export function groupEncounterDetails(details: EncounterDetail[], methods: string[]): EncounterRow[] {
+  const groups = new Map<string, DetailGroup>()
+  for (const d of details) {
+    const times = d.conditionValues.filter((c) => c.startsWith('time-'))
+    const others = d.conditionValues.filter((c) => !c.startsWith('time-')).sort()
+    const key = `${d.methodIndex}|${others.join(',')}`
+    let group = groups.get(key)
+    if (!group) {
+      group = { method: slugDisplayName(methods[d.methodIndex]), otherConditions: others, byTime: new Map() }
+      groups.set(key, group)
+    }
+    for (const time of times.length > 0 ? times : [ANY_TIME]) {
+      let slots = group.byTime.get(time)
+      if (!slots) {
+        slots = new Map()
+        group.byTime.set(time, slots)
+      }
+      const levelKey = levelLabel(d.minLevel, d.maxLevel)
+      const slot = slots.get(levelKey)
+      if (slot) slot.chance += d.chance
+      else slots.set(levelKey, { minLevel: d.minLevel, maxLevel: d.maxLevel, chance: d.chance })
+    }
+  }
+
+  const rows: Array<EncounterRow & { total: number }> = []
+  for (const group of groups.values()) {
+    const bySignature = new Map<string, { slots: LevelSlot[]; times: string[] }>()
+    for (const [time, slotMap] of group.byTime) {
+      const slots = [...slotMap.values()].sort((a, b) => a.minLevel - b.minLevel || a.maxLevel - b.maxLevel)
+      const signature = levelsLabel(slots)
+      const cluster = bySignature.get(signature)
+      if (cluster) cluster.times.push(time)
+      else bySignature.set(signature, { slots, times: [time] })
+    }
+    for (const [levels, { slots, times }] of bySignature) {
+      const realTimes = TIME_ORDER.filter((t) => times.includes(t))
+      const timeLabel =
+        realTimes.length === 0 || realTimes.length === TIME_ORDER.length
+          ? []
+          : [realTimes.map((t) => slugDisplayName(t.replace(/^time-/, ''))).join(', ')]
+      const conditions = [...timeLabel, ...group.otherConditions.map(slugDisplayName)].join(', ')
+      rows.push({
+        method: group.method,
+        levels,
+        conditions: conditions === '' ? null : conditions,
+        total: slots.reduce((sum, s) => sum + s.chance, 0)
+      })
+    }
+  }
+  return rows
+    .sort((a, b) => b.total - a.total || a.method.localeCompare(b.method) || (a.conditions ?? '').localeCompare(b.conditions ?? ''))
+    .map(({ total: _total, ...row }) => row)
 }
 
 export interface EncounterLocationRows {
@@ -86,7 +162,7 @@ export interface GameEncounterSection {
  * this form has no PokeAPI encounter data at all (an excluded game, or a form PokeAPI
  * records no wild encounters for). Same opt-in-field contract as safariFleeRatesForSpecies:
  * SpeciesPage hides the Where to Find field entirely when this returns []. Within a game,
- * locations sort alphabetically and rows by chance descending. */
+ * locations sort alphabetically and rows by total chance descending. */
 export function encounterSectionsForForm(encounterData: EncounterData, pokeapiId: number): GameEncounterSection[] {
   const locationEntries = encounterData.encounters[pokeapiId]
   if (!locationEntries) return []
@@ -106,14 +182,7 @@ export function encounterSectionsForForm(encounterData: EncounterData, pokeapiId
         working = { ref: gameRefForVersion(versionName), locations: [] }
         byVersion.set(versionName, working)
       }
-      const rows: EncounterRow[] = [...versionDetail.encounterDetails]
-        .sort((a, b) => b.chance - a.chance)
-        .map((d) => ({
-          method: slugDisplayName(encounterData.methods[d.methodIndex]),
-          levelRange: levelRangeLabel(d.minLevel, d.maxLevel),
-          chance: `${d.chance}%`,
-          conditions: conditionsLabel(d.conditionValues)
-        }))
+      const rows = groupEncounterDetails(versionDetail.encounterDetails, encounterData.methods)
       working.locations.push({ location, rows })
     }
   }

@@ -213,8 +213,7 @@ export function SpeciesPage({
                         <tr>
                           <th>Location</th>
                           <th>Method</th>
-                          <th>Level</th>
-                          <th>Chance</th>
+                          <th>Levels</th>
                           <th>Conditions</th>
                         </tr>
                       </thead>
@@ -224,8 +223,7 @@ export function SpeciesPage({
                             <tr key={`${loc.location}-${i}`}>
                               <td>{i === 0 ? loc.location : ''}</td>
                               <td>{row.method}</td>
-                              <td>{row.levelRange}</td>
-                              <td>{row.chance}</td>
+                              <td>{row.levels}</td>
                               <td>{row.conditions ?? ''}</td>
                             </tr>
                           ))
