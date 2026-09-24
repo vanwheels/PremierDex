@@ -4,7 +4,7 @@
 Design pass: chose PokeAPI as the only source (no scraping), stay fetch-from-CDN, HOME renders
 for Gen 8/9, USUM gifs for Gen 7, `transparent/` for Gen 2, hide Gen 1's shiny slot, and a
 version chip row for multi-game generations. Full reasoning in
-`docs/investigations/sprite-sources.md`. See commit `TBD`.
+`docs/investigations/sprite-sources.md`. See commit `703edca`.
 
 ## [Where to Find section on SpeciesPage, Leg 3] — 2026-09-23
 Final leg — milestone shipped, see MILESTONES.md. Added `encounterLocationsForForm`
