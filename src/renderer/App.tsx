@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BackupControls } from './BackupControls'
+import { SettingsButton } from './SettingsButton'
 import { UpdateControls } from './UpdateControls'
 import { ThemeProvider } from './theme/theme-store'
 import { ThemeModeToggle } from './theme/ThemeModeToggle'
@@ -47,9 +47,9 @@ export function App(): JSX.Element {
         <header className="app-header">
           <h1 className="app-title">PremierDex</h1>
           <div className="app-header-controls">
-            <ThemeModeToggle />
-            <BackupControls onImported={data.handleImported} />
             <UpdateControls />
+            <ThemeModeToggle />
+            <SettingsButton onImported={data.handleImported} />
           </div>
         </header>
         <nav className="app-view-tabs">

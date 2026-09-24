@@ -97,6 +97,14 @@
   display: flex;
   gap: 0.75rem;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+/* One block per group of settings inside the Settings popup (SettingsButton). */
+.settings-section h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--muted);
 }
 
 /* ThemeModeToggle (app-header-controls) — the two icon buttons sit inside one bordered box
