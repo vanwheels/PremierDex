@@ -35,8 +35,8 @@ const HOME = source('home', 'HOME', 'other/home', { hasBack: false })
 
 export const GENERATION_SOURCES: Record<number, SpriteSource[]> = {
   1: [
-    source('red-blue', 'Red/Blue', 'versions/generation-i/red-blue', { hasShiny: false }),
-    source('yellow', 'Yellow', 'versions/generation-i/yellow', { hasShiny: false })
+    source('red-blue', 'Red/Blue', 'versions/generation-i/red-blue/transparent', { hasShiny: false }),
+    source('yellow', 'Yellow', 'versions/generation-i/yellow/transparent', { hasShiny: false })
   ],
   2: [
     source('crystal', 'Crystal', 'versions/generation-ii/crystal/transparent'),

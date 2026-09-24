@@ -112,6 +112,14 @@ export type AnimatedSource = 'black-white' | 'showdown'
  * callers should use it for every other generation. */
 const BLACK_WHITE_ANIMATED_GENERATIONS = new Set([5])
 
+/** Animated art starts with Gen 5 (B/W); Gen 1-4 games only had static sprites, so the modal
+ * offers no Animated option there even though Showdown's set covers every generation. */
+export const FIRST_ANIMATED_GENERATION = 5
+
+export function hasAnimatedSprites(generation: number): boolean {
+  return generation >= FIRST_ANIMATED_GENERATION
+}
+
 export function hasBlackWhiteAnimatedSprites(generation: number): boolean {
   return BLACK_WHITE_ANIMATED_GENERATIONS.has(generation)
 }

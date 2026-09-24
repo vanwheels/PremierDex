@@ -4,6 +4,7 @@ import {
   AnimatedSource,
   availableGenerations,
   generationSpriteUrl,
+  hasAnimatedSprites,
   hasBlackWhiteAnimatedSprites
 } from './sprites'
 import { defaultSpriteSource } from './spriteSources'
@@ -57,8 +58,8 @@ function SpriteSlot({ src, alt, label }: { src: string; alt: string; label?: str
  * Click-to-enlarge overlay with the generation stepper. Defaults to the most current
  * generation (most recognizable art) and non-shiny; closes on Escape, backdrop click,
  * or the close button. A generation/shiny combo with no sprite file shows a text
- * fallback rather than a broken image — see sprites.ts (which itself falls back to
- * evergreen shiny art for the three generations with no shiny set at all).
+ * fallback rather than a broken image. Shiny is disabled where the generation has no shiny
+ * art (Gen 1) and Animated where it has no animated art (before Gen 5).
  *
  * Animated has two sources (see AnimatedSource in sprites.ts): the authentic gen-5
  * black-white set, and Pokemon Showdown's generation-independent set. The Animated
@@ -78,10 +79,16 @@ export function SpriteModal({ target, onClose, initialShiny = false, initialGene
     initialGeneration !== undefined && generations.includes(initialGeneration) ? initialGeneration : generations[generations.length - 1]
   )
   const [shiny, setShiny] = useState(initialShiny)
-  const [animated, setAnimated] = useState(false)
+  const [animatedPref, setAnimatedPref] = useState(false)
   const [back, setBack] = useState(false)
   const [preferredSource, setPreferredSource] = useState<AnimatedSource>('black-white')
 
+  // The Animated / Shiny choices persist across generations but only apply where that art
+  // exists (no animated art before Gen 5, no shiny art in Gen 1).
+  const canAnimate = hasAnimatedSprites(generation)
+  const animated = animatedPref && canAnimate
+  const canShiny = animated || defaultSpriteSource(generation).hasShiny
+  const showShiny = shiny && canShiny
   const canUseBlackWhite = hasBlackWhiteAnimatedSprites(generation)
   const animatedSource: AnimatedSource = canUseBlackWhite ? preferredSource : 'showdown'
 
@@ -102,10 +109,10 @@ export function SpriteModal({ target, onClose, initialShiny = false, initialGene
 
   const spriteUrl = (female: boolean): string =>
     animated
-      ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, shiny, animatedSource, female, showBack)
-      : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, shiny, female, showBack)
+      ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, showShiny, animatedSource, female, showBack)
+      : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, showShiny, female, showBack)
 
-  const altSuffix = `${shiny ? ' shiny' : ''}${animated ? ' animated' : ''}${showBack ? ' back' : ''}`
+  const altSuffix = `${showShiny ? ' shiny' : ''}${animated ? ' animated' : ''}${showBack ? ' back' : ''}`
 
   return (
     <div className="sprite-modal-backdrop" onClick={onClose}>
@@ -154,11 +161,11 @@ export function SpriteModal({ target, onClose, initialShiny = false, initialGene
         </div>
         <div className="sprite-modal-options">
           <label>
-            <input type="checkbox" checked={shiny} onChange={(e) => setShiny(e.target.checked)} />
+            <input type="checkbox" checked={showShiny} disabled={!canShiny} onChange={(e) => setShiny(e.target.checked)} />
             Shiny
           </label>
           <label>
-            <input type="checkbox" checked={animated} onChange={(e) => setAnimated(e.target.checked)} />
+            <input type="checkbox" checked={animated} disabled={!canAnimate} onChange={(e) => setAnimatedPref(e.target.checked)} />
             Animated
           </label>
           {canBack && (

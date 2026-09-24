@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   animatedSpriteUrl,
+  hasAnimatedSprites,
   availableGenerations,
   CURRENT_MAX_GENERATION,
   defaultSpriteUrl,
@@ -123,7 +124,7 @@ describe('generationSpriteUrl', () => {
 
   it('does not fall back for a non-shiny request in a shiny-less generation', () => {
     expect(generationSpriteUrl(25, null, 1, false, false)).toBe(
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/25.png'
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/transparent/25.png'
     )
   })
 
@@ -178,7 +179,7 @@ describe('generationSpriteUrl', () => {
 
   it('does not fall back for a non-shiny back request in generation 1, which does have back/', () => {
     expect(generationSpriteUrl(25, null, 1, false, false, true)).toBe(
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/back/25.png'
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/transparent/back/25.png'
     )
   })
 })
@@ -247,5 +248,12 @@ describe('animatedSpriteUrl', () => {
     expect(animatedSpriteUrl(593, null, true, 'showdown', true, true)).toBe(
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/shiny/female/593.gif'
     )
+  })
+})
+
+describe('hasAnimatedSprites', () => {
+  it('is false before Gen 5 and true from Gen 5 onward', () => {
+    expect([1, 2, 3, 4].some(hasAnimatedSprites)).toBe(false)
+    expect([5, 6, 7, 8, 9].every(hasAnimatedSprites)).toBe(true)
   })
 })

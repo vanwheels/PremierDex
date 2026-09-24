@@ -3,7 +3,8 @@
 ## [Sprite system overhaul, Leg 3] — 2026-09-24
 Species strip hides the shiny slot for Gen 1 (flex row centers the lone sprite) and captions
 Gen 8/9 as Pokémon HOME art (`generationArtNote`). The modal's Back toggle now hides when the
-generation has no back art and Animated is off, instead of showing evergreen back art. See commit `8f3c4e7`.
+generation has no back art and Animated is off, instead of showing evergreen back art. Follow-up: Gen 1 now uses `transparent/` art, the modal's Shiny
+is disabled in Gen 1, and Animated is disabled before Gen 5. See commits `8f3c4e7`.
 
 ## [Sprite system overhaul, Leg 2] — 2026-09-24
 Replaced the `GENERATION_GAME` + hardcoded `.png` assumption with a per-generation source table
