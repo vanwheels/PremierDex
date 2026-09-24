@@ -1,29 +1,10 @@
 # TODO
 
-## Current Milestone: Encounter data + Where to Find (PokeAPI-covered games)
-
-Species database (full per-species pages) shipped 2026-09-23 (Legs 1-5, see
-COMPLETED.md/MILESTONES.md). Movesets and breeding/egg groups were deliberately left out of
-that leg sequence; candidates for a follow-on milestone if wanted, not yet scoped.
-
-Scoped 2026-09-23 out of the original "Encounter tables + location/game search UI" idea
-(raised by Vanny 2026-09-21; see `docs/investigations/pokeapi-encounter-coverage.md` for the
-data-source investigation). Split into this milestone (data build + a simple per-species list,
-tied into the Dex) and a separate future milestone for the map-based browse UI (see Future
-Milestones below) — the map UI is a much bigger, asset-dependent problem (no map art exists
-in the repo, and different eras need different map treatments) and doesn't need to block
-getting encounter data into the app. Scope is the PokeAPI-covered games only: Gen 1-7, Let's
-Go, Sword/Shield (+DLC), and Orre's snag mechanic. Brilliant Diamond/Shining Pearl, Legends
-Arceus, Scarlet/Violet (+DLC), and Legends Z-A have zero PokeAPI encounter data and are
-deferred to a later hand-curation pass (same reactive, opt-in-per-game posture as
-`BALL_POOLS`/Met Location), not blocking this milestone.
-
-### [Where to Find section on SpeciesPage] — Leg 3
-Add a per-game/location/method encounter list to `SpeciesPage.tsx`, grouped and formatted the
-same way the existing Safari Zone Flee Rate field is. This is the milestone's proof of
-concept — ties encounter data into the Dex per Vanny's original 2026-09-21 ask, without
-needing the map UI. Depends on Leg 2's IPC wiring.
-Last touched: 2026-09-23. Re-check count: 0.
+No current milestone — Encounter data + Where to Find (PokeAPI-covered games) shipped
+2026-09-23 (Legs 1-3, see COMPLETED.md/MILESTONES.md). The map-based browse UI it was split
+from stays a separate, not-yet-scoped future milestone (see Future Milestones below).
+Movesets and breeding/egg groups (deferred from the earlier Species database milestone) are
+also still unscoped.
 
 ## Unscheduled
 

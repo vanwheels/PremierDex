@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Where to Find section on SpeciesPage, Leg 3] — 2026-09-23
+Final leg — milestone shipped, see MILESTONES.md. Added `encounterLocationsForForm`
+(`encountersFormat.ts`), grouping `encounters.json`'s raw per-location/version/method rows
+into a per-location list on `SpeciesPage`, deduping versions sharing an identical
+method/level/chance/condition combination into one games label (same precedent as Leg 5 of
+the Species database milestone's `safari-flee-rates.ts`). Isle of Armor/Crown Tundra DLC
+version names resolve back to the base Sword/Shield id for sorting, with a distinguishing
+suffix on the display label. See commit `83c7442`.
+
 ## [Encounter data storage/IPC wiring, Leg 2] — 2026-09-23
 Wired `data/pokemon/encounters.json` into the renderer end-to-end, following the
 `loadSpeciesDetails` pattern exactly: `loadEncounterData()` in `load-species-data.ts`, a
