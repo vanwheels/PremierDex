@@ -1,5 +1,10 @@
 # COMPLETED
 
+## [Full UI/UX pass on the Dex interface, Leg 3] — 2026-09-24
+Species page reflowed into sketch-2's box layout with an inline Gen I-IX sprite strip (sprites
+only; SpriteModal kept for Animated/Back/gender pair). Types and base stats not placed — no
+data yet (Species/Dex reference data layer). See commit `4754bd0`.
+
 ## [Full UI/UX pass on the Dex interface, Leg 2] — 2026-09-24
 `ThemeModeToggle` restyled from a 3-button text row into the sketched diamond/pearl icon box;
 `theme-store` untouched. System mode has no icon, so it reads as neither icon pressed and

@@ -4,22 +4,11 @@
 
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones —
 many input fields, some overlapping in function. Scoped 2026-09-24 from Vanny's hand-drawn
-sketches into 4 legs (Legs 1-2 shipped 2026-09-24, see COMPLETED.md), covering everything buildable without new species/move/stat
+sketches into 4 legs (Legs 1-3 shipped 2026-09-24, see COMPLETED.md), covering everything buildable without new species/move/stat
 data. List view's right-click context menu for Ribbons & Marks/Edit Origin (confirmed
 unintuitive by Vanny 2026-09-20) gets revisited as part of Leg 1's nav rework rather than
 fixed in isolation. Sketches and the decisions behind them: `docs/design/ui-ux-pass/`
 (read its README first — a clean session has no other copy of the screenshots).
-
-### [Full UI/UX pass on the Dex interface] — Leg 3
-Reflow the Species page's existing fields (abilities as a dynamic list with descriptions,
-gender ratio, base happiness, experience growth, EVs earned, base catch rate, Safari flee
-rate, Where to Find, regional dex #) into the sketched box layout. Promote sprite
-generation-switching from `SpriteModal`'s click-to-enlarge stepper into an inline Gen I-IX
-strip on the page itself — scoped to sprites only for now, since types/abilities/stats
-aren't generation-aware in the current data model (see the Species/Dex reference data layer
-item under Future Milestones). The per-version (e.g. D/P/Pt vs. HGSS) sub-toggle and
-"changes all info" behavior wait on that data.
-Last touched: 2026-09-24. Re-check count: 0.
 
 ### [Full UI/UX pass on the Dex interface] — Leg 4
 New Dex tab: Showdown/Serebii-inspired species reference list (Name/Dex #/Abilities columns,
