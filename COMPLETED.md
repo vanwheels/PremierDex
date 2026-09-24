@@ -4,7 +4,7 @@
 Species strip hides the shiny slot for Gen 1 (flex row centers the lone sprite) and captions
 Gen 8/9 as Pokémon HOME art (`generationArtNote`). The modal's Back toggle now hides when the
 generation has no back art and Animated is off, instead of showing evergreen back art. Follow-up: Gen 1 now uses `transparent/` art, the modal's Shiny
-is disabled in Gen 1, and Animated is disabled before Gen 5. See commits `8f3c4e7`.
+is disabled in Gen 1, and Animated is disabled before Gen 5. See commits `8f3c4e7` and `5bc6184`.
 
 ## [Sprite system overhaul, Leg 2] — 2026-09-24
 Replaced the `GENERATION_GAME` + hardcoded `.png` assumption with a per-generation source table
@@ -59,7 +59,7 @@ Split along the region/family boundary scoped in TODO.md: one test file per map 
 met-locations.ts's own const groupings and matching how a region can span multiple
 generations (e.g. `met-locations.kanto.test.ts` covers Gen 1, FireRed/LeafGreen, and
 Let's Go alike). All 147 test cases carried over unchanged; largest resulting file is 189
-lines. 1330 lines -> 12 files, none over 190 lines. See commits `6d5237b`, `bd71b30`.
+lines. 1330 lines -> 12 files, none over 190 lines. See commits `6d5237b` and `5bc6184`, `bd71b30`.
 
 ## [Codebase File-Size Cleanup Leg 4: split useCollectionData.ts] — 2026-09-21
 Split along the boundary scoped in TODO.md: the box-position/undo-stack slice
