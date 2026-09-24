@@ -69,3 +69,9 @@ export function defaultSpriteSource(generation: number): SpriteSource {
   if (!sources) throw new Error(`No sprite mapping for generation ${generation}`)
   return sources[0]
 }
+
+/** Caption for generations whose art isn't game-specific (Gen 8/9 share HOME renders), so the
+ * strip doesn't imply per-game art. Null for every other generation. */
+export function generationArtNote(generation: number): string | null {
+  return defaultSpriteSource(generation).id === HOME.id ? 'Pokémon HOME art (shared by Gen 8 and 9)' : null
+}

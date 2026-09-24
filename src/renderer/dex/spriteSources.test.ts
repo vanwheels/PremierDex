@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { CURRENT_MAX_GENERATION } from './sprites'
-import { defaultSpriteSource, GENERATION_SOURCES } from './spriteSources'
+import { defaultSpriteSource, generationArtNote, GENERATION_SOURCES } from './spriteSources'
 
 describe('GENERATION_SOURCES', () => {
   it('covers every generation from 1 through CURRENT_MAX_GENERATION with at least one source', () => {
@@ -30,5 +30,14 @@ describe('defaultSpriteSource', () => {
 
   it('throws for a generation outside the table', () => {
     expect(() => defaultSpriteSource(10)).toThrow()
+  })
+})
+
+describe('generationArtNote', () => {
+  it('labels Gen 8 and 9 as HOME art and leaves other generations unlabeled', () => {
+    expect(generationArtNote(8)).toMatch(/HOME/)
+    expect(generationArtNote(9)).toMatch(/HOME/)
+    expect(generationArtNote(7)).toBeNull()
+    expect(generationArtNote(1)).toBeNull()
   })
 })

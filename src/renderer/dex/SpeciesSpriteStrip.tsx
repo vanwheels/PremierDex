@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Form } from '@shared/types/pokemon'
 import { availableGenerations, generationSpriteUrl } from './sprites'
+import { defaultSpriteSource, generationArtNote } from './spriteSources'
 
 const SPRITE_SIZE = 120
 
@@ -39,6 +40,10 @@ function StripSprite({ src, alt, label, onClick }: { src: string; alt: string; l
  */
 export function SpeciesSpriteStrip({ form, displayName, generation, onGenerationChange, onEnlarge }: SpeciesSpriteStripProps): JSX.Element {
   const available = availableGenerations(form.firstAvailableGeneration)
+  // Gen 1 has no shiny art: drop the slot (the flex row centers the lone sprite) rather than
+  // showing the evergreen shiny fallback next to 1990s art.
+  const variants = defaultSpriteSource(generation).hasShiny ? [false, true] : [false]
+  const artNote = generationArtNote(generation)
   return (
     <>
       <div className="species-page-gen-strip" role="group" aria-label="Sprite generation">
@@ -56,7 +61,7 @@ export function SpeciesSpriteStrip({ form, displayName, generation, onGeneration
         ))}
       </div>
       <div className="species-page-sprites">
-        {[false, true].map((shiny) => {
+        {variants.map((shiny) => {
           const src = generationSpriteUrl(form.pokeapiId, form.spriteFormSuffix, generation, shiny, false)
           return (
             <StripSprite
@@ -69,6 +74,7 @@ export function SpeciesSpriteStrip({ form, displayName, generation, onGeneration
           )
         })}
       </div>
+      {artNote && <p className="species-page-sprite-note">{artNote}</p>}
     </>
   )
 }

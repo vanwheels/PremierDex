@@ -6,13 +6,6 @@ Started 2026-09-24. Design pass done — decisions and per-generation sources ar
 `docs/investigations/sprite-sources.md`. Stays fetch-from-CDN (bundling is a separate future
 discussion); Gen 8/9 use HOME renders, Gen 7 keeps the USUM gifs, Gen 2 uses `transparent/`.
 
-### [Sprite system overhaul] — Leg 3
-Species page strip UI: hide the shiny slot when a generation has no shiny art (Gen 1) and center
-the lone sprite; label Gen 8/9 as HOME art rather than implying game-specific art. `other/home`
-has no `back/` folder (verified in Leg 2), so `generationSpriteUrl` currently falls back to the
-evergreen back art there — decide whether the modal's back toggle should hide instead.
-Last touched: 2026-09-24. Re-check count: 0.
-
 ### [Sprite system overhaul] — Leg 4
 Version chip row under the Gen I-IX strip, shown only for generations with more than one game
 (Gen 1-4, 6), switching the sprite source among that generation's games. Toggle first — a

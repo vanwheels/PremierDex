@@ -6,6 +6,7 @@ import {
   generationSpriteUrl,
   hasBlackWhiteAnimatedSprites
 } from './sprites'
+import { defaultSpriteSource } from './spriteSources'
 
 export interface SpriteModalTarget {
   pokeapiId: number
@@ -92,14 +93,19 @@ export function SpriteModal({ target, onClose, initialShiny = false, initialGene
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [onClose])
 
+  // HOME renders (Gen 8/9) have no back/ art, so hide the toggle rather than substituting
+  // evergreen back art; the animated Showdown set has back sprites for every generation.
+  const canBack = animated || defaultSpriteSource(generation).hasBack
+  const showBack = back && canBack
+
   const index = generations.indexOf(generation)
 
   const spriteUrl = (female: boolean): string =>
     animated
-      ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, shiny, animatedSource, female, back)
-      : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, shiny, female, back)
+      ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, shiny, animatedSource, female, showBack)
+      : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, shiny, female, showBack)
 
-  const altSuffix = `${shiny ? ' shiny' : ''}${animated ? ' animated' : ''}${back ? ' back' : ''}`
+  const altSuffix = `${shiny ? ' shiny' : ''}${animated ? ' animated' : ''}${showBack ? ' back' : ''}`
 
   return (
     <div className="sprite-modal-backdrop" onClick={onClose}>
@@ -155,10 +161,12 @@ export function SpriteModal({ target, onClose, initialShiny = false, initialGene
             <input type="checkbox" checked={animated} onChange={(e) => setAnimated(e.target.checked)} />
             Animated
           </label>
-          <label>
-            <input type="checkbox" checked={back} onChange={(e) => setBack(e.target.checked)} />
-            Back
-          </label>
+          {canBack && (
+            <label>
+              <input type="checkbox" checked={back} onChange={(e) => setBack(e.target.checked)} />
+              Back
+            </label>
+          )}
           {animated && canUseBlackWhite && (
             <span className="sprite-modal-animated-source">
               <label>

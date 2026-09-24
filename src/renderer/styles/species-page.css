@@ -58,6 +58,13 @@
   margin-bottom: 1rem;
 }
 
+.species-page-sprite-note {
+  margin: 0 0 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
 .species-page-sprite-button {
   display: flex;
   flex-direction: column;
