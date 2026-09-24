@@ -6,6 +6,7 @@ import type { SpeciesAvailabilityData } from '@shared/types/species-availability
 import type { EvolutionEdge } from '@shared/types/evolution'
 import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
+import type { EncounterData } from '@shared/types/encounters'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
 import type { UpdaterBridge } from '@shared/updater/updater-provider'
 
@@ -68,6 +69,10 @@ export interface AppBridge extends UpdaterBridge {
    * full species page (Leg 3). Not DB-backed — see PokemonIpcChannel.loadSpeciesDetails'
    * own comment. */
   loadSpeciesDetails(): Promise<SpeciesDetailsData>
+  /** Leg 2 of the Encounter data + Where to Find milestone: static per-pokeapiId wild/snag
+   * encounter data, for the species page's Where to Find section (Leg 3). Not DB-backed —
+   * see PokemonIpcChannel.loadEncounters' own comment. */
+  loadEncounters(): Promise<EncounterData>
   /** Opens a save dialog, writes the full collection to the chosen file. Null if the
    * user canceled the dialog. */
   exportCollectionToFile(): Promise<string | null>

@@ -41,6 +41,10 @@ export const PokemonIpcChannel = {
    * per-form detail data (see load-species-data.ts), same not-a-StorageAdapter-method shape
    * as loadFormeSwitchGroups above. */
   loadSpeciesDetails: 'pokemon:speciesDetails:load',
+  /** Leg 2 of the Encounter data + Where to Find milestone: static per-pokeapiId wild/snag
+   * encounter data (see load-species-data.ts), same not-a-StorageAdapter-method shape as
+   * loadSpeciesDetails above. */
+  loadEncounters: 'pokemon:encounters:load',
   /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
    * see StorageAdapter.listEntryRibbons/setEntryRibbons/listEntryMarks/setEntryMarks' own
    * doc comments. */

@@ -3,6 +3,7 @@ import type { StorageAdapter } from '@shared/storage/storage-interface'
 import type { CollectionEntryOriginInput, Gender } from '@shared/types/pokemon'
 import { PokemonIpcChannel } from '@shared/storage/ipc-channels'
 import {
+  loadEncounterData,
   loadEvolutionEdgesData,
   loadFormeSwitchGroupsData,
   loadSpeciesAvailabilityData,
@@ -70,6 +71,7 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
   ipcMain.handle(PokemonIpcChannel.loadEvolutionEdges, () => loadEvolutionEdgesData())
   ipcMain.handle(PokemonIpcChannel.loadFormeSwitchGroups, () => loadFormeSwitchGroupsData())
   ipcMain.handle(PokemonIpcChannel.loadSpeciesDetails, () => loadSpeciesDetailsData())
+  ipcMain.handle(PokemonIpcChannel.loadEncounters, () => loadEncounterData())
   ipcMain.handle(PokemonIpcChannel.listEntryRibbons, (_event, entryId: number) => storage.listEntryRibbons(entryId))
   ipcMain.handle(PokemonIpcChannel.setEntryRibbons, (_event, entryId: number, ribbonNames: string[]) =>
     storage.setEntryRibbons(entryId, ribbonNames)

@@ -5,6 +5,7 @@ import type { SpeciesAvailabilityData } from '@shared/types/species-availability
 import type { EvolutionEdge } from '@shared/types/evolution'
 import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
+import type { EncounterData } from '@shared/types/encounters'
 
 export interface SeedSpecies {
   id: number
@@ -95,4 +96,12 @@ export function loadFormeSwitchGroupsData(): FormeSwitchGroup[] {
 export function loadSpeciesDetailsData(): SpeciesDetailsData {
   const filePath = join(DATA_DIR, 'species-details.json')
   return JSON.parse(readFileSync(filePath, 'utf-8')) as SpeciesDetailsData
+}
+
+/** Loads the static per-pokeapiId wild/snag encounter data (Leg 1 of the Encounter data +
+ * Where to Find milestone) written by `npm run fetch-encounters`. Same not-DB-backed shape
+ * as loadSpeciesAvailabilityData. */
+export function loadEncounterData(): EncounterData {
+  const filePath = join(DATA_DIR, 'encounters.json')
+  return JSON.parse(readFileSync(filePath, 'utf-8')) as EncounterData
 }

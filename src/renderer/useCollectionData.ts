@@ -7,6 +7,7 @@ import type { SpeciesAvailabilityData } from '@shared/types/species-availability
 import type { EvolutionEdge } from '@shared/types/evolution'
 import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
+import type { EncounterData } from '@shared/types/encounters'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { useBoxPositionUndo } from './useBoxPositionUndo'
 
@@ -17,6 +18,9 @@ const EMPTY_SPECIES_AVAILABILITY: SpeciesAvailabilityData = { pokedexes: {}, ent
 
 // Same not-loaded-yet shape as EMPTY_SPECIES_AVAILABILITY above.
 const EMPTY_SPECIES_DETAILS: SpeciesDetailsData = { species: {}, forms: {}, growthRates: {}, abilities: {} }
+
+// Same not-loaded-yet shape as EMPTY_SPECIES_DETAILS above.
+const EMPTY_ENCOUNTER_DATA: EncounterData = { encounters: {}, locationAreas: [], methods: [], versions: [] }
 
 export interface CollectionData {
   species: Species[]
@@ -37,6 +41,9 @@ export interface CollectionData {
    * detail data (ability descriptions, base happiness, EV yield, etc.) for the full species
    * page (Leg 3). */
   speciesDetails: SpeciesDetailsData
+  /** Leg 2 of the Encounter data + Where to Find milestone — per-pokeapiId wild/snag
+   * encounter data, for the species page's Where to Find section (Leg 3). */
+  encounterData: EncounterData
   loading: boolean
   importVersion: number
   loadAll: () => Promise<void>
@@ -111,6 +118,7 @@ export function useCollectionData(): CollectionData {
   const [evolutionEdges, setEvolutionEdges] = useState<EvolutionEdge[]>([])
   const [formeSwitchGroups, setFormeSwitchGroups] = useState<FormeSwitchGroup[]>([])
   const [speciesDetails, setSpeciesDetails] = useState<SpeciesDetailsData>(EMPTY_SPECIES_DETAILS)
+  const [encounterData, setEncounterData] = useState<EncounterData>(EMPTY_ENCOUNTER_DATA)
   const [loading, setLoading] = useState(true)
   // Bumped after a JSON import so TrainerProfilesPanel/StorageLocationsPanel remount and
   // refetch — they load their own data on mount only and have no other way to learn the DB
@@ -139,6 +147,7 @@ export function useCollectionData(): CollectionData {
       window.premierDex.loadEvolutionEdges(),
       window.premierDex.loadFormeSwitchGroups(),
       window.premierDex.loadSpeciesDetails(),
+      window.premierDex.loadEncounters(),
       window.premierDex.listTrainerProfiles()
     ]).then(
       ([
@@ -152,6 +161,7 @@ export function useCollectionData(): CollectionData {
         edges,
         formeSwitchGroupList,
         details,
+        encounters,
         trainerProfileList
       ]) => {
         setSpecies(speciesList)
@@ -164,6 +174,7 @@ export function useCollectionData(): CollectionData {
         setEvolutionEdges(edges)
         setFormeSwitchGroups(formeSwitchGroupList)
         setSpeciesDetails(details)
+        setEncounterData(encounters)
         setTrainerProfiles(trainerProfileList)
       }
     )
@@ -339,6 +350,7 @@ export function useCollectionData(): CollectionData {
     evolutionEdges,
     formeSwitchGroups,
     speciesDetails,
+    encounterData,
     loading,
     importVersion,
     loadAll,
