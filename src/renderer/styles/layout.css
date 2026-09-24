@@ -272,10 +272,10 @@
 }
 
 /* Sketch layout (docs/design/ui-ux-pass/sketch-1): Overall top-left, By Regional Variant
-   below it, By Generation as a tall block on the right. Overall keeps its content height
-   and the 1fr row lets Regional Variant absorb the rest, so the left column (both blocks
-   plus the gap) always matches the By Generation block's height — and vice versa if the
-   left column is ever the taller one. */
+   below it, By Generation as a tall block on the right. Both left blocks keep their own
+   content height: Overall pins to the top and Regional Variant to the bottom of the 1fr
+   row, so any height the By Generation block has beyond them shows up as extra gap between
+   the two rather than stretching either box. */
 .completion-stats-tables {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
@@ -289,6 +289,7 @@
 
 .completion-stats-block-overall {
   grid-area: overall;
+  align-self: start;
 }
 
 .completion-stats-block-generation {
@@ -297,6 +298,7 @@
 
 .completion-stats-block-regional {
   grid-area: regional;
+  align-self: end;
 }
 
 /* .dex-table-panel shares the card background/border/shadow rule above; it only differs
