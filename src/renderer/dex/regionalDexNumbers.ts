@@ -35,3 +35,28 @@ export function regionalDexNumbersForGame(
   }
   return results
 }
+
+export interface GroupedRegionalDexNumbers {
+  dexDisplayName: string
+  entryNumbers: number[]
+}
+
+/**
+ * Full UI/UX pass Leg 3: every regional dex the species has an entry in, independent of any
+ * one game (the Species page has no origin game to key on). Dexes sharing a display name
+ * (e.g. `original-johto`/`updated-johto`, both "Johto") collapse into one row, listing each
+ * distinct number in first-seen order — same shared-name convention regionalDexDisplayName
+ * documents.
+ */
+export function regionalDexNumbersForSpecies(speciesId: number, availability: SpeciesAvailabilityData): GroupedRegionalDexNumbers[] {
+  const byName = new Map<string, number[]>()
+  for (const [dexName, numbers] of Object.entries(availability.entryNumbers)) {
+    const entryNumber = numbers[speciesId]
+    if (entryNumber === undefined) continue
+    const displayName = regionalDexDisplayName(dexName)
+    const existing = byName.get(displayName) ?? []
+    if (!existing.includes(entryNumber)) existing.push(entryNumber)
+    byName.set(displayName, existing)
+  }
+  return [...byName.entries()].map(([dexDisplayName, entryNumbers]) => ({ dexDisplayName, entryNumbers }))
+}

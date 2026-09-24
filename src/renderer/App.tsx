@@ -116,6 +116,7 @@ export function App(): JSX.Element {
               forms={data.forms}
               speciesDetails={data.speciesDetails}
               encounterData={data.encounterData}
+              speciesAvailability={data.speciesAvailability}
               onClose={() => setView('collection')}
             />
           )}

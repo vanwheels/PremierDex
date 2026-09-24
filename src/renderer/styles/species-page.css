@@ -5,7 +5,7 @@
  */
 
 .species-page {
-  max-width: 40rem;
+  max-width: 52rem;
   margin: 0 auto;
 }
 
@@ -25,6 +25,30 @@
 .species-page-title {
   text-align: center;
   margin-top: 0;
+}
+
+/* Full UI/UX pass Leg 3: the sketch's Gen I-IX strip above the Normal/Shiny pair. */
+.species-page-gen-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.species-page-gen-button {
+  padding: 0.25rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.species-page-gen-button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.species-page-gen-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .species-page-sprites {
@@ -53,7 +77,14 @@
 }
 
 .species-page-sprite-missing {
-  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  font-size: 0.75rem;
+  border-radius: 0.4rem;
   background: var(--surface-raised);
   border: 1px solid var(--border);
 }
@@ -63,6 +94,12 @@
   flex-direction: column;
   gap: 0.9rem;
   margin: 0;
+}
+
+.species-page-fields-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.9rem 1.2rem;
 }
 
 .species-page-field dt {
@@ -88,6 +125,38 @@
 .species-page-abilities p {
   margin: 0.15rem 0 0;
   color: var(--muted);
+}
+
+/* Full UI/UX pass Leg 3: sketch's box layout — Abilities beside Gender Ratio on the top row,
+ * every other box spanning the full width. */
+.species-page-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.species-page-box {
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  padding: 0.6rem 1rem 0.9rem;
+}
+
+.species-page-box h3 {
+  margin: 0 0 0.6rem;
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.species-page-box-wide {
+  grid-column: 1 / -1;
+}
+
+.species-page-value {
+  margin: 0;
 }
 
 /* Leg 5's curated Safari Zone flee rate field — same bare-list layout as

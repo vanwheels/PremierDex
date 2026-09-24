@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
-import { regionalDexNumbersForGame } from './regionalDexNumbers'
+import { regionalDexNumbersForGame, regionalDexNumbersForSpecies } from './regionalDexNumbers'
 
 // Mirrors the real Sun/Moon shape (main Alola dex + one island sub-dex) and X/Y's three
 // co-equal Kalos sub-dexes — the two multi-dex shapes docs/investigations/
@@ -54,5 +54,31 @@ describe('regionalDexNumbersForGame', () => {
 
   it('returns nothing when the species is in none of the game\'s dexes', () => {
     expect(regionalDexNumbersForGame('y', 999, AVAILABILITY)).toEqual([])
+  })
+})
+
+describe('regionalDexNumbersForSpecies', () => {
+  it('lists every dex the species has an entry in, regardless of game', () => {
+    expect(regionalDexNumbersForSpecies(1, AVAILABILITY)).toEqual([
+      { dexDisplayName: 'Alola', entryNumbers: [80] },
+      { dexDisplayName: 'Melemele Island', entryNumbers: [12] },
+      { dexDisplayName: 'Kalos (Central)', entryNumbers: [1] }
+    ])
+  })
+
+  it('collapses dexes sharing a display name, keeping each distinct number', () => {
+    const availability: SpeciesAvailabilityData = {
+      pokedexes: {},
+      entryNumbers: { 'original-johto': { 152: 1 }, 'updated-johto': { 152: 1 }, hoenn: { 152: 9 }, 'updated-hoenn': { 152: 7 } },
+      gameToPokedexes: {}
+    }
+    expect(regionalDexNumbersForSpecies(152, availability)).toEqual([
+      { dexDisplayName: 'Johto', entryNumbers: [1] },
+      { dexDisplayName: 'Hoenn', entryNumbers: [9, 7] }
+    ])
+  })
+
+  it('returns nothing for a species in no dex', () => {
+    expect(regionalDexNumbersForSpecies(999, AVAILABILITY)).toEqual([])
   })
 })

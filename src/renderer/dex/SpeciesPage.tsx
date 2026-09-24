@@ -2,23 +2,18 @@ import { useEffect, useState } from 'react'
 import { safariFleeRatesForSpecies } from '@shared/data/safari-flee-rates'
 import type { Form, Species } from '@shared/types/pokemon'
 import type { EncounterData } from '@shared/types/encounters'
+import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
-import {
-  CATCH_CALC_BALLS,
-  CATCH_CALC_BALL_LABELS,
-  CATCH_CALC_STATUSES,
-  CATCH_CALC_STATUS_LABELS,
-  calculateCatchProbability,
-  type CatchCalcBall,
-  type CatchCalcStatus
-} from './catchProbability'
+import { CatchProbabilityCalculator } from './CatchProbabilityCalculator'
 import { encounterLocationsForForm } from './encountersFormat'
 import { formDisplayName, speciesDisplayName } from './formNames'
-import { formatCatchProbability, formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
-import { defaultSpriteUrl } from './sprites'
+import { regionalDexNumbersForSpecies } from './regionalDexNumbers'
+import { formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
+import { CURRENT_MAX_GENERATION } from './sprites'
 import { SpriteModal } from './SpriteModal'
 import type { SpriteModalTarget } from './SpriteModal'
+import { SpeciesSpriteStrip } from './SpeciesSpriteStrip'
 
 export interface SpeciesPageProps {
   target: SpeciesDetailTarget
@@ -26,30 +21,43 @@ export interface SpeciesPageProps {
   forms: Form[]
   speciesDetails: SpeciesDetailsData
   encounterData: EncounterData
+  speciesAvailability: SpeciesAvailabilityData
   onClose: () => void
 }
 
-const SPRITE_SIZE = 120
+/** Sketch layout's labelled box: a titled panel around one field group. */
+function Box({ title, className, children }: { title: string; className?: string; children: React.ReactNode }): JSX.Element {
+  return (
+    <section className={className ? `species-page-box ${className}` : 'species-page-box'}>
+      <h3>{title}</h3>
+      {children}
+    </section>
+  )
+}
 
 /**
- * Leg 3 of the Species database milestone: the full species page — a sibling AppView
- * (App.tsx), reached via SpeciesDetailPopup's "View Full Page" button, not a modal.
- * Renders the fields Vanny confirmed wanted in the 2026-09-22 triage (ability +
- * description, base happiness, experience growth, EVs earned, gender ratio, base catch
- * rate) off the SpeciesDetailsData dataset Leg 1/2 fetched and wired through IPC, plus
- * Leg 4's catch-probability calculator on top of the base catch rate (see
- * catchProbability.ts).
+ * The full species page — a sibling AppView (App.tsx), reached via SpeciesDetailPopup's
+ * "View Full Page" button, not a modal. Full UI/UX pass Leg 3 reflowed it into the sketched
+ * layout (docs/design/ui-ux-pass/sketch-2-species-page.jpg): title with National Dex #,
+ * inline Gen I-IX sprite strip (SpeciesSpriteStrip), an Abilities box beside a
+ * gender-ratio box, then one box per remaining field group.
  *
- * The normal/shiny thumbnails reuse SpriteModal for the enlarge-and-browse-generations
- * behavior (same click-to-open pattern as SpeciesDetailPopup's own sprite), passing
- * `initialShiny` so clicking the shiny thumbnail opens the modal already showing shiny
- * art instead of always defaulting non-shiny.
+ * Clicking either sprite still opens SpriteModal, now as the place for the extras the strip
+ * doesn't carry (Animated, Back, male/female pair), starting on the strip's generation.
+ * Types and base stats from the sketch aren't in the data model yet — see TODO.md's
+ * Species/Dex reference data layer.
  */
-export function SpeciesPage({ target, species, forms, speciesDetails, encounterData, onClose }: SpeciesPageProps): JSX.Element {
+export function SpeciesPage({
+  target,
+  species,
+  forms,
+  speciesDetails,
+  encounterData,
+  speciesAvailability,
+  onClose
+}: SpeciesPageProps): JSX.Element {
   const [spriteModalShiny, setSpriteModalShiny] = useState<boolean | null>(null)
-  const [calcHpPercent, setCalcHpPercent] = useState(100)
-  const [calcStatus, setCalcStatus] = useState<CatchCalcStatus>('none')
-  const [calcBall, setCalcBall] = useState<CatchCalcBall>('poke')
+  const [generation, setGeneration] = useState(CURRENT_MAX_GENERATION)
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -67,6 +75,7 @@ export function SpeciesPage({ target, species, forms, speciesDetails, encounterD
   const formDetail = form ? speciesDetails.forms[form.pokeapiId] : undefined
   const safariFleeRates = safariFleeRatesForSpecies(target.speciesId)
   const whereToFind = form ? encounterLocationsForForm(encounterData, form.pokeapiId) : []
+  const regionalDexes = regionalDexNumbersForSpecies(target.speciesId, speciesAvailability)
 
   const spriteModalTarget: SpriteModalTarget | null = form
     ? {
@@ -83,169 +92,118 @@ export function SpeciesPage({ target, species, forms, speciesDetails, encounterD
       <button type="button" className="species-page-back" onClick={onClose}>
         ‹ Back
       </button>
-      <h2 className="species-page-title">{displayName}</h2>
-      <div className="species-page-sprites">
-        {form ? (
-          <>
-            <button type="button" className="species-page-sprite-button" onClick={() => setSpriteModalShiny(false)}>
-              <img
-                src={defaultSpriteUrl(form.pokeapiId, form.spriteFormSuffix, false, false)}
-                alt={displayName}
-                width={SPRITE_SIZE}
-                height={SPRITE_SIZE}
-              />
-              <span>Normal</span>
-            </button>
-            <button type="button" className="species-page-sprite-button" onClick={() => setSpriteModalShiny(true)}>
-              <img
-                src={defaultSpriteUrl(form.pokeapiId, form.spriteFormSuffix, true, false)}
-                alt={`${displayName} shiny`}
-                width={SPRITE_SIZE}
-                height={SPRITE_SIZE}
-              />
-              <span>Shiny</span>
-            </button>
-          </>
-        ) : (
-          <div className="species-page-sprite-missing" style={{ width: SPRITE_SIZE, height: SPRITE_SIZE }} />
-        )}
-      </div>
+      <h2 className="species-page-title">
+        {displayName} #{String(target.speciesId).padStart(3, '0')}
+      </h2>
+      {form && (
+        <SpeciesSpriteStrip
+          form={form}
+          displayName={displayName}
+          generation={generation}
+          onGenerationChange={setGeneration}
+          onEnlarge={setSpriteModalShiny}
+        />
+      )}
       {!speciesDetail || !formDetail ? (
         <p>No detail data available for this species/form yet.</p>
       ) : (
-        <dl className="species-page-fields">
-          <div className="species-page-field">
-            <dt>Abilities</dt>
-            <dd>
-              <ul className="species-page-abilities">
-                {formDetail.abilities.map(({ name, isHidden }) => (
-                  <li key={name}>
-                    <strong>
-                      {slugDisplayName(name)}
-                      {isHidden && ' (Hidden)'}
-                    </strong>
-                    {speciesDetails.abilities[name] && <p>{speciesDetails.abilities[name]}</p>}
+        <div className="species-page-layout">
+          <Box title="Abilities" className="species-page-box-abilities">
+            <ul className="species-page-abilities">
+              {formDetail.abilities.map(({ name, isHidden }) => (
+                <li key={name}>
+                  <strong>
+                    {slugDisplayName(name)}
+                    {isHidden && ' (Hidden)'}
+                  </strong>
+                  {speciesDetails.abilities[name] && <p>{speciesDetails.abilities[name]}</p>}
+                </li>
+              ))}
+            </ul>
+          </Box>
+          <Box title="Gender Ratio">
+            <p className="species-page-value">{formatGenderRatio(speciesDetail.genderRate)}</p>
+          </Box>
+          <Box title="Training" className="species-page-box-wide">
+            <dl className="species-page-fields">
+              <div className="species-page-field">
+                <dt>Base Happiness</dt>
+                <dd>{speciesDetail.baseHappiness}</dd>
+              </div>
+              <div className="species-page-field">
+                <dt>Base Catch Rate</dt>
+                <dd>{speciesDetail.captureRate}</dd>
+              </div>
+              <div className="species-page-field">
+                <dt>Experience Growth</dt>
+                <dd>
+                  {slugDisplayName(speciesDetail.growthRateName)}
+                  {speciesDetails.growthRates[speciesDetail.growthRateName] !== undefined &&
+                    ` (${speciesDetails.growthRates[speciesDetail.growthRateName].toLocaleString()} EXP to level 100)`}
+                </dd>
+              </div>
+              <div className="species-page-field">
+                <dt>EVs Earned</dt>
+                <dd>
+                  {formatEvYield(formDetail.evYield)
+                    .map((entry) => `${entry.value} ${entry.label}`)
+                    .join(', ') || 'None'}
+                </dd>
+              </div>
+            </dl>
+          </Box>
+          {regionalDexes.length > 0 && (
+            <Box title="Regional Dex #" className="species-page-box-wide">
+              <dl className="species-page-fields species-page-fields-grid">
+                {regionalDexes.map((dex) => (
+                  <div key={dex.dexDisplayName} className="species-page-field">
+                    <dt>{dex.dexDisplayName}</dt>
+                    <dd>{dex.entryNumbers.map((n) => `#${n}`).join(' / ')}</dd>
+                  </div>
+                ))}
+              </dl>
+            </Box>
+          )}
+          {safariFleeRates.length > 0 && (
+            <Box title="Safari Zone Flee Rate" className="species-page-box-wide">
+              <ul className="species-page-flee-rates">
+                {safariFleeRates.map((entry) => (
+                  <li key={entry.location}>
+                    {entry.location} ({entry.gamesLabel}): {entry.fleeRate}
                   </li>
                 ))}
               </ul>
-            </dd>
-          </div>
-          <div className="species-page-field">
-            <dt>Base Happiness</dt>
-            <dd>{speciesDetail.baseHappiness}</dd>
-          </div>
-          <div className="species-page-field">
-            <dt>Experience Growth</dt>
-            <dd>
-              {slugDisplayName(speciesDetail.growthRateName)}
-              {speciesDetails.growthRates[speciesDetail.growthRateName] !== undefined &&
-                ` (${speciesDetails.growthRates[speciesDetail.growthRateName].toLocaleString()} EXP to level 100)`}
-            </dd>
-          </div>
-          <div className="species-page-field">
-            <dt>EVs Earned</dt>
-            <dd>
-              {formatEvYield(formDetail.evYield)
-                .map((entry) => `${entry.value} ${entry.label}`)
-                .join(', ') || 'None'}
-            </dd>
-          </div>
-          <div className="species-page-field">
-            <dt>Gender Ratio</dt>
-            <dd>{formatGenderRatio(speciesDetail.genderRate)}</dd>
-          </div>
-          <div className="species-page-field">
-            <dt>Base Catch Rate</dt>
-            <dd>{speciesDetail.captureRate}</dd>
-          </div>
-          {safariFleeRates.length > 0 && (
-            <div className="species-page-field">
-              <dt>Safari Zone Flee Rate</dt>
-              <dd>
-                <ul className="species-page-flee-rates">
-                  {safariFleeRates.map((entry) => (
-                    <li key={entry.location}>
-                      {entry.location} ({entry.gamesLabel}): {entry.fleeRate}
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
+            </Box>
           )}
           {whereToFind.length > 0 && (
-            <div className="species-page-field">
-              <dt>Where to Find</dt>
-              <dd>
-                <ul className="species-page-where-to-find">
-                  {whereToFind.map((loc) => (
-                    <li key={loc.location}>
-                      <strong>{loc.location}</strong>
-                      <ul className="species-page-where-to-find-details">
-                        {loc.details.map((detail, i) => (
-                          <li key={i}>
-                            {detail.gamesLabel}: {detail.method}, {detail.levelRange} ({detail.chance})
-                            {detail.conditions && ` — ${detail.conditions}`}
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
+            <Box title="Where to Find" className="species-page-box-wide">
+              <ul className="species-page-where-to-find">
+                {whereToFind.map((loc) => (
+                  <li key={loc.location}>
+                    <strong>{loc.location}</strong>
+                    <ul className="species-page-where-to-find-details">
+                      {loc.details.map((detail, i) => (
+                        <li key={i}>
+                          {detail.gamesLabel}: {detail.method}, {detail.levelRange} ({detail.chance})
+                          {detail.conditions && ` — ${detail.conditions}`}
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </Box>
           )}
-        </dl>
+        </div>
       )}
-      {speciesDetail && (
-        <fieldset className="species-page-calc">
-          <legend>Catch Probability Calculator</legend>
-          <label className="origin-modal-field">
-            Current HP (%)
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={calcHpPercent}
-              onChange={(e) => setCalcHpPercent(Number(e.target.value))}
-            />
-          </label>
-          <label className="origin-modal-field">
-            Status Condition
-            <select value={calcStatus} onChange={(e) => setCalcStatus(e.target.value as CatchCalcStatus)}>
-              {CATCH_CALC_STATUSES.map((status) => (
-                <option key={status} value={status}>
-                  {CATCH_CALC_STATUS_LABELS[status]}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="origin-modal-field">
-            Poké Ball
-            <select value={calcBall} onChange={(e) => setCalcBall(e.target.value as CatchCalcBall)}>
-              {CATCH_CALC_BALLS.map((ball) => (
-                <option key={ball} value={ball}>
-                  {CATCH_CALC_BALL_LABELS[ball]}
-                </option>
-              ))}
-            </select>
-          </label>
-          <p className="species-page-calc-result">
-            Catch Probability:{' '}
-            <strong>
-              {formatCatchProbability(
-                calculateCatchProbability({
-                  captureRate: speciesDetail.captureRate,
-                  hpPercent: calcHpPercent,
-                  ball: calcBall,
-                  status: calcStatus
-                })
-              )}
-            </strong>
-          </p>
-        </fieldset>
-      )}
+      {speciesDetail && <CatchProbabilityCalculator captureRate={speciesDetail.captureRate} />}
       {spriteModalShiny !== null && spriteModalTarget && (
-        <SpriteModal target={spriteModalTarget} initialShiny={spriteModalShiny} onClose={() => setSpriteModalShiny(null)} />
+        <SpriteModal
+          target={spriteModalTarget}
+          initialShiny={spriteModalShiny}
+          initialGeneration={generation}
+          onClose={() => setSpriteModalShiny(null)}
+        />
       )}
     </section>
   )

@@ -1,0 +1,74 @@
+import { useState } from 'react'
+import type { Form } from '@shared/types/pokemon'
+import { availableGenerations, generationSpriteUrl } from './sprites'
+
+const SPRITE_SIZE = 120
+
+interface SpeciesSpriteStripProps {
+  form: Form
+  displayName: string
+  generation: number
+  onGenerationChange: (generation: number) => void
+  onEnlarge: (shiny: boolean) => void
+}
+
+/** One sprite button: falls back to text on load error. Keyed by `src` from the caller so
+ * `failed` resets whenever the generation changes (same trick as SpriteModal's SpriteSlot). */
+function StripSprite({ src, alt, label, onClick }: { src: string; alt: string; label: string; onClick: () => void }): JSX.Element {
+  const [failed, setFailed] = useState(false)
+  return (
+    <button type="button" className="species-page-sprite-button" onClick={onClick}>
+      {failed ? (
+        <span className="species-page-sprite-missing" style={{ width: SPRITE_SIZE, height: SPRITE_SIZE }}>
+          Sprite unavailable for this generation.
+        </span>
+      ) : (
+        <img src={src} alt={alt} width={SPRITE_SIZE} height={SPRITE_SIZE} onError={() => setFailed(true)} />
+      )}
+      <span>{label}</span>
+    </button>
+  )
+}
+
+/**
+ * Full UI/UX pass Leg 3: the sketch's Gen I-IX strip + Normal/Shiny sprite pair, promoted
+ * out of SpriteModal's stepper. Generations before the form's firstAvailableGeneration are
+ * shown disabled rather than hidden, so the strip always reads as the full I-IX row from the
+ * sketch. Sprites-only for now — types/abilities/stats aren't generation-aware in the data
+ * model yet (see TODO.md's Species/Dex reference data layer).
+ */
+export function SpeciesSpriteStrip({ form, displayName, generation, onGenerationChange, onEnlarge }: SpeciesSpriteStripProps): JSX.Element {
+  const available = availableGenerations(form.firstAvailableGeneration)
+  return (
+    <>
+      <div className="species-page-gen-strip" role="group" aria-label="Sprite generation">
+        {Array.from({ length: 9 }, (_, i) => i + 1).map((gen) => (
+          <button
+            key={gen}
+            type="button"
+            className={gen === generation ? 'species-page-gen-button active' : 'species-page-gen-button'}
+            aria-pressed={gen === generation}
+            disabled={!available.includes(gen)}
+            onClick={() => onGenerationChange(gen)}
+          >
+            Gen {gen}
+          </button>
+        ))}
+      </div>
+      <div className="species-page-sprites">
+        {[false, true].map((shiny) => {
+          const src = generationSpriteUrl(form.pokeapiId, form.spriteFormSuffix, generation, shiny, false)
+          return (
+            <StripSprite
+              key={src}
+              src={src}
+              alt={`${displayName} — generation ${generation}${shiny ? ' shiny' : ''}`}
+              label={shiny ? 'Shiny' : 'Normal'}
+              onClick={() => onEnlarge(shiny)}
+            />
+          )
+        })}
+      </div>
+    </>
+  )
+}
