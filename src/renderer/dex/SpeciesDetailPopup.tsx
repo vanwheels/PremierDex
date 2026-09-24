@@ -11,6 +11,9 @@ import { SpriteModal } from './SpriteModal'
 export interface SpeciesDetailTarget {
   speciesId: number
   formName: string
+  /** Generation the opener was viewing (e.g. the Dex Locations game's); SpeciesPage starts on it
+   * instead of the current max. Omitted = current max. */
+  generation?: number
 }
 
 interface SpeciesDetailPopupProps {

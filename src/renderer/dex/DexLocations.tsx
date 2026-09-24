@@ -89,6 +89,7 @@ export function DexLocations({ species, forms, encounterData, onOpenSpecies }: D
             key={`${game?.label}/${location.name}`}
             location={location}
             methods={encounterData.methods}
+            generation={game?.generation ?? null}
             onOpenSpecies={onOpenSpecies}
           />
         ) : (

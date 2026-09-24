@@ -58,7 +58,12 @@ export function SpeciesPage({
   onClose
 }: SpeciesPageProps): JSX.Element {
   const [spriteModalShiny, setSpriteModalShiny] = useState<boolean | null>(null)
-  const [generation, setGeneration] = useState(CURRENT_MAX_GENERATION)
+  // Starts on the generation the opener was viewing (clamped up to when this form first
+  // existed), else the current max.
+  const [generation, setGeneration] = useState(() => {
+    const opened = forms.find((f) => f.speciesId === target.speciesId && f.formName === target.formName)
+    return Math.max(target.generation ?? CURRENT_MAX_GENERATION, opened?.firstAvailableGeneration ?? 1)
+  })
   // Starts on the form the page was opened for; the form strip below switches it.
   const [formName, setFormName] = useState(target.formName)
 

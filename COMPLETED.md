@@ -1,5 +1,8 @@
 # COMPLETED
 
+## [Encounter display rework] — Leg 4 — 2026-09-24
+Vanny's post-Leg 3 tweaks: Dex Locations tab widened (66rem) and split into per-method tables (Wild/Surfing/Fishing/Headbutt/Rock Smash/Special, `encounterMethods.ts`), dex # dropped from the encounter tables, and opening a species from a location now starts the species page on that game's generation (`SpeciesDetailTarget.generation`). Separately, the whole Dex list row is now the click target for opening a species. Tests/typecheck only; visual check pending. See commits `38710ac` and the Leg 4 commit.
+
 ## [Encounter display rework] — Leg 3 — 2026-09-24
 Dex Locations sub-tab is now three panes (Games -> that game's Locations -> species at the location, each with grouped Method/Levels/Conditions rows). A per-location toggle row appears only for conditions the location's encounters actually vary in (time, season, weather, swarm, PokéRadar, GBA slot; `encounterConditions.ts`); long-tail conditions (trades, coins, Safari blocks) stay inline. Decided NOT to fold regional/alternate forms to one entry per species: encounters are per-form and "Alolan Rattata" vs "Rattata" is the point of a location view. Verified by tests/typecheck only; visual check pending. See commit `ef0a32c`.
 

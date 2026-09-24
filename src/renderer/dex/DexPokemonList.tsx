@@ -74,7 +74,13 @@ export function DexPokemonList({ species, forms, speciesDetails, onOpenSpecies }
         <div key={group.generation}>
           {sort.key === 'dex' && <h3 className="dex-list-generation">Generation {group.generation}</h3>}
           {group.rows.map((row) => (
-            <div key={`${row.speciesId}-${row.formName}`} className="dex-list-row">
+            // The whole row opens the species page. The sprite and name stay real buttons for
+            // keyboard/screen-reader access; their clicks bubble up to this handler.
+            <div
+              key={`${row.speciesId}-${row.formName}`}
+              className="dex-list-row"
+              onClick={() => onOpenSpecies({ speciesId: row.speciesId, formName: row.formName })}
+            >
               <span className="dex-list-number">#{String(row.speciesId).padStart(3, '0')}</span>
               <span className="dex-list-identity">
                 <SpriteThumbnail
@@ -84,13 +90,9 @@ export function DexPokemonList({ species, forms, speciesDetails, onOpenSpecies }
                   displayName={row.displayName}
                   size={SPRITE_SIZE}
                   ariaLabel={`Open ${row.displayName}`}
-                  onClick={() => onOpenSpecies({ speciesId: row.speciesId, formName: row.formName })}
+                  onClick={() => undefined}
                 />
-                <button
-                  type="button"
-                  className="dex-list-name"
-                  onClick={() => onOpenSpecies({ speciesId: row.speciesId, formName: row.formName })}
-                >
+                <button type="button" className="dex-list-name">
                   {row.displayName}
                 </button>
               </span>

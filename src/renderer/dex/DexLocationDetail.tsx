@@ -8,6 +8,8 @@ import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 interface DexLocationDetailProps {
   location: DexLocation
   methods: string[]
+  /** The game's generation, handed to the species page so it opens on that generation. */
+  generation: number | null
   onOpenSpecies: (target: SpeciesDetailTarget) => void
 }
 
@@ -18,7 +20,7 @@ interface DexLocationDetailProps {
  * shows none. The parent keys this component by game+location so the selection resets when
  * either changes.
  */
-export function DexLocationDetail({ location, methods, onOpenSpecies }: DexLocationDetailProps): JSX.Element {
+export function DexLocationDetail({ location, methods, generation, onOpenSpecies }: DexLocationDetailProps): JSX.Element {
   const [selection, setSelection] = useState<ConditionSelection>({})
 
   const entries = useMemo(
@@ -85,16 +87,19 @@ export function DexLocationDetail({ location, methods, onOpenSpecies }: DexLocat
                   <tr key={`${s.speciesId}-${s.formName}-${i}`}>
                     <td>
                       {i === 0 && (
-                        <>
-                          <span className="dex-list-number">#{String(s.speciesId).padStart(3, '0')}</span>
-                          <button
-                            type="button"
-                            className="dex-list-name"
-                            onClick={() => onOpenSpecies({ speciesId: s.speciesId, formName: s.formName })}
-                          >
-                            {s.displayName}
-                          </button>
-                        </>
+                        <button
+                          type="button"
+                          className="dex-list-name"
+                          onClick={() =>
+                            onOpenSpecies({
+                              speciesId: s.speciesId,
+                              formName: s.formName,
+                              ...(generation !== null && { generation })
+                            })
+                          }
+                        >
+                          {s.displayName}
+                        </button>
                       )}
                     </td>
                     <td>{row.method}</td>

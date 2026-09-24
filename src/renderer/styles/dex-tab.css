@@ -52,6 +52,10 @@
   padding: 0.25rem 0.6rem;
 }
 
+.dex-list-row {
+  cursor: pointer;
+}
+
 .dex-list-header {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -182,11 +186,6 @@
   color: var(--text);
   background: var(--surface);
   font-weight: 600;
-}
-
-.dex-locations-table .dex-list-number {
-  display: block;
-  font-size: 0.75rem;
 }
 
 .dex-locations-method h4 {

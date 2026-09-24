@@ -7,15 +7,15 @@ species (Rattata: 1,722 encounter rows across 59 areas) make both views unusable
 stores one row per slot and per time-of-day, so the fix is grouping, not removing data. A
 prototype against the real `encounters.json` cut Rattata to 490 rows by merging same-level
 slots (summing chance) and merging Morning/Day/Night when their breakdowns match. Slot numbers
-aren't in the data and stay out of scope (RNG-only). Sequenced in 3 legs (all shipped 2026-09-24); design questions resolved: inline format reads
+aren't in the data and stay out of scope (RNG-only). Sequenced in 3 legs plus a Leg 4 of Vanny's tweaks (all shipped 2026-09-24); design questions resolved: inline format reads
 fine after Leg 1; Where to Find follows the Gen I-IX toggle (Leg 2).
 
 ### [Encounter display rework] — Close-out
-Legs 1-3 all shipped with tests/typecheck only. Once Vanny has eyeballed the Species page Where
-to Find (Legs 1-2) and the three-pane Dex Locations (Leg 3) against real data (Rattata: expect
+Legs 1-4 all shipped with tests/typecheck only. Once Vanny has eyeballed the Species page Where
+to Find (Legs 1-2) and the three-pane Dex Locations (Legs 3-4) against real data (Rattata: expect
 ~490 rows on its page), write `docs/postmortems/encounter-display-rework.md` and add the
 `MILESTONES.md` entry, then move this milestone out of TODO.
-Blocked: Vanny's visual check of Legs 1-3.
+Blocked: Vanny's visual check of Legs 1-4.
 Last touched: 2026-09-24.
 
 ## Unscheduled
@@ -29,6 +29,12 @@ The Dex Locations pane now splits encounters into Wild/Surfing/Fishing/Headbutt/
 Special tables (`encounterMethods.ts`, added in a Leg 3 follow-up at Vanny's request). The
 Species page Where to Find still shows one mixed table per game; apply the same split there
 only if Vanny wants it — `EncounterRow.category` is already populated.
+Last touched: 2026-09-24. Re-check count: 0.
+
+### [Ability description popup in Dex list] — unscheduled
+Clicking an ability name in the Dex Pokémon list would open a small popup with its description
+(the whole row now opens the species page, so this needs a stopPropagation on the ability).
+Needs ability description data — check whether `species-details.json` carries it before scoping.
 Last touched: 2026-09-24. Re-check count: 0.
 
 ### [Dex tab sprite-grid view mode] — unscheduled
