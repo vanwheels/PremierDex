@@ -11,13 +11,6 @@ aren't in the data and stay out of scope (RNG-only). Sequenced in 3 legs; Vanny 
 open design questions when the milestone opens — resolved 2026-09-24: inline format reads fine
 after Leg 1; Where to Find follows the Gen I-IX toggle (Leg 2).
 
-### [Encounter display rework] — Leg 2
-Species page Where to Find: each game section collapsed by default with a one-line summary
-(e.g. "Gold — 41 locations"). Also filter game sections to the selected Gen I-IX toggle, and give
-the per-game tables shared fixed column widths + tabular numerals so Method/Levels line up
-across sections (currently each table sizes itself; Yellow's columns sit right of Red's).
-Last touched: 2026-09-24. Re-check count: 0.
-
 ### [Encounter display rework] — Leg 3
 Dex Locations sub-tab as three panes (Games -> that game's Locations -> species at the
 location), time toggle shown only when the location has time-conditioned encounters (same rule

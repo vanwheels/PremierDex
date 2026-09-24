@@ -1,5 +1,8 @@
 # COMPLETED
 
+## [Encounter display rework] — Leg 2 — 2026-09-24
+Species page Where to Find game sections are now collapsed `<details>` with a "Gold — 41 locations" summary, filtered to the Gen I-IX toggle, with fixed shared column widths and tabular numerals. Extracted `WhereToFindBox.tsx`. Verified by tests/typecheck only; visual check pending. See commit `81dc47f`.
+
 ## [Encounter display rework] — Leg 1 — 2026-09-24
 Added `groupEncounterDetails` (`encountersFormat.ts`) and switched the Species page Where to Find to a single inline Levels column. Not yet checked against real Rattata data (prototype predicted 490 rows). See commit `98a92e5`.
 
