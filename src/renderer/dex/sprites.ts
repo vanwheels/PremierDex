@@ -24,7 +24,7 @@
  * shiny/female ("back/shiny/female/", never "female/back/" or "shiny/back/").
  */
 
-import { defaultSpriteSource } from './spriteSources'
+import { spriteSourceFor } from './spriteSources'
 
 export const CURRENT_MAX_GENERATION = 9
 
@@ -71,17 +71,19 @@ export function defaultSpriteUrl(
   return `${SPRITE_BASE}${backFolder(back)}${genderShinyFolder(shiny, female)}/${id}.png`
 }
 
-/** The modal/strip's generation-stepped sprite, from the generation's default source. Falls
- * back to defaultSpriteUrl's evergreen art when that source lacks shiny/ or back/. */
+/** The modal/strip's generation-stepped sprite, from the chosen version's source (the
+ * generation's default when `sourceId` is omitted). Falls back to defaultSpriteUrl's evergreen
+ * art when that source lacks shiny/ or back/. */
 export function generationSpriteUrl(
   pokeapiId: number,
   spriteFormSuffix: string | null,
   generation: number,
   shiny: boolean,
   female: boolean,
-  back = false
+  back = false,
+  sourceId?: string
 ): string {
-  const source = defaultSpriteSource(generation)
+  const source = spriteSourceFor(generation, sourceId)
   if ((shiny && !source.hasShiny) || (back && !source.hasBack)) {
     return defaultSpriteUrl(pokeapiId, spriteFormSuffix, shiny, female, back)
   }

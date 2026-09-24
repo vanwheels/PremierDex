@@ -7,7 +7,7 @@ import {
   hasAnimatedSprites,
   hasBlackWhiteAnimatedSprites
 } from './sprites'
-import { defaultSpriteSource } from './spriteSources'
+import { spriteSourceFor } from './spriteSources'
 
 export interface SpriteModalTarget {
   pokeapiId: number
@@ -32,6 +32,9 @@ interface SpriteModalProps {
    * selection through so enlarging a sprite opens on the generation already being viewed.
    * Ignored if outside the form's availableGenerations range. */
   initialGeneration?: number
+  /** Sprite-version choices from SpeciesPage's version chips (generation → source id), so the
+   * enlarged sprite shows the game being viewed. Read-only here; absent = each default. */
+  spriteSourceIds?: Record<number, string>
 }
 
 const MODAL_SIZE = 200
@@ -73,7 +76,7 @@ function SpriteSlot({ src, alt, label }: { src: string; alt: string; label?: str
  * drawn until generation IV). A Back checkbox (Leg 11's back-sprite builders) applies to
  * whichever sprite(s) are currently shown, static or animated.
  */
-export function SpriteModal({ target, onClose, initialShiny = false, initialGeneration }: SpriteModalProps): JSX.Element {
+export function SpriteModal({ target, onClose, initialShiny = false, initialGeneration, spriteSourceIds = {} }: SpriteModalProps): JSX.Element {
   const generations = availableGenerations(target.firstAvailableGeneration)
   const [generation, setGeneration] = useState(
     initialGeneration !== undefined && generations.includes(initialGeneration) ? initialGeneration : generations[generations.length - 1]
@@ -87,7 +90,8 @@ export function SpriteModal({ target, onClose, initialShiny = false, initialGene
   // exists (no animated art before Gen 5, no shiny art in Gen 1).
   const canAnimate = hasAnimatedSprites(generation)
   const animated = animatedPref && canAnimate
-  const canShiny = animated || defaultSpriteSource(generation).hasShiny
+  const source = spriteSourceFor(generation, spriteSourceIds[generation])
+  const canShiny = animated || source.hasShiny
   const showShiny = shiny && canShiny
   const canUseBlackWhite = hasBlackWhiteAnimatedSprites(generation)
   const animatedSource: AnimatedSource = canUseBlackWhite ? preferredSource : 'showdown'
@@ -102,7 +106,7 @@ export function SpriteModal({ target, onClose, initialShiny = false, initialGene
 
   // HOME renders (Gen 8/9) have no back/ art, so hide the toggle rather than substituting
   // evergreen back art; the animated Showdown set has back sprites for every generation.
-  const canBack = animated || defaultSpriteSource(generation).hasBack
+  const canBack = animated || source.hasBack
   const showBack = back && canBack
 
   const index = generations.indexOf(generation)
@@ -110,7 +114,7 @@ export function SpriteModal({ target, onClose, initialShiny = false, initialGene
   const spriteUrl = (female: boolean): string =>
     animated
       ? animatedSpriteUrl(target.pokeapiId, target.spriteFormSuffix, showShiny, animatedSource, female, showBack)
-      : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, showShiny, female, showBack)
+      : generationSpriteUrl(target.pokeapiId, target.spriteFormSuffix, generation, showShiny, female, showBack, source.id)
 
   const altSuffix = `${showShiny ? ' shiny' : ''}${animated ? ' animated' : ''}${showBack ? ' back' : ''}`
 

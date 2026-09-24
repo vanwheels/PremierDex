@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Form } from '@shared/types/pokemon'
 import { availableGenerations, generationSpriteUrl } from './sprites'
-import { defaultSpriteSource, generationArtNote } from './spriteSources'
+import { GENERATION_SOURCES, generationArtNote, spriteSourceFor } from './spriteSources'
 
 const SPRITE_SIZE = 120
 
@@ -9,7 +9,10 @@ interface SpeciesSpriteStripProps {
   form: Form
   displayName: string
   generation: number
+  /** Chosen version for the current generation; the generation's default when undefined. */
+  sourceId?: string
   onGenerationChange: (generation: number) => void
+  onSourceChange: (sourceId: string) => void
   onEnlarge: (shiny: boolean) => void
 }
 
@@ -38,11 +41,22 @@ function StripSprite({ src, alt, label, onClick }: { src: string; alt: string; l
  * sketch. Sprites-only for now — types/abilities/stats aren't generation-aware in the data
  * model yet (see TODO.md's Species/Dex reference data layer).
  */
-export function SpeciesSpriteStrip({ form, displayName, generation, onGenerationChange, onEnlarge }: SpeciesSpriteStripProps): JSX.Element {
+export function SpeciesSpriteStrip({
+  form,
+  displayName,
+  generation,
+  sourceId,
+  onGenerationChange,
+  onSourceChange,
+  onEnlarge
+}: SpeciesSpriteStripProps): JSX.Element {
   const available = availableGenerations(form.firstAvailableGeneration)
+  const source = spriteSourceFor(generation, sourceId)
+  // Version chips only where the generation has more than one game (Gen 1-4, 6).
+  const versions = GENERATION_SOURCES[generation]
   // Gen 1 has no shiny art: drop the slot (the flex row centers the lone sprite) rather than
   // showing the evergreen shiny fallback next to 1990s art.
-  const variants = defaultSpriteSource(generation).hasShiny ? [false, true] : [false]
+  const variants = source.hasShiny ? [false, true] : [false]
   const artNote = generationArtNote(generation)
   return (
     <>
@@ -60,9 +74,24 @@ export function SpeciesSpriteStrip({ form, displayName, generation, onGeneration
           </button>
         ))}
       </div>
+      {versions.length > 1 && (
+        <div className="species-page-gen-strip species-page-version-strip" role="group" aria-label="Sprite version">
+          {versions.map((v) => (
+            <button
+              key={v.id}
+              type="button"
+              className={v.id === source.id ? 'species-page-gen-button active' : 'species-page-gen-button'}
+              aria-pressed={v.id === source.id}
+              onClick={() => onSourceChange(v.id)}
+            >
+              {v.label}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="species-page-sprites">
         {variants.map((shiny) => {
-          const src = generationSpriteUrl(form.pokeapiId, form.spriteFormSuffix, generation, shiny, false)
+          const src = generationSpriteUrl(form.pokeapiId, form.spriteFormSuffix, generation, shiny, false, false, source.id)
           return (
             <StripSprite
               key={src}

@@ -51,6 +51,11 @@
   cursor: not-allowed;
 }
 
+/* Sprite-version chips sit tight under the Gen strip they belong to. */
+.species-page-version-strip {
+  margin-top: -0.4rem;
+}
+
 .species-page-sprites {
   display: flex;
   justify-content: center;

@@ -83,6 +83,18 @@ describe('generationSpriteUrl', () => {
     )
   })
 
+  it('builds the URL from a chosen alternate version, including its shiny/back subfolders', () => {
+    expect(generationSpriteUrl(25, null, 4, true, false, true, 'heartgold-soulsilver')).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/back/shiny/25.png'
+    )
+  })
+
+  it('applies the chosen version’s coverage: Yellow has no shiny, so it falls back like Red/Blue', () => {
+    expect(generationSpriteUrl(25, null, 1, true, false, false, 'yellow')).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png'
+    )
+  })
+
   it('uses the real omegaruby-alphasapphire folder name for generation 6', () => {
     expect(generationSpriteUrl(25, null, 6, false, false)).toBe(
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vi/omegaruby-alphasapphire/25.png'

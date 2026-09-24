@@ -64,6 +64,9 @@ export function SpeciesPage({
     const opened = forms.find((f) => f.speciesId === target.speciesId && f.formName === target.formName)
     return Math.max(target.generation ?? CURRENT_MAX_GENERATION, opened?.firstAvailableGeneration ?? 1)
   })
+  // Chosen sprite version per generation (absent = that generation's default game), so
+  // switching generations and back keeps each generation's pick.
+  const [spriteSourceIds, setSpriteSourceIds] = useState<Record<number, string>>({})
   // Starts on the form the page was opened for; the form strip below switches it.
   const [formName, setFormName] = useState(target.formName)
 
@@ -129,7 +132,9 @@ export function SpeciesPage({
           form={form}
           displayName={displayName}
           generation={generation}
+          sourceId={spriteSourceIds[generation]}
           onGenerationChange={setGeneration}
+          onSourceChange={(id) => setSpriteSourceIds((prev) => ({ ...prev, [generation]: id }))}
           onEnlarge={setSpriteModalShiny}
         />
       )}
@@ -217,6 +222,7 @@ export function SpeciesPage({
           target={spriteModalTarget}
           initialShiny={spriteModalShiny}
           initialGeneration={generation}
+          spriteSourceIds={spriteSourceIds}
           onClose={() => setSpriteModalShiny(null)}
         />
       )}

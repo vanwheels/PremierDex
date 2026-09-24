@@ -5,7 +5,7 @@
  * verified live (see docs/investigations/sprite-sources.md for the per-generation decisions).
  *
  * A generation's first source is its default; later ones are the alternate versions the
- * Sprite system overhaul's version-chip leg (Leg 4) switches among.
+ * Species page's version chip row switches among (see spriteSourceFor).
  */
 
 export interface SpriteSource {
@@ -68,6 +68,12 @@ export function defaultSpriteSource(generation: number): SpriteSource {
   const sources = GENERATION_SOURCES[generation]
   if (!sources) throw new Error(`No sprite mapping for generation ${generation}`)
   return sources[0]
+}
+
+/** The chosen version's source for a generation, or the default when `sourceId` is absent or
+ * isn't one of that generation's games (e.g. a stale choice carried over from another form). */
+export function spriteSourceFor(generation: number, sourceId?: string): SpriteSource {
+  return GENERATION_SOURCES[generation]?.find((s) => s.id === sourceId) ?? defaultSpriteSource(generation)
 }
 
 /** Caption for generations whose art isn't game-specific (Gen 8/9 share HOME renders), so the

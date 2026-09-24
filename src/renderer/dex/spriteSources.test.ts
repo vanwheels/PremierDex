@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { CURRENT_MAX_GENERATION } from './sprites'
-import { defaultSpriteSource, generationArtNote, GENERATION_SOURCES } from './spriteSources'
+import { defaultSpriteSource, generationArtNote, GENERATION_SOURCES, spriteSourceFor } from './spriteSources'
 
 describe('GENERATION_SOURCES', () => {
   it('covers every generation from 1 through CURRENT_MAX_GENERATION with at least one source', () => {
@@ -30,6 +30,17 @@ describe('defaultSpriteSource', () => {
 
   it('throws for a generation outside the table', () => {
     expect(() => defaultSpriteSource(10)).toThrow()
+  })
+})
+
+describe('spriteSourceFor', () => {
+  it('returns the chosen version within the generation', () => {
+    expect(spriteSourceFor(3, 'firered-leafgreen').folder).toBe('versions/generation-iii/firered-leafgreen')
+  })
+
+  it('falls back to the default for an omitted or foreign source id', () => {
+    expect(spriteSourceFor(3).id).toBe('emerald')
+    expect(spriteSourceFor(3, 'x-y').id).toBe('emerald')
   })
 })
 
