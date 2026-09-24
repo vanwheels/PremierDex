@@ -2,29 +2,29 @@
 
 ## Current Milestone: Sprite system overhaul
 
-Started 2026-09-24 (Encounter display rework shipped the same day — see MILESTONES.md). Legs
-aren't planned yet: the design pass (source per generation, bundle vs fetch, per-version toggle)
-comes first, and its decisions become the leg list.
+Started 2026-09-24. Design pass done — decisions and per-generation sources are in
+`docs/investigations/sprite-sources.md`. Stays fetch-from-CDN (bundling is a separate future
+discussion); Gen 8/9 use HOME renders, Gen 7 keeps the USUM gifs, Gen 2 uses `transparent/`.
 
-### [Sprite system overhaul] — Leg 1
-Design pass. Raised in Vanny's 2026-09-24 feedback pass on the Species page. Current sprites
-come from PokeAPI's per-generation folders only, which leaves gaps: Gen 1 has no shiny art
-(don't show a shiny slot there), Gen 2 sprites aren't transparent PNGs, Gen 7 shows nothing
-(the folded extension bug below), and Gen 8/9 fall back to boxed BDSP/SV art with no shiny
-variants. Wanted: official 3D models for Gen 7+ (animated as a bonus), and per-version sprite
-sets where a generation's games differ — D/P/Pt vs HG/SS, R/S vs FR/LG vs Emerald — shown side
-by side like the reference Serebii-style Images section. Open questions: sprite source per
-generation (PokeAPI's `other/home` renders / Showdown animated sets / other), whether to bundle
-or fetch, and how the per-version toggle fits the Gen I-IX strip.
+### [Sprite system overhaul] — Leg 2
+Rework `sprites.ts` around a per-generation source table (folder, extension, transparent
+subfolder, has-shiny/has-back) instead of the `GENERATION_GAME` + `.png` assumption. Folds in
+the old Generation-vii extension bug (`ultra-sun-ultra-moon` serves `.gif`; `.png` 404s), Gen 2's
+`transparent/` subfolder, and Gen 8/9 switching to `other/home`. `SpriteModal` shares the same
+URL function, so it must keep working. Update `sprites.test.ts`.
 Last touched: 2026-09-24. Re-check count: 0.
 
-### [Generation-vii sprite URLs use the wrong extension] — Leg 2
-Folded into this milestone 2026-09-24. `generationSpriteUrl` in `sprites.ts` builds every
-generation's URL with `.png`, but the CDN's `generation-vii/ultra-sun-ultra-moon` folder (front,
-`shiny/`, and `back/`) serves `.gif` — re-confirmed live 2026-09-24: `.../25.png` and
-`.../shiny/25.png` 404, `.../25.gif` and `.../shiny/25.gif` return 200. Pre-existing, predates
-back-sprite support. Whether it's fixed as a per-generation extension map or made moot by
-switching Gen 7's source depends on Leg 1's decision, so sequence it after that.
+### [Sprite system overhaul] — Leg 3
+Species page strip UI: hide the shiny slot when a generation has no shiny art (Gen 1) and center
+the lone sprite; label Gen 8/9 as HOME art rather than implying game-specific art. Verify
+`other/home` has no `back/` folder before deciding how the modal's back toggle behaves there.
+Last touched: 2026-09-24. Re-check count: 0.
+
+### [Sprite system overhaul] — Leg 4
+Version chip row under the Gen I-IX strip, shown only for generations with more than one game
+(Gen 1-4, 6), switching the sprite source among that generation's games. Toggle first — a
+side-by-side layout is a possible later change, not part of this leg. Should reuse Leg 2's
+source table rather than adding a second mapping.
 Last touched: 2026-09-24. Re-check count: 0.
 
 ## Unscheduled

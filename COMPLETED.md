@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Sprite system overhaul, Leg 1] — 2026-09-24
+Design pass: chose PokeAPI as the only source (no scraping), stay fetch-from-CDN, HOME renders
+for Gen 8/9, USUM gifs for Gen 7, `transparent/` for Gen 2, hide Gen 1's shiny slot, and a
+version chip row for multi-game generations. Full reasoning in
+`docs/investigations/sprite-sources.md`. See commit `TBD`.
+
 ## [Where to Find section on SpeciesPage, Leg 3] — 2026-09-23
 Final leg — milestone shipped, see MILESTONES.md. Added `encounterLocationsForForm`
 (`encountersFormat.ts`), grouping `encounters.json`'s raw per-location/version/method rows
