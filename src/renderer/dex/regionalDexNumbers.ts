@@ -1,4 +1,5 @@
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
+import { ORIGIN_GAMES } from '@shared/data/origin-games'
 import { regionalDexDisplayName } from '@shared/data/regional-dex-names'
 
 export interface RegionalDexNumber {
@@ -42,21 +43,27 @@ export interface GroupedRegionalDexNumbers {
 }
 
 /**
- * Full UI/UX pass Leg 3: every regional dex the species has an entry in, independent of any
- * one game (the Species page has no origin game to key on). Dexes sharing a display name
- * (e.g. `original-johto`/`updated-johto`, both "Johto") collapse into one row, listing each
- * distinct number in first-seen order — same shared-name convention regionalDexDisplayName
- * documents.
+ * Full UI/UX pass Leg 4 (Vanny's feedback on Leg 3): the regional dex numbers for the games of
+ * one generation, so the Species page's Gen I-IX toggle drives which dexes show — Gen 8 lists
+ * Sword/Shield's and BDSP's dexes, Gen 3 lists Ruby/Sapphire/Emerald's and FireRed/LeafGreen's.
+ * A game's dexes come from regionalDexNumbersForGame (so its "no data reads as nothing"
+ * contract carries over); dexes sharing a display name (e.g. `original-johto`/`updated-johto`,
+ * both "Johto") collapse into one row, listing each distinct number in first-seen (game
+ * release) order — same shared-name convention regionalDexDisplayName documents.
  */
-export function regionalDexNumbersForSpecies(speciesId: number, availability: SpeciesAvailabilityData): GroupedRegionalDexNumbers[] {
+export function regionalDexNumbersForGeneration(
+  speciesId: number,
+  generation: number,
+  availability: SpeciesAvailabilityData
+): GroupedRegionalDexNumbers[] {
   const byName = new Map<string, number[]>()
-  for (const [dexName, numbers] of Object.entries(availability.entryNumbers)) {
-    const entryNumber = numbers[speciesId]
-    if (entryNumber === undefined) continue
-    const displayName = regionalDexDisplayName(dexName)
-    const existing = byName.get(displayName) ?? []
-    if (!existing.includes(entryNumber)) existing.push(entryNumber)
-    byName.set(displayName, existing)
+  for (const game of ORIGIN_GAMES) {
+    if (game.generation !== generation) continue
+    for (const { dexDisplayName, entryNumber } of regionalDexNumbersForGame(game.id, speciesId, availability)) {
+      const existing = byName.get(dexDisplayName) ?? []
+      if (!existing.includes(entryNumber)) existing.push(entryNumber)
+      byName.set(dexDisplayName, existing)
+    }
   }
   return [...byName.entries()].map(([dexDisplayName, entryNumbers]) => ({ dexDisplayName, entryNumbers }))
 }

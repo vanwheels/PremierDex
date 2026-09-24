@@ -9,6 +9,7 @@ import {
   type DexListSort,
   type DexListSortKey
 } from './dexSpeciesList'
+import { SpriteThumbnail } from './SpriteThumbnail'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 
 interface DexPokemonListProps {
@@ -17,6 +18,9 @@ interface DexPokemonListProps {
   speciesDetails: SpeciesDetailsData
   onOpenSpecies: (target: SpeciesDetailTarget) => void
 }
+
+/** Row sprite size — SpriteThumbnail's default 32 reads small beside the list's text. */
+const SPRITE_SIZE = 40
 
 const COLUMNS: Array<{ key: DexListSortKey; label: string }> = [
   { key: 'dex', label: 'Dex #' },
@@ -27,7 +31,7 @@ const COLUMNS: Array<{ key: DexListSortKey; label: string }> = [
 /**
  * Full UI/UX pass Leg 4: the Dex tab's Pokémon sub-tab — the reference-dex-list.png model
  * (docs/design/ui-ux-pass/), thinned to the columns the data layer has today (Name / Dex # /
- * Abilities; Types and base stats wait on TODO.md's Species/Dex reference data layer).
+ * Abilities, one row per species — forms live on the species page; Types and base stats wait on TODO.md's Species/Dex reference data layer).
  * Reference-only: no ownership state, so it renders straight from species/forms/
  * speciesDetails rather than through buildDexSections.
  *
@@ -72,18 +76,28 @@ export function DexPokemonList({ species, forms, speciesDetails, onOpenSpecies }
           {group.rows.map((row) => (
             <div key={`${row.speciesId}-${row.formName}`} className="dex-list-row">
               <span className="dex-list-number">#{String(row.speciesId).padStart(3, '0')}</span>
-              <button
-                type="button"
-                className="dex-list-name"
-                onClick={() => onOpenSpecies({ speciesId: row.speciesId, formName: row.formName })}
-              >
-                {row.displayName}
-              </button>
+              <span className="dex-list-identity">
+                <SpriteThumbnail
+                  pokeapiId={row.pokeapiId}
+                  spriteFormSuffix={row.spriteFormSuffix}
+                  female={false}
+                  displayName={row.displayName}
+                  size={SPRITE_SIZE}
+                  ariaLabel={`Open ${row.displayName}`}
+                  onClick={() => onOpenSpecies({ speciesId: row.speciesId, formName: row.formName })}
+                />
+                <button
+                  type="button"
+                  className="dex-list-name"
+                  onClick={() => onOpenSpecies({ speciesId: row.speciesId, formName: row.formName })}
+                >
+                  {row.displayName}
+                </button>
+              </span>
               <span className="dex-list-abilities">
                 {row.abilities.map((a) => (
                   <span key={a.name} className={a.isHidden ? 'dex-list-ability-hidden' : undefined}>
                     {a.name}
-                    {a.isHidden && ' (Hidden)'}
                   </span>
                 ))}
               </span>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { SpeciesAvailabilityData } from '@shared/types/species-availability'
-import { regionalDexNumbersForGame, regionalDexNumbersForSpecies } from './regionalDexNumbers'
+import { regionalDexNumbersForGame, regionalDexNumbersForGeneration } from './regionalDexNumbers'
 
 // Mirrors the real Sun/Moon shape (main Alola dex + one island sub-dex) and X/Y's three
 // co-equal Kalos sub-dexes — the two multi-dex shapes docs/investigations/
@@ -57,28 +57,27 @@ describe('regionalDexNumbersForGame', () => {
   })
 })
 
-describe('regionalDexNumbersForSpecies', () => {
-  it('lists every dex the species has an entry in, regardless of game', () => {
-    expect(regionalDexNumbersForSpecies(1, AVAILABILITY)).toEqual([
+describe('regionalDexNumbersForGeneration', () => {
+  it("lists only the dexes of that generation's games", () => {
+    expect(regionalDexNumbersForGeneration(1, 7, AVAILABILITY)).toEqual([
       { dexDisplayName: 'Alola', entryNumbers: [80] },
-      { dexDisplayName: 'Melemele Island', entryNumbers: [12] },
-      { dexDisplayName: 'Kalos (Central)', entryNumbers: [1] }
+      { dexDisplayName: 'Melemele Island', entryNumbers: [12] }
     ])
+    expect(regionalDexNumbersForGeneration(1, 6, AVAILABILITY)).toEqual([{ dexDisplayName: 'Kalos (Central)', entryNumbers: [1] }])
   })
 
-  it('collapses dexes sharing a display name, keeping each distinct number', () => {
+  it('collapses dexes sharing a display name across a generation, keeping each distinct number', () => {
     const availability: SpeciesAvailabilityData = {
       pokedexes: {},
-      entryNumbers: { 'original-johto': { 152: 1 }, 'updated-johto': { 152: 1 }, hoenn: { 152: 9 }, 'updated-hoenn': { 152: 7 } },
-      gameToPokedexes: {}
+      entryNumbers: { 'original-johto': { 152: 1 }, 'updated-johto': { 152: 1 }, 'hoenn': { 152: 9 }, 'updated-hoenn': { 152: 7 } },
+      gameToPokedexes: { heartgold: ['updated-johto'], gold: ['original-johto'], ruby: ['hoenn'], emerald: ['updated-hoenn'] }
     }
-    expect(regionalDexNumbersForSpecies(152, availability)).toEqual([
-      { dexDisplayName: 'Johto', entryNumbers: [1] },
-      { dexDisplayName: 'Hoenn', entryNumbers: [9, 7] }
-    ])
+    expect(regionalDexNumbersForGeneration(152, 3, availability)).toEqual([{ dexDisplayName: 'Hoenn', entryNumbers: [9, 7] }])
+    expect(regionalDexNumbersForGeneration(152, 4, availability)).toEqual([{ dexDisplayName: 'Johto', entryNumbers: [1] }])
   })
 
-  it('returns nothing for a species in no dex', () => {
-    expect(regionalDexNumbersForSpecies(999, AVAILABILITY)).toEqual([])
+  it('returns nothing for a species with no entry in that generation', () => {
+    expect(regionalDexNumbersForGeneration(999, 7, AVAILABILITY)).toEqual([])
+    expect(regionalDexNumbersForGeneration(1, 8, AVAILABILITY)).toEqual([])
   })
 })

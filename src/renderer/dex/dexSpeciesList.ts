@@ -1,6 +1,6 @@
 import type { Form, Species } from '@shared/types/pokemon'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
-import { formDisplayName, speciesDisplayName } from './formNames'
+import { speciesDisplayName } from './formNames'
 import { slugDisplayName } from './speciesPageFormat'
 
 /**
@@ -8,16 +8,19 @@ import { slugDisplayName } from './speciesPageFormat'
  * ownership concept, so unlike buildDexSections this reads straight from species/forms/
  * speciesDetails and never touches collection entries.
  *
- * One row per species+form the reference should list: dex_distinct and non_boxable forms
- * (Megas etc. — the reference sketch lists them as their own rows) but not
- * cosmetic_variant sub-forms, which share a pokeapiId with their base form and carry no
- * distinct reference data.
+ * One row per *species* (Vanny's feedback pass): Megas, Gigantamax, regional and battle
+ * formes, Crowned Zacian/Zamazenta, etc. are toggles on the species page (SpeciesPage's form
+ * strip), not list rows. The row shows the species' base form — its `formName === 'base'`
+ * non-cosmetic form, else the first non-cosmetic one.
  */
 export interface DexListRow {
   speciesId: number
+  /** The base form's name — what a click opens the species page on. */
   formName: string
   displayName: string
   generation: number
+  pokeapiId: number
+  spriteFormSuffix: string | null
   abilities: Array<{ name: string; isHidden: boolean }>
 }
 
@@ -35,25 +38,30 @@ export interface DexListGeneration {
 }
 
 export function buildDexListRows(species: Species[], forms: Form[], speciesDetails: SpeciesDetailsData): DexListRow[] {
-  const speciesById = new Map(species.map((s) => [s.id, s]))
-  const rows: DexListRow[] = []
+  const baseFormBySpecies = new Map<number, Form>()
   for (const form of forms) {
     if (form.formCategory === 'cosmetic_variant') continue
-    const sp = speciesById.get(form.speciesId)
-    if (!sp) continue
+    const existing = baseFormBySpecies.get(form.speciesId)
+    if (!existing || (form.formName === 'base' && existing.formName !== 'base')) baseFormBySpecies.set(form.speciesId, form)
+  }
+
+  const rows: DexListRow[] = []
+  for (const sp of species) {
+    const form = baseFormBySpecies.get(sp.id)
+    if (!form) continue
     rows.push({
       speciesId: sp.id,
       formName: form.formName,
-      displayName: formDisplayName(speciesDisplayName(sp.name), form),
+      displayName: speciesDisplayName(sp.name),
       generation: sp.generation,
+      pokeapiId: form.pokeapiId,
+      spriteFormSuffix: form.spriteFormSuffix,
       abilities: (speciesDetails.forms[form.pokeapiId]?.abilities ?? []).map((a) => ({
         name: slugDisplayName(a.name),
         isHidden: a.isHidden
       }))
     })
   }
-  // Stable National Dex order (forms.json order within a species) — the default view and
-  // the tiebreak every other sort key falls back to.
   return rows.sort((a, b) => a.speciesId - b.speciesId)
 }
 
@@ -74,9 +82,7 @@ function firstAbility(row: DexListRow): string {
   return row.abilities[0]?.name ?? ''
 }
 
-/** Sorts a copy. Ties (and the 'dex' key itself) resolve by National Dex # ascending, so a
- * descending sort never scrambles a species' own forms relative to each other — Array.sort
- * is stable, so form order within a species is kept from the input. */
+/** Sorts a copy. Ties on name/abilities resolve by National Dex # ascending. */
 export function sortDexListRows(rows: DexListRow[], sort: DexListSort): DexListRow[] {
   const sign = sort.direction === 'asc' ? 1 : -1
   const byDex = (a: DexListRow, b: DexListRow): number => a.speciesId - b.speciesId

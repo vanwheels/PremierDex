@@ -119,3 +119,11 @@ export function formDisplayName(speciesName: string, form: Form): string {
   if (!formName) return speciesName
   return `${speciesName} (${capitalizeWords(formName.replace(/-/g, ' '))})`
 }
+
+/** Short toggle label for a form on the species page's form strip — just the forme name
+ * ("Mega X", "Alola", "Crowned"), or "Base" for the default form of a species with no true
+ * base-forme name (see BASE_FORM_NAMES). */
+export function formShortLabel(form: Form): string {
+  const formName = form.formName === 'base' ? BASE_FORM_NAMES[form.speciesId] : form.formName
+  return formName ? capitalizeWords(formName.replace(/-/g, ' ')) : 'Base'
+}

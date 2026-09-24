@@ -7,8 +7,8 @@ import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import { CatchProbabilityCalculator } from './CatchProbabilityCalculator'
 import { encounterLocationsForForm } from './encountersFormat'
-import { formDisplayName, speciesDisplayName } from './formNames'
-import { regionalDexNumbersForSpecies } from './regionalDexNumbers'
+import { formDisplayName, formShortLabel, speciesDisplayName } from './formNames'
+import { regionalDexNumbersForGeneration } from './regionalDexNumbers'
 import { formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
 import { CURRENT_MAX_GENERATION } from './sprites'
 import { SpriteModal } from './SpriteModal'
@@ -58,6 +58,8 @@ export function SpeciesPage({
 }: SpeciesPageProps): JSX.Element {
   const [spriteModalShiny, setSpriteModalShiny] = useState<boolean | null>(null)
   const [generation, setGeneration] = useState(CURRENT_MAX_GENERATION)
+  // Starts on the form the page was opened for; the form strip below switches it.
+  const [formName, setFormName] = useState(target.formName)
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -68,14 +70,16 @@ export function SpeciesPage({
   }, [onClose, spriteModalShiny])
 
   const sp = species.find((s) => s.id === target.speciesId)
-  const form = forms.find((f) => f.speciesId === target.speciesId && f.formName === target.formName)
+  const form = forms.find((f) => f.speciesId === target.speciesId && f.formName === formName)
   const displayName = sp && form ? formDisplayName(speciesDisplayName(sp.name), form) : `#${target.speciesId}`
 
   const speciesDetail = speciesDetails.species[target.speciesId]
   const formDetail = form ? speciesDetails.forms[form.pokeapiId] : undefined
   const safariFleeRates = safariFleeRatesForSpecies(target.speciesId)
   const whereToFind = form ? encounterLocationsForForm(encounterData, form.pokeapiId) : []
-  const regionalDexes = regionalDexNumbersForSpecies(target.speciesId, speciesAvailability)
+  // Cosmetic variants share their base form's data, so only real forms get a toggle.
+  const speciesForms = forms.filter((f) => f.speciesId === target.speciesId && f.formCategory !== 'cosmetic_variant')
+  const regionalDexes = regionalDexNumbersForGeneration(target.speciesId, generation, speciesAvailability)
 
   const spriteModalTarget: SpriteModalTarget | null = form
     ? {
@@ -95,6 +99,25 @@ export function SpeciesPage({
       <h2 className="species-page-title">
         {displayName} #{String(target.speciesId).padStart(3, '0')}
       </h2>
+      {speciesForms.length > 1 && (
+        <div className="species-page-gen-strip" role="group" aria-label="Form">
+          {speciesForms.map((f) => (
+            <button
+              key={f.formName}
+              type="button"
+              className={f.formName === formName ? 'species-page-gen-button active' : 'species-page-gen-button'}
+              aria-pressed={f.formName === formName}
+              onClick={() => {
+                setFormName(f.formName)
+                // A later-introduced form (e.g. a Gen 6 Mega) has earlier generations disabled.
+                setGeneration((g) => Math.max(g, f.firstAvailableGeneration))
+              }}
+            >
+              {formShortLabel(f)}
+            </button>
+          ))}
+        </div>
+      )}
       {form && (
         <SpeciesSpriteStrip
           form={form}
@@ -153,7 +176,7 @@ export function SpeciesPage({
             </dl>
           </Box>
           {regionalDexes.length > 0 && (
-            <Box title="Regional Dex #" className="species-page-box-wide">
+            <Box title={`Regional Dex # (Gen ${generation})`} className="species-page-box-wide">
               <dl className="species-page-fields species-page-fields-grid">
                 {regionalDexes.map((dex) => (
                   <div key={dex.dexDisplayName} className="species-page-field">

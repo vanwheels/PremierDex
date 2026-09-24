@@ -89,6 +89,18 @@
   font-variant-numeric: tabular-nums;
 }
 
+.dex-list-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Overrides tables.css's 2.1rem row-icon sizing to fit the 40px sprite. */
+.dex-list-identity .sprite-thumbnail {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
 .dex-list-name {
   border: none;
   background: none;
@@ -110,6 +122,7 @@
   gap: 0 0.9rem;
 }
 
+/* Hidden abilities are marked by italics alone (Vanny's feedback pass) — no "(Hidden)" text. */
 .dex-list-ability-hidden {
   color: var(--muted);
   font-style: italic;

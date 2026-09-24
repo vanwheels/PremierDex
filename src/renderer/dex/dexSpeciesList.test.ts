@@ -57,16 +57,25 @@ const FORMS = [
 describe('buildDexListRows', () => {
   const rows = buildDexListRows(SPECIES, FORMS, details)
 
-  it('lists dex_distinct and non_boxable forms but skips cosmetic variants', () => {
-    expect(rows.map((r) => r.displayName)).toEqual(['Bulbasaur', 'Bulbasaur (Mega)', 'Charmander', 'Chikorita'])
+  it('lists one row per species, folding Mega/other forms and cosmetic variants into it', () => {
+    expect(rows.map((r) => r.displayName)).toEqual(['Bulbasaur', 'Charmander', 'Chikorita'])
   })
 
-  it('resolves abilities per form via pokeapiId, display-formatted', () => {
+  it("uses the base form for the row even when a non-base form is listed first", () => {
+    const reordered = buildDexListRows(SPECIES, [FORMS[1], ...FORMS.filter((f) => f.id !== 2)], details)
+    expect(reordered[0]).toMatchObject({ formName: 'base', pokeapiId: 1 })
+  })
+
+  it('falls back to the first non-cosmetic form when a species has no base-named form', () => {
+    const noBase = buildDexListRows([species(386, 'deoxys', 3)], [form(9, 386, 'normal', 'dex_distinct', 386)], details)
+    expect(noBase[0].formName).toBe('normal')
+  })
+
+  it("resolves the base form's abilities via pokeapiId, display-formatted", () => {
     expect(rows[0].abilities).toEqual([
       { name: 'Overgrow', isHidden: false },
       { name: 'Chlorophyll', isHidden: true }
     ])
-    expect(rows[1].abilities).toEqual([{ name: 'Thick Fat', isHidden: false }])
   })
 
   it('gives a form with no detail entry an empty ability list', () => {
@@ -85,7 +94,7 @@ describe('filterDexListRows', () => {
   it('matches name, dex # substring, and ability name case-insensitively', () => {
     expect(filterDexListRows(rows, 'CHAR').map((r) => r.speciesId)).toEqual([4])
     expect(filterDexListRows(rows, '15').map((r) => r.speciesId)).toEqual([152])
-    expect(filterDexListRows(rows, 'thick').map((r) => r.displayName)).toEqual(['Bulbasaur (Mega)'])
+    expect(filterDexListRows(rows, 'chloro').map((r) => r.speciesId)).toEqual([1])
     expect(filterDexListRows(rows, 'overgrow').map((r) => r.speciesId)).toEqual([1, 152])
   })
 })
@@ -100,13 +109,11 @@ describe('sortDexListRows', () => {
 
   it('sorts by first ability, breaking ties by dex #', () => {
     const sorted = sortDexListRows(rows, { key: 'abilities', direction: 'asc' })
-    expect(sorted.map((r) => r.displayName)).toEqual(['Charmander', 'Bulbasaur', 'Chikorita', 'Bulbasaur (Mega)'])
+    expect(sorted.map((r) => r.displayName)).toEqual(['Charmander', 'Bulbasaur', 'Chikorita'])
   })
 
-  it("reverses dex order without scrambling a species' own forms", () => {
-    const sorted = sortDexListRows(rows, { key: 'dex', direction: 'desc' })
-    expect(sorted.map((r) => r.speciesId)).toEqual([152, 4, 1, 1])
-    expect(sorted.slice(2).map((r) => r.formName)).toEqual(['base', 'mega'])
+  it('reverses dex order', () => {
+    expect(sortDexListRows(rows, { key: 'dex', direction: 'desc' }).map((r) => r.speciesId)).toEqual([152, 4, 1])
   })
 
   it('does not mutate its input', () => {
@@ -120,7 +127,7 @@ describe('groupRowsByGeneration', () => {
   it('opens a new group whenever the generation changes', () => {
     const groups = groupRowsByGeneration(buildDexListRows(SPECIES, FORMS, details))
     expect(groups.map((g) => [g.generation, g.rows.length])).toEqual([
-      [1, 3],
+      [1, 2],
       [2, 1]
     ])
   })
