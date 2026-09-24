@@ -6,12 +6,9 @@ Started 2026-09-24. Design pass done — decisions and per-generation sources ar
 `docs/investigations/sprite-sources.md`. Stays fetch-from-CDN (bundling is a separate future
 discussion); Gen 8/9 use HOME renders, Gen 7 keeps the USUM gifs, Gen 2 uses `transparent/`.
 
-### [Sprite system overhaul] — Leg 4
-Version chip row under the Gen I-IX strip, shown only for generations with more than one game
-(Gen 1-4, 6), switching the sprite source among that generation's games. Toggle first — a
-side-by-side layout is a possible later change, not part of this leg. Should reuse Leg 2's
-source table rather than adding a second mapping.
-Last touched: 2026-09-24. Re-check count: 0.
+All four legs are built. Remaining: Vanny's manual check of the running app (version chips,
+per-generation persistence, modal opening on the chosen game), then close out the milestone
+(post-mortem, `MILESTONES.md`, archive legs).
 
 ## Unscheduled
 

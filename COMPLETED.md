@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Sprite system overhaul, Leg 4] — 2026-09-24
+Version chip row under the Gen I-IX strip for Gen 1-4 and 6, driven by Leg 2's source table
+via `spriteSourceFor`. The pick is kept per generation on `SpeciesPage` and carried into the
+enlarge modal; shiny/back availability follows the chosen game. Modal has no chips of its own.
+See commit `adfec83`.
+
 ## [Sprite system overhaul, Leg 3] — 2026-09-24
 Species strip hides the shiny slot for Gen 1 (flex row centers the lone sprite) and captions
 Gen 8/9 as Pokémon HOME art (`generationArtNote`). The modal's Back toggle now hides when the
