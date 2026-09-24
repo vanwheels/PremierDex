@@ -3,7 +3,9 @@
 ## [Full UI/UX pass on the Dex interface, Leg 2] — 2026-09-24
 `ThemeModeToggle` restyled from a 3-button text row into the sketched diamond/pearl icon box;
 `theme-store` untouched. System mode has no icon, so it reads as neither icon pressed and
-clicking the pressed icon returns to it. See commit `1370792`.
+clicking the pressed icon returns to it. Also added a header Settings button/popup (Backup
+section holds Export/Import), added at Vanny's request as the home for future settings. See
+commits `1370792`, `c74e215`.
 
 ## [Full UI/UX pass on the Dex interface, Leg 1] — 2026-09-24
 Top-level nav is now Collection (the old Living Dex) and Dex (placeholder until Leg 4); the
