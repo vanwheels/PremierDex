@@ -1,10 +1,52 @@
 # TODO
 
-No current milestone — Encounter data + Where to Find (PokeAPI-covered games) shipped
-2026-09-23 (Legs 1-3, see COMPLETED.md/MILESTONES.md). The map-based browse UI it was split
-from stays a separate, not-yet-scoped future milestone (see Future Milestones below).
-Movesets and breeding/egg groups (deferred from the earlier Species database milestone) are
-also still unscoped.
+## Current Milestone: Full UI/UX pass on the Dex interface
+
+Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones —
+many input fields, some overlapping in function. Scoped 2026-09-24 from Vanny's hand-drawn
+sketches into the 4 legs below, covering everything buildable without new species/move/stat
+data. List view's right-click context menu for Ribbons & Marks/Edit Origin (confirmed
+unintuitive by Vanny 2026-09-20) gets revisited as part of Leg 1's nav rework rather than
+fixed in isolation. Sketches and the decisions behind them: `docs/design/ui-ux-pass/`
+(read its README first — a clean session has no other copy of the screenshots).
+
+### [Full UI/UX pass on the Dex interface] — Leg 1
+Collapse the 4 top-level tabs (Living Dex, Collection, Trainer Profiles, Storage Locations)
+into 2 (Collection, Dex). Collection becomes today's Living Dex, with a Storage Location
+dropdown + edit-pencil popup wrapping today's `StorageLocationsPanel`, a Trainer Profiles
+button opening a popup wrapping today's `TrainerProfilesPanel`, and the completion overview
+(Overall/By Generation/By Regional Variant, already in Living Dex) rearranged per sketch.
+Today's standalone Collection tab (group owned entries by Origin Game/OT/Shiny/Dex Number,
+`CollectionView.tsx`) is shelved and removed outright — Vanny confirmed its functionality
+isn't being ported forward. Dex tab itself stays empty/placeholder until Leg 4.
+Last touched: 2026-09-24. Re-check count: 0.
+
+### [Full UI/UX pass on the Dex interface] — Leg 2
+Restyle the existing System/Diamond/Pearl `ThemeModeToggle` from its 3-button row into the
+sketched icon control (diamond + pearl) in the header next to Settings. Same underlying
+`theme-store` logic — visual-only change, no new functionality.
+Last touched: 2026-09-24. Re-check count: 0.
+
+### [Full UI/UX pass on the Dex interface] — Leg 3
+Reflow the Species page's existing fields (abilities as a dynamic list with descriptions,
+gender ratio, base happiness, experience growth, EVs earned, base catch rate, Safari flee
+rate, Where to Find, regional dex #) into the sketched box layout. Promote sprite
+generation-switching from `SpriteModal`'s click-to-enlarge stepper into an inline Gen I-IX
+strip on the page itself — scoped to sprites only for now, since types/abilities/stats
+aren't generation-aware in the current data model (see the Species/Dex reference data layer
+item under Future Milestones). The per-version (e.g. D/P/Pt vs. HGSS) sub-toggle and
+"changes all info" behavior wait on that data.
+Last touched: 2026-09-24. Re-check count: 0.
+
+### [Full UI/UX pass on the Dex interface] — Leg 4
+New Dex tab: Showdown/Serebii-inspired species reference list (Name/Dex #/Abilities columns,
+searchable/sortable), plus a Locations sub-tab (species-per-location browse, built off the
+already-shipped `encounters.json` per-game data). Types and base-stat columns, the Moves
+sub-tab, and search-by-move/egg-group are deferred to a follow-up leg once the Species/Dex
+reference data layer milestone ships that data — ships as a thin v1 per Vanny's 2026-09-24
+call, not held for a complete column set. The sprite-grid view mode (Hybrid-view style)
+mentioned in discussion is explicitly out of scope for this leg.
+Last touched: 2026-09-24. Re-check count: 0.
 
 ## Unscheduled
 
@@ -145,17 +187,19 @@ Blocked: needs a real false positive or wrong-game forme to actually surface bef
 worth scoping — not built speculatively ahead of demonstrated need.
 Last touched: 2026-09-19. Re-check count: 0.
 
-### [Full UI/UX pass on the Dex interface] — future milestone
-Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones
-— many input fields, some overlapping in function (e.g. the tier picker's shortcut checkboxes
-vs. the underlying `includeCosmeticVariants`/`splitByGender` checkboxes it drives, per-entry
-vs. bulk vs. per-location Duplicate/Move actions). Wants a full pass over the UI to find a
-more user-friendly, less redundant layout. Deliberately not scoped or folded into the current
-milestone — milestone-sized investigation on its own, not a leg. Needs its own scoping pass
-(which panels/modals, what "simpler" means concretely) before a leg sequence can be planned.
-Confirmed 2026-09-20 (Vanny, after using it): List view's right-click context menu for
-Ribbons & Marks/Edit Origin (Ribbons & Marks: List/Collection View Entry Points milestone,
-`DexTable`/`DexRow`) works but is unintuitive — right-clicking specifically the Origin
-button area to reach it isn't discoverable. Revisit the List view entry point mechanic as
-part of this pass rather than fixing in isolation.
-Last touched: 2026-09-20. Re-check count: 0.
+### [Species/Dex reference data layer] — future milestone
+Split out 2026-09-24 during Full UI/UX pass scoping: base stats, movesets, egg groups, Base
+Egg Steps, and per-form types don't exist anywhere in the current data model
+(`species-details.ts` has only capture rate/happiness/growth rate/gender rate/abilities/EV
+yield; `pokemon.ts` has no type field at all). Also needed: per-generation type/ability
+variance (e.g. the Fairy-type split at Gen VI) and per-version-within-generation variance
+(e.g. Diamond/Pearl/Platinum vs. HeartGold/SoulSilver) for the Species page's Gen I-IX strip
+to eventually drive more than sprite art. Types and base stats are cheap additions (same
+`/pokemon/{id}` PokeAPI endpoint the fetch script already hits for abilities/EV yield);
+movesets and egg groups need new endpoints/fetch-script work, closer in shape to the
+Encounter data milestone. Blocks a follow-up leg of Full UI/UX pass Leg 4 (Dex tab
+Types/BST columns, Moves sub-tab, move/egg-group search) and the Species page's full
+generation-toggle behavior beyond sprites. Needs its own scoping pass before a leg sequence
+can be planned.
+Last touched: 2026-09-24. Re-check count: 0.
+
