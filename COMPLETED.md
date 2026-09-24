@@ -1,5 +1,14 @@
 # COMPLETED
 
+## [Encounter data fetch script + types, Leg 1] — 2026-09-23
+Added `EncounterData` (`src/shared/types/encounters.ts`), mirroring PokeAPI's
+`/pokemon/{id}/encounters` shape and keyed by pokeapiId like `FormDetailEntry`, with dedup
+tables for location-area/method/version names. `scripts/fetch-encounters.ts` fetches it for
+all 1329 distinct form pokeapiIds, restricted to the 22 PokeAPI-covered version groups (Gen
+1-7, Let's Go, Sword/Shield + Isle of Armor/Crown Tundra DLC, Colosseum/XD); wrote 927 forms'
+worth of encounters (1432 location areas, 64 methods, 38 versions) to
+`data/pokemon/encounters.json`. See commit `f1984cf`.
+
 ## [Codebase File-Size Cleanup Leg 6: split fetch-pokemon-forms.ts] — 2026-09-22
 Final leg — milestone shipped, see MILESTONES.md. Split along the boundary scoped in
 TODO.md: pulled OVERRIDES, SHINY_LOCKED, ALWAYS_SHINY, VERSION_GROUP_GENERATION,

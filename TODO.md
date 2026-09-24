@@ -1,9 +1,35 @@
 # TODO
 
-No current milestone — Species database: full per-species pages shipped 2026-09-23 (Legs
-1-5, see COMPLETED.md/MILESTONES.md). Movesets and breeding/egg groups were deliberately
-left out of that leg sequence; candidates for a follow-on milestone if wanted, not yet
-scoped.
+## Current Milestone: Encounter data + Where to Find (PokeAPI-covered games)
+
+Species database (full per-species pages) shipped 2026-09-23 (Legs 1-5, see
+COMPLETED.md/MILESTONES.md). Movesets and breeding/egg groups were deliberately left out of
+that leg sequence; candidates for a follow-on milestone if wanted, not yet scoped.
+
+Scoped 2026-09-23 out of the original "Encounter tables + location/game search UI" idea
+(raised by Vanny 2026-09-21; see `docs/investigations/pokeapi-encounter-coverage.md` for the
+data-source investigation). Split into this milestone (data build + a simple per-species list,
+tied into the Dex) and a separate future milestone for the map-based browse UI (see Future
+Milestones below) — the map UI is a much bigger, asset-dependent problem (no map art exists
+in the repo, and different eras need different map treatments) and doesn't need to block
+getting encounter data into the app. Scope is the PokeAPI-covered games only: Gen 1-7, Let's
+Go, Sword/Shield (+DLC), and Orre's snag mechanic. Brilliant Diamond/Shining Pearl, Legends
+Arceus, Scarlet/Violet (+DLC), and Legends Z-A have zero PokeAPI encounter data and are
+deferred to a later hand-curation pass (same reactive, opt-in-per-game posture as
+`BALL_POOLS`/Met Location), not blocking this milestone.
+
+### [Encounter data storage/IPC wiring] — Leg 2
+Extend `load-species-data.ts` and `pokemon-ipc.ts` to load `data/pokemon/encounters.json` and
+expose it to the renderer, following the existing `loadSpeciesDetails` channel pattern exactly.
+Depends on Leg 1's output shape.
+Last touched: 2026-09-23. Re-check count: 0.
+
+### [Where to Find section on SpeciesPage] — Leg 3
+Add a per-game/location/method encounter list to `SpeciesPage.tsx`, grouped and formatted the
+same way the existing Safari Zone Flee Rate field is. This is the milestone's proof of
+concept — ties encounter data into the Dex per Vanny's original 2026-09-21 ask, without
+needing the map UI. Depends on Leg 2's IPC wiring.
+Last touched: 2026-09-23. Re-check count: 0.
 
 ## Unscheduled
 
@@ -82,6 +108,22 @@ Items too large for a single leg — need their own scoping pass before a leg se
 be planned. Some are grouped because they share a root cause or precedent fix; others are
 standalone but milestone-sized on their own.
 
+### [Location/game browse UI with maps] — future milestone
+Split out 2026-09-23 from the Encounter data milestone above: a new top-level view (sibling
+`AppView` to `species`/`dex`, per `App.tsx`) for browsing encounters by location or by game,
+with somewhat interactable maps per game. No map assets exist anywhere in the repo yet.
+Gens 1-7 and (mostly) Sword/Shield share a map convention (breaks up each route/city,
+highlights the selected area) usable as design inspiration; Scarlet/Violet largely breaks
+that convention and Legends Arceus/Z-A break it entirely (open world), so map treatment
+needs per-era variants, not one universal system. Pokémon GO gets no map (real-world
+location data). Confirmed 2026-09-23: ship placeholder/schematic maps (simple region/route
+layout, not polished cartographic art) rather than blocking on sourced/commissioned art —
+same deferred-polish posture as the App icon item below. Needs its own
+scoping pass (data is available once the current milestone's `encounters.json` ships, so
+this can be scoped independently of that data-build work) before a leg sequence can be
+planned.
+Last touched: 2026-09-23. Re-check count: 0.
+
 ### [Backup/Export Completeness] — future milestone
 Two CollectionExport gaps with the same shape and the same fix pattern (version bump v2→v3,
 same "reject the old version outright" precedent as v1→v2) — worth scoping and shipping
@@ -127,33 +169,6 @@ Zamazenta/Ogerpon/Silvally catalogue) has been shown to actually misfire today.
 Blocked: needs a real false positive or wrong-game forme to actually surface before this is
 worth scoping — not built speculatively ahead of demonstrated need.
 Last touched: 2026-09-19. Re-check count: 0.
-
-### [Encounter tables + location/game search UI] — future milestone
-Raised by Vanny 2026-09-21, after the Curated Met Location dataset milestone shipped: once
-full encounter tables exist for every curated Met Location across all games, the app needs a
-new UI system for searching Pokémon and viewing where they're encountered — linked to the
-Dex/storage feature. Needs to support browsing encounters by location or by game, which
-implies somewhat interactable maps per game. Confirmed 2026-09-21: OK to split into as many
-milestones as makes sense once this is picked up (e.g. data build vs. UI as separate
-milestones) — written down now just to capture the idea, not to lock in a single scope.
-Data sourcing investigated 2026-09-23 (see
-`docs/investigations/pokeapi-encounter-coverage.md`): PokeAPI fully covers Gen 1-7, Let's Go,
-Sword/Shield (+DLC), and Orre's snag mechanic, but has zero encounter data — empty stubs or
-no resource at all — for Brilliant Diamond/Shining Pearl, Legends Arceus, Scarlet/Violet
-(+DLC), and almost certainly Legends Z-A. Map convention: gens 1-7 and (mostly) Sword/Shield
-use a map that distinctly breaks up each route/city and highlights the selected area —
-usable as design inspiration. Scarlet/Violet largely breaks that convention, and Legends
-Arceus/Z-A break it entirely (open world), so map treatment needs per-era variants rather
-than one universal system anyway. Pokémon GO gets no map — real-world location data, not a
-fixed map.
-Decided 2026-09-23: ship the PokeAPI-covered games first (Gen 1-7, Let's Go, Sword/Shield,
-Orre) as the initial scope — both a proof of concept for the feature and a natural
-boundary, since the newest four games (BDSP/Legends Arceus/Scarlet-Violet/Z-A) already
-needed different map treatment regardless of data-source concerns. Hand-curating those four
-(same reactive, opt-in-per-game posture as `BALL_POOLS`/Met Location) is deferred to a later
-pass, not blocking this milestone's start. Still needs a scoping pass (data-build vs. UI
-split, per Vanny's 2026-09-21 note above) before a leg sequence can be planned.
-Last touched: 2026-09-23. Re-check count: 0.
 
 ### [Full UI/UX pass on the Dex interface] — future milestone
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones
