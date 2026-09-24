@@ -130,7 +130,7 @@
 
 .dex-locations {
   display: grid;
-  grid-template-columns: 16rem 1fr;
+  grid-template-columns: 12rem 15rem 1fr;
   gap: 1rem;
   align-items: start;
 }
@@ -141,11 +141,14 @@
   padding: 0;
 }
 
+.dex-locations-games ul,
 .dex-locations-list ul {
   max-height: 70vh;
   overflow-y: auto;
 }
 
+/* Inactive games carry their Where to Find colour as a left stripe; the active one fills. */
+.dex-locations-game,
 .dex-locations-item {
   display: block;
   width: 100%;
@@ -158,8 +161,21 @@
   border-radius: 4px;
 }
 
-.dex-locations-item:hover {
+.dex-locations-game {
+  border-left: 4px solid transparent;
+}
+
+.dex-locations-game.active {
+  font-weight: 600;
+}
+
+.dex-locations-item:hover,
+.dex-locations-game:hover {
   color: var(--text);
+}
+
+.dex-locations-game.active:hover {
+  color: inherit;
 }
 
 .dex-locations-item.active {
@@ -172,15 +188,68 @@
   margin-top: 0;
 }
 
-.dex-locations-species {
-  display: grid;
-  grid-template-columns: 4rem 1fr 1fr;
+.dex-locations-toggle {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.25rem 0.6rem;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
 }
 
-.dex-locations-games {
+.dex-locations-toggle-label {
   color: var(--muted);
   font-size: 0.85rem;
+  min-width: 5rem;
+}
+
+.dex-locations-toggle-option {
+  padding: 0.1rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.dex-locations-toggle-option.active {
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.dex-locations-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dex-locations-col-number {
+  width: 9%;
+}
+
+.dex-locations-col-name {
+  width: 20%;
+}
+
+.dex-locations-col-method {
+  width: 14%;
+}
+
+.dex-locations-col-levels {
+  width: 37%;
+}
+
+.dex-locations-col-conditions {
+  width: 20%;
+}
+
+.dex-locations-table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+}
+
+.dex-locations-table td {
+  padding: 0.15rem 0.6rem;
+  border-top: 1px solid var(--border);
+  vertical-align: top;
 }

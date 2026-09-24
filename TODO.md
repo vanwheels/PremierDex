@@ -7,16 +7,16 @@ species (Rattata: 1,722 encounter rows across 59 areas) make both views unusable
 stores one row per slot and per time-of-day, so the fix is grouping, not removing data. A
 prototype against the real `encounters.json` cut Rattata to 490 rows by merging same-level
 slots (summing chance) and merging Morning/Day/Night when their breakdowns match. Slot numbers
-aren't in the data and stay out of scope (RNG-only). Sequenced in 3 legs; Vanny will answer the
-open design questions when the milestone opens — resolved 2026-09-24: inline format reads fine
-after Leg 1; Where to Find follows the Gen I-IX toggle (Leg 2).
+aren't in the data and stay out of scope (RNG-only). Sequenced in 3 legs (all shipped 2026-09-24); design questions resolved: inline format reads
+fine after Leg 1; Where to Find follows the Gen I-IX toggle (Leg 2).
 
-### [Encounter display rework] — Leg 3
-Dex Locations sub-tab as three panes (Games -> that game's Locations -> species at the
-location), time toggle shown only when the location has time-conditioned encounters (same rule
-for other varying conditions: swarm, radar, dual-slot, season, weather). Also decides whether
-regional/alternate forms fold to one entry per species like the Pokémon list.
-Last touched: 2026-09-24. Re-check count: 0.
+### [Encounter display rework] — Close-out
+Legs 1-3 all shipped with tests/typecheck only. Once Vanny has eyeballed the Species page Where
+to Find (Legs 1-2) and the three-pane Dex Locations (Leg 3) against real data (Rattata: expect
+~490 rows on its page), write `docs/postmortems/encounter-display-rework.md` and add the
+`MILESTONES.md` entry, then move this milestone out of TODO.
+Blocked: Vanny's visual check of Legs 1-3.
+Last touched: 2026-09-24.
 
 ## Unscheduled
 

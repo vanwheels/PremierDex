@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import type { EncounterData } from '@shared/types/encounters'
 import type { Form, Species } from '@shared/types/pokemon'
-import { buildDexLocations, filterDexLocations } from './dexLocationIndex'
+import { DexLocationDetail } from './DexLocationDetail'
+import { buildDexGames, filterDexLocations } from './dexLocationIndex'
+import { gameColor } from './gameColors'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 
 interface DexLocationsProps {
@@ -12,66 +14,87 @@ interface DexLocationsProps {
 }
 
 /**
- * Full UI/UX pass Leg 4: the Dex tab's Locations sub-tab — a searchable location list on the
- * left, the species found at the selected location (with which games) on the right. Built
- * off encounters.json, so it carries that dataset's coverage gap (no Brilliant Diamond/
+ * The Dex tab's Locations sub-tab as three panes (Encounter display rework Leg 3): Games ->
+ * the selected game's searchable Locations -> the species found at the selected location.
+ * Built off encounters.json, so it carries that dataset's coverage gap (no Brilliant Diamond/
  * Shining Pearl, Legends Arceus, Scarlet/Violet, or Legends Z-A — see encounters.ts).
  */
 export function DexLocations({ species, forms, encounterData, onOpenSpecies }: DexLocationsProps): JSX.Element {
   const [query, setQuery] = useState('')
-  const [selectedName, setSelectedName] = useState<string | null>(null)
+  const [selectedGame, setSelectedGame] = useState<string | null>(null)
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
 
-  const locations = useMemo(() => buildDexLocations(encounterData, species, forms), [encounterData, species, forms])
-  const visible = useMemo(() => filterDexLocations(locations, query), [locations, query])
-  const selected = locations.find((l) => l.name === selectedName) ?? null
+  const games = useMemo(() => buildDexGames(encounterData, species, forms), [encounterData, species, forms])
+  const game = games.find((g) => g.label === selectedGame) ?? null
+  const visible = useMemo(() => (game ? filterDexLocations(game.locations, query) : []), [game, query])
+  const location = game?.locations.find((l) => l.name === selectedLocation) ?? null
 
   return (
     <div className="dex-locations">
-      <div className="dex-locations-list">
-        <input
-          type="search"
-          className="dex-tab-search"
-          value={query}
-          placeholder="Search locations…"
-          onChange={(e) => setQuery(e.target.value)}
-        />
+      <div className="dex-locations-games">
         <ul>
-          {visible.map((loc) => (
-            <li key={loc.name}>
-              <button
-                type="button"
-                className={loc.name === selectedName ? 'dex-locations-item active' : 'dex-locations-item'}
-                onClick={() => setSelectedName(loc.name)}
-              >
-                {loc.name}
-              </button>
-            </li>
-          ))}
+          {games.map((g) => {
+            const { bg, fg } = gameColor(g.gameId)
+            const active = g.label === selectedGame
+            return (
+              <li key={g.label}>
+                <button
+                  type="button"
+                  className={active ? 'dex-locations-game active' : 'dex-locations-game'}
+                  style={active ? { backgroundColor: bg, color: fg } : { borderLeftColor: bg }}
+                  onClick={() => {
+                    setSelectedGame(g.label)
+                    setSelectedLocation(null)
+                  }}
+                >
+                  {g.label}
+                </button>
+              </li>
+            )
+          })}
         </ul>
-        {visible.length === 0 && <p className="dex-tab-empty">No locations match “{query.trim()}”.</p>}
       </div>
-      <div className="dex-locations-detail">
-        {selected ? (
+      <div className="dex-locations-list">
+        {game ? (
           <>
-            <h3>{selected.name}</h3>
+            <input
+              type="search"
+              className="dex-tab-search"
+              value={query}
+              placeholder="Search locations…"
+              onChange={(e) => setQuery(e.target.value)}
+            />
             <ul>
-              {selected.species.map((s) => (
-                <li key={`${s.speciesId}-${s.formName}`} className="dex-locations-species">
-                  <span className="dex-list-number">#{String(s.speciesId).padStart(3, '0')}</span>
+              {visible.map((loc) => (
+                <li key={loc.name}>
                   <button
                     type="button"
-                    className="dex-list-name"
-                    onClick={() => onOpenSpecies({ speciesId: s.speciesId, formName: s.formName })}
+                    className={loc.name === selectedLocation ? 'dex-locations-item active' : 'dex-locations-item'}
+                    onClick={() => setSelectedLocation(loc.name)}
                   >
-                    {s.displayName}
+                    {loc.name}
                   </button>
-                  <span className="dex-locations-games">{s.gamesLabel}</span>
                 </li>
               ))}
             </ul>
+            {visible.length === 0 && <p className="dex-tab-empty">No locations match “{query.trim()}”.</p>}
           </>
         ) : (
-          <p className="dex-tab-empty">Select a location to see which Pokémon appear there.</p>
+          <p className="dex-tab-empty">Select a game.</p>
+        )}
+      </div>
+      <div className="dex-locations-detail">
+        {location ? (
+          <DexLocationDetail
+            key={`${game?.label}/${location.name}`}
+            location={location}
+            methods={encounterData.methods}
+            onOpenSpecies={onOpenSpecies}
+          />
+        ) : (
+          <p className="dex-tab-empty">
+            {game ? 'Select a location to see which Pokémon appear there.' : 'Pick a game, then a location.'}
+          </p>
         )}
       </div>
     </div>

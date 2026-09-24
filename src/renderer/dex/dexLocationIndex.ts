@@ -1,27 +1,42 @@
-import type { EncounterData } from '@shared/types/encounters'
+import type { EncounterData, EncounterDetail } from '@shared/types/encounters'
 import type { Form, Species } from '@shared/types/pokemon'
+import { conditionTogglesFor, type ConditionToggle } from './encounterConditions'
 import { gameRefForVersion, locationAreaLabel } from './encountersFormat'
 import { formDisplayName, speciesDisplayName } from './formNames'
 
 /**
- * Full UI/UX pass Leg 4: the Dex tab's Locations sub-tab data — the inverse of
+ * The Dex tab's Locations sub-tab data (Encounter display rework Leg 3) — the inverse of
  * encountersFormat.ts's per-form "Where to Find" grouping. encounters.json is keyed
- * pokeapiId -> location areas; this flips it to location area -> species/forms found
- * there, each with the games that have that encounter. Built once per data load (a full
- * pass over every encounter row), not per keystroke.
+ * pokeapiId -> location areas -> versions; this flips it to game -> location -> species/forms,
+ * keeping each entry's raw encounter details so the pane can re-group them under the time/
+ * weather/etc. toggles. Built once per data load (a full pass over every encounter row), not
+ * per keystroke.
+ *
+ * Each regional/alternate form is its own entry rather than folding to one per species like
+ * the Pokémon list: encounters are per form, and "Alolan Rattata" vs "Rattata" is exactly what
+ * someone looking at a location wants to tell apart.
  */
 export interface LocationSpeciesEntry {
   speciesId: number
   formName: string
   displayName: string
-  /** Display-joined games (release order) with any encounter of this form here, e.g.
-   * "Ruby/Sapphire/Emerald". */
-  gamesLabel: string
+  /** Every encounter detail for this form at this game's location, ungrouped. */
+  details: EncounterDetail[]
 }
 
 export interface DexLocation {
   name: string
   species: LocationSpeciesEntry[]
+  /** Condition toggles this location's encounters vary in (empty when none do). */
+  toggles: ConditionToggle[]
+}
+
+export interface DexGame {
+  /** Version-derived label, incl. the Isle of Armor/Crown Tundra suffix. */
+  label: string
+  gameId: string
+  generation: number | null
+  locations: DexLocation[]
 }
 
 /** pokeapiId -> the form the reference should attribute its encounters to. Cosmetic
@@ -36,15 +51,15 @@ function formsByPokeapiId(forms: Form[]): Map<number, Form> {
   return byId
 }
 
-export function buildDexLocations(encounterData: EncounterData, species: Species[], forms: Form[]): DexLocation[] {
+export function buildDexGames(encounterData: EncounterData, species: Species[], forms: Form[]): DexGame[] {
   const speciesById = new Map(species.map((s) => [s.id, s]))
   const formByPokeapiId = formsByPokeapiId(forms)
 
   interface Working {
-    entry: Omit<LocationSpeciesEntry, 'gamesLabel'>
-    games: Map<string, string>
+    ref: ReturnType<typeof gameRefForVersion>
+    locations: Map<string, Map<number, LocationSpeciesEntry>>
   }
-  const locations = new Map<string, Map<number, Working>>()
+  const byVersion = new Map<string, Working>()
 
   for (const [pokeapiIdKey, areas] of Object.entries(encounterData.encounters)) {
     const pokeapiId = Number(pokeapiIdKey)
@@ -54,38 +69,45 @@ export function buildDexLocations(encounterData: EncounterData, species: Species
     const displayName = formDisplayName(speciesDisplayName(sp.name), form)
 
     for (const area of areas) {
-      const name = locationAreaLabel(encounterData.locationAreas[area.locationAreaIndex])
-      let inLocation = locations.get(name)
-      if (!inLocation) {
-        inLocation = new Map()
-        locations.set(name, inLocation)
-      }
-      let working = inLocation.get(pokeapiId)
-      if (!working) {
-        working = { entry: { speciesId: sp.id, formName: form.formName, displayName }, games: new Map() }
-        inLocation.set(pokeapiId, working)
-      }
+      const locationName = locationAreaLabel(encounterData.locationAreas[area.locationAreaIndex])
       for (const versionDetail of area.versionDetails) {
-        const game = gameRefForVersion(encounterData.versions[versionDetail.versionIndex])
-        working.games.set(game.sortKey, game.label)
+        const versionName = encounterData.versions[versionDetail.versionIndex]
+        let game = byVersion.get(versionName)
+        if (!game) {
+          game = { ref: gameRefForVersion(versionName), locations: new Map() }
+          byVersion.set(versionName, game)
+        }
+        let inLocation = game.locations.get(locationName)
+        if (!inLocation) {
+          inLocation = new Map()
+          game.locations.set(locationName, inLocation)
+        }
+        const entry = inLocation.get(pokeapiId)
+        if (entry) entry.details = entry.details.concat(versionDetail.encounterDetails)
+        else
+          inLocation.set(pokeapiId, {
+            speciesId: sp.id,
+            formName: form.formName,
+            displayName,
+            details: versionDetail.encounterDetails
+          })
       }
     }
   }
 
-  return [...locations.entries()]
-    .map(([name, inLocation]) => ({
-      name,
-      species: [...inLocation.values()]
-        .map(({ entry, games }) => ({
-          ...entry,
-          gamesLabel: [...games.entries()]
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([, label]) => label)
-            .join('/')
-        }))
-        .sort((a, b) => a.speciesId - b.speciesId)
+  return [...byVersion.values()]
+    .sort((a, b) => a.ref.sortKey.localeCompare(b.ref.sortKey) || a.ref.label.localeCompare(b.ref.label))
+    .map(({ ref, locations }) => ({
+      label: ref.label,
+      gameId: ref.gameId,
+      generation: ref.generation,
+      locations: [...locations.entries()]
+        .map(([name, inLocation]) => {
+          const entries = [...inLocation.values()].sort((a, b) => a.speciesId - b.speciesId)
+          return { name, species: entries, toggles: conditionTogglesFor(entries.flatMap((e) => e.details)) }
+        })
+        .sort((a, b) => a.name.localeCompare(b.name))
     }))
-    .sort((a, b) => a.name.localeCompare(b.name))
 }
 
 /** Case-insensitive substring match on the location name. Blank query matches all. */
