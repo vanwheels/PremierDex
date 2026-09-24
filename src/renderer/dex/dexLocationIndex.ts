@@ -106,7 +106,7 @@ export function buildDexGames(encounterData: EncounterData, species: Species[], 
           const entries = [...inLocation.values()].sort((a, b) => a.speciesId - b.speciesId)
           return { name, species: entries, toggles: conditionTogglesFor(entries.flatMap((e) => e.details)) }
         })
-        .sort((a, b) => a.name.localeCompare(b.name))
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
     }))
 }
 

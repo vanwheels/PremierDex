@@ -87,6 +87,24 @@ describe('buildDexGames', () => {
   })
 })
 
+describe('location ordering', () => {
+  it('sorts numbered locations numerically within alphabetical order', () => {
+    const data: EncounterData = {
+      locationAreas: ['hoenn-route-110-area', 'hoenn-route-2-area', 'hoenn-route-101-area', 'hoenn-altering-cave-area'],
+      methods: ['walk'],
+      versions: ['ruby'],
+      encounters: {
+        16: [0, 1, 2, 3].map((i) => ({
+          locationAreaIndex: i,
+          versionDetails: [{ versionIndex: 0, maxChance: 50, encounterDetails: [detail] }]
+        }))
+      }
+    }
+    const names = buildDexGames(data, SPECIES, FORMS)[0].locations.map((l) => l.name)
+    expect(names).toEqual(['Hoenn Altering Cave', 'Hoenn Route 2', 'Hoenn Route 101', 'Hoenn Route 110'])
+  })
+})
+
 describe('filterDexLocations', () => {
   const ruby = buildDexGames(DATA, SPECIES, FORMS).find((g) => g.label === 'Ruby')!.locations
 

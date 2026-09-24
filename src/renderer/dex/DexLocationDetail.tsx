@@ -61,7 +61,6 @@ export function DexLocationDetail({ location, methods, onOpenSpecies }: DexLocat
       ))}
       <table className="dex-locations-table">
         <colgroup>
-          <col className="dex-locations-col-number" />
           <col className="dex-locations-col-name" />
           <col className="dex-locations-col-method" />
           <col className="dex-locations-col-levels" />
@@ -69,7 +68,6 @@ export function DexLocationDetail({ location, methods, onOpenSpecies }: DexLocat
         </colgroup>
         <thead>
           <tr>
-            <th>#</th>
             <th>Pokémon</th>
             <th>Method</th>
             <th>Levels</th>
@@ -80,16 +78,18 @@ export function DexLocationDetail({ location, methods, onOpenSpecies }: DexLocat
           {entries.flatMap((s) =>
             s.rows.map((row, i) => (
               <tr key={`${s.speciesId}-${s.formName}-${i}`}>
-                <td className="dex-list-number">{i === 0 ? `#${String(s.speciesId).padStart(3, '0')}` : ''}</td>
                 <td>
                   {i === 0 && (
-                    <button
-                      type="button"
-                      className="dex-list-name"
-                      onClick={() => onOpenSpecies({ speciesId: s.speciesId, formName: s.formName })}
-                    >
-                      {s.displayName}
-                    </button>
+                    <>
+                      <span className="dex-list-number">#{String(s.speciesId).padStart(3, '0')}</span>
+                      <button
+                        type="button"
+                        className="dex-list-name"
+                        onClick={() => onOpenSpecies({ speciesId: s.speciesId, formName: s.formName })}
+                      >
+                        {s.displayName}
+                      </button>
+                    </>
                   )}
                 </td>
                 <td>{row.method}</td>
