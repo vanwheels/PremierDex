@@ -4,6 +4,7 @@ Index of shipped milestones. Name, date, status, and a link to the post-mortem d
 same scannable spirit as `TODO.md`, not prose. See `docs/postmortems/<milestone-slug>.md`
 for what shipped/went well/didn't per milestone.
 
+- **Full UI/UX pass on the Dex interface** — 2026-09-24 — Shipped — [post-mortem](docs/postmortems/full-ui-ux-pass-on-the-dex-interface.md)
 - **Encounter data + Where to Find (PokeAPI-covered games)** — 2026-09-23 — Shipped — [post-mortem](docs/postmortems/encounter-data-where-to-find.md)
 - **Species database: full per-species pages** — 2026-09-23 — Shipped — [post-mortem](docs/postmortems/species-database-full-per-species-pages.md)
 - **Species detail popup + evolution family tree** — 2026-09-22 — Shipped — [post-mortem](docs/postmortems/species-detail-popup-evolution-family-tree.md)

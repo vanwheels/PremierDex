@@ -1,23 +1,34 @@
 # TODO
 
-## Current Milestone: Full UI/UX pass on the Dex interface
+## Current Milestone: Encounter display rework
 
-Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones —
-many input fields, some overlapping in function. Scoped 2026-09-24 from Vanny's hand-drawn
-sketches into 4 legs (all shipped 2026-09-24, see COMPLETED.md), covering everything buildable without new species/move/stat
-data. List view's right-click context menu for Ribbons & Marks/Edit Origin (confirmed
-unintuitive by Vanny 2026-09-20) gets revisited as part of Leg 1's nav rework rather than
-fixed in isolation. Sketches and the decisions behind them: `docs/design/ui-ux-pass/`
-(read its README first — a clean session has no other copy of the screenshots).
+Scoped 2026-09-24 from Vanny's feedback on the Where to Find / Locations sub-tab: common
+species (Rattata: 1,722 encounter rows across 59 areas) make both views unusable. PokeAPI
+stores one row per slot and per time-of-day, so the fix is grouping, not removing data. A
+prototype against the real `encounters.json` cut Rattata to 490 rows by merging same-level
+slots (summing chance) and merging Morning/Day/Night when their breakdowns match. Slot numbers
+aren't in the data and stay out of scope (RNG-only). Sequenced in 3 legs; Vanny will answer the
+open design questions when the milestone opens: is the inline `Lv. 20 (30%), 21 (30%)` format
+clear enough (vs. tags), and should Where to Find follow the Gen I-IX toggle (currently no).
 
-All 4 legs shipped 2026-09-24 (see COMPLETED.md). Milestone deliberately left open: Vanny
-is giving feedback on the Leg 3 Species page reflow, tied in with Leg 4's Dex tab, before it
-closes out (MILESTONES.md entry + post-mortem not yet written). Types/base-stat columns, the
-Dex tab's Moves/Search sub-tabs are deferred — see the Species/Dex reference data layer
-item below; the sprite-grid view mode is its own Unscheduled item. Vanny's feedback pass also
-spun off the Sprite system overhaul (Future Milestones). Open question for Vanny: the Dex
-tab's Locations sub-tab still lists regional/alternate forms as separate entries — fold to
-one per species like the Pokémon list?
+### [Encounter display rework] — Leg 1
+Shared grouping function replacing `encounterSectionsForForm`'s per-row output: group by
+location/game/method/non-time conditions, merge same-level slots by summing chance, merge
+identical time-of-day breakdowns. Species page rows show the inline level breakdown; covers
+both views' data needs.
+Last touched: 2026-09-24. Re-check count: 0.
+
+### [Encounter display rework] — Leg 2
+Species page Where to Find: each game section collapsed by default with a one-line summary
+(e.g. "Gold — 41 locations").
+Last touched: 2026-09-24. Re-check count: 0.
+
+### [Encounter display rework] — Leg 3
+Dex Locations sub-tab as three panes (Games -> that game's Locations -> species at the
+location), time toggle shown only when the location has time-conditioned encounters (same rule
+for other varying conditions: swarm, radar, dual-slot, season, weather). Also decides whether
+regional/alternate forms fold to one entry per species like the Pokémon list.
+Last touched: 2026-09-24. Re-check count: 0.
 
 ## Unscheduled
 
