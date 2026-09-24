@@ -272,14 +272,18 @@
 }
 
 /* Sketch layout (docs/design/ui-ux-pass/sketch-1): Overall top-left, By Regional Variant
-   below it, By Generation as a tall block on the right. */
+   below it, By Generation as a tall block on the right. Overall keeps its content height
+   and the 1fr row lets Regional Variant absorb the rest, so the left column (both blocks
+   plus the gap) always matches the By Generation block's height — and vice versa if the
+   left column is ever the taller one. */
 .completion-stats-tables {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  grid-template-rows: auto 1fr;
   grid-template-areas:
     'overall generation'
     'regional generation';
-  align-items: start;
+  align-items: stretch;
   gap: 1rem;
 }
 
