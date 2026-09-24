@@ -98,6 +98,25 @@
   padding: 0;
 }
 
+/* Leg 3 of the Encounter data + Where to Find milestone — one outer entry per location
+ * area (bold), each with a nested list of its distinct games/method/level/chance rows,
+ * since unlike Safari Zone Flee Rate a location can have several of those, not one scalar. */
+.species-page-where-to-find {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.species-page-where-to-find-details {
+  list-style: none;
+  margin: 0.15rem 0 0;
+  padding: 0;
+  color: var(--muted);
+}
+
 /* Leg 4's catch-probability calculator (catchProbability.ts) — reuses origin-modal-field
  * for its label/input rows (see modals.css) rather than duplicating that layout. */
 .species-page-calc {

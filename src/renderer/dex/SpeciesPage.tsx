@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { safariFleeRatesForSpecies } from '@shared/data/safari-flee-rates'
 import type { Form, Species } from '@shared/types/pokemon'
+import type { EncounterData } from '@shared/types/encounters'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import {
@@ -12,6 +13,7 @@ import {
   type CatchCalcBall,
   type CatchCalcStatus
 } from './catchProbability'
+import { encounterLocationsForForm } from './encountersFormat'
 import { formDisplayName, speciesDisplayName } from './formNames'
 import { formatCatchProbability, formatEvYield, formatGenderRatio, slugDisplayName } from './speciesPageFormat'
 import { defaultSpriteUrl } from './sprites'
@@ -23,6 +25,7 @@ export interface SpeciesPageProps {
   species: Species[]
   forms: Form[]
   speciesDetails: SpeciesDetailsData
+  encounterData: EncounterData
   onClose: () => void
 }
 
@@ -42,7 +45,7 @@ const SPRITE_SIZE = 120
  * `initialShiny` so clicking the shiny thumbnail opens the modal already showing shiny
  * art instead of always defaulting non-shiny.
  */
-export function SpeciesPage({ target, species, forms, speciesDetails, onClose }: SpeciesPageProps): JSX.Element {
+export function SpeciesPage({ target, species, forms, speciesDetails, encounterData, onClose }: SpeciesPageProps): JSX.Element {
   const [spriteModalShiny, setSpriteModalShiny] = useState<boolean | null>(null)
   const [calcHpPercent, setCalcHpPercent] = useState(100)
   const [calcStatus, setCalcStatus] = useState<CatchCalcStatus>('none')
@@ -63,6 +66,7 @@ export function SpeciesPage({ target, species, forms, speciesDetails, onClose }:
   const speciesDetail = speciesDetails.species[target.speciesId]
   const formDetail = form ? speciesDetails.forms[form.pokeapiId] : undefined
   const safariFleeRates = safariFleeRatesForSpecies(target.speciesId)
+  const whereToFind = form ? encounterLocationsForForm(encounterData, form.pokeapiId) : []
 
   const spriteModalTarget: SpriteModalTarget | null = form
     ? {
@@ -162,6 +166,28 @@ export function SpeciesPage({ target, species, forms, speciesDetails, onClose }:
                   {safariFleeRates.map((entry) => (
                     <li key={entry.location}>
                       {entry.location} ({entry.gamesLabel}): {entry.fleeRate}
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+          {whereToFind.length > 0 && (
+            <div className="species-page-field">
+              <dt>Where to Find</dt>
+              <dd>
+                <ul className="species-page-where-to-find">
+                  {whereToFind.map((loc) => (
+                    <li key={loc.location}>
+                      <strong>{loc.location}</strong>
+                      <ul className="species-page-where-to-find-details">
+                        {loc.details.map((detail, i) => (
+                          <li key={i}>
+                            {detail.gamesLabel}: {detail.method}, {detail.levelRange} ({detail.chance})
+                            {detail.conditions && ` — ${detail.conditions}`}
+                          </li>
+                        ))}
+                      </ul>
                     </li>
                   ))}
                 </ul>

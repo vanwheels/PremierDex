@@ -136,6 +136,7 @@ export function App(): JSX.Element {
               species={data.species}
               forms={data.forms}
               speciesDetails={data.speciesDetails}
+              encounterData={data.encounterData}
               onClose={() => setView('dex')}
             />
           )}
