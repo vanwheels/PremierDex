@@ -1,9 +1,31 @@
 # TODO
 
-## Current Milestone: none scoped
+## Current Milestone: Sprite system overhaul
 
-Encounter display rework shipped 2026-09-24 (see MILESTONES.md). Next milestone is picked from
-Unscheduled / Future Milestones below.
+Started 2026-09-24 (Encounter display rework shipped the same day — see MILESTONES.md). Legs
+aren't planned yet: the design pass (source per generation, bundle vs fetch, per-version toggle)
+comes first, and its decisions become the leg list.
+
+### [Sprite system overhaul] — Leg 1
+Design pass. Raised in Vanny's 2026-09-24 feedback pass on the Species page. Current sprites
+come from PokeAPI's per-generation folders only, which leaves gaps: Gen 1 has no shiny art
+(don't show a shiny slot there), Gen 2 sprites aren't transparent PNGs, Gen 7 shows nothing
+(the folded extension bug below), and Gen 8/9 fall back to boxed BDSP/SV art with no shiny
+variants. Wanted: official 3D models for Gen 7+ (animated as a bonus), and per-version sprite
+sets where a generation's games differ — D/P/Pt vs HG/SS, R/S vs FR/LG vs Emerald — shown side
+by side like the reference Serebii-style Images section. Open questions: sprite source per
+generation (PokeAPI's `other/home` renders / Showdown animated sets / other), whether to bundle
+or fetch, and how the per-version toggle fits the Gen I-IX strip.
+Last touched: 2026-09-24. Re-check count: 0.
+
+### [Generation-vii sprite URLs use the wrong extension] — Leg 2
+Folded into this milestone 2026-09-24. `generationSpriteUrl` in `sprites.ts` builds every
+generation's URL with `.png`, but the CDN's `generation-vii/ultra-sun-ultra-moon` folder (front,
+`shiny/`, and `back/`) serves `.gif` — re-confirmed live 2026-09-24: `.../25.png` and
+`.../shiny/25.png` 404, `.../25.gif` and `.../shiny/25.gif` return 200. Pre-existing, predates
+back-sprite support. Whether it's fixed as a per-generation extension map or made moot by
+switching Gen 7's source depends on Leg 1's decision, so sequence it after that.
+Last touched: 2026-09-24. Re-check count: 0.
 
 ## Unscheduled
 
@@ -39,18 +61,6 @@ Nest, Dive, Repeat, Timer, Quick, Dusk, Fast, Level, Lure, Heavy, Love, Friend, 
 day) the calculator doesn't collect inputs for yet. Pick up only if Vanny wants those balls
 supported; would need one extra input per conditional ball, not a formula change.
 Last touched: 2026-09-23. Re-check count: 0.
-
-### [Generation-vii sprite URLs use the wrong extension] — unscheduled
-Surfaced by Leg 11's live-CDN verification for back-sprite support: `generationSpriteUrl` in
-`sprites.ts` builds every generation's URL with a `.png` extension, but the CDN's
-`generation-vii/ultra-sun-ultra-moon` folder (both its flat front sprites and its `back/`
-subfolder) serves `.gif` instead — confirmed live, e.g.
-`.../generation-vii/ultra-sun-ultra-moon/25.png` 404s while `.../25.gif` returns 200. This is
-pre-existing (predates Leg 11, affects the front sprite too, not something back-sprite support
-introduced) and was never caught because nothing in the app currently exercises generation 7
-specifically in a way that surfaced the broken image. Needs a per-generation extension map (or
-a gen-7-specific override) alongside `GENERATION_GAME`/`ROMAN_NUMERALS`.
-Last touched: 2026-09-22. Re-check count: 0.
 
 ### [DexBoxGrid.tsx / DexBoxPane.tsx over the file-size cap] — unscheduled
 Surfaced by Leg 8 of the Species detail popup + evolution family tree milestone: threading
@@ -162,19 +172,6 @@ Zamazenta/Ogerpon/Silvally catalogue) has been shown to actually misfire today.
 Blocked: needs a real false positive or wrong-game forme to actually surface before this is
 worth scoping — not built speculatively ahead of demonstrated need.
 Last touched: 2026-09-19. Re-check count: 0.
-
-### [Sprite system overhaul] — future milestone
-Raised in Vanny's 2026-09-24 feedback pass on the Species page; scoped as its own milestone,
-needs a design/discussion pass before legs can be planned. Current sprites come from PokeAPI's
-per-generation folders only, which leaves gaps: Gen 1 has no shiny art (don't show a shiny slot
-there), Gen 2 sprites aren't transparent PNGs, Gen 7 shows nothing (see the Generation-vii
-extension item under Unscheduled — subsumed by this), and Gen 8/9 fall back to boxed BDSP/SV
-art with no shiny variants. Wanted: official 3D models for Gen 7+ (animated as a bonus), and
-per-version sprite sets where a generation's games differ — D/P/Pt vs HG/SS, R/S vs FR/LG vs
-Emerald — shown side by side like the reference Serebii-style Images section. Open questions:
-sprite source per generation (PokeAPI's `other/home` renders / Showdown animated sets / other),
-whether to bundle or fetch, and how the per-version toggle fits the Gen I-IX strip.
-Last touched: 2026-09-24. Re-check count: 0.
 
 ### [Species/Dex reference data layer] — future milestone
 Split out 2026-09-24 during Full UI/UX pass scoping: base stats, movesets, egg groups, Base
