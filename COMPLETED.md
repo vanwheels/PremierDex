@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Sprite system overhaul, Leg 2] — 2026-09-24
+Replaced the `GENERATION_GAME` + hardcoded `.png` assumption with a per-generation source table
+(`spriteSources.ts`: folder, extension, has-shiny/has-back; all versions Leg 4 will offer are
+already in it). Fixes Gen 7's `.gif` 404s, moves Gen 2 to `transparent/`, and Gen 8/9 to `other/home`
+(shiny exists, no `back/` — falls back to evergreen back art). See commit `HASH`.
+
 ## [Sprite system overhaul, Leg 1] — 2026-09-24
 Design pass: chose PokeAPI as the only source (no scraping), stay fetch-from-CDN, HOME renders
 for Gen 8/9, USUM gifs for Gen 7, `transparent/` for Gen 2, hide Gen 1's shiny slot, and a

@@ -33,8 +33,9 @@ overhaul design pass.
 | 5 | B/W | `generation-v/black-white` | Single version; animated set is gen 5 only. |
 | 6 | X/Y, OR/AS | `generation-vi/{x-y,omegaruby-alphasapphire}` | Shiny + back exist. |
 | 7 | USUM | `generation-vii/ultra-sun-ultra-moon` | `.gif`, not `.png`. |
-| 8, 9 | HOME | `other/home` | Shiny exists; no back — check before Leg 4. |
+| 8, 9 | HOME | `other/home` | Shiny exists; no `back/`. |
 
-Not yet verified: `generation-i/red-green` 404s (JP only, not offered); `other/home/back/`
-existence; per-version female/back coverage for every folder. Verify per leg before relying
-on them.
+Verified in Leg 2 (Pikachu #25): every folder in the table above resolves for front/back, and
+shiny/back-shiny for all but Gen 1; `generation-i/yellow` has no `shiny/` either; `other/home` has
+`shiny/` and `female/` but no `back/`; `generation-i/red-green` 404s (JP only, not offered).
+Female coverage per folder is not checked — a missing female file 404s into the "unavailable" slot.

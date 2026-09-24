@@ -9,72 +9,24 @@
  * `<img src>` tags in SpriteThumbnail/SpriteModal, which fall back to a placeholder on
  * load error rather than this module trying to know in advance which files exist.
  *
- * Verified live against the repo (see docs/completed-archive/living-dex-v1.md's [Sprite
- * display] leg, Leg 4): generation
- * folders exist through generation-ix, but generation-viii has no Sword/Shield sprite
- * set (those games used 3D models — brilliant-diamond-shining-pearl is the only
- * gen-8 sprite source). Also verified live: generation-i/red-blue,
- * generation-viii/brilliant-diamond-shining-pearl, and generation-ix/scarlet-violet
- * have no shiny/ subfolder at all on the CDN (0 files — Gen 1 predates shiny Pokemon;
- * BDSP and SV simply never got shiny recolors uploaded). generationSpriteUrl falls
- * back to the evergreen defaultSpriteUrl shiny art for those three generations rather
- * than building a URL guaranteed to 404.
+ * Per-generation folders, extensions and shiny/back coverage live in spriteSources.ts.
+ * generationSpriteUrl falls back to the evergreen defaultSpriteUrl art when a generation's
+ * source has no shiny/ or back/ subfolder (Gen 1 shiny, HOME back) rather than building a
+ * URL guaranteed to 404.
  *
- * `female` (see TODO.md's "Female-form sprites missing" leg) selects Form.hasGenderDifference's
- * distinct female art, which the CDN keys as a "female/" *subfolder* rather than a
- * filename suffix like spriteFormSuffix — confirmed live (e.g.
- * sprites/pokemon/female/593.png for Jellicent) at every layer this module builds:
- * evergreen, shiny (nested as shiny/female/, not female/shiny/), per-generation, and
- * both animated sources. A species/generation combo with no distinct female art (e.g.
- * Pikachu's gender difference wasn't drawn until generation IV, despite the species
- * existing since gen 1) simply 404s and falls back to the same "sprite unavailable"
- * handling SpriteThumbnail/SpriteModal already use for any other missing file — no
- * special-cased fallback set needed here, unlike GENERATIONS_WITHOUT_SHINY below.
+ * `female` selects Form.hasGenderDifference's distinct female art, which the CDN keys as a
+ * "female/" *subfolder* rather than a filename suffix like spriteFormSuffix — e.g.
+ * sprites/pokemon/female/593.png for Jellicent — nested after shiny ("shiny/female/", never
+ * "female/shiny/"). A species/generation combo with no distinct female art simply 404s and
+ * falls back to the "sprite unavailable" handling SpriteThumbnail/SpriteModal already use.
  *
- * `back` (Leg 11) selects the back-of-battle-sprite art PokeAPI's CDN mirrors under a
- * "back/" subfolder — confirmed live at every layer this module builds, nested the same
- * "back/shiny/female/" order as the front-sprite genderShinyFolder path (never
- * "female/back/" or "shiny/back/"): evergreen, per-generation, and both animated
- * sources. Two more live-verified exceptions layer on top of the existing
- * GENERATIONS_WITHOUT_SHINY ones: generation-viii (brilliant-diamond-shining-pearl) and
- * generation-ix (scarlet-violet) have no back/ subfolder at all (3D-model games, same
- * root cause as their missing shiny/ folders) — generationSpriteUrl falls back to
- * defaultSpriteUrl's evergreen back art for those, same pattern as the shiny fallback.
- * generation-i (red-blue) does have a back/ folder, but — like its front sprites — no
- * shiny/ subfolder underneath it, so GENERATIONS_WITHOUT_SHINY's existing fallback
- * already covers it once `back` is threaded through that fallback call. Separately
- * (pre-existing, not fixed here): generation-vii (ultra-sun-ultra-moon) serves both its
- * front *and* back sprites as .gif rather than the .png every other generation folder
- * uses, which generationSpriteUrl doesn't account for regardless of `back` — see
- * TODO.md.
+ * `back` selects the back-of-battle-sprite art under a "back/" subfolder, nested before
+ * shiny/female ("back/shiny/female/", never "female/back/" or "shiny/back/").
  */
 
+import { defaultSpriteSource } from './spriteSources'
+
 export const CURRENT_MAX_GENERATION = 9
-
-/** One representative game per generation, chosen for sprite-set completeness. */
-const GENERATION_GAME: Record<number, string> = {
-  1: 'red-blue',
-  2: 'crystal',
-  3: 'emerald',
-  4: 'platinum',
-  5: 'black-white',
-  6: 'omegaruby-alphasapphire',
-  7: 'ultra-sun-ultra-moon',
-  8: 'brilliant-diamond-shining-pearl',
-  9: 'scarlet-violet'
-}
-
-const ROMAN_NUMERALS: Record<number, string> = {
-  1: 'i',
-  2: 'ii',
-  3: 'iii',
-  4: 'iv',
-  5: 'v',
-  6: 'vi',
-  7: 'vii',
-  8: 'viii',
-  9: 'ix'
-}
 
 const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
 const ITEM_SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items'
@@ -119,18 +71,8 @@ export function defaultSpriteUrl(
   return `${SPRITE_BASE}${backFolder(back)}${genderShinyFolder(shiny, female)}/${id}.png`
 }
 
-/** Generations with no shiny/ subfolder at all on the CDN (verified live — see the
- * module comment above). generationSpriteUrl falls back to defaultSpriteUrl's
- * evergreen shiny art for these rather than building a URL that can never resolve. */
-const GENERATIONS_WITHOUT_SHINY = new Set([1, 8, 9])
-
-/** Generations with no back/ subfolder at all on the CDN (verified live — see the
- * module comment above; generation-i does have back/, it just inherits the shiny gap
- * above). generationSpriteUrl falls back to defaultSpriteUrl's evergreen back art for
- * these rather than building a URL that can never resolve. */
-const GENERATIONS_WITHOUT_BACK = new Set([8, 9])
-
-/** The modal's generation-stepped sprite, per GENERATION_GAME's representative game. */
+/** The modal/strip's generation-stepped sprite, from the generation's default source. Falls
+ * back to defaultSpriteUrl's evergreen art when that source lacks shiny/ or back/. */
 export function generationSpriteUrl(
   pokeapiId: number,
   spriteFormSuffix: string | null,
@@ -139,17 +81,12 @@ export function generationSpriteUrl(
   female: boolean,
   back = false
 ): string {
-  const game = GENERATION_GAME[generation]
-  const roman = ROMAN_NUMERALS[generation]
-  if (!game || !roman) throw new Error(`No sprite mapping for generation ${generation}`)
-  if (shiny && GENERATIONS_WITHOUT_SHINY.has(generation)) {
-    return defaultSpriteUrl(pokeapiId, spriteFormSuffix, true, female, back)
-  }
-  if (back && GENERATIONS_WITHOUT_BACK.has(generation)) {
-    return defaultSpriteUrl(pokeapiId, spriteFormSuffix, shiny, female, true)
+  const source = defaultSpriteSource(generation)
+  if ((shiny && !source.hasShiny) || (back && !source.hasBack)) {
+    return defaultSpriteUrl(pokeapiId, spriteFormSuffix, shiny, female, back)
   }
   const id = spriteFileId(pokeapiId, spriteFormSuffix)
-  return `${SPRITE_BASE}/versions/generation-${roman}/${game}${backFolder(back)}${genderShinyFolder(shiny, female)}/${id}.png`
+  return `${SPRITE_BASE}/${source.folder}${backFolder(back)}${genderShinyFolder(shiny, female)}/${id}.${source.ext}`
 }
 
 /**

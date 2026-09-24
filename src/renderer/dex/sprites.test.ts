@@ -88,14 +88,38 @@ describe('generationSpriteUrl', () => {
     )
   })
 
-  it.each([1, 8, 9])(
-    'falls back to the evergreen shiny sprite for generation %i — the CDN has no shiny subfolder there',
-    (generation) => {
-      expect(generationSpriteUrl(25, null, generation, true, false)).toBe(
-        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png'
-      )
-    }
-  )
+  it('falls back to the evergreen shiny sprite for generation 1 — the CDN has no shiny subfolder there', () => {
+    expect(generationSpriteUrl(25, null, 1, true, false)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png'
+    )
+  })
+
+  it('uses the .gif extension for generation 7 — ultra-sun-ultra-moon has no .png files', () => {
+    expect(generationSpriteUrl(25, null, 7, false, false)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/ultra-sun-ultra-moon/25.gif'
+    )
+    expect(generationSpriteUrl(593, null, 7, true, true, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/ultra-sun-ultra-moon/back/shiny/female/593.gif'
+    )
+  })
+
+  it('uses the transparent subfolder for generation 2, including shiny and back', () => {
+    expect(generationSpriteUrl(25, null, 2, false, false)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/transparent/25.png'
+    )
+    expect(generationSpriteUrl(25, null, 2, true, false, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/transparent/back/shiny/25.png'
+    )
+  })
+
+  it.each([8, 9])('serves generation %i from the HOME renders, with a real shiny folder', (generation) => {
+    expect(generationSpriteUrl(25, null, generation, false, false)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/25.png'
+    )
+    expect(generationSpriteUrl(593, null, generation, true, true)).toBe(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/shiny/female/593.png'
+    )
+  })
 
   it('does not fall back for a non-shiny request in a shiny-less generation', () => {
     expect(generationSpriteUrl(25, null, 1, false, false)).toBe(
@@ -109,7 +133,7 @@ describe('generationSpriteUrl', () => {
 
   it('appends spriteFormSuffix to the id for a cosmetic sub-form', () => {
     expect(generationSpriteUrl(666, 'icy-snow', 9, false, false)).toBe(
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ix/scarlet-violet/666-icy-snow.png'
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/666-icy-snow.png'
     )
   })
 
@@ -138,7 +162,7 @@ describe('generationSpriteUrl', () => {
   })
 
   it.each([8, 9])(
-    'falls back to the evergreen back sprite for generation %i — the CDN has no back/ subfolder there',
+    'falls back to the evergreen back sprite for generation %i — HOME has no back/ subfolder',
     (generation) => {
       expect(generationSpriteUrl(25, null, generation, false, false, true)).toBe(
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png'
@@ -146,7 +170,7 @@ describe('generationSpriteUrl', () => {
     }
   )
 
-  it('falls back to the evergreen shiny back sprite for generation 8 or 9', () => {
+  it('falls back to the evergreen shiny back sprite for a HOME generation', () => {
     expect(generationSpriteUrl(25, null, 9, true, false, true)).toBe(
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/25.png'
     )

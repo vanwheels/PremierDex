@@ -6,18 +6,11 @@ Started 2026-09-24. Design pass done — decisions and per-generation sources ar
 `docs/investigations/sprite-sources.md`. Stays fetch-from-CDN (bundling is a separate future
 discussion); Gen 8/9 use HOME renders, Gen 7 keeps the USUM gifs, Gen 2 uses `transparent/`.
 
-### [Sprite system overhaul] — Leg 2
-Rework `sprites.ts` around a per-generation source table (folder, extension, transparent
-subfolder, has-shiny/has-back) instead of the `GENERATION_GAME` + `.png` assumption. Folds in
-the old Generation-vii extension bug (`ultra-sun-ultra-moon` serves `.gif`; `.png` 404s), Gen 2's
-`transparent/` subfolder, and Gen 8/9 switching to `other/home`. `SpriteModal` shares the same
-URL function, so it must keep working. Update `sprites.test.ts`.
-Last touched: 2026-09-24. Re-check count: 0.
-
 ### [Sprite system overhaul] — Leg 3
 Species page strip UI: hide the shiny slot when a generation has no shiny art (Gen 1) and center
-the lone sprite; label Gen 8/9 as HOME art rather than implying game-specific art. Verify
-`other/home` has no `back/` folder before deciding how the modal's back toggle behaves there.
+the lone sprite; label Gen 8/9 as HOME art rather than implying game-specific art. `other/home`
+has no `back/` folder (verified in Leg 2), so `generationSpriteUrl` currently falls back to the
+evergreen back art there — decide whether the modal's back toggle should hide instead.
 Last touched: 2026-09-24. Re-check count: 0.
 
 ### [Sprite system overhaul] — Leg 4
