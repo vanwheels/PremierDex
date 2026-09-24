@@ -8,12 +8,14 @@ stores one row per slot and per time-of-day, so the fix is grouping, not removin
 prototype against the real `encounters.json` cut Rattata to 490 rows by merging same-level
 slots (summing chance) and merging Morning/Day/Night when their breakdowns match. Slot numbers
 aren't in the data and stay out of scope (RNG-only). Sequenced in 3 legs; Vanny will answer the
-open design questions when the milestone opens: is the inline `Lv. 20 (30%), 21 (30%)` format
-clear enough (vs. tags), and should Where to Find follow the Gen I-IX toggle (currently no).
+open design questions when the milestone opens — resolved 2026-09-24: inline format reads fine
+after Leg 1; Where to Find follows the Gen I-IX toggle (Leg 2).
 
 ### [Encounter display rework] — Leg 2
 Species page Where to Find: each game section collapsed by default with a one-line summary
-(e.g. "Gold — 41 locations").
+(e.g. "Gold — 41 locations"). Also filter game sections to the selected Gen I-IX toggle, and give
+the per-game tables shared fixed column widths + tabular numerals so Method/Levels line up
+across sections (currently each table sizes itself; Yellow's columns sit right of Red's).
 Last touched: 2026-09-24. Re-check count: 0.
 
 ### [Encounter display rework] — Leg 3
