@@ -4,17 +4,11 @@
 
 Raised by Vanny 2026-09-04: the interface has grown overly complex across several milestones —
 many input fields, some overlapping in function. Scoped 2026-09-24 from Vanny's hand-drawn
-sketches into 4 legs (Leg 1 shipped 2026-09-24, see COMPLETED.md), covering everything buildable without new species/move/stat
+sketches into 4 legs (Legs 1-2 shipped 2026-09-24, see COMPLETED.md), covering everything buildable without new species/move/stat
 data. List view's right-click context menu for Ribbons & Marks/Edit Origin (confirmed
 unintuitive by Vanny 2026-09-20) gets revisited as part of Leg 1's nav rework rather than
 fixed in isolation. Sketches and the decisions behind them: `docs/design/ui-ux-pass/`
 (read its README first — a clean session has no other copy of the screenshots).
-
-### [Full UI/UX pass on the Dex interface] — Leg 2
-Restyle the existing System/Diamond/Pearl `ThemeModeToggle` from its 3-button row into the
-sketched icon control (diamond + pearl) in the header next to Settings. Same underlying
-`theme-store` logic — visual-only change, no new functionality.
-Last touched: 2026-09-24. Re-check count: 0.
 
 ### [Full UI/UX pass on the Dex interface] — Leg 3
 Reflow the Species page's existing fields (abilities as a dynamic list with descriptions,
