@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Species/Dex reference data layer] — Leg 3 — 2026-09-25
+Per-form learnsets written to `data/pokemon/learnsets.json` (3.7 MB, 1329 forms, 822 moves, 24 version groups)
+from the same `/pokemon/{id}` pass as species details, with its own `loadLearnsets` IPC channel and
+`learnsetData` in `useCollectionData`. Per-version-group granularity; entries identical across groups are
+merged, names deduped into sorted tables. See commit `d197018`.
+
 ## [Species/Dex reference data layer] — Leg 2 — 2026-09-25
 Per-species `eggGroups` (slugs) and raw `hatchCounter` added to `SpeciesDetailEntry`, plus an
 `eggGroups` slug -> English name table (slugs don't title-case to in-game names, e.g. `plant` ->

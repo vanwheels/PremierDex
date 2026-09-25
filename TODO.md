@@ -11,17 +11,9 @@ page generation toggle beyond sprites) is a follow-up milestone, not part of thi
 movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
 new endpoint (`/move/{id}`).
 
-### [Species/Dex reference data layer] — Leg 3
-Learnsets: per-form `moves[]` with learn method, level, and version group, from `/pokemon/{id}`.
-Likely large — write to its own file (`data/pokemon/learnsets.json`, loaded via its own IPC
-channel) rather than bloating `species-details.json`, and dedupe move/method/version-group
-names into lookup tables like `encounters.json` does. Decide the size budget and per-version-
-group granularity at the start of the leg.
-Last touched: 2026-09-25. Re-check count: 0.
-
 ### [Species/Dex reference data layer] — Leg 4
 Move metadata table (type, damage class, power, accuracy, PP, English short effect) from
-`/move/{id}` for every move referenced in Leg 3's learnsets, plus past-generation move values
+`/move/{id}` for every move referenced in Leg 3's learnsets (822 slugs in `learnsets.json`'s `moves` table; fetch by name), plus past-generation move values
 if PokeAPI exposes them (`past_values`). Separate leg because it's a new endpoint sweep
 (~900 fetches), not an extension of the per-form pass.
 Last touched: 2026-09-25. Re-check count: 0.
@@ -42,6 +34,12 @@ already stored, so it's a one-function change plus tests.
 Last touched: 2026-09-25. Re-check count: 0.
 
 ## Unscheduled
+
+### [fetch-species-details deterministic output] — Leg 1
+`scripts/fetch-species-details.ts` writes `growthRates`/`eggGroups`/`abilities` (and `species`/`forms`
+keys) in fetch-completion order, so every regeneration reshuffles hundreds of diff lines with no
+semantic change. Sort those maps before writing (`learnsets.json` already is sorted).
+Last touched: 2026-09-25. Re-check count: 0.
 
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
