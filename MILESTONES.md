@@ -4,6 +4,7 @@ Index of shipped milestones. Name, date, status, and a link to the post-mortem d
 same scannable spirit as `TODO.md`, not prose. See `docs/postmortems/<milestone-slug>.md`
 for what shipped/went well/didn't per milestone.
 
+- **Species/Dex reference data layer** — 2026-09-25 — Shipped — [post-mortem](docs/postmortems/species-dex-reference-data-layer.md)
 - **Sprite system overhaul** — 2026-09-24 — Shipped — [post-mortem](docs/postmortems/sprite-system-overhaul.md)
 - **Encounter display rework** — 2026-09-24 — Shipped — [post-mortem](docs/postmortems/encounter-display-rework.md)
 - **Full UI/UX pass on the Dex interface** — 2026-09-24 — Shipped — [post-mortem](docs/postmortems/full-ui-ux-pass-on-the-dex-interface.md)

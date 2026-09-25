@@ -1,18 +1,5 @@
 # TODO
 
-## Current Milestone: Species/Dex reference data layer
-
-Data-only milestone (fetch scripts, shared types, static JSON, IPC/`useCollectionData`
-wiring, tests) — no UI consumers. Split out 2026-09-24 from Full UI/UX pass scoping; the UI
-that consumes this (Dex tab Types/BST columns, Moves sub-tab, move/egg-group search, Species
-page generation toggle beyond sprites) is a follow-up milestone, not part of this one. Scoped
-2026-09-25. Two corrections to the original item text: egg groups and Base Egg Steps
-(`hatch_counter`) live on `/pokemon-species/{id}`, which the fetch script already hits, and
-movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
-new endpoint (`/move/{id}`).
-
-_All legs shipped (Leg 8 done 2026-09-25). Remaining: milestone close-out — MILESTONES.md entry, post-mortem at `docs/postmortems/species-dex-reference-data-layer.md`, COMPLETED.md archive, then retire this section._
-
 ## Unscheduled
 
 Standalone items not part of the current milestone — pick up opportunistically or when
