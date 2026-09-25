@@ -3,7 +3,7 @@
 ## [Species/Dex reference data layer] — Leg 6 — 2026-09-25
 Base egg steps are now per-generation: `baseEggSteps(hatchCounter, generation)` uses 256 (II/III/VII),
 255 (IV), 257 (V/VI), 128 (VIII/IX), defaulting to Gen IX. BDSP reads as 128 since it's keyed by
-generation number, not game — accepted imprecision, noted in the file. See the Leg 6 commit.
+generation number, not game — accepted imprecision, noted in the file. See commit `f7d3491`.
 
 ## [Species/Dex reference data layer] — Leg 5 — 2026-09-25
 Investigation only, no override table. PokeAPI already models learnsets and move history per version
