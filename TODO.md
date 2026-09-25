@@ -18,7 +18,27 @@ the convention (single figure vs. per-generation) at the start of the leg — ra
 already stored, so it's a one-function change plus tests.
 Last touched: 2026-09-25. Re-check count: 0.
 
+### [Species/Dex reference data layer] — Leg 7
+`moves.json` (Leg 4 of the Species/Dex reference data layer) is keyed by slug with no display name
+(slugs don't title-case to in-game names: `double-edge`, `u-turn`), and 88 Gen VIII/IX moves have
+`effect: null` because PokeAPI has only flavor text for them. Both need another `/move/{name}` sweep
+(`names[]` en, latest English `flavor_text_entries`) — do them together, before the Moves sub-tab UI.
+Folded in from Unscheduled 2026-09-25 (was "Move display names and effect fallback").
+Last touched: 2026-09-25. Re-check count: 0.
+
+### [Species/Dex reference data layer] — Leg 8
+`scripts/fetch-species-details.ts` writes `growthRates`/`eggGroups`/`abilities` (and `species`/`forms`
+keys) in fetch-completion order, so every regeneration reshuffles hundreds of diff lines with no
+semantic change. Sort those maps before writing (`learnsets.json` already is sorted).
+Folded in from Unscheduled 2026-09-25 (was "fetch-species-details deterministic output").
+Milestone close-out (MILESTONES.md, post-mortem, COMPLETED archive) follows this leg.
+Last touched: 2026-09-25. Re-check count: 0.
+
 ## Unscheduled
+
+Standalone items not part of the current milestone — pick up opportunistically or when
+explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
+Future Milestones below.
 
 ### [Evolution methods per version group] — Leg 1
 `fetch-evolution-chains.ts` joins distinct `evolution_details` methods with " or " and drops each
@@ -27,23 +47,6 @@ alternatives with no game attached. PokeAPI tags all 676 entries; keep the tag t
 `evolution-edges.json` and decide the display (per-game filter vs. labeled list) before scoping the UI.
 See `docs/investigations/per-version-variance.md`.
 Last touched: 2026-09-25. Re-check count: 0.
-
-### [Move display names and effect fallback] — Leg 1
-`moves.json` (Leg 4 of the Species/Dex reference data layer) is keyed by slug with no display name
-(slugs don't title-case to in-game names: `double-edge`, `u-turn`), and 88 Gen VIII/IX moves have
-`effect: null` because PokeAPI has only flavor text for them. Both need another `/move/{name}` sweep
-(`names[]` en, latest English `flavor_text_entries`) — do them together, before the Moves sub-tab UI.
-Last touched: 2026-09-25. Re-check count: 0.
-
-### [fetch-species-details deterministic output] — Leg 1
-`scripts/fetch-species-details.ts` writes `growthRates`/`eggGroups`/`abilities` (and `species`/`forms`
-keys) in fetch-completion order, so every regeneration reshuffles hundreds of diff lines with no
-semantic change. Sort those maps before writing (`learnsets.json` already is sorted).
-Last touched: 2026-09-25. Re-check count: 0.
-
-Standalone items not part of the current milestone — pick up opportunistically or when
-explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
-Future Milestones below.
 
 ### [Species page Where to Find method tables] — unscheduled
 The Dex Locations pane now splits encounters into Wild/Surfing/Fishing/Headbutt/Rock Smash/
