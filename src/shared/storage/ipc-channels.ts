@@ -49,6 +49,10 @@ export const PokemonIpcChannel = {
    * data (see load-species-data.ts). Its own channel because it is large; same
    * not-a-StorageAdapter-method shape as loadSpeciesDetails above. */
   loadLearnsets: 'pokemon:learnsets:load',
+  /** Leg 4 of the Species/Dex reference data layer milestone: static move metadata keyed by
+   * move slug (see load-species-data.ts). Same not-a-StorageAdapter-method shape as
+   * loadLearnsets above. */
+  loadMoves: 'pokemon:moves:load',
   /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
    * see StorageAdapter.listEntryRibbons/setEntryRibbons/listEntryMarks/setEntryMarks' own
    * doc comments. */

@@ -7,6 +7,7 @@ import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { EncounterData } from '@shared/types/encounters'
 import type { LearnsetData } from '@shared/types/learnsets'
+import type { MoveData } from '@shared/types/moves'
 
 export interface SeedSpecies {
   id: number
@@ -113,4 +114,11 @@ export function loadEncounterData(): EncounterData {
 export function loadLearnsetData(): LearnsetData {
   const filePath = join(DATA_DIR, 'learnsets.json')
   return JSON.parse(readFileSync(filePath, 'utf-8')) as LearnsetData
+}
+
+/** Loads the static move metadata (Leg 4 of the Species/Dex reference data layer milestone)
+ * written by `npm run fetch-move-data`. Same not-DB-backed shape as loadLearnsetData. */
+export function loadMoveData(): MoveData {
+  const filePath = join(DATA_DIR, 'moves.json')
+  return JSON.parse(readFileSync(filePath, 'utf-8')) as MoveData
 }

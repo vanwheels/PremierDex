@@ -9,6 +9,7 @@ import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { EncounterData } from '@shared/types/encounters'
 import type { LearnsetData } from '@shared/types/learnsets'
+import type { MoveData } from '@shared/types/moves'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { useBoxPositionUndo } from './useBoxPositionUndo'
 
@@ -25,6 +26,9 @@ const EMPTY_ENCOUNTER_DATA: EncounterData = { encounters: {}, locationAreas: [],
 
 // Same not-loaded-yet shape as EMPTY_ENCOUNTER_DATA above.
 const EMPTY_LEARNSET_DATA: LearnsetData = { moves: [], methods: [], versionGroups: [], learnsets: {} }
+
+// Same not-loaded-yet shape as EMPTY_LEARNSET_DATA above.
+const EMPTY_MOVE_DATA: MoveData = { moves: {} }
 
 export interface CollectionData {
   species: Species[]
@@ -51,6 +55,9 @@ export interface CollectionData {
   /** Leg 3 of the Species/Dex reference data layer milestone — per-pokeapiId learnsets (no UI
    * consumer yet; the Moves sub-tab/species page moveset are a follow-up milestone). */
   learnsetData: LearnsetData
+  /** Leg 4 of the Species/Dex reference data layer milestone — move metadata keyed by the
+   * slugs in `learnsetData.moves` (no UI consumer yet, same as learnsetData). */
+  moveData: MoveData
   loading: boolean
   loadAll: () => Promise<void>
   handleImported: () => void
@@ -126,6 +133,7 @@ export function useCollectionData(): CollectionData {
   const [speciesDetails, setSpeciesDetails] = useState<SpeciesDetailsData>(EMPTY_SPECIES_DETAILS)
   const [encounterData, setEncounterData] = useState<EncounterData>(EMPTY_ENCOUNTER_DATA)
   const [learnsetData, setLearnsetData] = useState<LearnsetData>(EMPTY_LEARNSET_DATA)
+  const [moveData, setMoveData] = useState<MoveData>(EMPTY_MOVE_DATA)
   const [loading, setLoading] = useState(true)
 
   // Leg 2 of the Box View Move & Undo Operations milestone. Mirrors `entries` in a ref
@@ -152,6 +160,7 @@ export function useCollectionData(): CollectionData {
       window.premierDex.loadSpeciesDetails(),
       window.premierDex.loadEncounters(),
       window.premierDex.loadLearnsets(),
+      window.premierDex.loadMoves(),
       window.premierDex.listTrainerProfiles()
     ]).then(
       ([
@@ -167,6 +176,7 @@ export function useCollectionData(): CollectionData {
         details,
         encounters,
         learnsets,
+        moves,
         trainerProfileList
       ]) => {
         setSpecies(speciesList)
@@ -181,6 +191,7 @@ export function useCollectionData(): CollectionData {
         setSpeciesDetails(details)
         setEncounterData(encounters)
         setLearnsetData(learnsets)
+        setMoveData(moves)
         setTrainerProfiles(trainerProfileList)
       }
     )
@@ -357,6 +368,7 @@ export function useCollectionData(): CollectionData {
     speciesDetails,
     encounterData,
     learnsetData,
+    moveData,
     loading,
     loadAll,
     handleImported,

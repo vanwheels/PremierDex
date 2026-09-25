@@ -8,6 +8,7 @@ import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { EncounterData } from '@shared/types/encounters'
 import type { LearnsetData } from '@shared/types/learnsets'
+import type { MoveData } from '@shared/types/moves'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
 import type { UpdaterBridge } from '@shared/updater/updater-provider'
 
@@ -77,6 +78,9 @@ export interface AppBridge extends UpdaterBridge {
   /** Leg 3 of the Species/Dex reference data layer milestone: static per-pokeapiId learnset
    * data. Not DB-backed — see PokemonIpcChannel.loadLearnsets' own comment. */
   loadLearnsets(): Promise<LearnsetData>
+  /** Leg 4 of the Species/Dex reference data layer milestone: static move metadata keyed by
+   * move slug. Not DB-backed — see PokemonIpcChannel.loadMoves' own comment. */
+  loadMoves(): Promise<MoveData>
   /** Opens a save dialog, writes the full collection to the chosen file. Null if the
    * user canceled the dialog. */
   exportCollectionToFile(): Promise<string | null>
