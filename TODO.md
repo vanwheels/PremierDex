@@ -31,7 +31,14 @@ Per-version-within-generation variance (e.g. Diamond/Pearl/Platinum vs. HeartGol
 which PokeAPI mostly doesn't model. Investigation first: write up what PokeAPI does and doesn't
 cover in `docs/investigations/`, then either hand-curate a small override table (same reactive,
 opt-in posture as `BALL_POOLS`) or defer the remainder to Unscheduled. Milestone close-out
-(MILESTONES.md, post-mortem, COMPLETED archive) follows this leg.
+(MILESTONES.md, post-mortem, COMPLETED archive) follows Leg 6.
+Last touched: 2026-09-25. Re-check count: 0.
+
+### [Species/Dex reference data layer] — Leg 6
+Fix the base egg steps conversion. `baseEggSteps` (`src/shared/egg-steps.ts`) uses `cycles * 255 + 255`,
+which matches only Gen IV; steps per cycle are 256 in II/III/VII, 257 in V/VI, 128 in SwSh/SV. Decide
+the convention (single figure vs. per-generation) at the start of the leg — raw `hatchCounter` is
+already stored, so it's a one-function change plus tests.
 Last touched: 2026-09-25. Re-check count: 0.
 
 ## Unscheduled
@@ -39,13 +46,6 @@ Last touched: 2026-09-25. Re-check count: 0.
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
-
-### [Base Egg Steps convention] — unscheduled
-Steps per egg cycle differ by generation (256 in II/III/VII, 255 in IV, 257 in V/VI, 128 in SwSh/SV),
-so `baseEggSteps` (`src/shared/egg-steps.ts`) using `cycles * 255 + 255` matches only Gen IV. Raw
-`hatchCounter` is stored, so this is a one-function change. Decide which convention (or per-generation
-value) the Dex UI should show before the UI milestone consumes it.
-Last touched: 2026-09-25. Re-check count: 0.
 
 ### [Species page Where to Find method tables] — unscheduled
 The Dex Locations pane now splits encounters into Wild/Surfing/Fishing/Headbutt/Rock Smash/
