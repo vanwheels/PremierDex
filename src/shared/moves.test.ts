@@ -11,6 +11,8 @@ const CHANCE_TEXT = 'Has a $effect_chance% chance to paralyze the target.'
 function response(overrides: Partial<PokeApiMoveResponse> = {}): PokeApiMoveResponse {
   return {
     name: 'thunderbolt',
+    names: [{ name: 'Tonnerre', language: { name: 'fr' } }, { name: 'Thunderbolt', language: { name: 'en' } }],
+    flavor_text_entries: [],
     type: { name: 'electric' },
     damage_class: { name: 'special' },
     power: 90,
@@ -28,6 +30,7 @@ const noChange = { type: null, power: null, accuracy: null, pp: null, effect_cha
 describe('parseMove', () => {
   it('reads the stats and substitutes $effect_chance into the English effect', () => {
     expect(parseMove(response())).toEqual({
+      name: 'Thunderbolt',
       type: 'electric',
       damageClass: 'special',
       power: 90,
@@ -46,10 +49,48 @@ describe('parseMove', () => {
     expect(entry.effect).toBe('Raises the user Attack.')
   })
 
-  it('leaves effect null when PokeAPI has no English effect entry (newer moves)', () => {
-    const entry = parseMove(response({ effect_chance: null, effect_entries: [] }))
+  it('leaves effect null when there is no English effect entry or flavor text', () => {
+    const entry = parseMove(
+      response({
+        effect_chance: null,
+        effect_entries: [],
+        flavor_text_entries: [{ flavor_text: 'Français.', language: { name: 'fr' } }]
+      })
+    )
     expect(entry.effect).toBeNull()
     expect(entry.pastValues).toBeUndefined()
+  })
+
+  it('falls back to the newest English flavor text, collapsing line breaks, when effect_entries is empty', () => {
+    const flavor = (flavor_text: string, lang: string): { flavor_text: string; language: { name: string } } => ({
+      flavor_text,
+      language: { name: lang }
+    })
+    const entry = parseMove(
+      response({
+        effect_chance: null,
+        effect_entries: [],
+        flavor_text_entries: [
+          flavor('Old text.', 'en'),
+          flavor('A tackle that\nalso\fhurts the user.', 'en'),
+          flavor('Français.', 'fr')
+        ]
+      })
+    )
+    expect(entry.effect).toBe('A tackle that also hurts the user.')
+  })
+
+  it('prefers effect_entries over flavor text', () => {
+    const entry = parseMove(
+      response({ flavor_text_entries: [{ flavor_text: 'Flavor.', language: { name: 'en' } }] })
+    )
+    expect(entry.effect).toBe('Has a 10% chance to paralyze the target.')
+  })
+
+  it('throws when a move has no English name', () => {
+    expect(() => parseMove(response({ names: [{ name: 'Tonnerre', language: { name: 'fr' } }] }))).toThrow(
+      /no English name/
+    )
   })
 
   it('keeps only the changed fields of a past value', () => {

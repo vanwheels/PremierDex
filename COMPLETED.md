@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Species/Dex reference data layer] — Leg 7 — 2026-09-25
+`moves.json` entries now carry an in-game English `name` (`Double-Edge`, `U-turn`), and the 88 moves that
+had `effect: null` fall back to the newest English flavor text (whitespace-collapsed), so no move is
+left without an effect string. Flavor text is longer and less mechanical than a short effect; the type
+comment says so. See commit `<hash>`.
+
 ## [Species/Dex reference data layer] — Leg 6 — 2026-09-25
 Base egg steps are now per-generation: `baseEggSteps(hatchCounter, generation)` uses 256 (II/III/VII),
 255 (IV), 257 (V/VI), 128 (VIII/IX), defaulting to Gen IX. BDSP reads as 128 since it's keyed by

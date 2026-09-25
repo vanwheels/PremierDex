@@ -1,5 +1,10 @@
 import type { MoveData, MoveEntry, MovePastValue } from './types/moves'
 
+interface PokeApiFlavorTextEntry {
+  flavor_text: string
+  language: { name: string }
+}
+
 interface PokeApiEffectEntry {
   short_effect: string
   language: { name: string }
@@ -8,6 +13,8 @@ interface PokeApiEffectEntry {
 /** The subset of PokeAPI's `/move/{name}` that `parseMove` reads. */
 export interface PokeApiMoveResponse {
   name: string
+  names: Array<{ name: string; language: { name: string } }>
+  flavor_text_entries: PokeApiFlavorTextEntry[]
   type: { name: string }
   damage_class: { name: string }
   power: number | null
@@ -30,6 +37,14 @@ function englishTemplate(entries: PokeApiEffectEntry[]): string | null {
   return entries.find((e) => e.language.name === 'en')?.short_effect ?? null
 }
 
+/** Newest English flavor text (PokeAPI lists entries oldest version group first), with the
+ * in-game line breaks collapsed to spaces. Only used when a move has no `effect_entries`. */
+function latestEnglishFlavorText(entries: PokeApiFlavorTextEntry[]): string | null {
+  const en = entries.filter((e) => e.language.name === 'en')
+  if (en.length === 0) return null
+  return en[en.length - 1].flavor_text.replace(/\s+/g, ' ').trim()
+}
+
 /** PokeAPI effect text embeds the chance as `$effect_chance` (e.g. "Has a $effect_chance% chance to..."). */
 function renderEffect(template: string, effectChance: number | null): string {
   if (!template.includes('$effect_chance')) return template
@@ -39,13 +54,19 @@ function renderEffect(template: string, effectChance: number | null): string {
 
 export function parseMove(data: PokeApiMoveResponse): MoveEntry {
   const template = englishTemplate(data.effect_entries)
+  const displayName = data.names.find((n) => n.language.name === 'en')?.name
+  if (!displayName) throw new Error(`Move ${data.name} has no English name`)
   const entry: MoveEntry = {
+    name: displayName,
     type: data.type.name,
     damageClass: data.damage_class.name,
     power: data.power,
     accuracy: data.accuracy,
     pp: data.pp,
-    effect: template === null ? null : renderEffect(template, data.effect_chance)
+    effect:
+      template === null
+        ? latestEnglishFlavorText(data.flavor_text_entries)
+        : renderEffect(template, data.effect_chance)
   }
   const pastValues: MovePastValue[] = []
   for (const past of data.past_values) {

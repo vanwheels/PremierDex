@@ -10,6 +10,8 @@ export interface MoveData {
 }
 
 export interface MoveEntry {
+  /** In-game English display name ("Double-Edge", "U-turn") — slugs don't title-case to it. */
+  name: string
   /** Type slug ("fire", "dark", ...). */
   type: string
   /** "physical", "special" or "status". */
@@ -19,9 +21,10 @@ export interface MoveEntry {
   /** Null for moves that never miss (Swift, most status moves aimed at the user). */
   accuracy: number | null
   pp: number | null
-  /** English short effect with PokeAPI's `$effect_chance` placeholder already substituted. Null
-   * for the ~88 Gen VIII/IX moves (Tera Blast, Salt Cure, ...) PokeAPI has no `effect_entries`
-   * for — it only has in-game flavor text there, which is a different kind of text. */
+  /** English short effect with PokeAPI's `$effect_chance` placeholder already substituted. For the
+   * ~88 Gen VIII/IX moves (Tera Blast, Salt Cure, ...) PokeAPI has no `effect_entries` for, this is
+   * the newest English in-game flavor text instead (longer and less mechanical than a short
+   * effect). Null only if a move has neither. */
   effect: string | null
   /** Omitted when the move never changed. Ordered oldest to newest by `untilVersionGroup`
    * (PokeAPI's own order). */

@@ -8,7 +8,8 @@
  * Confirmed live 2026-09-25: `/move/{name}` has type, damage_class, power, accuracy, pp,
  * effect_chance, English `effect_entries[].short_effect` (with a `$effect_chance` placeholder),
  * and `past_values[]` (changed stats only, null = unchanged, `version_group` = last group the
- * old values applied in — Tackle's 35 power/95 accuracy is tagged black-white).
+ * old values applied in — Tackle's 35 power/95 accuracy is tagged black-white). Also `names[]`
+ * (English display name) and, for moves with no `effect_entries`, `flavor_text_entries`.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'

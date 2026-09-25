@@ -11,14 +11,6 @@ page generation toggle beyond sprites) is a follow-up milestone, not part of thi
 movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
 new endpoint (`/move/{id}`).
 
-### [Species/Dex reference data layer] — Leg 7
-`moves.json` (Leg 4 of the Species/Dex reference data layer) is keyed by slug with no display name
-(slugs don't title-case to in-game names: `double-edge`, `u-turn`), and 88 Gen VIII/IX moves have
-`effect: null` because PokeAPI has only flavor text for them. Both need another `/move/{name}` sweep
-(`names[]` en, latest English `flavor_text_entries`) — do them together, before the Moves sub-tab UI.
-Folded in from Unscheduled 2026-09-25 (was "Move display names and effect fallback").
-Last touched: 2026-09-25. Re-check count: 0.
-
 ### [Species/Dex reference data layer] — Leg 8
 `scripts/fetch-species-details.ts` writes `growthRates`/`eggGroups`/`abilities` (and `species`/`forms`
 keys) in fetch-completion order, so every regeneration reshuffles hundreds of diff lines with no
