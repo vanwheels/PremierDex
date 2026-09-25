@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Species/Dex reference data layer] — Leg 5 — 2026-09-25
+Investigation only, no override table. PokeAPI already models learnsets and move history per version
+group and types/stats/abilities per generation; the one real gap is evolution methods, whose per-entry
+`version_group` tag `fetch-evolution-chains.ts` discards (scheduled in Unscheduled). See
+`docs/investigations/per-version-variance.md`.
+
 ## [Species/Dex reference data layer] — Leg 4 — 2026-09-25
 Move metadata (type, damage class, power, accuracy, PP, English short effect, `past_values`) for all 822
 learnset moves in `data/pokemon/moves.json` (139 KB) via new `npm run fetch-move-data`, with its own

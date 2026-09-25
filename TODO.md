@@ -11,14 +11,6 @@ page generation toggle beyond sprites) is a follow-up milestone, not part of thi
 movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
 new endpoint (`/move/{id}`).
 
-### [Species/Dex reference data layer] — Leg 5
-Per-version-within-generation variance (e.g. Diamond/Pearl/Platinum vs. HeartGold/SoulSilver),
-which PokeAPI mostly doesn't model. Investigation first: write up what PokeAPI does and doesn't
-cover in `docs/investigations/`, then either hand-curate a small override table (same reactive,
-opt-in posture as `BALL_POOLS`) or defer the remainder to Unscheduled. Milestone close-out
-(MILESTONES.md, post-mortem, COMPLETED archive) follows Leg 6.
-Last touched: 2026-09-25. Re-check count: 0.
-
 ### [Species/Dex reference data layer] — Leg 6
 Fix the base egg steps conversion. `baseEggSteps` (`src/shared/egg-steps.ts`) uses `cycles * 255 + 255`,
 which matches only Gen IV; steps per cycle are 256 in II/III/VII, 257 in V/VI, 128 in SwSh/SV. Decide
@@ -27,6 +19,14 @@ already stored, so it's a one-function change plus tests.
 Last touched: 2026-09-25. Re-check count: 0.
 
 ## Unscheduled
+
+### [Evolution methods per version group] — Leg 1
+`fetch-evolution-chains.ts` joins distinct `evolution_details` methods with " or " and drops each
+entry's `version_group` tag, so Magnezone/Leafeon/Glaceon/Probopass show every game's location as
+alternatives with no game attached. PokeAPI tags all 676 entries; keep the tag through to
+`evolution-edges.json` and decide the display (per-game filter vs. labeled list) before scoping the UI.
+See `docs/investigations/per-version-variance.md`.
+Last touched: 2026-09-25. Re-check count: 0.
 
 ### [Move display names and effect fallback] — Leg 1
 `moves.json` (Leg 4 of the Species/Dex reference data layer) is keyed by slug with no display name
