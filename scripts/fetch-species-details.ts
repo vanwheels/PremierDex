@@ -10,10 +10,14 @@
  * growth_rate, gender_rate; `/pokemon/{id}` has abilities and `stats[].effort` (EV yield);
  * `/growth-rate/{name}` has `levels[]` (experience needed per level, up to 100);
  * `/ability/{id}` has `effect_entries[]` with a `short_effect` per language.
+ * Confirmed live 2026-09-25: `/pokemon/{id}` also has `types`, `stats[].base_stat`, and
+ * `past_types`/`past_stats`/`past_abilities` (see FormDetailEntry for their semantics); the
+ * parsing lives in src/shared/form-history.ts so it can be unit-tested.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { parseFormDetails, type PokeApiPokemonResponse } from '../src/shared/form-history'
 import type { FormDetailEntry, SpeciesDetailEntry, SpeciesDetailsData } from '../src/shared/types/species-details'
 
 interface SeedSpecies {
@@ -31,11 +35,6 @@ interface PokeApiSpeciesResponse {
   base_happiness: number
   gender_rate: number
   growth_rate: { name: string }
-}
-
-interface PokeApiPokemonResponse {
-  abilities: Array<{ ability: { name: string; url: string }; is_hidden: boolean }>
-  stats: Array<{ stat: { name: string }; effort: number }>
 }
 
 interface PokeApiGrowthRateResponse {
@@ -121,17 +120,9 @@ async function main(): Promise<void> {
   const abilityUrls = new Map<string, string>()
   await mapWithConcurrency(pokeapiIds, async (pokeapiId) => {
     const data = await fetchJson<PokeApiPokemonResponse>(`https://pokeapi.co/api/v2/pokemon/${pokeapiId}`)
-    for (const a of data.abilities) abilityUrls.set(a.ability.name, a.ability.url)
-
-    const evYield: Record<string, number> = {}
-    for (const s of data.stats) {
-      if (s.effort > 0) evYield[s.stat.name] = s.effort
-    }
-
-    formEntries[pokeapiId] = {
-      abilities: data.abilities.map((a) => ({ name: a.ability.name, isHidden: a.is_hidden })),
-      evYield
-    }
+    const { entry, abilityRefs } = parseFormDetails(data)
+    for (const ref of abilityRefs) abilityUrls.set(ref.name, ref.url)
+    formEntries[pokeapiId] = entry
   })
 
   console.log(`Fetching ${abilityUrls.size} distinct abilities...`)

@@ -34,14 +34,16 @@ const details: SpeciesDetailsData = {
   forms: {
     1: {
       abilities: [
-        { name: 'overgrow', isHidden: false },
-        { name: 'chlorophyll', isHidden: true }
+        { name: 'overgrow', isHidden: false, slot: 1 },
+        { name: 'chlorophyll', isHidden: true, slot: 3 }
       ],
-      evYield: {}
+      evYield: {},
+      types: [],
+      baseStats: {}
     },
-    10033: { abilities: [{ name: 'thick-fat', isHidden: false }], evYield: {} },
-    4: { abilities: [{ name: 'blaze', isHidden: false }], evYield: {} },
-    152: { abilities: [{ name: 'overgrow', isHidden: false }], evYield: {} }
+    10033: { abilities: [{ name: 'thick-fat', isHidden: false, slot: 1 }], evYield: {}, types: [], baseStats: {} },
+    4: { abilities: [{ name: 'blaze', isHidden: false, slot: 1 }], evYield: {}, types: [], baseStats: {} },
+    152: { abilities: [{ name: 'overgrow', isHidden: false, slot: 1 }], evYield: {}, types: [], baseStats: {} }
   }
 }
 
