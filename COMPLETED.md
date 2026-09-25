@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Species/Dex reference data layer] — Leg 4 — 2026-09-25
+Move metadata (type, damage class, power, accuracy, PP, English short effect, `past_values`) for all 822
+learnset moves in `data/pokemon/moves.json` (139 KB) via new `npm run fetch-move-data`, with its own
+`loadMoves` IPC channel and `moveData` in `useCollectionData`. 88 Gen VIII/IX moves have `effect: null`
+(PokeAPI has no effect text for them) — see Unscheduled. See commit `14f06c8`.
+
 ## [Species/Dex reference data layer] — Leg 3 — 2026-09-25
 Per-form learnsets written to `data/pokemon/learnsets.json` (3.7 MB, 1329 forms, 822 moves, 24 version groups)
 from the same `/pokemon/{id}` pass as species details, with its own `loadLearnsets` IPC channel and

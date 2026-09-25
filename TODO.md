@@ -11,13 +11,6 @@ page generation toggle beyond sprites) is a follow-up milestone, not part of thi
 movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
 new endpoint (`/move/{id}`).
 
-### [Species/Dex reference data layer] — Leg 4
-Move metadata table (type, damage class, power, accuracy, PP, English short effect) from
-`/move/{id}` for every move referenced in Leg 3's learnsets (822 slugs in `learnsets.json`'s `moves` table; fetch by name), plus past-generation move values
-if PokeAPI exposes them (`past_values`). Separate leg because it's a new endpoint sweep
-(~900 fetches), not an extension of the per-form pass.
-Last touched: 2026-09-25. Re-check count: 0.
-
 ### [Species/Dex reference data layer] — Leg 5
 Per-version-within-generation variance (e.g. Diamond/Pearl/Platinum vs. HeartGold/SoulSilver),
 which PokeAPI mostly doesn't model. Investigation first: write up what PokeAPI does and doesn't
@@ -34,6 +27,13 @@ already stored, so it's a one-function change plus tests.
 Last touched: 2026-09-25. Re-check count: 0.
 
 ## Unscheduled
+
+### [Move display names and effect fallback] — Leg 1
+`moves.json` (Leg 4 of the Species/Dex reference data layer) is keyed by slug with no display name
+(slugs don't title-case to in-game names: `double-edge`, `u-turn`), and 88 Gen VIII/IX moves have
+`effect: null` because PokeAPI has only flavor text for them. Both need another `/move/{name}` sweep
+(`names[]` en, latest English `flavor_text_entries`) — do them together, before the Moves sub-tab UI.
+Last touched: 2026-09-25. Re-check count: 0.
 
 ### [fetch-species-details deterministic output] — Leg 1
 `scripts/fetch-species-details.ts` writes `growthRates`/`eggGroups`/`abilities` (and `species`/`forms`
