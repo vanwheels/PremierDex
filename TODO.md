@@ -1,9 +1,51 @@
 # TODO
 
-## Current Milestone: none scoped
+## Current Milestone: Species/Dex reference data layer
 
-Sprite system overhaul shipped 2026-09-24 (see MILESTONES.md). Next milestone is picked from
-Unscheduled / Future Milestones below.
+Data-only milestone (fetch scripts, shared types, static JSON, IPC/`useCollectionData`
+wiring, tests) — no UI consumers. Split out 2026-09-24 from Full UI/UX pass scoping; the UI
+that consumes this (Dex tab Types/BST columns, Moves sub-tab, move/egg-group search, Species
+page generation toggle beyond sprites) is a follow-up milestone, not part of this one. Scoped
+2026-09-25. Two corrections to the original item text: egg groups and Base Egg Steps
+(`hatch_counter`) live on `/pokemon-species/{id}`, which the fetch script already hits, and
+movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
+new endpoint (`/move/{id}`).
+
+### [Species/Dex reference data layer] — Leg 1
+Per-form types and base stats from `/pokemon/{id}` (extend `fetch-species-details.ts` and
+`FormDetailEntry`), plus PokeAPI's `past_types` (e.g. Fairy split at Gen VI) and any past
+stats/abilities data it exposes. Verify against live PokeAPI what past-generation data actually
+exists before designing the shape. Wire through the existing `speciesDetails` load path.
+Last touched: 2026-09-25. Re-check count: 0.
+
+### [Species/Dex reference data layer] — Leg 2
+Egg groups and Base Egg Steps (`hatch_counter` × 255 + 255, confirm formula) per species from
+`/pokemon-species/{id}`. Egg groups get a dedupe table like `growthRates`. Small leg; could
+fold into Leg 1 if Leg 1 comes in light.
+Last touched: 2026-09-25. Re-check count: 0.
+
+### [Species/Dex reference data layer] — Leg 3
+Learnsets: per-form `moves[]` with learn method, level, and version group, from `/pokemon/{id}`.
+Likely large — write to its own file (`data/pokemon/learnsets.json`, loaded via its own IPC
+channel) rather than bloating `species-details.json`, and dedupe move/method/version-group
+names into lookup tables like `encounters.json` does. Decide the size budget and per-version-
+group granularity at the start of the leg.
+Last touched: 2026-09-25. Re-check count: 0.
+
+### [Species/Dex reference data layer] — Leg 4
+Move metadata table (type, damage class, power, accuracy, PP, English short effect) from
+`/move/{id}` for every move referenced in Leg 3's learnsets, plus past-generation move values
+if PokeAPI exposes them (`past_values`). Separate leg because it's a new endpoint sweep
+(~900 fetches), not an extension of the per-form pass.
+Last touched: 2026-09-25. Re-check count: 0.
+
+### [Species/Dex reference data layer] — Leg 5
+Per-version-within-generation variance (e.g. Diamond/Pearl/Platinum vs. HeartGold/SoulSilver),
+which PokeAPI mostly doesn't model. Investigation first: write up what PokeAPI does and doesn't
+cover in `docs/investigations/`, then either hand-curate a small override table (same reactive,
+opt-in posture as `BALL_POOLS`) or defer the remainder to Unscheduled. Milestone close-out
+(MILESTONES.md, post-mortem, COMPLETED archive) follows this leg.
+Last touched: 2026-09-25. Re-check count: 0.
 
 ## Unscheduled
 
@@ -150,20 +192,4 @@ Zamazenta/Ogerpon/Silvally catalogue) has been shown to actually misfire today.
 Blocked: needs a real false positive or wrong-game forme to actually surface before this is
 worth scoping — not built speculatively ahead of demonstrated need.
 Last touched: 2026-09-19. Re-check count: 0.
-
-### [Species/Dex reference data layer] — future milestone
-Split out 2026-09-24 during Full UI/UX pass scoping: base stats, movesets, egg groups, Base
-Egg Steps, and per-form types don't exist anywhere in the current data model
-(`species-details.ts` has only capture rate/happiness/growth rate/gender rate/abilities/EV
-yield; `pokemon.ts` has no type field at all). Also needed: per-generation type/ability
-variance (e.g. the Fairy-type split at Gen VI) and per-version-within-generation variance
-(e.g. Diamond/Pearl/Platinum vs. HeartGold/SoulSilver) for the Species page's Gen I-IX strip
-to eventually drive more than sprite art. Types and base stats are cheap additions (same
-`/pokemon/{id}` PokeAPI endpoint the fetch script already hits for abilities/EV yield);
-movesets and egg groups need new endpoints/fetch-script work, closer in shape to the
-Encounter data milestone. Blocks a follow-up leg of Full UI/UX pass Leg 4 (Dex tab
-Types/BST columns, Moves sub-tab, move/egg-group search) and the Species page's full
-generation-toggle behavior beyond sprites. Needs its own scoping pass before a leg sequence
-can be planned.
-Last touched: 2026-09-24. Re-check count: 0.
 
