@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Species/Dex reference data layer] — Leg 1 — 2026-09-25
+Per-form types, base stats and PokeAPI's `past_types`/`past_stats`/`past_abilities` (incl. per-era EV
+yield and Gen I `special`) added to `FormDetailEntry` and regenerated `species-details.json`; parsing
+and a `resolveFormAtGeneration` layering helper live in `src/shared/form-history.ts` with tests. Existing
+`speciesDetails` load path needed no changes. See commit `4233d13`.
+
 ## [Where to Find section on SpeciesPage, Leg 3] — 2026-09-23
 Final leg — milestone shipped, see MILESTONES.md. Added `encounterLocationsForForm`
 (`encountersFormat.ts`), grouping `encounters.json`'s raw per-location/version/method rows

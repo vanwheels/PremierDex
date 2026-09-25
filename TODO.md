@@ -11,13 +11,6 @@ page generation toggle beyond sprites) is a follow-up milestone, not part of thi
 movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
 new endpoint (`/move/{id}`).
 
-### [Species/Dex reference data layer] — Leg 1
-Per-form types and base stats from `/pokemon/{id}` (extend `fetch-species-details.ts` and
-`FormDetailEntry`), plus PokeAPI's `past_types` (e.g. Fairy split at Gen VI) and any past
-stats/abilities data it exposes. Verify against live PokeAPI what past-generation data actually
-exists before designing the shape. Wire through the existing `speciesDetails` load path.
-Last touched: 2026-09-25. Re-check count: 0.
-
 ### [Species/Dex reference data layer] — Leg 2
 Egg groups and Base Egg Steps (`hatch_counter` × 255 + 255, confirm formula) per species from
 `/pokemon-species/{id}`. Egg groups get a dedupe table like `growthRates`. Small leg; could
