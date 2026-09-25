@@ -17,7 +17,7 @@ import { useBoxPositionUndo } from './useBoxPositionUndo'
 const EMPTY_SPECIES_AVAILABILITY: SpeciesAvailabilityData = { pokedexes: {}, entryNumbers: {}, gameToPokedexes: {} }
 
 // Same not-loaded-yet shape as EMPTY_SPECIES_AVAILABILITY above.
-const EMPTY_SPECIES_DETAILS: SpeciesDetailsData = { species: {}, forms: {}, growthRates: {}, abilities: {} }
+const EMPTY_SPECIES_DETAILS: SpeciesDetailsData = { species: {}, forms: {}, growthRates: {}, eggGroups: {}, abilities: {} }
 
 // Same not-loaded-yet shape as EMPTY_SPECIES_DETAILS above.
 const EMPTY_ENCOUNTER_DATA: EncounterData = { encounters: {}, locationAreas: [], methods: [], versions: [] }

@@ -10,7 +10,9 @@
  * growth_rate, gender_rate; `/pokemon/{id}` has abilities and `stats[].effort` (EV yield);
  * `/growth-rate/{name}` has `levels[]` (experience needed per level, up to 100);
  * `/ability/{id}` has `effect_entries[]` with a `short_effect` per language.
- * Confirmed live 2026-09-25: `/pokemon/{id}` also has `types`, `stats[].base_stat`, and
+ * Confirmed live 2026-09-25: `/pokemon-species/{id}` also has `egg_groups[]` and
+ * `hatch_counter`; `/egg-group/{name}` has `names[]` (English display name per group).
+ * `/pokemon/{id}` also has `types`, `stats[].base_stat`, and
  * `past_types`/`past_stats`/`past_abilities` (see FormDetailEntry for their semantics); the
  * parsing lives in src/shared/form-history.ts so it can be unit-tested.
  */
@@ -35,6 +37,12 @@ interface PokeApiSpeciesResponse {
   base_happiness: number
   gender_rate: number
   growth_rate: { name: string }
+  hatch_counter: number
+  egg_groups: Array<{ name: string }>
+}
+
+interface PokeApiEggGroupResponse {
+  names: Array<{ name: string; language: { name: string } }>
 }
 
 interface PokeApiGrowthRateResponse {
@@ -94,15 +102,29 @@ async function main(): Promise<void> {
   console.log(`Fetching species details for ${species.length} species (concurrency ${CONCURRENCY})...`)
   const speciesEntries: Record<number, SpeciesDetailEntry> = {}
   const growthRateNames = new Set<string>()
+  const eggGroupNames = new Set<string>()
   await mapWithConcurrency(species, async (s) => {
     const data = await fetchJson<PokeApiSpeciesResponse>(`https://pokeapi.co/api/v2/pokemon-species/${s.id}`)
     growthRateNames.add(data.growth_rate.name)
+    const eggGroups = data.egg_groups.map((g) => g.name)
+    for (const name of eggGroups) eggGroupNames.add(name)
     speciesEntries[s.id] = {
       captureRate: data.capture_rate,
       baseHappiness: data.base_happiness,
       growthRateName: data.growth_rate.name,
-      genderRate: data.gender_rate
+      genderRate: data.gender_rate,
+      eggGroups,
+      hatchCounter: data.hatch_counter
     }
+  })
+
+  console.log(`Fetching ${eggGroupNames.size} distinct egg groups...`)
+  const eggGroups: Record<string, string> = {}
+  await mapWithConcurrency([...eggGroupNames], async (name) => {
+    const data = await fetchJson<PokeApiEggGroupResponse>(`https://pokeapi.co/api/v2/egg-group/${name}`)
+    const english = data.names.find((n) => n.language.name === 'en')
+    if (!english) throw new Error(`Egg group "${name}" has no English name`)
+    eggGroups[name] = english.name
   })
 
   console.log(`Fetching ${growthRateNames.size} distinct growth rates...`)
@@ -134,7 +156,7 @@ async function main(): Promise<void> {
     abilities[name] = english.short_effect
   })
 
-  const output: SpeciesDetailsData = { species: speciesEntries, forms: formEntries, growthRates, abilities }
+  const output: SpeciesDetailsData = { species: speciesEntries, forms: formEntries, growthRates, eggGroups, abilities }
 
   mkdirSync(dataDir, { recursive: true })
   const outPath = join(dataDir, 'species-details.json')

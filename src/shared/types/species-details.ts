@@ -23,6 +23,10 @@ export interface SpeciesDetailsData {
   /** Growth rate name (PokeAPI's `/growth-rate/{name}`) -> total experience required to
    * reach level 100 under that growth rate. */
   growthRates: Record<string, number>
+  /** Egg group slug (PokeAPI's `/egg-group/{name}`) -> English display name. The slugs don't
+   * map onto the in-game names by title-casing (`plant` -> "Grass", `no-eggs` ->
+   * "Undiscovered", `humanshape` -> "Human-Like"), hence a table rather than a helper. */
+  eggGroups: Record<string, string>
   /** Ability name (PokeAPI's `/ability/{name}`) -> English `short_effect` text. Includes
    * abilities that only appear in `pastAbilities`. */
   abilities: Record<string, string>
@@ -35,6 +39,11 @@ export interface SpeciesDetailEntry {
   /** PokeAPI's raw `gender_rate`: -1 means genderless, otherwise the number of eighths
    * that are female (0 = always male, 8 = always female). */
   genderRate: number
+  /** Egg group slugs (1 or 2; join key into `eggGroups`). */
+  eggGroups: string[]
+  /** PokeAPI's raw `hatch_counter` (base egg cycles). Steps depend on the generation's cycle
+   * length — use `baseEggSteps` in `shared/egg-steps.ts` rather than converting inline. */
+  hatchCounter: number
 }
 
 export interface FormAbility {

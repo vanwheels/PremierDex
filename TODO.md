@@ -11,12 +11,6 @@ page generation toggle beyond sprites) is a follow-up milestone, not part of thi
 movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
 new endpoint (`/move/{id}`).
 
-### [Species/Dex reference data layer] — Leg 2
-Egg groups and Base Egg Steps (`hatch_counter` × 255 + 255, confirm formula) per species from
-`/pokemon-species/{id}`. Egg groups get a dedupe table like `growthRates`. Small leg; could
-fold into Leg 1 if Leg 1 comes in light.
-Last touched: 2026-09-25. Re-check count: 0.
-
 ### [Species/Dex reference data layer] — Leg 3
 Learnsets: per-form `moves[]` with learn method, level, and version group, from `/pokemon/{id}`.
 Likely large — write to its own file (`data/pokemon/learnsets.json`, loaded via its own IPC
@@ -45,6 +39,13 @@ Last touched: 2026-09-25. Re-check count: 0.
 Standalone items not part of the current milestone — pick up opportunistically or when
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
+
+### [Base Egg Steps convention] — unscheduled
+Steps per egg cycle differ by generation (256 in II/III/VII, 255 in IV, 257 in V/VI, 128 in SwSh/SV),
+so `baseEggSteps` (`src/shared/egg-steps.ts`) using `cycles * 255 + 255` matches only Gen IV. Raw
+`hatchCounter` is stored, so this is a one-function change. Decide which convention (or per-generation
+value) the Dex UI should show before the UI milestone consumes it.
+Last touched: 2026-09-25. Re-check count: 0.
 
 ### [Species page Where to Find method tables] — unscheduled
 The Dex Locations pane now splits encounters into Wild/Surfing/Fishing/Headbutt/Rock Smash/

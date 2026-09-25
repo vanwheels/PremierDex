@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Species/Dex reference data layer] — Leg 2 — 2026-09-25
+Per-species `eggGroups` (slugs) and raw `hatchCounter` added to `SpeciesDetailEntry`, plus an
+`eggGroups` slug -> English name table (slugs don't title-case to in-game names, e.g. `plant` ->
+Grass). `baseEggSteps` in `src/shared/egg-steps.ts` converts cycles to steps using the spec's
+`cycles * 255 + 255`, which is only the Gen IV convention — see the egg-steps TODO item. See commit `COMMIT`.
+
 ## [Species/Dex reference data layer] — Leg 1 — 2026-09-25
 Per-form types, base stats and PokeAPI's `past_types`/`past_stats`/`past_abilities` (incl. per-era EV
 yield and Gen I `special`) added to `FormDetailEntry` and regenerated `species-details.json`; parsing

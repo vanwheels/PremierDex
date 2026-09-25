@@ -30,6 +30,7 @@ const form = (id: number, speciesId: number, formName: string, formCategory: For
 const details: SpeciesDetailsData = {
   species: {},
   growthRates: {},
+  eggGroups: {},
   abilities: {},
   forms: {
     1: {
