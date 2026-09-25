@@ -30,6 +30,7 @@ import {
   type PokeApiMoveEntry,
   type RawLearnsetEntry
 } from '../src/shared/learnsets'
+import { sortRecord } from '../src/shared/sort-record'
 import type { LearnsetData, LearnsetVersionGroup } from '../src/shared/types/learnsets'
 import type { FormDetailEntry, SpeciesDetailEntry, SpeciesDetailsData } from '../src/shared/types/species-details'
 
@@ -204,7 +205,15 @@ async function main(): Promise<void> {
     abilities[name] = english.short_effect
   })
 
-  const output: SpeciesDetailsData = { species: speciesEntries, forms: formEntries, growthRates, eggGroups, abilities }
+  // The three name-keyed maps are filled in request-completion order; sort so regenerating
+  // doesn't reshuffle the file. (species/forms are integer-keyed, so JS already orders them.)
+  const output: SpeciesDetailsData = {
+    species: speciesEntries,
+    forms: formEntries,
+    growthRates: sortRecord(growthRates),
+    eggGroups: sortRecord(eggGroups),
+    abilities: sortRecord(abilities)
+  }
 
   mkdirSync(dataDir, { recursive: true })
   const outPath = join(dataDir, 'species-details.json')
