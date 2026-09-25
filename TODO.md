@@ -11,13 +11,7 @@ page generation toggle beyond sprites) is a follow-up milestone, not part of thi
 movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
 new endpoint (`/move/{id}`).
 
-### [Species/Dex reference data layer] — Leg 8
-`scripts/fetch-species-details.ts` writes `growthRates`/`eggGroups`/`abilities` (and `species`/`forms`
-keys) in fetch-completion order, so every regeneration reshuffles hundreds of diff lines with no
-semantic change. Sort those maps before writing (`learnsets.json` already is sorted).
-Folded in from Unscheduled 2026-09-25 (was "fetch-species-details deterministic output").
-Milestone close-out (MILESTONES.md, post-mortem, COMPLETED archive) follows this leg.
-Last touched: 2026-09-25. Re-check count: 0.
+_All legs shipped (Leg 8 done 2026-09-25). Remaining: milestone close-out — MILESTONES.md entry, post-mortem at `docs/postmortems/species-dex-reference-data-layer.md`, COMPLETED.md archive, then retire this section._
 
 ## Unscheduled
 

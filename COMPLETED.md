@@ -1,5 +1,8 @@
 # COMPLETED
 
+## [Species/Dex reference data layer] — Leg 8 — 2026-09-25
+The `growthRates`/`eggGroups`/`abilities` maps in `species-details.json` are now key-sorted on write (`sortRecord`), and the committed file was re-sorted once. `species`/`forms` needed no change — integer keys already serialize in ascending order. See commit `ff0f2a8`.
+
 ## [Species/Dex reference data layer] — Leg 7 — 2026-09-25
 `moves.json` entries now carry an in-game English `name` (`Double-Edge`, `U-turn`), and the 88 moves that
 had `effect: null` fall back to the newest English flavor text (whitespace-collapsed), so no move is
