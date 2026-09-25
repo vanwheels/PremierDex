@@ -1,5 +1,10 @@
 # COMPLETED
 
+## [Species/Dex reference data layer] — Leg 6 — 2026-09-25
+Base egg steps are now per-generation: `baseEggSteps(hatchCounter, generation)` uses 256 (II/III/VII),
+255 (IV), 257 (V/VI), 128 (VIII/IX), defaulting to Gen IX. BDSP reads as 128 since it's keyed by
+generation number, not game — accepted imprecision, noted in the file. See the Leg 6 commit.
+
 ## [Species/Dex reference data layer] — Leg 5 — 2026-09-25
 Investigation only, no override table. PokeAPI already models learnsets and move history per version
 group and types/stats/abilities per generation; the one real gap is evolution methods, whose per-entry
@@ -22,7 +27,7 @@ merged, names deduped into sorted tables. See commit `d197018`.
 Per-species `eggGroups` (slugs) and raw `hatchCounter` added to `SpeciesDetailEntry`, plus an
 `eggGroups` slug -> English name table (slugs don't title-case to in-game names, e.g. `plant` ->
 Grass). `baseEggSteps` in `src/shared/egg-steps.ts` converts cycles to steps using the spec's
-`cycles * 255 + 255`, which is only the Gen IV convention — see Leg 6 in TODO.md. See commit `0a60908`.
+`cycles * 255 + 255`, which is only the Gen IV convention (fixed in Leg 6). See commit `0a60908`.
 
 ## [Species/Dex reference data layer] — Leg 1 — 2026-09-25
 Per-form types, base stats and PokeAPI's `past_types`/`past_stats`/`past_abilities` (incl. per-era EV

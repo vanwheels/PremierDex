@@ -11,13 +11,6 @@ page generation toggle beyond sprites) is a follow-up milestone, not part of thi
 movesets are `moves[]` on the `/pokemon/{id}` it already hits — so only move *metadata* needs a
 new endpoint (`/move/{id}`).
 
-### [Species/Dex reference data layer] — Leg 6
-Fix the base egg steps conversion. `baseEggSteps` (`src/shared/egg-steps.ts`) uses `cycles * 255 + 255`,
-which matches only Gen IV; steps per cycle are 256 in II/III/VII, 257 in V/VI, 128 in SwSh/SV. Decide
-the convention (single figure vs. per-generation) at the start of the leg — raw `hatchCounter` is
-already stored, so it's a one-function change plus tests.
-Last touched: 2026-09-25. Re-check count: 0.
-
 ### [Species/Dex reference data layer] — Leg 7
 `moves.json` (Leg 4 of the Species/Dex reference data layer) is keyed by slug with no display name
 (slugs don't title-case to in-game names: `double-edge`, `u-turn`), and 88 Gen VIII/IX moves have

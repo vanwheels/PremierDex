@@ -42,7 +42,8 @@ export interface SpeciesDetailEntry {
   /** Egg group slugs (1 or 2; join key into `eggGroups`). */
   eggGroups: string[]
   /** PokeAPI's raw `hatch_counter` (base egg cycles). Steps depend on the generation's cycle
-   * length — use `baseEggSteps` in `shared/egg-steps.ts` rather than converting inline. */
+   * length — use `baseEggSteps(hatchCounter, generation)` in `shared/egg-steps.ts` rather than
+   * converting inline. */
   hatchCounter: number
 }
 
