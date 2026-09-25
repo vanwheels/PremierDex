@@ -6,6 +6,7 @@ import {
   loadEncounterData,
   loadEvolutionEdgesData,
   loadFormeSwitchGroupsData,
+  loadLearnsetData,
   loadSpeciesAvailabilityData,
   loadSpeciesDetailsData
 } from '../storage/load-species-data'
@@ -72,6 +73,7 @@ export function registerPokemonIpc(storage: StorageAdapter): void {
   ipcMain.handle(PokemonIpcChannel.loadFormeSwitchGroups, () => loadFormeSwitchGroupsData())
   ipcMain.handle(PokemonIpcChannel.loadSpeciesDetails, () => loadSpeciesDetailsData())
   ipcMain.handle(PokemonIpcChannel.loadEncounters, () => loadEncounterData())
+  ipcMain.handle(PokemonIpcChannel.loadLearnsets, () => loadLearnsetData())
   ipcMain.handle(PokemonIpcChannel.listEntryRibbons, (_event, entryId: number) => storage.listEntryRibbons(entryId))
   ipcMain.handle(PokemonIpcChannel.setEntryRibbons, (_event, entryId: number, ribbonNames: string[]) =>
     storage.setEntryRibbons(entryId, ribbonNames)

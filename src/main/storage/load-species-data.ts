@@ -6,6 +6,7 @@ import type { EvolutionEdge } from '@shared/types/evolution'
 import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { EncounterData } from '@shared/types/encounters'
+import type { LearnsetData } from '@shared/types/learnsets'
 
 export interface SeedSpecies {
   id: number
@@ -104,4 +105,12 @@ export function loadSpeciesDetailsData(): SpeciesDetailsData {
 export function loadEncounterData(): EncounterData {
   const filePath = join(DATA_DIR, 'encounters.json')
   return JSON.parse(readFileSync(filePath, 'utf-8')) as EncounterData
+}
+
+/** Loads the static per-pokeapiId learnset data (Leg 3 of the Species/Dex reference data layer
+ * milestone) written by `npm run fetch-species-details`. Same not-DB-backed shape as
+ * loadEncounterData. */
+export function loadLearnsetData(): LearnsetData {
+  const filePath = join(DATA_DIR, 'learnsets.json')
+  return JSON.parse(readFileSync(filePath, 'utf-8')) as LearnsetData
 }

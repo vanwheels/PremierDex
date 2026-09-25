@@ -15,11 +15,22 @@
  * `/pokemon/{id}` also has `types`, `stats[].base_stat`, and
  * `past_types`/`past_stats`/`past_abilities` (see FormDetailEntry for their semantics); the
  * parsing lives in src/shared/form-history.ts so it can be unit-tested.
+ * Confirmed live 2026-09-25: `/pokemon/{id}` `moves[]` carries per-version-group
+ * `level_learned_at`/`move_learn_method`; `/version-group/{name}` has `order` and
+ * `generation`. The same `/pokemon/{id}` response feeds data/pokemon/learnsets.json (see
+ * src/shared/types/learnsets.ts and src/shared/learnsets.ts), so learnsets add no extra fetches.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseFormDetails, type PokeApiPokemonResponse } from '../src/shared/form-history'
+import {
+  buildLearnsetData,
+  parseLearnset,
+  type PokeApiMoveEntry,
+  type RawLearnsetEntry
+} from '../src/shared/learnsets'
+import type { LearnsetData, LearnsetVersionGroup } from '../src/shared/types/learnsets'
 import type { FormDetailEntry, SpeciesDetailEntry, SpeciesDetailsData } from '../src/shared/types/species-details'
 
 interface SeedSpecies {
@@ -45,6 +56,11 @@ interface PokeApiEggGroupResponse {
   names: Array<{ name: string; language: { name: string } }>
 }
 
+interface PokeApiVersionGroupResponse {
+  order: number
+  generation: { name: string }
+}
+
 interface PokeApiGrowthRateResponse {
   levels: Array<{ level: number; experience: number }>
 }
@@ -52,6 +68,8 @@ interface PokeApiGrowthRateResponse {
 interface PokeApiAbilityResponse {
   effect_entries: Array<{ short_effect: string; language: { name: string } }>
 }
+
+const ROMAN_GENERATIONS: Record<string, number> = { i: 1, ii: 2, iii: 3, iv: 4, v: 5, vi: 6, vii: 7, viii: 8, ix: 9 }
 
 const MAX_ATTEMPTS = 3
 const CONCURRENCY = 10
@@ -91,6 +109,22 @@ async function mapWithConcurrency<T, R>(items: T[], fn: (item: T) => Promise<R>)
   }
   await Promise.all(Array.from({ length: Math.min(CONCURRENCY, items.length) }, worker))
   return results
+}
+
+/** One line per form (and per table) keeps the file compact but diffable form-by-form. */
+function stringifyLearnsets(data: LearnsetData): string {
+  const forms = Object.entries(data.learnsets).map(([id, entries]) => `    "${id}": ${JSON.stringify(entries)}`)
+  const lines = [
+    '{',
+    `  "moves": ${JSON.stringify(data.moves)},`,
+    `  "methods": ${JSON.stringify(data.methods)},`,
+    `  "versionGroups": ${JSON.stringify(data.versionGroups)},`,
+    '  "learnsets": {',
+    forms.join(',\n'),
+    '  }',
+    '}'
+  ]
+  return lines.join('\n') + '\n'
 }
 
 async function main(): Promise<void> {
@@ -139,12 +173,26 @@ async function main(): Promise<void> {
   const pokeapiIds = [...new Set(forms.map((f) => f.pokeapiId))]
   console.log(`Fetching form details for ${pokeapiIds.length} distinct forms...`)
   const formEntries: Record<number, FormDetailEntry> = {}
+  const rawLearnsets: Record<number, RawLearnsetEntry[]> = {}
+  const versionGroupNames = new Set<string>()
   const abilityUrls = new Map<string, string>()
   await mapWithConcurrency(pokeapiIds, async (pokeapiId) => {
-    const data = await fetchJson<PokeApiPokemonResponse>(`https://pokeapi.co/api/v2/pokemon/${pokeapiId}`)
+    const data = await fetchJson<PokeApiPokemonResponse & { moves: PokeApiMoveEntry[] }>(`https://pokeapi.co/api/v2/pokemon/${pokeapiId}`)
     const { entry, abilityRefs } = parseFormDetails(data)
     for (const ref of abilityRefs) abilityUrls.set(ref.name, ref.url)
     formEntries[pokeapiId] = entry
+    const learnset = parseLearnset(data.moves)
+    for (const [, , , groups] of learnset) for (const g of groups) versionGroupNames.add(g)
+    rawLearnsets[pokeapiId] = learnset
+  })
+
+  console.log(`Fetching ${versionGroupNames.size} distinct version groups...`)
+  const versionGroupMeta: Array<LearnsetVersionGroup & { order: number }> = []
+  await mapWithConcurrency([...versionGroupNames], async (name) => {
+    const data = await fetchJson<PokeApiVersionGroupResponse>(`https://pokeapi.co/api/v2/version-group/${name}`)
+    const generation = ROMAN_GENERATIONS[data.generation.name.replace('generation-', '')]
+    if (!generation) throw new Error(`Version group "${name}" has unrecognised generation "${data.generation.name}"`)
+    versionGroupMeta.push({ name, generation, order: data.order })
   })
 
   console.log(`Fetching ${abilityUrls.size} distinct abilities...`)
@@ -161,6 +209,14 @@ async function main(): Promise<void> {
   mkdirSync(dataDir, { recursive: true })
   const outPath = join(dataDir, 'species-details.json')
   writeFileSync(outPath, JSON.stringify(output, null, 2) + '\n')
+
+  const learnsetData = buildLearnsetData(rawLearnsets, versionGroupMeta)
+  const learnsetPath = join(dataDir, 'learnsets.json')
+  writeFileSync(learnsetPath, stringifyLearnsets(learnsetData))
+  console.log(
+    `Wrote learnsets for ${pokeapiIds.length} forms (${learnsetData.moves.length} moves, ` +
+      `${learnsetData.versionGroups.length} version groups) to ${learnsetPath}`
+  )
 
   console.log(
     `Wrote details for ${species.length} species, ${pokeapiIds.length} forms, ` +

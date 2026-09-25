@@ -7,6 +7,7 @@ import type { EvolutionEdge } from '@shared/types/evolution'
 import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { EncounterData } from '@shared/types/encounters'
+import type { LearnsetData } from '@shared/types/learnsets'
 import type { CollectionImportResult } from '@shared/storage/collection-export'
 import type { UpdaterBridge } from '@shared/updater/updater-provider'
 
@@ -73,6 +74,9 @@ export interface AppBridge extends UpdaterBridge {
    * encounter data, for the species page's Where to Find section (Leg 3). Not DB-backed —
    * see PokemonIpcChannel.loadEncounters' own comment. */
   loadEncounters(): Promise<EncounterData>
+  /** Leg 3 of the Species/Dex reference data layer milestone: static per-pokeapiId learnset
+   * data. Not DB-backed — see PokemonIpcChannel.loadLearnsets' own comment. */
+  loadLearnsets(): Promise<LearnsetData>
   /** Opens a save dialog, writes the full collection to the chosen file. Null if the
    * user canceled the dialog. */
   exportCollectionToFile(): Promise<string | null>

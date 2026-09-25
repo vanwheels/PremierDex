@@ -8,6 +8,7 @@ import type { EvolutionEdge } from '@shared/types/evolution'
 import type { FormeSwitchGroup } from '@shared/types/forme-switch-groups'
 import type { SpeciesDetailsData } from '@shared/types/species-details'
 import type { EncounterData } from '@shared/types/encounters'
+import type { LearnsetData } from '@shared/types/learnsets'
 import type { TrainerProfile } from '@shared/types/trainer-profile'
 import { useBoxPositionUndo } from './useBoxPositionUndo'
 
@@ -21,6 +22,9 @@ const EMPTY_SPECIES_DETAILS: SpeciesDetailsData = { species: {}, forms: {}, grow
 
 // Same not-loaded-yet shape as EMPTY_SPECIES_DETAILS above.
 const EMPTY_ENCOUNTER_DATA: EncounterData = { encounters: {}, locationAreas: [], methods: [], versions: [] }
+
+// Same not-loaded-yet shape as EMPTY_ENCOUNTER_DATA above.
+const EMPTY_LEARNSET_DATA: LearnsetData = { moves: [], methods: [], versionGroups: [], learnsets: {} }
 
 export interface CollectionData {
   species: Species[]
@@ -44,6 +48,9 @@ export interface CollectionData {
   /** Leg 2 of the Encounter data + Where to Find milestone — per-pokeapiId wild/snag
    * encounter data, for the species page's Where to Find section (Leg 3). */
   encounterData: EncounterData
+  /** Leg 3 of the Species/Dex reference data layer milestone — per-pokeapiId learnsets (no UI
+   * consumer yet; the Moves sub-tab/species page moveset are a follow-up milestone). */
+  learnsetData: LearnsetData
   loading: boolean
   loadAll: () => Promise<void>
   handleImported: () => void
@@ -118,6 +125,7 @@ export function useCollectionData(): CollectionData {
   const [formeSwitchGroups, setFormeSwitchGroups] = useState<FormeSwitchGroup[]>([])
   const [speciesDetails, setSpeciesDetails] = useState<SpeciesDetailsData>(EMPTY_SPECIES_DETAILS)
   const [encounterData, setEncounterData] = useState<EncounterData>(EMPTY_ENCOUNTER_DATA)
+  const [learnsetData, setLearnsetData] = useState<LearnsetData>(EMPTY_LEARNSET_DATA)
   const [loading, setLoading] = useState(true)
 
   // Leg 2 of the Box View Move & Undo Operations milestone. Mirrors `entries` in a ref
@@ -143,6 +151,7 @@ export function useCollectionData(): CollectionData {
       window.premierDex.loadFormeSwitchGroups(),
       window.premierDex.loadSpeciesDetails(),
       window.premierDex.loadEncounters(),
+      window.premierDex.loadLearnsets(),
       window.premierDex.listTrainerProfiles()
     ]).then(
       ([
@@ -157,6 +166,7 @@ export function useCollectionData(): CollectionData {
         formeSwitchGroupList,
         details,
         encounters,
+        learnsets,
         trainerProfileList
       ]) => {
         setSpecies(speciesList)
@@ -170,6 +180,7 @@ export function useCollectionData(): CollectionData {
         setFormeSwitchGroups(formeSwitchGroupList)
         setSpeciesDetails(details)
         setEncounterData(encounters)
+        setLearnsetData(learnsets)
         setTrainerProfiles(trainerProfileList)
       }
     )
@@ -345,6 +356,7 @@ export function useCollectionData(): CollectionData {
     formeSwitchGroups,
     speciesDetails,
     encounterData,
+    learnsetData,
     loading,
     loadAll,
     handleImported,
