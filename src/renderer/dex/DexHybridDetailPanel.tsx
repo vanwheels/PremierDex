@@ -7,6 +7,7 @@ import { checkEntryValidity } from './invalidCombo'
 import { regionalDexNumbersForGame } from './regionalDexNumbers'
 import { defaultSpriteUrl } from './sprites'
 import { BallIcon } from './BallIcon'
+import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 
 const DETAIL_SPRITE_SIZE = 64
 
@@ -21,6 +22,10 @@ interface DexHybridDetailPanelProps {
   /** Ribbons & Marks (Leg 4 of the Ribbons/Alpha/Size/Capture-Date Tracking milestone) —
    * opens RibbonsMarksModal, same "parent owns the modal" split as onEditOrigin above. */
   onEditRibbonsMarks: () => void
+  /** Species detail popup entry point on Hybrid view (unscheduled item, picked up
+   * 2026-09-28): same "parent owns the modal" split as onEditOrigin/onEditRibbonsMarks
+   * above, matching DexBoxDetailPanel's onOpenSpeciesDetail. */
+  onOpenSpeciesDetail: (target: SpeciesDetailTarget) => void
 }
 
 /** One label/value pair, omitted entirely by the caller when the value is empty — same
@@ -41,6 +46,12 @@ function DetailField({ label, value }: { label: string; value: string }): JSX.El
  * rather than HOME's own Nature/stats block, which PremierDex has no data for. Read-only
  * display, matching Hybrid's own "read-only grid" framing — an Edit button opens the real
  * OriginModal (DexHybridGrid owns that) for anything beyond browsing.
+ *
+ * The species-info button in the heading (picked up from the unscheduled backlog,
+ * 2026-09-28) mirrors DexBoxDetailPanel's own — same `dex-species-info-button` class and
+ * onOpenSpeciesDetail split, wiring the entry point Leg 3 of the Species detail popup +
+ * evolution family tree milestone had only added to DexTable/DexBoxDetailPanel (List/Box
+ * view), not here.
  */
 export function DexHybridDetailPanel({
   tile,
@@ -48,7 +59,8 @@ export function DexHybridDetailPanel({
   speciesAvailability,
   speciesById,
   onEditOrigin,
-  onEditRibbonsMarks
+  onEditRibbonsMarks,
+  onOpenSpeciesDetail
 }: DexHybridDetailPanelProps): JSX.Element {
   if (!tile) {
     return (
@@ -74,6 +86,15 @@ export function DexHybridDetailPanel({
       <div className="dex-hybrid-detail-body">
         <h3>
           {row.displayName} {shiny && '(Shiny)'}
+          <button
+            type="button"
+            className="dex-species-info-button"
+            onClick={() => onOpenSpeciesDetail({ speciesId: row.speciesId, formName: row.formName })}
+            aria-label={`View ${row.displayName} species details`}
+            title="Species details"
+          >
+            ⓘ
+          </button>
         </h3>
         <div className="dex-hybrid-detail-badges">
           {!row.homeBoxable && <span className="dex-not-home-boxable-badge">Not Home-boxable</span>}

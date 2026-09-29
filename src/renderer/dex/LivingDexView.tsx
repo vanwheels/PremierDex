@@ -41,10 +41,12 @@ export interface LivingDexViewProps {
   species: Species[]
   forms: Form[]
   /** Leg 3 of the Species detail popup + evolution family tree milestone: threaded down
-   * to DexTable/DexBoxGrid's SpeciesDetailPopup. */
+   * to DexTable/DexBoxGrid's SpeciesDetailPopup; DexHybridGrid too since it picked up the
+   * same entry point from the unscheduled backlog (2026-09-28). */
   evolutionEdges: EvolutionEdge[]
   /** Leg 8 of the Species detail popup + evolution family tree milestone: threaded down
-   * to DexTable/DexBoxGrid's SpeciesDetailPopup alongside evolutionEdges above. */
+   * to DexTable/DexBoxGrid's SpeciesDetailPopup alongside evolutionEdges above; same
+   * DexHybridGrid caveat. */
   formeSwitchGroups: FormeSwitchGroup[]
   entries: CollectionEntry[]
   storageLocations: StorageLocation[]
@@ -87,7 +89,8 @@ export interface LivingDexViewProps {
    * StorageAdapter.moveEntriesToLocation's own doc comment. */
   onMoveEntriesToLocation: (storageLocationId: number, placements: FillInPlacement[]) => Promise<void>
   /** Leg 3 of the Species database milestone: threaded down to DexTable/DexBoxGrid's
-   * SpeciesDetailPopup — opens App.tsx's full species page. */
+   * SpeciesDetailPopup — opens App.tsx's full species page. DexHybridGrid too, since
+   * 2026-09-28. */
   onOpenFullPage: (target: SpeciesDetailTarget) => void
   /** Leg 1 of the Full UI/UX pass: forwarded to CollectionHeaderBar's Storage Locations/
    * Trainer Profiles popups — see useCollectionData's loadAll/refetchEntries. */
@@ -307,7 +310,11 @@ export function LivingDexView(props: LivingDexViewProps): JSX.Element {
           storageLocations={storageLocations}
           speciesAvailability={speciesAvailability}
           species={species}
+          forms={forms}
+          evolutionEdges={evolutionEdges}
+          formeSwitchGroups={formeSwitchGroups}
           onSaveOrigin={onSaveOrigin}
+          onOpenFullPage={onOpenFullPage}
         />
       </div>
       {/* Same hidden-not-unmounted treatment. Unlike List/Hybrid above, Box view reads
