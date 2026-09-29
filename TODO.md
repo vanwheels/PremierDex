@@ -43,16 +43,6 @@ day) the calculator doesn't collect inputs for yet. Pick up only if Vanny wants 
 supported; would need one extra input per conditional ball, not a formula change.
 Last touched: 2026-09-23. Re-check count: 0.
 
-### [DexBoxGrid.tsx / DexBoxPane.tsx over the file-size cap] — unscheduled
-Surfaced by Leg 8 of the Species detail popup + evolution family tree milestone: threading
-`formeSwitchGroups` through both files' props (same mechanical pattern `evolutionEdges` already
-used) pushed `DexBoxGrid.tsx` to exactly 500 lines (the hard cap) and `DexBoxPane.tsx` to 506 —
-`DexBoxPane.tsx` was already over the 500-line hard cap (502) before this leg. Small, purely
-additive prop-threading isn't the moment to stop and split either file, so left for a dedicated
-Codebase File-Size Cleanup-style pass — same treatment past legs of that milestone gave
-fetch-pokemon-forms.ts/met-locations.test.ts (see COMPLETED.md).
-Last touched: 2026-09-22. Re-check count: 0.
-
 ### [Species detail popup entry point on Hybrid view] — unscheduled
 Leg 3 of the Species detail popup + evolution family tree milestone wired the info-button
 entry point into DexTable/DexRow (List view) and DexBoxDetailPanel (Box view) per Vanny's

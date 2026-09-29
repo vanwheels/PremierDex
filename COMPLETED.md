@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [DexBoxGrid.tsx / DexBoxPane.tsx over the file-size cap] — 2026-09-28
+Split DexBoxGrid's second-pane/cross-location-move machinery into `useSecondBoxPane.ts` and
+DexBoxPane's multi-select/placeholder-select state into `useBoxSelection.ts`, no behavior
+change. DexBoxGrid.tsx 500 -> 437 lines, DexBoxPane.tsx 511 -> 442 lines. See commit
+`0c40a76`.
+
 ## [Where to Find section on SpeciesPage, Leg 3] — 2026-09-23
 Final leg — milestone shipped, see MILESTONES.md. Added `encounterLocationsForForm`
 (`encountersFormat.ts`), grouping `encounters.json`'s raw per-location/version/method rows
