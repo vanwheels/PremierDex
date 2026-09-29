@@ -1,5 +1,18 @@
 # COMPLETED
 
+## [Evolution methods per version group, Leg 2] — 2026-09-28
+Scoping only, no code change. Resolved both open questions Leg 1 left: the version-group
+chronology needed for the "since" tag semantics turns out to already exist in
+`learnsets.json`'s ordered `versionGroups` (just needs extracting, plus two tags it's missing
+that `evolution-edges.json` actually uses — `the-isle-of-armor`, `legends-za`); "where the game
+context comes from" turned out to be a per-call-site patchwork (Dex Locations pane already
+knows a specific version; Box/Hybrid owned entries have `entry.originGame`; most other call
+sites — Dex Table, unowned Box/Hybrid cells — have none). Confirmed with Vanny: no-context case
+keeps today's joined-list rendering unchanged; `entry.originGame` is worth threading through.
+Split into Leg 3 (chronology + game->version-group mapping, data/logic only) and Leg 4 (thread
+game context through, filter the rendered method) — see TODO.md and
+`docs/investigations/per-version-variance.md`.
+
 ## [Evolution methods per version group, Leg 1] — 2026-09-28
 Data-layer fix only: `fetch-evolution-chains.ts` now tags each distinct method of a
 multi-method edge (Magnezone/Leafeon/Glaceon/Probopass-style location-or-stone alternatives)

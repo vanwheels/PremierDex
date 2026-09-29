@@ -6,19 +6,32 @@ Standalone items not part of the current milestone — pick up opportunistically
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
 
-### [Evolution methods per version group] — Leg 2
-Leg 1 (see COMPLETED.md) preserved PokeAPI's `version_group` tag through to
-`evolution-edges.json`'s `methodsByVersionGroup` — the data exists now, but EvolutionTree still
-renders the old joined `method` string unchanged. Vanny's call on display: per-game filter (show
-only the method valid for the game context the popup is showing), not a labeled list. Two things
-this leg still needs to scope before it's leg-sized:
-- A version-group chronology (oldest-to-newest ordering) — doesn't exist anywhere in the
-  codebase yet, and is needed to resolve PokeAPI's "first appeared in" tag semantics (an
-  untagged later group inherits whichever tagged method most recently precedes it).
-- Where "the game context the popup is showing" actually comes from — SpeciesDetailTarget
-  currently carries only an optional `generation`, not a specific version group/game, and the
-  popup can be opened from contexts (Box view, Hybrid view) with no single game selected at all.
-See `docs/investigations/per-version-variance.md`.
+### [Evolution methods per version group] — Leg 3
+Leg 2 (see COMPLETED.md) resolved both open scoping questions — see
+`docs/investigations/per-version-variance.md`'s "Leg 2 scoping" section for the full findings.
+This leg is the data/logic layer only, no UI change:
+- Extract a shared version-group chronology module from `learnsets.json`'s already-ordered
+  `versionGroups` (name + generation + PokeAPI `order`), supplementing the two tags
+  `evolution-edges.json` actually uses that it's missing (`the-isle-of-armor`, `legends-za`) —
+  looked up from PokeAPI's `/version-group` directly.
+- Build a specific-game -> version-group mapping (e.g. `diamond` -> `diamond-pearl`), since
+  every game-context source Leg 4 will thread through is game- or generation-level, not
+  version-group-level.
+- A resolver that, given a version group and an edge's `methodsByVersionGroup`, returns the
+  method that applies (walking the chronology backward from that version group to the most
+  recent tagged entry — the "since" semantics).
+Last touched: 2026-09-28. Re-check count: 0.
+
+### [Evolution methods per version group] — Leg 4
+Depends on Leg 3's resolver. Threads real game context through to `EvolutionTree` and applies
+it:
+- Extend `SpeciesDetailTarget` to carry a specific game (not just `generation`).
+- Dex Locations pane (`DexLocationDetail`/`DexLocations`): pass the already-known selected
+  version instead of collapsing it to `generation`.
+- Box/Hybrid view owned entries: pass `entry.originGame`.
+- `EvolutionTree`: when a specific game is known, render Leg 3's resolved single method instead
+  of the joined string; when none is known (Dex Table, unowned Box/Hybrid cells — confirmed
+  with Vanny 2026-09-28 this stays as-is), keep today's joined-list rendering unchanged.
 Last touched: 2026-09-28. Re-check count: 0.
 
 ### [Species page Where to Find method tables] — unscheduled

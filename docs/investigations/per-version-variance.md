@@ -54,3 +54,69 @@ wrong answer shows up. Nothing this milestone stores has a within-generation gap
 fails to model, except evolution methods, and those need a consumer-shaped fix (keep the
 version-group tag through to the data) rather than a curated table. Deferred to Unscheduled
 as `[Evolution methods per version group]`.
+
+## Leg 2 scoping (2026-09-28): the two open questions
+
+Leg 1 landed `methodsByVersionGroup`. Before display work is leg-sized, two things needed
+resolving:
+
+### Version-group chronology
+
+Already exists, just not extracted anywhere reusable. `data/pokemon/learnsets.json`'s
+`versionGroups` array is written in PokeAPI's own chronological `order` (see
+`fetch-species-details.ts`'s `versionGroupMeta`/`buildLearnsetData`), 24 entries, each with a
+`generation`. That's the ordering the "since" tag needs (an untagged later group inherits
+whichever tagged method most recently precedes it) — it just needs pulling into a shared
+module instead of re-derived.
+
+One real gap found cross-checking it against `evolution-edges.json`'s actual tags: two version
+groups evolution data uses aren't in that list —
+- `the-isle-of-armor` — a genuine separate PokeAPI version group (Sword/Shield's Isle of Armor
+  DLC, distinct from `sword-shield`; Kubfu/Urshifu-family evolutions are tagged with it).
+  `learnsets.json`'s fetch apparently doesn't need DLC-specific groups, so it was never pulled.
+- `legends-za` — Legends: Z-A. Missing from the same list, likely because it postdates
+  whichever PokeAPI snapshot `learnsets.json` was last regenerated against.
+
+So the shared chronology module needs these two added (order/generation looked up from
+PokeAPI's `/version-group` directly) on top of extracting the other 24, not a verbatim copy.
+
+Also worth flagging for whoever implements: PokeAPI's `order` field does not track real-world
+release-date chronology once spinoffs interleave with mainline (e.g. `ruby-sapphire`,
+`emerald`, `colosseum`, `xd`, `firered-leafgreen` in that literal order — not release order).
+It's correct within the mainline-to-mainline lineage that "since" tags actually need
+(diamond-pearl -> platinum -> heartgold-soulsilver is in the right order), so this shouldn't
+bite in practice, but it means "PokeAPI's order" isn't a synonym for "release date" if a future
+edge case involves a spinoff.
+
+### Where the game context comes from
+
+Not one missing piece — a patchwork, most of it currently discarded before it reaches the
+popup:
+- **Dex Locations pane** (`DexLocationDetail`/`DexLocations`): already knows a *specific*
+  PokeAPI version (Diamond vs. Pearl vs. Platinum are separate `DexGame` entries, keyed by
+  `versionName` — see `dexLocationIndex.ts`/`encountersFormat.ts`'s `gameRefForVersion`), but
+  collapses it to a bare `generation` number before building `SpeciesDetailTarget`.
+- **Box/Hybrid view, owned entries**: `entry.originGame` (`DexBoxDetailPanel.tsx`/
+  `DexHybridDetailPanel.tsx`) is a specific named game, richer than a generation, but is
+  never passed to `SpeciesDetailTarget` at all today.
+- **Box/Hybrid view, unowned/placeholder cells**, and the **main Dex Table / Dex Pokémon
+  List**: no game context exists at these call sites, period.
+- **`SpeciesDetailPopup`/`EvolutionTree` themselves currently ignore `target.generation`
+  entirely** — it's only consumed by `SpeciesPage`'s sprite-generation stepper, a separate,
+  independently-changeable piece of state unrelated to the popup's evolution tree view.
+- Nothing anywhere maps a specific game (`diamond`) to its version-group tag
+  (`diamond-pearl`) — needed regardless of source, since `methodsByVersionGroup` is tagged at
+  version-group granularity and every context above is game- or generation-level.
+
+**Confirmed with Vanny 2026-09-28:**
+- When no specific game is known (the majority of entry points — Dex Table, unowned Box/
+  Hybrid cells), keep today's joined-list method string unchanged. Filtering only replaces
+  the joined string when a specific game *is* known; nothing regresses for the no-context
+  case.
+- `entry.originGame` is worth threading through — extend `SpeciesDetailTarget` to carry a
+  specific game (not just generation), sourced from the Dex Locations pane's selected version
+  and from Box/Hybrid owned entries' `originGame`.
+
+Split into Leg 3 (chronology + game->version-group mapping, pure data/logic, no UI change) and
+Leg 4 (thread game context through `SpeciesDetailTarget` at the two known call sites + filter
+`EvolutionTree`'s rendered method) — see TODO.md.
