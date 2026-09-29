@@ -31,7 +31,12 @@
  * built by evolution-method-format.ts (see its doc comment) from every remaining condition
  * field on the bucket's evolution_details entries, deduped and joined with " or " when a
  * form pairing has more than one distinct way to reach it (e.g. Feebas -> Milotic via
- * trade-holding-Prism-Scale or a beauty threshold).
+ * trade-holding-Prism-Scale or a beauty threshold). Each such multi-method edge also gets a
+ * `methodsByVersionGroup` breakdown (picked up from the Unscheduled backlog, 2026-09-28 —
+ * see docs/investigations/per-version-variance.md) tagging each distinct method with the
+ * version group(s) PokeAPI attests it under, so a consumer can eventually show "which game
+ * gets which method" instead of the current run-on "or" sentence — see that field's own doc
+ * comment on EvolutionEdge for what it does and doesn't resolve.
  *
  * `fromFormName`/`toFormName` have to match forms.json's formName convention exactly (Leg 2's
  * tree UI joins on it to find each bubble's sprite/label) — verified live 2026-09-22 by
@@ -100,6 +105,15 @@ interface EvolutionEdge {
   toSpeciesId: number
   toFormName: string
   method: string
+  /** Set only when a form pairing has more than one distinct method (the ~60 edges
+   * docs/investigations/per-version-variance.md found) — one entry per distinct method
+   * string, each with every version group its evolution_details entries carried a
+   * version_group tag for (deduped, sorted). Omitted (not just empty) for the common single-
+   * method case, so most of the ~700 edges stay exactly as lean as before this field existed.
+   * PokeAPI's tag is "first appeared in", not an exhaustive per-game list — see that doc for
+   * why resolving "which game shows which method" needs a version-group ordering table this
+   * field alone doesn't provide; that's left to the UI-facing leg that consumes this data. */
+  methodsByVersionGroup?: Array<{ method: string; versionGroups: string[] }>
 }
 
 /** One parent-to-child link, not yet bucketed by form pairing — bucketing needs
@@ -220,8 +234,29 @@ function groupEdgesByForm(
 
   return [...buckets.entries()].map(([key, group]) => {
     const [fromFormName, toFormName] = key.split('|')
-    const methods = [...new Set(group.map(formatEvolutionMethod))]
-    return { fromSpeciesId: edge.fromSpeciesId, fromFormName, toSpeciesId: edge.toSpeciesId, toFormName, method: methods.join(' or ') }
+    // Every distinct method string in this bucket, each tagged with the version group(s) its
+    // evolution_details entries carried — preserves formatEvolutionMethod's own dedup (a
+    // method reachable via several tagged entries collapses to one), just keeping the tags
+    // instead of discarding them.
+    const versionGroupsByMethod = new Map<string, Set<string>>()
+    for (const d of group) {
+      const method = formatEvolutionMethod(d)
+      const versionGroups = versionGroupsByMethod.get(method) ?? new Set<string>()
+      versionGroups.add(d.version_group.name)
+      versionGroupsByMethod.set(method, versionGroups)
+    }
+    const methods = [...versionGroupsByMethod.keys()]
+    const result: EvolutionEdge = {
+      fromSpeciesId: edge.fromSpeciesId,
+      fromFormName,
+      toSpeciesId: edge.toSpeciesId,
+      toFormName,
+      method: methods.join(' or ')
+    }
+    if (methods.length > 1) {
+      result.methodsByVersionGroup = methods.map((m) => ({ method: m, versionGroups: [...versionGroupsByMethod.get(m)!].sort() }))
+    }
+    return result
   })
 }
 

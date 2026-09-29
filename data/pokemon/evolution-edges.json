@@ -466,7 +466,51 @@
     "fromFormName": "base",
     "toSpeciesId": 462,
     "toFormName": "base",
-    "method": "At Mt Coronet + Level Up or At Chargestone Cave + Level Up or At Kalos Route 13 + Level Up or At Blush Mountain + Level Up or At Vast Poni Canyon + Level Up or Thunder Stone or At New Mauville + Level Up"
+    "method": "At Mt Coronet + Level Up or At Chargestone Cave + Level Up or At Kalos Route 13 + Level Up or At Blush Mountain + Level Up or At Vast Poni Canyon + Level Up or Thunder Stone or At New Mauville + Level Up",
+    "methodsByVersionGroup": [
+      {
+        "method": "At Mt Coronet + Level Up",
+        "versionGroups": [
+          "diamond-pearl"
+        ]
+      },
+      {
+        "method": "At Chargestone Cave + Level Up",
+        "versionGroups": [
+          "black-white"
+        ]
+      },
+      {
+        "method": "At Kalos Route 13 + Level Up",
+        "versionGroups": [
+          "x-y"
+        ]
+      },
+      {
+        "method": "At Blush Mountain + Level Up",
+        "versionGroups": [
+          "sun-moon"
+        ]
+      },
+      {
+        "method": "At Vast Poni Canyon + Level Up",
+        "versionGroups": [
+          "sun-moon"
+        ]
+      },
+      {
+        "method": "Thunder Stone",
+        "versionGroups": [
+          "sword-shield"
+        ]
+      },
+      {
+        "method": "At New Mauville + Level Up",
+        "versionGroups": [
+          "omega-ruby-alpha-sapphire"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 83,
@@ -746,21 +790,111 @@
     "fromFormName": "base",
     "toSpeciesId": 470,
     "toFormName": "base",
-    "method": "At Eterna Forest + Near a Special Rock + Level Up or At Pinwheel Forest + Near a Special Rock + Level Up or At Kalos Route 20 + Near a Special Rock + Level Up or Leaf Stone or At Petalburg Woods + Near a Special Rock + Level Up or At Lush Jungle + Near a Special Rock + Level Up"
+    "method": "At Eterna Forest + Near a Special Rock + Level Up or At Pinwheel Forest + Near a Special Rock + Level Up or At Kalos Route 20 + Near a Special Rock + Level Up or Leaf Stone or At Petalburg Woods + Near a Special Rock + Level Up or At Lush Jungle + Near a Special Rock + Level Up",
+    "methodsByVersionGroup": [
+      {
+        "method": "At Eterna Forest + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "diamond-pearl"
+        ]
+      },
+      {
+        "method": "At Pinwheel Forest + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "black-white"
+        ]
+      },
+      {
+        "method": "At Kalos Route 20 + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "x-y"
+        ]
+      },
+      {
+        "method": "Leaf Stone",
+        "versionGroups": [
+          "sword-shield"
+        ]
+      },
+      {
+        "method": "At Petalburg Woods + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "omega-ruby-alpha-sapphire"
+        ]
+      },
+      {
+        "method": "At Lush Jungle + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "sun-moon"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 133,
     "fromFormName": "base",
     "toSpeciesId": 471,
     "toFormName": "base",
-    "method": "At Sinnoh Route 217 + Near a Special Rock + Level Up or At Twist Mountain + Near a Special Rock + Level Up or At Frost Cavern + Near a Special Rock + Level Up or Ice Stone or At Shoal Cave + Near a Special Rock + Level Up or At Mount Lanakila + Near a Special Rock + Level Up"
+    "method": "At Sinnoh Route 217 + Near a Special Rock + Level Up or At Twist Mountain + Near a Special Rock + Level Up or At Frost Cavern + Near a Special Rock + Level Up or Ice Stone or At Shoal Cave + Near a Special Rock + Level Up or At Mount Lanakila + Near a Special Rock + Level Up",
+    "methodsByVersionGroup": [
+      {
+        "method": "At Sinnoh Route 217 + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "diamond-pearl"
+        ]
+      },
+      {
+        "method": "At Twist Mountain + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "black-white"
+        ]
+      },
+      {
+        "method": "At Frost Cavern + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "x-y"
+        ]
+      },
+      {
+        "method": "Ice Stone",
+        "versionGroups": [
+          "sword-shield"
+        ]
+      },
+      {
+        "method": "At Shoal Cave + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "omega-ruby-alpha-sapphire"
+        ]
+      },
+      {
+        "method": "At Mount Lanakila + Near a Special Rock + Level Up",
+        "versionGroups": [
+          "sun-moon"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 133,
     "fromFormName": "base",
     "toSpeciesId": 700,
     "toFormName": "base",
-    "method": "2 Affection + Knows a Fairy Move + Level Up or 160 Friendship + Knows a Fairy Move + Level Up"
+    "method": "2 Affection + Knows a Fairy Move + Level Up or 160 Friendship + Knows a Fairy Move + Level Up",
+    "methodsByVersionGroup": [
+      {
+        "method": "2 Affection + Knows a Fairy Move + Level Up",
+        "versionGroups": [
+          "x-y"
+        ]
+      },
+      {
+        "method": "160 Friendship + Knows a Fairy Move + Level Up",
+        "versionGroups": [
+          "sword-shield"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 137,
@@ -816,7 +950,21 @@
     "fromFormName": "base",
     "toSpeciesId": 156,
     "toFormName": "base",
-    "method": "Level 14 or Level 17"
+    "method": "Level 14 or Level 17",
+    "methodsByVersionGroup": [
+      {
+        "method": "Level 14",
+        "versionGroups": [
+          "gold-silver"
+        ]
+      },
+      {
+        "method": "Level 17",
+        "versionGroups": [
+          "legends-arceus"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 156,
@@ -1054,7 +1202,27 @@
     "fromFormName": "hisui",
     "toSpeciesId": 904,
     "toFormName": "base",
-    "method": "Use Barb Barrage as a Strong Style Move 20 Times or Knows Barb Barrage + Level Up or Use Barb Barrage 20 Times"
+    "method": "Use Barb Barrage as a Strong Style Move 20 Times or Knows Barb Barrage + Level Up or Use Barb Barrage 20 Times",
+    "methodsByVersionGroup": [
+      {
+        "method": "Use Barb Barrage as a Strong Style Move 20 Times",
+        "versionGroups": [
+          "legends-arceus"
+        ]
+      },
+      {
+        "method": "Knows Barb Barrage + Level Up",
+        "versionGroups": [
+          "scarlet-violet"
+        ]
+      },
+      {
+        "method": "Use Barb Barrage 20 Times",
+        "versionGroups": [
+          "legends-za"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 215,
@@ -1439,7 +1607,51 @@
     "fromFormName": "base",
     "toSpeciesId": 476,
     "toFormName": "base",
-    "method": "At Mt Coronet + Level Up or At Chargestone Cave + Level Up or At Kalos Route 13 + Level Up or At Blush Mountain + Level Up or At Vast Poni Canyon + Level Up or Thunder Stone or At New Mauville + Level Up"
+    "method": "At Mt Coronet + Level Up or At Chargestone Cave + Level Up or At Kalos Route 13 + Level Up or At Blush Mountain + Level Up or At Vast Poni Canyon + Level Up or Thunder Stone or At New Mauville + Level Up",
+    "methodsByVersionGroup": [
+      {
+        "method": "At Mt Coronet + Level Up",
+        "versionGroups": [
+          "diamond-pearl"
+        ]
+      },
+      {
+        "method": "At Chargestone Cave + Level Up",
+        "versionGroups": [
+          "black-white"
+        ]
+      },
+      {
+        "method": "At Kalos Route 13 + Level Up",
+        "versionGroups": [
+          "x-y"
+        ]
+      },
+      {
+        "method": "At Blush Mountain + Level Up",
+        "versionGroups": [
+          "sun-moon"
+        ]
+      },
+      {
+        "method": "At Vast Poni Canyon + Level Up",
+        "versionGroups": [
+          "sun-moon"
+        ]
+      },
+      {
+        "method": "Thunder Stone",
+        "versionGroups": [
+          "scarlet-violet"
+        ]
+      },
+      {
+        "method": "At New Mauville + Level Up",
+        "versionGroups": [
+          "omega-ruby-alpha-sapphire"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 300,
@@ -1586,7 +1798,22 @@
     "fromFormName": "base",
     "toSpeciesId": 350,
     "toFormName": "base",
-    "method": "170 Beauty + Level Up or Trade + Holding Prism Scale"
+    "method": "170 Beauty + Level Up or Trade + Holding Prism Scale",
+    "methodsByVersionGroup": [
+      {
+        "method": "170 Beauty + Level Up",
+        "versionGroups": [
+          "omega-ruby-alpha-sapphire",
+          "ruby-sapphire"
+        ]
+      },
+      {
+        "method": "Trade + Holding Prism Scale",
+        "versionGroups": [
+          "black-white"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 353,
@@ -2667,10 +2894,276 @@
     "method": "Level 9"
   },
   {
+    "fromSpeciesId": 664,
+    "fromFormName": "polar",
+    "toSpeciesId": 665,
+    "toFormName": "polar",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "tundra",
+    "toSpeciesId": 665,
+    "toFormName": "tundra",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "continental",
+    "toSpeciesId": 665,
+    "toFormName": "continental",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "garden",
+    "toSpeciesId": 665,
+    "toFormName": "garden",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "elegant",
+    "toSpeciesId": 665,
+    "toFormName": "elegant",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "meadow",
+    "toSpeciesId": 665,
+    "toFormName": "meadow",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "modern",
+    "toSpeciesId": 665,
+    "toFormName": "modern",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "marine",
+    "toSpeciesId": 665,
+    "toFormName": "marine",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "archipelago",
+    "toSpeciesId": 665,
+    "toFormName": "archipelago",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "high-plains",
+    "toSpeciesId": 665,
+    "toFormName": "high-plains",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "sandstorm",
+    "toSpeciesId": 665,
+    "toFormName": "sandstorm",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "river",
+    "toSpeciesId": 665,
+    "toFormName": "river",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "monsoon",
+    "toSpeciesId": 665,
+    "toFormName": "monsoon",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "savanna",
+    "toSpeciesId": 665,
+    "toFormName": "savanna",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "sun",
+    "toSpeciesId": 665,
+    "toFormName": "sun",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "ocean",
+    "toSpeciesId": 665,
+    "toFormName": "ocean",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "jungle",
+    "toSpeciesId": 665,
+    "toFormName": "jungle",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "fancy",
+    "toSpeciesId": 665,
+    "toFormName": "fancy",
+    "method": "Level 9"
+  },
+  {
+    "fromSpeciesId": 664,
+    "fromFormName": "poke-ball",
+    "toSpeciesId": 665,
+    "toFormName": "poke-ball",
+    "method": "Level 9"
+  },
+  {
     "fromSpeciesId": 665,
     "fromFormName": "base",
     "toSpeciesId": 666,
+    "toFormName": "icy-snow",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "polar",
+    "toSpeciesId": 666,
+    "toFormName": "polar",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "tundra",
+    "toSpeciesId": 666,
+    "toFormName": "tundra",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "continental",
+    "toSpeciesId": 666,
+    "toFormName": "continental",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "garden",
+    "toSpeciesId": 666,
+    "toFormName": "garden",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "elegant",
+    "toSpeciesId": 666,
+    "toFormName": "elegant",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "meadow",
+    "toSpeciesId": 666,
     "toFormName": "base",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "modern",
+    "toSpeciesId": 666,
+    "toFormName": "modern",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "marine",
+    "toSpeciesId": 666,
+    "toFormName": "marine",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "archipelago",
+    "toSpeciesId": 666,
+    "toFormName": "archipelago",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "high-plains",
+    "toSpeciesId": 666,
+    "toFormName": "high-plains",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "sandstorm",
+    "toSpeciesId": 666,
+    "toFormName": "sandstorm",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "river",
+    "toSpeciesId": 666,
+    "toFormName": "river",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "monsoon",
+    "toSpeciesId": 666,
+    "toFormName": "monsoon",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "savanna",
+    "toSpeciesId": 666,
+    "toFormName": "savanna",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "sun",
+    "toSpeciesId": 666,
+    "toFormName": "sun",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "ocean",
+    "toSpeciesId": 666,
+    "toFormName": "ocean",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "jungle",
+    "toSpeciesId": 666,
+    "toFormName": "jungle",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "fancy",
+    "toSpeciesId": 666,
+    "toFormName": "fancy",
+    "method": "Level 12"
+  },
+  {
+    "fromSpeciesId": 665,
+    "fromFormName": "poke-ball",
+    "toSpeciesId": 666,
+    "toFormName": "poke-ball",
     "method": "Level 12"
   },
   {
@@ -3021,14 +3514,48 @@
     "fromFormName": "base",
     "toSpeciesId": 738,
     "toFormName": "base",
-    "method": "At Vast Poni Canyon + Level Up or At Blush Mountain + Level Up or Thunder Stone"
+    "method": "At Vast Poni Canyon + Level Up or At Blush Mountain + Level Up or Thunder Stone",
+    "methodsByVersionGroup": [
+      {
+        "method": "At Vast Poni Canyon + Level Up",
+        "versionGroups": [
+          "sun-moon"
+        ]
+      },
+      {
+        "method": "At Blush Mountain + Level Up",
+        "versionGroups": [
+          "sun-moon"
+        ]
+      },
+      {
+        "method": "Thunder Stone",
+        "versionGroups": [
+          "sword-shield"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 739,
     "fromFormName": "base",
     "toSpeciesId": 740,
     "toFormName": "base",
-    "method": "At Mount Lanakila + Level Up or Ice Stone"
+    "method": "At Mount Lanakila + Level Up or Ice Stone",
+    "methodsByVersionGroup": [
+      {
+        "method": "At Mount Lanakila + Level Up",
+        "versionGroups": [
+          "sun-moon"
+        ]
+      },
+      {
+        "method": "Ice Stone",
+        "versionGroups": [
+          "scarlet-violet"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 742,
@@ -3427,7 +3954,441 @@
     "fromFormName": "base",
     "toSpeciesId": 869,
     "toFormName": "base",
-    "method": "Spin While Holding a Sweet"
+    "method": "Spin While Holding a Sweet + During the Day + Holding Strawberry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-cream-strawberry-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Strawberry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "matcha-cream-strawberry-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Strawberry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "mint-cream-strawberry-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Strawberry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "lemon-cream-strawberry-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Strawberry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "salted-cream-strawberry-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Strawberry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-swirl-strawberry-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Strawberry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "caramel-swirl-strawberry-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Strawberry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "rainbow-swirl-strawberry-sweet",
+    "method": "Spin While Holding a Sweet + At Dusk + Holding Strawberry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "vanilla-cream-berry-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Berry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-cream-berry-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Berry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "matcha-cream-berry-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Berry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "mint-cream-berry-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Berry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "lemon-cream-berry-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Berry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "salted-cream-berry-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Berry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-swirl-berry-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Berry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "caramel-swirl-berry-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Berry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "rainbow-swirl-berry-sweet",
+    "method": "Spin While Holding a Sweet + At Dusk + Holding Berry Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "vanilla-cream-love-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Love Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-cream-love-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Love Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "matcha-cream-love-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Love Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "mint-cream-love-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Love Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "lemon-cream-love-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Love Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "salted-cream-love-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Love Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-swirl-love-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Love Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "caramel-swirl-love-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Love Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "rainbow-swirl-love-sweet",
+    "method": "Spin While Holding a Sweet + At Dusk + Holding Love Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "vanilla-cream-star-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Star Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-cream-star-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Star Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "matcha-cream-star-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Star Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "mint-cream-star-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Star Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "lemon-cream-star-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Star Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "salted-cream-star-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Star Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-swirl-star-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Star Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "caramel-swirl-star-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Star Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "rainbow-swirl-star-sweet",
+    "method": "Spin While Holding a Sweet + At Dusk + Holding Star Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "vanilla-cream-clover-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Clover Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-cream-clover-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Clover Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "matcha-cream-clover-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Clover Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "mint-cream-clover-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Clover Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "lemon-cream-clover-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Clover Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "salted-cream-clover-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Clover Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-swirl-clover-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Clover Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "caramel-swirl-clover-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Clover Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "rainbow-swirl-clover-sweet",
+    "method": "Spin While Holding a Sweet + At Dusk + Holding Clover Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "vanilla-cream-flower-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Flower Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-cream-flower-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Flower Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "matcha-cream-flower-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Flower Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "mint-cream-flower-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Flower Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "lemon-cream-flower-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Flower Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "salted-cream-flower-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Flower Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-swirl-flower-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Flower Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "caramel-swirl-flower-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Flower Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "rainbow-swirl-flower-sweet",
+    "method": "Spin While Holding a Sweet + At Dusk + Holding Flower Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "vanilla-cream-ribbon-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Ribbon Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-cream-ribbon-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Ribbon Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "matcha-cream-ribbon-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Ribbon Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "mint-cream-ribbon-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Ribbon Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "lemon-cream-ribbon-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Ribbon Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "salted-cream-ribbon-sweet",
+    "method": "Spin While Holding a Sweet + At Night + Holding Ribbon Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "ruby-swirl-ribbon-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Ribbon Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "caramel-swirl-ribbon-sweet",
+    "method": "Spin While Holding a Sweet + During the Day + Holding Ribbon Sweet + null% Chance"
+  },
+  {
+    "fromSpeciesId": 868,
+    "fromFormName": "base",
+    "toSpeciesId": 869,
+    "toFormName": "rainbow-swirl-ribbon-sweet",
+    "method": "Spin While Holding a Sweet + At Dusk + Holding Ribbon Sweet + null% Chance"
   },
   {
     "fromSpeciesId": 872,
@@ -3469,14 +4430,42 @@
     "fromFormName": "base",
     "toSpeciesId": 892,
     "toFormName": "base",
-    "method": "Tower of Darkness (Sword Only) or Scroll of Darkness"
+    "method": "Tower of Darkness (Sword Only) or Scroll of Darkness",
+    "methodsByVersionGroup": [
+      {
+        "method": "Tower of Darkness (Sword Only)",
+        "versionGroups": [
+          "the-isle-of-armor"
+        ]
+      },
+      {
+        "method": "Scroll of Darkness",
+        "versionGroups": [
+          "scarlet-violet"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 891,
     "fromFormName": "base",
     "toSpeciesId": 892,
     "toFormName": "rapid-strike",
-    "method": "Tower of Waters (Shield Only) or Scroll of Waters"
+    "method": "Tower of Waters (Shield Only) or Scroll of Waters",
+    "methodsByVersionGroup": [
+      {
+        "method": "Tower of Waters (Shield Only)",
+        "versionGroups": [
+          "the-isle-of-armor"
+        ]
+      },
+      {
+        "method": "Scroll of Waters",
+        "versionGroups": [
+          "scarlet-violet"
+        ]
+      }
+    ]
   },
   {
     "fromSpeciesId": 906,

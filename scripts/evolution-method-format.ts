@@ -25,6 +25,12 @@
  */
 
 export interface PokeApiEvolutionDetail {
+  /** The version group this entry first appeared in — a "since" tag, not an exhaustive
+   * per-game list (see docs/investigations/per-version-variance.md). Unused by
+   * formatEvolutionMethod itself; fetch-evolution-chains.ts's groupEdgesByForm reads it
+   * directly to tag each distinct method string with the version group(s) it's attested
+   * under. */
+  version_group: { name: string }
   trigger: { name: string } | null
   item: { name: string } | null
   held_item: { name: string } | null
