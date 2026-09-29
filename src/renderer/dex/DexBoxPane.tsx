@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type MouseEvent } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { CollectionEntryOriginInput, Form, Gender, Species } from '@shared/types/pokemon'
 import type { StorageLocation } from '@shared/types/storage-location'
 import type { StorageBox } from '@shared/types/box'
@@ -18,7 +18,8 @@ import { RibbonsMarksModal } from './RibbonsMarksModal'
 import { SpeciesDetailPopup } from './SpeciesDetailPopup'
 import type { SpeciesDetailTarget } from './SpeciesDetailPopup'
 import { prefetchBoxSprites } from './spritePrefetch'
-import type { Box, BoxCell, BoxPlaceholderCell, CellTarget } from './types'
+import type { Box, BoxCell, CellTarget } from './types'
+import { useBoxSelection } from './useBoxSelection'
 
 interface DexBoxPaneProps {
   /** This pane's own location's full box list — see buildBoxes.ts. Shared with the other
@@ -142,21 +143,6 @@ export function DexBoxPane({
 }: DexBoxPaneProps): JSX.Element {
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species])
   const [boxIndex, setBoxIndex] = useState(initialBoxIndex)
-  // Leg 4 of the Box View Polish milestone: multi-select. `selectedSlots` is ordered by
-  // *selection* order, not slot order — a ctrl-click appends to the end, a shift-click
-  // range is written in ascending slot order (see handleCellClick) — since that order is
-  // what a multi-drag's payload carries through to a contiguous fill (handleDropOnSlot).
-  // `selectionAnchor` is the slot a plain or ctrl-click last landed on, i.e. the far end a
-  // subsequent shift-click range is computed from; only a plain click moves it back
-  // (Explorer-style), so repeated shift-clicks re-select from the same anchor.
-  const [selectedSlots, setSelectedSlots] = useState<number[]>([])
-  const [selectionAnchor, setSelectionAnchor] = useState<number | null>(null)
-  // Leg 2 of the Dex completeness tier migration: a placeholder can now be single-selected
-  // (click to view its specifics in the detail panel) — deliberately a separate piece of
-  // state from selectedSlots/selectionAnchor above rather than folding placeholders into
-  // that multi-select machinery, since a placeholder supports neither multi-select nor
-  // drag (see DexBoxGridCell's onClickPlaceholder wiring below).
-  const [selectedPlaceholderSlot, setSelectedPlaceholderSlot] = useState<number | null>(null)
   const [editingOrigin, setEditingOrigin] = useState(false)
   const [editingRibbonsMarks, setEditingRibbonsMarks] = useState(false)
   // Leg 3 of the Species detail popup + evolution family tree milestone — same "parent
@@ -179,74 +165,20 @@ export function DexBoxPane({
   const clampedIndex = Math.min(boxIndex, boxes.length - 1)
   const box = boxes[clampedIndex]
   const cells = box.cells
-  // The detail panel only ever shows one Pokémon's info — a multi-selection shows nothing
-  // rather than guessing which of several to display (Vanny's implicit call: this leg's
-  // design decisions only specify drag/drop behavior, not a multi-select detail view).
-  // Narrowed to 'entry' specifically: selectedSlots (see handleCellClick below) only ever
-  // holds real-entry slots, but cells' own type still allows a placeholder there.
-  const selectedSlotCell = selectedSlots.length === 1 ? cells[selectedSlots[0]] : null
-  const selectedEntryCell = selectedSlotCell?.kind === 'entry' ? selectedSlotCell : null
-  // Leg 2 of the Dex completeness tier migration: a single selected placeholder, shown
-  // read-only in the same detail panel — see selectedPlaceholderSlot's own doc comment.
-  const selectedPlaceholderSlotCell = selectedPlaceholderSlot !== null ? cells[selectedPlaceholderSlot] : null
-  const selectedPlaceholderCell = selectedPlaceholderSlotCell?.kind === 'placeholder' ? selectedPlaceholderSlotCell : null
-  const detailCell: BoxCell | BoxPlaceholderCell | null = selectedEntryCell ?? selectedPlaceholderCell
-
-  const clearSelection = (): void => {
-    setSelectedSlots([])
-    setSelectionAnchor(null)
-  }
-
-  // Plain click replaces the selection with just this slot; ctrl/cmd-click toggles it
-  // into/out of the current selection; shift-click selects every filled slot in the
-  // contiguous index range between the anchor and this slot. Only ever wired to a real
-  // entry cell's SpriteThumbnail (see the grid render below) — a placeholder cell's own
-  // SpriteThumbnail has a no-op onClick — so `cells[slot]` is always an entry cell here.
-  const handleCellClick = (slot: number, e: MouseEvent): void => {
-    setSelectedPlaceholderSlot(null)
-    if (e.shiftKey && selectionAnchor !== null) {
-      const [lo, hi] = selectionAnchor <= slot ? [selectionAnchor, slot] : [slot, selectionAnchor]
-      const range: number[] = []
-      for (let i = lo; i <= hi; i++) {
-        // Only real entries are selectable — a placeholder cell has no onClick wired to
-        // this handler (see the grid render below), but a shift-click range can still span
-        // over one sitting between two real cells, so it's excluded here too.
-        if (cells[i]?.kind === 'entry') range.push(i)
-      }
-      setSelectedSlots(range)
-    } else if (e.ctrlKey || e.metaKey) {
-      setSelectedSlots((prev) => (prev.includes(slot) ? prev.filter((s) => s !== slot) : [...prev, slot]))
-      setSelectionAnchor(slot)
-    } else {
-      setSelectedSlots([slot])
-      setSelectionAnchor(slot)
-    }
-  }
-
-  // A placeholder click always replaces the selection with just this slot — no
-  // multi-select, no drag, matching "view its info" as the only interaction this leg adds
-  // (see selectedPlaceholderSlot's own doc comment above).
-  const handleClickPlaceholder = (slot: number): void => {
-    clearSelection()
-    setSelectedPlaceholderSlot(slot)
-  }
-
-  // Dragging a slot that's part of the current selection carries the whole selection, in
-  // its selection order; dragging any other filled slot (no selection, or a cell outside
-  // it) drags just that one cell and collapses the selection down to it first, same as a
-  // plain click would — matching how file-manager drag-and-drop treats an unselected item.
-  const handleDragStart = (slot: number): number[] => {
-    if (selectedSlots.includes(slot)) {
-      // Filters rather than asserts non-null: `cells` is shared across panes (see
-      // boxedEntryIds' doc comment), so a slot that was filled when selected could in
-      // principle have been vacated (or, since Leg 5, replaced by a placeholder) by the
-      // other pane since — drop it from the drag rather than crash on a stale selection.
-      return selectedSlots.map((s) => cells[s]).filter((c): c is BoxCell => c?.kind === 'entry').map((c) => c.entry.id)
-    }
-    setSelectedSlots([slot])
-    setSelectionAnchor(slot)
-    return [(cells[slot] as BoxCell).entry.id]
-  }
+  // Leg 4 of the Box View Polish milestone's multi-select and Leg 2 of the Dex completeness
+  // tier migration's single-select placeholder viewer — split into their own hook by the
+  // Codebase File-Size Cleanup pass (2026-09-28), see useBoxSelection.ts's doc comment.
+  const {
+    selectedSlots,
+    selectedPlaceholderSlot,
+    selectedEntryCell,
+    detailCell,
+    clearSelection,
+    resetAll: resetSelection,
+    handleCellClick,
+    handleClickPlaceholder,
+    handleDragStart
+  } = useBoxSelection(cells)
 
   // DexBoxGrid wraps its handler in useCallback so this doesn't re-fire on every unrelated
   // parent render — only when this pane's own displayed box actually changes.
@@ -265,8 +197,7 @@ export function DexBoxPane({
 
   const goToBox = (index: number): void => {
     setBoxIndex(index)
-    clearSelection()
-    setSelectedPlaceholderSlot(null)
+    resetSelection()
   }
 
   // Same logic as pre-Leg-3 DexBoxGrid.handleDropOnSlot, but gated on the shared
