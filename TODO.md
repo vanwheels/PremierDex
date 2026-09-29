@@ -43,14 +43,6 @@ day) the calculator doesn't collect inputs for yet. Pick up only if Vanny wants 
 supported; would need one extra input per conditional ball, not a formula change.
 Last touched: 2026-09-23. Re-check count: 0.
 
-### [Species detail popup entry point on Hybrid view] — unscheduled
-Leg 3 of the Species detail popup + evolution family tree milestone wired the info-button
-entry point into DexTable/DexRow (List view) and DexBoxDetailPanel (Box view) per Vanny's
-explicit scope (Dex Table/Box View only) — DexHybridGrid/DexHybridDetailPanel (Hybrid view)
-don't have it yet, even though they share the same `dex-hybrid-detail-*` CSS classes as
-DexBoxDetailPanel. Small addition if/when wanted — same pattern, just a third wiring site.
-Last touched: 2026-09-22. Re-check count: 0.
-
 ### [App icon] — unscheduled
 No custom icon exists yet (`build/icon.png` per electron-builder convention, matching
 GW2-Squaded) — packaged builds currently ship with Electron's default icon. Not blocking

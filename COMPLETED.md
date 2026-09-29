@@ -1,5 +1,11 @@
 # COMPLETED
 
+## [Species detail popup entry point on Hybrid view] — 2026-09-28
+Wired the same info-button entry point Leg 3 of the Species detail popup + evolution family
+tree milestone added to DexTable/DexBoxDetailPanel into DexHybridDetailPanel/DexHybridGrid —
+same onOpenSpeciesDetail split, same SpeciesDetailPopup wiring pattern as DexBoxPane. See
+commit `55c15c8`.
+
 ## [DexBoxGrid.tsx / DexBoxPane.tsx over the file-size cap] — 2026-09-28
 Split DexBoxGrid's second-pane/cross-location-move machinery into `useSecondBoxPane.ts` and
 DexBoxPane's multi-select/placeholder-select state into `useBoxSelection.ts`, no behavior
