@@ -6,13 +6,20 @@ Standalone items not part of the current milestone — pick up opportunistically
 explicitly prioritized. Small/low-priority items only; anything milestone-sized lives in
 Future Milestones below.
 
-### [Evolution methods per version group] — Leg 1
-`fetch-evolution-chains.ts` joins distinct `evolution_details` methods with " or " and drops each
-entry's `version_group` tag, so Magnezone/Leafeon/Glaceon/Probopass show every game's location as
-alternatives with no game attached. PokeAPI tags all 676 entries; keep the tag through to
-`evolution-edges.json` and decide the display (per-game filter vs. labeled list) before scoping the UI.
+### [Evolution methods per version group] — Leg 2
+Leg 1 (see COMPLETED.md) preserved PokeAPI's `version_group` tag through to
+`evolution-edges.json`'s `methodsByVersionGroup` — the data exists now, but EvolutionTree still
+renders the old joined `method` string unchanged. Vanny's call on display: per-game filter (show
+only the method valid for the game context the popup is showing), not a labeled list. Two things
+this leg still needs to scope before it's leg-sized:
+- A version-group chronology (oldest-to-newest ordering) — doesn't exist anywhere in the
+  codebase yet, and is needed to resolve PokeAPI's "first appeared in" tag semantics (an
+  untagged later group inherits whichever tagged method most recently precedes it).
+- Where "the game context the popup is showing" actually comes from — SpeciesDetailTarget
+  currently carries only an optional `generation`, not a specific version group/game, and the
+  popup can be opened from contexts (Box view, Hybrid view) with no single game selected at all.
 See `docs/investigations/per-version-variance.md`.
-Last touched: 2026-09-25. Re-check count: 0.
+Last touched: 2026-09-28. Re-check count: 0.
 
 ### [Species page Where to Find method tables] — unscheduled
 The Dex Locations pane now splits encounters into Wild/Surfing/Fishing/Headbutt/Rock Smash/

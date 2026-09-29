@@ -1,5 +1,13 @@
 # COMPLETED
 
+## [Evolution methods per version group, Leg 1] — 2026-09-28
+Data-layer fix only: `fetch-evolution-chains.ts` now tags each distinct method of a
+multi-method edge (Magnezone/Leafeon/Glaceon/Probopass-style location-or-stone alternatives)
+with its PokeAPI `version_group`(s) in a new `methodsByVersionGroup` field, and
+`evolution-edges.json` was regenerated from live data. No UI change yet — see TODO.md's
+Leg 2 for what's still needed before EvolutionTree can filter by game. See commit
+`a010588`.
+
 ## [Species detail popup entry point on Hybrid view] — 2026-09-28
 Wired the same info-button entry point Leg 3 of the Species detail popup + evolution family
 tree milestone added to DexTable/DexBoxDetailPanel into DexHybridDetailPanel/DexHybridGrid —
